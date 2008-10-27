@@ -104,7 +104,7 @@ public class Messages
 
 	public static String koToECLoaderParsingError(String line) {
 		Object[] a = {line};
-		return MessageFormat.format(getString("KOToECLoader.ParsingError"), a);
+		return MessageFormat.format(getString("KOToECLoader.error.Parsing"), a);
 	}
 
 	public static String koToECLoaderFinalMsg() {
@@ -124,7 +124,7 @@ public class Messages
 
 	public static String koToGOLoaderParsingError(String line) {
 		Object[] a = {line};
-		return MessageFormat.format(getString("KOToGOLoader.ParsingError"), a);
+		return MessageFormat.format(getString("KOToGOLoader.error.Parsing"), a);
 	}
 
 	public static String koToGOLoaderFinalMsg() {
@@ -134,6 +134,72 @@ public class Messages
 	public static String koToGOLoaderInitMsg(String fileKo2GOName) {
 		Object[] a = {fileKo2GOName};
 		return MessageFormat.format(getString("KOToGOLoader.init"), a);
+	}
+
+	//GBKLoader
+
+	public static String gBKChooseFile() {
+		return getString("GBKLoader.chooseFile");
+	}
+
+	public static String gBKLoaderFinalMsg() {
+		return getString("GBKLoader.final");
+	}
+
+	public static String gBKLoaderInitMsg(String fileGBKName) {
+		Object[] a = {fileGBKName};
+		return MessageFormat.format(getString("GBKLoader.init"), a);
+	}
+
+	//CDSToKOLoader
+
+	public static String cdsToKOLoaderCDSNotFound(String cdsName) {
+		Object[] a = {cdsName};
+		return MessageFormat.format(getString("CDSToKOLoader.error.CDSNotFound"), a);
+	}
+
+	public static String cdsToKOChooseFile() {
+		return getString("CDSToKOLoader.chooseFile");
+	}
+
+	public static String cdsToKOLoaderFinalMsg() {
+		return getString("CDSToKOLoader.final");
+	}
+
+	public static String cdsToKOLoaderInitMsg(String fileGBKName) {
+		Object[] a = {fileGBKName};
+		return MessageFormat.format(getString("CDSToKOLoader.init"), a);
+	}
+
+	public static String cdsToKOChooseOrganism() {
+		return getString("CDSToKOLoader.chooseOrganism");
+	}
+
+	public static String cdsToKOChooseMethod() {
+		return getString("CDSToKOLoader.chooseMethod");
+	}
+
+	//KOLoader
+
+	public static String koLoaderChooseFile() {
+		return getString("KOLoader.chooseFile");
+	}
+
+	public static String koLoaderFinalMsg() {
+		return getString("KOLoader.final");
+	}
+
+	public static String koLoaderInitMsg(String fileKOName) {
+		Object[] a = {fileKOName};
+		return MessageFormat.format(getString("KOLoader.init"), a);
+	}
+
+	public static String koLoaderExceptionKONotNull() {
+		return getString("KOLoader.Exception.KONotNull");
+	}
+
+	public static String koLoaderExceptionDBLinkSeparator() {
+		return getString("KOLoader.Exception.DBLinkSeparator");
 	}
 
 }

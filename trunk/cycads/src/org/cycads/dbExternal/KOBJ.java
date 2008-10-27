@@ -18,6 +18,7 @@ public class KOBJ implements KO
 
 	public KOBJ(String id) {
 		term = TermsAndOntologies.getOntologyKO().getOrCreateTerm(id);
+		setDefinition(DEFINITION_DEFAULT);
 	}
 
 	public KOBJ(ComparableTerm term) {
@@ -35,10 +36,18 @@ public class KOBJ implements KO
 		return term;
 	}
 
+	public String getDefinition() {
+		return term.getDescription();
+	}
+
+	public void setDefinition(String definition) {
+		term.setDescription(definition);
+	}
+
 	/* (non-Javadoc)
 	 * @see org.cycads.dbExternal.KO#link2Ec(org.cycads.dbExternal.EC)
 	 */
-	public void link2Ec(EC ec) {
+	public void link2EC(EC ec) {
 		if (!(ec instanceof ECBJ)) {
 			ec = new ECBJ(ec.getId());
 		}
@@ -63,26 +72,12 @@ public class KOBJ implements KO
 	/* (non-Javadoc)
 	 * @see org.cycads.dbExternal.KO#link2Go(org.cycads.dbExternal.GO)
 	 */
-	public void link2Go(GO go) {
+	public void link2GO(GO go) {
 		if (!(go instanceof GOBJ)) {
 			go = new GOBJ(go.getId());
 		}
 		TermsAndOntologies.getOntologyToLinksKOToGO().getOrCreateTriple(getTerm(), ((GOBJ) go).getTerm(),
 			TermsAndOntologies.getTermPredicateToLinkKOToGO());
-	}
-
-	/* (non-Javadoc)
-	 * @see org.cycads.dbExternal.KO#getDefinition()
-	 */
-	public String getDefinition() {
-		return term.getDescription();
-	}
-
-	/* (non-Javadoc)
-	 * @see org.cycads.dbExternal.KO#setDefinition(java.lang.String)
-	 */
-	public void setDefinition(String definition) {
-		term.setDescription(definition);
 	}
 
 	public Collection<GO> getGOs() {
@@ -101,6 +96,25 @@ public class KOBJ implements KO
 			return term.compareTo(((KOBJ) ko).getTerm());
 		}
 		return getId().compareTo(ko.getId());
+	}
+
+	public void link2COG(COG cog) {
+		if (!(cog instanceof COGBJ)) {
+			cog = new COGBJ(cog.getId());
+		}
+		TermsAndOntologies.getOntologyToLinksKOToCOG().getOrCreateTriple(getTerm(), ((COGBJ) cog).getTerm(),
+			TermsAndOntologies.getTermPredicateToLinkKOToCOG());
+	}
+
+	public Collection<COG> getCOGs() {
+		SimpleComparableOntology ont = TermsAndOntologies.getOntologyToLinksKOToCOG();
+		ComparableTerm term = TermsAndOntologies.getTermPredicateToLinkKOToCOG();
+		Set<ComparableTriple> triples = ont.getTriples(getTerm(), null, term);
+		Set<COG> cogs = new TreeSet<COG>();
+		for (ComparableTriple triple : triples) {
+			cogs.add(new COGBJ((ComparableTerm) triple.getObject()));
+		}
+		return cogs;
 	}
 
 }

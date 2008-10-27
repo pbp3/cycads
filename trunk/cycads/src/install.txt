@@ -20,7 +20,8 @@ mysql> GRANT SELECT,INSERT,UPDATE,DELETE
     ->     IDENTIFIED BY 'cycads';
 mysql> exit
 
-5- Unzip cycads.zip in folder 'cycads' 
+5- Unzip cycads.zip in folder 'cycads'
 
 6- Load Taxonomy
- 
+
+ java -cp lib/*:cycads.jar org.cycads.ui.loads.LoadTaxonomy

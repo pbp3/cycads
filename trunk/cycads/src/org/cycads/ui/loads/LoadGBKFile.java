@@ -11,24 +11,23 @@ import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
 import org.cycads.general.biojava.BioJavaxSession;
 import org.cycads.general.biojava.CacheCleanerBJ;
-import org.cycads.loaders.KOToECLoaderBJ;
+import org.cycads.loaders.GBKLoaderBJ;
 import org.cycads.ui.progress.Progress;
 import org.cycads.ui.progress.ProgressPrintInterval;
 
-public class LoadKOtoEC
+public class LoadGBKFile
 {
 	public static void main(String[] args) {
 		BioJavaxSession.init();
-		File file = LoadTools.getFile(args, 0, ParametersDefault.koToECLoaderFileName(), Messages.koToECChooseFile());
+		File file = LoadTools.getFile(args, 0, ParametersDefault.gBKLoaderFileName(), Messages.gBKChooseFile());
 		if (file == null) {
 			return;
 		}
 
-		Progress progress = new ProgressPrintInterval(System.out, ParametersDefault.koToECLoaderStepShowInterval(),
-			Messages.koToECLoaderInitMsg(file.getPath()), Messages.koToECLoaderFinalMsg());
+		Progress progress = new ProgressPrintInterval(System.out, ParametersDefault.gBKLoaderStepShowInterval(),
+			Messages.gBKLoaderInitMsg(file.getPath()), Messages.gBKLoaderFinalMsg());
 		try {
-
-			(new KOToECLoaderBJ(progress, new CacheCleanerBJ(ParametersDefault.koToECLoaderStepCache()))).load(file);
+			(new GBKLoaderBJ(progress, new CacheCleanerBJ(ParametersDefault.gBKLoaderStepCache()))).load(file);
 		}
 		catch (IOException e) {
 			BioJavaxSession.finishWithRollback();
@@ -40,5 +39,4 @@ public class LoadKOtoEC
 		}
 		BioJavaxSession.finish();
 	}
-
 }

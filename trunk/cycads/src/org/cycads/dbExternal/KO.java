@@ -7,14 +7,24 @@ import java.util.Collection;
 
 public interface KO extends Comparable<KO>
 {
+	public static final String	DEFINITION_DEFAULT	= "";
+
 	public String getId();
 
-	public void link2Ec(EC ec);
+	public String getDefinition();
+
+	public void setDefinition(String definition);
+
+	public void link2EC(EC ec);
 
 	public Collection<EC> getECs();
 
-	public void link2Go(GO go);
+	public void link2GO(GO go);
 
 	public Collection<GO> getGOs();
+
+	public void link2COG(COG cog);
+
+	public Collection<COG> getCOGs();
 
 }

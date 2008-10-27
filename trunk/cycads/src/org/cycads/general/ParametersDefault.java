@@ -1,5 +1,6 @@
 package org.cycads.general;
 
+import java.text.MessageFormat;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -94,6 +95,165 @@ public class ParametersDefault
 
 	public static String koToGOLoaderFileName() {
 		return getString("KOToGOLoader.fileName");
+	}
+
+	//GBKLoader
+
+	public static int gBKLoaderStepCache() {
+		return Integer.parseInt(getString("GBKLoader.stepCache"));
+	}
+
+	public static int gBKLoaderStepShowInterval() {
+		return Integer.parseInt(getString("GBKLoader.stepShowInterval"));
+	}
+
+	public static String gBKLoaderFileName() {
+		return getString("GBKLoader.fileName");
+	}
+
+	public static String cdsToECMethodType() {
+		return getString("CDSToEC.methodType");
+	}
+
+	public static String gBKLoaderMethodCDSToECName() {
+		return getString("GBKLoader.methodCDSToECName");
+	}
+
+	//GBK file
+
+	public static String gbkECTagExpression() {
+		return getString("GBK.file.ECTagExpression");
+	}
+
+	public static String gbkGeneTagExpression() {
+		return getString("GBK.file.GeneTagExpression");
+	}
+
+	public static String gbkRNATagExpression() {
+		return getString("GBK.file.RNATagExpression");
+	}
+
+	public static String gbkCDSTagExpression() {
+		return getString("GBK.file.CDSTagExpression");
+	}
+
+	//CDSToKOLoader
+
+	public static String cdsToKOLoaderSeparator() {
+		return getString("CDSToKOLoader.separator");
+	}
+
+	public static String cdsToKOLoaderComment() {
+		return getString("CDSToKOLoader.comment");
+	}
+
+	public static String cdsToKOLoaderFileName() {
+		return getString("CDSToKOLoader.fileName");
+	}
+
+	public static int cdsToKOLoaderStepCache() {
+		return Integer.parseInt(getString("CDSToKOLoader.stepCache"));
+	}
+
+	public static int cdsToKOLoaderStepShowInterval() {
+		return Integer.parseInt(getString("CDSToKOLoader.stepShowInterval"));
+	}
+
+	public static int cdsToKOLoaderOrganismNumber() {
+		return Integer.parseInt(getString("CDSToKOLoader.organismNumber"));
+	}
+
+	public static String cdsToKOMethodType() {
+		return getString("CDSToKO.methodType");
+	}
+
+	public static String cdsToKOLoaderMethodName() {
+		return getString("CDSToKOLoader.methodName");
+	}
+
+	public static String cdsToKOMethodDescription(String methodName) {
+		Object[] a = {methodName};
+		return MessageFormat.format(getString("CDSToKOLoader.methodDescription"), a);
+	}
+
+	public static int cdsToKOLoaderPosCDSName() {
+		return Integer.parseInt(getString("CDSToKOLoader.PosCDSName"));
+	}
+
+	public static String cdsToKOLoaderSeparatorCDSName() {
+		return getString("CDSToKOLoader.SeparatorCDSName");
+	}
+
+	//KOLoader
+
+	public static String koLoaderFileName() {
+		return getString("KOLoader.fileName");
+	}
+
+	public static int koLoaderStepCache() {
+		return Integer.parseInt(getString("KOLoader.stepCache"));
+	}
+
+	public static int koLoaderStepShowInterval() {
+		return Integer.parseInt(getString("KOLoader.stepShowInterval"));
+	}
+
+	//KOFile
+
+	public static String koFileEntryTag() {
+		return getString("KOFile.entryTag");
+	}
+
+	public static String koFileDefinitionTag() {
+		return getString("KOFile.definitionTag");
+	}
+
+	public static String koFileDBLinksTag() {
+		return getString("KOFile.dbLinksTag");
+	}
+
+	public static String koFileECTag() {
+		return getString("KOFile.ecTag");
+	}
+
+	public static int koFileDataPos() {
+		return Integer.parseInt(getString("KOFile.dataPos"));
+	}
+
+	public static String koFileEndRecordStr() {
+		return getString("KOFile.endRecord");
+	}
+
+	public static String koFileCommentStr() {
+		return getString("KOFile.comment");
+	}
+
+	public static String koFileECDeleteExpression() {
+		return getString("KOFile.EC.deleteExpression");
+	}
+
+	public static String koFileECSeparator() {
+		return getString("KOFile.EC.SeparatorExpression");
+	}
+
+	public static String koFileDBLinkSubTagSeparator() {
+		return getString("KOFile.DBLink.SubTagSeparator");
+	}
+
+	public static String koFileDBLinkGOTag() {
+		return getString("KOFile.DBLink.GOTag");
+	}
+
+	public static String koFileDBLinkGOSeparator() {
+		return getString("KOFile.DBLink.GOSeparator");
+	}
+
+	public static String koFileDBLinkCOGTag() {
+		return getString("KOFile.DBLink.COGTag");
+	}
+
+	public static String koFileDBLinkCOGSeparator() {
+		return getString("KOFile.DBLink.COGSeparator");
 	}
 
 }
