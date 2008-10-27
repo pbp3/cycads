@@ -4,13 +4,14 @@
 package org.cycads.loaders;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 
 import org.biojava.bio.seq.io.ParseException;
 import org.biojavax.bio.taxa.io.NCBITaxonomyLoader;
 import org.biojavax.bio.taxa.io.SimpleNCBITaxonomyLoader;
-import org.cycads.general.biojava.BioJavaxSession;
-import org.cycads.general.biojava.CacheCleaner;
+import org.cycads.general.CacheCleaner;
 import org.cycads.ui.progress.Progress;
 
 public class TaxonomyLoaderBJ implements TaxonomyLoader
@@ -25,7 +26,6 @@ public class TaxonomyLoaderBJ implements TaxonomyLoader
 	}
 
 	public void load(BufferedReader nodes, BufferedReader names) throws IOException {
-		BioJavaxSession.init();
 		NCBITaxonomyLoader l = new SimpleNCBITaxonomyLoader();
 		progressNode.init();
 		try {
@@ -41,16 +41,18 @@ public class TaxonomyLoaderBJ implements TaxonomyLoader
 				progressName.completeStep();
 				cacheCleaner.incCache();
 			}
-			BioJavaxSession.finish();
 		}
 		catch (ParseException e) {
 			e.printStackTrace();
-			BioJavaxSession.finishWithRollback();
 			throw new IOException(e.getMessage());
 		}
 		finally {
 			Object[] a1 = {progressName.getStep()};
 			progressName.finish(a1);
 		}
+	}
+
+	public void load(File nodesFile, File namesFile) throws IOException {
+		load(new BufferedReader(new FileReader(nodesFile)), new BufferedReader(new FileReader(nodesFile)));
 	}
 }

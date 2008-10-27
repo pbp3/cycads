@@ -3,64 +3,50 @@
  */
 package org.cycads.loaders;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.text.ParseException;
 
 import org.cycads.dbExternal.GO;
 import org.cycads.dbExternal.GOBJ;
 import org.cycads.dbExternal.KO;
 import org.cycads.dbExternal.KOBJ;
+import org.cycads.exceptions.LoadLineError;
+import org.cycads.general.CacheCleaner;
 import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
-import org.cycads.general.biojava.BioJavaxSession;
-import org.cycads.general.biojava.CacheCleaner;
 import org.cycads.ui.progress.Progress;
 
-public class KOToGOLoaderBJ implements KOToGOLoader
+public class KOToGOLoaderBJ extends FileLoaderLine
 {
-	Progress		progress;
-	CacheCleaner	cacheCleaner;
-
 	public KOToGOLoaderBJ(Progress progress, CacheCleaner cacheCleaner) {
-		this.progress = progress;
-		this.cacheCleaner = cacheCleaner;
+		super(progress, cacheCleaner);
 	}
 
-	public void load(BufferedReader br) throws IOException {
-		BioJavaxSession.init();
-		progress.init();
-		String line;
-		KO ko;
-		String[] sep;
-		while ((line = br.readLine()) != null) {
-			if (!line.startsWith(ParametersDefault.koToGOLoaderComment())) {
-				sep = line.split(ParametersDefault.koToGOLoaderSeparator());
-				if (sep.length != 2) {
-					System.err.println(Messages.koToGOLoaderParsingError(line));
-				}
-				else {
-					ko = createKO(sep[0]);
-					sep[1] = sep[1].replaceAll(ParametersDefault.koToGOLoaderDeleteExpression(), "");
-					sep = sep[1].split(" ");
-					for (String goId : sep) {
-						ko.link2Go(createGO(goId));
-					}
-					progress.completeStep();
-					cacheCleaner.incCache();
-				}
-			}
-		}
-		BioJavaxSession.finish();
-		Object[] a1 = {progress.getStep()};
-		progress.finish(a1);
-	}
-
-	protected KO createKO(String koId) {
+	protected KO createKOObject(String koId) {
 		return new KOBJ(koId);
 	}
 
-	protected GO createGO(String goId) {
+	protected GO createGOObject(String goId) {
 		return new GOBJ(goId);
+	}
+
+	@Override
+	public void loadLine(String line) throws LoadLineError {
+		KO ko;
+		String[] sep;
+		if (!line.startsWith(ParametersDefault.koToGOLoaderComment())) {
+			sep = line.split(ParametersDefault.koToGOLoaderSeparator());
+			if (sep.length != 2) {
+				throw new LoadLineError(line, new ParseException(Messages.koToGOLoaderParsingError(line), 0));
+			}
+			ko = createKOObject(sep[0]);
+			sep[1] = sep[1].replaceAll(ParametersDefault.koToGOLoaderDeleteExpression(), "");
+			sep = sep[1].split(" ");
+			for (String goId : sep) {
+				ko.link2GO(createGOObject(goId));
+			}
+			progress.completeStep();
+			cacheCleaner.incCache();
+		}
 	}
 
 }

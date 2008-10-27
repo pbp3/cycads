@@ -3,7 +3,6 @@
  */
 package org.cycads.general.biojava;
 
-
 public class BioSql
 {
 
@@ -146,23 +145,6 @@ public class BioSql
 	//		return new CDS(feature);
 	//	}
 	//
-	//	public static CDS getCDSByProtID(String protName, Organism organism) {
-	//		Query query = session.createQuery("select f from Feature as f join f.parent as b join f.noteSet as prop "
-	//			+ "where f.typeTerm=:cdsTerm and b.taxon=:taxonId and "
-	//			+ "prop.term=:termProteinID and prop.value=:protName");
-	//		query.setString("protName", protName);
-	//		query.setParameter("taxonId", organism.getTaxon());
-	//		query.setParameter("cdsTerm", TermsAndOntologies.getTermCDS());
-	//		query.setParameter("termProteinID", TermsAndOntologies.getTermProteinID());
-	//		List features = query.list();
-	//		if (features.size() != 1) {
-	//			return null;
-	//		}
-	//		SimpleRichFeature feature = (SimpleRichFeature) features.get(0);
-	//		feature.toString();
-	//		return new CDS(feature);
-	//	}
-	//
 	//	public static RichFeature getParent(RichFeature feature) {
 	//		Query query = session.createQuery("from FeatureRelationship as f "
 	//			+ "where f.term=:containsTerm and f.subject=:feature");
@@ -245,18 +227,6 @@ public class BioSql
 	//		if (progress != null) {
 	//			progress.end();
 	//		}
-	//	}
-	//
-	//	public static Namespace getDefaultNamespace() {
-	//		return RichObjectFactory.getDefaultNamespace();
-	//	}
-	//
-	//	public static void save(EST est) {
-	//		session.saveOrUpdate("Sequence", est.getSequence());
-	//	}
-	//
-	//	public static void save(Sequence seq) {
-	//		session.saveOrUpdate("Sequence", seq.getSequence());
 	//	}
 	//
 	//	public static void save(Gene gene) {

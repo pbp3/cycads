@@ -3,16 +3,14 @@
  */
 package org.cycads.ui.loads;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.File;
 import java.io.IOException;
 
-import javax.swing.JFileChooser;
-
+import org.cycads.exceptions.LoadLineError;
 import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
-import org.cycads.general.biojava.CacheCleaner;
+import org.cycads.general.biojava.BioJavaxSession;
+import org.cycads.general.biojava.CacheCleanerBJ;
 import org.cycads.loaders.KOToGOLoaderBJ;
 import org.cycads.ui.progress.Progress;
 import org.cycads.ui.progress.ProgressPrintInterval;
@@ -20,41 +18,26 @@ import org.cycads.ui.progress.ProgressPrintInterval;
 public class LoadKOtoGO
 {
 	public static void main(String[] args) {
-		try {
-			//file Fasta
-			String fileName;
-			BufferedReader br;
-			if (args.length > 0) {
-				fileName = args[0];
-				br = new BufferedReader(new FileReader(fileName));
-			}
-			else {
-				try {
-					fileName = ParametersDefault.koToGOLoaderFileName();
-					br = new BufferedReader(new FileReader(fileName));
-				}
-				catch (FileNotFoundException e) {
-					JFileChooser fc = new JFileChooser();
-					fc.setDialogTitle(Messages.koToGOChooseFile());
-					int returnVal = fc.showOpenDialog(null);
-					if (returnVal != JFileChooser.APPROVE_OPTION) {
-						return;
-					}
-					fileName = fc.getSelectedFile().getPath();
-					br = new BufferedReader(new FileReader(fileName));
-				}
-			}
-
-			Progress progress = new ProgressPrintInterval(System.out, ParametersDefault.koToGOLoaderStepShowInterval(),
-				Messages.koToGOLoaderInitMsg(fileName), Messages.koToGOLoaderFinalMsg());
-			(new KOToGOLoaderBJ(progress, new CacheCleaner(ParametersDefault.koToGOLoaderStepCache()))).load(br);
+		BioJavaxSession.init();
+		File file = LoadTools.getFile(args, 0, ParametersDefault.koToGOLoaderFileName(), Messages.koToGOChooseFile());
+		if (file == null) {
+			return;
 		}
-		catch (FileNotFoundException e) {
-			e.printStackTrace();
+
+		Progress progress = new ProgressPrintInterval(System.out, ParametersDefault.koToGOLoaderStepShowInterval(),
+			Messages.koToGOLoaderInitMsg(file.getPath()), Messages.koToGOLoaderFinalMsg());
+		try {
+			(new KOToGOLoaderBJ(progress, new CacheCleanerBJ(ParametersDefault.koToGOLoaderStepCache()))).load(file);
 		}
 		catch (IOException e) {
+			BioJavaxSession.finishWithRollback();
 			e.printStackTrace();
 		}
+		catch (LoadLineError e) {
+			BioJavaxSession.finishWithRollback();
+			e.printStackTrace();
+		}
+		BioJavaxSession.finish();
 	}
 
 }

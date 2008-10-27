@@ -7,6 +7,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import org.biojavax.RichObjectFactory;
+import org.biojavax.ontology.ComparableOntology;
 import org.biojavax.ontology.ComparableTerm;
 import org.biojavax.ontology.SimpleComparableOntology;
 
@@ -34,41 +35,77 @@ public class TermsAndOntologies
 		return getString("nameSpaceDefault");
 	}
 
+	public static ComparableOntology getDefaultOntology() {
+		return RichObjectFactory.getDefaultOntology();
+	}
+
 	private static SimpleComparableOntology getOntology(String name) {
 		return (SimpleComparableOntology) RichObjectFactory.getObject(SimpleComparableOntology.class,
-			new Object[] {getString(name)});
+			new Object[] {name});
 	}
 
-	public static SimpleComparableOntology getOntologyEC() {
-		return getOntology("ontology.EC");
+	public static ComparableOntology getOntologyEC() {
+		return getOntology(getString("ontology.EC"));
 	}
 
-	public static SimpleComparableOntology getOntologyGO() {
-		return getOntology("ontology.GO");
+	public static ComparableOntology getOntologyGO() {
+		return getOntology(getString("ontology.GO"));
 	}
 
-	public static SimpleComparableOntology getOntologyKO() {
-		return getOntology("ontology.KO");
+	public static ComparableOntology getOntologyKO() {
+		return getOntology(getString("ontology.KO"));
+	}
+
+	public static ComparableOntology getOntologyCOG() {
+		return getOntology(getString("ontology.COG"));
 	}
 
 	public static SimpleComparableOntology getOntologyToLinksKOToEC() {
-		return getOntology("ontology.Links.KOToEC");
+		return getOntology(getString("ontology.Links.KOToEC"));
 	}
 
 	public static SimpleComparableOntology getOntologyToLinksKOToGO() {
-		return getOntology("ontology.Links.KOToGO");
+		return getOntology(getString("ontology.Links.KOToGO"));
 	}
 
-	public static SimpleComparableOntology getOntologyGeneral() {
-		return getOntology("ontology.general");
+	public static SimpleComparableOntology getOntologyToLinksKOToCOG() {
+		return getOntology(getString("ontology.Links.KOToCOG"));
+	}
+
+	public static ComparableOntology getOntologyGeneral() {
+		return getOntology(getString("ontology.general"));
 	}
 
 	public static ComparableTerm getTermPredicateToLinkKOToEC() {
-		return getOntology("ontology.predicate.KOToEC").getOrCreateTerm(getString("term.predicate.KOToEC"));
+		return getOntology(getString("ontology.predicate.KOToEC")).getOrCreateTerm(getString("term.predicate.KOToEC"));
 	}
 
 	public static ComparableTerm getTermPredicateToLinkKOToGO() {
-		return getOntology("ontology.predicate.KOToGO").getOrCreateTerm(getString("term.predicate.KOToGO"));
+		return getOntology(getString("ontology.predicate.KOToGO")).getOrCreateTerm(getString("term.predicate.KOToGO"));
+	}
+
+	public static ComparableTerm getTermPredicateToLinkKOToCOG() {
+		return getOntology(getString("ontology.predicate.KOToCOG")).getOrCreateTerm(getString("term.predicate.KOToCOG"));
+	}
+
+	public static ComparableTerm getTermTypeCDS() {
+		return getDefaultOntology().getOrCreateTerm(getString("term.type.CDS"));
+	}
+
+	public static ComparableTerm getTermTypeEC() {
+		return getDefaultOntology().getOrCreateTerm(getString("term.type.EC"));
+	}
+
+	public static ComparableTerm getTermTypeGene() {
+		return getDefaultOntology().getOrCreateTerm(getString("term.type.Gene"));
+	}
+
+	public static ComparableTerm getTermProteinID() {
+		return getDefaultOntology().getOrCreateTerm(getString("term.qualifier.ProteinID"));
+	}
+
+	public static ComparableOntology getOntologyMethodType(String methodTypeName) {
+		return getOntology(methodTypeName);
 	}
 
 	//	public static SimpleComparableOntology getOntologyFeatures() {
@@ -101,14 +138,6 @@ public class TermsAndOntologies
 	//			new Object[] {Messages.getString("Compilation.ontologyPrefix") + org.getTaxon().getNCBITaxID()});
 	//	}
 	//
-	//	public static ComparableTerm getTermToLinkKOToEC() {
-	//		return getOntologyGeneral().getOrCreateTerm(Messages.getString("KO.termToEc"));
-	//	}
-	//
-	//	public static ComparableTerm getTermToLinkKOToGO() {
-	//		return getOntologyGeneral().getOrCreateTerm(Messages.getString("KO.termToGo"));
-	//	}
-	//
 	//	public static ComparableTerm getTermGene() {
 	//		return RichObjectFactory.getDefaultOntology().getOrCreateTerm(Messages.getString("termGene"));
 	//	}
@@ -135,10 +164,6 @@ public class TermsAndOntologies
 	//
 	//	public static ComparableTerm getTermVR() {
 	//		return getOntologyMRNAToCDS().getOrCreateTerm(Messages.getString("termVR"));
-	//	}
-	//
-	//	public static ComparableTerm getTermProteinID() {
-	//		return RichObjectFactory.getDefaultOntology().getOrCreateTerm(Messages.getString("termProteinID"));
 	//	}
 	//
 	//	public static ComparableTerm getTermMRNAID() {
