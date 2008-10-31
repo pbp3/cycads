@@ -13,11 +13,13 @@ import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
 import org.cycads.general.SimpleCacheCleanerController;
 import org.cycads.general.biojava.BioJavaxSession;
+import org.cycads.generators.BioCycRecordFactory;
 import org.cycads.generators.BioCycStream;
 import org.cycads.generators.FeatureFilter;
 import org.cycads.generators.FeatureFilterByType;
 import org.cycads.generators.PFFileStream;
 import org.cycads.generators.SimpleBioCycExporter;
+import org.cycads.generators.SimpleBioCycRecordFactory;
 import org.cycads.ui.Arguments;
 import org.cycads.ui.ArgumentsBJ;
 import org.cycads.ui.progress.Progress;
@@ -80,7 +82,12 @@ public class PFFile
 		BioCycIDGenerator bioCycIdGenerator = new BioCycIdGeneratorBJ(bioCycIdFileRepository,
 			ParametersDefault.bioCycIdTag());
 
-		BioCycStream pfFileStream = new PFFileStream(directory, pfForSequence, createFastaFile,
+		BioCycRecordFactory bioCycRecordFactory = new SimpleBioCycRecordFactory(ecCreator, functionCreator,
+			dbLinkCreator, bioCycIdGenerator);
+
+		boolean createBioCycIdFile = true;
+
+		BioCycStream pfFileStream = new PFFileStream(directory, pfForSequence, createFastaFile, createBioCycIdFile,
 			ParametersDefault.pfFileGeneratorPfName(pfForSequence));
 
 		//		PFFileFactory pfFactory = new SimplePFFileFactory(directory,
