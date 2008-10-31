@@ -23,7 +23,7 @@ import org.cycads.entities.CDS;
 import org.cycads.entities.CDSBJ;
 import org.cycads.entities.Method;
 import org.cycads.entities.MethodTypeBJ;
-import org.cycads.general.CacheCleaner;
+import org.cycads.general.CacheCleanerController;
 import org.cycads.general.ParametersDefault;
 import org.cycads.general.biojava.BioJavaxSession;
 import org.cycads.general.biojava.TermsAndOntologies;
@@ -31,8 +31,16 @@ import org.cycads.ui.progress.Progress;
 
 public class GBKLoaderBJ extends FileLoaderAbstract
 {
-	public GBKLoaderBJ(Progress progress, CacheCleaner cacheCleaner) {
+	Method	methodCDSToEC;
+
+	public GBKLoaderBJ(Progress progress, CacheCleanerController cacheCleaner) {
+		this(progress, cacheCleaner,
+			MethodTypeBJ.CDS_TO_EC.getOrCreateMethod(ParametersDefault.gBKLoaderMethodCDSToECName()));
+	}
+
+	public GBKLoaderBJ(Progress progress, CacheCleanerController cacheCleaner, Method methodCDSToEC) {
 		super(progress, cacheCleaner);
+		this.methodCDSToEC = methodCDSToEC;
 	}
 
 	public void load(BufferedReader br) throws IOException {
@@ -46,8 +54,6 @@ public class GBKLoaderBJ extends FileLoaderAbstract
 		ComparableTerm ecTerm = TermsAndOntologies.getTermTypeEC();
 		ComparableTerm geneTerm = TermsAndOntologies.getTermTypeGene();
 		ComparableTerm cdsTerm = TermsAndOntologies.getTermTypeCDS();
-
-		Method methodCDSToEC = MethodTypeBJ.CDS_TO_EC.getOrCreateMethod(ParametersDefault.gBKLoaderMethodCDSToECName());
 
 		// we are reading DNA sequences
 		RichSequenceIterator seqs = RichSequence.IOTools.readGenbankDNA(br, RichObjectFactory.getDefaultNamespace());

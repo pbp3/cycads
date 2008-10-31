@@ -9,9 +9,10 @@ import java.io.IOException;
 import org.cycads.exceptions.LoadLineError;
 import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
+import org.cycads.general.SimpleCacheCleanerController;
 import org.cycads.general.biojava.BioJavaxSession;
-import org.cycads.general.biojava.CacheCleanerBJ;
 import org.cycads.loaders.KOToECLoaderBJ;
+import org.cycads.ui.Arguments;
 import org.cycads.ui.progress.Progress;
 import org.cycads.ui.progress.ProgressPrintInterval;
 
@@ -19,7 +20,8 @@ public class LoadKOtoEC
 {
 	public static void main(String[] args) {
 		BioJavaxSession.init();
-		File file = LoadTools.getFile(args, 0, ParametersDefault.koToECLoaderFileName(), Messages.koToECChooseFile());
+		File file = Arguments.getFileToOpen(args, 0, ParametersDefault.koToECLoaderFileName(),
+			Messages.koToECChooseFile());
 		if (file == null) {
 			return;
 		}
@@ -28,7 +30,8 @@ public class LoadKOtoEC
 			Messages.koToECLoaderInitMsg(file.getPath()), Messages.koToECLoaderFinalMsg());
 		try {
 
-			(new KOToECLoaderBJ(progress, new CacheCleanerBJ(ParametersDefault.koToECLoaderStepCache()))).load(file);
+			(new KOToECLoaderBJ(progress, new SimpleCacheCleanerController(ParametersDefault.koToECLoaderStepCache(),
+				BioJavaxSession.getCacheCleanerListener()))).load(file);
 		}
 		catch (IOException e) {
 			BioJavaxSession.finishWithRollback();

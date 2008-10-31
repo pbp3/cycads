@@ -8,7 +8,7 @@ import org.cycads.entities.CDSBJ;
 import org.cycads.entities.Method;
 import org.cycads.entities.Organism;
 import org.cycads.exceptions.DBObjectNotFound;
-import org.cycads.general.CacheCleaner;
+import org.cycads.general.CacheCleanerController;
 import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
 import org.cycads.ui.progress.Progress;
@@ -18,7 +18,7 @@ public class CDSToKOLoaderBJ extends FileLoaderLine
 	Organism	org;
 	Method		method;
 
-	public CDSToKOLoaderBJ(Progress progress, CacheCleaner cacheCleaner, Organism org, Method method) {
+	public CDSToKOLoaderBJ(Progress progress, CacheCleanerController cacheCleaner, Organism org, Method method) {
 		super(progress, cacheCleaner);
 		this.org = org;
 		this.method = method;

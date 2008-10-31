@@ -3,10 +3,14 @@
  */
 package org.cycads.entities;
 
+import java.util.Collection;
+
 public interface Organism
 {
 	public String getName();
 
 	public int getNumberID();
+
+	public Collection<Sequence> getSequences(int version);
 
 }

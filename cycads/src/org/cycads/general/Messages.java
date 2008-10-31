@@ -202,4 +202,45 @@ public class Messages
 		return getString("KOLoader.Exception.DBLinkSeparator");
 	}
 
+	//PFFileGenerator
+
+	public static String pfFileGeneratorChoosePfFile() {
+		return getString("PFFileGenerator.chooseFile");
+	}
+
+	public static String pfFileGeneratorFinalMsg() {
+		return getString("PFFileGenerator.final");
+	}
+
+	public static String pfFileGeneratorInitMsg(String fileGBKName) {
+		Object[] a = {fileGBKName};
+		return MessageFormat.format(getString("PFFileGenerator.init"), a);
+	}
+
+	public static String pfFileGeneratorChooseOrganism() {
+		return getString("PFFileGenerator.chooseOrganism");
+	}
+
+	public static String pfFileGeneratorChooseVersion() {
+		return getString("PFFileGenerator.chooseVersion");
+	}
+
+	public static String pfFileGeneratorGenerateFastaFile() {
+		return getString("PFFileGenerator.GenerateFastaFile");
+	}
+
+	//File headers
+
+	public static String fastaFileForPFFileHeader() {
+		return getString("FastaFileForPFFile.Header");
+	}
+
+	public static String bioCycIdsFileForPFFileHeader() {
+		return getString("BioCycIdsFileForPFFile.Header");
+	}
+
+	public static String PFFileHeader() {
+		return getString("PFFile.Header");
+	}
+
 }
