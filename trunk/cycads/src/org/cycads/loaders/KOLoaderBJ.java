@@ -16,7 +16,7 @@ import org.cycads.dbExternal.GOBJ;
 import org.cycads.dbExternal.KO;
 import org.cycads.dbExternal.KOBJ;
 import org.cycads.exceptions.LoadLineError;
-import org.cycads.general.CacheCleaner;
+import org.cycads.general.CacheCleanerController;
 import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
 import org.cycads.ui.progress.Progress;
@@ -26,7 +26,7 @@ public class KOLoaderBJ extends FileLoaderAbstract
 
 	public static final String	EC_TAG	= ParametersDefault.koFileECTag();
 
-	public KOLoaderBJ(Progress progress, CacheCleaner cacheCleaner) {
+	public KOLoaderBJ(Progress progress, CacheCleanerController cacheCleaner) {
 		super(progress, cacheCleaner);
 	}
 

@@ -41,7 +41,14 @@ public class MethodTypeBJ implements MethodType
 	}
 
 	public Method getOrCreateMethod(String name) {
-		return new MethodBJ(ont.getOrCreateTerm(name));
+		if (ont.containsTerm(name)) {
+			return new MethodBJ(ont.getOrCreateTerm(name));
+		}
+		else {
+			ComparableTerm term = ont.getOrCreateTerm(name);
+			term.setDescription(ParametersDefault.methodDescription());
+			return new MethodBJ(term);
+		}
 	}
 
 }

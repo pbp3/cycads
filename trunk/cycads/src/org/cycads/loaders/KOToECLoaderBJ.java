@@ -10,14 +10,14 @@ import org.cycads.dbExternal.ECBJ;
 import org.cycads.dbExternal.KO;
 import org.cycads.dbExternal.KOBJ;
 import org.cycads.exceptions.LoadLineError;
-import org.cycads.general.CacheCleaner;
+import org.cycads.general.CacheCleanerController;
 import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
 import org.cycads.ui.progress.Progress;
 
 public class KOToECLoaderBJ extends FileLoaderLine
 {
-	public KOToECLoaderBJ(Progress progress, CacheCleaner cacheCleaner) {
+	public KOToECLoaderBJ(Progress progress, CacheCleanerController cacheCleaner) {
 		super(progress, cacheCleaner);
 	}
 

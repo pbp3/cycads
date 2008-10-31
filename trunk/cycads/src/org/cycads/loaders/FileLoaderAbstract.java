@@ -9,15 +9,15 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import org.cycads.exceptions.LoadLineError;
-import org.cycads.general.CacheCleaner;
+import org.cycads.general.CacheCleanerController;
 import org.cycads.ui.progress.Progress;
 
 public abstract class FileLoaderAbstract implements FileLoader
 {
 	Progress		progress;
-	CacheCleaner	cacheCleaner;
+	CacheCleanerController	cacheCleaner;
 
-	public FileLoaderAbstract(Progress progress, CacheCleaner cacheCleaner) {
+	public FileLoaderAbstract(Progress progress, CacheCleanerController cacheCleaner) {
 		this.progress = progress;
 		this.cacheCleaner = cacheCleaner;
 	}

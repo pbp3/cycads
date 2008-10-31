@@ -7,13 +7,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 import org.cycads.exceptions.LoadLineError;
-import org.cycads.general.CacheCleaner;
+import org.cycads.general.CacheCleanerController;
 import org.cycads.ui.progress.Progress;
 
 public abstract class FileLoaderLine extends FileLoaderAbstract
 {
 
-	public FileLoaderLine(Progress progress, CacheCleaner cacheCleaner) {
+	public FileLoaderLine(Progress progress, CacheCleanerController cacheCleaner) {
 		super(progress, cacheCleaner);
 	}
 

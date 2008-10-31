@@ -3,7 +3,7 @@
  */
 package org.cycads.general;
 
-public interface CacheCleaner
+public interface CacheCleanerController
 {
 
 	public void incCache();

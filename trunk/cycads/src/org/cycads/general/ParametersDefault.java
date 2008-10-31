@@ -1,5 +1,6 @@
 package org.cycads.general;
 
+import java.io.File;
 import java.text.MessageFormat;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -117,6 +118,11 @@ public class ParametersDefault
 
 	public static String gBKLoaderMethodCDSToECName() {
 		return getString("GBKLoader.methodCDSToECName");
+	}
+
+	public static String gBKLoaderMethodCDSToECDescription(String methodName) {
+		Object[] a = {methodName};
+		return MessageFormat.format(getString("GBKLoader.methodCDSToECDescription"), a);
 	}
 
 	//GBK file
@@ -254,6 +260,55 @@ public class ParametersDefault
 
 	public static String koFileDBLinkCOGSeparator() {
 		return getString("KOFile.DBLink.COGSeparator");
+	}
+
+	//PFFileGenerator
+
+	public static String pfFileGeneratorPfFileName(int organismNumber) {
+		Object[] a = {organismNumber};
+		return MessageFormat.format(getString("PFFileGenerator.fileName"), a);
+	}
+
+	public static int pfFileGeneratorStepCache() {
+		return Integer.parseInt(getString("PFFileGenerator.stepCache"));
+	}
+
+	public static int pfFileGeneratorStepShowInterval() {
+		return Integer.parseInt(getString("PFFileGenerator.stepShowInterval"));
+	}
+
+	public static int pfFileGeneratorOrganismNumber() {
+		return Integer.parseInt(getString("PFFileGenerator.organismNumber"));
+	}
+
+	public static int pfFileGeneratorVersionNumber() {
+		return Integer.parseInt(getString("PFFileGenerator.versionNumber"));
+	}
+
+	public static String pfFileGeneratorFastaFileName(File file) {
+		return file.getPath() + getString("PFFileGenerator.fastaFileExtension");
+	}
+
+	public static int fastaFileForPFFileLineWidth() {
+		return Integer.parseInt(getString("FastaFileForPFFile.LineWidth"));
+	}
+
+	public static String pfFileGeneratorBioCycIdsFileName(File file) {
+		return file.getPath() + getString("PFFileGenerator.BioCycIdsFileExtension");
+	}
+
+	public static String bioCycIdsSeparator() {
+		return getString("BioCycIdsFileForPFFile.Separator");
+	}
+
+	public static String bioCycIdFormat() {
+		return getString("BioCycId.Format");
+	}
+
+	//General
+
+	public static String methodDescription() {
+		return getString("General.Method.Description");
 	}
 
 }

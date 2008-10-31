@@ -12,9 +12,11 @@ import org.cycads.entities.Organism;
 import org.cycads.exceptions.LoadLineError;
 import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
+import org.cycads.general.SimpleCacheCleanerController;
 import org.cycads.general.biojava.BioJavaxSession;
-import org.cycads.general.biojava.CacheCleanerBJ;
 import org.cycads.loaders.CDSToKOLoaderBJ;
+import org.cycads.ui.Arguments;
+import org.cycads.ui.ArgumentsBJ;
 import org.cycads.ui.progress.Progress;
 import org.cycads.ui.progress.ProgressPrintInterval;
 
@@ -22,8 +24,9 @@ public class LoadCDSToKOFile
 {
 	public static void main(String[] args) {
 		BioJavaxSession.init();
-		LoadTools tools = new LoadToolsBJ();
-		File file = tools.getFile(args, 0, ParametersDefault.cdsToKOLoaderFileName(), Messages.cdsToKOChooseFile());
+		Arguments tools = new ArgumentsBJ();
+		File file = tools.getFileToOpen(args, 0, ParametersDefault.cdsToKOLoaderFileName(),
+			Messages.cdsToKOChooseFile());
 		if (file == null) {
 			return;
 		}
@@ -40,13 +43,11 @@ public class LoadCDSToKOFile
 			return;
 		}
 
-		method.setDescription(ParametersDefault.cdsToKOMethodDescription(method.getName()));
-
 		Progress progress = new ProgressPrintInterval(System.out, ParametersDefault.cdsToKOLoaderStepShowInterval(),
 			Messages.cdsToKOLoaderInitMsg(file.getPath()), Messages.cdsToKOLoaderFinalMsg());
 		try {
-			(new CDSToKOLoaderBJ(progress, new CacheCleanerBJ(ParametersDefault.cdsToKOLoaderStepCache()), organism,
-				method)).load(file);
+			(new CDSToKOLoaderBJ(progress, new SimpleCacheCleanerController(ParametersDefault.cdsToKOLoaderStepCache(),
+				BioJavaxSession.getCacheCleanerListener()), organism, method)).load(file);
 		}
 		catch (IOException e) {
 			BioJavaxSession.finishWithRollback();

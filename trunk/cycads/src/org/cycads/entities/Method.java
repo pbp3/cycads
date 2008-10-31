@@ -9,5 +9,9 @@ public interface Method
 
 	public MethodType getType();
 
-	public void setDescription(String methodDescription);
+	//	public void setDescription(String methodDescription);
+
+	public int getWeight();
+
+	public void setWeight(int weight);
 }

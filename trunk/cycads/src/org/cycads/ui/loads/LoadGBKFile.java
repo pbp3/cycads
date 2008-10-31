@@ -9,9 +9,10 @@ import java.io.IOException;
 import org.cycads.exceptions.LoadLineError;
 import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
+import org.cycads.general.SimpleCacheCleanerController;
 import org.cycads.general.biojava.BioJavaxSession;
-import org.cycads.general.biojava.CacheCleanerBJ;
 import org.cycads.loaders.GBKLoaderBJ;
+import org.cycads.ui.Arguments;
 import org.cycads.ui.progress.Progress;
 import org.cycads.ui.progress.ProgressPrintInterval;
 
@@ -19,7 +20,7 @@ public class LoadGBKFile
 {
 	public static void main(String[] args) {
 		BioJavaxSession.init();
-		File file = LoadTools.getFile(args, 0, ParametersDefault.gBKLoaderFileName(), Messages.gBKChooseFile());
+		File file = Arguments.getFileToOpen(args, 0, ParametersDefault.gBKLoaderFileName(), Messages.gBKChooseFile());
 		if (file == null) {
 			return;
 		}
@@ -27,7 +28,8 @@ public class LoadGBKFile
 		Progress progress = new ProgressPrintInterval(System.out, ParametersDefault.gBKLoaderStepShowInterval(),
 			Messages.gBKLoaderInitMsg(file.getPath()), Messages.gBKLoaderFinalMsg());
 		try {
-			(new GBKLoaderBJ(progress, new CacheCleanerBJ(ParametersDefault.gBKLoaderStepCache()))).load(file);
+			(new GBKLoaderBJ(progress, new SimpleCacheCleanerController(ParametersDefault.gBKLoaderStepCache(),
+				BioJavaxSession.getCacheCleanerListener()))).load(file);
 		}
 		catch (IOException e) {
 			BioJavaxSession.finishWithRollback();

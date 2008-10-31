@@ -108,6 +108,10 @@ public class TermsAndOntologies
 		return getOntology(methodTypeName);
 	}
 
+	public static ComparableTerm getTermNextBiocycId() {
+		return getDefaultOntology().getOrCreateTerm(getString("term.nextBioCycID"));
+	}
+
 	//	public static SimpleComparableOntology getOntologyFeatures() {
 	//		return (SimpleComparableOntology) RichObjectFactory.getObject(SimpleComparableOntology.class,
 	//			new Object[] {Messages.getString("ontologyFeatures")});

@@ -1,7 +1,7 @@
 /*
  * Created on 20/10/2008
  */
-package org.cycads.ui.loads;
+package org.cycads.ui;
 
 import org.cycads.entities.MethodType;
 import org.cycads.entities.MethodTypeBJ;
@@ -9,7 +9,7 @@ import org.cycads.entities.NCBIOrganismBJ;
 import org.cycads.entities.Organism;
 import org.cycads.exceptions.DBObjectNotFound;
 
-public class LoadToolsBJ extends LoadTools
+public class ArgumentsBJ extends Arguments
 {
 
 	@Override

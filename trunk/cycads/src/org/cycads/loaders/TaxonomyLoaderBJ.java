@@ -11,15 +11,15 @@ import java.io.IOException;
 import org.biojava.bio.seq.io.ParseException;
 import org.biojavax.bio.taxa.io.NCBITaxonomyLoader;
 import org.biojavax.bio.taxa.io.SimpleNCBITaxonomyLoader;
-import org.cycads.general.CacheCleaner;
+import org.cycads.general.CacheCleanerController;
 import org.cycads.ui.progress.Progress;
 
 public class TaxonomyLoaderBJ implements TaxonomyLoader
 {
 	Progress		progressNode, progressName;
-	CacheCleaner	cacheCleaner;
+	CacheCleanerController	cacheCleaner;
 
-	public TaxonomyLoaderBJ(Progress progressNode, Progress progressName, CacheCleaner cacheCleaner) {
+	public TaxonomyLoaderBJ(Progress progressNode, Progress progressName, CacheCleanerController cacheCleaner) {
 		this.progressNode = progressNode;
 		this.progressName = progressName;
 		this.cacheCleaner = cacheCleaner;

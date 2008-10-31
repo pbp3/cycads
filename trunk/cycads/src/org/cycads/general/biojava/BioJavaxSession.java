@@ -4,6 +4,7 @@
 package org.cycads.general.biojava;
 
 import org.biojavax.RichObjectFactory;
+import org.cycads.general.CacheCleanerListener;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -40,5 +41,14 @@ public class BioJavaxSession
 		session.flush();
 		transaction.rollback();
 		session.close();
+	}
+
+	public static CacheCleanerListener getCacheCleanerListener() {
+		return new CacheCleanerListener() {
+
+			public void clearCache() {
+				BioJavaxSession.clearCache();
+			}
+		};
 	}
 }
