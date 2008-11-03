@@ -5,8 +5,11 @@ package org.cycads.generators;
 
 import java.util.Collection;
 
+import org.cycads.general.Config;
+
 public interface BioCycRecord
 {
+	static final String	PROTEIN_TYPE	= Config.bioCycRecordProteinType();
 
 	public boolean isValid();
 
