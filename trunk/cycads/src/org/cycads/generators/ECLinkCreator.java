@@ -1,7 +1,7 @@
 /*
  * Created on 31/10/2008
  */
-package org.cycads.ui.generators;
+package org.cycads.generators;
 
 import java.util.Collection;
 

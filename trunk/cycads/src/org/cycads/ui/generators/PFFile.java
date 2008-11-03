@@ -13,10 +13,13 @@ import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
 import org.cycads.general.SimpleCacheCleanerController;
 import org.cycads.general.biojava.BioJavaxSession;
+import org.cycads.generators.BioCycExporter;
 import org.cycads.generators.BioCycRecordFactory;
 import org.cycads.generators.BioCycStream;
+import org.cycads.generators.ECLinkCreator;
 import org.cycads.generators.FeatureFilter;
 import org.cycads.generators.FeatureFilterByType;
+import org.cycads.generators.MethodFilter;
 import org.cycads.generators.PFFileStream;
 import org.cycads.generators.SimpleBioCycExporter;
 import org.cycads.generators.SimpleBioCycRecordFactory;
@@ -77,9 +80,9 @@ public class PFFile
 		DBLinkCreator[] dbLinkCreators = {crossRefDBLinkCreator, sequenceDBLinkCreator, koDBLinkCreator};
 		DBLinkCreator dbLinkCreator = new UnionDBLinkCreator(dbLinkCreators);
 
-		BioCycIdFileRepository bioCycIdFileRepository = new SimpleBioCycIdFileRepository(directory,
+		BioCycIdRepository bioCycIdFileRepository = new SimpleBioCycIdFileRepository(directory,
 			ParametersDefault.pfFileGeneratorBioCycIdFileName(pfForSequence));
-		BioCycIDGenerator bioCycIdGenerator = new BioCycIdGeneratorBJ(bioCycIdFileRepository,
+		BioCycIDGenerator bioCycIdGenerator = new BioCycIdGeneratorBJ(ParametersDefault.bioCycIdRegexGenerator(),
 			ParametersDefault.bioCycIdTag());
 
 		BioCycRecordFactory bioCycRecordFactory = new SimpleBioCycRecordFactory(ecCreator, functionCreator,
@@ -87,7 +90,7 @@ public class PFFile
 
 		boolean createBioCycIdFile = true;
 
-		BioCycStream pfFileStream = new PFFileStream(directory, pfForSequence, createFastaFile, createBioCycIdFile,
+		BioCycStream pfFileStream = new PFFileStream(directory, pfForSequence, createFastaFile, bioCycIdFileRepository,
 			ParametersDefault.pfFileGeneratorPfName(pfForSequence));
 
 		//		PFFileFactory pfFactory = new SimplePFFileFactory(directory,
@@ -114,8 +117,7 @@ public class PFFile
 		CacheCleanerController cacheControl = new SimpleCacheCleanerController(
 			ParametersDefault.pfFileGeneratorStepCache(), listeners);
 
-		org.cycads.generators.BioCycExporter exporter = new SimpleBioCycExporter(progress, cacheControl,
-			bioCycRecordFactory);
+		BioCycExporter exporter = new SimpleBioCycExporter(progress, cacheControl, bioCycRecordFactory);
 		exporter.export(organism, version, featureFilter, pfFileStream);
 
 		BioJavaxSession.finish();
