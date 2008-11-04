@@ -5,32 +5,90 @@ package org.cycads.generators;
 
 import java.util.Collection;
 
+import org.cycads.entities.DBLink;
+import org.cycads.entities.Function;
+import org.cycads.entities.Location;
+
 public class SimpleBioCycRecord implements BioCycRecord
 {
+	String				type;
+	String				bioCycID;
+	String				name;
+	Location			location;
+	String				productId;
+	Collection<DBLink>	dBLinks;
 
-	public Collection<String> getComments() {
-		// TODO Auto-generated method stub
-		return null;
+	public SimpleBioCycRecord(String type, String bioCycID) {
+		this.type = type;
+		this.bioCycID = bioCycID;
 	}
 
-	public Collection<DBLink> getDBLinks() {
-		// TODO Auto-generated method stub
-		return null;
+	public void setType(String type) {
+		this.type = type;
 	}
 
-	public Collection<String> getECs() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getType() {
+		return type;
+	}
+
+	public void setID(String bioCycID) {
+		this.bioCycID = bioCycID;
+	}
+
+	public String getId() {
+		return bioCycID;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
 	}
 
 	public int getEndBase() {
-		// TODO Auto-generated method stub
-		return 0;
+		return location.getEnd();
 	}
 
-	public String getExternalId() {
-		// TODO Auto-generated method stub
-		return null;
+	public int getStartBase() {
+		return location.getStart();
+	}
+
+	public void shiftLocation(int shiftQtty) {
+		location.shift(shiftQtty);
+	}
+
+	public Collection<Intron> getIntrons() {
+		return location.getIntrons();
+	}
+
+	public String getProductId() {
+		return productId;
+	}
+
+	public void setProductId(String productId) {
+		this.productId = productId;
+	}
+
+	public void addDBLink(DBLink dbLink) {
+		dBLinks.add(dbLink);
+	}
+
+	public void setDBLinks(Collection<DBLink> dBLinks) {
+		this.dBLinks = dBLinks;
+	}
+
+	public Collection<DBLink> getDBLinks() {
+		return dBLinks;
 	}
 
 	public Collection<Function> getFunctions() {
@@ -38,37 +96,7 @@ public class SimpleBioCycRecord implements BioCycRecord
 		return null;
 	}
 
-	public String getId() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Collection<Intron> getIntrons() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getProductID() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public int getStartBase() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 	public Collection<String> getSynonyms() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getType() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -78,14 +106,14 @@ public class SimpleBioCycRecord implements BioCycRecord
 		return null;
 	}
 
-	public boolean isValid() {
+	public String getExternalId() {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
-	public void shiftLocation(int shiftQtty) {
+	public Collection<String> getComments() {
 		// TODO Auto-generated method stub
-
+		return null;
 	}
 
 }

@@ -3,11 +3,11 @@
  */
 package org.cycads.entities;
 
-public interface Note
+public interface FeatureNote
 {
 	public String getValue();
 
-	public NoteType getType();
+	public FeatureNoteType getType();
 
 	public SequenceFeature getSequenceFeature();
 }

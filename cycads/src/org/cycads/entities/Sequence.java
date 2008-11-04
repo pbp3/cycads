@@ -5,7 +5,6 @@ package org.cycads.entities;
 
 import java.util.Collection;
 
-import org.cycads.generators.FeatureFilter;
 
 public interface Sequence
 {

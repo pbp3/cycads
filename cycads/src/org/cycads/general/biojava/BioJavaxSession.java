@@ -5,6 +5,7 @@ package org.cycads.general.biojava;
 
 import org.biojavax.RichObjectFactory;
 import org.cycads.general.CacheCleanerListener;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -50,5 +51,9 @@ public class BioJavaxSession
 				BioJavaxSession.clearCache();
 			}
 		};
+	}
+
+	public static Query createQuery(String query) {
+		return session.createQuery(query);
 	}
 }

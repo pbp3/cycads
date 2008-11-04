@@ -17,8 +17,16 @@ public interface SequenceFeature
 
 	public Collection<DBRef> getDBRefs();
 
-	public Collection<Note> getNotes();
+	public Collection<FeatureNote> getNotes();
 
-	public Collection<SequenceFeature> getFeatures();
+	//	public void addNote(FeatureNote note);
+	//
+	public Collection<FeatureNote> getNotes(String noteTypeName);
+
+	public FeatureNote getNote(String noteTypeName);
+
+	public FeatureNote getNote(FeatureNoteType noteType);
+
+	public Collection<FeatureNote> getNotes(FeatureNoteType noteType);
 
 }

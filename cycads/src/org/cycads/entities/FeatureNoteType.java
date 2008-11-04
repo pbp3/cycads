@@ -3,7 +3,9 @@
  */
 package org.cycads.entities;
 
-public interface NoteType
+public interface FeatureNoteType
 {
 	public String getName();
+
+	//	public boolean equals(NoteType other);
 }

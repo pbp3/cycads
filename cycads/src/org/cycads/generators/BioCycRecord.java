@@ -5,41 +5,60 @@ package org.cycads.generators;
 
 import java.util.Collection;
 
-import org.cycads.general.Config;
+import org.cycads.entities.DBLink;
+import org.cycads.entities.Function;
+import org.cycads.entities.Location;
 
 public interface BioCycRecord
 {
-	static final String	PROTEIN_TYPE	= Config.bioCycRecordProteinType();
+	public String getType();
 
-	public boolean isValid();
+	public void setType(String type);
 
 	public String getId();
 
-	public String getExternalId();
+	public void setID(String bioCycID);
 
 	public String getName();
+
+	public void setName(String name);
+
+	public Location getLocation();
+
+	public void setLocation(Location location);
 
 	public int getStartBase();
 
 	public int getEndBase();
 
-	public String getType();
-
-	public Collection<String> getComments();
-
-	public String getProductID();
-
-	public Collection<String> getSynonyms();
-
-	public Collection<DBLink> getDBLinks();
-
-	public Collection<Function> getFunctions();
-
-	public Collection<String> getECs();
-
 	public Collection<Intron> getIntrons();
 
 	public void shiftLocation(int shiftQtty);
 
+	public String getProductId();
+
+	public void setProductId(String productId);
+
+	public Collection<DBLink> getDBLinks();
+
+	public void setDBLinks(Collection<DBLink> dbLinks);
+
+	public void addDBLink(DBLink dbLink);
+
+	public Collection<Function> getFunctions();
+
+	public void setFunctions(Collection<Function> functions);
+
+	public void addFunction(Function function);
+
+	public Collection<String> getECs();
+
 	public String getTypeDescriptor();
+
+	public String getExternalId();
+
+	public Collection<String> getComments();
+
+	public Collection<String> getSynonyms();
+
 }

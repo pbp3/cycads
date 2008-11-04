@@ -3,6 +3,9 @@
  */
 package org.cycads.entities;
 
+import java.util.Collection;
+import java.util.LinkedList;
+
 import org.biojavax.bio.taxa.NCBITaxon;
 import org.cycads.exceptions.DBObjectNotFound;
 import org.cycads.general.biojava.BioJavaxSession;
@@ -39,6 +42,19 @@ public class NCBIOrganismBJ implements Organism
 		Query taxonsQuery = BioJavaxSession.session.createQuery("from Taxon where ncbi_taxon_id=:ncbiTaxonNumber");
 		taxonsQuery.setInteger("ncbiTaxonNumber", ncbiTaxonNumber);
 		return (NCBITaxon) taxonsQuery.uniqueResult();
+	}
+
+	public Collection<Sequence> getSequences(int version) {
+		Query query = BioJavaxSession.createQuery("select distinct(b.id) from Feature as f join f.parent as b where "
+			+ "b.version=:version and b.taxon=:taxonId");
+		query.setInteger("version", version);
+		query.setParameter("taxonId", getTaxon());
+		Collection<Integer> seqIds = (Collection<Integer>) query.list();
+		Collection<Sequence> seqs = new LinkedList<Sequence>();
+		for (int seqId : seqIds) {
+			seqs.add(new ThinSequenceBJ(seqId));
+		}
+		return seqs;
 	}
 
 }
