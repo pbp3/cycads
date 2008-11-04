@@ -6,11 +6,11 @@ package org.cycads.entities;
 import org.biojavax.ontology.ComparableTerm;
 import org.cycads.general.biojava.TermEncapsulator;
 
-public class NoteTypeBJ implements NoteType, TermEncapsulator
+public class FeatureNoteTypeBJ implements FeatureNoteType, TermEncapsulator
 {
 	ComparableTerm	term;
 
-	public NoteTypeBJ(ComparableTerm term) {
+	public FeatureNoteTypeBJ(ComparableTerm term) {
 		this.term = term;
 	}
 

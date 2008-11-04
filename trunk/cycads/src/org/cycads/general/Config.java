@@ -2,17 +2,20 @@ package org.cycads.general;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 public class Config
 {
-	private static final String			BUNDLE_NAME		= "config";								//$NON-NLS-1$
+	private static final String			BUNDLE_NAME						= "config";											//$NON-NLS-1$
 
-	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
+	private static final ResourceBundle	RESOURCE_BUNDLE					= ResourceBundle.getBundle(BUNDLE_NAME);
 
-	private static Transformer			BIOCYC_RECORD_TYPE;
+	public static List<Pattern>			SEQUENCEFEATURE_TYPE_PATTERNS	= getPatterns("SequenceFeature.Tag.Type.regex");
+	public static List<String>			BIOCYC_RECORD_TYPES				= getStrings("BioCycRecord.Type.value");
+	public static List<String>			SEQUENCEFEATURE_TAG_PRODUCT_IDS	= getStrings("SequenceFeature.Tag.ProductId.value");
 
 	private Config() {
 	}
@@ -44,10 +47,6 @@ public class Config
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-	}
-
-	private static Transformer createTransformer(String tag) {
-		return new Transformer(tag);
 	}
 
 	//KOToECLoader
@@ -208,38 +207,51 @@ public class Config
 		return getString("General.Method.Description");
 	}
 
-	public static String bioCycRecordType(String featureTag) {
-		if (BIOCYC_RECORD_TYPE == null) {
-			BIOCYC_RECORD_TYPE = createTransformer("BioCycRecord.Type");
-		}
-		return BIOCYC_RECORD_TYPE.getValue(featureTag);
+	public static String bioCycRecordType(String featureType) {
+		return transform(featureType, SEQUENCEFEATURE_TYPE_PATTERNS, BIOCYC_RECORD_TYPES);
 	}
 
-	static class Transformer
-	{
-		ArrayList<Pattern>	keyPatterns	= new ArrayList<Pattern>();
-		ArrayList<String>	values		= new ArrayList<String>();
+	public static String sequenceFeatureTagProductId(String featureType) {
+		return transform(featureType, SEQUENCEFEATURE_TYPE_PATTERNS, SEQUENCEFEATURE_TAG_PRODUCT_IDS);
+	}
 
-		Transformer(String tag) {
-			int i = 0;
-			String typePatternStr;
-			while ((typePatternStr = getStringOptional(tag + ".key." + i)) != null) {
-				keyPatterns.add(Pattern.compile(typePatternStr));
-				values.add(getStringMandatory(tag + ".value." + i));
-				i++;
-			}
-			keyPatterns.trimToSize();
-			values.trimToSize();
-		}
-
-		public String getValue(String key) {
-			for (int i = 0; i < keyPatterns.size(); i++) {
-				if (keyPatterns.get(i).matcher(key).matches()) {
+	private static String transform(String key, List<Pattern> keyPatterns, List<String> values) {
+		for (int i = 0; i < keyPatterns.size(); i++) {
+			if (keyPatterns.get(i).matcher(key).matches()) {
+				if (values.size() > i) {
 					return values.get(i);
 				}
+				else {
+					return null;
+				}
 			}
-			return null;
 		}
+		return null;
+	}
+
+	private static List<Pattern> getPatterns(String tag) {
+		List<String> patternsStr = getStrings(tag);
+		List<Pattern> patterns = new ArrayList<Pattern>(patternsStr.size());
+		for (String str : patternsStr) {
+			patterns.add(Pattern.compile(str));
+		}
+		return patterns;
+	}
+
+	private static List<String> getStrings(String tag) {
+		ArrayList<String> values = new ArrayList<String>(4);
+		int i = 0;
+		String str;
+		while ((str = getStringOptional(tag + "." + i)) != null) {
+			values.add(str);
+			i++;
+		}
+		values.trimToSize();
+		return values;
+	}
+
+	public static String sequenceFeatureNameTag() {
+		return getString("SequenceFeature.Tag.Name");
 	}
 
 }

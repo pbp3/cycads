@@ -1,7 +1,7 @@
 /*
  * Created on 16/09/2008
  */
-package org.cycads.generators;
+package org.cycads.entities;
 
 public class DBLink
 {

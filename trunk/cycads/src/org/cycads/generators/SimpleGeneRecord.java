@@ -17,6 +17,8 @@ import org.biojavax.RichAnnotation;
 import org.biojavax.bio.seq.RichFeature;
 import org.biojavax.bio.seq.RichSequence;
 import org.biojavax.ontology.ComparableTerm;
+import org.cycads.entities.DBLink;
+import org.cycads.entities.Function;
 import org.cycads.general.CacheCleanerController;
 import org.cycads.general.CacheCleanerListener;
 

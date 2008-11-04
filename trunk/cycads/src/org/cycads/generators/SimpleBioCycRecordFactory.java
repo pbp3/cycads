@@ -3,8 +3,9 @@
  */
 package org.cycads.generators;
 
-import java.util.regex.Pattern;
-
+import org.cycads.entities.DBLinkCreator;
+import org.cycads.entities.ECLinkCreator;
+import org.cycads.entities.FunctionCreator;
 import org.cycads.entities.SequenceFeature;
 import org.cycads.general.Config;
 
@@ -17,30 +18,27 @@ public class SimpleBioCycRecordFactory implements BioCycRecordFactory
 
 	public BioCycRecord createRecord(SequenceFeature feature) {
 		String type = Config.bioCycRecordType(feature.getType());
-		if (type==null)
-		{
+		if (type == null) {
 			return null;
 		}
 		String bioCycID = bioCycIdGenerator.getOrCreate(feature);
 		if (bioCycID == null) {
 			return null;
 		}
-		BioCycRecord record = new SimpleBioCycRecord(bioCycID);
-		String type = feature.getType();
+		BioCycRecord record = new SimpleBioCycRecord(type, bioCycID);
 
-		if (proteinPattern.matcher(type).matches()) {
-			record.setType(BioCycRecord.PROTEIN_TYPE);
-		}
-		else 		if (tRNAPattern.matcher(type).matches())
-		{
+		record.setName(feature.getNote(Config.sequenceFeatureNameTag()).getValue());
+		record.setLocation(feature.getLocation());
 
-		}
-		record.setName(feature.getNote(Config.bioCycRecordFactoryNameTag()))
+		record.setProductId(feature.getNote(Config.sequenceFeatureTagProductId(feature.getType())).getValue());
+		record.setDBLinks(dbLinkCreator.create(feature));
+		record.setFunctions(functionCreator.create(feature));
+
+		record.setECs();
+		record.setComments();
+		record.setSynonyms();
+
 		return record;
 	}
 
-	class TypeTransform
-	{
-
-	}
 }
