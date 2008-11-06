@@ -23,29 +23,38 @@ public class SimpleBioCycExporter implements BioCycExporter
 	BioCycRecordFactory		recordFactory;
 
 	public SimpleBioCycExporter(Progress progress, CacheCleanerController cacheCleaner,
-			BioCycRecordFactory recordFactory) {
+			BioCycRecordFactory recordFactory)
+	{
 		this.progress = progress;
 		this.cacheCleaner = cacheCleaner;
 		this.recordFactory = recordFactory;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.cycads.generators.BioCycExporter#export(org.cycads.entities.Organism, int, org.cycads.generators.FeatureFilter, org.cycads.generators.BioCycStream)
+	/*
+	 * (non-Javadoc)
+	 * @see org.cycads.generators.BioCycExporter#export(org.cycads.entities.Organism, int,
+	 *      org.cycads.generators.FeatureFilter, org.cycads.generators.BioCycStream)
 	 */
-	public void export(Organism org, int version, FeatureFilter featureFilter, BioCycStream stream) {
+	public void export(Organism org, int version, FeatureFilter featureFilter, BioCycStream stream)
+	{
 		progress.init();
 		Hashtable<String, Integer> counters = new Hashtable<String, Integer>();
 
 		Collection<Sequence> seqs = org.getSequences(version);
-		for (Sequence seq : seqs) {
+		for (Sequence seq : seqs)
+		{
 			Collection<SequenceFeature> features = seq.getFeatures(featureFilter);
-			for (SequenceFeature feature : features) {
+			for (SequenceFeature feature : features)
+			{
 				BioCycRecord record = recordFactory.createRecord(feature);
-				if (record != null) {
-					try {
+				if (record != null)
+				{
+					try
+					{
 						stream.write(record);
 					}
-					catch (GeneRecordInvalidException e) {
+					catch (GeneRecordInvalidException e)
+					{
 						e.printStackTrace();
 						throw new RuntimeException(e);
 					}
@@ -59,7 +68,8 @@ public class SimpleBioCycExporter implements BioCycExporter
 		String[] a = new String[counters.size() * 2 + 1];
 		a[0] = new Integer(progress.getStep()).toString();
 		int i = 1;
-		while (it.hasNext()) {
+		while (it.hasNext())
+		{
 			Map.Entry<String, Integer> entry = it.next();
 			a[++i] = entry.getKey();
 			a[++i] = entry.getValue().toString();
@@ -67,13 +77,16 @@ public class SimpleBioCycExporter implements BioCycExporter
 		progress.finish(a);
 	}
 
-	private void incCounter(BioCycRecord record, Hashtable<String, Integer> counters) {
-		String typeDescriptor = record.getTypeDescriptor();
+	private void incCounter(BioCycRecord record, Hashtable<String, Integer> counters)
+	{
+		String typeDescriptor = record.getTypeDescription();
 		Integer counter = counters.get(record);
-		if (counter == null) {
+		if (counter == null)
+		{
 			counter = 1;
 		}
-		else {
+		else
+		{
 			counter++;
 		}
 		counters.put(typeDescriptor, counter);

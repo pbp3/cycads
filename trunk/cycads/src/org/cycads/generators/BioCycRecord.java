@@ -5,6 +5,7 @@ package org.cycads.generators;
 
 import java.util.Collection;
 
+import org.cycads.dbExternal.EC;
 import org.cycads.entities.DBLink;
 import org.cycads.entities.Function;
 import org.cycads.entities.Location;
@@ -14,6 +15,10 @@ public interface BioCycRecord
 	public String getType();
 
 	public void setType(String type);
+
+	public String getTypeDescription();
+
+	public void setTypeDescription(String typeDescription);
 
 	public String getId();
 
@@ -51,14 +56,24 @@ public interface BioCycRecord
 
 	public void addFunction(Function function);
 
-	public Collection<String> getECs();
+	public Collection<EC> getECs();
 
-	public String getTypeDescriptor();
+	public void setECs(Collection<EC> eCs);
 
-	public String getExternalId();
+	public void addEC(EC eC);
 
 	public Collection<String> getComments();
 
+	public void setComments(Collection<String> comments);
+
+	public void addComment(String comment);
+
 	public Collection<String> getSynonyms();
 
+	public void setSynonyms(Collection<String> synonyms);
+
+	public void addSynonym(String synonym);
+
+	// public String getExternalId();
+	//
 }
