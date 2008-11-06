@@ -85,7 +85,8 @@ public class GBKLoaderBJ extends FileLoaderAbstract
 						SimpleRichAnnotation annot = (SimpleRichAnnotation) feature.getAnnotation();
 						Set<Note> notes = annot.getNoteSet();
 						for (Note note : notes) {
-							if (ecPattern.matcher(note.getTerm().getName()).matches()) {
+							String tag = note.getTerm().getName();
+							if (ecPattern.matcher(tag).matches()) {
 								note.setTerm(ecTerm);
 								CDS cds = new CDSBJ(feature);
 								cds.addAnnotation(methodCDSToEC, note.getValue());
