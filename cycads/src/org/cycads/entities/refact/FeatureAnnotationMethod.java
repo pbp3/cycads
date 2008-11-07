@@ -5,5 +5,5 @@ package org.cycads.entities.refact;
 
 public class FeatureAnnotationMethod
 {
-	Term	name;
+	private Term	name;
 }

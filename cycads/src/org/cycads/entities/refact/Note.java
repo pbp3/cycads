@@ -1,4 +1,5 @@
 package org.cycads.entities.refact;
+
 /*
  * Created on 07/11/2008
  */
@@ -6,10 +7,8 @@ package org.cycads.entities.refact;
 public class Note
 {
 
-	/*
-	* (non-javadoc)
-	*/
 	private Term	type;
+	private String	value;
 
 	/**
 	 * Getter of the property <tt>type</tt>
@@ -17,14 +16,10 @@ public class Note
 	 * @return Returns the type.
 	 * 
 	 */
-	public Term getType() {
+	public Term getType()
+	{
 		return type;
 	}
-
-	/*
-	* (non-javadoc)
-	*/
-	private String	value;
 
 	/**
 	 * Getter of the property <tt>value</tt>
@@ -32,7 +27,8 @@ public class Note
 	 * @return Returns the value.
 	 * 
 	 */
-	public String getValue() {
+	public String getValue()
+	{
 		return value;
 	}
 
@@ -42,18 +38,9 @@ public class Note
 	 * @param value The value to set.
 	 * 
 	 */
-	public void setValue(String value) {
+	public void setValue(String value)
+	{
 		this.value = value;
 	}
 
 }
-
-///**
-//	 * Getter of the property <tt>type</tt>
-//	 * 
-//	 * @return Returns the type.
-//	 * 
-//	 */
-//	public String getType() {
-//		return type;
-//	}

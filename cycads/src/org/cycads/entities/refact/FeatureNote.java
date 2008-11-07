@@ -5,9 +5,10 @@ package org.cycads.entities.refact;
 
 public class FeatureNote extends Note
 {
-	SequenceFeature	feature;
+	private Feature	feature;
 
-	public SequenceFeature getFeature() {
+	public Feature getFeature()
+	{
 		return feature;
 	}
 

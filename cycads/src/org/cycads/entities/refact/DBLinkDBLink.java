@@ -1,4 +1,5 @@
 package org.cycads.entities.refact;
+
 /*
  * Created on 07/11/2008
  */
@@ -6,10 +7,7 @@ package org.cycads.entities.refact;
 public class DBLinkDBLink extends DBLink
 {
 
-	/*
-	* (non-javadoc)
-	*/
-	private DBRecord	source	= null;
+	private DBRecord	source;
 
 	/**
 	 * Getter of the property <tt>source</tt>
@@ -17,7 +15,8 @@ public class DBLinkDBLink extends DBLink
 	 * @return Returns the source.
 	 * 
 	 */
-	public DBRecord getSource() {
+	public DBRecord getSource()
+	{
 		return source;
 	}
 
