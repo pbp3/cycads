@@ -4,25 +4,10 @@ import java.util.Collection;
 
 /** 
  */
-public class DBLinkMethod
+public class DBLinkMethod extends Term
 {
 
-	private Collection<DBLink>	dBLink;
-
-	private Term				type;
-
-	private String				name;
-
-	/**
-	 * Getter of the property <tt>type</tt>
-	 * 
-	 * @return Returns the type.
-	 * 
-	 */
-	public Term getType()
-	{
-		return type;
-	}
+	private Collection<DBLink>	dBLinks;
 
 	/**
 	 * Getter of the property <tt>name</tt>
@@ -32,7 +17,12 @@ public class DBLinkMethod
 	 */
 	public String getName()
 	{
-		return name;
+		return getValue();
+	}
+
+	public Collection<DBLink> getDBLinks()
+	{
+		return dBLinks;
 	}
 
 }
