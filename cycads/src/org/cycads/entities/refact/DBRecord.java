@@ -8,8 +8,9 @@ public class DBRecord
 {
 
 	private ExternalDatabase			database;
-	private Collection<DBLinkDBLink>	dbLinks;
 	private String						accession;
+
+	private Collection<DBLinkDBLink>	dbLinks;
 
 	/**
 	 * Getter of the property <tt>dbLinks</tt>

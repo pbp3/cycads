@@ -3,7 +3,10 @@
  */
 package org.cycads.entities.refact;
 
-public class FeatureAnnotationMethod
+public class FeatureAnnotationMethod extends Term
 {
-	private Term	name;
+	public String getName()
+	{
+		return getValue();
+	}
 }

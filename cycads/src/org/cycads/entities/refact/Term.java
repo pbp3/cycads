@@ -9,7 +9,14 @@ package org.cycads.entities.refact;
 public class Term
 {
 
-	private String	value;
+	private String		value;
+
+	private TypeTerm	type;
+
+	public TypeTerm getType()
+	{
+		return type;
+	}
 
 	/**
 	 * Getter of the property <tt>value</tt>

@@ -3,7 +3,7 @@ package org.cycads.entities.refact;
 public class FeatureDBLink extends DBLink
 {
 
-	private Feature	sequenceFeature;
+	private Feature	feature;
 
 	/**
 	 * Getter of the property <tt>sequenceFeature</tt>
@@ -11,9 +11,9 @@ public class FeatureDBLink extends DBLink
 	 * @return Returns the sequenceFeature.
 	 * 
 	 */
-	public Feature getSequenceFeature()
+	public Feature getFeature()
 	{
-		return sequenceFeature;
+		return feature;
 	}
 
 }
