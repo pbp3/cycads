@@ -1,17 +1,18 @@
 package org.cycads.entities.refact;
 
 import java.util.Collection;
-import java.util.Iterator;
 
 /** 
  */
 public class Sequence
 {
 
-	/**
-	 * 
-	 */
+	private String						name;
+	private String						description;
+	private double						version;
+
 	private Collection<SequenceDBLink>	dBLinks;
+	private Collection<Feature>			features;
 
 	/**
 	 * Getter of the property <tt>dBLinks</tt>
@@ -19,7 +20,8 @@ public class Sequence
 	 * @return Returns the dBLinks.
 	 * 
 	 */
-	public Collection<SequenceDBLink> getDBLinks() {
+	public Collection<SequenceDBLink> getDBLinks()
+	{
 		return dBLinks;
 	}
 
@@ -30,14 +32,10 @@ public class Sequence
 	 * @see java.util.Collection#containsAll(Collection)
 	 * 
 	 */
-	public boolean containsAllDBLinks(Collection<SequenceDBLink> dBLinks) {
+	public boolean containsAllDBLinks(Collection<SequenceDBLink> dBLinks)
+	{
 		return this.dBLinks.containsAll(dBLinks);
 	}
-
-	/**
-	 * 
-	 */
-	private Collection<SequenceFeature>	sequenceFeatures;
 
 	/**
 	 * Getter of the property <tt>sequenceFeatures</tt>
@@ -45,14 +43,10 @@ public class Sequence
 	 * @return Returns the sequenceFeatures.
 	 * 
 	 */
-	public Collection<SequenceFeature> getSequenceFeatures() {
-		return sequenceFeatures;
+	public Collection<Feature> getFeatures()
+	{
+		return features;
 	}
-
-	/*
-	 * (non-javadoc)
-	 */
-	private String	description;
 
 	/**
 	 * Getter of the property <tt>description</tt>
@@ -60,14 +54,10 @@ public class Sequence
 	 * @return Returns the description.
 	 * 
 	 */
-	public String getDescription() {
+	public String getDescription()
+	{
 		return description;
 	}
-
-	/*
-	 * (non-javadoc)
-	 */
-	private double	version;
 
 	/**
 	 * Getter of the property <tt>version</tt>
@@ -75,14 +65,10 @@ public class Sequence
 	 * @return Returns the version.
 	 * 
 	 */
-	public double getVersion() {
+	public double getVersion()
+	{
 		return version;
 	}
-
-	/*
-	 * (non-javadoc)
-	 */
-	private String	name;
 
 	/**
 	 * Getter of the property <tt>name</tt>
@@ -90,28 +76,9 @@ public class Sequence
 	 * @return Returns the name.
 	 * 
 	 */
-	public String getName() {
+	public String getName()
+	{
 		return name;
 	}
 
 }
-
-///**
-// * Getter of the property <tt>sequenceFeatures</tt>
-// *
-// * @return Returns the sequenceFeatures.
-// * 
-// */
-//public SequenceFeature getSequenceFeature()
-//{
-//	return sequenceFeatures;
-//}
-///**
-// * Setter of the property <tt>sequenceFeatures</tt>
-// *
-// * @param sequenceFeatures The sequenceFeatures to set.
-// *
-// */
-//public void setSequenceFeature(SequenceFeature sequenceFeatures ){
-//	this.sequenceFeature = sequenceFeatures;
-//}

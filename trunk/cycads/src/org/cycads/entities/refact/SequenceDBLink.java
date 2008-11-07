@@ -1,4 +1,5 @@
 package org.cycads.entities.refact;
+
 /*
  * Created on 07/11/2008
  */
@@ -6,10 +7,7 @@ package org.cycads.entities.refact;
 public class SequenceDBLink extends DBLink
 {
 
-	/*
-	* (non-javadoc)
-	*/
-	private Sequence	sequence	= null;
+	private Sequence	sequence;
 
 	/**
 	 * Getter of the property <tt>sequence</tt>
@@ -17,7 +15,8 @@ public class SequenceDBLink extends DBLink
 	 * @return Returns the sequence.
 	 * 
 	 */
-	public Sequence getSequence() {
+	public Sequence getSequence()
+	{
 		return sequence;
 	}
 

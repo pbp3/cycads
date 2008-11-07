@@ -1,24 +1,17 @@
 package org.cycads.entities.refact;
 
 import java.util.Collection;
-import java.util.Iterator;/*
- * Created on 07/11/2008
- */
 
 /** 
  */
 public class DBLinkMethod
 {
 
-	/**
-	 * 
-	 */
 	private Collection<DBLink>	dBLink;
 
-	/*
-	 * (non-javadoc)
-	 */
-	private Term							type;
+	private Term				type;
+
+	private String				name;
 
 	/**
 	 * Getter of the property <tt>type</tt>
@@ -26,14 +19,10 @@ public class DBLinkMethod
 	 * @return Returns the type.
 	 * 
 	 */
-	public Term getType() {
+	public Term getType()
+	{
 		return type;
 	}
-
-	/*
-	 * (non-javadoc)
-	 */
-	private String	name;
 
 	/**
 	 * Getter of the property <tt>name</tt>
@@ -41,7 +30,8 @@ public class DBLinkMethod
 	 * @return Returns the name.
 	 * 
 	 */
-	public String getName() {
+	public String getName()
+	{
 		return name;
 	}
 

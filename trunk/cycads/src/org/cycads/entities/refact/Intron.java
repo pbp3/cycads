@@ -5,6 +5,16 @@ package org.cycads.entities.refact;
 
 public class Intron
 {
-	int	start, end;
+	private int	start, end;
+
+	public int getStart()
+	{
+		return start;
+	}
+
+	public int getEnd()
+	{
+		return end;
+	}
 
 }

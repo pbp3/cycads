@@ -1,4 +1,5 @@
 package org.cycads.entities.refact;
+
 /*
  * Created on 07/11/2008
  */
@@ -6,10 +7,7 @@ package org.cycads.entities.refact;
 public class DBLinkNote extends Note
 {
 
-	/*
-	* (non-javadoc)
-	*/
-	private DBLink	dBLink	= null;
+	private DBLink	dBLink;
 
 	/**
 	 * Getter of the property <tt>dBLink</tt>
@@ -17,7 +15,8 @@ public class DBLinkNote extends Note
 	 * @return Returns the dBLink.
 	 * 
 	 */
-	public DBLink getDBink() {
+	public DBLink getDBink()
+	{
 		return dBLink;
 	}
 

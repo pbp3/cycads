@@ -8,20 +8,17 @@ import java.util.Collection;
 
 public class Location
 {
+	private int					start, end;
+	private Collection<Intron>	introns;
+	private boolean				positiveStrand;
 
-	/*
-	* (non-javadoc)
-	*/
-	private int			end;
-
-	Collection<Intron>	introns;
-	boolean				positiveStrand;
-
-	public Collection<Intron> getIntrons() {
+	public Collection<Intron> getIntrons()
+	{
 		return introns;
 	}
 
-	public boolean isPositiveStrand() {
+	public boolean isPositiveStrand()
+	{
 		return positiveStrand;
 	}
 
@@ -31,22 +28,22 @@ public class Location
 	 * @return Returns the end.
 	 * 
 	 */
-	public int getEnd() {
+	public int getEnd()
+	{
 		return end;
 	}
 
 	/*
-	* (non-javadoc)
-	*/
-	private int	start;
-
+	 * (non-javadoc)
+	 */
 	/**
 	 * Getter of the property <tt>start</tt>
 	 * 
 	 * @return Returns the start.
 	 * 
 	 */
-	public int getStart() {
+	public int getStart()
+	{
 		return start;
 	}
 
