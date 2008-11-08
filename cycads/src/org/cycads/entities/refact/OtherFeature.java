@@ -5,9 +5,9 @@ package org.cycads.entities.refact;
 
 public class OtherFeature extends Feature
 {
-	private Term	type;
+	private FeatureType	type;
 
-	public Term getType()
+	public FeatureType getType()
 	{
 		return type;
 	}

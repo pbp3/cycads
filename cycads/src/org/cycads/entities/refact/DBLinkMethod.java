@@ -4,9 +4,8 @@ import java.util.Collection;
 
 /** 
  */
-public class DBLinkMethod extends Term
+public class DBLinkMethod extends AnnotationMethod
 {
-
 	private Collection<DBLink>	dBLinks;
 
 	/**
@@ -15,11 +14,6 @@ public class DBLinkMethod extends Term
 	 * @return Returns the name.
 	 * 
 	 */
-	public String getName()
-	{
-		return getValue();
-	}
-
 	public Collection<DBLink> getDBLinks()
 	{
 		return dBLinks;
