@@ -8,7 +8,7 @@ public class Feature
 {
 	private String						name;
 	private Location					location;
-	private FeatureAnnotationMethod		method;
+	private FeatureMethod		method;
 
 	private Collection<FeatureNote>		notes;
 
@@ -32,7 +32,7 @@ public class Feature
 		return location;
 	}
 
-	public FeatureAnnotationMethod getMethod()
+	public FeatureMethod getMethod()
 	{
 		return method;
 	}
