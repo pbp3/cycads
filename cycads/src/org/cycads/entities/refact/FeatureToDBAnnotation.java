@@ -1,6 +1,6 @@
 package org.cycads.entities.refact;
 
-public class FeatureDBLink extends DBLink
+public class FeatureToDBAnnotation extends DBAnnotation
 {
 
 	private Feature	feature;

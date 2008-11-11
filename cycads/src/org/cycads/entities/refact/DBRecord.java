@@ -7,10 +7,10 @@ import java.util.Collection;
 public class DBRecord
 {
 
-	private ExternalDatabase			database;
-	private String						accession;
+	private ExternalDatabase				database;
+	private String							accession;
 
-	private Collection<DBLinkDBLink>	dbLinks;
+	private Collection<DBToDBAnnotation>	dbAnnotations;
 
 	/**
 	 * Getter of the property <tt>dbLinks</tt>
@@ -18,9 +18,9 @@ public class DBRecord
 	 * @return Returns the dbLinks.
 	 * 
 	 */
-	public Collection<DBLinkDBLink> getDbLinks()
+	public Collection<DBToDBAnnotation> getDbAnnotations()
 	{
-		return dbLinks;
+		return dbAnnotations;
 	}
 
 	/**

@@ -2,12 +2,12 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-public abstract class DBLink
+public abstract class DBAnnotation
 {
 
-	private Collection<DBLinkNote>	dBLinkNotes;
-	private DBLinkMethod			dBLinkMethod;
-	private DBRecord				dBRecord;
+	private Collection<DBAnnotationNote>	dBAnnotationNotes;
+	private DBAnnotationMethod				dBAnnotationMethod;
+	private DBRecord						dBRecord;
 
 	/**
 	 * Getter of the property <tt>dBLinkNotes</tt>
@@ -15,18 +15,18 @@ public abstract class DBLink
 	 * @return Returns the dBLinkNotes.
 	 * 
 	 */
-	public Collection<DBLinkNote> getDBLinkNotes()
+	public Collection<DBAnnotationNote> getDBAnnotationNotes()
 	{
-		return dBLinkNotes;
+		return dBAnnotationNotes;
 	}
 
 	/**
 	 * Getter of the property <tt>dBLinkMethod</tt>
 	 * @return Returns the dBLinkMethod.
 	 */
-	public DBLinkMethod getDBLinkMethod()
+	public DBAnnotationMethod getDBAnnotationMethod()
 	{
-		return dBLinkMethod;
+		return dBAnnotationMethod;
 	}
 
 	/**

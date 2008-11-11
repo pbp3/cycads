@@ -8,43 +8,21 @@ import java.util.Collection;
 public class AnnotationMethod
 {
 	private String								name;
-	private Collection<AnnotationMethodLabel>	labels;
-	private Collection<EntityType>				sourceTypes;
-	private Collection<EntityType>				targetTypes;
-
-	public void addSourceType(EntityType sourceType)
-	{
-
-	}
-
-	public void addTargetType(EntityType targetType)
-	{
-
-	}
-
-	public Collection<EntityType> getSourceTypes()
-	{
-		return sourceTypes;
-	}
-
-	public Collection<EntityType> getTargetTypes()
-	{
-		return targetTypes;
-	}
+	private Collection<AnnotationMethodNote>	notes;
 
 	public String getName()
 	{
 		return name;
 	}
 
-	public Collection<AnnotationMethodLabel> getLabels()
+	public Collection<AnnotationMethodNote> getNotes()
 	{
-		return labels;
+		return notes;
 	}
 
-	public void addLabel(AnnotationMethodLabel label)
+	public void addNote(AnnotationMethodNote note)
 	{
-
+		notes.add(note);
 	}
 
 }

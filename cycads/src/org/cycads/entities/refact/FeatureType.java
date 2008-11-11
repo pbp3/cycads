@@ -7,8 +7,10 @@ import java.util.Collection;
 
 public class FeatureType extends Term
 {
-	public Collection<Feature> getFeatures(Sequence sequence)
+	Collection<OtherFeature>	features;
+
+	public Collection<OtherFeature> getFeatures(Sequence sequence)
 	{
-		return null;
+		return features;
 	}
 }

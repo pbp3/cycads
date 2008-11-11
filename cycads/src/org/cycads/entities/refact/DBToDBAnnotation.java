@@ -4,7 +4,7 @@ package org.cycads.entities.refact;
  * Created on 07/11/2008
  */
 
-public class DBLinkDBLink extends DBLink
+public class DBToDBAnnotation extends DBAnnotation
 {
 
 	private DBRecord	source;

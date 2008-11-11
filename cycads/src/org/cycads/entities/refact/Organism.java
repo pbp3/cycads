@@ -1,5 +1,7 @@
 package org.cycads.entities.refact;
 
+import java.util.Collection;
+
 /*
  * Created on 07/11/2008
  */
@@ -9,8 +11,19 @@ package org.cycads.entities.refact;
 public class Organism
 {
 
-	private int		id;
-	private String	name;
+	private int						id;
+	private String					name;
+	private Collection<Sequence>	sequences;
+
+	public Collection<Sequence> getSequences()
+	{
+		return sequences;
+	}
+
+	public Collection<Sequence> getSequences(double version)
+	{
+		return sequences;
+	}
 
 	/**
 	 * Getter of the property <tt>name</tt>
