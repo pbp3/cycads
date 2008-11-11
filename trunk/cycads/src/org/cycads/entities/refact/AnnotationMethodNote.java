@@ -6,9 +6,9 @@ package org.cycads.entities.refact;
 
 public class AnnotationMethodNote extends Term
 {
-	private AnnotationMethod	method;
+	private IAnnotationMethod	method;
 
-	public AnnotationMethod getMethod()
+	public IAnnotationMethod getMethod()
 	{
 		return method;
 	}
