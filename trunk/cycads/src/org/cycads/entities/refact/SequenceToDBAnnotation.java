@@ -4,7 +4,7 @@ package org.cycads.entities.refact;
  * Created on 07/11/2008
  */
 
-public class SequenceDBLink extends DBLink
+public class SequenceToDBAnnotation extends DBAnnotation
 {
 
 	private Sequence	sequence;

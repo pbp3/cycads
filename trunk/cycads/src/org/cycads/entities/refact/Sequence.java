@@ -10,8 +10,9 @@ public class Sequence
 	private String						name;
 	private String						description;
 	private double						version;
+	private Organism					organism;
 
-	private Collection<SequenceDBLink>	dBLinks;
+	private Collection<SequenceToDBAnnotation>	dBLinks;
 	private Collection<Feature>			features;
 
 	/**
@@ -20,21 +21,9 @@ public class Sequence
 	 * @return Returns the dBLinks.
 	 * 
 	 */
-	public Collection<SequenceDBLink> getDBLinks()
+	public Collection<SequenceToDBAnnotation> getDBLinks()
 	{
 		return dBLinks;
-	}
-
-	/**
-	 * Returns <tt>true</tt> if this collection contains all of the elements in the specified collection.
-	 * 
-	 * @param elements collection to be checked for containment in this collection.
-	 * @see java.util.Collection#containsAll(Collection)
-	 * 
-	 */
-	public boolean containsAllDBLinks(Collection<SequenceDBLink> dBLinks)
-	{
-		return this.dBLinks.containsAll(dBLinks);
 	}
 
 	/**
@@ -79,6 +68,11 @@ public class Sequence
 	public String getName()
 	{
 		return name;
+	}
+
+	public Organism getOrganism()
+	{
+		return organism;
 	}
 
 }

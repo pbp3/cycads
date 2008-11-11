@@ -6,22 +6,16 @@ import java.util.Collection;
  */
 public class Feature
 {
-	private String						name;
-	private Location					location;
-	private FeatureMethod		method;
+	private String								name;
+	private Location							location;
+	private FeatureAnnotationMethod				method;
 
-	private Collection<FeatureNote>		notes;
+	private Collection<FeatureNote>				notes;
 
-	private Collection<FeatureDBLink>	dBLinks;
+	private Collection<FeatureToDBAnnotation>	dBAnnotations;
 
-	private Sequence					sequence;
+	private Sequence							sequence;
 
-	/**
-	 * Getter of the property <tt>sequence</tt>
-	 * 
-	 * @return Returns the sequence.
-	 * 
-	 */
 	public Sequence getSequence()
 	{
 		return sequence;
@@ -32,7 +26,7 @@ public class Feature
 		return location;
 	}
 
-	public FeatureMethod getMethod()
+	public FeatureAnnotationMethod getMethod()
 	{
 		return method;
 	}
@@ -47,9 +41,9 @@ public class Feature
 		return name;
 	}
 
-	public Collection<FeatureDBLink> getdBLinks()
+	public Collection<FeatureToDBAnnotation> getdBAnnotations()
 	{
-		return dBLinks;
+		return dBAnnotations;
 	}
 
 }
