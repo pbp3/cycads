@@ -3,7 +3,7 @@
  */
 package org.cycads.entities.refact;
 
-public class FeatureNote extends Term
+public class FeatureNote extends Note
 {
 	private Feature	feature;
 

@@ -3,8 +3,7 @@
  */
 package org.cycads.entities.refact;
 
-
-public class AnnotationMethodNote extends Term
+public class AnnotationMethodNote extends Note
 {
 	private IAnnotationMethod	method;
 
