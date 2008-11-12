@@ -3,7 +3,7 @@
  */
 package org.cycads.entities.annotation;
 
-import org.cycads.entities.Note;
+import org.cycads.entities.note.Note;
 
 public interface DBAnnotationNote extends Note
 {

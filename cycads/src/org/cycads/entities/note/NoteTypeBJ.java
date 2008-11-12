@@ -1,7 +1,7 @@
 /*
  * Created on 12/11/2008
  */
-package org.cycads.entities;
+package org.cycads.entities.note;
 
 import java.util.Hashtable;
 

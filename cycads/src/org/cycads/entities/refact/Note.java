@@ -3,8 +3,8 @@
  */
 package org.cycads.entities.refact;
 
-import org.cycads.entities.Note;
-import org.cycads.entities.NoteType;
+import org.cycads.entities.note.Note;
+import org.cycads.entities.note.NoteType;
 
 public class Note implements Note
 {
