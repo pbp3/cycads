@@ -6,27 +6,33 @@ import java.util.Collection;
  * Created on 07/11/2008
  */
 
-public class Location
+public class Location implements ILocation
 {
 	private int					start, end;
-	private Collection<Intron>	introns;
+	private Collection<IIntron>	introns;
 	private boolean				positiveStrand;
 
-	public Collection<Intron> getIntrons()
+	/*
+	 * (non-Javadoc)
+	 * @see org.cycads.entities.refact.ILocation#getIntrons()
+	 */
+	public Collection<IIntron> getIntrons()
 	{
 		return introns;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.cycads.entities.refact.ILocation#isPositiveStrand()
+	 */
 	public boolean isPositiveStrand()
 	{
 		return positiveStrand;
 	}
 
-	/**
-	 * Getter of the property <tt>end</tt>
-	 * 
-	 * @return Returns the end.
-	 * 
+	/*
+	 * (non-Javadoc)
+	 * @see org.cycads.entities.refact.ILocation#getEnd()
 	 */
 	public int getEnd()
 	{
@@ -36,11 +42,9 @@ public class Location
 	/*
 	 * (non-javadoc)
 	 */
-	/**
-	 * Getter of the property <tt>start</tt>
-	 * 
-	 * @return Returns the start.
-	 * 
+	/*
+	 * (non-Javadoc)
+	 * @see org.cycads.entities.refact.ILocation#getStart()
 	 */
 	public int getStart()
 	{

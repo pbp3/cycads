@@ -2,8 +2,9 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-public class ExternalDatabase extends Term
+public class ExternalDatabase
 {
+	String							dbName;
 
 	private Collection<DBRecord>	records;
 
@@ -16,6 +17,11 @@ public class ExternalDatabase extends Term
 	public Collection<DBRecord> getRecords()
 	{
 		return records;
+	}
+
+	public String getDbName()
+	{
+		return dbName;
 	}
 
 }

@@ -6,23 +6,23 @@ package org.cycads.entities.refact;
 
 /** 
  */
-public class Term
+public class Term implements ITerm
 {
 
 	private String		value;
 
-	private TypeTerm	type;
+	private ITypeTerm	type;
 
-	public TypeTerm getType()
+	/* (non-Javadoc)
+	 * @see org.cycads.entities.refact.ITerm#getType()
+	 */
+	public ITypeTerm getType()
 	{
 		return type;
 	}
 
-	/**
-	 * Getter of the property <tt>value</tt>
-	 * 
-	 * @return Returns the value.
-	 * 
+	/* (non-Javadoc)
+	 * @see org.cycads.entities.refact.ITerm#getValue()
 	 */
 	public String getValue()
 	{
