@@ -1,7 +1,7 @@
 package org.cycads.entities.refact;
 
-import org.cycads.entities.DBAnnotation;
-import org.cycads.entities.DBAnnotationNote;
+import org.cycads.entities.annotation.DBAnnotation;
+import org.cycads.entities.annotation.DBAnnotationNote;
 
 /*
  * Created on 07/11/2008

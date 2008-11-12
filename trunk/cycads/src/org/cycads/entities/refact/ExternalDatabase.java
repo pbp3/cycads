@@ -2,7 +2,7 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-import org.cycads.entities.ExternalDatabase;
+import org.cycads.entities.annotation.ExternalDatabase;
 
 public class ExternalDatabase implements ExternalDatabase
 {

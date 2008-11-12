@@ -5,7 +5,7 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-import org.cycads.entities.Gene;
+import org.cycads.entities.sequence.feature.Gene;
 
 public class Gene extends Feature implements Gene
 {
