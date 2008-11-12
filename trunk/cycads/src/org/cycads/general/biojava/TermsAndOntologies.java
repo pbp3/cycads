@@ -76,6 +76,10 @@ public class TermsAndOntologies
 		return getOntology(getString("ontology.general"));
 	}
 
+	public static ComparableOntology getOntologyNotes() {
+		return getOntology(getString("ontology.notes"));
+	}
+
 	public static ComparableTerm getTermPredicateToLinkKOToEC() {
 		return getOntology(getString("ontology.predicate.KOToEC")).getOrCreateTerm(getString("term.predicate.KOToEC"));
 	}

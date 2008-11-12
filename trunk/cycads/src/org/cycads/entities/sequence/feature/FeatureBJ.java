@@ -3,27 +3,27 @@
  */
 package org.cycads.entities.sequence.feature;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Hashtable;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
 
-import org.biojavax.Note;
 import org.biojavax.bio.seq.RichFeature;
-import org.cycads.entities.NoteType;
+import org.cycads.entities.annotation.DBAnnotationMethod;
+import org.cycads.entities.note.Note;
+import org.cycads.entities.note.NoteBJ;
+import org.cycads.entities.note.NoteCollectionHash;
+import org.cycads.entities.sequence.Sequence;
 import org.cycads.general.biojava.BioJavaxSession;
 import org.hibernate.Query;
 
 public class FeatureBJ implements Feature
 {
-	RichFeature								feature;
-	Collection<FeatureNote>					notes;
-	Map<String, Collection<FeatureNote>>	mapNotes;
+	RichFeature					feature;
+	NoteCollectionHash<Feature>	notes;
+	Sequence					sequence;
+	Location					location;
 
 	public FeatureBJ(RichFeature feature) {
 		this.feature = feature;
+		notes = new NoteCollectionHash<Feature>(this, feature);
 	}
 
 	public FeatureBJ(int featureId) {
@@ -44,112 +44,72 @@ public class FeatureBJ implements Feature
 		return feature.getName();
 	}
 
-	public Collection<FeatureNote> getNotes() {
-		if (notes == null) {
-			createNotes();
-		}
-		return notes;
-	}
-
-	private void createNotes() {
-		Set<Note> notesBJ = feature.getNoteSet();
-		notes = new ArrayList<FeatureNote>(notesBJ.size());
-		for (Note note : notesBJ) {
-			FeatureNote featureNote = new SimpleFeatureNote(this, new FeatureNoteTypeBJ(note.getTerm()),
-				note.getValue());
-			notes.add(featureNote);
-		}
-	}
-
-	public Collection<FeatureNote> getNotes(String noteTypeName) {
-		if (mapNotes == null) {
-			createMapNotes();
-		}
-		return mapNotes.get(noteTypeName);
-	}
-
-	//return the first element found
-	public FeatureNote getNote(String noteTypeName) {
-		Collection<FeatureNote> notesResult = getNotes(noteTypeName);
-		if (notesResult == null || notesResult.isEmpty()) {
-			return null;
-		}
-		else {
-			return notesResult.iterator().next();
-		}
-	}
-
-	public Collection<FeatureNote> getNotes(NoteType noteType) {
-		Collection<FeatureNote> notes = getNotes(noteType.getName());
-		Collection<FeatureNote> ret = notes;
-		for (FeatureNote note : notes) {
-			if (!note.getType().equals(noteType)) {
-				if (ret == notes) {
-					ret = new LinkedList<FeatureNote>(notes);
-				}
-				ret.remove(note);
-			}
-		}
-		return ret;
-	}
-
-	//return the first element found
-	public FeatureNote getNote(NoteType noteType) {
-		Collection<FeatureNote> notesResult = getNotes(noteType);
-		if (notesResult == null || notesResult.isEmpty()) {
-			return null;
-		}
-		else {
-			return notesResult.iterator().next();
-		}
-	}
-
-	private void createMapNotes() {
-		Set<Note> notesBJ = feature.getNoteSet();
-		String key;
-		mapNotes = new Hashtable<String, Collection<FeatureNote>>();
-		for (Note note : notesBJ) {
-			key = note.getTerm().getName();
-			Collection<FeatureNote> notesKey = mapNotes.get(key);
-			if (notesKey == null) {
-				notesKey = new LinkedList<FeatureNote>();
-				mapNotes.put(key, notesKey);
-			}
-			notesKey.add(new SimpleFeatureNote(this, new FeatureNoteTypeBJ(note.getTerm()), note.getValue()));
-		}
-	}
-
-	//	public Collection<FeatureNote> getNotes(String noteTypeName) {
-	//		if (mapNotes == null) {
-	//			createMapNotes();
-	//		}
-	//		return mapNotes.get(noteTypeName);
-	//	}
-	//
-	//	public FeatureNote getNote(String noteTypeName) {
-	//		if (mapNotes == null) {
-	//			createMapNotes();
-	//		}
-	//		Collection<FeatureNote> notesKey = mapNotes.get(noteTypeName);
-	//		if (notesKey == null || notesKey.isEmpty()) {
-	//			return null;
-	//		}
-	//		else {
-	//			return notesKey.iterator().next();
-	//		}
-	//	}
-	//
 	public Sequence getSequence() {
-		return new SequenceBJ(feature.getSequence());
+		if (sequence == null) {
+			sequence = new SequenceBJ(feature.getSequence());
+		}
+		return sequence;
 	}
 
-	public Collection<DBRef> getDBRefs() {
+	public Location getLocation() {
+		if (location == null) {
+			return new LocationBJ(feature.getLocation());
+		}
+		return location;
+	}
+
+	public FeatureType getFeatureType() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Location getLocation() {
-		return new LocationBJ(feature.getLocation());
+	public FeatureAnnotationMethod getMethod() {
+		//feature.source
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Note<Feature> createNote(String value, String noteTypeName) {
+		return new NoteBJ<Feature>(this, value, noteTypeName);
+	}
+
+	public Note<Feature> addNote(Note<Feature> note) {
+		return notes.addNote(note);
+	}
+
+	public Note<Feature> addNote(String value, String noteTypeName) {
+		return notes.addNote(value, noteTypeName);
+	}
+
+	public Note<Feature> getNote(String value, String noteTypeName) {
+		return notes.getNote(value, noteTypeName);
+	}
+
+	public Collection<Note<Feature>> getNotes() {
+		return notes.getNotes();
+	}
+
+	public Collection<Note<Feature>> getNotes(String noteTypeName) {
+		return notes.getNotes(noteTypeName);
+	}
+
+	public Note<Feature> getOrCreateNote(String value, String noteTypeName) {
+		return notes.getOrCreateNote(value, noteTypeName);
+	}
+
+	public void addDBAnnotation(FeatureToDBAnnotation featureToDBAnnotation) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public FeatureToDBAnnotation addDBAnnotation(String db, String accession, DBAnnotationMethod method) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Collection<FeatureToDBAnnotation> getdBAnnotations() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

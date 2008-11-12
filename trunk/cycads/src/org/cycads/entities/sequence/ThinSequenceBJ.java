@@ -7,6 +7,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cycads.entities.biojava.FeatureFilterByType;
+import org.cycads.entities.note.Note;
+import org.cycads.entities.note.NoteBJ;
+import org.cycads.entities.note.NoteCollectionHash;
 import org.cycads.entities.sequence.feature.Feature;
 import org.cycads.entities.sequence.feature.FeatureBJ;
 import org.cycads.entities.sequence.feature.FeatureFilter;
@@ -15,10 +18,12 @@ import org.hibernate.Query;
 
 public class ThinSequenceBJ implements Sequence
 {
-	int	id;
+	int								id;
+	NoteCollectionHash<Sequence>	notes;
 
 	public ThinSequenceBJ(int id) {
 		this.id = id;
+		notes = new NoteCollectionHash<Sequence>(this);
 	}
 
 	public int getId() {
@@ -74,11 +79,6 @@ public class ThinSequenceBJ implements Sequence
 		return null;
 	}
 
-	public Collection<SequenceNote> getNotes() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public Organism getOrganism() {
 		// TODO Auto-generated method stub
 		return null;
@@ -87,6 +87,34 @@ public class ThinSequenceBJ implements Sequence
 	public double getVersion() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	public Note<Sequence> addNote(Note<Sequence> note) {
+		return notes.addNote(note);
+	}
+
+	public Note<Sequence> addNote(String value, String noteTypeName) {
+		return notes.addNote(value, noteTypeName);
+	}
+
+	public Note<Sequence> getNote(String value, String noteTypeName) {
+		return notes.getNote(value, noteTypeName);
+	}
+
+	public Collection<Note<Sequence>> getNotes() {
+		return notes.getNotes();
+	}
+
+	public Collection<Note<Sequence>> getNotes(String noteTypeName) {
+		return notes.getNotes(noteTypeName);
+	}
+
+	public Note<Sequence> getOrCreateNote(String value, String noteTypeName) {
+		return notes.getOrCreateNote(value, noteTypeName);
+	}
+
+	public Note<Sequence> createNote(String value, String noteTypeName) {
+		return new NoteBJ<Sequence>(this, value, noteTypeName);
 	}
 
 }
