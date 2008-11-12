@@ -3,6 +3,8 @@
  */
 package org.cycads.entities.sequence;
 
+import org.cycads.entities.annotation.DBAnnotation;
+
 public interface SequenceToDBAnnotation extends DBAnnotation
 {
 

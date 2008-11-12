@@ -5,57 +5,26 @@ package org.cycads.entities.sequence;
 
 import java.util.Collection;
 
-import org.cycads.entities.biojava.FeatureFilter;
-import org.cycads.entities.biojava.SequenceFeature;
 import org.cycads.entities.sequence.feature.Feature;
+import org.cycads.entities.sequence.feature.FeatureFilter;
 
 public interface Sequence
 {
 
-	/**
-	 * Getter of the property <tt>dBLinks</tt>
-	 * 
-	 * @return Returns the dBLinks.
-	 * 
-	 */
 	public Collection<SequenceToDBAnnotation> getDBLinks();
 
-	/**
-	 * Getter of the property <tt>sequenceFeatures</tt>
-	 * 
-	 * @return Returns the sequenceFeatures.
-	 * 
-	 */
 	public Collection<Feature> getFeatures();
 
-	/**
-	 * Getter of the property <tt>description</tt>
-	 * 
-	 * @return Returns the description.
-	 * 
-	 */
+	public Collection<Feature> getFeatures(FeatureFilter featureFilter);
+
 	public String getDescription();
 
-	/**
-	 * Getter of the property <tt>version</tt>
-	 * 
-	 * @return Returns the version.
-	 * 
-	 */
 	public double getVersion();
 
-	/**
-	 * Getter of the property <tt>name</tt>
-	 * 
-	 * @return Returns the name.
-	 * 
-	 */
 	public String getName();
 
 	public Organism getOrganism();
 
 	public Collection<SequenceNote> getNotes();
-
-	public Collection<SequenceFeature> getFeatures(FeatureFilter featureFilter);
 
 }
