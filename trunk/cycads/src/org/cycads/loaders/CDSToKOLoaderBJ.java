@@ -3,10 +3,10 @@
  */
 package org.cycads.loaders;
 
-import org.cycads.entities.biojava1.CDS;
-import org.cycads.entities.biojava1.CDSBJ;
-import org.cycads.entities.biojava1.Method;
-import org.cycads.entities.biojava1.Organism;
+import org.cycads.entities.biojava.CDS;
+import org.cycads.entities.biojava.CDSBJ;
+import org.cycads.entities.biojava.Method;
+import org.cycads.entities.biojava.Organism;
 import org.cycads.exceptions.DBObjectNotFound;
 import org.cycads.general.CacheCleanerController;
 import org.cycads.general.Messages;

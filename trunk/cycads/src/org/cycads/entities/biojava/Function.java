@@ -1,7 +1,7 @@
 /*
  * Created on 16/09/2008
  */
-package org.cycads.entities.biojava1;
+package org.cycads.entities.biojava;
 
 public class Function
 {

@@ -1,7 +1,7 @@
 /*
  * Created on 10/06/2008
  */
-package org.cycads.entities.biojava1;
+package org.cycads.entities.biojava;
 
 import java.util.List;
 import java.util.Set;

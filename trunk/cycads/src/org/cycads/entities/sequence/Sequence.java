@@ -5,8 +5,8 @@ package org.cycads.entities.sequence;
 
 import java.util.Collection;
 
-import org.cycads.entities.biojava1.FeatureFilter;
-import org.cycads.entities.biojava1.SequenceFeature;
+import org.cycads.entities.biojava.FeatureFilter;
+import org.cycads.entities.biojava.SequenceFeature;
 import org.cycads.entities.sequence.feature.Feature;
 
 public interface Sequence

@@ -6,9 +6,9 @@ package org.cycads.generators;
 import java.util.Collection;
 
 import org.cycads.dbExternal.EC;
-import org.cycads.entities.biojava1.DBLink;
-import org.cycads.entities.biojava1.Function;
-import org.cycads.entities.biojava1.Location;
+import org.cycads.entities.biojava.DBLink;
+import org.cycads.entities.biojava.Function;
+import org.cycads.entities.biojava.Location;
 
 public interface BioCycRecord
 {
