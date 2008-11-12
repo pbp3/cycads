@@ -3,10 +3,10 @@
  */
 package org.cycads.generators;
 
-import org.cycads.entities.biojava1.DBLinkCreator;
-import org.cycads.entities.biojava1.ECLinkCreator;
-import org.cycads.entities.biojava1.FunctionCreator;
-import org.cycads.entities.biojava1.SequenceFeature;
+import org.cycads.entities.biojava.DBLinkCreator;
+import org.cycads.entities.biojava.ECLinkCreator;
+import org.cycads.entities.biojava.FunctionCreator;
+import org.cycads.entities.biojava.SequenceFeature;
 import org.cycads.general.Config;
 
 public class SimpleBioCycRecordFactory implements BioCycRecordFactory

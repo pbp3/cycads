@@ -1,7 +1,7 @@
 /*
  * Created on 31/10/2008
  */
-package org.cycads.entities.biojava1;
+package org.cycads.entities.biojava;
 
 import java.util.ArrayList;
 import java.util.Collection;

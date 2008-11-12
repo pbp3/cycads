@@ -1,7 +1,7 @@
 /*
  * Created on 04/11/2008
  */
-package org.cycads.entities.biojava1;
+package org.cycads.entities.biojava;
 
 public class SimpleFeatureNote implements FeatureNote
 {
