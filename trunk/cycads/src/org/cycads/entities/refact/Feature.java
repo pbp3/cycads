@@ -7,7 +7,7 @@ import java.util.Collection;
 public class Feature
 {
 	private String								name;
-	private Location							location;
+	private ILocation							location;
 	private FeatureAnnotationMethod				method;
 
 	private Collection<FeatureNote>				notes;
@@ -21,7 +21,7 @@ public class Feature
 		return sequence;
 	}
 
-	public Location getLoaction()
+	public ILocation getLoaction()
 	{
 		return location;
 	}

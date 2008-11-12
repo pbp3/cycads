@@ -5,9 +5,13 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-public class TypeTerm extends Term
+public class TypeTerm extends Term implements ITypeTerm
 {
-	public Collection<Term> getTerms()
+	/*
+	 * (non-Javadoc)
+	 * @see org.cycads.entities.refact.ITypeTerm#getTerms()
+	 */
+	public Collection<ITerm> getTerms()
 	{
 		return null;
 	}

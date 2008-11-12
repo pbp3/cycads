@@ -6,7 +6,6 @@ import java.util.Collection;
  */
 public class DBRecord
 {
-
 	private ExternalDatabase				database;
 	private String							accession;
 
