@@ -5,67 +5,67 @@ import java.util.Collection;
 import org.cycads.entities.DBAnnotationMethod;
 import org.cycads.entities.ExternalDatabase;
 import org.cycads.entities.Feature;
-import org.cycads.entities.IFeatureAnnotationMethod;
-import org.cycads.entities.IFeatureNote;
-import org.cycads.entities.IFeatureToDBAnnotation;
-import org.cycads.entities.IFeatureType;
-import org.cycads.entities.ILocation;
-import org.cycads.entities.ISequence;
+import org.cycads.entities.FeatureAnnotationMethod;
+import org.cycads.entities.FeatureNote;
+import org.cycads.entities.FeatureToDBAnnotation;
+import org.cycads.entities.FeatureType;
+import org.cycads.entities.Location;
+import org.cycads.entities.Sequence;
 
 /**
  */
 public class Feature implements Feature
 {
 	private String								name;
-	private ILocation							location;
-	private IFeatureAnnotationMethod			method;
-	private IFeatureType						featureType;
+	private Location							location;
+	private FeatureAnnotationMethod			method;
+	private FeatureType						featureType;
 
-	private Collection<IFeatureNote>			notes;
+	private Collection<FeatureNote>			notes;
 
-	private Collection<IFeatureToDBAnnotation>	dBAnnotations;
+	private Collection<FeatureToDBAnnotation>	dBAnnotations;
 
-	private ISequence							sequence;
+	private Sequence							sequence;
 
 	/* (non-Javadoc)
 	 * @see org.cycads.entities.refact.IFeature#getSequence()
 	 */
-	public ISequence getSequence() {
+	public Sequence getSequence() {
 		return sequence;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.cycads.entities.refact.IFeature#getLoaction()
 	 */
-	public ILocation getLoaction() {
+	public Location getLoaction() {
 		return location;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.cycads.entities.refact.IFeature#getMethod()
 	 */
-	public IFeatureAnnotationMethod getMethod() {
+	public FeatureAnnotationMethod getMethod() {
 		return method;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.cycads.entities.refact.IFeature#getNotes()
 	 */
-	public Collection<IFeatureNote> getNotes() {
+	public Collection<FeatureNote> getNotes() {
 		return notes;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.cycads.entities.refact.IFeature#addNote(org.cycads.entities.refact.IFeatureNote)
 	 */
-	public void addNote(IFeatureNote note) {
+	public void addNote(FeatureNote note) {
 		notes.add(note);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.cycads.entities.refact.IFeature#addNote(java.lang.String, java.lang.String)
 	 */
-	public IFeatureNote addNote(String value, String noteType) {
+	public FeatureNote addNote(String value, String noteType) {
 		//		notes.add(new FeatureNote(value,noteType));
 		return null;
 	}
@@ -80,35 +80,35 @@ public class Feature implements Feature
 	/* (non-Javadoc)
 	 * @see org.cycads.entities.refact.IFeature#getdBAnnotations()
 	 */
-	public Collection<IFeatureToDBAnnotation> getdBAnnotations() {
+	public Collection<FeatureToDBAnnotation> getdBAnnotations() {
 		return dBAnnotations;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.cycads.entities.refact.IFeature#addDBAnnotation(org.cycads.entities.refact.IFeatureToDBAnnotation)
 	 */
-	public void addDBAnnotation(IFeatureToDBAnnotation featureToDBAnnotation) {
+	public void addDBAnnotation(FeatureToDBAnnotation featureToDBAnnotation) {
 		dBAnnotations.add(featureToDBAnnotation);
 	}
 
 	/* (non-Javadoc)
 	 * @see org.cycads.entities.refact.IFeature#addDBAnnotation(org.cycads.entities.refact.IExternalDatabase, java.lang.String, org.cycads.entities.refact.IDBAnnotationMethod)
 	 */
-	public IFeatureToDBAnnotation addDBAnnotation(ExternalDatabase db, String accession, DBAnnotationMethod method) {
+	public FeatureToDBAnnotation addDBAnnotation(ExternalDatabase db, String accession, DBAnnotationMethod method) {
 		return null;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.cycads.entities.refact.IFeature#addDBAnnotation(java.lang.String, java.lang.String, org.cycads.entities.refact.IDBAnnotationMethod)
 	 */
-	public IFeatureToDBAnnotation addDBAnnotation(String db, String accession, DBAnnotationMethod method) {
+	public FeatureToDBAnnotation addDBAnnotation(String db, String accession, DBAnnotationMethod method) {
 		return null;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.cycads.entities.refact.IFeature#getFeatureType()
 	 */
-	public IFeatureType getFeatureType() {
+	public FeatureType getFeatureType() {
 		return featureType;
 	}
 

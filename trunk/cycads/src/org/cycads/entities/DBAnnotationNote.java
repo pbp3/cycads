@@ -3,7 +3,7 @@
  */
 package org.cycads.entities;
 
-public interface DBAnnotationNote extends INote
+public interface DBAnnotationNote extends Note
 {
 
 	public DBAnnotation getDBAnnotation();

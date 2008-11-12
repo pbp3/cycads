@@ -4,9 +4,9 @@
 package org.cycads.entities.refact;
 
 import org.cycads.entities.Feature;
-import org.cycads.entities.IFeatureNote;
+import org.cycads.entities.FeatureNote;
 
-public class FeatureNote extends Note implements IFeatureNote
+public class FeatureNote extends Note implements FeatureNote
 {
 	private Feature	feature;
 

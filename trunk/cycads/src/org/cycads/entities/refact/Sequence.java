@@ -3,27 +3,27 @@ package org.cycads.entities.refact;
 import java.util.Collection;
 
 import org.cycads.entities.Feature;
-import org.cycads.entities.IOrganism;
-import org.cycads.entities.ISequence;
-import org.cycads.entities.ISequenceToDBAnnotation;
+import org.cycads.entities.Organism;
+import org.cycads.entities.Sequence;
+import org.cycads.entities.SequenceToDBAnnotation;
 
 /**
  */
-public class Sequence implements ISequence
+public class Sequence implements Sequence
 {
 
 	private String								name;
 	private String								description;
 	private double								version;
-	private IOrganism							organism;
+	private Organism							organism;
 
-	private Collection<ISequenceToDBAnnotation>	dBLinks;
+	private Collection<SequenceToDBAnnotation>	dBLinks;
 	private Collection<Feature>				features;
 
 	/* (non-Javadoc)
 	 * @see org.cycads.entities.refact.ISequence#getDBLinks()
 	 */
-	public Collection<ISequenceToDBAnnotation> getDBLinks() {
+	public Collection<SequenceToDBAnnotation> getDBLinks() {
 		return dBLinks;
 	}
 
@@ -58,7 +58,7 @@ public class Sequence implements ISequence
 	/* (non-Javadoc)
 	 * @see org.cycads.entities.refact.ISequence#getOrganism()
 	 */
-	public IOrganism getOrganism() {
+	public Organism getOrganism() {
 		return organism;
 	}
 

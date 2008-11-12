@@ -2,7 +2,7 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-import org.cycads.entities.IOrganism;
+import org.cycads.entities.Organism;
 
 /*
  * Created on 07/11/2008
@@ -10,7 +10,7 @@ import org.cycads.entities.IOrganism;
 
 /** 
  */
-public class Organism implements IOrganism
+public class Organism implements Organism
 {
 
 	private int						id;

@@ -3,9 +3,9 @@
  */
 package org.cycads.entities.refact;
 
-import org.cycads.entities.INoteType;
+import org.cycads.entities.NoteType;
 
-public class NoteType implements INoteType
+public class NoteType implements NoteType
 {
 	String	name;
 

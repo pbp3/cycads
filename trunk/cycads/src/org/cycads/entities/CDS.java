@@ -3,9 +3,7 @@
  */
 package org.cycads.entities;
 
-public interface INoteType
+public interface CDS
 {
-
-	public String getName();
 
 }

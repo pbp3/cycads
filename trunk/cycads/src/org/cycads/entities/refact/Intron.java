@@ -3,9 +3,9 @@
  */
 package org.cycads.entities.refact;
 
-import org.cycads.entities.IIntron;
+import org.cycads.entities.Intron;
 
-public class Intron implements IIntron
+public class Intron implements Intron
 {
 	private int	start, end;
 

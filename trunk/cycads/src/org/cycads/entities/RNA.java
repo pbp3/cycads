@@ -5,9 +5,7 @@ package org.cycads.entities;
 
 import java.util.Collection;
 
-import org.cycads.entities.refact.CDS;
-
-public interface IRNA
+public interface RNA
 {
 
 	public Collection<CDS> getCDSs();

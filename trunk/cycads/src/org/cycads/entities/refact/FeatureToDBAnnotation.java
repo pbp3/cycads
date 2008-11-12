@@ -1,9 +1,9 @@
 package org.cycads.entities.refact;
 
 import org.cycads.entities.Feature;
-import org.cycads.entities.IFeatureToDBAnnotation;
+import org.cycads.entities.FeatureToDBAnnotation;
 
-public class FeatureToDBAnnotation extends DBAnnotation implements IFeatureToDBAnnotation
+public class FeatureToDBAnnotation extends DBAnnotation implements FeatureToDBAnnotation
 {
 
 	private Feature	feature;

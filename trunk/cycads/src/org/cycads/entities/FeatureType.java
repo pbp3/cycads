@@ -5,12 +5,12 @@ package org.cycads.entities;
 
 import java.util.Collection;
 
-public interface IFeatureType
+public interface FeatureType
 {
 
 	public String getName();
 
-	public Collection<Feature> getFeatures(ISequence sequence);
+	public Collection<Feature> getFeatures(Sequence sequence);
 
 	public Collection<Feature> getFeatures();
 

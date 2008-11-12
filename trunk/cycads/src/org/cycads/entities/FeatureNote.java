@@ -3,7 +3,7 @@
  */
 package org.cycads.entities;
 
-public interface IFeatureNote extends INote
+public interface FeatureNote extends Note
 {
 
 	public Feature getFeature();

@@ -5,14 +5,14 @@ package org.cycads.entities;
 
 import java.util.Collection;
 
-public interface ILocation
+public interface Location
 {
 
-	public Collection<IIntron> getIntrons();
+	public Collection<Intron> getIntrons();
 
-	public void addIntron(IIntron intron);
+	public void addIntron(Intron intron);
 
-	public IIntron addIntron(int startPos, int endPos);
+	public Intron addIntron(int startPos, int endPos);
 
 	public boolean isPositiveStrand();
 

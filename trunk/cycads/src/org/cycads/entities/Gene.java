@@ -5,9 +5,7 @@ package org.cycads.entities;
 
 import java.util.Collection;
 
-import org.cycads.entities.refact.RNA;
-
-public interface IGene
+public interface Gene
 {
 	public Collection<RNA> getRNAs();
 }

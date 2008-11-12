@@ -3,10 +3,10 @@
  */
 package org.cycads.entities;
 
-public interface INote
+public interface Note
 {
 
-	public INoteType getNoteType();
+	public NoteType getNoteType();
 
 	public String getTypeName();
 

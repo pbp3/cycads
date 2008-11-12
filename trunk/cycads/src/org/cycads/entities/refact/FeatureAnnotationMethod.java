@@ -5,9 +5,9 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-import org.cycads.entities.IFeatureAnnotationMethod;
+import org.cycads.entities.FeatureAnnotationMethod;
 
-public class FeatureAnnotationMethod extends AnnotationMethod implements IFeatureAnnotationMethod
+public class FeatureAnnotationMethod extends AnnotationMethod implements FeatureAnnotationMethod
 {
 	private Collection<Feature>	features;
 

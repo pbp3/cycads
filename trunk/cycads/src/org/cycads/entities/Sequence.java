@@ -5,7 +5,7 @@ package org.cycads.entities;
 
 import java.util.Collection;
 
-public interface ISequence
+public interface Sequence
 {
 
 	/**
@@ -14,7 +14,7 @@ public interface ISequence
 	 * @return Returns the dBLinks.
 	 * 
 	 */
-	public Collection<ISequenceToDBAnnotation> getDBLinks();
+	public Collection<SequenceToDBAnnotation> getDBLinks();
 
 	/**
 	 * Getter of the property <tt>sequenceFeatures</tt>
@@ -48,6 +48,6 @@ public interface ISequence
 	 */
 	public String getName();
 
-	public IOrganism getOrganism();
+	public Organism getOrganism();
 
 }

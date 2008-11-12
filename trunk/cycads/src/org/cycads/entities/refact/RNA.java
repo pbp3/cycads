@@ -5,9 +5,9 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-import org.cycads.entities.IRNA;
+import org.cycads.entities.RNA;
 
-public class RNA extends Feature implements IRNA
+public class RNA extends Feature implements RNA
 {
 	private Collection<CDS>	cDSs;
 
