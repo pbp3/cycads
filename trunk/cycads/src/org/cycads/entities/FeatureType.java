@@ -10,8 +10,8 @@ public interface FeatureType
 
 	public String getName();
 
-	public Collection<Feature> getFeatures(Sequence sequence);
-
+	//	public Collection<Feature> getFeatures(Sequence sequence);
+	//
 	public Collection<Feature> getFeatures();
 
 }

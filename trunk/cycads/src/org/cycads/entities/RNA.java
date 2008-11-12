@@ -5,7 +5,7 @@ package org.cycads.entities;
 
 import java.util.Collection;
 
-public interface RNA
+public interface RNA extends Feature
 {
 
 	public Collection<CDS> getCDSs();

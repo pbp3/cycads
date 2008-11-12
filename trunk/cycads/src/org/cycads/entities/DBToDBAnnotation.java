@@ -3,7 +3,7 @@
  */
 package org.cycads.entities;
 
-public interface DBToDBAnnotation
+public interface DBToDBAnnotation extends DBAnnotation
 {
 
 	/**

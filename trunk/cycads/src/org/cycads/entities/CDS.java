@@ -3,7 +3,7 @@
  */
 package org.cycads.entities;
 
-public interface CDS
+public interface CDS extends Feature
 {
 
 }

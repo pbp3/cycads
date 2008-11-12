@@ -26,8 +26,8 @@ public interface Feature
 
 	public void addDBAnnotation(FeatureToDBAnnotation featureToDBAnnotation);
 
-	public FeatureToDBAnnotation addDBAnnotation(ExternalDatabase db, String accession, DBAnnotationMethod method);
-
+	//	public FeatureToDBAnnotation addDBAnnotation(ExternalDatabase db, String accession, DBAnnotationMethod method);
+	//
 	public FeatureToDBAnnotation addDBAnnotation(String db, String accession, DBAnnotationMethod method);
 
 	public FeatureType getFeatureType();

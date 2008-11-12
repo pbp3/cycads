@@ -5,7 +5,7 @@ package org.cycads.entities;
 
 import java.util.Collection;
 
-public interface Gene
+public interface Gene extends Feature
 {
 	public Collection<RNA> getRNAs();
 }
