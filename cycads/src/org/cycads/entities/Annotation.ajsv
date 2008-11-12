@@ -9,9 +9,6 @@
         <switch switchID="standardDiagramStyles.styleEnumSwitch.Members" switchValue="fields, methods, inners, initializers"/>
         <class className="org.cycads.entities.AnnotationMethod" project="cycads" xLocation="1257" yLocation="96"/>
         <class className="org.cycads.entities.Feature" project="cycads" xLocation="776" yLocation="207"/>
-        <class className="org.cycads.entities.CDS" project="cycads" xLocation="990" yLocation="624"/>
-        <class className="org.cycads.entities.Gene" project="cycads" xLocation="448" yLocation="698"/>
-        <class className="org.cycads.entities.RNA" project="cycads" xLocation="726" yLocation="606"/>
         <class className="org.cycads.entities.FeatureNote" project="cycads" xLocation="1080" yLocation="529"/>
         <class className="org.cycads.entities.Location" project="cycads" xLocation="852" yLocation="729"/>
         <class className="org.cycads.entities.Sequence" project="cycads" xLocation="68" yLocation="421"/>
