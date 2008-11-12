@@ -50,4 +50,6 @@ public interface Sequence
 
 	public Organism getOrganism();
 
+	public Collection<SequenceNote> getNotes();
+
 }

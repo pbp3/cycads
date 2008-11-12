@@ -14,7 +14,7 @@ public interface DBRecord
 	 * @return Returns the dbLinks.
 	 * 
 	 */
-	public Collection<DBToDBAnnotation> getDbAnnotations();
+	public Collection<DBAnnotation> getDbAnnotations();
 
 	/**
 	 * Getter of the property <tt>accession</tt>
