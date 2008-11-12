@@ -2,6 +2,9 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
+import org.cycads.entities.IIntron;
+import org.cycads.entities.ILocation;
+
 /*
  * Created on 07/11/2008
  */
@@ -16,8 +19,7 @@ public class Location implements ILocation
 	 * (non-Javadoc)
 	 * @see org.cycads.entities.refact.ILocation#getIntrons()
 	 */
-	public Collection<IIntron> getIntrons()
-	{
+	public Collection<IIntron> getIntrons() {
 		return introns;
 	}
 
@@ -25,8 +27,7 @@ public class Location implements ILocation
 	 * (non-Javadoc)
 	 * @see org.cycads.entities.refact.ILocation#isPositiveStrand()
 	 */
-	public boolean isPositiveStrand()
-	{
+	public boolean isPositiveStrand() {
 		return positiveStrand;
 	}
 
@@ -34,8 +35,7 @@ public class Location implements ILocation
 	 * (non-Javadoc)
 	 * @see org.cycads.entities.refact.ILocation#getEnd()
 	 */
-	public int getEnd()
-	{
+	public int getEnd() {
 		return end;
 	}
 
@@ -46,9 +46,18 @@ public class Location implements ILocation
 	 * (non-Javadoc)
 	 * @see org.cycads.entities.refact.ILocation#getStart()
 	 */
-	public int getStart()
-	{
+	public int getStart() {
 		return start;
+	}
+
+	public void addIntron(IIntron intron) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public IIntron addIntron(int startPos, int endPos) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -2,17 +2,16 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
+import org.cycads.entities.DBAnnotationMethod;
+
 /** 
  */
-public class DBAnnotationMethod extends AnnotationMethod
+public class DBAnnotationMethod extends AnnotationMethod implements DBAnnotationMethod
 {
 	private Collection<DBAnnotation>	dBAnnotations;
 
-	/**
-	 * Getter of the property <tt>name</tt>
-	 * 
-	 * @return Returns the name.
-	 * 
+	/* (non-Javadoc)
+	 * @see org.cycads.entities.refact.IDBAnnotationMethod#getDBAnnotations()
 	 */
 	public Collection<DBAnnotation> getDBAnnotations()
 	{

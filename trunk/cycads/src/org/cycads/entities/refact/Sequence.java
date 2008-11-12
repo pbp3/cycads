@@ -2,76 +2,63 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-/** 
+import org.cycads.entities.Feature;
+import org.cycads.entities.IOrganism;
+import org.cycads.entities.ISequence;
+import org.cycads.entities.ISequenceToDBAnnotation;
+
+/**
  */
-public class Sequence
+public class Sequence implements ISequence
 {
 
-	private String						name;
-	private String						description;
-	private double						version;
-	private Organism					organism;
+	private String								name;
+	private String								description;
+	private double								version;
+	private IOrganism							organism;
 
-	private Collection<SequenceToDBAnnotation>	dBLinks;
-	private Collection<Feature>			features;
+	private Collection<ISequenceToDBAnnotation>	dBLinks;
+	private Collection<Feature>				features;
 
-	/**
-	 * Getter of the property <tt>dBLinks</tt>
-	 * 
-	 * @return Returns the dBLinks.
-	 * 
+	/* (non-Javadoc)
+	 * @see org.cycads.entities.refact.ISequence#getDBLinks()
 	 */
-	public Collection<SequenceToDBAnnotation> getDBLinks()
-	{
+	public Collection<ISequenceToDBAnnotation> getDBLinks() {
 		return dBLinks;
 	}
 
-	/**
-	 * Getter of the property <tt>sequenceFeatures</tt>
-	 * 
-	 * @return Returns the sequenceFeatures.
-	 * 
+	/* (non-Javadoc)
+	 * @see org.cycads.entities.refact.ISequence#getFeatures()
 	 */
-	public Collection<Feature> getFeatures()
-	{
+	public Collection<Feature> getFeatures() {
 		return features;
 	}
 
-	/**
-	 * Getter of the property <tt>description</tt>
-	 * 
-	 * @return Returns the description.
-	 * 
+	/* (non-Javadoc)
+	 * @see org.cycads.entities.refact.ISequence#getDescription()
 	 */
-	public String getDescription()
-	{
+	public String getDescription() {
 		return description;
 	}
 
-	/**
-	 * Getter of the property <tt>version</tt>
-	 * 
-	 * @return Returns the version.
-	 * 
+	/* (non-Javadoc)
+	 * @see org.cycads.entities.refact.ISequence#getVersion()
 	 */
-	public double getVersion()
-	{
+	public double getVersion() {
 		return version;
 	}
 
-	/**
-	 * Getter of the property <tt>name</tt>
-	 * 
-	 * @return Returns the name.
-	 * 
+	/* (non-Javadoc)
+	 * @see org.cycads.entities.refact.ISequence#getName()
 	 */
-	public String getName()
-	{
+	public String getName() {
 		return name;
 	}
 
-	public Organism getOrganism()
-	{
+	/* (non-Javadoc)
+	 * @see org.cycads.entities.refact.ISequence#getOrganism()
+	 */
+	public IOrganism getOrganism() {
 		return organism;
 	}
 

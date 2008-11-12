@@ -5,7 +5,9 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-public class Gene extends Feature
+import org.cycads.entities.IGene;
+
+public class Gene extends Feature implements IGene
 {
 	private Collection<RNA>	rNAs;
 

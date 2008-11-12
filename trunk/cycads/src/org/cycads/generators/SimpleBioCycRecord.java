@@ -7,9 +7,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cycads.dbExternal.EC;
-import org.cycads.entities.DBLink;
-import org.cycads.entities.Function;
-import org.cycads.entities.Location;
+import org.cycads.entities.biojava.DBLink;
+import org.cycads.entities.biojava.Function;
+import org.cycads.entities.biojava.Location;
 
 public class SimpleBioCycRecord implements BioCycRecord
 {

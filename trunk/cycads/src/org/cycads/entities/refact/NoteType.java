@@ -3,10 +3,15 @@
  */
 package org.cycads.entities.refact;
 
-public class NoteType
+import org.cycads.entities.INoteType;
+
+public class NoteType implements INoteType
 {
 	String	name;
 
+	/* (non-Javadoc)
+	 * @see org.cycads.entities.refact.INoteType#getName()
+	 */
 	public String getName()
 	{
 		return name;

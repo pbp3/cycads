@@ -3,10 +3,10 @@
  */
 package org.cycads.ui;
 
-import org.cycads.entities.MethodType;
-import org.cycads.entities.MethodTypeBJ;
-import org.cycads.entities.NCBIOrganismBJ;
-import org.cycads.entities.Organism;
+import org.cycads.entities.biojava.MethodType;
+import org.cycads.entities.biojava.MethodTypeBJ;
+import org.cycads.entities.biojava.NCBIOrganismBJ;
+import org.cycads.entities.biojava.Organism;
 import org.cycads.exceptions.DBObjectNotFound;
 
 public class ArgumentsBJ extends Arguments

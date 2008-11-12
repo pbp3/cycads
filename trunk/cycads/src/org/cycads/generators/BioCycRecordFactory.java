@@ -3,7 +3,7 @@
  */
 package org.cycads.generators;
 
-import org.cycads.entities.SequenceFeature;
+import org.cycads.entities.biojava.SequenceFeature;
 
 public interface BioCycRecordFactory
 {

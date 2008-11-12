@@ -9,9 +9,9 @@ import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import org.cycads.entities.Method;
-import org.cycads.entities.MethodType;
-import org.cycads.entities.Organism;
+import org.cycads.entities.biojava.Method;
+import org.cycads.entities.biojava.MethodType;
+import org.cycads.entities.biojava.Organism;
 import org.cycads.exceptions.DBObjectNotFound;
 
 public abstract class Arguments

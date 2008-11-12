@@ -2,23 +2,25 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-public class ExternalDatabase
+import org.cycads.entities.ExternalDatabase;
+
+public class ExternalDatabase implements ExternalDatabase
 {
 	String							dbName;
 
 	private Collection<DBRecord>	records;
 
-	/**
-	 * Getter of the property <tt>records</tt>
-	 * 
-	 * @return Returns the records.
-	 * 
+	/* (non-Javadoc)
+	 * @see org.cycads.entities.refact.IExternalDatabase#getRecords()
 	 */
 	public Collection<DBRecord> getRecords()
 	{
 		return records;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.cycads.entities.refact.IExternalDatabase#getDbName()
+	 */
 	public String getDbName()
 	{
 		return dbName;

@@ -5,18 +5,33 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-public class FeatureType
-{
-	Collection<OtherFeature>	features;
-	String						name;
+import org.cycads.entities.Feature;
+import org.cycads.entities.IFeatureType;
+import org.cycads.entities.ISequence;
 
-	public String getName()
-	{
+public class FeatureType implements IFeatureType
+{
+	Collection<Feature>	features;
+	String					name;
+
+	/* (non-Javadoc)
+	 * @see org.cycads.entities.refact.IFeatureType#getName()
+	 */
+	public String getName() {
 		return name;
 	}
 
-	public Collection<OtherFeature> getFeatures(Sequence sequence)
-	{
+	/* (non-Javadoc)
+	 * @see org.cycads.entities.refact.IFeatureType#getFeatures(org.cycads.entities.refact.Sequence)
+	 */
+	public Collection<Feature> getFeatures(ISequence sequence) {
+		return features;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.cycads.entities.refact.IFeatureType#getFeatures()
+	 */
+	public Collection<Feature> getFeatures() {
 		return features;
 	}
 }
