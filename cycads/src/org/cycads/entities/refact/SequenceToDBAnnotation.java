@@ -1,7 +1,7 @@
 package org.cycads.entities.refact;
 
-import org.cycads.entities.Sequence;
-import org.cycads.entities.SequenceToDBAnnotation;
+import org.cycads.entities.sequence.Sequence;
+import org.cycads.entities.sequence.SequenceToDBAnnotation;
 
 /*
  * Created on 07/11/2008

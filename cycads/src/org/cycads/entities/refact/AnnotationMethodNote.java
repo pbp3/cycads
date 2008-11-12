@@ -3,8 +3,8 @@
  */
 package org.cycads.entities.refact;
 
-import org.cycads.entities.AnnotationMethod;
-import org.cycads.entities.AnnotationMethodNote;
+import org.cycads.entities.annotation.AnnotationMethod;
+import org.cycads.entities.annotation.AnnotationMethodNote;
 
 public class AnnotationMethodNote extends Note implements AnnotationMethodNote
 {

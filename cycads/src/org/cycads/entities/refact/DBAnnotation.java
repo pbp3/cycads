@@ -2,9 +2,9 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-import org.cycads.entities.DBAnnotation;
-import org.cycads.entities.DBAnnotationMethod;
-import org.cycads.entities.DBRecord;
+import org.cycads.entities.annotation.DBAnnotation;
+import org.cycads.entities.annotation.DBAnnotationMethod;
+import org.cycads.entities.annotation.DBRecord;
 
 public abstract class DBAnnotation implements DBAnnotation
 {

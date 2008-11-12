@@ -2,15 +2,15 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-import org.cycads.entities.DBAnnotationMethod;
-import org.cycads.entities.ExternalDatabase;
-import org.cycads.entities.Feature;
-import org.cycads.entities.FeatureAnnotationMethod;
-import org.cycads.entities.FeatureNote;
-import org.cycads.entities.FeatureToDBAnnotation;
-import org.cycads.entities.FeatureType;
-import org.cycads.entities.Location;
-import org.cycads.entities.Sequence;
+import org.cycads.entities.annotation.DBAnnotationMethod;
+import org.cycads.entities.annotation.ExternalDatabase;
+import org.cycads.entities.sequence.Sequence;
+import org.cycads.entities.sequence.feature.Feature;
+import org.cycads.entities.sequence.feature.FeatureAnnotationMethod;
+import org.cycads.entities.sequence.feature.FeatureNote;
+import org.cycads.entities.sequence.feature.FeatureToDBAnnotation;
+import org.cycads.entities.sequence.feature.FeatureType;
+import org.cycads.entities.sequence.feature.Location;
 
 /**
  */

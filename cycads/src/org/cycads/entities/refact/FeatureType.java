@@ -5,9 +5,9 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-import org.cycads.entities.Feature;
-import org.cycads.entities.FeatureType;
-import org.cycads.entities.Sequence;
+import org.cycads.entities.sequence.Sequence;
+import org.cycads.entities.sequence.feature.Feature;
+import org.cycads.entities.sequence.feature.FeatureType;
 
 public class FeatureType implements FeatureType
 {

@@ -2,10 +2,10 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-import org.cycads.entities.Feature;
-import org.cycads.entities.Organism;
-import org.cycads.entities.Sequence;
-import org.cycads.entities.SequenceToDBAnnotation;
+import org.cycads.entities.sequence.Organism;
+import org.cycads.entities.sequence.Sequence;
+import org.cycads.entities.sequence.SequenceToDBAnnotation;
+import org.cycads.entities.sequence.feature.Feature;
 
 /**
  */

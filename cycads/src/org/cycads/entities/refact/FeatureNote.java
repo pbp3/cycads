@@ -3,8 +3,8 @@
  */
 package org.cycads.entities.refact;
 
-import org.cycads.entities.Feature;
-import org.cycads.entities.FeatureNote;
+import org.cycads.entities.sequence.feature.Feature;
+import org.cycads.entities.sequence.feature.FeatureNote;
 
 public class FeatureNote extends Note implements FeatureNote
 {

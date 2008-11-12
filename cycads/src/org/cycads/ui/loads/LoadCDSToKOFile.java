@@ -6,9 +6,9 @@ package org.cycads.ui.loads;
 import java.io.File;
 import java.io.IOException;
 
-import org.cycads.entities.biojava.Method;
-import org.cycads.entities.biojava.MethodTypeBJ;
-import org.cycads.entities.biojava.Organism;
+import org.cycads.entities.biojava1.Method;
+import org.cycads.entities.biojava1.MethodTypeBJ;
+import org.cycads.entities.biojava1.Organism;
 import org.cycads.exceptions.LoadLineError;
 import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;

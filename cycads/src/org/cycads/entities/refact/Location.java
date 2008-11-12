@@ -2,8 +2,8 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-import org.cycads.entities.Intron;
-import org.cycads.entities.Location;
+import org.cycads.entities.sequence.feature.Intron;
+import org.cycads.entities.sequence.feature.Location;
 
 /*
  * Created on 07/11/2008

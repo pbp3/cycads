@@ -2,7 +2,7 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-import org.cycads.entities.Organism;
+import org.cycads.entities.sequence.Organism;
 
 /*
  * Created on 07/11/2008

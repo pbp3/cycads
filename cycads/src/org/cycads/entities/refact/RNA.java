@@ -5,7 +5,7 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-import org.cycads.entities.RNA;
+import org.cycads.entities.sequence.feature.RNA;
 
 public class RNA extends Feature implements RNA
 {

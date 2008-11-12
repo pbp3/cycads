@@ -5,8 +5,8 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-import org.cycads.entities.AnnotationMethod;
-import org.cycads.entities.AnnotationMethodNote;
+import org.cycads.entities.annotation.AnnotationMethod;
+import org.cycads.entities.annotation.AnnotationMethodNote;
 
 public class AnnotationMethod implements AnnotationMethod
 {
