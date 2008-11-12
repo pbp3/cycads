@@ -8,28 +8,28 @@ import java.util.Collection;
 public interface Feature
 {
 
-	public ISequence getSequence();
+	public Sequence getSequence();
 
-	public ILocation getLoaction();
+	public Location getLoaction();
 
-	public IFeatureAnnotationMethod getMethod();
+	public FeatureAnnotationMethod getMethod();
 
-	public Collection<IFeatureNote> getNotes();
+	public Collection<FeatureNote> getNotes();
 
-	public void addNote(IFeatureNote note);
+	public void addNote(FeatureNote note);
 
-	public IFeatureNote addNote(String value, String noteType);
+	public FeatureNote addNote(String value, String noteType);
 
 	public String getName();
 
-	public Collection<IFeatureToDBAnnotation> getdBAnnotations();
+	public Collection<FeatureToDBAnnotation> getdBAnnotations();
 
-	public void addDBAnnotation(IFeatureToDBAnnotation featureToDBAnnotation);
+	public void addDBAnnotation(FeatureToDBAnnotation featureToDBAnnotation);
 
-	public IFeatureToDBAnnotation addDBAnnotation(ExternalDatabase db, String accession, DBAnnotationMethod method);
+	public FeatureToDBAnnotation addDBAnnotation(ExternalDatabase db, String accession, DBAnnotationMethod method);
 
-	public IFeatureToDBAnnotation addDBAnnotation(String db, String accession, DBAnnotationMethod method);
+	public FeatureToDBAnnotation addDBAnnotation(String db, String accession, DBAnnotationMethod method);
 
-	public IFeatureType getFeatureType();
+	public FeatureType getFeatureType();
 
 }

@@ -3,7 +3,7 @@
  */
 package org.cycads.entities;
 
-public interface ISequenceToDBAnnotation
+public interface SequenceToDBAnnotation
 {
 
 	/**
@@ -12,6 +12,6 @@ public interface ISequenceToDBAnnotation
 	 * @return Returns the sequence.
 	 * 
 	 */
-	public ISequence getSequence();
+	public Sequence getSequence();
 
 }

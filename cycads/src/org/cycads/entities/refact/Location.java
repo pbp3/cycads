@@ -2,24 +2,24 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-import org.cycads.entities.IIntron;
-import org.cycads.entities.ILocation;
+import org.cycads.entities.Intron;
+import org.cycads.entities.Location;
 
 /*
  * Created on 07/11/2008
  */
 
-public class Location implements ILocation
+public class Location implements Location
 {
 	private int					start, end;
-	private Collection<IIntron>	introns;
+	private Collection<Intron>	introns;
 	private boolean				positiveStrand;
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.cycads.entities.refact.ILocation#getIntrons()
 	 */
-	public Collection<IIntron> getIntrons() {
+	public Collection<Intron> getIntrons() {
 		return introns;
 	}
 
@@ -50,12 +50,12 @@ public class Location implements ILocation
 		return start;
 	}
 
-	public void addIntron(IIntron intron) {
+	public void addIntron(Intron intron) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public IIntron addIntron(int startPos, int endPos) {
+	public Intron addIntron(int startPos, int endPos) {
 		// TODO Auto-generated method stub
 		return null;
 	}

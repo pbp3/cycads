@@ -5,9 +5,7 @@ package org.cycads.entities;
 
 import java.util.Collection;
 
-import org.cycads.entities.refact.Sequence;
-
-public interface IOrganism
+public interface Organism
 {
 
 	public Collection<Sequence> getSequences();

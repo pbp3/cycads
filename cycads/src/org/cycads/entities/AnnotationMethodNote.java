@@ -3,7 +3,7 @@
  */
 package org.cycads.entities;
 
-public interface AnnotationMethodNote extends INote
+public interface AnnotationMethodNote extends Note
 {
 
 	public AnnotationMethod getMethod();

@@ -3,7 +3,7 @@
  */
 package org.cycads.entities;
 
-public interface IIntron
+public interface Intron
 {
 
 	public int getStart();

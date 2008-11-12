@@ -3,7 +3,7 @@
  */
 package org.cycads.entities;
 
-public interface IFeatureToDBAnnotation extends DBAnnotation
+public interface FeatureToDBAnnotation extends DBAnnotation
 {
 
 	/**
