@@ -3,8 +3,8 @@
  */
 package org.cycads.generators;
 
-import org.cycads.entities.FeatureFilter;
-import org.cycads.entities.Organism;
+import org.cycads.entities.biojava.FeatureFilter;
+import org.cycads.entities.biojava.Organism;
 
 public interface BioCycExporter
 {

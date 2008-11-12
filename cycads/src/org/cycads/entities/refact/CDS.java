@@ -3,7 +3,9 @@
  */
 package org.cycads.entities.refact;
 
-public class CDS extends Feature
+import org.cycads.entities.CDS;
+
+public class CDS extends Feature implements CDS
 {
 
 }

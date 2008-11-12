@@ -9,8 +9,8 @@ import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Collection;
 
-import org.cycads.entities.DBLink;
-import org.cycads.entities.Function;
+import org.cycads.entities.biojava.DBLink;
+import org.cycads.entities.biojava.Function;
 
 public class PFFileStream implements BioCycStream
 {

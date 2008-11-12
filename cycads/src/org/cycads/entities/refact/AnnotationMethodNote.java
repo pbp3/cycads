@@ -3,11 +3,17 @@
  */
 package org.cycads.entities.refact;
 
-public class AnnotationMethodNote extends Note
-{
-	private IAnnotationMethod	method;
+import org.cycads.entities.AnnotationMethod;
+import org.cycads.entities.AnnotationMethodNote;
 
-	public IAnnotationMethod getMethod()
+public class AnnotationMethodNote extends Note implements AnnotationMethodNote
+{
+	private AnnotationMethod	method;
+
+	/* (non-Javadoc)
+	 * @see org.cycads.entities.refact.IAnnotationMethodNote#getMethod()
+	 */
+	public AnnotationMethod getMethod()
 	{
 		return method;
 	}

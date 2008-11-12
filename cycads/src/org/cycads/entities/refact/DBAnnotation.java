@@ -2,38 +2,35 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-public abstract class DBAnnotation
+import org.cycads.entities.DBAnnotation;
+import org.cycads.entities.DBAnnotationMethod;
+import org.cycads.entities.DBRecord;
+
+public abstract class DBAnnotation implements DBAnnotation
 {
 
 	private Collection<DBAnnotationNote>	dBAnnotationNotes;
 	private DBAnnotationMethod				dBAnnotationMethod;
 	private DBRecord						dBRecord;
 
-	/**
-	 * Getter of the property <tt>dBLinkNotes</tt>
-	 * 
-	 * @return Returns the dBLinkNotes.
-	 * 
+	/* (non-Javadoc)
+	 * @see org.cycads.entities.refact.IDBAnnotation#getDBAnnotationNotes()
 	 */
 	public Collection<DBAnnotationNote> getDBAnnotationNotes()
 	{
 		return dBAnnotationNotes;
 	}
 
-	/**
-	 * Getter of the property <tt>dBLinkMethod</tt>
-	 * @return Returns the dBLinkMethod.
+	/* (non-Javadoc)
+	 * @see org.cycads.entities.refact.IDBAnnotation#getDBAnnotationMethod()
 	 */
 	public DBAnnotationMethod getDBAnnotationMethod()
 	{
 		return dBAnnotationMethod;
 	}
 
-	/**
-	 * Getter of the property <tt>dBRecord</tt>
-	 * 
-	 * @return Returns the dBRecord.
-	 * 
+	/* (non-Javadoc)
+	 * @see org.cycads.entities.refact.IDBAnnotation#getDBRecord()
 	 */
 	public DBRecord getDBRecord()
 	{

@@ -3,6 +3,8 @@
  */
 package org.cycads.entities.refact;
 
+import org.cycads.entities.IIntron;
+
 public class Intron implements IIntron
 {
 	private int	start, end;

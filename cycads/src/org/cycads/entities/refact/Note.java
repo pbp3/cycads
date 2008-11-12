@@ -3,22 +3,34 @@
  */
 package org.cycads.entities.refact;
 
-public class Note
+import org.cycads.entities.INote;
+import org.cycads.entities.INoteType;
+
+public class Note implements INote
 {
-	NoteType	noteType;
+	INoteType	noteType;
 
 	String		value;
 
-	public NoteType getNoteType()
+	/* (non-Javadoc)
+	 * @see org.cycads.entities.refact.INote#getNoteType()
+	 */
+	public INoteType getNoteType()
 	{
 		return noteType;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.cycads.entities.refact.INote#getTypeName()
+	 */
 	public String getTypeName()
 	{
 		return noteType.getName();
 	}
 
+	/* (non-Javadoc)
+	 * @see org.cycads.entities.refact.INote#getValue()
+	 */
 	public String getValue()
 	{
 		return value;

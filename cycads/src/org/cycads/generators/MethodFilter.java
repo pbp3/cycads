@@ -3,7 +3,7 @@
  */
 package org.cycads.generators;
 
-import org.cycads.entities.Method;
+import org.cycads.entities.biojava.Method;
 
 public interface MethodFilter
 {

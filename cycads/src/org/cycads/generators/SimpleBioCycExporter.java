@@ -8,10 +8,10 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.cycads.entities.FeatureFilter;
-import org.cycads.entities.Organism;
-import org.cycads.entities.Sequence;
-import org.cycads.entities.SequenceFeature;
+import org.cycads.entities.biojava.FeatureFilter;
+import org.cycads.entities.biojava.Organism;
+import org.cycads.entities.biojava.Sequence;
+import org.cycads.entities.biojava.SequenceFeature;
 import org.cycads.general.CacheCleanerController;
 import org.cycads.ui.progress.Progress;
 

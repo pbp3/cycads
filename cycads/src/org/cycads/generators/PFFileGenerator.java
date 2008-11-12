@@ -8,8 +8,8 @@ import java.util.Collection;
 
 import org.biojava.bio.seq.Sequence;
 import org.biojavax.bio.seq.RichFeature;
-import org.cycads.entities.CDS;
-import org.cycads.entities.Organism;
+import org.cycads.entities.biojava.CDS;
+import org.cycads.entities.biojava.Organism;
 import org.cycads.general.CacheCleanerController;
 import org.cycads.general.biojava.BioSql;
 import org.cycads.general.biojava.TermsAndOntologies;

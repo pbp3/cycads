@@ -13,7 +13,6 @@
         <class className="org.cycads.entities.refact.Gene" project="cycads" xLocation="599" yLocation="606"/>
         <class className="org.cycads.entities.refact.RNA" project="cycads" xLocation="839" yLocation="606"/>
         <class className="org.cycads.entities.refact.FeatureNote" project="cycads" xLocation="1174" yLocation="88"/>
-        <class className="org.cycads.entities.refact.OtherFeature" project="cycads" xLocation="688" yLocation="835"/>
         <class className="org.cycads.entities.refact.Location" project="cycads" xLocation="1023" yLocation="720"/>
         <class className="org.cycads.entities.refact.Sequence" project="cycads" xLocation="171" yLocation="198"/>
         <class className="org.cycads.entities.refact.Organism" project="cycads" xLocation="-109" yLocation="197"/>

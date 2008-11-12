@@ -5,11 +5,11 @@ package org.cycads.ui.generators;
 
 import java.io.File;
 
-import org.cycads.entities.ECLinkCreator;
-import org.cycads.entities.FeatureFilter;
-import org.cycads.entities.FeatureFilterByType;
-import org.cycads.entities.MethodTypeBJ;
-import org.cycads.entities.Organism;
+import org.cycads.entities.biojava.ECLinkCreator;
+import org.cycads.entities.biojava.FeatureFilter;
+import org.cycads.entities.biojava.FeatureFilterByType;
+import org.cycads.entities.biojava.MethodTypeBJ;
+import org.cycads.entities.biojava.Organism;
 import org.cycads.general.CacheCleanerController;
 import org.cycads.general.CacheCleanerListener;
 import org.cycads.general.Messages;
