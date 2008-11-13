@@ -3,16 +3,13 @@
  */
 package org.cycads.entities.annotation;
 
-import java.util.Collection;
+import org.cycads.entities.note.NoteHolder;
 
-public interface AnnotationMethod
+public interface AnnotationMethod<S extends AnnotationSource, T extends AnnotationTarget> extends
+		NoteHolder<AnnotationMethod<S, T>>
 {
 	public String getName();
 
-	public Collection<AnnotationMethodNote> getNotes();
-
-	public void addNote(AnnotationMethodNote note);
-
-	public AnnotationMethodNote addNote(String value, String type);
+	public Annotation<S, T> getOrCreateAnnotation(S source, T target);
 
 }
