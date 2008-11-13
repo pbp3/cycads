@@ -38,7 +38,7 @@ public class GBKLoaderBJ extends FileLoaderAbstract
 			MethodTypeBJ.CDS_TO_EC.getOrCreateMethod(ParametersDefault.gBKLoaderMethodCDSToECName()));
 	}
 
-	public GBKLoaderBJ(Progress progress, CacheCleanerController cacheCleaner, Method methodCDSToEC) {
+	private GBKLoaderBJ(Progress progress, CacheCleanerController cacheCleaner, Method methodCDSToEC) {
 		super(progress, cacheCleaner);
 		this.methodCDSToEC = methodCDSToEC;
 	}
@@ -51,10 +51,10 @@ public class GBKLoaderBJ extends FileLoaderAbstract
 		Pattern rnaPattern = Pattern.compile(ParametersDefault.gbkRNATagExpression());
 		Pattern cdsPattern = Pattern.compile(ParametersDefault.gbkCDSTagExpression());
 
-		ComparableTerm ecTerm = TermsAndOntologies.getTermTypeEC();
-		ComparableTerm geneTerm = TermsAndOntologies.getTermTypeGene();
-		ComparableTerm cdsTerm = TermsAndOntologies.getTermTypeCDS();
-
+		//		ComparableTerm ecTerm = TermsAndOntologies.getTermTypeEC();
+		//		ComparableTerm geneTerm = TermsAndOntologies.getTermTypeGene();
+		//		ComparableTerm cdsTerm = TermsAndOntologies.getTermTypeCDS();
+		//
 		// we are reading DNA sequences
 		RichSequenceIterator seqs = RichSequence.IOTools.readGenbankDNA(br, RichObjectFactory.getDefaultNamespace());
 		while (seqs.hasNext()) {
@@ -72,6 +72,10 @@ public class GBKLoaderBJ extends FileLoaderAbstract
 			ArrayList<RichFeature> cDSs = new ArrayList<RichFeature>();
 			for (RichFeature feature : features) {
 				try {
+					ComparableTerm ecTerm = TermsAndOntologies.getTermTypeEC();
+					ComparableTerm geneTerm = TermsAndOntologies.getTermTypeGene();
+					ComparableTerm cdsTerm = TermsAndOntologies.getTermTypeCDS();
+
 					if (genePattern.matcher(feature.getType()).matches()) {
 						genes.add(feature);
 						feature.setTypeTerm(geneTerm);
@@ -116,6 +120,8 @@ public class GBKLoaderBJ extends FileLoaderAbstract
 			BioJavaxSession.session.saveOrUpdate("Sequence", seq);
 			progress.completeStep();
 			cacheCleaner.clear();
+			MethodTypeBJ.CDS_TO_EC = new MethodTypeBJ(ParametersDefault.cdsToECMethodType());
+			methodCDSToEC = MethodTypeBJ.CDS_TO_EC.getOrCreateMethod(ParametersDefault.gBKLoaderMethodCDSToECName());
 		}
 		Object[] a1 = {progress.getStep()};
 		progress.finish(a1);

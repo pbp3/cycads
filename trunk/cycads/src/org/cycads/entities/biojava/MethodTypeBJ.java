@@ -14,11 +14,11 @@ import org.cycads.general.biojava.TermsAndOntologies;
 
 public class MethodTypeBJ implements MethodType
 {
-	public static final MethodType	CDS_TO_KO	= new MethodTypeBJ(ParametersDefault.cdsToKOMethodType());
+	public static MethodType	CDS_TO_KO	= new MethodTypeBJ(ParametersDefault.cdsToKOMethodType());
 
-	public static final MethodType	CDS_TO_EC	= new MethodTypeBJ(ParametersDefault.cdsToECMethodType());
+	public static MethodType	CDS_TO_EC	= new MethodTypeBJ(ParametersDefault.cdsToECMethodType());
 
-	ComparableOntology				ont;
+	ComparableOntology			ont;
 
 	public MethodTypeBJ(ComparableOntology ont) {
 		this.ont = ont;

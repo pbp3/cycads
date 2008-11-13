@@ -16,7 +16,7 @@ import org.cycads.ui.progress.Progress;
 
 public class TaxonomyLoaderBJ implements TaxonomyLoader
 {
-	Progress		progressNode, progressName;
+	Progress				progressNode, progressName;
 	CacheCleanerController	cacheCleaner;
 
 	public TaxonomyLoaderBJ(Progress progressNode, Progress progressName, CacheCleanerController cacheCleaner) {
@@ -53,6 +53,6 @@ public class TaxonomyLoaderBJ implements TaxonomyLoader
 	}
 
 	public void load(File nodesFile, File namesFile) throws IOException {
-		load(new BufferedReader(new FileReader(nodesFile)), new BufferedReader(new FileReader(nodesFile)));
+		load(new BufferedReader(new FileReader(nodesFile)), new BufferedReader(new FileReader(namesFile)));
 	}
 }
