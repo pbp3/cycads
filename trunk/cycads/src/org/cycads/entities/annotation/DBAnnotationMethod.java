@@ -5,15 +5,9 @@ package org.cycads.entities.annotation;
 
 import java.util.Collection;
 
-public interface DBAnnotationMethod extends AnnotationMethod
+public interface DBAnnotationMethod extends AnnotationMethod<DBAnnotationMethod>
 {
 
-	/**
-	 * Getter of the property <tt>name</tt>
-	 * 
-	 * @return Returns the name.
-	 * 
-	 */
 	public Collection<DBAnnotation> getDBAnnotations();
 
 }

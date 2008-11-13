@@ -3,25 +3,8 @@
  */
 package org.cycads.entities.annotation;
 
-import java.util.Collection;
-
-public interface DBRecord
+public interface DBRecord extends AnnotationSource, AnnotationTarget
 {
-
-	/**
-	 * Getter of the property <tt>dbLinks</tt>
-	 * 
-	 * @return Returns the dbLinks.
-	 * 
-	 */
-	public Collection<DBAnnotation> getDbAnnotations();
-
-	/**
-	 * Getter of the property <tt>accession</tt>
-	 * 
-	 * @return Returns the accession.
-	 * 
-	 */
 	public String getAccession();
 
 	public ExternalDatabase getDatabase();
