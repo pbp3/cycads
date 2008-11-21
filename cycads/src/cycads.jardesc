@@ -11,7 +11,11 @@
         </sealing>
     </manifest>
     <selectedElements exportClassFiles="true" exportJavaFiles="true" exportOutputFolder="false">
+        <file path="/cycads/data/ko2go.xl"/>
         <javaElement handleIdentifier="=cycads/src"/>
-        <folder path="/cycads/data"/>
+        <file path="/cycads/data/ko"/>
+        <file path="/cycads/data/nodes.dmp"/>
+        <file path="/cycads/data/names.dmp"/>
+        <file path="/cycads/data/ko2ec.xl"/>
     </selectedElements>
 </jardesc>

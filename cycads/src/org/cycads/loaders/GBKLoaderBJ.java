@@ -67,9 +67,10 @@ public class GBKLoaderBJ extends FileLoaderAbstract
 				throw new IOException(e.getMessage());
 			}
 			Set<RichFeature> features = seq.getFeatureSet();
-			ArrayList<RichFeature> genes = new ArrayList<RichFeature>();
+			//			ArrayList<RichFeature> genes = new ArrayList<RichFeature>();
+			RichFeature gene = null;
 			ArrayList<RichFeature> rNAs = new ArrayList<RichFeature>();
-			ArrayList<RichFeature> cDSs = new ArrayList<RichFeature>();
+			//			ArrayList<RichFeature> cDSs = new ArrayList<RichFeature>();
 			for (RichFeature feature : features) {
 				try {
 					ComparableTerm ecTerm = TermsAndOntologies.getTermTypeEC();
@@ -77,25 +78,44 @@ public class GBKLoaderBJ extends FileLoaderAbstract
 					ComparableTerm cdsTerm = TermsAndOntologies.getTermTypeCDS();
 
 					if (genePattern.matcher(feature.getType()).matches()) {
-						genes.add(feature);
+						gene = feature;
+						rNAs = new ArrayList<RichFeature>();
+						//						genes.add(feature);
 						feature.setTypeTerm(geneTerm);
 					}
 					else if (rnaPattern.matcher(feature.getType()).matches()) {
-						rNAs.add(feature);
+						RichFeature rNA = feature;
+						rNAs.add(rNA);
+						if ((gene != null) && gene.getLocation().contains(rNA.getLocation())) {
+							gene.addFeatureRelationship(new SimpleRichFeatureRelationship(gene, rNA,
+								SimpleRichFeatureRelationship.getContainsTerm(), 0));
+						}
 					}
 					else if (cdsPattern.matcher(feature.getType()).matches()) {
-						feature.setTypeTerm(cdsTerm);
-						cDSs.add(feature);
+						RichFeature cDS = feature;
+						progress.completeStep();
+						cDS.setTypeTerm(cdsTerm);
+						//						cDSs.add(feature);
+						//Adjust EC qualifier
 						SimpleRichAnnotation annot = (SimpleRichAnnotation) feature.getAnnotation();
-						Set<Note> notes = annot.getNoteSet();
-						for (Note note : notes) {
+						Object[] notes = annot.getNoteSet().toArray();
+						for (Object obj : notes) {
+							Note note = (Note) obj;
 							String tag = note.getTerm().getName();
 							if (ecPattern.matcher(tag).matches()) {
 								note.setTerm(ecTerm);
-								CDS cds = new CDSBJ(feature);
+								CDS cds = new CDSBJ(cDS);
 								cds.addAnnotation(methodCDSToEC, note.getValue());
 							}
 						}
+						//put CDS in RNAs
+						for (RichFeature rNA : rNAs) {
+							if (rNA.getLocation().contains(cDS.getLocation())) {
+								rNA.addFeatureRelationship(new SimpleRichFeatureRelationship(rNA, cDS,
+									SimpleRichFeatureRelationship.getContainsTerm(), 0));
+							}
+						}
+
 					}
 				}
 				catch (InvalidTermException e) {
@@ -103,23 +123,22 @@ public class GBKLoaderBJ extends FileLoaderAbstract
 					throw new RuntimeException(e);
 				}
 			}
-			for (RichFeature gene : genes) {
-				for (RichFeature rNA : rNAs) {
-					for (RichFeature cDS : cDSs) {
-						if (rNA.getLocation().contains(cDS.getLocation())) {
-							rNA.addFeatureRelationship(new SimpleRichFeatureRelationship(rNA, cDS,
-								SimpleRichFeatureRelationship.getContainsTerm(), 0));
-						}
-					}
-					if (gene.getLocation().contains(rNA.getLocation())) {
-						gene.addFeatureRelationship(new SimpleRichFeatureRelationship(gene, rNA,
-							SimpleRichFeatureRelationship.getContainsTerm(), 0));
-					}
-				}
-			}
+			//			for (RichFeature gene : genes) {
+			//				for (RichFeature rNA : rNAs) {
+			//					for (RichFeature cDS : cDSs) {
+			//						if (rNA.getLocation().contains(cDS.getLocation())) {
+			//							rNA.addFeatureRelationship(new SimpleRichFeatureRelationship(rNA, cDS,
+			//								SimpleRichFeatureRelationship.getContainsTerm(), 0));
+			//						}
+			//					}
+			//					if (gene.getLocation().contains(rNA.getLocation())) {
+			//						gene.addFeatureRelationship(new SimpleRichFeatureRelationship(gene, rNA,
+			//							SimpleRichFeatureRelationship.getContainsTerm(), 0));
+			//					}
+			//				}
+			//			}
 			BioJavaxSession.session.saveOrUpdate("Sequence", seq);
-			progress.completeStep();
-			cacheCleaner.clear();
+			cacheCleaner.incCache();
 			MethodTypeBJ.CDS_TO_EC = new MethodTypeBJ(ParametersDefault.cdsToECMethodType());
 			methodCDSToEC = MethodTypeBJ.CDS_TO_EC.getOrCreateMethod(ParametersDefault.gBKLoaderMethodCDSToECName());
 		}

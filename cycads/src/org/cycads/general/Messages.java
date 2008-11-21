@@ -24,6 +24,10 @@ public class Messages
 		}
 	}
 
+	public static String splitUsage() {
+		return getString("Split.usage");
+	}
+
 	//Progress
 
 	public static String getProgressStartTimeMsg() {
