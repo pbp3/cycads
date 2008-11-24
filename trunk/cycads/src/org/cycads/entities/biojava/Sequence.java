@@ -5,6 +5,8 @@ package org.cycads.entities.biojava;
 
 import java.util.Collection;
 
+import org.cycads.generators.FeatureFilter;
+
 
 public interface Sequence
 {

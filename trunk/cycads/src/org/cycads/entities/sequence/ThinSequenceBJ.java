@@ -6,7 +6,6 @@ package org.cycads.entities.sequence;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cycads.entities.biojava.FeatureFilterByType;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.NoteBJ;
 import org.cycads.entities.note.NoteCollectionHash;
@@ -14,6 +13,7 @@ import org.cycads.entities.sequence.feature.Feature;
 import org.cycads.entities.sequence.feature.FeatureBJ;
 import org.cycads.entities.sequence.feature.FeatureFilter;
 import org.cycads.general.biojava.BioJavaxSession;
+import org.cycads.generators.FeatureFilterByType;
 import org.hibernate.Query;
 
 public class ThinSequenceBJ implements Sequence

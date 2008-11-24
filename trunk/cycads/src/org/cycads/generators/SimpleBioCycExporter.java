@@ -8,7 +8,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.cycads.entities.biojava.FeatureFilter;
 import org.cycads.entities.biojava.Organism;
 import org.cycads.entities.biojava.Sequence;
 import org.cycads.entities.biojava.SequenceFeature;

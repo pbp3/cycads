@@ -5,10 +5,9 @@ package org.cycads.ui.generators;
 
 import java.io.File;
 
+import org.cycads.entities.biojava.DBLinkCreator;
 import org.cycads.entities.biojava.ECLinkCreator;
-import org.cycads.entities.biojava.FeatureFilter;
-import org.cycads.entities.biojava.FeatureFilterByType;
-import org.cycads.entities.biojava.MethodTypeBJ;
+import org.cycads.entities.biojava.FunctionCreator;
 import org.cycads.entities.biojava.Organism;
 import org.cycads.general.CacheCleanerController;
 import org.cycads.general.CacheCleanerListener;
@@ -17,8 +16,11 @@ import org.cycads.general.ParametersDefault;
 import org.cycads.general.SimpleCacheCleanerController;
 import org.cycads.general.biojava.BioJavaxSession;
 import org.cycads.generators.BioCycExporter;
+import org.cycads.generators.BioCycIDGenerator;
 import org.cycads.generators.BioCycRecordFactory;
 import org.cycads.generators.BioCycStream;
+import org.cycads.generators.FeatureFilter;
+import org.cycads.generators.FeatureFilterByType;
 import org.cycads.generators.MethodFilter;
 import org.cycads.generators.PFFileStream;
 import org.cycads.generators.SimpleBioCycExporter;
@@ -57,11 +59,9 @@ public class PFFile
 		File directory = arguments.getDirectoryToSave(args, 4, ParametersDefault.pfFileGeneratorPfDirectoryName(),
 			Messages.pfFileGeneratorChooseDirectory());
 
-		FeatureFilter featureFilter = new FeatureFilterByType(ParametersDefault.pfFileGeneratorFeatureFilter());
-
-		MethodFilter koFilter = new ThresholdMethodFilter(MethodTypeBJ.CDS_TO_KO.getMethods(), 0);
-		MethodFilter ecFilter = new ThresholdMethodFilter(MethodTypeBJ.CDS_TO_EC.getMethods(), 0);
-		//		MethodFilter methodFilter = new UnionMethodFilter(koFilter, ecFilter);
+		MethodFilter filterNothing = new MethodFilter.FilterNothing();
+		//		MethodFilter koFilter = new ThresholdMethodFilter(MethodTypeBJ.CDS_TO_KO.getMethods(), 0);
+		//		MethodFilter ecFilter = new ThresholdMethodFilter(MethodTypeBJ.CDS_TO_EC.getMethods(), 0);
 
 		ECLinkCreator directECCreator = new DirectECLinkCreator(ecFilter);
 		ECLinkCreator koECCreator = new ECLinkCreatorByKO(koFilter);
@@ -118,6 +118,8 @@ public class PFFile
 			ParametersDefault.pfFileGeneratorStepCache(), listeners);
 
 		BioCycExporter exporter = new SimpleBioCycExporter(progress, cacheControl, bioCycRecordFactory);
+		FeatureFilter featureFilter = new FeatureFilterByType(ParametersDefault.pfFileGeneratorFeatureFilter());
+
 		exporter.export(organism, version, featureFilter, pfFileStream);
 
 		BioJavaxSession.finish();

@@ -6,8 +6,6 @@ package org.cycads.ui.generators;
 import java.io.File;
 
 import org.cycads.entities.biojava.ECLinkCreator;
-import org.cycads.entities.biojava.FeatureFilter;
-import org.cycads.entities.biojava.FeatureFilterByType;
 import org.cycads.entities.biojava.MethodTypeBJ;
 import org.cycads.entities.biojava.Organism;
 import org.cycads.general.CacheCleanerController;
@@ -19,6 +17,8 @@ import org.cycads.general.biojava.BioJavaxSession;
 import org.cycads.generators.BioCycExporter;
 import org.cycads.generators.BioCycRecordFactory;
 import org.cycads.generators.BioCycStream;
+import org.cycads.generators.FeatureFilter;
+import org.cycads.generators.FeatureFilterByType;
 import org.cycads.generators.MethodFilter;
 import org.cycads.generators.PFFileStream;
 import org.cycads.generators.SimpleBioCycExporter;
