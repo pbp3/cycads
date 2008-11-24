@@ -9,6 +9,8 @@ import java.util.List;
 
 import org.biojava.ontology.Term;
 import org.cycads.general.biojava.BioJavaxSession;
+import org.cycads.generators.FeatureFilter;
+import org.cycads.generators.FeatureFilterByType;
 import org.hibernate.Query;
 
 public class ThinSequenceBJ implements Sequence

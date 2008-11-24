@@ -9,4 +9,10 @@ public interface MethodFilter
 {
 	public boolean isValid(Method method);
 
+	public class FilterNothing implements MethodFilter
+	{
+		public boolean isValid(Method method) {
+			return true;
+		}
+	}
 }

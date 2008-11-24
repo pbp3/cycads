@@ -1,9 +1,11 @@
 /*
  * Created on 31/10/2008
  */
-package org.cycads.entities.biojava;
+package org.cycads.generators;
 
 import java.util.regex.Pattern;
+
+import org.cycads.entities.biojava.SequenceFeature;
 
 public class FeatureFilterByType implements FeatureFilter
 {

@@ -8,7 +8,6 @@ import java.util.Collection;
 import org.cycads.dbExternal.EC;
 import org.cycads.entities.biojava.DBLink;
 import org.cycads.entities.biojava.Function;
-import org.cycads.entities.biojava.Location;
 
 public interface BioCycRecord
 {
@@ -28,10 +27,10 @@ public interface BioCycRecord
 
 	public void setName(String name);
 
-	public Location getLocation();
-
-	public void setLocation(Location location);
-
+	//	public Location getLocation();
+	//
+	//	public void setLocation(Location location);
+	//
 	public int getStartBase();
 
 	public int getEndBase();
