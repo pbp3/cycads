@@ -20,14 +20,14 @@ public class NoteCollectionHash<H extends NoteHolder<H>>
 	}
 
 	public Note<H> addNote(Note<H> note) {
-		Note<H> note1 = getNote(note.getValue(), note.getTypeName());
+		Note<H> note1 = getNote(note.getValue(), note.getType().getName());
 		if (note1 != null) {
 			return note1;
 		}
-		Collection<Note<H>> notes = getNotes(note.getTypeName());
+		Collection<Note<H>> notes = getNotes(note.getType().getName());
 		if (notes == null) {
 			notes = createNotes();
-			hash.put(note.getTypeName(), notes);
+			hash.put(note.getType().getName(), notes);
 		}
 		notes.add(note);
 		return note;

@@ -10,6 +10,7 @@ import org.cycads.entities.annotation.DBAnnotationMethod;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.NoteBJ;
 import org.cycads.entities.note.NoteCollectionHash;
+import org.cycads.entities.sequence.Location;
 import org.cycads.entities.sequence.Sequence;
 import org.cycads.general.biojava.BioJavaxSession;
 import org.hibernate.Query;

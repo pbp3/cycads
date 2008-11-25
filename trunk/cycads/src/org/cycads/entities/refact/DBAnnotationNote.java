@@ -1,7 +1,7 @@
 package org.cycads.entities.refact;
 
-import org.cycads.entities.annotation.DBAnnotation;
-import org.cycads.entities.annotation.DBAnnotationNote;
+import org.cycads.entities.annotation.ExternalAnnotation;
+import org.cycads.entities.annotation.ExternalAnnotation;
 
 /*
  * Created on 07/11/2008
@@ -10,14 +10,14 @@ import org.cycads.entities.annotation.DBAnnotationNote;
 public class DBAnnotationNote extends Note implements DBAnnotationNote
 {
 
-	private DBAnnotation	dBAnnotation;
+	private ExternalAnnotation	externalAnnotation;
 
 	/* (non-Javadoc)
 	 * @see org.cycads.entities.refact.IDBAnnotationNote#getDBAnnotation()
 	 */
-	public DBAnnotation getDBAnnotation()
+	public ExternalAnnotation getDBAnnotation()
 	{
-		return dBAnnotation;
+		return externalAnnotation;
 	}
 
 }

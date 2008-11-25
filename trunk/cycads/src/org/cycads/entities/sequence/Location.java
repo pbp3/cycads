@@ -1,11 +1,14 @@
 /*
  * Created on 11/11/2008
  */
-package org.cycads.entities.sequence.feature;
+package org.cycads.entities.sequence;
 
 import java.util.Collection;
 
-public interface Location
+import org.cycads.entities.annotation.ExternalAnnotationSource;
+import org.cycads.entities.annotation.FeatureAnnotationSource;
+
+public interface Location extends FeatureAnnotationSource, ExternalAnnotationSource
 {
 
 	public Collection<Intron> getIntrons();
@@ -34,5 +37,7 @@ public interface Location
 	 * 
 	 */
 	public int getStart();
+
+	public Sequence getSequence();
 
 }

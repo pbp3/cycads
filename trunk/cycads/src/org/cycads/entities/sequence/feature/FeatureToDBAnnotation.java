@@ -3,9 +3,9 @@
  */
 package org.cycads.entities.sequence.feature;
 
-import org.cycads.entities.annotation.DBAnnotation;
+import org.cycads.entities.annotation.ExternalAnnotation;
 
-public interface FeatureToDBAnnotation extends DBAnnotation
+public interface FeatureToDBAnnotation extends ExternalAnnotation
 {
 
 	/**
