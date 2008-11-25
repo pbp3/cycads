@@ -3,7 +3,7 @@
  */
 package org.cycads.entities.annotation;
 
-public interface DBRecord extends AnnotationSource, AnnotationTarget
+public interface DBRecord
 {
 	public String getAccession();
 

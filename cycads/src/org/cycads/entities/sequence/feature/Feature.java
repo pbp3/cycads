@@ -8,6 +8,7 @@ import java.util.Collection;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationTarget;
 import org.cycads.entities.annotation.DBAnnotationMethod;
+import org.cycads.entities.sequence.Location;
 import org.cycads.entities.sequence.Sequence;
 
 public interface Feature extends AnnotationTarget, Annotation<Sequence, Feature>

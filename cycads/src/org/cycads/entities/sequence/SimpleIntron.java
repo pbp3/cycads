@@ -1,7 +1,8 @@
 /*
  * Created on 12/11/2008
  */
-package org.cycads.entities.sequence.feature;
+package org.cycads.entities.sequence;
+
 
 public class SimpleIntron implements Intron
 {

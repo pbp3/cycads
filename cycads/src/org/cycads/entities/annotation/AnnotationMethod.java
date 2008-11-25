@@ -5,11 +5,8 @@ package org.cycads.entities.annotation;
 
 import org.cycads.entities.note.NoteHolder;
 
-public interface AnnotationMethod<S extends AnnotationSource, T extends AnnotationTarget> extends
-		NoteHolder<AnnotationMethod<S, T>>
+public interface AnnotationMethod extends NoteHolder<AnnotationMethod>
 {
 	public String getName();
-
-	public Annotation<S, T> getOrCreateAnnotation(S source, T target);
 
 }

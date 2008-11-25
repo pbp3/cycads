@@ -4,13 +4,13 @@ import java.util.Collection;
 
 import org.cycads.entities.annotation.DBAnnotationMethod;
 import org.cycads.entities.annotation.ExternalDatabase;
+import org.cycads.entities.sequence.Location;
 import org.cycads.entities.sequence.Sequence;
 import org.cycads.entities.sequence.feature.Feature;
 import org.cycads.entities.sequence.feature.FeatureAnnotationMethod;
 import org.cycads.entities.sequence.feature.FeatureNote;
 import org.cycads.entities.sequence.feature.FeatureToDBAnnotation;
 import org.cycads.entities.sequence.feature.FeatureType;
-import org.cycads.entities.sequence.feature.Location;
 
 /**
  */

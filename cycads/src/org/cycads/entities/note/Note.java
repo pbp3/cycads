@@ -6,9 +6,7 @@ package org.cycads.entities.note;
 public interface Note<H extends NoteHolder<H>>
 {
 
-	public NoteType getNoteType();
-
-	public String getTypeName();
+	public NoteType getType();
 
 	public String getValue();
 

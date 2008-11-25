@@ -15,7 +15,7 @@ public class NoteBJ<H extends NoteHolder<H>> implements Note<H>
 		this.holder = holder;
 	}
 
-	public NoteType getNoteType() {
+	public NoteType getType() {
 		return noteType;
 	}
 
@@ -33,7 +33,7 @@ public class NoteBJ<H extends NoteHolder<H>> implements Note<H>
 			return false;
 		}
 		Note o = (Note) obj;
-		return (o.getValue().equals(this.getValue()) && o.getNoteType().equals(this.getNoteType()));
+		return (o.getValue().equals(this.getValue()) && o.getType().equals(this.getType()));
 	}
 
 	public H getHolder() {

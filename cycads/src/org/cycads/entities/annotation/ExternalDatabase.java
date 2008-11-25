@@ -7,7 +7,6 @@ import java.util.Collection;
 
 public interface ExternalDatabase
 {
-
 	public Collection<DBRecord> getRecords();
 
 	public String getDbName();
