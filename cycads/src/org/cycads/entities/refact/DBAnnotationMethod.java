@@ -2,7 +2,7 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-import org.cycads.entities.annotation.ExternalAnnotation;
+import org.cycads.entities.annotation.DBLink;
 
 /** 
  */

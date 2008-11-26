@@ -6,6 +6,7 @@ package org.cycads.entities.sequence;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.cycads.entities.annotation.FeatureFilter;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.NoteBJ;
 import org.cycads.entities.note.NoteCollectionHash;

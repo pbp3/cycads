@@ -5,11 +5,12 @@ package org.cycads.entities.sequence;
 
 import java.util.Collection;
 
-import org.cycads.entities.annotation.ExternalAnnotationSource;
+import org.cycads.entities.annotation.DBLinkSource;
 import org.cycads.entities.annotation.Feature;
+import org.cycads.entities.annotation.FeatureFilter;
 import org.cycads.entities.note.NoteHolder;
 
-public interface Sequence extends NoteHolder<Sequence>, ExternalAnnotationSource
+public interface Sequence extends NoteHolder<Sequence>, DBLinkSource
 {
 
 	public Collection<Feature> getFeatures();
