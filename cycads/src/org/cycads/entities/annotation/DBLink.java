@@ -3,7 +3,7 @@
  */
 package org.cycads.entities.annotation;
 
-public interface ExternalAnnotation extends Annotation<ExternalAnnotation>, ExternalAnnotationSource
+public interface DBLink extends Annotation<DBLink>, DBLinkSource
 {
 
 	public DBRecord getDBRecord();

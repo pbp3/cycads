@@ -7,7 +7,7 @@ import java.util.Collection;
 
 public interface AnnotationSource<A extends Annotation<A>>
 {
-	public Collection<A> getAnnotations(AnnotationFilter filter);
+	public Collection<A> getAnnotations(AnnotationFilter<A> filter);
 
 	public void addAnnotation(A annotation);
 
