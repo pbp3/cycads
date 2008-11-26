@@ -3,9 +3,11 @@
  */
 package org.cycads.entities.annotation;
 
+import org.cycads.entities.note.Note;
+import org.cycads.entities.note.NoteCollection;
 import org.cycads.entities.note.NoteSource;
 
-public interface Annotation<SourceType> extends NoteSource
+public interface Annotation<SourceType> extends NoteSource, NoteCollection<Note<Annotation<SourceType>>>
 {
 	public AnnotationMethod getAnnotationMethod();
 
