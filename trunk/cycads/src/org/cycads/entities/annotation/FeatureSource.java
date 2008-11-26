@@ -5,11 +5,12 @@ package org.cycads.entities.annotation;
 
 import java.util.Collection;
 
-import org.cycads.entities.sequence.FeatureFilter;
 import org.cycads.entities.sequence.Location;
 
-public interface FeatureSource extends AnnotationSource<Feature>
+public interface FeatureSource
 {
+	public void addFeature(Feature feature);
+
 	public Collection<Feature> getFeatures(FeatureFilter featureFilter);
 
 	public Feature addFeature(AnnotationMethod method, Location location, String type);

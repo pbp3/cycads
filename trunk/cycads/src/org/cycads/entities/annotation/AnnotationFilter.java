@@ -3,7 +3,7 @@
  */
 package org.cycads.entities.annotation;
 
-public interface AnnotationFilter
+public interface AnnotationFilter<A extends Annotation<A>>
 {
-	public boolean accept(Annotation annotation);
+	public boolean accept(A annotation);
 }
