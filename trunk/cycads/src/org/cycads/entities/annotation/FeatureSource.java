@@ -3,21 +3,15 @@
  */
 package org.cycads.entities.annotation;
 
-import java.util.Collection;
-
-import org.cycads.entities.sequence.Location;
+import org.cycads.entities.note.Note;
 
 public interface FeatureSource
 {
-	public void addFeature(Feature feature);
+	public Feature createFeature(AnnotationMethod method, String type, Note<Feature> notes);
 
-	public Collection<Feature> getFeatures(FeatureFilter featureFilter);
+	public CDS createCDS(AnnotationMethod method);
 
-	public Feature addFeature(AnnotationMethod method, Location location, String type);
+	public RNA createRNA(AnnotationMethod method, String type);
 
-	public CDS addCDS(AnnotationMethod method, Location location);
-
-	public RNA addRNA(AnnotationMethod method, Location location, String type);
-
-	public Gene addGene(AnnotationMethod method, Location location);
+	public Gene createGene(AnnotationMethod method);
 }

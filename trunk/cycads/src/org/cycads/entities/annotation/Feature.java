@@ -6,7 +6,7 @@ package org.cycads.entities.annotation;
 import org.cycads.entities.sequence.Location;
 import org.cycads.entities.sequence.Sequence;
 
-public interface Feature extends Annotation<Feature>, DBLinkSource
+public interface Feature extends Annotation<Location>, DBLinkSource
 {
 	public String getType();
 

@@ -3,16 +3,14 @@
  */
 package org.cycads.entities.annotation;
 
-import java.util.Collection;
+import org.cycads.entities.note.Note;
+import org.cycads.entities.note.NoteCollection;
 
 public interface DBLinkSource
 {
-	public DBLink getOrCreateDBLink(AnnotationMethod method, DBRecord record);
+	public DBLink createDBLink(AnnotationMethod method, DBRecord record, NoteCollection<Note<DBLink>> notes);
 
-	public DBLink getOrCreateDBLink(AnnotationMethod method, String accession, String dbName);
-
-	public Collection<DBLink> getDBLinks(DBLinkFilter filter);
-
-	public void addDBLink(DBLink dBLink);
+	public DBLink createDBLink(AnnotationMethod method, String accession, String dbName,
+			NoteCollection<Note<DBLink>> notes);
 
 }

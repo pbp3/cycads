@@ -8,9 +8,9 @@ import java.util.Collection;
 import org.cycads.entities.annotation.DBLinkSource;
 import org.cycads.entities.annotation.Feature;
 import org.cycads.entities.annotation.FeatureFilter;
-import org.cycads.entities.note.NoteHolder;
+import org.cycads.entities.note.NoteSource;
 
-public interface Sequence extends NoteHolder<Sequence>, DBLinkSource
+public interface Sequence extends NoteSource<Sequence>, DBLinkSource
 {
 
 	public Collection<Feature> getFeatures();
