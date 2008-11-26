@@ -3,9 +3,9 @@
  */
 package org.cycads.entities.annotation;
 
-import org.cycads.entities.note.NoteHolder;
+import org.cycads.entities.note.NoteSource;
 
-public interface AnnotationMethod extends NoteHolder<AnnotationMethod>
+public interface AnnotationMethod extends NoteSource
 {
 	public String getName();
 

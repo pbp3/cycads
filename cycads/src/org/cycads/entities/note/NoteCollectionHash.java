@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.LinkedList;
 
-public class NoteCollectionHash<H extends NoteHolder<H>>
+public class NoteCollectionHash<H extends NoteSource> implements NoteCollection<Note<H>>
 {
 
 	//verificar comment e dblink
@@ -20,14 +20,14 @@ public class NoteCollectionHash<H extends NoteHolder<H>>
 	}
 
 	public Note<H> addNote(Note<H> note) {
-		Note<H> note1 = getNote(note.getValue(), note.getType().getName());
+		Note<H> note1 = getNote(note.getValue(), note.getType());
 		if (note1 != null) {
 			return note1;
 		}
-		Collection<Note<H>> notes = getNotes(note.getType().getName());
+		Collection<Note<H>> notes = getNotes(note.getType());
 		if (notes == null) {
 			notes = createNotes();
-			hash.put(note.getType().getName(), notes);
+			hash.put(note.getType(), notes);
 		}
 		notes.add(note);
 		return note;
@@ -60,18 +60,6 @@ public class NoteCollectionHash<H extends NoteHolder<H>>
 			}
 		}
 		return null;
-	}
-
-	public Note<H> addNote(String value, String noteTypeName) {
-		return addNote(holder.createNote(value, noteTypeName));
-	}
-
-	public Note<H> getOrCreateNote(String value, String noteTypeName) {
-		Note<H> note = getNote(value, noteTypeName);
-		if (note == null) {
-			note = holder.createNote(value, noteTypeName);
-		}
-		return note;
 	}
 
 }

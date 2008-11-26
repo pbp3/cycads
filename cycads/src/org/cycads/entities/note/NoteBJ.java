@@ -3,23 +3,22 @@
  */
 package org.cycads.entities.note;
 
-public class NoteBJ<H extends NoteHolder<H>> implements Note<H>
-{
-	String		value;
-	NoteType	noteType;
-	H			holder;
+import org.biojava.ontology.Term;
+import org.cycads.general.biojava.TermsAndOntologies;
 
-	public NoteBJ(H holder, String value, String noteTypeName) {
+public class NoteBJ<H extends NoteSource> implements Note<H>
+{
+	String	value;
+	Term	noteType;
+	H		holder;
+
+	public NoteBJ(H holder, String value, String noteType) {
 		this.value = value;
-		this.noteType = NoteTypeBJ.getNoteTypeInstance(noteTypeName);
+		this.noteType = TermsAndOntologies.getOntologyNotes().getOrCreateTerm(noteType);
 		this.holder = holder;
 	}
 
-	public NoteType getType() {
-		return noteType;
-	}
-
-	public String getTypeName() {
+	public String getType() {
 		return noteType.getName();
 	}
 
