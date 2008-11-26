@@ -6,9 +6,9 @@ package org.cycads.entities.sequence;
 import java.util.Collection;
 
 import org.cycads.entities.annotation.ExternalAnnotationSource;
-import org.cycads.entities.annotation.FeatureAnnotationSource;
+import org.cycads.entities.annotation.FeatureSource;
 
-public interface Location extends FeatureAnnotationSource, ExternalAnnotationSource
+public interface Location extends FeatureSource, ExternalAnnotationSource
 {
 
 	public Collection<Intron> getIntrons();

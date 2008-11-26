@@ -9,4 +9,6 @@ public interface AnnotationMethod extends NoteHolder<AnnotationMethod>
 {
 	public String getName();
 
+	public int getWeight();
+
 }

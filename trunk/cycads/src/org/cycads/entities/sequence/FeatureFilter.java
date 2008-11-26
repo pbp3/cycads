@@ -1,7 +1,9 @@
 /*
  * Created on 31/10/2008
  */
-package org.cycads.entities.sequence.feature;
+package org.cycads.entities.sequence;
+
+import org.cycads.entities.annotation.Feature;
 
 public interface FeatureFilter
 {
