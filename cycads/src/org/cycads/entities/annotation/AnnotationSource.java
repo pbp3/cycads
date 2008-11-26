@@ -5,8 +5,10 @@ package org.cycads.entities.annotation;
 
 import java.util.Collection;
 
-public interface AnnotationSource
+public interface AnnotationSource<A extends Annotation<A>>
 {
-	public Collection<Annotation> getAnnotations(AnnotationFilter filter);
+	public Collection<A> getAnnotations(AnnotationFilter filter);
+
+	public void addAnnotation(A annotation);
 
 }

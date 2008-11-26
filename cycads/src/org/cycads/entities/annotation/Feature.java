@@ -6,9 +6,8 @@ package org.cycads.entities.annotation;
 import org.cycads.entities.sequence.Location;
 import org.cycads.entities.sequence.Sequence;
 
-public interface FeatureAnnotation extends Annotation, ExternalAnnotationSource
+public interface Feature extends Annotation<Feature>, ExternalAnnotationSource
 {
-
 	public String getType();
 
 	public Sequence getSequence();

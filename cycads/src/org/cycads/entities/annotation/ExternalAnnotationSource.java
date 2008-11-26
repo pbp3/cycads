@@ -3,8 +3,10 @@
  */
 package org.cycads.entities.annotation;
 
-public interface ExternalAnnotationSource extends AnnotationSource
+public interface ExternalAnnotationSource extends AnnotationSource<ExternalAnnotation>
 {
-	public Annotation getOrCreateAnnotation(AnnotationMethod method, DBRecord record);
+	public ExternalAnnotation getOrCreateAnnotation(AnnotationMethod method, DBRecord record);
+
+	public ExternalAnnotation getOrCreateAnnotation(AnnotationMethod method, String accession, String dbName);
 
 }
