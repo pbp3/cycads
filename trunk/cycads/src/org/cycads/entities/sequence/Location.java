@@ -5,10 +5,10 @@ package org.cycads.entities.sequence;
 
 import java.util.Collection;
 
-import org.cycads.entities.annotation.ExternalAnnotationSource;
+import org.cycads.entities.annotation.DBLinkSource;
 import org.cycads.entities.annotation.FeatureSource;
 
-public interface Location extends FeatureSource, ExternalAnnotationSource
+public interface Location extends FeatureSource, DBLinkSource
 {
 
 	public Collection<Intron> getIntrons();

@@ -3,9 +3,9 @@
  */
 package org.cycads.entities.sequence;
 
-import org.cycads.entities.annotation.ExternalAnnotation;
+import org.cycads.entities.annotation.DBLink;
 
-public interface SequenceToDBAnnotation extends ExternalAnnotation
+public interface SequenceToDBAnnotation extends DBLink
 {
 
 	/**
