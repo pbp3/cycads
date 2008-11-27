@@ -3,7 +3,7 @@
  */
 package org.cycads.entities.annotation;
 
-public interface DBRecord
+public interface DBRecord extends DBLinkSource, DBLinkCollection
 {
 	public String getAccession();
 

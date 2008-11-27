@@ -15,29 +15,14 @@ public interface Location extends FeatureSource, FeatureCollection, DBLinkSource
 
 	public Collection<Intron> getIntrons();
 
-	public void addIntron(Intron intron);
+	public Intron addIntron(Intron intron);
 
 	public Intron addIntron(int startPos, int endPos);
 
 	public boolean isPositiveStrand();
 
-	/**
-	 * Getter of the property <tt>end</tt>
-	 * 
-	 * @return Returns the end.
-	 * 
-	 */
 	public int getEnd();
 
-	/*
-	 * (non-javadoc)
-	 */
-	/**
-	 * Getter of the property <tt>start</tt>
-	 * 
-	 * @return Returns the start.
-	 * 
-	 */
 	public int getStart();
 
 	public Sequence getSequence();

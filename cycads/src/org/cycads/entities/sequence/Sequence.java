@@ -28,4 +28,6 @@ public interface Sequence extends NoteSource, NoteCollection<Note<Sequence>>, DB
 
 	public Organism getOrganism();
 
+	public Location createLocation(int start, int end, Collection<Intron> introns);
+
 }
