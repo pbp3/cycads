@@ -5,136 +5,142 @@ package org.cycads.entities.sequence;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
 
+import org.biojavax.SimpleNote;
+import org.biojavax.SimpleRichAnnotation;
+import org.biojavax.bio.seq.ThinRichSequence;
+import org.cycads.entities.annotation.AnnotationMethod;
+import org.cycads.entities.annotation.DBLink;
+import org.cycads.entities.annotation.DBLinkFilter;
+import org.cycads.entities.annotation.DBLinkSource;
+import org.cycads.entities.annotation.DBRecord;
+import org.cycads.entities.annotation.Feature;
 import org.cycads.entities.annotation.FeatureFilter;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.NoteBJ;
-import org.cycads.entities.note.NoteCollectionHash;
-import org.cycads.entities.sequence.feature.Feature;
-import org.cycads.general.biojava.BioJavaxSession;
-import org.cycads.generators.FeatureFilterByType;
-import org.hibernate.Query;
+import org.cycads.entities.note.NoteCollection;
+import org.cycads.general.biojava.BioSql;
 
 public class ThinSequenceBJ implements Sequence
 {
-	int								id;
-	NoteCollectionHash<Sequence>	notes;
+	int					id;
+	ThinRichSequence	thinSeq	= null;
 
-	public ThinSequenceBJ(int id)
-	{
+	//	NoteHashTable<Note<Sequence>>	notes	= new NoteHashTable<Note<Sequence>>();
+
+	public ThinSequenceBJ(int id) {
 		this.id = id;
-		notes = new NoteCollectionHash<Sequence>(this);
 	}
 
-	public int getId()
-	{
+	public int getId() {
 		return id;
 	}
 
-	public Collection<Feature> getFeatures(FeatureFilter featureFilter)
-	{
-		if (featureFilter instanceof FeatureFilterByType)
-		{
-
-			Query query = BioJavaxSession.createQuery("select f.id from Feature as f join f.parent as b where "
-				+ "b.id=:seqId ");
-			query.setInteger("seqId", id);
-			Collection<Integer> results = query.list();
-			Collection<Feature> ret = new ArrayList<Feature>();
-			for (Integer featureId : results)
-			{
-				Feature f = new FeatureBJ(featureId);
-				if (featureFilter.accept(f))
-				{
-					ret.add(f);
-				}
-			}
-			return ret;
-		}
-		else
-		{
-			return null;
-		}
-	}
-
-	public Collection<SequenceToDBAnnotation> getDBLinks()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String getDescription()
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public Collection<Feature> getFeatures()
-	{
-		Query query = BioJavaxSession.createQuery("select f.id from Feature as f join f.parent as b where "
-			+ "b.id=:seqId ");
-		query.setInteger("seqId", id);
-		Collection<Integer> results = query.list();
+	public Collection<Feature> getFeatures(FeatureFilter featureFilter) {
+		Collection<Integer> results = BioSql.getFeaturesId(id);
 		Collection<Feature> ret = new ArrayList<Feature>();
-		for (Integer featureId : results)
-		{
-
-			ret.add(new FeatureBJ(featureId));
+		for (Integer featureId : results) {
+			Feature f = new FeatureBJ(featureId);
+			if (featureFilter.accept(f)) {
+				ret.add(f);
+			}
 		}
 		return ret;
 	}
 
-	public String getName()
-	{
+	public Note<Sequence> addNote(Note<Sequence> note) {
+		ThinRichSequence seq=null;
+		SimpleRichAnnotation annot = seq.getAnnotation().
+		SimpleRichAnnotation annot = (SimpleRichAnnotation) feature.getAnnotation();
+		Set<Note> notes = annot.getNoteSet();
+		int rank = 0;
+		for (Note note : notes) {
+			if (note.getTerm().equals(meth.getTerm())) {
+				if (note.getValue().equalsIgnoreCase(value)) {
+					return;
+				}
+				rank++;
+			}
+		}
+		annot.addNote(new SimpleNote(meth.getTerm(), value, rank));
+		return notes.addNote(note);
+	}
+
+	public Note<Sequence> getNote(String value, String noteTypeName) {
+		return notes.getNote(value, noteTypeName);
+	}
+
+	public Collection<Note<Sequence>> getNotes() {
+		return notes.getNotes();
+	}
+
+	public Collection<Note<Sequence>> getNotes(String noteTypeName) {
+		return notes.getNotes(noteTypeName);
+	}
+
+	public Note<Sequence> createNote(String value, String noteTypeName) {
+		return new NoteBJ<Sequence>(this, value, noteTypeName);
+	}
+
+	public Location createLocation(int start, int end, Collection<Intron> introns) {
+		return new SimpleLocation(start, end, introns, this);
+	}
+
+	public String getDescription() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Organism getOrganism()
-	{
+	public String getName() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public double getVersion()
-	{
+	public Organism getOrganism() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public double getVersion() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	public Note<Sequence> addNote(Note<Sequence> note)
-	{
-		return notes.addNote(note);
+	public DBLink createDBLink(AnnotationMethod method, DBRecord record, NoteCollection<Note<DBLink>> notes) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public Note<Sequence> addNote(String value, String noteTypeName)
-	{
-		return notes.addNote(value, noteTypeName);
+	public DBLink createDBLink(AnnotationMethod method, String accession, String dbName,
+			NoteCollection<Note<DBLink>> notes) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public Note<Sequence> getNote(String value, String noteTypeName)
-	{
-		return notes.getNote(value, noteTypeName);
+	public void addDBLink(DBLink link) {
+		// TODO Auto-generated method stub
+
 	}
 
-	public Collection<Note<Sequence>> getNotes()
-	{
-		return notes.getNotes();
+	public DBLink getDBLink(AnnotationMethod method, DBRecord record, DBLinkSource source) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public Collection<Note<Sequence>> getNotes(String noteTypeName)
-	{
-		return notes.getNotes(noteTypeName);
+	public Collection<DBLink> getDBLinks(AnnotationMethod method, DBRecord record) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public Note<Sequence> getOrCreateNote(String value, String noteTypeName)
-	{
-		return notes.getOrCreateNote(value, noteTypeName);
+	public Collection<DBLink> getDBLinks(AnnotationMethod method, String accession, String dbName) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public Note<Sequence> createNote(String value, String noteTypeName)
-	{
-		return new NoteBJ<Sequence>(this, value, noteTypeName);
+	public Collection<DBLink> getDBLinks(DBLinkFilter filter) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

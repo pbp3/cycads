@@ -3,9 +3,20 @@
  */
 package org.cycads.general.biojava;
 
+import java.util.Collection;
+
+import org.hibernate.Query;
+
 public class BioSql
 {
 
+	public static Collection<Integer> getFeaturesId(int seqId) {
+		Query query = BioJavaxSession.createQuery("select f.id from Feature as f join f.parent as b where "
+			+ "b.id=:seqId ");
+		query.setInteger("seqId", seqId);
+		Collection<Integer> results = query.list();
+		return results;
+	}
 	//	public static NCBITaxon getTaxon(int ncbiTaxonNumber) {
 	//		Query taxonsQuery = session.createQuery("from Taxon where ncbi_taxon_id=:ncbiTaxonNumber");
 	//		taxonsQuery.setInteger("ncbiTaxonNumber", ncbiTaxonNumber);

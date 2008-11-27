@@ -9,20 +9,20 @@ import org.biojavax.bio.seq.RichFeature;
 import org.cycads.entities.annotation.DBAnnotationMethod;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.NoteBJ;
-import org.cycads.entities.note.NoteCollectionHash;
+import org.cycads.entities.note.NoteHashTable;
 import org.cycads.general.biojava.BioJavaxSession;
 import org.hibernate.Query;
 
 public class FeatureBJ implements Feature
 {
 	RichFeature					feature;
-	NoteCollectionHash<Feature>	notes;
+	NoteHashTable<Feature>	notes;
 	Sequence					sequence;
 	Location					location;
 
 	public FeatureBJ(RichFeature feature) {
 		this.feature = feature;
-		notes = new NoteCollectionHash<Feature>(this, feature);
+		notes = new NoteHashTable<Feature>(this, feature);
 	}
 
 	public FeatureBJ(int featureId) {
