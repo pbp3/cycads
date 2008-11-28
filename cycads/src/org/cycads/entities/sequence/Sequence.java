@@ -15,7 +15,6 @@ import org.cycads.entities.note.NoteSource;
 
 public interface Sequence extends NoteSource, NotesContainer<Note<Sequence>>, DBLinkSource, DBLinkCollection
 {
-
 	public Collection<Feature> getFeatures(FeatureFilter featureFilter);
 
 	public String getDescription();

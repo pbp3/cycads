@@ -5,10 +5,8 @@ package org.cycads.entities.sequence;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
 
 import org.biojavax.RichAnnotation;
-import org.biojavax.SimpleNote;
 import org.biojavax.bio.seq.ThinRichSequence;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.annotation.DBLink;
@@ -16,22 +14,32 @@ import org.cycads.entities.annotation.DBLinkFilter;
 import org.cycads.entities.annotation.DBLinkSource;
 import org.cycads.entities.annotation.DBRecord;
 import org.cycads.entities.annotation.Feature;
+import org.cycads.entities.annotation.FeatureBJ;
 import org.cycads.entities.annotation.FeatureFilter;
+import org.cycads.entities.change.ChangeListener;
+import org.cycads.entities.change.ChangeType;
+import org.cycads.entities.note.LinkNotesToBJ;
 import org.cycads.entities.note.Note;
-import org.cycads.entities.note.NoteWithTermBJ;
 import org.cycads.entities.note.NotesContainer;
+import org.cycads.entities.note.NotesHashTable;
+import org.cycads.entities.note.SimpleNote;
+import org.cycads.general.biojava.BioJavaxSession;
 import org.cycads.general.biojava.BioSql;
+import org.hibernate.Query;
 
 public class ThinSequenceBJ implements Sequence
 {
-	int					id;
-	ThinRichSequence	richSeq	= null;
+	int								id;
+	ThinRichSequence				richSeq	= null;
+	NotesHashTable<Note<Sequence>>	notes;
+	Organism						organism;
 
 	// NoteHashTable<Note<Sequence>> notes = new NoteHashTable<Note<Sequence>>();
 
-	public ThinSequenceBJ(int id)
+	public ThinSequenceBJ(int id, Organism organism)
 	{
 		this.id = id;
+		this.organism = organism;
 	}
 
 	public int getId()
@@ -39,92 +47,111 @@ public class ThinSequenceBJ implements Sequence
 		return id;
 	}
 
-	public Collection<Feature> getFeatures(FeatureFilter featureFilter)
+	private void adjusteNotes()
 	{
-		Collection<Integer> results = BioSql.getFeaturesId(getId());
-		Collection<Feature> ret = new ArrayList<Feature>();
-		for (Integer featureId : results)
+		adjusteRichSeq();
+		if (notes == null)
 		{
-			Feature f = new FeatureBJ(featureId);
-			if (featureFilter.accept(f))
-			{
-				ret.add(f);
-			}
+			notes = LinkNotesToBJ.createNotesHashTable((RichAnnotation) richSeq.getAnnotation(), (Sequence) this);
 		}
-		return ret;
 	}
 
-	public Note<Sequence> addNote(Note<Sequence> note)
+	private void adjusteRichSeq()
 	{
 		if (richSeq == null)
 		{
 			richSeq = getRichSeq(getId());
 		}
-		RichAnnotation annot = (RichAnnotation) richSeq.getAnnotation();
-		Set<Note> notes = annot.getNoteSet();
-		int rank = 0;
-		for (Note note : notes)
-		{
-			if (note.getTerm().equals(meth.getTerm()))
-			{
-				if (note.getValue().equalsIgnoreCase(value))
-				{
-					return;
-				}
-				rank++;
-			}
-		}
-		annot.addNote(new SimpleNote(meth.getTerm(), value, rank));
+	}
+
+	private static ThinRichSequence getRichSeq(int id)
+	{
+		Query query = BioJavaxSession.createQuery("from ThinSequence where id=:id");
+		query.setInteger("id", id);
+		return (ThinRichSequence) query.uniqueResult();
+	}
+
+	@Override
+	public Note<Sequence> addNote(Note<Sequence> note)
+	{
+		adjusteNotes();
 		return notes.addNote(note);
 	}
 
+	@Override
 	public Note<Sequence> getNote(String value, String noteTypeName)
 	{
+		adjusteNotes();
 		return notes.getNote(value, noteTypeName);
 	}
 
+	@Override
 	public Collection<Note<Sequence>> getNotes()
 	{
+		adjusteNotes();
 		return notes.getNotes();
 	}
 
+	@Override
 	public Collection<Note<Sequence>> getNotes(String noteTypeName)
 	{
+		adjusteNotes();
 		return notes.getNotes(noteTypeName);
+	}
+
+	@Override
+	public void addChangeListener(ChangeListener<Note<Sequence>> cl, ChangeType ct)
+	{
+		adjusteNotes();
+		notes.addChangeListener(cl, ct);
+	}
+
+	@Override
+	public boolean isUnchanging(ChangeType ct)
+	{
+		adjusteNotes();
+		return notes.isUnchanging(ct);
+	}
+
+	@Override
+	public void removeChangeListener(ChangeListener<Note<Sequence>> cl, ChangeType ct)
+	{
+		adjusteNotes();
+		notes.removeChangeListener(cl, ct);
 	}
 
 	public Note<Sequence> createNote(String value, String noteTypeName)
 	{
-		return new NoteWithTermBJ<Sequence>(this, value, noteTypeName);
+		adjusteNotes();
+		return new SimpleNote<Sequence>(this, value, noteTypeName);
 	}
 
 	public Location createLocation(int start, int end, Collection<Intron> introns)
 	{
-		return new SimpleLocation(start, end, introns, this);
+		return new SimpleLocation(start, end, this, introns);
 	}
 
 	public String getDescription()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		adjusteRichSeq();
+		return richSeq.getDescription();
 	}
 
 	public String getName()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		adjusteRichSeq();
+		return richSeq.getName();
 	}
 
 	public Organism getOrganism()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return organism;
 	}
 
 	public double getVersion()
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		adjusteRichSeq();
+		return richSeq.getVersion();
 	}
 
 	public DBLink createDBLink(AnnotationMethod method, DBRecord record, NotesContainer<Note<DBLink>> notes)
@@ -168,6 +195,21 @@ public class ThinSequenceBJ implements Sequence
 	{
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public Collection<Feature> getFeatures(FeatureFilter featureFilter)
+	{
+		Collection<Integer> results = BioSql.getFeaturesId(getId());
+		Collection<Feature> ret = new ArrayList<Feature>();
+		for (Integer featureId : results)
+		{
+			Feature f = new FeatureBJ(featureId, this);
+			if (featureFilter.accept(f))
+			{
+				ret.add(f);
+			}
+		}
+		return ret;
 	}
 
 }
