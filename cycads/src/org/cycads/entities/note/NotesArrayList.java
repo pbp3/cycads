@@ -6,7 +6,7 @@ package org.cycads.entities.note;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class NotesArrayList<N extends Note< H extends NoteSource>> extends ArrayList<N> implements NoteCollection<N>
+public class NotesArrayList<N extends Note< ? extends NoteSource>> extends ArrayList<N> implements NoteCollection<N>
 {
 	public NotesArrayList()
 	{
