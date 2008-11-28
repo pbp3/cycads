@@ -6,9 +6,8 @@ package org.cycads.entities.note;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class NotesArrayList<N extends Note< ? extends NoteSource>> extends ArrayList<N> implements NoteCollection<N>
+public class NotesArrayList<N extends Note< H extends NoteSource>> extends ArrayList<N> implements NoteCollection<N>
 {
-
 	public NotesArrayList()
 	{
 		super();
@@ -50,14 +49,9 @@ public class NotesArrayList<N extends Note< ? extends NoteSource>> extends Array
 
 	public N getNote(String value, String noteTypeName)
 	{
-		Collection<N> notes = getNotes(noteTypeName);
-		if (notes == null || notes.size() == 0)
+		for (N note : this)
 		{
-			return null;
-		}
-		for (N note : notes)
-		{
-			if (note.getValue().equals(value))
+			if (note.getType().equals(noteTypeName) && note.getValue().equals(value))
 			{
 				return note;
 			}
