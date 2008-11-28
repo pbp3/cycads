@@ -5,19 +5,23 @@ package org.cycads.entities.note;
 
 import java.util.Collection;
 
+import org.biojava.bio.Annotatable;
 import org.biojava.utils.ChangeEvent;
 import org.biojava.utils.ChangeListener;
 import org.biojava.utils.ChangeVetoException;
 import org.biojavax.RichAnnotation;
 
-public class NotesBJ<H extends NoteSource> implements NoteCollection<Note<H>>, ChangeListener
+public class NotesBJ<N extends Note<H>, H extends NoteSource> implements NotesContainer<N>, ChangeListener
 {
-	NoteCollection<N>	notes;
+	NotesContainer<N>	notes;
 	RichAnnotation		annotation;
+	H					source;
 
-	public NotesBJ(NoteCollection<N> notes, RichAnnotation annotation) {
+	public NotesBJ(NotesContainer<N> notes, RichAnnotation annotation, H source) {
 		this.notes = notes;
 		this.annotation = annotation;
+		this.annotation.addChangeListener(this, Annotatable.ANNOTATION);
+		this.source = source;
 	}
 
 	public N addNote(N note) {

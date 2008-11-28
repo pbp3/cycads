@@ -4,13 +4,13 @@
 package org.cycads.entities.annotation;
 
 import org.cycads.entities.note.Note;
-import org.cycads.entities.note.NoteCollection;
+import org.cycads.entities.note.NotesContainer;
 
 public interface DBLinkSource
 {
-	public DBLink createDBLink(AnnotationMethod method, DBRecord record, NoteCollection<Note<DBLink>> notes);
+	public DBLink createDBLink(AnnotationMethod method, DBRecord record, NotesContainer<Note<DBLink>> notes);
 
 	public DBLink createDBLink(AnnotationMethod method, String accession, String dbName,
-			NoteCollection<Note<DBLink>> notes);
+			NotesContainer<Note<DBLink>> notes);
 
 }

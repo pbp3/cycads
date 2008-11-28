@@ -10,10 +10,10 @@ import org.cycads.entities.annotation.DBLinkSource;
 import org.cycads.entities.annotation.Feature;
 import org.cycads.entities.annotation.FeatureFilter;
 import org.cycads.entities.note.Note;
-import org.cycads.entities.note.NoteCollection;
+import org.cycads.entities.note.NotesContainer;
 import org.cycads.entities.note.NoteSource;
 
-public interface Sequence extends NoteSource, NoteCollection<Note<Sequence>>, DBLinkSource, DBLinkCollection
+public interface Sequence extends NoteSource, NotesContainer<Note<Sequence>>, DBLinkSource, DBLinkCollection
 {
 
 	public Collection<Feature> getFeatures(FeatureFilter featureFilter);

@@ -19,7 +19,7 @@ import org.cycads.entities.annotation.Feature;
 import org.cycads.entities.annotation.FeatureFilter;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.NoteBJ;
-import org.cycads.entities.note.NoteCollection;
+import org.cycads.entities.note.NotesContainer;
 import org.cycads.general.biojava.BioSql;
 
 public class ThinSequenceBJ implements Sequence
@@ -127,14 +127,14 @@ public class ThinSequenceBJ implements Sequence
 		return 0;
 	}
 
-	public DBLink createDBLink(AnnotationMethod method, DBRecord record, NoteCollection<Note<DBLink>> notes)
+	public DBLink createDBLink(AnnotationMethod method, DBRecord record, NotesContainer<Note<DBLink>> notes)
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public DBLink createDBLink(AnnotationMethod method, String accession, String dbName,
-			NoteCollection<Note<DBLink>> notes)
+			NotesContainer<Note<DBLink>> notes)
 	{
 		// TODO Auto-generated method stub
 		return null;
