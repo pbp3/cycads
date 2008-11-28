@@ -7,7 +7,7 @@ import org.cycads.entities.note.Note;
 import org.cycads.entities.note.NotesContainer;
 import org.cycads.entities.note.NoteSource;
 
-public interface Annotation<SourceType> extends NoteSource, NotesContainer<Note<Annotation<SourceType>>>
+public interface Annotation<SourceType> extends NoteSource, NotesContainer<Note< ? extends Annotation<SourceType>>>
 {
 	public AnnotationMethod getAnnotationMethod();
 

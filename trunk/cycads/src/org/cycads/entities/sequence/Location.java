@@ -15,7 +15,7 @@ public interface Location extends FeatureSource, FeatureCollection, DBLinkSource
 
 	public Collection<Intron> getIntrons();
 
-	public Intron addIntron(Intron intron);
+	public boolean addIntron(Intron intron);
 
 	public Intron addIntron(int startPos, int endPos);
 
