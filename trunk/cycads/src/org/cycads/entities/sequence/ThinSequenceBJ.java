@@ -18,7 +18,7 @@ import org.cycads.entities.annotation.DBRecord;
 import org.cycads.entities.annotation.Feature;
 import org.cycads.entities.annotation.FeatureFilter;
 import org.cycads.entities.note.Note;
-import org.cycads.entities.note.NoteBJ;
+import org.cycads.entities.note.NoteWithTermBJ;
 import org.cycads.entities.note.NotesContainer;
 import org.cycads.general.biojava.BioSql;
 
@@ -95,7 +95,7 @@ public class ThinSequenceBJ implements Sequence
 
 	public Note<Sequence> createNote(String value, String noteTypeName)
 	{
-		return new NoteBJ<Sequence>(this, value, noteTypeName);
+		return new NoteWithTermBJ<Sequence>(this, value, noteTypeName);
 	}
 
 	public Location createLocation(int start, int end, Collection<Intron> introns)
