@@ -8,7 +8,7 @@ import java.util.Collection;
 import org.biojavax.bio.seq.RichFeature;
 import org.cycads.entities.annotation.DBAnnotationMethod;
 import org.cycads.entities.note.Note;
-import org.cycads.entities.note.NoteBJ;
+import org.cycads.entities.note.NoteWithTermBJ;
 import org.cycads.entities.note.NotesHashTable;
 import org.cycads.general.biojava.BioJavaxSession;
 import org.hibernate.Query;
@@ -69,7 +69,7 @@ public class FeatureBJ implements Feature
 	}
 
 	public Note<Feature> createNote(String value, String noteTypeName) {
-		return new NoteBJ<Feature>(this, value, noteTypeName);
+		return new NoteWithTermBJ<Feature>(this, value, noteTypeName);
 	}
 
 	public Note<Feature> addNote(Note<Feature> note) {

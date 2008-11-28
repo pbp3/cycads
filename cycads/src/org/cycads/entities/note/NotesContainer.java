@@ -5,7 +5,9 @@ package org.cycads.entities.note;
 
 import java.util.Collection;
 
-public interface NotesContainer<N extends Note< ? extends NoteSource>>
+import org.cycads.entities.change.Changeable;
+
+public interface NotesContainer<N extends Note< ? extends NoteSource>> extends Changeable<N>
 {
 	public Collection<N> getNotes();
 
