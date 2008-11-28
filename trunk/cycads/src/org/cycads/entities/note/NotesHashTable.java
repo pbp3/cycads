@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 public class NotesHashTable<N extends Note< ? extends NoteSource>> extends Hashtable<String, Collection<N>> implements
-		NoteCollection<N>
+		NotesContainer<N>
 {
 
 	public NotesHashTable()
