@@ -18,7 +18,7 @@ import org.cycads.entities.annotation.feature.FeatureBJ;
 import org.cycads.entities.annotation.feature.FeatureFilter;
 import org.cycads.entities.change.ChangeListener;
 import org.cycads.entities.change.ChangeType;
-import org.cycads.entities.note.LinkNotesToBJ;
+import org.cycads.entities.note.AssociateNotesToBJ;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.NotesContainer;
 import org.cycads.entities.note.NotesHashTable;
@@ -46,7 +46,7 @@ public class ThinSequenceBJ implements Sequence
 	private void adjusteNotes() {
 		adjusteRichSeq();
 		if (notes == null) {
-			notes = LinkNotesToBJ.createNotesHashTable((RichAnnotation) richSeq.getAnnotation(), (Sequence) this);
+			notes = AssociateNotesToBJ.createNotesHashTable((RichAnnotation) richSeq.getAnnotation(), (Sequence) this);
 		}
 	}
 

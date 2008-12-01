@@ -3,7 +3,7 @@
  */
 package org.cycads.entities.annotation.dBLink;
 
-public interface DBRecord extends DBLinkSource, DBLinkContainer
+public interface DBRecord extends DBLinkSource<DBRecord>, DBLinkContainer
 {
 	public String getAccession();
 
