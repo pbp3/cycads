@@ -8,14 +8,14 @@ import org.biojavax.RichAnnotation;
 import org.cycads.entities.change.ChangeListener;
 import org.cycads.entities.change.ChangeType;
 
-public class LinkNotesToBJ<N extends Note<H>, H extends NoteSource> implements ChangeListener<N>,
+public class AssociateNotesToBJ<N extends Note<H>, H extends NoteSource> implements ChangeListener<N>,
 		org.biojava.utils.ChangeListener
 {
 	NotesContainer<N>	notes;
 	RichAnnotation		annotation;
 	H					source;
 
-	private LinkNotesToBJ(NotesContainer<N> notes, RichAnnotation annotation, H source)
+	private AssociateNotesToBJ(NotesContainer<N> notes, RichAnnotation annotation, H source)
 	{
 		this.notes = notes;
 		this.annotation = annotation;
@@ -28,7 +28,7 @@ public class LinkNotesToBJ<N extends Note<H>, H extends NoteSource> implements C
 			RichAnnotation annotation, H source)
 	{
 		NotesHashTable<N> notes = new NotesHashTable<N>();
-		new LinkNotesToBJ<N, H>(notes, annotation, source);
+		new AssociateNotesToBJ<N, H>(notes, annotation, source);
 		return notes;
 	}
 
@@ -36,7 +36,7 @@ public class LinkNotesToBJ<N extends Note<H>, H extends NoteSource> implements C
 			RichAnnotation annotation, H source)
 	{
 		NotesArrayList<N> notes = new NotesArrayList<N>();
-		new LinkNotesToBJ<N, H>(notes, annotation, source);
+		new AssociateNotesToBJ<N, H>(notes, annotation, source);
 		return notes;
 	}
 
