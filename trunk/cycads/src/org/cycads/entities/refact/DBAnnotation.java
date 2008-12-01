@@ -2,9 +2,8 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-import org.cycads.entities.annotation.DBLink;
-import org.cycads.entities.annotation.DBLink;
-import org.cycads.entities.annotation.DBRecord;
+import org.cycads.entities.annotation.dBLink.DBLink;
+import org.cycads.entities.annotation.dBLink.DBRecord;
 
 public abstract class DBAnnotation implements DBLink
 {

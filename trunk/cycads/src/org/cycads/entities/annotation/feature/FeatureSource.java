@@ -1,8 +1,9 @@
 /*
  * Created on 12/11/2008
  */
-package org.cycads.entities.annotation;
+package org.cycads.entities.annotation.feature;
 
+import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.note.Note;
 
 public interface FeatureSource

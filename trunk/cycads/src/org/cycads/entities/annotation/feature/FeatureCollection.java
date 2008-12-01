@@ -1,9 +1,11 @@
 /*
  * Created on 26/11/2008
  */
-package org.cycads.entities.annotation;
+package org.cycads.entities.annotation.feature;
 
 import java.util.Collection;
+
+import org.cycads.entities.annotation.AnnotationMethod;
 
 public interface FeatureCollection
 {

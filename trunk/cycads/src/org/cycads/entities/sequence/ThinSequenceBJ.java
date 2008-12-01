@@ -9,13 +9,13 @@ import java.util.Collection;
 import org.biojavax.RichAnnotation;
 import org.biojavax.bio.seq.ThinRichSequence;
 import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.annotation.DBLink;
-import org.cycads.entities.annotation.DBLinkFilter;
-import org.cycads.entities.annotation.DBLinkSource;
-import org.cycads.entities.annotation.DBRecord;
-import org.cycads.entities.annotation.Feature;
-import org.cycads.entities.annotation.FeatureBJ;
-import org.cycads.entities.annotation.FeatureFilter;
+import org.cycads.entities.annotation.dBLink.DBLink;
+import org.cycads.entities.annotation.dBLink.DBLinkFilter;
+import org.cycads.entities.annotation.dBLink.DBLinkSource;
+import org.cycads.entities.annotation.dBLink.DBRecord;
+import org.cycads.entities.annotation.feature.Feature;
+import org.cycads.entities.annotation.feature.FeatureBJ;
+import org.cycads.entities.annotation.feature.FeatureFilter;
 import org.cycads.entities.change.ChangeListener;
 import org.cycads.entities.change.ChangeType;
 import org.cycads.entities.note.LinkNotesToBJ;
@@ -34,178 +34,146 @@ public class ThinSequenceBJ implements Sequence
 	NotesHashTable<Note<Sequence>>	notes;
 	Organism						organism;
 
-	// NoteHashTable<Note<Sequence>> notes = new NoteHashTable<Note<Sequence>>();
-
-	public ThinSequenceBJ(int id, Organism organism)
-	{
+	public ThinSequenceBJ(int id, Organism organism) {
 		this.id = id;
 		this.organism = organism;
 	}
 
-	public int getId()
-	{
+	public int getId() {
 		return id;
 	}
 
-	private void adjusteNotes()
-	{
+	private void adjusteNotes() {
 		adjusteRichSeq();
-		if (notes == null)
-		{
+		if (notes == null) {
 			notes = LinkNotesToBJ.createNotesHashTable((RichAnnotation) richSeq.getAnnotation(), (Sequence) this);
 		}
 	}
 
-	private void adjusteRichSeq()
-	{
-		if (richSeq == null)
-		{
+	private void adjusteRichSeq() {
+		if (richSeq == null) {
 			richSeq = getRichSeq(getId());
 		}
 	}
 
-	private static ThinRichSequence getRichSeq(int id)
-	{
+	private static ThinRichSequence getRichSeq(int id) {
 		Query query = BioJavaxSession.createQuery("from ThinSequence where id=:id");
 		query.setInteger("id", id);
 		return (ThinRichSequence) query.uniqueResult();
 	}
 
 	@Override
-	public Note<Sequence> addNote(Note<Sequence> note)
-	{
+	public Note<Sequence> addNote(Note<Sequence> note) {
 		adjusteNotes();
 		return notes.addNote(note);
 	}
 
 	@Override
-	public Note<Sequence> getNote(String value, String noteTypeName)
-	{
+	public Note<Sequence> getNote(String value, String noteTypeName) {
 		adjusteNotes();
 		return notes.getNote(value, noteTypeName);
 	}
 
 	@Override
-	public Collection<Note<Sequence>> getNotes()
-	{
+	public Collection<Note<Sequence>> getNotes() {
 		adjusteNotes();
 		return notes.getNotes();
 	}
 
 	@Override
-	public Collection<Note<Sequence>> getNotes(String noteTypeName)
-	{
+	public Collection<Note<Sequence>> getNotes(String noteTypeName) {
 		adjusteNotes();
 		return notes.getNotes(noteTypeName);
 	}
 
 	@Override
-	public void addChangeListener(ChangeListener<Note<Sequence>> cl, ChangeType ct)
-	{
+	public void addChangeListener(ChangeListener<Note<Sequence>> cl, ChangeType ct) {
 		adjusteNotes();
 		notes.addChangeListener(cl, ct);
 	}
 
 	@Override
-	public boolean isUnchanging(ChangeType ct)
-	{
+	public boolean isUnchanging(ChangeType ct) {
 		adjusteNotes();
 		return notes.isUnchanging(ct);
 	}
 
 	@Override
-	public void removeChangeListener(ChangeListener<Note<Sequence>> cl, ChangeType ct)
-	{
+	public void removeChangeListener(ChangeListener<Note<Sequence>> cl, ChangeType ct) {
 		adjusteNotes();
 		notes.removeChangeListener(cl, ct);
 	}
 
-	public Note<Sequence> createNote(String value, String noteTypeName)
-	{
+	public Note<Sequence> createNote(String value, String noteTypeName) {
 		adjusteNotes();
 		return new SimpleNote<Sequence>(this, value, noteTypeName);
 	}
 
-	public Location createLocation(int start, int end, Collection<Intron> introns)
-	{
+	public Location createLocation(int start, int end, Collection<Intron> introns) {
 		return new SimpleLocation(start, end, this, introns);
 	}
 
-	public String getDescription()
-	{
+	public String getDescription() {
 		adjusteRichSeq();
 		return richSeq.getDescription();
 	}
 
-	public String getName()
-	{
+	public String getName() {
 		adjusteRichSeq();
 		return richSeq.getName();
 	}
 
-	public Organism getOrganism()
-	{
+	public Organism getOrganism() {
 		return organism;
 	}
 
-	public double getVersion()
-	{
+	public double getVersion() {
 		adjusteRichSeq();
 		return richSeq.getVersion();
 	}
 
-	public DBLink createDBLink(AnnotationMethod method, DBRecord record, NotesContainer<Note<DBLink>> notes)
-	{
+	public DBLink createDBLink(AnnotationMethod method, DBRecord record, NotesContainer<Note<DBLink>> notes) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public DBLink createDBLink(AnnotationMethod method, String accession, String dbName,
-			NotesContainer<Note<DBLink>> notes)
-	{
+			NotesContainer<Note<DBLink>> notes) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public void addDBLink(DBLink link)
-	{
+	public void addDBLink(DBLink link) {
 		// TODO Auto-generated method stub
 
 	}
 
-	public DBLink getDBLink(AnnotationMethod method, DBRecord record, DBLinkSource source)
-	{
+	public DBLink getDBLink(AnnotationMethod method, DBRecord record, DBLinkSource source) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Collection<DBLink> getDBLinks(AnnotationMethod method, DBRecord record)
-	{
+	public Collection<DBLink> getDBLinks(AnnotationMethod method, DBRecord record) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Collection<DBLink> getDBLinks(AnnotationMethod method, String accession, String dbName)
-	{
+	public Collection<DBLink> getDBLinks(AnnotationMethod method, String accession, String dbName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Collection<DBLink> getDBLinks(DBLinkFilter filter)
-	{
+	public Collection<DBLink> getDBLinks(DBLinkFilter filter) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Collection<Feature> getFeatures(FeatureFilter featureFilter)
-	{
+	public Collection<Feature> getFeatures(FeatureFilter featureFilter) {
 		Collection<Integer> results = BioSql.getFeaturesId(getId());
 		Collection<Feature> ret = new ArrayList<Feature>();
-		for (Integer featureId : results)
-		{
+		for (Integer featureId : results) {
 			Feature f = new FeatureBJ(featureId, this);
-			if (featureFilter.accept(f))
-			{
+			if (featureFilter.accept(f)) {
 				ret.add(f);
 			}
 		}

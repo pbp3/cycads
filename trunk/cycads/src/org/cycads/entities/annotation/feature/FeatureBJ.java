@@ -1,12 +1,13 @@
 /*
  * Created on 31/10/2008
  */
-package org.cycads.entities.annotation;
+package org.cycads.entities.annotation.feature;
 
 import java.util.Collection;
 
 import org.biojavax.RichAnnotation;
 import org.biojavax.bio.seq.RichFeature;
+import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.change.ChangeListener;
 import org.cycads.entities.change.ChangeType;
 import org.cycads.entities.note.LinkNotesToBJ;

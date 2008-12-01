@@ -3,7 +3,7 @@ package org.cycads.entities.refact;
 import java.util.Collection;
 
 import org.cycads.entities.annotation.DBAnnotationMethod;
-import org.cycads.entities.annotation.ExternalDatabase;
+import org.cycads.entities.annotation.dBLink.ExternalDatabase;
 import org.cycads.entities.sequence.Location;
 import org.cycads.entities.sequence.Sequence;
 import org.cycads.entities.sequence.feature.Feature;

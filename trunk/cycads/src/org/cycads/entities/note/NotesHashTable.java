@@ -17,7 +17,7 @@ import org.cycads.entities.change.ChangeType;
 public class NotesHashTable<N extends Note< ? extends NoteSource>> extends Hashtable<String, Collection<N>>
 		implements NotesContainer<N>
 {
-	ChangeSupport	changeSupport	= new ChangeSupport();
+	ChangeSupport<N>	changeSupport	= new ChangeSupport<N>();
 
 	public NotesHashTable() {
 		super();
@@ -36,7 +36,7 @@ public class NotesHashTable<N extends Note< ? extends NoteSource>> extends Hasht
 	}
 
 	public N addNote(N note) {
-		ChangeEvent ce = new ChangeEvent(this, ChangeType.NOTE, note, null);
+		ChangeEvent<N> ce = new ChangeEvent<N>(this, ChangeType.NOTE, note, null);
 		changeSupport.firePreChangeEvent(ce);
 		N note1 = getNote(note.getValue(), note.getType());
 		if (note1 != null) {
@@ -81,7 +81,7 @@ public class NotesHashTable<N extends Note< ? extends NoteSource>> extends Hasht
 		return null;
 	}
 
-	public void addChangeListener(ChangeListener cl, ChangeType ct) {
+	public void addChangeListener(ChangeListener<N> cl, ChangeType ct) {
 		changeSupport.addChangeListener(cl, ct);
 	}
 
@@ -89,7 +89,7 @@ public class NotesHashTable<N extends Note< ? extends NoteSource>> extends Hasht
 		return changeSupport.isUnchanging(ct);
 	}
 
-	public void removeChangeListener(ChangeListener cl, ChangeType ct) {
+	public void removeChangeListener(ChangeListener<N> cl, ChangeType ct) {
 		changeSupport.removeChangeListener(cl, ct);
 	}
 

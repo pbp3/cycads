@@ -5,15 +5,15 @@ package org.cycads.entities.sequence;
 
 import java.util.Collection;
 
-import org.cycads.entities.annotation.DBLinkCollection;
-import org.cycads.entities.annotation.DBLinkSource;
-import org.cycads.entities.annotation.Feature;
-import org.cycads.entities.annotation.FeatureFilter;
+import org.cycads.entities.annotation.dBLink.DBLinkContainer;
+import org.cycads.entities.annotation.dBLink.DBLinkSource;
+import org.cycads.entities.annotation.feature.Feature;
+import org.cycads.entities.annotation.feature.FeatureFilter;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.NotesContainer;
 import org.cycads.entities.note.NoteSource;
 
-public interface Sequence extends NoteSource, NotesContainer<Note<Sequence>>, DBLinkSource, DBLinkCollection
+public interface Sequence extends NoteSource, NotesContainer<Note<Sequence>>, DBLinkSource, DBLinkContainer
 {
 	public Collection<Feature> getFeatures(FeatureFilter featureFilter);
 
