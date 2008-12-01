@@ -6,16 +6,16 @@ package org.cycads.entities.sequence;
 import java.util.Collection;
 
 import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.annotation.CDS;
-import org.cycads.entities.annotation.DBLink;
-import org.cycads.entities.annotation.DBLinkFilter;
-import org.cycads.entities.annotation.DBLinkSource;
-import org.cycads.entities.annotation.DBRecord;
-import org.cycads.entities.annotation.Feature;
-import org.cycads.entities.annotation.FeatureFilter;
-import org.cycads.entities.annotation.FeatureSource;
-import org.cycads.entities.annotation.Gene;
-import org.cycads.entities.annotation.RNA;
+import org.cycads.entities.annotation.dBLink.DBLink;
+import org.cycads.entities.annotation.dBLink.DBLinkFilter;
+import org.cycads.entities.annotation.dBLink.DBLinkSource;
+import org.cycads.entities.annotation.dBLink.DBRecord;
+import org.cycads.entities.annotation.feature.CDS;
+import org.cycads.entities.annotation.feature.Feature;
+import org.cycads.entities.annotation.feature.FeatureFilter;
+import org.cycads.entities.annotation.feature.FeatureSource;
+import org.cycads.entities.annotation.feature.Gene;
+import org.cycads.entities.annotation.feature.RNA;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.NotesContainer;
 

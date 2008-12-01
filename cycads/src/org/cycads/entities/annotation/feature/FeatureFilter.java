@@ -1,7 +1,9 @@
 /*
  * Created on 31/10/2008
  */
-package org.cycads.entities.annotation;
+package org.cycads.entities.annotation.feature;
+
+import org.cycads.entities.annotation.AnnotationFilter;
 
 public interface FeatureFilter extends AnnotationFilter<Feature>
 {

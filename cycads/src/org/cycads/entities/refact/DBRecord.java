@@ -2,8 +2,8 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-import org.cycads.entities.annotation.DBRecord;
-import org.cycads.entities.annotation.ExternalDatabase;
+import org.cycads.entities.annotation.dBLink.DBRecord;
+import org.cycads.entities.annotation.dBLink.ExternalDatabase;
 
 /**
  */

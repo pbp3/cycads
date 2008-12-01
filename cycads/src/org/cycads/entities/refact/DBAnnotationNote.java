@@ -1,7 +1,6 @@
 package org.cycads.entities.refact;
 
-import org.cycads.entities.annotation.DBLink;
-import org.cycads.entities.annotation.DBLink;
+import org.cycads.entities.annotation.dBLink.DBLink;
 
 /*
  * Created on 07/11/2008
