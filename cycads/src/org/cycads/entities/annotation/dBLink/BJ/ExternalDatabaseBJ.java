@@ -11,24 +11,28 @@ import org.biojavax.ontology.ComparableOntology;
 import org.biojavax.ontology.ComparableTerm;
 import org.cycads.entities.annotation.dBLink.ExternalDatabase;
 
-public class ExternalDatabaseBJ implements ExternalDatabase
+public class ExternalDatabaseBJ implements ExternalDatabase<DBRecordBJ>
 {
 	ComparableOntology	ont;
 
-	public ExternalDatabaseBJ(ComparableOntology ont) {
+	public ExternalDatabaseBJ(ComparableOntology ont)
+	{
 		this.ont = ont;
 	}
 
 	@Override
-	public String getDbName() {
+	public String getDbName()
+	{
 		return ont.getName();
 	}
 
 	@Override
-	public Collection<DBRecordBJ> getRecords() {
+	public Collection<DBRecordBJ> getRecords()
+	{
 		Set<ComparableTerm> records = ((Set<ComparableTerm>) ont.getTermSet());
 		ArrayList<DBRecordBJ> result = new ArrayList<DBRecordBJ>(records.size());
-		for (ComparableTerm recordTerm : records) {
+		for (ComparableTerm recordTerm : records)
+		{
 			result.add(new DBRecordBJ(recordTerm));
 		}
 		return result;

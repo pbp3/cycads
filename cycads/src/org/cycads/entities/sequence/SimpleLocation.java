@@ -19,7 +19,7 @@ import org.cycads.entities.annotation.feature.RNA;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.NotesContainer;
 
-public class SimpleLocation implements Location<>
+public class SimpleLocation implements Location
 {
 	Collection<Intron>	introns;
 	int					start;

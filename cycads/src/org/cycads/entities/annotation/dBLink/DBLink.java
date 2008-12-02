@@ -7,6 +7,6 @@ import org.cycads.entities.annotation.Annotation;
 
 public interface DBLink<S extends DBLinkSource< ? , ? , ? >, R extends DBRecord< ? , ? , ? >> extends Annotation<S>
 {
-	public R getDBRecord();
+	public R getDBRecordTarget();
 
 }
