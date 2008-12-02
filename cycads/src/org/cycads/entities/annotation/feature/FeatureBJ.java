@@ -10,7 +10,7 @@ import org.biojavax.bio.seq.RichFeature;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.change.ChangeListener;
 import org.cycads.entities.change.ChangeType;
-import org.cycads.entities.note.AssociateNotesToBJ;
+import org.cycads.entities.note.NotesToAnnotationBJ;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.NotesHashTable;
 import org.cycads.entities.note.SimpleNote;
@@ -45,7 +45,7 @@ public class FeatureBJ implements Feature
 	{
 		if (notes == null)
 		{
-			notes = AssociateNotesToBJ.createNotesHashTable((RichAnnotation) feature.getAnnotation(), (Feature) this);
+			notes = NotesToAnnotationBJ.createNotesHashTable((RichAnnotation) feature.getAnnotation(), (Feature) this);
 		}
 	}
 

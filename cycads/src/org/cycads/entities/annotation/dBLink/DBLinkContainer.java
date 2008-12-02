@@ -7,19 +7,17 @@ import java.util.Collection;
 
 import org.cycads.entities.annotation.AnnotationMethod;
 
-public interface DBLinkContainer
+//public interface DBLinkContainer<S extends DBLinkSource< ? , ? >, R extends DBRecord< ? >>
+public interface DBLinkContainer<D extends DBLink<S, R>, S extends DBLinkSource< ? , ? , ? >, R extends DBRecord< ? , ? , ? >>
 {
-	public <S extends DBLinkSource<S>> void addDBLink(DBLink<S, DBRecord> dBLink);
+	public void addDBLink(DBLink<S, R> dBLink);
 
-	public <S extends DBLinkSource<S>, R extends DBRecord> DBLink<S, R> getDBLink(AnnotationMethod method, R record,
-			S source);
+	public DBLink<S, R> getDBLink(AnnotationMethod method, R record, S source);
 
-	public <S extends DBLinkSource<S>, R extends DBRecord> Collection<DBLink<S, R>> getDBLinks(AnnotationMethod method,
-			R record);
+	public Collection<DBLink<S, R>> getDBLinks(AnnotationMethod method, R record);
 
-	public <S extends DBLinkSource<S>> Collection<DBLink<S, DBRecord>> getDBLinks(AnnotationMethod method,
-			String accession, String dbName);
+	public Collection<DBLink<S, R>> getDBLinks(AnnotationMethod method, String accession, String dbName);
 
-	public <S extends DBLinkSource<S>> Collection<DBLink<S, DBRecord>> getDBLinks(DBLinkFilter filter);
+	public Collection<DBLink<S, R>> getDBLinks(DBLinkFilter<D> filter);
 
 }

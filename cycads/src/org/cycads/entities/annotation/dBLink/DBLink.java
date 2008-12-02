@@ -5,7 +5,7 @@ package org.cycads.entities.annotation.dBLink;
 
 import org.cycads.entities.annotation.Annotation;
 
-public interface DBLink<S extends DBLinkSource<S>, R extends DBRecord> extends Annotation<S>
+public interface DBLink<S extends DBLinkSource< ? , ? , ? >, R extends DBRecord< ? , ? , ? >> extends Annotation<S>
 {
 	public R getDBRecord();
 
