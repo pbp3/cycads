@@ -5,12 +5,15 @@ package org.cycads.entities.sequence;
 
 import java.util.Collection;
 
+import org.cycads.entities.annotation.dBLink.DBLink;
 import org.cycads.entities.annotation.dBLink.DBLinkContainer;
 import org.cycads.entities.annotation.dBLink.DBLinkSource;
+import org.cycads.entities.annotation.dBLink.DBRecord;
 import org.cycads.entities.annotation.feature.FeatureCollection;
 import org.cycads.entities.annotation.feature.FeatureSource;
 
-public interface Location extends FeatureSource, FeatureCollection, DBLinkSource, DBLinkContainer
+public interface Location<D extends DBLink<S, R>, S extends Location< ? , ? , ? , ? >, R extends DBRecord< ? , ? , ? >, SEQ extends Sequence< ? , ? , ? >>
+		extends FeatureSource, FeatureCollection, DBLinkSource<D, S, R>, DBLinkContainer<D, S, R>
 {
 
 	public Collection<Intron> getIntrons();
@@ -25,6 +28,6 @@ public interface Location extends FeatureSource, FeatureCollection, DBLinkSource
 
 	public int getStart();
 
-	public Sequence getSequence();
+	public SEQ getSequence();
 
 }
