@@ -8,7 +8,6 @@ import java.util.Collection;
 import org.biojavax.ontology.ComparableOntology;
 import org.biojavax.ontology.ComparableTerm;
 import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.annotation.dBLink.DBLink;
 import org.cycads.entities.annotation.dBLink.DBLinkFilter;
 import org.cycads.entities.annotation.dBLink.DBRecord;
 import org.cycads.entities.annotation.dBLink.ExternalDatabase;
@@ -16,7 +15,6 @@ import org.cycads.entities.change.ChangeListener;
 import org.cycads.entities.change.ChangeType;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.NoteSource;
-import org.cycads.entities.note.NotesContainer;
 
 public class DBRecordBJ implements DBRecord<DBRecordDBRecordLinkBJ, DBRecordBJ, DBRecordBJ>
 {
@@ -42,7 +40,7 @@ public class DBRecordBJ implements DBRecord<DBRecordDBRecordLinkBJ, DBRecordBJ, 
 	@Override
 	public ExternalDatabase<DBRecordBJ> getDatabase()
 	{
-		return new ExternalDatabaseBJ((ComparableOntology) term.getOntology());
+		return ExternalDatabaseBJ.getOrCreateInstance((ComparableOntology) term.getOntology());
 	}
 
 	public ComparableTerm getTerm()
@@ -51,51 +49,47 @@ public class DBRecordBJ implements DBRecord<DBRecordDBRecordLinkBJ, DBRecordBJ, 
 	}
 
 	@Override
-	public DBRecordDBRecordLinkBJ createDBLink(AnnotationMethod method, DBRecordBJ record,
-			NotesContainer<Note<DBRecordDBRecordLinkBJ>> notes)
+	public DBRecordDBRecordLinkBJ createDBLink(AnnotationMethod method, DBRecordBJ record)
 	{
-		return new DBRecordDBRecordLinkBJ(method, this, record);
+		return new DBRecordDBRecordLinkBJ(this, method, record);
 	}
 
 	@Override
-	public DBRecordDBRecordLinkBJ createDBLink(AnnotationMethod method, String accession, String dbName,
-			NotesContainer<Note<DBRecordDBRecordLinkBJ>> notes)
+	public DBRecordDBRecordLinkBJ createDBLink(AnnotationMethod method, String accession, String dbName)
+	{
+		return new DBRecordDBRecordLinkBJ(this, method, record);
+	}
+
+	@Override
+	public void addDBLink(DBRecordDBRecordLinkBJ link)
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public DBRecordDBRecordLinkBJ getDBLink(AnnotationMethod method, DBRecordBJ record, DBRecordBJ source)
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void addDBLink(DBLink<DBRecordBJ, DBRecordBJ> link)
-	{
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public DBLink<DBRecordBJ, DBRecordBJ> getDBLink(AnnotationMethod method, DBRecordBJ record, DBRecordBJ source)
+	public Collection<DBRecordDBRecordLinkBJ> getDBLinks(AnnotationMethod method, DBRecordBJ record)
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<DBLink<DBRecordBJ, DBRecordBJ>> getDBLinks(AnnotationMethod method, DBRecordBJ record)
+	public Collection<DBRecordDBRecordLinkBJ> getDBLinks(AnnotationMethod method, String accession, String dbName)
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<DBLink<DBRecordBJ, DBRecordBJ>> getDBLinks(AnnotationMethod method, String accession,
-			String dbName)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Collection<DBLink<DBRecordBJ, DBRecordBJ>> getDBLinks(DBLinkFilter<DBRecordDBRecordLinkBJ> filter)
+	public Collection<DBRecordDBRecordLinkBJ> getDBLinks(DBLinkFilter<DBRecordDBRecordLinkBJ> filter)
 	{
 		// TODO Auto-generated method stub
 		return null;

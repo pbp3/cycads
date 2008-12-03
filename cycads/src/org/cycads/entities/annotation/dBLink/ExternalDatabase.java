@@ -11,4 +11,6 @@ public interface ExternalDatabase<R extends DBRecord< ? , ? , ? >>
 
 	public String getDbName();
 
+	public R getOrCreateDBRecord(String accession);
+
 }
