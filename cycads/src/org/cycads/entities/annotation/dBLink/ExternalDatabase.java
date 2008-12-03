@@ -5,7 +5,7 @@ package org.cycads.entities.annotation.dBLink;
 
 import java.util.Collection;
 
-public interface ExternalDatabase<R extends DBRecord< ? , ? , ? >>
+public interface ExternalDatabase<R extends DBRecord< ? , ? , ? , ? >>
 {
 	public Collection<R> getRecords();
 
