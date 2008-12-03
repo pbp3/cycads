@@ -51,24 +51,31 @@ public class TermsAndOntologies
 			new Object[] {name});
 	}
 
+	public static ComparableOntology getOntologyExternalDB(String ontName)
+	{
+		ComparableOntology ont = getOntology(ontName);
+		ont.setDescription(getString("ontology.externalDB.description"));
+		return ont;
+	}
+
 	public static ComparableOntology getOntologyEC()
 	{
-		return getOntology(getString("ontology.EC"));
+		return getOntologyExternalDB(getString("ontology.EC"));
 	}
 
 	public static ComparableOntology getOntologyGO()
 	{
-		return getOntology(getString("ontology.GO"));
+		return getOntologyExternalDB(getString("ontology.GO"));
 	}
 
 	public static ComparableOntology getOntologyKO()
 	{
-		return getOntology(getString("ontology.KO"));
+		return getOntologyExternalDB(getString("ontology.KO"));
 	}
 
 	public static ComparableOntology getOntologyCOG()
 	{
-		return getOntology(getString("ontology.COG"));
+		return getOntologyExternalDB(getString("ontology.COG"));
 	}
 
 	public static SimpleComparableOntology getOntologyToLinksKOToEC()
