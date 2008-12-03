@@ -6,66 +6,50 @@ package org.cycads.entities.annotation.dBLink.BJ;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
-import java.util.Set;
 
-import org.biojavax.ontology.ComparableOntology;
-import org.biojavax.ontology.ComparableTerm;
 import org.cycads.entities.annotation.dBLink.ExternalDatabase;
-import org.cycads.general.biojava.TermsAndOntologies;
+import org.cycads.general.biojava.BioSql;
 
 public class ExternalDatabaseBJ implements ExternalDatabase<DBRecordBJ>
 {
-	static Hashtable<ComparableOntology, ExternalDatabaseBJ> externalDBs = new Hashtable<ComparableOntology, ExternalDatabaseBJ>();
+	static Hashtable<String, ExternalDatabaseBJ>	externalDBs	= new Hashtable<String, ExternalDatabaseBJ>();
+	private Hashtable<String, DBRecordBJ>			records		= new Hashtable<String, DBRecordBJ>();
+	private String									name;
 
-	Hashtable<Term,DBRecodBJ>
-	ComparableOntology	ont;
-	
-	private ExternalDatabaseBJ(ComparableOntology ont)
-	{
-		this.ont = ont;
-	}
-
-	private ExternalDatabaseBJ(String ontName)
-	{
-		this.ont = TermsAndOntologies.getOntologyExternalDB(ontName);
+	private ExternalDatabaseBJ(String name) {
+		this.name = name;
 	}
 
 	@Override
-	public String getDbName()
-	{
-		return ont.getName();
+	public String getDbName() {
+		return name;
 	}
 
 	@Override
-	public Collection<DBRecordBJ> getRecords()
-	{
-		Set<ComparableTerm> records = ((Set<ComparableTerm>) ont.getTermSet());
+	public Collection<DBRecordBJ> getRecords() {
+		Collection<String> records = BioSql.getAccessions(getDbName());
 		ArrayList<DBRecordBJ> result = new ArrayList<DBRecordBJ>(records.size());
-		for (ComparableTerm recordTerm : records)
-		{
-			result.add(new DBRecordBJ(recordTerm));
+		for (String record : records) {
+			result.add(getOrCreateDBRecord(record));
 		}
 		return result;
 	}
 
 	@Override
-	public DBRecordBJ getOrCreateDBRecord(String accession)
-	{
-		return getOrCreateDBRecord(ont.getOrCreateTerm(accession));
+	public DBRecordBJ getOrCreateDBRecord(String accession) {
+		DBRecordBJ record = records.get(accession);
+		if (record == null) {
+			record = new DBRecordBJ(this, accession);
+			records.put(accession, record);
+		}
+		return record;
 	}
 
-	public DBRecordBJ getOrCreateDBRecord(ComparableTerm accession)
-	{
-		return new DBRecordBJ(accession);
-	}
-
-	public static ExternalDatabaseBJ getOrCreateExternalDB(ComparableOntology ontology)
-	{
-		ExternalDatabaseBJ externalDB = externalDBs.get(ontology);
-		if (externalDB==null)
-		{
-			externalDB= new ExternalDatabaseBJ(ontology);
-			externalDBs.put(ontology, externalDB);
+	public static ExternalDatabaseBJ getOrCreateExternalDB(String externalDBName) {
+		ExternalDatabaseBJ externalDB = externalDBs.get(externalDBName);
+		if (externalDB == null) {
+			externalDB = new ExternalDatabaseBJ(externalDBName);
+			externalDBs.put(externalDBName, externalDB);
 		}
 		return externalDB;
 	}

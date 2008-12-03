@@ -5,9 +5,10 @@ package org.cycads.entities.annotation.dBLink.BJ;
 
 import java.util.Collection;
 
-import org.biojavax.ontology.ComparableOntology;
-import org.biojavax.ontology.ComparableTerm;
-import org.cycads.entities.annotation.AnnotationMethod;
+import org.biojavax.CrossRef;
+import org.biojavax.RichObjectFactory;
+import org.biojavax.SimpleCrossRef;
+import org.cycads.entities.annotation.AnnotationMethodBJ;
 import org.cycads.entities.annotation.dBLink.DBLinkFilter;
 import org.cycads.entities.annotation.dBLink.DBRecord;
 import org.cycads.entities.annotation.dBLink.ExternalDatabase;
@@ -16,137 +17,123 @@ import org.cycads.entities.change.ChangeType;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.NoteSource;
 
-public class DBRecordBJ implements DBRecord<DBRecordDBRecordLinkBJ, DBRecordBJ, DBRecordBJ>
+public class DBRecordBJ implements DBRecord<DBRecordDBRecordLinkBJ, DBRecordBJ, DBRecordBJ, AnnotationMethodBJ>
 {
-	ComparableTerm	term;
+	CrossRef			crossRef;
+	ExternalDatabaseBJ	database;
 
-	public DBRecordBJ(ComparableTerm term)
-	{
-		this.term = term;
+	protected DBRecordBJ(ExternalDatabaseBJ database, String accession) {
+		this.database = database;
+		crossRef = (CrossRef) RichObjectFactory.getObject(SimpleCrossRef.class, new Object[] {database.getDbName(),
+			accession, 0});
 	}
 
 	@Override
-	public String getAccession()
-	{
-		return term.getName();
+	public String getAccession() {
+		return getCrossRef().getAccession();
 	}
 
 	@Override
-	public String getDatabaseName()
-	{
-		return term.getOntology().getName();
+	public String getDatabaseName() {
+		return getDatabase().getDbName();
 	}
 
 	@Override
-	public ExternalDatabase<DBRecordBJ> getDatabase()
-	{
-		return ExternalDatabaseBJ.getOrCreateInstance((ComparableOntology) term.getOntology());
+	public ExternalDatabase<DBRecordBJ> getDatabase() {
+		return database;
 	}
 
-	public ComparableTerm getTerm()
-	{
-		return term;
+	public CrossRef getCrossRef() {
+		return crossRef;
+	}
+
+	protected static DBRecordBJ getOrCreateDBRecordBJ(String dbName, String accession) {
+		return ExternalDatabaseBJ.getOrCreateExternalDB(dbName).getOrCreateDBRecord(accession);
 	}
 
 	@Override
-	public DBRecordDBRecordLinkBJ createDBLink(AnnotationMethod method, DBRecordBJ record)
-	{
+	public DBRecordDBRecordLinkBJ createDBLink(AnnotationMethodBJ method, DBRecordBJ record) {
 		return new DBRecordDBRecordLinkBJ(this, method, record);
 	}
 
 	@Override
-	public DBRecordDBRecordLinkBJ createDBLink(AnnotationMethod method, String accession, String dbName)
-	{
-		return new DBRecordDBRecordLinkBJ(this, method, record);
+	public DBRecordDBRecordLinkBJ createDBLink(AnnotationMethodBJ method, String accession, String dbName) {
+		return new DBRecordDBRecordLinkBJ(this, method, getOrCreateDBRecordBJ(dbName, accession));
 	}
 
 	@Override
-	public void addDBLink(DBRecordDBRecordLinkBJ link)
-	{
-		// TODO Auto-generated method stub
-
+	public void addDBLink(DBRecordDBRecordLinkBJ link) {
+		//Do nothing. The DBLink collection is handled by DBRecordBJ source term.
 	}
 
 	@Override
-	public DBRecordDBRecordLinkBJ getDBLink(AnnotationMethod method, DBRecordBJ record, DBRecordBJ source)
-	{
+	public DBRecordDBRecordLinkBJ getDBLink(AnnotationMethodBJ method, DBRecordBJ record, DBRecordBJ source) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<DBRecordDBRecordLinkBJ> getDBLinks(AnnotationMethod method, DBRecordBJ record)
-	{
+	public Collection<DBRecordDBRecordLinkBJ> getDBLinks(AnnotationMethodBJ method, DBRecordBJ record) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<DBRecordDBRecordLinkBJ> getDBLinks(AnnotationMethod method, String accession, String dbName)
-	{
+	public Collection<DBRecordDBRecordLinkBJ> getDBLinks(AnnotationMethodBJ method, String accession, String dbName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<DBRecordDBRecordLinkBJ> getDBLinks(DBLinkFilter<DBRecordDBRecordLinkBJ> filter)
-	{
+	public Collection<DBRecordDBRecordLinkBJ> getDBLinks(DBLinkFilter<DBRecordDBRecordLinkBJ> filter) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Note< ? extends NoteSource> createNote(String value, String noteTypeName)
-	{
+	public Note< ? extends NoteSource> createNote(String value, String noteTypeName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Note<DBRecordBJ> addNote(Note<DBRecordBJ> note)
-	{
+	public Note<DBRecordBJ> addNote(Note<DBRecordBJ> note) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Note<DBRecordBJ> getNote(String value, String noteTypeName)
-	{
+	public Note<DBRecordBJ> getNote(String value, String noteTypeName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<Note<DBRecordBJ>> getNotes()
-	{
+	public Collection<Note<DBRecordBJ>> getNotes() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<Note<DBRecordBJ>> getNotes(String noteTypeName)
-	{
+	public Collection<Note<DBRecordBJ>> getNotes(String noteTypeName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void addChangeListener(ChangeListener<Note<DBRecordBJ>> cl, ChangeType ct)
-	{
+	public void addChangeListener(ChangeListener<Note<DBRecordBJ>> cl, ChangeType ct) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public boolean isUnchanging(ChangeType ct)
-	{
+	public boolean isUnchanging(ChangeType ct) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void removeChangeListener(ChangeListener<Note<DBRecordBJ>> cl, ChangeType ct)
-	{
+	public void removeChangeListener(ChangeListener<Note<DBRecordBJ>> cl, ChangeType ct) {
 		// TODO Auto-generated method stub
 
 	}

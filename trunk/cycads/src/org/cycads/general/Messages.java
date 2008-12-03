@@ -247,4 +247,8 @@ public class Messages
 		return getString("PFFile.Header");
 	}
 
+	public static String ExceptionDBRecordDbRecordLinkBJSourceOrTargetNull() {
+		return getString("Exception.DBRecordDbRecordLinkBJ.SourceOrTargetNull");
+	}
+
 }

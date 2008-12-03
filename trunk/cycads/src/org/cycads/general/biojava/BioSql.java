@@ -17,6 +17,20 @@ public class BioSql
 		Collection<Integer> results = query.list();
 		return results;
 	}
+
+	public static Collection<String> getAccessions(String dbName) {
+		Query query = BioJavaxSession.createQuery("select accession from CrossRef where dbname=:dbName ");
+		query.setString("dbName", dbName);
+		Collection<String> results = query.list();
+		return results;
+	}
+
+	//	public static CrossRef getCrossRef(String dbName, String accession) {
+	//		Query query = BioJavaxSession.createQuery("from CrossRef where dbname=:dbName and accession=:accession");
+	//		query.setString("dbName", dbName);
+	//		query.setString("accession", accession);
+	//		return (CrossRef) query.uniqueResult();
+	//	}
 	//	public static NCBITaxon getTaxon(int ncbiTaxonNumber) {
 	//		Query taxonsQuery = session.createQuery("from Taxon where ncbi_taxon_id=:ncbiTaxonNumber");
 	//		taxonsQuery.setInteger("ncbiTaxonNumber", ncbiTaxonNumber);
@@ -245,4 +259,5 @@ public class BioSql
 	//		session.saveOrUpdate("Feature", gene.getFeature());
 	//	}
 	//
+
 }
