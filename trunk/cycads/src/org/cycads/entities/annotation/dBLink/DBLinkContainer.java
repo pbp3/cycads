@@ -12,11 +12,11 @@ public interface DBLinkContainer<D extends DBLink<S, R, M>, S extends DBLinkSour
 {
 	public void addDBLink(D dBLink);
 
-	public D getDBLink(M method, R record, S source);
+	public D getDBLink(S source, M method, R target);
 
-	public Collection<D> getDBLinks(M method, R record);
+	public Collection<D> getDBLinks(M method, R target);
 
-	public Collection<D> getDBLinks(M method, String accession, String dbName);
+	public Collection<D> getDBLinks(M method, String dbName, String accession);
 
 	public Collection<D> getDBLinks(DBLinkFilter<D> filter);
 
