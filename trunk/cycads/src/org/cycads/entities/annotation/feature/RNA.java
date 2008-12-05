@@ -5,14 +5,19 @@ package org.cycads.entities.annotation.feature;
 
 import java.util.Collection;
 
-public interface RNA extends Feature
+import org.cycads.entities.annotation.AnnotationMethod;
+import org.cycads.entities.sequence.Location;
+import org.cycads.entities.sequence.Sequence;
+
+public interface RNA<L extends Location< ? , ? , ? , ? , ? >, SEQ extends Sequence< ? , ? , ? , ? >, M extends AnnotationMethod, G extends Gene< ? , ? , ? , ? >, C extends CDS< ? , ? , ? , ? >>
+		extends Feature<L, SEQ, M>
 {
-	public Collection<Gene> getGenesContains();
+	public Collection<G> getGenesContains();
 
-	public Gene getGeneSource();
+	public G getGeneParent();
 
-	public void setGeneSource(Gene gene);
+	public void setGeneParent(G gene);
 
-	public Collection<CDS> getCDSProducts();
+	public Collection<C> getCDSProducts();
 
 }
