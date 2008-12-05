@@ -4,11 +4,10 @@
 package org.cycads.entities.annotation.feature;
 
 import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.note.Note;
 
 public interface FeatureSource
 {
-	public Feature createFeature(AnnotationMethod method, String type, Note<Feature> notes);
+	public Feature createFeature(AnnotationMethod method, String type);
 
 	public CDS createCDS(AnnotationMethod method);
 
