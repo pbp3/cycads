@@ -16,42 +16,49 @@ public class ExternalDatabaseBJ implements ExternalDatabase<DBRecordBJ>
 	private Hashtable<String, DBRecordBJ>			records		= new Hashtable<String, DBRecordBJ>();
 	private String									name;
 
-	private ExternalDatabaseBJ(String name) {
+	private ExternalDatabaseBJ(String name)
+	{
 		this.name = name;
 	}
 
 	@Override
-	public String getDbName() {
+	public String getDbName()
+	{
 		return name;
 	}
 
 	@Override
-	public Collection<DBRecordBJ> getRecords() {
+	public Collection<DBRecordBJ> getRecords()
+	{
 		Collection<String> records = BioSql.getAccessions(getDbName());
 		ArrayList<DBRecordBJ> result = new ArrayList<DBRecordBJ>(records.size());
-		for (String record : records) {
+		for (String record : records)
+		{
 			result.add(getOrCreateDBRecord(record));
 		}
 		return result;
 	}
 
 	@Override
-	public DBRecordBJ getOrCreateDBRecord(String accession) {
+	public DBRecordBJ getOrCreateDBRecord(String accession)
+	{
 		DBRecordBJ record = records.get(accession);
-		if (record == null) {
+		if (record == null)
+		{
 			record = new DBRecordBJ(this, accession);
 			records.put(accession, record);
 		}
 		return record;
 	}
 
-	public static ExternalDatabaseBJ getOrCreateExternalDB(String externalDBName) {
+	public static ExternalDatabaseBJ getOrCreateExternalDB(String externalDBName)
+	{
 		ExternalDatabaseBJ externalDB = externalDBs.get(externalDBName);
-		if (externalDB == null) {
+		if (externalDB == null)
+		{
 			externalDB = new ExternalDatabaseBJ(externalDBName);
 			externalDBs.put(externalDBName, externalDB);
 		}
 		return externalDB;
 	}
-
 }

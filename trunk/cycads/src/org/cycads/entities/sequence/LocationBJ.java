@@ -5,11 +5,12 @@ package org.cycads.entities.sequence;
 
 import java.util.Collection;
 
+import org.biojavax.bio.seq.RichLocation;
 import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.annotation.dBLink.DBLink;
+import org.cycads.entities.annotation.AnnotationMethodBJ;
 import org.cycads.entities.annotation.dBLink.DBLinkFilter;
-import org.cycads.entities.annotation.dBLink.DBLinkSource;
-import org.cycads.entities.annotation.dBLink.DBRecord;
+import org.cycads.entities.annotation.dBLink.BJ.DBRecordBJ;
+import org.cycads.entities.annotation.dBLink.BJ.ThinDBLinkBJ;
 import org.cycads.entities.annotation.feature.CDS;
 import org.cycads.entities.annotation.feature.Feature;
 import org.cycads.entities.annotation.feature.FeatureFilter;
@@ -17,16 +18,17 @@ import org.cycads.entities.annotation.feature.FeatureSource;
 import org.cycads.entities.annotation.feature.Gene;
 import org.cycads.entities.annotation.feature.RNA;
 import org.cycads.entities.note.Note;
-import org.cycads.entities.note.NotesContainer;
 
-public class SimpleLocation implements Location
+public class LocationBJ<SEQ extends Sequence< ? , ? , ? , ? >> implements
+		Location<ThinDBLinkBJ<LocationBJ<SEQ>>, LocationBJ<SEQ>, DBRecordBJ, SEQ, AnnotationMethodBJ>
 {
 	Collection<Intron>	introns;
 	int					start;
 	int					end;
-	Sequence			sequence;
+	SEQ					sequence;
+	RichLocation		location;
 
-	public SimpleLocation(int start, int end, Sequence sequence, Collection<Intron> introns)
+	public LocationBJ(int start, int end, SEQ sequence, Collection<Intron> introns)
 	{
 		this.introns = introns;
 		this.start = start;
@@ -55,7 +57,7 @@ public class SimpleLocation implements Location
 	}
 
 	@Override
-	public Sequence getSequence()
+	public SEQ getSequence()
 	{
 		return sequence;
 	}
@@ -135,50 +137,50 @@ public class SimpleLocation implements Location
 	}
 
 	@Override
-	public DBLink createDBLink(AnnotationMethod method, DBRecord record, NotesContainer<Note<DBLink>> notes)
+	public ThinDBLinkBJ<LocationBJ<SEQ>> createDBLink(AnnotationMethodBJ method, DBRecordBJ target)
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public DBLink createDBLink(AnnotationMethod method, String accession, String dbName,
-			NotesContainer<Note<DBLink>> notes)
+	public ThinDBLinkBJ<LocationBJ<SEQ>> createDBLink(AnnotationMethodBJ method, String accession, String dbName)
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void addDBLink(DBLink link)
+	public void addDBLink(ThinDBLinkBJ<LocationBJ<SEQ>> link)
 	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public DBLink getDBLink(AnnotationMethod method, DBRecord record, DBLinkSource source)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Collection<DBLink> getDBLinks(AnnotationMethod method, DBRecord record)
+	public ThinDBLinkBJ<LocationBJ<SEQ>> getDBLink(LocationBJ<SEQ> source, AnnotationMethodBJ method, DBRecordBJ target)
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<DBLink> getDBLinks(AnnotationMethod method, String accession, String dbName)
+	public Collection<ThinDBLinkBJ<LocationBJ<SEQ>>> getDBLinks(AnnotationMethodBJ method, DBRecordBJ target)
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<DBLink> getDBLinks(DBLinkFilter filter)
+	public Collection<ThinDBLinkBJ<LocationBJ<SEQ>>> getDBLinks(AnnotationMethodBJ method, String dbName,
+			String accession)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection<ThinDBLinkBJ<LocationBJ<SEQ>>> getDBLinks(DBLinkFilter<ThinDBLinkBJ<LocationBJ<SEQ>>> filter)
 	{
 		// TODO Auto-generated method stub
 		return null;

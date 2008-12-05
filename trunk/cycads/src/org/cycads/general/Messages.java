@@ -298,7 +298,7 @@ public class Messages
 		return getString("PFFile.Header");
 	}
 
-	public static String ExceptionDBRecordDbRecordLinkBJSourceOrTargetNull()
+	public static String exceptionDBRecordDbRecordLinkBJSourceOrTargetNull()
 	{
 		return getString("Exception.DBRecordDbRecordLinkBJ.SourceOrTargetNull");
 	}
@@ -306,6 +306,38 @@ public class Messages
 	public static String exceptionMethodNotImplemented()
 	{
 		return getString("Exception.MethodNotImplemented");
+	}
+
+	public static String exceptionDBRecordBJSplitDBNameAccession(String dbNameAndAccession)
+	{
+		Object[] a = {dbNameAndAccession};
+		return MessageFormat.format(getString("Exception.DBRecordBJ.SplitDBNameAccession"), a);
+	}
+
+	public static String ExceptionDBRecordDbRecordLinkBJConstructorTerm()
+	{
+		return getString("Exception.DBRecordDbRecordLinkBJ.ConstructorTerm");
+	}
+
+	public static String ExceptionInvalidDBRecordDBRecordLinkName(String termName)
+	{
+		Object[] a = {termName};
+		return MessageFormat.format(getString("Exception.DBRecordDBRecordBJ.InvalidTermName"), a);
+	}
+
+	public static String ExceptionAnnotationMethodBJConstructorTerm()
+	{
+		return getString("Exception.AnnotationMethodBJ.ConstructorTerm");
+	}
+
+	public static String exceptionInvalidMethod()
+	{
+		return getString("Exception.InvalidMethod");
+	}
+
+	public static String exceptionHandleDBLinkOtherSequence()
+	{
+		return getString("Exception.Sequence.DBLinkOtherSequence");
 	}
 
 }

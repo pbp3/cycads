@@ -22,17 +22,25 @@ import org.cycads.entities.note.NoteSource;
 import org.cycads.exceptions.MethodNotImplemented;
 import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
+import org.cycads.general.biojava.BioSql;
 
 public class DBRecordBJ implements DBRecord<DBRecordDBRecordLinkBJ, DBRecordBJ, DBRecordBJ, AnnotationMethodBJ>
 {
 	CrossRef			crossRef;
 	ExternalDatabaseBJ	database;
 
+	// Created by ExternalDatabaseBJ
 	protected DBRecordBJ(ExternalDatabaseBJ database, String accession)
 	{
 		this.database = database;
 		crossRef = (CrossRef) RichObjectFactory.getObject(SimpleCrossRef.class, new Object[] {database.getDbName(),
 			accession, 0});
+	}
+
+	public DBRecordBJ(CrossRef crossRef)
+	{
+		this.crossRef = crossRef;
+		database = ExternalDatabaseBJ.getOrCreateExternalDB(crossRef.getDbname());
 	}
 
 	@Override
@@ -58,7 +66,7 @@ public class DBRecordBJ implements DBRecord<DBRecordDBRecordLinkBJ, DBRecordBJ, 
 		return crossRef;
 	}
 
-	protected static DBRecordBJ getOrCreateDBRecordBJ(String dbName, String accession)
+	public static DBRecordBJ getOrCreateDBRecordBJ(String dbName, String accession)
 	{
 		return ExternalDatabaseBJ.getOrCreateExternalDB(dbName).getOrCreateDBRecord(accession);
 	}
@@ -73,7 +81,7 @@ public class DBRecordBJ implements DBRecord<DBRecordDBRecordLinkBJ, DBRecordBJ, 
 		String[] a = dbNameAndAccession.split(ParametersDefault.DBRecordSeparator());
 		if (a.length != 2 || a[0].length() == 0 || a[1].length() == 0)
 		{
-			throw new IllegalArgumentException(Messages.ExceptionDBRecordBJCreateDBNameAccession());
+			throw new IllegalArgumentException(Messages.exceptionDBRecordBJSplitDBNameAccession(dbNameAndAccession));
 		}
 		return a;
 	}
@@ -162,8 +170,17 @@ public class DBRecordBJ implements DBRecord<DBRecordDBRecordLinkBJ, DBRecordBJ, 
 	@Override
 	public Collection<DBRecordDBRecordLinkBJ> getDBLinks(DBLinkFilter<DBRecordDBRecordLinkBJ> filter)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		Collection<ComparableTerm> terms = BioSql.getTermsWithCrossRef(this.getCrossRef());
+		Collection<DBRecordDBRecordLinkBJ> result = new ArrayList<DBRecordDBRecordLinkBJ>(terms.size());
+		for (ComparableTerm term : terms)
+		{
+			DBRecordDBRecordLinkBJ link = new DBRecordDBRecordLinkBJ(term);
+			if (filter.accept(link))
+			{
+				result.add(link);
+			}
+		}
+		return result;
 	}
 
 	@Override
