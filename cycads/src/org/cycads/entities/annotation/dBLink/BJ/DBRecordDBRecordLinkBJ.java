@@ -34,7 +34,7 @@ public class DBRecordDBRecordLinkBJ implements DBLink<DBRecordBJ, DBRecordBJ, An
 	{
 		if (source == null || target == null)
 		{
-			throw new IllegalArgumentException(Messages.ExceptionDBRecordDbRecordLinkBJConstructor());
+			throw new IllegalArgumentException(Messages.exceptionDBRecordDbRecordLinkBJSourceOrTargetNull());
 		}
 		this.source = source;
 		this.method = method;
@@ -50,7 +50,7 @@ public class DBRecordDBRecordLinkBJ implements DBLink<DBRecordBJ, DBRecordBJ, An
 	{
 		if (term.getOntology() != ontDBRecordDBRecordLink)
 		{
-			throw new IllegalArgumentException(Messages.ExceptionDBRecordDbRecordLinkBJConstructor());
+			throw new IllegalArgumentException(Messages.ExceptionDBRecordDbRecordLinkBJConstructorTerm());
 		}
 		this.term = term;
 	}
@@ -66,7 +66,7 @@ public class DBRecordDBRecordLinkBJ implements DBLink<DBRecordBJ, DBRecordBJ, An
 		String[] a = termName.split(ParametersDefault.DBRecordDBRecordSeparator());
 		if (a.length != 3 || a[0].length() == 0 || a[2].length() == 0)
 		{
-			throw new IllegalArgumentException(Messages.ExceptionDBRecordBJCreateDBNameAccession());
+			throw new IllegalArgumentException(Messages.ExceptionInvalidDBRecordDBRecordLinkName(termName));
 		}
 		return a;
 	}
@@ -156,6 +156,12 @@ public class DBRecordDBRecordLinkBJ implements DBLink<DBRecordBJ, DBRecordBJ, An
 			ChangeType ct)
 	{
 		throw new MethodNotImplemented();
+	}
+
+	@Override
+	public String toString()
+	{
+		return joinTermName(getSource().toString(), getAnnotationMethod().getName(), getDBRecordTarget().toString());
 	}
 
 }

@@ -18,125 +18,165 @@ public class TermsAndOntologies
 
 	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
 
-	private TermsAndOntologies() {
+	private TermsAndOntologies()
+	{
 	}
 
-	private static String getString(String key) {
-		try {
+	private static String getString(String key)
+	{
+		try
+		{
 			return RESOURCE_BUNDLE.getString(key);
 		}
-		catch (MissingResourceException e) {
+		catch (MissingResourceException e)
+		{
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	public static String getNameSpaceDefault() {
+	public static String getNameSpaceDefault()
+	{
 		return getString("nameSpaceDefault");
 	}
 
-	public static ComparableOntology getDefaultOntology() {
+	public static ComparableOntology getDefaultOntology()
+	{
 		return RichObjectFactory.getDefaultOntology();
 	}
 
-	private static SimpleComparableOntology getOntology(String name) {
+	private static SimpleComparableOntology getOntology(String name)
+	{
 		return (SimpleComparableOntology) RichObjectFactory.getObject(SimpleComparableOntology.class,
 			new Object[] {name});
 	}
 
-	public static ComparableOntology getOntologyExternalDB(String dbName) {
+	public static ComparableOntology getOntologyExternalDB(String dbName)
+	{
 		ComparableOntology ont = getOntology(dbName);
 		ont.setDescription(getString("ontology.externalDB.description"));
 		return ont;
 	}
 
-	public static ComparableOntology getOntologyEC() {
+	public static ComparableOntology getOntologyEC()
+	{
 		return getOntologyExternalDB(getString("ontology.externalDB.EC"));
 	}
 
-	public static ComparableOntology getOntologyGO() {
+	public static ComparableOntology getOntologyGO()
+	{
 		return getOntologyExternalDB(getString("ontology.externalDB.GO"));
 	}
 
-	public static ComparableOntology getOntologyKO() {
+	public static ComparableOntology getOntologyKO()
+	{
 		return getOntologyExternalDB(getString("ontology.externalDB.KO"));
 	}
 
-	public static ComparableOntology getOntologyCOG() {
+	public static ComparableOntology getOntologyCOG()
+	{
 		return getOntologyExternalDB(getString("ontology.externalDB.COG"));
 	}
 
-	public static ComparableOntology getOntologyTripleDBLink() {
+	public static ComparableOntology getOntologyTripleDBLink()
+	{
 		return getOntology(getString("ontology.DBLink.Triple"));
 	}
 
-	public static SimpleComparableOntology getOntologyToLinksKOToEC() {
+	public static SimpleComparableOntology getOntologyToLinksKOToEC()
+	{
 		return getOntology(getString("ontology.Links.KOToEC"));
 	}
 
-	public static SimpleComparableOntology getOntologyToLinksKOToGO() {
+	public static SimpleComparableOntology getOntologyToLinksKOToGO()
+	{
 		return getOntology(getString("ontology.Links.KOToGO"));
 	}
 
-	public static SimpleComparableOntology getOntologyToLinksKOToCOG() {
+	public static SimpleComparableOntology getOntologyToLinksKOToCOG()
+	{
 		return getOntology(getString("ontology.Links.KOToCOG"));
 	}
 
-	public static ComparableOntology getOntologyGeneral() {
+	public static ComparableOntology getOntologyGeneral()
+	{
 		return getOntology(getString("ontology.general"));
 	}
 
-	public static ComparableOntology getOntologyNotes() {
+	public static ComparableOntology getOntologyNotes()
+	{
 		return getOntology(getString("ontology.notes"));
 	}
 
-	public static ComparableOntology getOntologyDBLinkMethods() {
+	public static ComparableOntology getOntologyDBLinkMethods()
+	{
 		return getOntology(getString("ontology.DBLinkMethods"));
 	}
 
-	public static ComparableTerm getTermDBLinkMethodCrossReference() {
+	public static ComparableTerm getTermDBLinkMethodCrossReference()
+	{
 		return getOntology(getString("ontology.DBLinkMethods")).getOrCreateTerm(
 			getString("term.DBLinkMethod.CrossReference"));
 	}
 
-	public static ComparableTerm getTermPredicateToLinkKOToEC() {
+	public static ComparableTerm getTermPredicateToLinkKOToEC()
+	{
 		return getOntology(getString("ontology.predicate.KOToEC")).getOrCreateTerm(getString("term.predicate.KOToEC"));
 	}
 
-	public static ComparableTerm getTermPredicateToLinkKOToGO() {
+	public static ComparableTerm getTermPredicateToLinkKOToGO()
+	{
 		return getOntology(getString("ontology.predicate.KOToGO")).getOrCreateTerm(getString("term.predicate.KOToGO"));
 	}
 
-	public static ComparableTerm getTermPredicateToLinkKOToCOG() {
+	public static ComparableTerm getTermPredicateToLinkKOToCOG()
+	{
 		return getOntology(getString("ontology.predicate.KOToCOG")).getOrCreateTerm(getString("term.predicate.KOToCOG"));
 	}
 
-	public static ComparableTerm getTermTypeCDS() {
+	public static ComparableTerm getTermTypeCDS()
+	{
 		return getDefaultOntology().getOrCreateTerm(getString("term.type.CDS"));
 	}
 
-	public static ComparableTerm getTermTypeEC() {
+	public static ComparableTerm getTermTypeEC()
+	{
 		return getDefaultOntology().getOrCreateTerm(getString("term.type.EC"));
 	}
 
-	public static ComparableTerm getTermTypeGene() {
+	public static ComparableTerm getTermTypeGene()
+	{
 		return getDefaultOntology().getOrCreateTerm(getString("term.type.Gene"));
 	}
 
-	public static ComparableTerm getTermProteinID() {
+	public static ComparableTerm getTermProteinID()
+	{
 		return getDefaultOntology().getOrCreateTerm(getString("term.qualifier.ProteinID"));
 	}
 
-	public static ComparableOntology getOntologyMethodType(String methodTypeName) {
+	public static ComparableOntology getOntologyMethodType(String methodTypeName)
+	{
 		return getOntology(methodTypeName);
 	}
 
-	public static ComparableTerm getTermNextBiocycId() {
+	public static ComparableTerm getTermNextBiocycId()
+	{
 		return getDefaultOntology().getOrCreateTerm(getString("term.nextBioCycID"));
 	}
 
-	public static ComparableTerm getMethodTerm(String methodName) {
-		return getOntology(getString("ontology.methods")).getOrCreateTerm(methodName);
+	public static ComparableTerm getOrCreateMethodTerm(String methodName)
+	{
+		return getOntologyMethods().getOrCreateTerm(methodName);
+	}
+
+	public static ComparableOntology getOntologyMethods()
+	{
+		return getOntology(getString("ontology.methods"));
+	}
+
+	public static ComparableOntology getOntologyDBRecordDBRecordLink()
+	{
+		return getOntology(getString("ontology.DBRecordDBRecordLink"));
 	}
 
 	// public static SimpleComparableOntology getOntologyFeatures() {
