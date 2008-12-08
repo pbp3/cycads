@@ -13,14 +13,14 @@ import org.cycads.entities.annotation.dBLink.BJ.DBRecordBJ;
 import org.cycads.entities.annotation.dBLink.BJ.ThinDBLinkBJ;
 import org.cycads.entities.annotation.feature.CDS;
 import org.cycads.entities.annotation.feature.Feature;
+import org.cycads.entities.annotation.feature.FeatureBJ;
 import org.cycads.entities.annotation.feature.FeatureFilter;
 import org.cycads.entities.annotation.feature.FeatureSource;
 import org.cycads.entities.annotation.feature.Gene;
 import org.cycads.entities.annotation.feature.RNA;
-import org.cycads.entities.note.Note;
 
-public class LocationBJ<SEQ extends Sequence< ? , ? , ? , ? >> implements
-		Location<ThinDBLinkBJ<LocationBJ<SEQ>>, LocationBJ<SEQ>, DBRecordBJ, SEQ, AnnotationMethodBJ>
+public class LocationBJ<SEQ extends Sequence< ? , ? , ? , ? , ? , ? >>
+		implements Location<ThinDBLinkBJ<LocationBJ<SEQ>>, LocationBJ<SEQ>, DBRecordBJ, AnnotationMethodBJ, SEQ>
 {
 	Collection<Intron>	introns;
 	int					start;
@@ -28,8 +28,7 @@ public class LocationBJ<SEQ extends Sequence< ? , ? , ? , ? >> implements
 	SEQ					sequence;
 	RichLocation		location;
 
-	public LocationBJ(int start, int end, SEQ sequence, Collection<Intron> introns)
-	{
+	public LocationBJ(int start, int end, SEQ sequence, Collection<Intron> introns) {
 		this.introns = introns;
 		this.start = start;
 		this.end = end;
@@ -37,151 +36,129 @@ public class LocationBJ<SEQ extends Sequence< ? , ? , ? , ? >> implements
 	}
 
 	@Override
-	public boolean addIntron(Intron intron)
-	{
+	public boolean addIntron(Intron intron) {
 		return introns.add(intron);
 	}
 
 	@Override
-	public Intron addIntron(int startPos, int endPos)
-	{
+	public Intron addIntron(int startPos, int endPos) {
 		Intron intron = new SimpleIntron(startPos, endPos);
 		addIntron(intron);
 		return intron;
 	}
 
 	@Override
-	public Collection<Intron> getIntrons()
-	{
+	public Collection<Intron> getIntrons() {
 		return introns;
 	}
 
 	@Override
-	public SEQ getSequence()
-	{
+	public SEQ getSequence() {
 		return sequence;
 	}
 
 	@Override
-	public int getStart()
-	{
+	public int getStart() {
 		return start;
 	}
 
 	@Override
-	public int getEnd()
-	{
+	public int getEnd() {
 		return end;
 	}
 
 	@Override
-	public boolean isPositiveStrand()
-	{
+	public boolean isPositiveStrand() {
 		return getStart() <= getEnd();
 	}
 
 	@Override
-	public CDS createCDS(AnnotationMethod method)
-	{
+	public CDS createCDS(AnnotationMethod method) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Feature createFeature(AnnotationMethod method, String type, Note<Feature> notes)
-	{
+	public FeatureBJ createFeature(AnnotationMethod method, String type) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Gene createGene(AnnotationMethod method)
-	{
+	public Gene createGene(AnnotationMethod method) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public RNA createRNA(AnnotationMethod method, String type)
-	{
+	public RNA createRNA(AnnotationMethod method, String type) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void addFeature(Feature feature)
-	{
+	public void addFeature(Feature feature) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public Feature getFeature(AnnotationMethod method, String type, FeatureSource source)
-	{
+	public Feature getFeature(AnnotationMethod method, String type, FeatureSource source) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<Feature> getFeatures(FeatureFilter featureFilter)
-	{
+	public Collection<Feature> getFeatures(FeatureFilter featureFilter) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<Feature> getFeatures(AnnotationMethod method, String type)
-	{
+	public Collection<Feature> getFeatures(AnnotationMethod method, String type) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ThinDBLinkBJ<LocationBJ<SEQ>> createDBLink(AnnotationMethodBJ method, DBRecordBJ target)
-	{
+	public ThinDBLinkBJ<LocationBJ<SEQ>> createDBLink(AnnotationMethodBJ method, DBRecordBJ target) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ThinDBLinkBJ<LocationBJ<SEQ>> createDBLink(AnnotationMethodBJ method, String accession, String dbName)
-	{
+	public ThinDBLinkBJ<LocationBJ<SEQ>> createDBLink(AnnotationMethodBJ method, String accession, String dbName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void addDBLink(ThinDBLinkBJ<LocationBJ<SEQ>> link)
-	{
+	public void addDBLink(ThinDBLinkBJ<LocationBJ<SEQ>> link) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public ThinDBLinkBJ<LocationBJ<SEQ>> getDBLink(LocationBJ<SEQ> source, AnnotationMethodBJ method, DBRecordBJ target)
-	{
+	public ThinDBLinkBJ<LocationBJ<SEQ>> getDBLink(LocationBJ<SEQ> source, AnnotationMethodBJ method, DBRecordBJ target) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<ThinDBLinkBJ<LocationBJ<SEQ>>> getDBLinks(AnnotationMethodBJ method, DBRecordBJ target)
-	{
+	public Collection<ThinDBLinkBJ<LocationBJ<SEQ>>> getDBLinks(AnnotationMethodBJ method, DBRecordBJ target) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Collection<ThinDBLinkBJ<LocationBJ<SEQ>>> getDBLinks(AnnotationMethodBJ method, String dbName,
-			String accession)
-	{
+			String accession) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<ThinDBLinkBJ<LocationBJ<SEQ>>> getDBLinks(DBLinkFilter<ThinDBLinkBJ<LocationBJ<SEQ>>> filter)
-	{
+	public Collection<ThinDBLinkBJ<LocationBJ<SEQ>>> getDBLinks(DBLinkFilter<ThinDBLinkBJ<LocationBJ<SEQ>>> filter) {
 		// TODO Auto-generated method stub
 		return null;
 	}

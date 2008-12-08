@@ -11,7 +11,7 @@ import org.cycads.exceptions.DBObjectNotFound;
 import org.cycads.general.biojava.BioJavaxSession;
 import org.hibernate.Query;
 
-public class NCBIOrganismBJ implements Organism
+public class NCBIOrganismBJ implements Organism<ThinSequenceBJ>
 {
 	NCBITaxon	taxon;
 
@@ -44,23 +44,23 @@ public class NCBIOrganismBJ implements Organism
 		return (NCBITaxon) taxonsQuery.uniqueResult();
 	}
 
-	public Collection<Sequence> getSequences(double version) {
+	public Collection<ThinSequenceBJ> getSequences(double version) {
 		Query query = BioJavaxSession.createQuery("select id from ThinSequence where version=:version and taxon=:taxonId");
 		query.setDouble("version", version);
 		query.setParameter("taxonId", getTaxon());
 		Collection<Integer> seqIds = (Collection<Integer>) query.list();
-		Collection<Sequence> seqs = new LinkedList<Sequence>();
+		Collection<ThinSequenceBJ> seqs = new LinkedList<ThinSequenceBJ>();
 		for (int seqId : seqIds) {
 			seqs.add(new ThinSequenceBJ(seqId, this));
 		}
 		return seqs;
 	}
 
-	public Collection<Sequence> getSequences() {
+	public Collection<ThinSequenceBJ> getSequences() {
 		Query query = BioJavaxSession.createQuery("select id from ThinSequence where taxon=:taxonId");
 		query.setParameter("taxonId", getTaxon());
 		Collection<Integer> seqIds = (Collection<Integer>) query.list();
-		Collection<Sequence> seqs = new LinkedList<Sequence>();
+		Collection<ThinSequenceBJ> seqs = new LinkedList<ThinSequenceBJ>();
 		for (int seqId : seqIds) {
 			seqs.add(new ThinSequenceBJ(seqId, this));
 		}

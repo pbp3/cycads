@@ -5,13 +5,13 @@ package org.cycads.entities.annotation.feature;
 
 import org.cycads.entities.annotation.AnnotationMethod;
 
-public interface FeatureSource
+public interface FeatureSource<F extends Feature< ? , ? , ? >, C extends CDS< ? , ? , ? , ? >, R extends RNA< ? , ? , ? , ? , ? >, G extends Gene< ? , ? , ? , ? >, M extends AnnotationMethod>
 {
-	public Feature createFeature(AnnotationMethod method, String type);
+	public F createFeature(M method, String type);
 
-	public CDS createCDS(AnnotationMethod method);
+	public C createCDS(M method);
 
-	public RNA createRNA(AnnotationMethod method, String type);
+	public R createRNA(M method, String type);
 
-	public Gene createGene(AnnotationMethod method);
+	public G createGene(M method);
 }

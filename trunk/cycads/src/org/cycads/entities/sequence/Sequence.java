@@ -16,8 +16,8 @@ import org.cycads.entities.note.Note;
 import org.cycads.entities.note.NoteSource;
 import org.cycads.entities.note.NotesContainer;
 
-public interface Sequence<D extends DBLink<S, R, M>, S extends Sequence< ? , ? , ? , ? >, R extends DBRecord< ? , ? , ? , ? >, M extends AnnotationMethod>
-		extends NoteSource, NotesContainer<Note<S>>, DBLinkSource<D, S, R, M>, DBLinkContainer<D, S, R, M>
+public interface Sequence<D extends DBLink<S, R, M>, S extends Sequence< ? , ? , ? , ? , ? , ? >, R extends DBRecord< ? , ? , ? , ? >, M extends AnnotationMethod, L extends Location< ? , ? , ? , ? , ? >, F extends Feature< ? , ? , ? >>
+		extends NoteSource, NotesContainer<Note<S>>, DBLinkSource<D, R, M>, DBLinkContainer<D, S, R, M>
 {
 	public String getDescription();
 
@@ -25,10 +25,10 @@ public interface Sequence<D extends DBLink<S, R, M>, S extends Sequence< ? , ? ,
 
 	public String getName();
 
-	public Organism getOrganism();
+	public Organism<S> getOrganism();
 
-	public Location createLocation(int start, int end, Collection<Intron> introns);
+	public L createLocation(int start, int end, Collection<Intron> introns);
 
-	public Collection<Feature> getFeatures(FeatureFilter featureFilter);
+	public Collection<F> getFeatures(FeatureFilter featureFilter);
 
 }

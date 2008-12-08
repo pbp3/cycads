@@ -13,8 +13,8 @@ import org.cycads.entities.annotation.dBLink.DBRecord;
 import org.cycads.entities.annotation.feature.FeatureCollection;
 import org.cycads.entities.annotation.feature.FeatureSource;
 
-public interface Location<D extends DBLink<S, R, M>, S extends Location< ? , ? , ? , ? , ? >, R extends DBRecord< ? , ? , ? , ? >, M extends AnnotationMethod, SEQ extends Sequence< ? , ? , ? , ? >>
-		extends FeatureSource, FeatureCollection, DBLinkSource<D, S, R, M>, DBLinkContainer<D, S, R, M>
+public interface Location<D extends DBLink<S, R, M>, S extends Location< ? , ? , ? , ? , ? >, R extends DBRecord< ? , ? , ? , ? >, M extends AnnotationMethod, SEQ extends Sequence< ? , ? , ? , ? , ? , ? >>
+		extends FeatureSource, FeatureCollection, DBLinkSource<D, R, M>, DBLinkContainer<D, S, R, M>
 {
 
 	public Collection<Intron> getIntrons();
