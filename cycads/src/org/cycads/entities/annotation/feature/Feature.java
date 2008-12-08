@@ -8,13 +8,15 @@ import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.sequence.Location;
 import org.cycads.entities.sequence.Sequence;
 import org.cycads.general.ParametersDefault;
-import org.cycads.general.biojava.TermsAndOntologies;
 
-public interface Feature<L extends Location< ? , ? , ? , ? , ? >, SEQ extends Sequence< ? , ? , ? , ? >, M extends AnnotationMethod>
+public interface Feature<L extends Location< ? , ? , ? , ? , ? >, SEQ extends Sequence< ? , ? , ? , ? , ? , ? >, M extends AnnotationMethod>
 		extends Annotation<L, M>
 {
 
-	public static String CDS_TYPE=ParametersDefault.;
+	public static String	CDS_TYPE	= ParametersDefault.featureTypeCDS();
+	public static String	MRNA_TYPE	= ParametersDefault.featureTypeMRNA();
+	public static String	GENE_TYPE	= ParametersDefault.featureTypeGene();
+
 	public String getType();
 
 	public SEQ getSequence();

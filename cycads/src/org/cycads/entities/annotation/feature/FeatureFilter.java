@@ -5,14 +5,16 @@ package org.cycads.entities.annotation.feature;
 
 import org.cycads.entities.annotation.AnnotationFilter;
 
-public interface FeatureFilter extends AnnotationFilter<Feature>
+public interface FeatureFilter<F extends Feature< ? , ? , ? >> extends AnnotationFilter<F>
 {
 	public final static FeatureFilterNothing	FEATURE_FILTER_NOTHING	= new FeatureFilterNothing();
 
-	public static class FeatureFilterNothing implements FeatureFilter
+	public static class FeatureFilterNothing implements FeatureFilter<Feature< ? , ? , ? >>
 	{
-		public boolean accept(Feature feature) {
+		@Override
+		public boolean accept(Feature< ? , ? , ? > feature) {
 			return true;
 		}
+
 	}
 }

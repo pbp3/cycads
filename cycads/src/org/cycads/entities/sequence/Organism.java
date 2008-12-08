@@ -5,12 +5,12 @@ package org.cycads.entities.sequence;
 
 import java.util.Collection;
 
-public interface Organism
+public interface Organism<SEQ extends Sequence< ? , ? , ? , ? , ? , ? >>
 {
 
-	public Collection<Sequence> getSequences();
+	public Collection<SEQ> getSequences();
 
-	public Collection<Sequence> getSequences(double version);
+	public Collection<SEQ> getSequences(double version);
 
 	/**
 	 * Getter of the property <tt>name</tt>

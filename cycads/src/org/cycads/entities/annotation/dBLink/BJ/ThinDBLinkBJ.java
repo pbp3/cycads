@@ -17,94 +17,80 @@ import org.cycads.entities.note.NoteSource;
 import org.cycads.exceptions.InvalidMethod;
 
 // Without AnnotationMethod and notes
-public class ThinDBLinkBJ<S extends DBLinkSource< ? , ? , ? , ? >> implements DBLink<S, DBRecordBJ, AnnotationMethodBJ>
+public class ThinDBLinkBJ<S extends DBLinkSource< ? , ? , ? >> implements DBLink<S, DBRecordBJ, AnnotationMethodBJ>
 {
 	S			source;
 	DBRecordBJ	target;
 
-	public ThinDBLinkBJ(S source, DBRecordBJ target)
-	{
+	public ThinDBLinkBJ(S source, DBRecordBJ target) {
 		this.source = source;
 		this.target = target;
 	}
 
-	public ThinDBLinkBJ(S source, CrossRef crossRef)
-	{
+	public ThinDBLinkBJ(S source, CrossRef crossRef) {
 		this.source = source;
 		this.target = new DBRecordBJ(crossRef);
 	}
 
 	@Override
-	public DBRecordBJ getDBRecordTarget()
-	{
+	public DBRecordBJ getDBRecordTarget() {
 		return target;
 	}
 
 	@Override
-	public AnnotationMethodBJ getAnnotationMethod()
-	{
+	public AnnotationMethodBJ getAnnotationMethod() {
 		return null;
 	}
 
 	@Override
-	public S getSource()
-	{
+	public S getSource() {
 		return source;
 	}
 
 	@Override
-	public Note< ? extends NoteSource> createNote(String value, String noteTypeName)
-	{
+	public Note< ? extends NoteSource> createNote(String value, String noteTypeName) {
 		return null;
 	}
 
 	@Override
 	public Note< ? extends Annotation<S, AnnotationMethodBJ>> addNote(
-			Note< ? extends Annotation<S, AnnotationMethodBJ>> note)
-	{
+			Note< ? extends Annotation<S, AnnotationMethodBJ>> note) {
 		throw new InvalidMethod();
 	}
 
 	@Override
-	public Note< ? extends Annotation<S, AnnotationMethodBJ>> getNote(String value, String noteTypeName)
-	{
+	public Note< ? extends Annotation<S, AnnotationMethodBJ>> getNote(String value, String noteTypeName) {
 		throw new InvalidMethod();
 	}
 
 	@Override
-	public Collection<Note< ? extends Annotation<S, AnnotationMethodBJ>>> getNotes()
-	{
+	public Collection<Note< ? extends Annotation<S, AnnotationMethodBJ>>> getNotes() {
 		return null;
 	}
 
 	@Override
-	public Collection<Note< ? extends Annotation<S, AnnotationMethodBJ>>> getNotes(String noteTypeName)
-	{
+	public Collection<Note< ? extends Annotation<S, AnnotationMethodBJ>>> getNotes(String noteTypeName) {
 		return null;
 	}
 
 	@Override
-	public void addChangeListener(ChangeListener<Note< ? extends Annotation<S, AnnotationMethodBJ>>> cl, ChangeType ct)
-	{
+	public void addChangeListener(ChangeListener<Note< ? extends Annotation<S, AnnotationMethodBJ>>> cl, ChangeType ct) {
 		throw new InvalidMethod();
 	}
 
 	@Override
-	public boolean isUnchanging(ChangeType ct)
-	{
+	public boolean isUnchanging(ChangeType ct) {
 		throw new InvalidMethod();
 	}
 
 	@Override
 	public void removeChangeListener(ChangeListener<Note< ? extends Annotation<S, AnnotationMethodBJ>>> cl,
-			ChangeType ct)
-	{
+			ChangeType ct) {
 		throw new InvalidMethod();
 	}
 
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		return DBRecordDBRecordLinkBJ.joinTermName(getSource().toString(), "", getDBRecordTarget().toString());
 	}
 
