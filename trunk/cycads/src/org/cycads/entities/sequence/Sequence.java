@@ -29,6 +29,6 @@ public interface Sequence<D extends DBLink<S, R, M>, S extends Sequence< ? , ? ,
 
 	public L createLocation(int start, int end, Collection<Intron> introns);
 
-	public Collection<F> getFeatures(FeatureFilter featureFilter);
+	public Collection<F> getFeatures(FeatureFilter<F> featureFilter);
 
 }
