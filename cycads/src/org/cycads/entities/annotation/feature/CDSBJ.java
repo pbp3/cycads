@@ -12,28 +12,30 @@ import org.cycads.entities.sequence.ThinSequenceBJ;
 
 public class CDSBJ extends FeatureBJ implements CDS<LocationBJ, ThinSequenceBJ, AnnotationMethodBJ, RNABJ>
 {
+	RNABJ	rnaParent;
 
-	public CDSBJ(RichFeature feature) {
+	public CDSBJ(RichFeature feature)
+	{
 		super(feature);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
-	public RNABJ getRNAParent() {
+	public RNABJ getRNAParent()
+	{
+		return rnaParent;
+	}
+
+	@Override
+	public void setRNAParent(RNABJ rnaParent)
+	{
+		this.rnaParent = rnaParent;
+	}
+
+	@Override
+	public Collection<RNABJ> getRNAsContains()
+	{
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public Collection<RNABJ> getRNAsContains() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setRNAParent(RNABJ rna) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

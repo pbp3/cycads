@@ -27,164 +27,191 @@ public class FeatureBJ implements Feature<LocationBJ, ThinSequenceBJ, Annotation
 	ThinSequenceBJ					sequence;
 	LocationBJ						location;
 
-	public FeatureBJ(RichFeature feature) {
+	public FeatureBJ(RichFeature feature)
+	{
 		this.feature = feature;
 	}
 
-	public FeatureBJ(int featureId, ThinSequenceBJ sequence) {
-		this(getRichFeature(featureId));
+	public FeatureBJ(int featureId, ThinSequenceBJ sequence)
+	{
+		this(featureId);
 		this.sequence = sequence;
 	}
 
-	private void adjusteNotes() {
-		if (notes == null) {
+	public FeatureBJ(int featureId)
+	{
+		this(getRichFeature(featureId));
+	}
+
+	private void adjusteNotes()
+	{
+		if (notes == null)
+		{
 			notes = NotesToAnnotationBJ.createNotesHashTable((RichAnnotation) feature.getAnnotation(), this);
 		}
 	}
 
-	public static RichFeature getRichFeature(int id) {
+	public static RichFeature getRichFeature(int id)
+	{
 		Query query = BioJavaxSession.createQuery("from Feature where id=:id");
 		query.setInteger("id", id);
 		return (RichFeature) query.uniqueResult();
 	}
 
+	public RichFeature getRichFeature()
+	{
+		return feature;
+	}
+
 	@Override
-	public ThinSequenceBJ getSequence() {
+	public ThinSequenceBJ getSequence()
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String getType() {
+	public String getType()
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public AnnotationMethodBJ getAnnotationMethod() {
+	public AnnotationMethodBJ getAnnotationMethod()
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public LocationBJ getSource() {
+	public LocationBJ getSource()
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Note< ? extends NoteSource> createNote(String value, String noteTypeName) {
+	public Note< ? extends NoteSource> createNote(String value, String noteTypeName)
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Note< ? extends Annotation<LocationBJ, AnnotationMethodBJ>> addNote(
-			Note< ? extends Annotation<LocationBJ, AnnotationMethodBJ>> note) {
+			Note< ? extends Annotation<LocationBJ, AnnotationMethodBJ>> note)
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Note< ? extends Annotation<LocationBJ, AnnotationMethodBJ>> getNote(String value, String noteTypeName) {
+	public Note< ? extends Annotation<LocationBJ, AnnotationMethodBJ>> getNote(String value, String noteTypeName)
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<Note< ? extends Annotation<LocationBJ, AnnotationMethodBJ>>> getNotes() {
+	public Collection<Note< ? extends Annotation<LocationBJ, AnnotationMethodBJ>>> getNotes()
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<Note< ? extends Annotation<LocationBJ, AnnotationMethodBJ>>> getNotes(String noteTypeName) {
+	public Collection<Note< ? extends Annotation<LocationBJ, AnnotationMethodBJ>>> getNotes(String noteTypeName)
+	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void addChangeListener(ChangeListener<Note< ? extends Annotation<LocationBJ, AnnotationMethodBJ>>> cl,
-			ChangeType ct) {
+			ChangeType ct)
+	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public boolean isUnchanging(ChangeType ct) {
+	public boolean isUnchanging(ChangeType ct)
+	{
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void removeChangeListener(ChangeListener<Note< ? extends Annotation<LocationBJ, AnnotationMethodBJ>>> cl,
-			ChangeType ct) {
+			ChangeType ct)
+	{
 		// TODO Auto-generated method stub
 
 	}
 
-	//	@Override
-	//	public Note<Feature> getNote(String value, String noteTypeName) {
-	//		adjusteNotes();
-	//		return notes.getNote(value, noteTypeName);
-	//	}
+	// @Override
+	// public Note<Feature> getNote(String value, String noteTypeName) {
+	// adjusteNotes();
+	// return notes.getNote(value, noteTypeName);
+	// }
 	//
-	//	@Override
-	//	public Collection<Note<Feature>> getNotes() {
-	//		adjusteNotes();
-	//		return notes.getNotes();
-	//	}
+	// @Override
+	// public Collection<Note<Feature>> getNotes() {
+	// adjusteNotes();
+	// return notes.getNotes();
+	// }
 	//
-	//	@Override
-	//	public Collection<Note<Feature>> getNotes(String noteTypeName) {
-	//		adjusteNotes();
-	//		return notes.getNotes(noteTypeName);
-	//	}
+	// @Override
+	// public Collection<Note<Feature>> getNotes(String noteTypeName) {
+	// adjusteNotes();
+	// return notes.getNotes(noteTypeName);
+	// }
 	//
-	//	@Override
-	//	public void addChangeListener(ChangeListener<Note<Feature>> cl, ChangeType ct) {
-	//		adjusteNotes();
-	//		notes.addChangeListener(cl, ct);
-	//	}
+	// @Override
+	// public void addChangeListener(ChangeListener<Note<Feature>> cl, ChangeType ct) {
+	// adjusteNotes();
+	// notes.addChangeListener(cl, ct);
+	// }
 	//
-	//	@Override
-	//	public boolean isUnchanging(ChangeType ct) {
-	//		adjusteNotes();
-	//		return notes.isUnchanging(ct);
-	//	}
+	// @Override
+	// public boolean isUnchanging(ChangeType ct) {
+	// adjusteNotes();
+	// return notes.isUnchanging(ct);
+	// }
 	//
-	//	@Override
-	//	public void removeChangeListener(ChangeListener<Note<Feature>> cl, ChangeType ct) {
-	//		adjusteNotes();
-	//		notes.removeChangeListener(cl, ct);
-	//	}
+	// @Override
+	// public void removeChangeListener(ChangeListener<Note<Feature>> cl, ChangeType ct) {
+	// adjusteNotes();
+	// notes.removeChangeListener(cl, ct);
+	// }
 	//
-	//	public Note<Feature> createNote(String value, String noteTypeName) {
-	//		adjusteNotes();
-	//		return new SimpleNote<Feature>(this, value, noteTypeName);
-	//	}
+	// public Note<Feature> createNote(String value, String noteTypeName) {
+	// adjusteNotes();
+	// return new SimpleNote<Feature>(this, value, noteTypeName);
+	// }
 	//
-	//	public String getType() {
-	//		return feature.getType();
-	//	}
+	// public String getType() {
+	// return feature.getType();
+	// }
 	//
-	//	public String getName() {
-	//		return feature.getName();
-	//	}
+	// public String getName() {
+	// return feature.getName();
+	// }
 	//
-	//	public Sequence getSequence() {
-	//		if (sequence == null) {
-	//			sequence = new SequenceBJ(feature.getSequence());
-	//		}
-	//		return sequence;
-	//	}
+	// public Sequence getSequence() {
+	// if (sequence == null) {
+	// sequence = new SequenceBJ(feature.getSequence());
+	// }
+	// return sequence;
+	// }
 	//
-	//	public Location getLocation() {
-	//		if (location == null) {
-	//			return new LocationBJ(feature.getLocation());
-	//		}
-	//		return location;
-	//	}
+	// public Location getLocation() {
+	// if (location == null) {
+	// return new LocationBJ(feature.getLocation());
+	// }
+	// return location;
+	// }
 	//
 	//
 }

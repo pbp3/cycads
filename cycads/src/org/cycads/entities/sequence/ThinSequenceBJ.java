@@ -11,6 +11,7 @@ import java.util.Set;
 import org.biojavax.RankedCrossRef;
 import org.biojavax.RichAnnotation;
 import org.biojavax.SimpleRankedCrossRef;
+import org.biojavax.bio.seq.RichSequence;
 import org.biojavax.bio.seq.ThinRichSequence;
 import org.cycads.entities.annotation.AnnotationMethodBJ;
 import org.cycads.entities.annotation.dBLink.DBLink;
@@ -38,41 +39,57 @@ public class ThinSequenceBJ
 		Sequence<DBLink<ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ>, ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ, LocationBJ, FeatureBJ>
 {
 	int																			id;
-	ThinRichSequence															richSeq	= null;
+	RichSequence																richSeq	= null;
 	NotesHashTable<Note<ThinSequenceBJ>>										notes;
-	Organism																	organism;
+	NCBIOrganismBJ																organism;
 	Hashtable<String, DBLink<ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ>>	dbLinks;
 
-	public ThinSequenceBJ(int id, Organism organism) {
+	public ThinSequenceBJ(int id, NCBIOrganismBJ organism)
+	{
 		this.id = id;
 		this.organism = organism;
 	}
 
-	public int getId() {
+	public ThinSequenceBJ(RichSequence richSeq)
+	{
+		this.richSeq = richSeq;
+		organism = new NCBIOrganismBJ(richSeq.getTaxon());
+		id = 0;
+	}
+
+	public int getId()
+	{
 		return id;
 	}
 
-	public NotesHashTable<Note<ThinSequenceBJ>> getNotesHash() {
-		if (notes == null) {
+	public NotesHashTable<Note<ThinSequenceBJ>> getNotesHash()
+	{
+		if (notes == null)
+		{
 			notes = NotesToAnnotationBJ.createNotesHashTable((RichAnnotation) getRichSeq().getAnnotation(),
 				(ThinSequenceBJ) this);
 		}
 		return notes;
 	}
 
-	public ThinRichSequence getRichSeq() {
-		if (richSeq == null) {
+	public RichSequence getRichSeq()
+	{
+		if (richSeq == null)
+		{
 			richSeq = getRichSeq(getId());
 		}
 		return richSeq;
 	}
 
-	public Hashtable<String, DBLink<ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ>> getDBLinksHash() {
-		if (dbLinks == null) {
+	public Hashtable<String, DBLink<ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ>> getDBLinksHash()
+	{
+		if (dbLinks == null)
+		{
 			dbLinks = new Hashtable<String, DBLink<ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ>>();
 			Set<RankedCrossRef> refs = (Set<RankedCrossRef>) getRichSeq().getRankedCrossRefs();
 			DBLink<ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ> dbLink;
-			for (RankedCrossRef ref : refs) {
+			for (RankedCrossRef ref : refs)
+			{
 				dbLink = new ThinDBLinkBJ<ThinSequenceBJ>(this, new DBRecordBJ(ref.getCrossRef()));
 				dbLinks.put(dbLink.toString(), dbLink);
 			}
@@ -80,77 +97,95 @@ public class ThinSequenceBJ
 		return dbLinks;
 	}
 
-	private static ThinRichSequence getRichSeq(int id) {
+	private static ThinRichSequence getRichSeq(int id)
+	{
 		Query query = BioJavaxSession.createQuery("from ThinSequence where id=:id");
 		query.setInteger("id", id);
 		return (ThinRichSequence) query.uniqueResult();
 	}
 
 	@Override
-	public Note<ThinSequenceBJ> addNote(Note<ThinSequenceBJ> note) {
+	public Note<ThinSequenceBJ> addNote(Note<ThinSequenceBJ> note)
+	{
 		return getNotesHash().addNote(note);
 	}
 
 	@Override
-	public Note<ThinSequenceBJ> getNote(String value, String noteTypeName) {
+	public Note<ThinSequenceBJ> getNote(String value, String noteTypeName)
+	{
 		return getNotesHash().getNote(value, noteTypeName);
 	}
 
 	@Override
-	public Collection<Note<ThinSequenceBJ>> getNotes() {
+	public Collection<Note<ThinSequenceBJ>> getNotes()
+	{
 		return getNotesHash().getNotes();
 	}
 
 	@Override
-	public Collection<Note<ThinSequenceBJ>> getNotes(String noteTypeName) {
+	public Collection<Note<ThinSequenceBJ>> getNotes(String noteTypeName)
+	{
 		return getNotesHash().getNotes(noteTypeName);
 	}
 
 	@Override
-	public void addChangeListener(ChangeListener<Note<ThinSequenceBJ>> cl, ChangeType ct) {
+	public void addChangeListener(ChangeListener<Note<ThinSequenceBJ>> cl, ChangeType ct)
+	{
 		getNotesHash().addChangeListener(cl, ct);
 	}
 
 	@Override
-	public boolean isUnchanging(ChangeType ct) {
+	public boolean isUnchanging(ChangeType ct)
+	{
 		return getNotesHash().isUnchanging(ct);
 	}
 
 	@Override
-	public void removeChangeListener(ChangeListener<Note<ThinSequenceBJ>> cl, ChangeType ct) {
+	public void removeChangeListener(ChangeListener<Note<ThinSequenceBJ>> cl, ChangeType ct)
+	{
 		getNotesHash().removeChangeListener(cl, ct);
 	}
 
-	public Note<ThinSequenceBJ> createNote(String value, String noteTypeName) {
+	public Note<ThinSequenceBJ> createNote(String value, String noteTypeName)
+	{
 		return addNote(new SimpleNote<ThinSequenceBJ>(this, value, noteTypeName));
 	}
 
-	public LocationBJ createLocation(int start, int end, Collection<Intron> introns) {
-		return new LocationBJ(start, end, this, introns);
+	public LocationBJ createLocation(int start, int end, Collection<Intron> introns)
+	{
+		throw new MethodNotImplemented();
+		// return new LocationBJ(start, end, this, introns);
 	}
 
-	public String getDescription() {
+	public String getDescription()
+	{
 		return getRichSeq().getDescription();
 	}
 
-	public String getName() {
+	public String getName()
+	{
 		return getRichSeq().getName();
 	}
 
-	public Organism getOrganism() {
+	public NCBIOrganismBJ getOrganism()
+	{
 		return organism;
 	}
 
-	public double getVersion() {
+	public double getVersion()
+	{
 		return getRichSeq().getVersion();
 	}
 
-	public Collection<FeatureBJ> getFeatures(FeatureFilter featureFilter) {
+	public Collection<FeatureBJ> getFeatures(FeatureFilter<FeatureBJ> featureFilter)
+	{
 		Collection<Integer> results = BioSql.getFeaturesId(getId());
 		Collection<FeatureBJ> ret = new ArrayList<FeatureBJ>();
-		for (Integer featureId : results) {
+		for (Integer featureId : results)
+		{
 			FeatureBJ f = new FeatureBJ(featureId, this);
-			if (featureFilter.accept(f)) {
+			if (featureFilter.accept(f))
+			{
 				ret.add(f);
 			}
 		}
@@ -159,13 +194,16 @@ public class ThinSequenceBJ
 
 	@Override
 	public DBLink<ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ> createDBLink(AnnotationMethodBJ method,
-			DBRecordBJ record) {
+			DBRecordBJ record)
+	{
 		DBLink<ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ> dbLink;
-		if (method == null) {
+		if (method == null)
+		{
 			dbLink = new ThinDBLinkBJ<ThinSequenceBJ>(this, record);
 			addDBLink(dbLink);
 		}
-		else {
+		else
+		{
 			throw new MethodNotImplemented();
 		}
 		return dbLink;
@@ -173,13 +211,16 @@ public class ThinSequenceBJ
 
 	@Override
 	public DBLink<ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ> createDBLink(AnnotationMethodBJ method,
-			String accession, String dbName) {
+			String accession, String dbName)
+	{
 		return createDBLink(method, ExternalDatabaseBJ.getOrCreateExternalDB(dbName).getOrCreateDBRecord(accession));
 	}
 
 	@Override
-	public void addDBLink(DBLink<ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ> link) {
-		if (link.getSource() != this) {
+	public void addDBLink(DBLink<ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ> link)
+	{
+		if (link.getSource() != this)
+		{
 			throw new IllegalArgumentException(Messages.exceptionHandleDBLinkOtherSequence());
 		}
 		getRichSeq().addRankedCrossRef(new SimpleRankedCrossRef(link.getDBRecordTarget().getCrossRef(), 0));
@@ -187,11 +228,14 @@ public class ThinSequenceBJ
 
 	@Override
 	public DBLink<ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ> getDBLink(ThinSequenceBJ source,
-			AnnotationMethodBJ method, DBRecordBJ target) {
-		if (source != this) {
+			AnnotationMethodBJ method, DBRecordBJ target)
+	{
+		if (source != this)
+		{
 			return null;
 		}
-		if (method != null) {
+		if (method != null)
+		{
 			return null;
 		}
 		return getDBLinksHash().get(DBRecordDBRecordLinkBJ.joinTermName(source.toString(), "", target.toString()));
@@ -199,10 +243,12 @@ public class ThinSequenceBJ
 
 	@Override
 	public Collection<DBLink<ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ>> getDBLinks(AnnotationMethodBJ method,
-			DBRecordBJ target) {
+			DBRecordBJ target)
+	{
 		ArrayList<DBLink<ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ>> dbLinks = new ArrayList<DBLink<ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ>>();
 		DBLink<ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ> dbLink = getDBLink(this, method, target);
-		if (dbLink != null) {
+		if (dbLink != null)
+		{
 			dbLinks.add(dbLink);
 		}
 		return dbLinks;
@@ -210,16 +256,20 @@ public class ThinSequenceBJ
 
 	@Override
 	public Collection<DBLink<ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ>> getDBLinks(AnnotationMethodBJ method,
-			String dbName, String accession) {
+			String dbName, String accession)
+	{
 		return getDBLinks(method, DBRecordBJ.getOrCreateDBRecordBJ(dbName, accession));
 	}
 
 	@Override
 	public Collection<DBLink<ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ>> getDBLinks(
-			DBLinkFilter<DBLink<ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ>> filter) {
+			DBLinkFilter<DBLink<ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ>> filter)
+	{
 		ArrayList<DBLink<ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ>> dbLinks = new ArrayList<DBLink<ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ>>();
-		for (DBLink<ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ> dbLink : getDBLinksHash().values()) {
-			if (filter.accept(dbLink)) {
+		for (DBLink<ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ> dbLink : getDBLinksHash().values())
+		{
+			if (filter.accept(dbLink))
+			{
 				dbLinks.add(dbLink);
 			}
 		}
@@ -227,7 +277,8 @@ public class ThinSequenceBJ
 	}
 
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return getRichSeq().getName();
 	}
 
