@@ -27,125 +27,106 @@ public class FeatureBJ implements Feature<LocationBJ, ThinSequenceBJ, Annotation
 	ThinSequenceBJ					sequence;
 	LocationBJ						location;
 
-	public FeatureBJ(RichFeature feature)
-	{
+	public FeatureBJ(RichFeature feature) {
 		this.feature = feature;
 	}
 
-	public FeatureBJ(int featureId, ThinSequenceBJ sequence)
-	{
+	public FeatureBJ(int featureId, ThinSequenceBJ sequence) {
 		this(featureId);
 		this.sequence = sequence;
 	}
 
-	public FeatureBJ(int featureId)
-	{
+	public FeatureBJ(int featureId) {
 		this(getRichFeature(featureId));
 	}
 
-	private void adjusteNotes()
-	{
-		if (notes == null)
-		{
+	private void adjusteNotes() {
+		if (notes == null) {
 			notes = NotesToAnnotationBJ.createNotesHashTable((RichAnnotation) feature.getAnnotation(), this);
 		}
 	}
 
-	public static RichFeature getRichFeature(int id)
-	{
+	public static RichFeature getRichFeature(int id) {
 		Query query = BioJavaxSession.createQuery("from Feature where id=:id");
 		query.setInteger("id", id);
 		return (RichFeature) query.uniqueResult();
 	}
 
-	public RichFeature getRichFeature()
-	{
+	public RichFeature getRichFeature() {
 		return feature;
 	}
 
 	@Override
-	public ThinSequenceBJ getSequence()
-	{
+	public ThinSequenceBJ getSequence() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String getType()
-	{
+	public String getType() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public AnnotationMethodBJ getAnnotationMethod()
-	{
+	public AnnotationMethodBJ getAnnotationMethod() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public LocationBJ getSource()
-	{
+	public LocationBJ getSource() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Note< ? extends NoteSource> createNote(String value, String noteTypeName)
-	{
+	public Note< ? extends NoteSource> createNote(String value, String noteTypeName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Note< ? extends Annotation<LocationBJ, AnnotationMethodBJ>> addNote(
-			Note< ? extends Annotation<LocationBJ, AnnotationMethodBJ>> note)
-	{
+			Note< ? extends Annotation<LocationBJ, AnnotationMethodBJ>> note) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Note< ? extends Annotation<LocationBJ, AnnotationMethodBJ>> getNote(String value, String noteTypeName)
-	{
+	public Note< ? extends Annotation<LocationBJ, AnnotationMethodBJ>> getNote(String value, String noteTypeName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<Note< ? extends Annotation<LocationBJ, AnnotationMethodBJ>>> getNotes()
-	{
+	public Collection<Note< ? extends Annotation<LocationBJ, AnnotationMethodBJ>>> getNotes() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<Note< ? extends Annotation<LocationBJ, AnnotationMethodBJ>>> getNotes(String noteTypeName)
-	{
+	public Collection<Note< ? extends Annotation<LocationBJ, AnnotationMethodBJ>>> getNotes(String noteTypeName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void addChangeListener(ChangeListener<Note< ? extends Annotation<LocationBJ, AnnotationMethodBJ>>> cl,
-			ChangeType ct)
-	{
+			ChangeType ct) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public boolean isUnchanging(ChangeType ct)
-	{
+	public boolean isUnchanging(ChangeType ct) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void removeChangeListener(ChangeListener<Note< ? extends Annotation<LocationBJ, AnnotationMethodBJ>>> cl,
-			ChangeType ct)
-	{
+			ChangeType ct) {
 		// TODO Auto-generated method stub
 
 	}

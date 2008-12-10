@@ -6,6 +6,7 @@ package org.cycads.general.biojava;
 import org.biojavax.RichObjectFactory;
 import org.cycads.general.CacheCleanerListener;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -55,5 +56,9 @@ public class BioJavaxSession
 
 	public static Query createQuery(String query) {
 		return session.createQuery(query);
+	}
+
+	public static SQLQuery createSqlQuery(String query) {
+		return session.createSQLQuery(query);
 	}
 }
