@@ -34,6 +34,10 @@ public interface Location<D extends DBLink<S, R, M>, S extends Location< ? , ? ,
 
 	public int getStart();
 
+	public int getMinPosition();
+
+	public int getMaxPosition();
+
 	public SEQ getSequence();
 
 }

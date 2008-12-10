@@ -25,6 +25,8 @@ public interface Sequence<D extends DBLink<S, R, M>, S extends Sequence< ? , ? ,
 
 	public String getName();
 
+	public int getId();
+
 	public Organism<S> getOrganism();
 
 	public L createLocation(int start, int end, Collection<Intron> introns);

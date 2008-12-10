@@ -4,16 +4,20 @@
 package org.cycads.general.biojava;
 
 import java.util.Collection;
+import java.util.List;
 
 import org.biojavax.CrossRef;
+import org.biojavax.bio.seq.RichSequence;
 import org.biojavax.ontology.ComparableTerm;
+import org.cycads.entities.annotation.AnnotationMethod;
+import org.cycads.entities.sequence.Location;
 import org.hibernate.Query;
+import org.hibernate.SQLQuery;
 
 public class BioSql
 {
 
-	public static Collection<Integer> getFeaturesId(int seqId)
-	{
+	public static Collection<Integer> getFeaturesId(int seqId) {
 		Query query = BioJavaxSession.createQuery("select f.id from Feature as f join f.parent as b where "
 			+ "b.id=:seqId ");
 		query.setInteger("seqId", seqId);
@@ -21,16 +25,14 @@ public class BioSql
 		return results;
 	}
 
-	public static Collection<String> getAccessions(String dbName)
-	{
+	public static Collection<String> getAccessions(String dbName) {
 		Query query = BioJavaxSession.createQuery("select accession from CrossRef where dbname=:dbName ");
 		query.setString("dbName", dbName);
 		Collection<String> results = query.list();
 		return results;
 	}
 
-	public static Collection<ComparableTerm> getTermsWithCrossRef(CrossRef crossRef)
-	{
+	public static Collection<ComparableTerm> getTermsWithCrossRef(CrossRef crossRef) {
 		Query query = BioJavaxSession.createQuery("select distinct t from Term as t where "
 			+ "t.rankedCrossRefs.crossRef=:crossRef ");
 		query.setEntity("crossRef", crossRef);
@@ -38,6 +40,40 @@ public class BioSql
 		return results;
 	}
 
+	public static List<Integer> getFeaturesId(Location location, String type, AnnotationMethod method) {
+		ComparableTerm termType = TermsAndOntologies.getTermFeatureType(type);
+		ComparableTerm termMethod = TermsAndOntologies.getOntologyMethods().getOrCreateTerm(method.getName());
+		SQLQuery query = BioJavaxSession.createSqlQuery("select f.Seqfeature_id from Seqfeature as f, Location as l  where "
+			+ "f.Bioentry_id=:seqId and f.type_term_id=:typeId and f.source_term_id=:methodId"
+			+ "and f.Seqfeature_id=l.Seqfeature_id and l.start_pos = :start");
+		query.setInteger("seqId", location.getSequence().getId());
+		query.setInteger("typeId", getTermId(termType));
+		query.setInteger("methodId", getTermId(termMethod));
+		query.setInteger("start", location.getMinPosition());
+		query.list();
+	}
+
+	public static int getSequenceId(RichSequence richSeq) {
+		Query query = BioJavaxSession.createQuery("select s.id from ThinSequence s where s=:seq ");
+		query.setEntity("seq", richSeq);
+		return (Integer) query.uniqueResult();
+	}
+
+	public static int getTermId(ComparableTerm term) {
+		Query query = BioJavaxSession.createQuery("select t.id from Term t where t=:term ");
+		query.setEntity("term", term);
+		return (Integer) query.uniqueResult();
+	}
+
+	// public static List<RichFeature> getFeatures(ComparableTerm type, Organism organism, int version) {
+	// Query query = session.createQuery("select f from Feature as f join f.parent as b where "
+	// + "b.version=:version and f.typeTerm=:typeTerm and b.taxon=:taxonId ");
+	// query.setInteger("version", version);
+	// query.setParameter("taxonId", organism.getTaxon());
+	// query.setParameter("typeTerm", type);
+	// return query.list();
+	// }
+	//
 	// public static CrossRef getCrossRef(String dbName, String accession) {
 	// Query query = BioJavaxSession.createQuery("from CrossRef where dbname=:dbName and accession=:accession");
 	// query.setString("dbName", dbName);
@@ -106,24 +142,6 @@ public class BioSql
 	// }
 	// }
 	// return null;
-	// }
-	//
-	// public static List<RichFeature> getFeatures(ComparableTerm type, Organism organism, int version) {
-	// Query query = session.createQuery("select f from Feature as f join f.parent as b where "
-	// + "b.version=:version and f.typeTerm=:typeTerm and b.taxon=:taxonId ");
-	// query.setInteger("version", version);
-	// query.setParameter("taxonId", organism.getTaxon());
-	// query.setParameter("typeTerm", type);
-	// return query.list();
-	// }
-	//
-	// public static List<Integer> getFeaturesId(ComparableTerm type, Organism organism, int version) {
-	// Query query = session.createQuery("select f.id from Feature as f join f.parent as b where "
-	// + "b.version=:version and f.typeTerm=:typeTerm and b.taxon=:taxonId order by b.id");
-	// query.setInteger("version", version);
-	// query.setParameter("taxonId", organism.getTaxon());
-	// query.setParameter("typeTerm", type);
-	// return query.list();
 	// }
 	//
 	// public static List<Integer> getCDSMiscRNATRNA(Organism organism, int version) {
