@@ -16,7 +16,7 @@ import org.biojavax.bio.seq.RichSequence;
 import org.cycads.entities.annotation.AnnotationMethodBJ;
 import org.cycads.entities.annotation.dBLink.DBLinkFilter;
 import org.cycads.entities.annotation.dBLink.BJ.DBRecordBJ;
-import org.cycads.entities.annotation.dBLink.BJ.ThinDBLinkBJ;
+import org.cycads.entities.annotation.dBLink.BJ.LocationDBLinkBJ;
 import org.cycads.entities.annotation.feature.CDSBJ;
 import org.cycads.entities.annotation.feature.Feature;
 import org.cycads.entities.annotation.feature.FeatureBJ;
@@ -24,13 +24,14 @@ import org.cycads.entities.annotation.feature.FeatureFilter;
 import org.cycads.entities.annotation.feature.GeneBJ;
 import org.cycads.entities.annotation.feature.RNABJ;
 import org.cycads.exceptions.MethodNotImplemented;
+import org.cycads.general.biojava.BioSql;
 import org.cycads.general.biojava.TermsAndOntologies;
 
 //receive just a RichLocation
 // can add only a feature
 public class LocationBJ
 		implements
-		Location<ThinDBLinkBJ<LocationBJ>, LocationBJ, DBRecordBJ, AnnotationMethodBJ, ThinSequenceBJ, FeatureBJ, CDSBJ, RNABJ, GeneBJ>
+		Location<LocationDBLinkBJ, LocationBJ, DBRecordBJ, AnnotationMethodBJ, ThinSequenceBJ, FeatureBJ, CDSBJ, RNABJ, GeneBJ>
 {
 	Collection<Intron>	introns		= null;
 	int					start		= -1;
@@ -172,6 +173,7 @@ public class LocationBJ
 		return getStart() <= getEnd();
 	}
 
+	//create feaure in the sequence
 	@Override
 	public FeatureBJ createFeature(AnnotationMethodBJ method, String type) {
 		// create a feature template
@@ -183,17 +185,17 @@ public class LocationBJ
 		templ.annotation = new SimpleRichAnnotation();
 		templ.featureRelationshipSet = new TreeSet();
 		templ.rankedCrossRefs = new TreeSet();
-		RichFeature richfeature;
+		RichFeature richfeature;LocationDBLinkBJ
+		if (getRichFeature() != null) {
+			//create new RichLocation
+			templ.location = getRichLocation().translate(0);
+			//				richfeature = (RichFeature) getRichFeature().createFeature(templ);
+		}
+		else {
+			templ.location = getRichLocation();
+		}
 		try {
-			if (getRichFeature() != null) {
-				//create new RichLocation
-				templ.location = getRichLocation().translate(0);
-				richfeature = (RichFeature) getRichFeature().createFeature(templ);
-			}
-			else {
-				templ.location = getRichLocation();
-				richfeature = (RichFeature) getSequence().getRichSeq().createFeature(templ);
-			}
+			richfeature = (RichFeature) getSequence().getRichSeq().createFeature(templ);
 		}
 		catch (BioException e) {
 			e.printStackTrace();
@@ -219,13 +221,12 @@ public class LocationBJ
 
 	@Override
 	public void addFeature(FeatureBJ feature) {
-		// TODO Auto-generated method stub
-
+		//Do nothing. the collection of features of the location are the RichFeatures in the same location
 	}
 
 	@Override
 	public FeatureBJ getFeature(AnnotationMethodBJ method, String type, LocationBJ source) {
-		if (source != this) {
+		if (source != this && source.getRichLocation().equals(this.getRichLocation())) {
 			return null;
 		}
 		Collection<FeatureBJ> features = getFeatures(method, type);
@@ -239,60 +240,76 @@ public class LocationBJ
 
 	@Override
 	public Collection<FeatureBJ> getFeatures(AnnotationMethodBJ method, String type) {
-		// TODO Auto-generated method stub
-		return null;
+		Collection<RichFeature> richFeatures = BioSql.getFeatures(getRichLocation(), type, method);
+		Collection<FeatureBJ> features = new ArrayList<FeatureBJ>();
+		for (RichFeature richFeature : richFeatures) {
+			features.add(new FeatureBJ(richFeature));
+		}
+		return features;
 	}
 
 	@Override
 	public Collection<FeatureBJ> getFeatures(String type) {
-		// TODO Auto-generated method stub
-		return null;
+		Collection<RichFeature> richFeatures = BioSql.getFeatures(getRichLocation(), type);
+		Collection<FeatureBJ> features = new ArrayList<FeatureBJ>();
+		for (RichFeature richFeature : richFeatures) {
+			features.add(new FeatureBJ(richFeature));
+		}
+		return features;
 	}
 
 	@Override
 	public Collection<FeatureBJ> getFeatures(FeatureFilter<FeatureBJ> featureFilter) {
+		Collection<RichFeature> richFeatures = BioSql.getFeatures(getRichLocation());
+		Collection<FeatureBJ> features = new ArrayList<FeatureBJ>();
+		FeatureBJ feature;
+		for (RichFeature richFeature : richFeatures) {
+			feature = new FeatureBJ(richFeature);
+			if (featureFilter.accept(feature)) {
+				features.add(feature);
+			}
+		}
+		return features;
+	}
+
+	@Override
+	public LocationDBLinkBJ createDBLink(AnnotationMethodBJ method, DBRecordBJ target) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ThinDBLinkBJ<LocationBJ> createDBLink(AnnotationMethodBJ method, DBRecordBJ target) {
+	public LocationDBLinkBJ createDBLink(AnnotationMethodBJ method, String accession, String dbName) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public ThinDBLinkBJ<LocationBJ> createDBLink(AnnotationMethodBJ method, String accession, String dbName) {
+	public void addDBLink(LocationDBLinkBJ link) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public LocationDBLinkBJ getDBLink(LocationBJ source, AnnotationMethodBJ method, DBRecordBJ target) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void addDBLink(ThinDBLinkBJ<LocationBJ> link) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public ThinDBLinkBJ<LocationBJ> getDBLink(LocationBJ source, AnnotationMethodBJ method, DBRecordBJ target) {
+	public Collection<LocationDBLinkBJ> getDBLinks(AnnotationMethodBJ method, DBRecordBJ target) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<ThinDBLinkBJ<LocationBJ>> getDBLinks(AnnotationMethodBJ method, DBRecordBJ target) {
+	public Collection<LocationDBLinkBJ> getDBLinks(AnnotationMethodBJ method, String dbName, String accession) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<ThinDBLinkBJ<LocationBJ>> getDBLinks(AnnotationMethodBJ method, String dbName, String accession) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Collection<ThinDBLinkBJ<LocationBJ>> getDBLinks(DBLinkFilter<ThinDBLinkBJ<LocationBJ>> filter) {
+	public Collection<LocationDBLinkBJ> getDBLinks(DBLinkFilter<LocationDBLinkBJ> filter) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -87,8 +87,7 @@ public class FeatureBJ implements Feature<LocationBJ, ThinSequenceBJ, Annotation
 	}
 
 	@Override
-	public Note< ? extends Annotation<LocationBJ, AnnotationMethodBJ>> addNote(
-			Note< ? extends Annotation<LocationBJ, AnnotationMethodBJ>> note) {
+	public Note<FeatureBJ> addNote(Note<FeatureBJ> note) {
 		// TODO Auto-generated method stub
 		return null;
 	}
