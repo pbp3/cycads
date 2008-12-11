@@ -3,14 +3,15 @@
  */
 package org.cycads.general.biojava;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import org.biojavax.CrossRef;
+import org.biojavax.bio.seq.RichFeature;
+import org.biojavax.bio.seq.RichLocation;
 import org.biojavax.bio.seq.RichSequence;
 import org.biojavax.ontology.ComparableTerm;
 import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.sequence.Location;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 
@@ -40,17 +41,63 @@ public class BioSql
 		return results;
 	}
 
-	public static List<Integer> getFeaturesId(Location location, String type, AnnotationMethod method) {
+	public static Collection<RichFeature> getFeatures(RichLocation location, String type, AnnotationMethod method) {
 		ComparableTerm termType = TermsAndOntologies.getTermFeatureType(type);
 		ComparableTerm termMethod = TermsAndOntologies.getOntologyMethods().getOrCreateTerm(method.getName());
 		SQLQuery query = BioJavaxSession.createSqlQuery("select f.Seqfeature_id from Seqfeature as f, Location as l  where "
 			+ "f.Bioentry_id=:seqId and f.type_term_id=:typeId and f.source_term_id=:methodId"
 			+ "and f.Seqfeature_id=l.Seqfeature_id and l.start_pos = :start");
-		query.setInteger("seqId", location.getSequence().getId());
+
+		query.setInteger("seqId", getSequenceId((RichSequence) location.getFeature().getSequence()));
 		query.setInteger("typeId", getTermId(termType));
 		query.setInteger("methodId", getTermId(termMethod));
-		query.setInteger("start", location.getMinPosition());
-		query.list();
+		query.setInteger("start", location.getMinPosition().getStart());
+		Collection<Integer> featuresId = query.list();
+		Collection<RichFeature> features = new ArrayList<RichFeature>();
+		for (Integer featureId : featuresId) {
+			RichFeature feature = getFeature(featureId);
+			if (feature != null && feature.getLocation().equals(location)) {
+				features.add(feature);
+			}
+		}
+		return features;
+	}
+
+	public static Collection<RichFeature> getFeatures(RichLocation location, String type) {
+		ComparableTerm termType = TermsAndOntologies.getTermFeatureType(type);
+		SQLQuery query = BioJavaxSession.createSqlQuery("select f.Seqfeature_id from Seqfeature as f, Location as l  where "
+			+ "f.Bioentry_id=:seqId and f.type_term_id=:typeId "
+			+ "and f.Seqfeature_id=l.Seqfeature_id and l.start_pos = :start");
+
+		query.setInteger("seqId", getSequenceId((RichSequence) location.getFeature().getSequence()));
+		query.setInteger("typeId", getTermId(termType));
+		query.setInteger("start", location.getMinPosition().getStart());
+		Collection<Integer> featuresId = query.list();
+		Collection<RichFeature> features = new ArrayList<RichFeature>();
+		for (Integer featureId : featuresId) {
+			RichFeature feature = getFeature(featureId);
+			if (feature != null && feature.getLocation().equals(location)) {
+				features.add(feature);
+			}
+		}
+		return features;
+	}
+
+	public static Collection<RichFeature> getFeatures(RichLocation location) {
+		SQLQuery query = BioJavaxSession.createSqlQuery("select f.Seqfeature_id from Seqfeature as f, Location as l  where "
+			+ "f.Bioentry_id=:seqId " + "and f.Seqfeature_id=l.Seqfeature_id and l.start_pos = :start");
+
+		query.setInteger("seqId", getSequenceId((RichSequence) location.getFeature().getSequence()));
+		query.setInteger("start", location.getMinPosition().getStart());
+		Collection<Integer> featuresId = query.list();
+		Collection<RichFeature> features = new ArrayList<RichFeature>();
+		for (Integer featureId : featuresId) {
+			RichFeature feature = getFeature(featureId);
+			if (feature != null && feature.getLocation().equals(location)) {
+				features.add(feature);
+			}
+		}
+		return features;
 	}
 
 	public static int getSequenceId(RichSequence richSeq) {
@@ -63,6 +110,12 @@ public class BioSql
 		Query query = BioJavaxSession.createQuery("select t.id from Term t where t=:term ");
 		query.setEntity("term", term);
 		return (Integer) query.uniqueResult();
+	}
+
+	public static RichFeature getFeature(Integer id) {
+		Query query = BioJavaxSession.createQuery("from Feature where id=:id");
+		query.setInteger("id", id);
+		return (RichFeature) query.uniqueResult();
 	}
 
 	// public static List<RichFeature> getFeatures(ComparableTerm type, Organism organism, int version) {
@@ -164,12 +217,6 @@ public class BioSql
 	// query.setParameter("miscRNATerm", TermsAndOntologies.getTermMiscRNA());
 	// query.setParameter("tTRNATerm", TermsAndOntologies.getTermTRNA());
 	// return query.list();
-	// }
-	//
-	// public static RichFeature getFeature(Integer id) {
-	// Query query = session.createQuery("from Feature where id=:id");
-	// query.setInteger("id", id);
-	// return (RichFeature) query.uniqueResult();
 	// }
 	//
 	// public static Gene getGene(String geneName, Organism organism) {
