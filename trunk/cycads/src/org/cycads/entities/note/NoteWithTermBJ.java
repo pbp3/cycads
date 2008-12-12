@@ -3,11 +3,7 @@
  */
 package org.cycads.entities.note;
 
-import java.util.Set;
-
 import org.biojava.ontology.Term;
-import org.biojavax.RichAnnotation;
-import org.biojavax.ontology.ComparableTerm;
 import org.cycads.general.biojava.TermsAndOntologies;
 
 public class NoteWithTermBJ<H extends NoteSource> implements Note<H>
@@ -53,46 +49,6 @@ public class NoteWithTermBJ<H extends NoteSource> implements Note<H>
 
 	public H getHolder() {
 		return holder;
-	}
-
-	public static org.biojavax.Note addNoteForAnnotation(Note note, RichAnnotation annot) {
-		return addNoteForAnnotation(note.getValue(), note.getType(), annot);
-	}
-
-	public static org.biojavax.Note addNoteForAnnotation(String value, String type, RichAnnotation annot) {
-		ComparableTerm noteType = TermsAndOntologies.getOntologyNotes().getOrCreateTerm(type);
-		Set<org.biojavax.Note> notes = annot.getNoteSet();
-		int rank = 0;
-		for (org.biojavax.Note note : notes) {
-			if (note.getTerm().equals(noteType)) {
-				if (note.getValue().equalsIgnoreCase(value)) {
-					return null;
-				}
-				rank++;
-			}
-		}
-		org.biojavax.Note note = new org.biojavax.SimpleNote(noteType, value, rank);
-		annot.addNote(note);
-		return note;
-	}
-
-	public static org.biojavax.Note removeNoteForAnnotation(Note note, RichAnnotation annot) {
-		return removeNoteForAnnotation(note.getValue(), note.getType(), annot);
-	}
-
-	public static org.biojavax.Note removeNoteForAnnotation(String value, String type, RichAnnotation annot) {
-		ComparableTerm noteType = TermsAndOntologies.getOntologyNotes().getOrCreateTerm(type);
-		Set<org.biojavax.Note> notes = annot.getNoteSet();
-		org.biojavax.Note noteToRemove = null;
-		for (org.biojavax.Note note : notes) {
-			if ((note.getTerm().equals(noteType)) && (note.getValue().equalsIgnoreCase(value))) {
-				noteToRemove = note;
-			}
-		}
-		if (noteToRemove != null) {
-			annot.removeNote(noteToRemove);
-		}
-		return noteToRemove;
 	}
 
 }

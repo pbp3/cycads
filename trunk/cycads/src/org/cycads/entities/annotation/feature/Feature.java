@@ -9,8 +9,8 @@ import org.cycads.entities.sequence.Location;
 import org.cycads.entities.sequence.Sequence;
 import org.cycads.general.ParametersDefault;
 
-public interface Feature<L extends Location< ? , ? , ? , ? , ? , ? , ? , ? , ? >, SEQ extends Sequence< ? , ? , ? , ? , ? , ? >, M extends AnnotationMethod>
-		extends Annotation<L, M>
+public interface Feature<FEATURE_TYPE extends Feature< ? , ? , ? , ? >, L extends Location< ? , ? , ? , ? , ? , ? , ? , ? , ? >, SEQ extends Sequence< ? , ? , ? , ? , ? , ? >, M extends AnnotationMethod>
+		extends Annotation<FEATURE_TYPE, L, M>
 {
 
 	public static String	CDS_TYPE	= ParametersDefault.featureTypeCDS();

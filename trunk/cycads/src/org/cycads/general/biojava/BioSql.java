@@ -55,7 +55,7 @@ public class BioSql
 		Collection<Integer> featuresId = query.list();
 		Collection<RichFeature> features = new ArrayList<RichFeature>();
 		for (Integer featureId : featuresId) {
-			RichFeature feature = getFeature(featureId);
+			RichFeature feature = getRichFeature(featureId);
 			if (feature != null && feature.getLocation().equals(location)) {
 				features.add(feature);
 			}
@@ -75,7 +75,7 @@ public class BioSql
 		Collection<Integer> featuresId = query.list();
 		Collection<RichFeature> features = new ArrayList<RichFeature>();
 		for (Integer featureId : featuresId) {
-			RichFeature feature = getFeature(featureId);
+			RichFeature feature = getRichFeature(featureId);
 			if (feature != null && feature.getLocation().equals(location)) {
 				features.add(feature);
 			}
@@ -92,7 +92,7 @@ public class BioSql
 		Collection<Integer> featuresId = query.list();
 		Collection<RichFeature> features = new ArrayList<RichFeature>();
 		for (Integer featureId : featuresId) {
-			RichFeature feature = getFeature(featureId);
+			RichFeature feature = getRichFeature(featureId);
 			if (feature != null && feature.getLocation().equals(location)) {
 				features.add(feature);
 			}
@@ -112,7 +112,7 @@ public class BioSql
 		return (Integer) query.uniqueResult();
 	}
 
-	public static RichFeature getFeature(Integer id) {
+	public static RichFeature getRichFeature(int id) {
 		Query query = BioJavaxSession.createQuery("from Feature where id=:id");
 		query.setInteger("id", id);
 		return (RichFeature) query.uniqueResult();

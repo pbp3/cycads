@@ -6,18 +6,17 @@ package org.cycads.entities.annotation.dBLink.BJ;
 import java.util.Collection;
 
 import org.biojavax.CrossRef;
-import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethodBJ;
 import org.cycads.entities.annotation.dBLink.DBLink;
 import org.cycads.entities.annotation.dBLink.DBLinkSource;
 import org.cycads.entities.change.ChangeListener;
 import org.cycads.entities.change.ChangeType;
 import org.cycads.entities.note.Note;
-import org.cycads.entities.note.NoteSource;
 import org.cycads.exceptions.InvalidMethod;
 
-// Without AnnotationMethod and notes
-public class ThinDBLinkBJ<S extends DBLinkSource< ? , ? , ? >> implements DBLink<S, DBRecordBJ, AnnotationMethodBJ>
+// Without AnnotationMethod and notes. It has just source and target.
+public class ThinDBLinkBJ<S extends DBLinkSource< ? , ? , ? >>
+		implements DBLink<ThinDBLinkBJ<S>, S, DBRecordBJ, AnnotationMethodBJ>
 {
 	S			source;
 	DBRecordBJ	target;
@@ -48,33 +47,32 @@ public class ThinDBLinkBJ<S extends DBLinkSource< ? , ? , ? >> implements DBLink
 	}
 
 	@Override
-	public Note< ? extends NoteSource> createNote(String value, String noteTypeName) {
+	public Note<ThinDBLinkBJ<S>> createNote(String value, String noteTypeName) {
 		return null;
 	}
 
 	@Override
-	public Note< ? extends Annotation<S, AnnotationMethodBJ>> addNote(
-			Note< ? extends Annotation<S, AnnotationMethodBJ>> note) {
+	public Note<ThinDBLinkBJ<S>> addNote(Note<ThinDBLinkBJ<S>> note) {
 		throw new InvalidMethod();
 	}
 
 	@Override
-	public Note< ? extends Annotation<S, AnnotationMethodBJ>> getNote(String value, String noteTypeName) {
-		throw new InvalidMethod();
+	public Note<ThinDBLinkBJ<S>> getNote(String value, String noteTypeName) {
+		throw null;
 	}
 
 	@Override
-	public Collection<Note< ? extends Annotation<S, AnnotationMethodBJ>>> getNotes() {
+	public Collection<Note<ThinDBLinkBJ<S>>> getNotes() {
 		return null;
 	}
 
 	@Override
-	public Collection<Note< ? extends Annotation<S, AnnotationMethodBJ>>> getNotes(String noteTypeName) {
+	public Collection<Note<ThinDBLinkBJ<S>>> getNotes(String noteTypeName) {
 		return null;
 	}
 
 	@Override
-	public void addChangeListener(ChangeListener<Note< ? extends Annotation<S, AnnotationMethodBJ>>> cl, ChangeType ct) {
+	public void addChangeListener(ChangeListener<Note<ThinDBLinkBJ<S>>> cl, ChangeType ct) {
 		throw new InvalidMethod();
 	}
 
@@ -84,8 +82,7 @@ public class ThinDBLinkBJ<S extends DBLinkSource< ? , ? , ? >> implements DBLink
 	}
 
 	@Override
-	public void removeChangeListener(ChangeListener<Note< ? extends Annotation<S, AnnotationMethodBJ>>> cl,
-			ChangeType ct) {
+	public void removeChangeListener(ChangeListener<Note<ThinDBLinkBJ<S>>> cl, ChangeType ct) {
 		throw new InvalidMethod();
 	}
 

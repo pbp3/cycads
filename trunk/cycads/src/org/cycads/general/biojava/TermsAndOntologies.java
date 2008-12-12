@@ -127,10 +127,6 @@ public class TermsAndOntologies
 		return getDefaultOntology().getOrCreateTerm(getString("term.qualifier.ProteinID"));
 	}
 
-	public static ComparableOntology getOntologyMethodType(String methodTypeName) {
-		return getOntology(methodTypeName);
-	}
-
 	public static ComparableTerm getTermNextBiocycId() {
 		return getDefaultOntology().getOrCreateTerm(getString("term.nextBioCycID"));
 	}
@@ -147,8 +143,16 @@ public class TermsAndOntologies
 		return getOntology(getString("ontology.DBRecordDBRecordLink"));
 	}
 
+	public static ComparableOntology getOntologyFeatureType() {
+		return getOntology(getString("ontology.Annotation.FeatureType"));
+	}
+
 	public static ComparableTerm getTermFeatureType(String type) {
-		return getOntology(getString("ontology.Annotation.FeatureType")).getOrCreateTerm(type);
+		return getOntologyFeatureType().getOrCreateTerm(type);
+	}
+
+	public static ComparableTerm getTermDBLinkType() {
+		return getTermFeatureType(getString("term.Annotation.DBLinkType"));
 	}
 
 	// public static SimpleComparableOntology getOntologyFeatures() {

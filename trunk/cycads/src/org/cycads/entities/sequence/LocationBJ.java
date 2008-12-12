@@ -185,7 +185,7 @@ public class LocationBJ
 		templ.annotation = new SimpleRichAnnotation();
 		templ.featureRelationshipSet = new TreeSet();
 		templ.rankedCrossRefs = new TreeSet();
-		RichFeature richfeature;LocationDBLinkBJ
+		RichFeature richfeature;
 		if (getRichFeature() != null) {
 			//create new RichLocation
 			templ.location = getRichLocation().translate(0);
@@ -225,17 +225,11 @@ public class LocationBJ
 	}
 
 	@Override
-	public FeatureBJ getFeature(AnnotationMethodBJ method, String type, LocationBJ source) {
-		if (source != this && source.getRichLocation().equals(this.getRichLocation())) {
+	public Collection<FeatureBJ> getFeatures(LocationBJ source, AnnotationMethodBJ method, String type) {
+		if (source != this && !source.getRichLocation().equals(this.getRichLocation())) {
 			return null;
 		}
-		Collection<FeatureBJ> features = getFeatures(method, type);
-		if (features.isEmpty()) {
-			return null;
-		}
-		else {
-			return features.iterator().next();
-		}
+		return getFeatures(method, type);
 	}
 
 	@Override
