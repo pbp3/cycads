@@ -10,38 +10,34 @@ import org.cycads.entities.annotation.AnnotationMethodBJ;
 import org.cycads.entities.sequence.LocationBJ;
 import org.cycads.entities.sequence.ThinSequenceBJ;
 
-public class RNABJ extends FeatureBJ implements RNA<LocationBJ, ThinSequenceBJ, AnnotationMethodBJ, GeneBJ, CDSBJ>
+public class RNABJ extends FeatureBJ<RNABJ>
+		implements RNA<RNABJ, LocationBJ, ThinSequenceBJ, AnnotationMethodBJ, GeneBJ, CDSBJ>
 {
 
-	public RNABJ(RichFeature feature)
-	{
+	public RNABJ(RichFeature feature) {
 		super(feature);
 	}
 
 	@Override
-	public Collection<CDSBJ> getCDSProducts()
-	{
+	public Collection<CDSBJ> getCDSProducts() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public GeneBJ getGeneParent()
-	{
+	public GeneBJ getGeneParent() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<GeneBJ> getGenesContains()
-	{
+	public Collection<GeneBJ> getGenesContains() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void setGeneParent(GeneBJ gene)
-	{
+	public void setGeneParent(GeneBJ gene) {
 		// TODO Auto-generated method stub
 
 	}

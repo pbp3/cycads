@@ -10,7 +10,8 @@ import org.cycads.entities.annotation.AnnotationMethodBJ;
 import org.cycads.entities.sequence.LocationBJ;
 import org.cycads.entities.sequence.ThinSequenceBJ;
 
-public class GeneBJ extends FeatureBJ implements Gene<LocationBJ, ThinSequenceBJ, AnnotationMethodBJ, RNABJ>
+public class GeneBJ extends FeatureBJ<GeneBJ>
+		implements Gene<GeneBJ, LocationBJ, ThinSequenceBJ, AnnotationMethodBJ, RNABJ>
 {
 
 	public GeneBJ(RichFeature feature) {

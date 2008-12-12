@@ -8,7 +8,7 @@ import java.util.Collection;
 import org.cycads.entities.annotation.AnnotationMethod;
 
 // public interface DBLinkContainer<S extends DBLinkSource< ? , ? >, R extends DBRecord< ? >>
-public interface DBLinkContainer<D extends DBLink<S, R, M>, S extends DBLinkSource< ? , ? , ? >, R extends DBRecord< ? , ? , ? , ? >, M extends AnnotationMethod>
+public interface DBLinkContainer<D extends DBLink< ? , S, R, M>, S extends DBLinkSource< ? , ? , ? >, R extends DBRecord< ? , ? , ? , ? >, M extends AnnotationMethod>
 {
 	public void addDBLink(D dBLink);
 

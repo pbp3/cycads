@@ -9,8 +9,8 @@ import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.sequence.Location;
 import org.cycads.entities.sequence.Sequence;
 
-public interface RNA<L extends Location< ? , ? , ? , ? , ? , ? , ? , ? , ? >, SEQ extends Sequence< ? , ? , ? , ? , ? , ? >, M extends AnnotationMethod, G extends Gene< ? , ? , ? , ? >, C extends CDS< ? , ? , ? , ? >>
-		extends Feature<L, SEQ, M>
+public interface RNA<RNA_TYPE extends RNA< ? , ? , ? , ? , ? , ? >, L extends Location< ? , ? , ? , ? , ? , ? , ? , ? , ? >, SEQ extends Sequence< ? , ? , ? , ? , ? , ? >, M extends AnnotationMethod, G extends Gene< ? , ? , ? , ? , ? >, C extends CDS< ? , ? , ? , ? , ? >>
+		extends Feature<RNA_TYPE, L, SEQ, M>
 {
 	public Collection<G> getGenesContains();
 

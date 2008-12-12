@@ -16,7 +16,7 @@ import org.cycads.entities.note.Note;
 import org.cycads.entities.note.NoteSource;
 import org.cycads.entities.note.NotesContainer;
 
-public interface Sequence<D extends DBLink<S, R, M>, S extends Sequence< ? , ? , ? , ? , ? , ? >, R extends DBRecord< ? , ? , ? , ? >, M extends AnnotationMethod, L extends Location< ? , ? , ? , ? , ? , ? , ? , ? , ? >, F extends Feature< ? , ? , ? >>
+public interface Sequence<D extends DBLink<D, S, R, M>, S extends Sequence< ? , ? , ? , ? , ? , ? >, R extends DBRecord< ? , ? , ? , ? >, M extends AnnotationMethod, L extends Location< ? , ? , ? , ? , ? , ? , ? , ? , ? >, F extends Feature< ? , ? , ? , ? >>
 		extends NoteSource, NotesContainer<Note<S>>, DBLinkSource<D, R, M>, DBLinkContainer<D, S, R, M>
 {
 	public String getDescription();

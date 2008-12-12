@@ -5,7 +5,7 @@ package org.cycads.entities.annotation.feature;
 
 import org.cycads.entities.annotation.AnnotationMethod;
 
-public interface FeatureSource<F extends Feature< ? , ? , ? >, C extends CDS< ? , ? , ? , ? >, R extends RNA< ? , ? , ? , ? , ? >, G extends Gene< ? , ? , ? , ? >, M extends AnnotationMethod>
+public interface FeatureSource<F extends Feature< ? , ? , ? , ? >, C extends CDS< ? , ? , ? , ? , ? >, R extends RNA< ? , ? , ? , ? , ? , ? >, G extends Gene< ? , ? , ? , ? , ? >, M extends AnnotationMethod>
 {
 	public F createFeature(M method, String type);
 

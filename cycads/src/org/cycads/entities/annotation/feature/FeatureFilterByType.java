@@ -5,7 +5,7 @@ package org.cycads.entities.annotation.feature;
 
 import java.util.regex.Pattern;
 
-public class FeatureFilterByType implements FeatureFilter<Feature< ? , ? , ? >>
+public class FeatureFilterByType implements FeatureFilter<Feature< ? , ? , ? , ? >>
 {
 	Pattern	pattern;
 
@@ -17,7 +17,7 @@ public class FeatureFilterByType implements FeatureFilter<Feature< ? , ? , ? >>
 		return pattern.matcher(featureType).matches();
 	}
 
-	public boolean accept(Feature< ? , ? , ? > feature) {
+	public boolean accept(Feature< ? , ? , ? , ? > feature) {
 		return acceptType(feature.getType());
 	}
 

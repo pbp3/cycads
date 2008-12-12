@@ -3,89 +3,37 @@
  */
 package org.cycads.entities.annotation.dBLink.BJ;
 
-import java.util.Collection;
-
+import org.biojavax.bio.seq.RichLocation;
 import org.cycads.entities.annotation.AnnotationMethodBJ;
 import org.cycads.entities.annotation.dBLink.DBLink;
-import org.cycads.entities.change.ChangeListener;
-import org.cycads.entities.change.ChangeType;
-import org.cycads.entities.note.Note;
-import org.cycads.entities.note.SimpleNote;
+import org.cycads.entities.annotation.feature.FeatureBJ;
 import org.cycads.entities.sequence.LocationBJ;
+import org.cycads.general.biojava.TermsAndOntologies;
 
-public class LocationDBLinkBJ implements DBLink<LocationBJ, DBRecordBJ, AnnotationMethodBJ>
+public class LocationDBLinkBJ extends FeatureBJ<LocationDBLinkBJ>
+		implements DBLink<LocationDBLinkBJ, LocationBJ, DBRecordBJ, AnnotationMethodBJ>
 {
+	DBRecordBJ	target;
 
-	LocationBJ			source;
-	DBRecordBJ			target;
-	AnnotationMethodBJ	method;
+	public LocationDBLinkBJ(LocationBJ source) {
+		super(source);
+		//verify consistency of parameter
+		if (!getTypeTerm().equals(TermsAndOntologies.getTermDBLinkType())
+			|| getSource().getRichLocation().getCrossRef() == null) {
+			throw new IllegalArgumentException();
+		}
+	}
 
-	protected LocationDBLinkBJ(LocationBJ source, DBRecordBJ target, AnnotationMethodBJ method) {
-		this.source = source;
-		this.target = target;
-		this.method = method;
+	public LocationDBLinkBJ(RichLocation location) {
+		this(new LocationBJ(location));
 	}
 
 	@Override
 	public DBRecordBJ getDBRecordTarget() {
+		if (target == null) {
+			target = new DBRecordBJ(getSource().getRichLocation().getCrossRef());
+		}
 		return target;
-	}
-
-	@Override
-	public AnnotationMethodBJ getAnnotationMethod() {
-		return method;
-	}
-
-	@Override
-	public LocationBJ getSource() {
-		return source;
-	}
-
-	@Override
-	public Note<LocationDBLinkBJ> createNote(String value, String noteTypeName) {
-		return addNote(new SimpleNote<LocationDBLinkBJ>(this, value, noteTypeName));
-	}
-
-	@Override
-	public Note<LocationDBLinkBJ> addNote(Note<LocationDBLinkBJ> note) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Note<LocationDBLinkBJ> getNote(String value, String noteTypeName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Collection<Note<LocationDBLinkBJ>> getNotes() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Collection<Note<LocationDBLinkBJ>> getNotes(String noteTypeName) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void addChangeListener(ChangeListener<Note<LocationDBLinkBJ>> cl, ChangeType ct) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public boolean isUnchanging(ChangeType ct) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void removeChangeListener(ChangeListener<Note<LocationDBLinkBJ>> cl, ChangeType ct) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

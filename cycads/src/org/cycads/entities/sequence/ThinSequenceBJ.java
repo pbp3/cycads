@@ -126,6 +126,7 @@ public class ThinSequenceBJ
 		getNotesHash().removeChangeListener(cl, ct);
 	}
 
+	@Override
 	public Note<ThinSequenceBJ> createNote(String value, String noteTypeName) {
 		return addNote(new SimpleNote<ThinSequenceBJ>(this, value, noteTypeName));
 	}
@@ -155,7 +156,7 @@ public class ThinSequenceBJ
 		Collection<Integer> results = BioSql.getFeaturesId(getId());
 		Collection<FeatureBJ> ret = new ArrayList<FeatureBJ>();
 		for (Integer featureId : results) {
-			FeatureBJ f = new FeatureBJ(featureId, this);
+			FeatureBJ f = new FeatureBJ(featureId);
 			if (featureFilter.accept(f)) {
 				ret.add(f);
 			}
