@@ -1,8 +1,9 @@
 /*
  * Created on 31/10/2008
  */
-package org.cycads.entities.annotation.feature;
+package org.cycads.entities.annotation;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.biojavax.RichAnnotation;
@@ -10,7 +11,7 @@ import org.biojavax.bio.seq.RichFeature;
 import org.biojavax.bio.seq.RichLocation;
 import org.biojavax.bio.seq.RichSequence;
 import org.biojavax.ontology.ComparableTerm;
-import org.cycads.entities.annotation.AnnotationMethodBJ;
+import org.cycads.entities.annotation.feature.Feature;
 import org.cycads.entities.change.ChangeListener;
 import org.cycads.entities.change.ChangeType;
 import org.cycads.entities.note.Note;
@@ -23,25 +24,25 @@ import org.cycads.general.biojava.BioSql;
 import org.cycads.general.biojava.TermsAndOntologies;
 
 //F must be the type of this object
-public class FeatureBJ<F extends FeatureBJ< ? >> implements Feature<F, LocationBJ, ThinSequenceBJ, AnnotationMethodBJ>
+public class AnnotationRichFeatureBJ implements Feature<AnnotationRichFeatureBJ, LocationBJ, ThinSequenceBJ, AnnotationMethodBJ>
 {
-	LocationBJ				location;
-	NotesHashTable<Note<F>>	notes;
-	ThinSequenceBJ			sequence;
+	LocationBJ						location;
+	NotesHashTable<Note<AnnotationRichFeatureBJ>>	notes;
+	ThinSequenceBJ					sequence;
 
-	public FeatureBJ(RichFeature feature) {
+	public AnnotationRichFeatureBJ(RichFeature feature) {
 		this(new LocationBJ((RichLocation) feature.getLocation()));
 	}
 
-	public FeatureBJ(int featureId) {
+	public AnnotationRichFeatureBJ(int featureId) {
 		this(BioSql.getRichFeature(featureId));
 	}
 
-	public FeatureBJ(RichLocation location) {
+	public AnnotationRichFeatureBJ(RichLocation location) {
 		this(new LocationBJ(location));
 	}
 
-	public FeatureBJ(LocationBJ location) {
+	public AnnotationRichFeatureBJ(LocationBJ location) {
 		//verify consistency of parameters
 		if (!location.getRichFeature().getTypeTerm().getOntology().equals(TermsAndOntologies.getOntologyFeatureType())
 			|| !location.getRichFeature().getSourceTerm().getOntology().equals(TermsAndOntologies.getOntologyMethods())) {
@@ -58,10 +59,9 @@ public class FeatureBJ<F extends FeatureBJ< ? >> implements Feature<F, LocationB
 		return getRichLocation().getFeature();
 	}
 
-	public NotesHashTable<Note<F>> getNotesHash() {
+	public NotesHashTable<Note<AnnotationRichFeatureBJ>> getNotesHash() {
 		if (notes == null) {
-			notes = NotesToAnnotationBJ.createNotesHashTable((RichAnnotation) getRichFeature().getAnnotation(),
-				(F) this);
+			notes = NotesToAnnotationBJ.createNotesHashTable((RichAnnotation) getRichFeature().getAnnotation(), this);
 		}
 		return notes;
 	}
@@ -94,32 +94,32 @@ public class FeatureBJ<F extends FeatureBJ< ? >> implements Feature<F, LocationB
 	}
 
 	@Override
-	public Note<F> createNote(String value, String noteTypeName) {
-		return addNote(new SimpleNote<F>((F) this, value, noteTypeName));
+	public Note<AnnotationRichFeatureBJ> createNote(String value, String noteTypeName) {
+		return addNote(new SimpleNote<AnnotationRichFeatureBJ>(this, value, noteTypeName));
 	}
 
 	@Override
-	public Note<F> addNote(Note<F> note) {
+	public Note<AnnotationRichFeatureBJ> addNote(Note<AnnotationRichFeatureBJ> note) {
 		return getNotesHash().addNote(note);
 	}
 
 	@Override
-	public Note<F> getNote(String value, String noteTypeName) {
+	public Note<AnnotationRichFeatureBJ> getNote(String value, String noteTypeName) {
 		return getNotesHash().getNote(value, noteTypeName);
 	}
 
 	@Override
-	public Collection<Note<F>> getNotes() {
+	public Collection<Note<AnnotationRichFeatureBJ>> getNotes() {
 		return getNotesHash().getNotes();
 	}
 
 	@Override
-	public Collection<Note<F>> getNotes(String noteTypeName) {
+	public Collection<Note<AnnotationRichFeatureBJ>> getNotes(String noteTypeName) {
 		return getNotesHash().getNotes(noteTypeName);
 	}
 
 	@Override
-	public void addChangeListener(ChangeListener<Note<F>> cl, ChangeType ct) {
+	public void addChangeListener(ChangeListener<Note<AnnotationRichFeatureBJ>> cl, ChangeType ct) {
 		getNotesHash().addChangeListener(cl, ct);
 	}
 
@@ -129,30 +129,30 @@ public class FeatureBJ<F extends FeatureBJ< ? >> implements Feature<F, LocationB
 	}
 
 	@Override
-	public void removeChangeListener(ChangeListener<Note<F>> cl, ChangeType ct) {
+	public void removeChangeListener(ChangeListener<Note<AnnotationRichFeatureBJ>> cl, ChangeType ct) {
 		getNotesHash().removeChangeListener(cl, ct);
 	}
 
-	//	@Override
-	//	public void addFeature(F feature) {
-	//		// TODO Auto-generated method stub
-	//
-	//	}
-	//
-	//	@Override
-	//	public Collection<F> getFeatures() {
-	//		// TODO Auto-generated method stub
-	//		return null;
-	//	}
-	//
-	//	@Override
-	//	public Collection<F> getFeaturesContainers() {
-	//		ArrayList<F> features = new ArrayList<F>();
-	//		Collection<RichFeature> RichFeatures = BioSql.getFeatureContains(getRichFeature());
-	//		for (RichFeature feature : RichFeatures) {
-	//			features.add(new FeatureBJ(feature));
-	//		}
-	//		return features;
-	//	}
-	//
+	@Override
+	public Collection<AnnotationRichFeatureBJ> getFeaturesContainers() {
+		ArrayList<AnnotationRichFeatureBJ> features = new ArrayList<AnnotationRichFeatureBJ>();
+		Collection<RichFeature> RichFeatures = BioSql.getFeatureContainers(getRichFeature());
+		for (RichFeature feature : RichFeatures) {
+			features.add(new AnnotationRichFeatureBJ(feature));
+		}
+		return features;
+	}
+
+	@Override
+	public void addContainFeature(AnnotationRichFeatureBJ feature) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Collection<AnnotationRichFeatureBJ> getFeaturesContains() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

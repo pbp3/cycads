@@ -7,7 +7,7 @@ import java.util.Collection;
 
 import org.cycads.entities.annotation.AnnotationMethod;
 
-public interface FeatureCollection<F extends Feature< ? , ? , ? , ? >, S extends FeatureSource< ? , ? , ? , ? , ? >, M extends AnnotationMethod>
+public interface FeatureCollection<F extends Feature< ? , ? , ? , ? >, S extends FeatureSource< ? , ? >, M extends AnnotationMethod>
 {
 	public void addFeature(F feature);
 
