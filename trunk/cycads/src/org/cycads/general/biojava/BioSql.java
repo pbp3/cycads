@@ -5,11 +5,14 @@ package org.cycads.general.biojava;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.biojavax.CrossRef;
 import org.biojavax.bio.seq.RichFeature;
+import org.biojavax.bio.seq.RichFeatureRelationship;
 import org.biojavax.bio.seq.RichLocation;
 import org.biojavax.bio.seq.RichSequence;
+import org.biojavax.bio.seq.SimpleRichFeatureRelationship;
 import org.biojavax.ontology.ComparableTerm;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.hibernate.Query;
@@ -43,6 +46,11 @@ public class BioSql
 
 	public static Collection<RichFeature> getFeatures(RichLocation location, String type, AnnotationMethod method) {
 		ComparableTerm termType = TermsAndOntologies.getTermFeatureType(type);
+		return getFeatures(location, termType, method);
+	}
+
+	public static Collection<RichFeature> getFeatures(RichLocation location, ComparableTerm termType,
+			AnnotationMethod method) {
 		ComparableTerm termMethod = TermsAndOntologies.getOntologyMethods().getOrCreateTerm(method.getName());
 		SQLQuery query = BioJavaxSession.createSqlQuery("select f.Seqfeature_id from Seqfeature as f, Location as l  where "
 			+ "f.Bioentry_id=:seqId and f.type_term_id=:typeId and f.source_term_id=:methodId"
@@ -63,8 +71,7 @@ public class BioSql
 		return features;
 	}
 
-	public static Collection<RichFeature> getFeatures(RichLocation location, String type) {
-		ComparableTerm termType = TermsAndOntologies.getTermFeatureType(type);
+	public static Collection<RichFeature> getFeatures(RichLocation location, ComparableTerm termType) {
 		SQLQuery query = BioJavaxSession.createSqlQuery("select f.Seqfeature_id from Seqfeature as f, Location as l  where "
 			+ "f.Bioentry_id=:seqId and f.type_term_id=:typeId "
 			+ "and f.Seqfeature_id=l.Seqfeature_id and l.start_pos = :start");
@@ -81,6 +88,11 @@ public class BioSql
 			}
 		}
 		return features;
+	}
+
+	public static Collection<RichFeature> getFeatures(RichLocation location, String type) {
+		ComparableTerm termType = TermsAndOntologies.getTermFeatureType(type);
+		return getFeatures(location, termType);
 	}
 
 	public static Collection<RichFeature> getFeatures(RichLocation location) {
@@ -116,6 +128,20 @@ public class BioSql
 		Query query = BioJavaxSession.createQuery("from Feature where id=:id");
 		query.setInteger("id", id);
 		return (RichFeature) query.uniqueResult();
+	}
+
+	public static Collection<RichFeature> getFeatureContains(RichFeature feature) {
+		Query query = BioJavaxSession.createQuery("from FeatureRelationship as f "
+			+ "where f.term=:containsTerm and f.subject=:feature");
+		query.setParameter("containsTerm", SimpleRichFeatureRelationship.getContainsTerm());
+		query.setParameter("feature", feature);
+		// RichFeatureRelationship featureRelationship = (RichFeatureRelationship) query.uniqueResult();
+		List<RichFeatureRelationship> featureRelations = query.list();
+		Collection<RichFeature> features = new ArrayList<RichFeature>();
+		for (RichFeatureRelationship featureRelation : featureRelations) {
+			features.add(featureRelation.getObject());
+		}
+		return features;
 	}
 
 	// public static List<RichFeature> getFeatures(ComparableTerm type, Organism organism, int version) {
@@ -247,24 +273,6 @@ public class BioSql
 	// SimpleRichFeature feature = (SimpleRichFeature) features.get(0);
 	// feature.toString();
 	// return new CDS(feature);
-	// }
-	//
-	// public static RichFeature getParent(RichFeature feature) {
-	// Query query = session.createQuery("from FeatureRelationship as f "
-	// + "where f.term=:containsTerm and f.subject=:feature");
-	// query.setParameter("containsTerm", SimpleRichFeatureRelationship.getContainsTerm());
-	// query.setParameter("feature", feature);
-	// // RichFeatureRelationship featureRelationship = (RichFeatureRelationship) query.uniqueResult();
-	//
-	// List features = query.list();
-	// if (features.size() < 1) {
-	// return null;
-	// }
-	// RichFeatureRelationship featureRelationship = (RichFeatureRelationship) features.get(0);
-	// if (featureRelationship != null) {
-	// return featureRelationship.getObject();
-	// }
-	// return null;
 	// }
 	//
 	// public static void LoadScaffolds(String fileName, Progress progress, int stepToSave)

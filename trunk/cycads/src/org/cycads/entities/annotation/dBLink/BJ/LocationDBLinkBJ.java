@@ -3,6 +3,9 @@
  */
 package org.cycads.entities.annotation.dBLink.BJ;
 
+import java.util.Collection;
+
+import org.biojavax.RankedCrossRef;
 import org.biojavax.bio.seq.RichLocation;
 import org.cycads.entities.annotation.AnnotationMethodBJ;
 import org.cycads.entities.annotation.dBLink.DBLink;
@@ -19,7 +22,7 @@ public class LocationDBLinkBJ extends FeatureBJ<LocationDBLinkBJ>
 		super(source);
 		//verify consistency of parameter
 		if (!getTypeTerm().equals(TermsAndOntologies.getTermDBLinkType())
-			|| getSource().getRichLocation().getCrossRef() == null) {
+			|| getSource().getRichFeature().getRankedCrossRefs().size() != 1) {
 			throw new IllegalArgumentException();
 		}
 	}
@@ -31,7 +34,10 @@ public class LocationDBLinkBJ extends FeatureBJ<LocationDBLinkBJ>
 	@Override
 	public DBRecordBJ getDBRecordTarget() {
 		if (target == null) {
-			target = new DBRecordBJ(getSource().getRichLocation().getCrossRef());
+			Collection<RankedCrossRef> crossRefs = getSource().getRichFeature().getRankedCrossRefs();
+			for (RankedCrossRef crossRef : crossRefs) {
+				target = new DBRecordBJ(crossRef.getCrossRef());
+			}
 		}
 		return target;
 	}
