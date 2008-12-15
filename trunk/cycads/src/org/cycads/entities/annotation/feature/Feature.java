@@ -3,8 +3,6 @@
  */
 package org.cycads.entities.annotation.feature;
 
-import java.util.Collection;
-
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.sequence.Location;
@@ -23,11 +21,11 @@ public interface Feature<FEATURE_TYPE extends Feature< ? , ? , ? , ? >, L extend
 
 	public SEQ getSequence();
 
-	public void addFeature(FEATURE_TYPE feature);
-
-	public Collection<FEATURE_TYPE> getFeatures();
-
-	public Collection<FEATURE_TYPE> getFeaturesContainers();
+	//	public void addFeature(FEATURE_TYPE feature);
+	//
+	//	public Collection<FEATURE_TYPE> getFeatures();
+	//
+	//	public Collection<FEATURE_TYPE> getFeaturesContainers();
 
 	//	public L getLocation();
 
