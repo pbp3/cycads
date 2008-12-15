@@ -133,4 +133,26 @@ public class FeatureBJ<F extends FeatureBJ< ? >> implements Feature<F, LocationB
 		getNotesHash().removeChangeListener(cl, ct);
 	}
 
+	//	@Override
+	//	public void addFeature(F feature) {
+	//		// TODO Auto-generated method stub
+	//
+	//	}
+	//
+	//	@Override
+	//	public Collection<F> getFeatures() {
+	//		// TODO Auto-generated method stub
+	//		return null;
+	//	}
+	//
+	//	@Override
+	//	public Collection<F> getFeaturesContainers() {
+	//		ArrayList<F> features = new ArrayList<F>();
+	//		Collection<RichFeature> RichFeatures = BioSql.getFeatureContains(getRichFeature());
+	//		for (RichFeature feature : RichFeatures) {
+	//			features.add(new FeatureBJ(feature));
+	//		}
+	//		return features;
+	//	}
+	//
 }
