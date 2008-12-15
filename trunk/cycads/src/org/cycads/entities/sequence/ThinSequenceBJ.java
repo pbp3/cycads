@@ -14,12 +14,12 @@ import org.biojavax.SimpleRankedCrossRef;
 import org.biojavax.bio.seq.RichSequence;
 import org.biojavax.bio.seq.ThinRichSequence;
 import org.cycads.entities.annotation.AnnotationMethodBJ;
+import org.cycads.entities.annotation.AnnotationRichFeatureBJ;
 import org.cycads.entities.annotation.dBLink.DBLinkFilter;
 import org.cycads.entities.annotation.dBLink.BJ.DBRecordBJ;
 import org.cycads.entities.annotation.dBLink.BJ.DBRecordDBRecordLinkBJ;
 import org.cycads.entities.annotation.dBLink.BJ.ExternalDatabaseBJ;
 import org.cycads.entities.annotation.dBLink.BJ.ThinDBLinkBJ;
-import org.cycads.entities.annotation.feature.FeatureBJ;
 import org.cycads.entities.annotation.feature.FeatureFilter;
 import org.cycads.entities.change.ChangeListener;
 import org.cycads.entities.change.ChangeType;
@@ -35,7 +35,7 @@ import org.hibernate.Query;
 
 public class ThinSequenceBJ
 		implements
-		Sequence<ThinDBLinkBJ<ThinSequenceBJ>, ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ, LocationBJ, FeatureBJ>
+		Sequence<ThinDBLinkBJ<ThinSequenceBJ>, ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ, LocationBJ, AnnotationRichFeatureBJ>
 {
 	int												id;
 	RichSequence									richSeq	= null;
@@ -152,11 +152,11 @@ public class ThinSequenceBJ
 		return getRichSeq().getVersion();
 	}
 
-	public Collection<FeatureBJ> getFeatures(FeatureFilter<FeatureBJ> featureFilter) {
+	public Collection<AnnotationRichFeatureBJ> getFeatures(FeatureFilter<AnnotationRichFeatureBJ> featureFilter) {
 		Collection<Integer> results = BioSql.getFeaturesId(getId());
-		Collection<FeatureBJ> ret = new ArrayList<FeatureBJ>();
+		Collection<AnnotationRichFeatureBJ> ret = new ArrayList<AnnotationRichFeatureBJ>();
 		for (Integer featureId : results) {
-			FeatureBJ f = new FeatureBJ(featureId);
+			AnnotationRichFeatureBJ f = new AnnotationRichFeatureBJ(featureId);
 			if (featureFilter.accept(f)) {
 				ret.add(f);
 			}

@@ -130,7 +130,7 @@ public class BioSql
 		return (RichFeature) query.uniqueResult();
 	}
 
-	public static Collection<RichFeature> getFeatureContains(RichFeature feature) {
+	public static Collection<RichFeature> getFeatureContainers(RichFeature feature) {
 		Query query = BioJavaxSession.createQuery("from FeatureRelationship as f "
 			+ "where f.term=:containsTerm and f.subject=:feature");
 		query.setParameter("containsTerm", SimpleRichFeatureRelationship.getContainsTerm());
