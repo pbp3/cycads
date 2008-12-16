@@ -169,7 +169,7 @@ public class ThinSequenceBJ
 		ThinDBLinkBJ<ThinSequenceBJ> dbLink;
 		if (method == null) {
 			dbLink = new ThinDBLinkBJ<ThinSequenceBJ>(this, record);
-			addDBLink(dbLink);
+			getRichSeq().addRankedCrossRef(new SimpleRankedCrossRef(record.getCrossRef(), 0));
 		}
 		else {
 			throw new MethodNotImplemented();
@@ -187,7 +187,7 @@ public class ThinSequenceBJ
 		if (link.getSource() != this) {
 			throw new IllegalArgumentException(Messages.exceptionHandleDBLinkOtherSequence());
 		}
-		getRichSeq().addRankedCrossRef(new SimpleRankedCrossRef(link.getDBRecordTarget().getCrossRef(), 0));
+		//Do nothing
 	}
 
 	@Override

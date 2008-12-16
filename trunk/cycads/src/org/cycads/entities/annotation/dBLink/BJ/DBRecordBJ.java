@@ -12,6 +12,7 @@ import org.biojavax.RichObjectFactory;
 import org.biojavax.SimpleCrossRef;
 import org.biojavax.ontology.ComparableTerm;
 import org.cycads.entities.annotation.AnnotationMethodBJ;
+import org.cycads.entities.annotation.dBLink.DBLink;
 import org.cycads.entities.annotation.dBLink.DBLinkFilter;
 import org.cycads.entities.annotation.dBLink.DBRecord;
 import org.cycads.entities.annotation.dBLink.ExternalDatabase;
@@ -19,6 +20,10 @@ import org.cycads.entities.change.ChangeListener;
 import org.cycads.entities.change.ChangeType;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.NoteSource;
+import org.cycads.entities.sequence.NCBIOrganismBJ;
+import org.cycads.entities.sequence.Organism;
+import org.cycads.entities.sequence.Sequence;
+import org.cycads.entities.sequence.ThinSequenceBJ;
 import org.cycads.exceptions.MethodNotImplemented;
 import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
@@ -192,4 +197,15 @@ public class DBRecordBJ implements DBRecord<DBRecordDBRecordLinkBJ, DBRecordBJ, 
 		throw new MethodNotImplemented();
 	}
 
+	@Override
+	public Collection<DBLink< ? , ? , ? , ? >> getDBLinksFromSequence(
+			Organism< ? extends Sequence< ? , ? , ? , ? , ? , ? >> organism) {
+		NCBIOrganismBJ orgBJ = (NCBIOrganismBJ) organism;
+		ArrayList<DBLink< ? , ? , ? , ? >> ret = new ArrayList<DBLink< ? , ? , ? , ? >>();
+		Collection<Integer> seqIds = BioSql.getSequencesId(this.getCrossRef(), orgBJ);
+		for (int seqId : seqIds) {
+			ret.add(new ThinDBLinkBJ<ThinSequenceBJ>(new ThinSequenceBJ(seqId, orgBJ), this));
+		}
+		return ret;
+	}
 }
