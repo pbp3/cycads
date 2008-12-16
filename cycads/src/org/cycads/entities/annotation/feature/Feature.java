@@ -3,15 +3,13 @@
  */
 package org.cycads.entities.annotation.feature;
 
-import java.util.Collection;
-
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.sequence.Location;
 import org.cycads.entities.sequence.Sequence;
 import org.cycads.general.ParametersDefault;
 
-public interface Feature<FEATURE_TYPE extends Feature< ? , ? , ? , ? >, L extends Location< ? , ? , ? , ? , ? , ? >, SEQ extends Sequence< ? , ? , ? , ? , ? , ? >, M extends AnnotationMethod>
+public interface Feature<FEATURE_TYPE extends Feature< ? , ? , ? , ? >, L extends Location< ? , ? , ? , ? , ? , ? , ? , ? , ? >, SEQ extends Sequence< ? , ? , ? , ? , ? , ? >, M extends AnnotationMethod>
 		extends Annotation<FEATURE_TYPE, L, M>
 {
 
@@ -22,13 +20,5 @@ public interface Feature<FEATURE_TYPE extends Feature< ? , ? , ? , ? >, L extend
 	public String getType();
 
 	public SEQ getSequence();
-
-	public void addContainFeature(FEATURE_TYPE feature);
-
-	public Collection<FEATURE_TYPE> getFeaturesContains();
-
-	public Collection<FEATURE_TYPE> getFeaturesContainers();
-
-	//	public L getLocation();
 
 }
