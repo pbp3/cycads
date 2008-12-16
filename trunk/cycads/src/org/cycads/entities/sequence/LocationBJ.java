@@ -16,12 +16,16 @@ import org.biojavax.bio.seq.RichLocation;
 import org.biojavax.bio.seq.RichSequence;
 import org.biojavax.ontology.ComparableTerm;
 import org.cycads.entities.annotation.AnnotationMethodBJ;
-import org.cycads.entities.annotation.AnnotationRichFeatureBJ;
 import org.cycads.entities.annotation.dBLink.DBLinkFilter;
 import org.cycads.entities.annotation.dBLink.BJ.DBRecordBJ;
 import org.cycads.entities.annotation.dBLink.BJ.ExternalDatabaseBJ;
 import org.cycads.entities.annotation.dBLink.BJ.LocationDBLinkBJ;
+import org.cycads.entities.annotation.feature.CDSBJ;
+import org.cycads.entities.annotation.feature.Feature;
 import org.cycads.entities.annotation.feature.FeatureFilter;
+import org.cycads.entities.annotation.feature.GeneBJ;
+import org.cycads.entities.annotation.feature.RNABJ;
+import org.cycads.entities.annotation.feature.SimpleFeatureBJ;
 import org.cycads.exceptions.MethodNotImplemented;
 import org.cycads.general.biojava.BioSql;
 import org.cycads.general.biojava.TermsAndOntologies;
@@ -29,7 +33,8 @@ import org.cycads.general.biojava.TermsAndOntologies;
 // receive just a RichLocation
 // can add only a feature
 public class LocationBJ
-		implements Location<LocationDBLinkBJ, LocationBJ, DBRecordBJ, AnnotationMethodBJ, ThinSequenceBJ, AnnotationRichFeatureBJ>
+		implements
+		Location<LocationDBLinkBJ, LocationBJ, DBRecordBJ, AnnotationMethodBJ, ThinSequenceBJ, SimpleFeatureBJ, CDSBJ, RNABJ, GeneBJ>
 {
 	Collection<Intron>	introns		= null;
 	int					start		= -1;
@@ -200,17 +205,32 @@ public class LocationBJ
 
 	// create feaure in the sequence
 	@Override
-	public AnnotationRichFeatureBJ createFeature(AnnotationMethodBJ method, String type) {
-		return new AnnotationRichFeatureBJ(createRichFeature(method, TermsAndOntologies.getTermFeatureType(type)));
+	public SimpleFeatureBJ createFeature(AnnotationMethodBJ method, String type) {
+		return new SimpleFeatureBJ(createRichFeature(method, TermsAndOntologies.getTermFeatureType(type)));
 	}
 
 	@Override
-	public void addFeature(AnnotationRichFeatureBJ feature) {
+	public CDSBJ createCDS(AnnotationMethodBJ method) {
+		return new CDSBJ(createFeature(method, Feature.CDS_TYPE).getRichFeature());
+	}
+
+	@Override
+	public GeneBJ createGene(AnnotationMethodBJ method) {
+		return new GeneBJ(createFeature(method, Feature.GENE_TYPE).getRichFeature());
+	}
+
+	@Override
+	public RNABJ createRNA(AnnotationMethodBJ method, String type) {
+		return new RNABJ(createFeature(method, type).getRichFeature());
+	}
+
+	@Override
+	public void addFeature(SimpleFeatureBJ feature) {
 		// Do nothing. the collection of features of the location are the RichFeatures in the same location
 	}
 
 	@Override
-	public Collection<AnnotationRichFeatureBJ> getFeatures(LocationBJ source, AnnotationMethodBJ method, String type) {
+	public Collection<SimpleFeatureBJ> getFeatures(LocationBJ source, AnnotationMethodBJ method, String type) {
 		if (source != this && !source.getRichLocation().equals(this.getRichLocation())) {
 			return null;
 		}
@@ -218,32 +238,32 @@ public class LocationBJ
 	}
 
 	@Override
-	public Collection<AnnotationRichFeatureBJ> getFeatures(AnnotationMethodBJ method, String type) {
+	public Collection<SimpleFeatureBJ> getFeatures(AnnotationMethodBJ method, String type) {
 		Collection<RichFeature> richFeatures = BioSql.getFeatures(getRichLocation(), type, method);
-		Collection<AnnotationRichFeatureBJ> features = new ArrayList<AnnotationRichFeatureBJ>();
+		Collection<SimpleFeatureBJ> features = new ArrayList<SimpleFeatureBJ>();
 		for (RichFeature richFeature : richFeatures) {
-			features.add(new AnnotationRichFeatureBJ(richFeature));
+			features.add(new SimpleFeatureBJ(richFeature));
 		}
 		return features;
 	}
 
 	@Override
-	public Collection<AnnotationRichFeatureBJ> getFeatures(String type) {
+	public Collection<SimpleFeatureBJ> getFeatures(String type) {
 		Collection<RichFeature> richFeatures = BioSql.getFeatures(getRichLocation(), type);
-		Collection<AnnotationRichFeatureBJ> features = new ArrayList<AnnotationRichFeatureBJ>();
+		Collection<SimpleFeatureBJ> features = new ArrayList<SimpleFeatureBJ>();
 		for (RichFeature richFeature : richFeatures) {
-			features.add(new AnnotationRichFeatureBJ(richFeature));
+			features.add(new SimpleFeatureBJ(richFeature));
 		}
 		return features;
 	}
 
 	@Override
-	public Collection<AnnotationRichFeatureBJ> getFeatures(FeatureFilter<AnnotationRichFeatureBJ> featureFilter) {
+	public Collection<SimpleFeatureBJ> getFeatures(FeatureFilter<SimpleFeatureBJ> featureFilter) {
 		Collection<RichFeature> richFeatures = BioSql.getFeatures(getRichLocation());
-		Collection<AnnotationRichFeatureBJ> features = new ArrayList<AnnotationRichFeatureBJ>();
-		AnnotationRichFeatureBJ feature;
+		Collection<SimpleFeatureBJ> features = new ArrayList<SimpleFeatureBJ>();
+		SimpleFeatureBJ feature;
 		for (RichFeature richFeature : richFeatures) {
-			feature = new AnnotationRichFeatureBJ(richFeature);
+			feature = new SimpleFeatureBJ(richFeature);
 			if (featureFilter.accept(feature)) {
 				features.add(feature);
 			}

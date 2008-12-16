@@ -10,8 +10,8 @@ import org.biojavax.RichAnnotation;
 import org.biojavax.bio.seq.RichFeature;
 import org.biojavax.bio.seq.RichLocation;
 import org.biojavax.bio.seq.RichSequence;
+import org.biojavax.bio.seq.SimpleRichFeatureRelationship;
 import org.biojavax.ontology.ComparableTerm;
-import org.cycads.entities.annotation.feature.Feature;
 import org.cycads.entities.change.ChangeListener;
 import org.cycads.entities.change.ChangeType;
 import org.cycads.entities.note.Note;
@@ -24,11 +24,12 @@ import org.cycads.general.biojava.BioSql;
 import org.cycads.general.biojava.TermsAndOntologies;
 
 //F must be the type of this object
-public class AnnotationRichFeatureBJ implements Feature<AnnotationRichFeatureBJ, LocationBJ, ThinSequenceBJ, AnnotationMethodBJ>
+public class AnnotationRichFeatureBJ<ANNOTATION_TYPE extends AnnotationRichFeatureBJ< ? , ? , ? >, ANNOTATION_TYPE_CONTAINS extends AnnotationRichFeatureBJ< ? , ? , ? >, ANNOTATION_TYPE_CONTAINER extends AnnotationRichFeatureBJ< ? , ? , ? >>
+		implements Annotation<ANNOTATION_TYPE, LocationBJ, AnnotationMethodBJ>
 {
-	LocationBJ						location;
-	NotesHashTable<Note<AnnotationRichFeatureBJ>>	notes;
-	ThinSequenceBJ					sequence;
+	LocationBJ								location;
+	NotesHashTable<Note<ANNOTATION_TYPE>>	notes;
+	ThinSequenceBJ							sequence;
 
 	public AnnotationRichFeatureBJ(RichFeature feature) {
 		this(new LocationBJ((RichLocation) feature.getLocation()));
@@ -59,14 +60,14 @@ public class AnnotationRichFeatureBJ implements Feature<AnnotationRichFeatureBJ,
 		return getRichLocation().getFeature();
 	}
 
-	public NotesHashTable<Note<AnnotationRichFeatureBJ>> getNotesHash() {
+	public NotesHashTable<Note<ANNOTATION_TYPE>> getNotesHash() {
 		if (notes == null) {
-			notes = NotesToAnnotationBJ.createNotesHashTable((RichAnnotation) getRichFeature().getAnnotation(), this);
+			notes = NotesToAnnotationBJ.createNotesHashTable((RichAnnotation) getRichFeature().getAnnotation(),
+				(ANNOTATION_TYPE) this);
 		}
 		return notes;
 	}
 
-	@Override
 	public ThinSequenceBJ getSequence() {
 		if (sequence == null) {
 			sequence = new ThinSequenceBJ((RichSequence) getRichFeature().getSequence());
@@ -74,7 +75,6 @@ public class AnnotationRichFeatureBJ implements Feature<AnnotationRichFeatureBJ,
 		return sequence;
 	}
 
-	@Override
 	public String getType() {
 		return getRichFeature().getType();
 	}
@@ -94,32 +94,32 @@ public class AnnotationRichFeatureBJ implements Feature<AnnotationRichFeatureBJ,
 	}
 
 	@Override
-	public Note<AnnotationRichFeatureBJ> createNote(String value, String noteTypeName) {
-		return addNote(new SimpleNote<AnnotationRichFeatureBJ>(this, value, noteTypeName));
+	public Note<ANNOTATION_TYPE> createNote(String value, String noteTypeName) {
+		return addNote(new SimpleNote<ANNOTATION_TYPE>((ANNOTATION_TYPE) this, value, noteTypeName));
 	}
 
 	@Override
-	public Note<AnnotationRichFeatureBJ> addNote(Note<AnnotationRichFeatureBJ> note) {
+	public Note<ANNOTATION_TYPE> addNote(Note<ANNOTATION_TYPE> note) {
 		return getNotesHash().addNote(note);
 	}
 
 	@Override
-	public Note<AnnotationRichFeatureBJ> getNote(String value, String noteTypeName) {
+	public Note<ANNOTATION_TYPE> getNote(String value, String noteTypeName) {
 		return getNotesHash().getNote(value, noteTypeName);
 	}
 
 	@Override
-	public Collection<Note<AnnotationRichFeatureBJ>> getNotes() {
+	public Collection<Note<ANNOTATION_TYPE>> getNotes() {
 		return getNotesHash().getNotes();
 	}
 
 	@Override
-	public Collection<Note<AnnotationRichFeatureBJ>> getNotes(String noteTypeName) {
+	public Collection<Note<ANNOTATION_TYPE>> getNotes(String noteTypeName) {
 		return getNotesHash().getNotes(noteTypeName);
 	}
 
 	@Override
-	public void addChangeListener(ChangeListener<Note<AnnotationRichFeatureBJ>> cl, ChangeType ct) {
+	public void addChangeListener(ChangeListener<Note<ANNOTATION_TYPE>> cl, ChangeType ct) {
 		getNotesHash().addChangeListener(cl, ct);
 	}
 
@@ -129,30 +129,43 @@ public class AnnotationRichFeatureBJ implements Feature<AnnotationRichFeatureBJ,
 	}
 
 	@Override
-	public void removeChangeListener(ChangeListener<Note<AnnotationRichFeatureBJ>> cl, ChangeType ct) {
+	public void removeChangeListener(ChangeListener<Note<ANNOTATION_TYPE>> cl, ChangeType ct) {
 		getNotesHash().removeChangeListener(cl, ct);
 	}
 
-	@Override
-	public Collection<AnnotationRichFeatureBJ> getFeaturesContainers() {
-		ArrayList<AnnotationRichFeatureBJ> features = new ArrayList<AnnotationRichFeatureBJ>();
+	protected Collection<ANNOTATION_TYPE_CONTAINER> getFeaturesContainers(
+			AnnotationRichFeatureBJFactory<ANNOTATION_TYPE_CONTAINS, ANNOTATION_TYPE_CONTAINER> factory) {
+		ArrayList<ANNOTATION_TYPE_CONTAINER> features = new ArrayList<ANNOTATION_TYPE_CONTAINER>();
 		Collection<RichFeature> RichFeatures = BioSql.getFeatureContainers(getRichFeature());
 		for (RichFeature feature : RichFeatures) {
-			features.add(new AnnotationRichFeatureBJ(feature));
+			features.add(factory.createObjectContainer(feature));
+		}
+		return features;
+	}
+
+	protected void addRichFeature(ANNOTATION_TYPE_CONTAINS feature) {
+		getRichFeature().addFeatureRelationship(
+			new SimpleRichFeatureRelationship(getRichFeature(), feature.getRichFeature(),
+				SimpleRichFeatureRelationship.getContainsTerm(), 0));
+	}
+
+	protected Collection<ANNOTATION_TYPE_CONTAINS> getFeaturesContains(
+			AnnotationRichFeatureBJFactory<ANNOTATION_TYPE_CONTAINS, ANNOTATION_TYPE_CONTAINER> factory) {
+		ArrayList<ANNOTATION_TYPE_CONTAINS> features = new ArrayList<ANNOTATION_TYPE_CONTAINS>();
+		Collection<RichFeature> RichFeatures = BioSql.getFeatureContains(getRichFeature());
+		for (RichFeature feature : RichFeatures) {
+			features.add(factory.createObjectContains(feature));
 		}
 		return features;
 	}
 
 	@Override
-	public void addContainFeature(AnnotationRichFeatureBJ feature) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public Collection<AnnotationRichFeatureBJ> getFeaturesContains() {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean equals(Object o) {
+		if (o != null && o instanceof AnnotationRichFeatureBJ< ? , ? , ? >) {
+			AnnotationRichFeatureBJ< ? , ? , ? > obj = (AnnotationRichFeatureBJ< ? , ? , ? >) o;
+			return this.getRichFeature().equals(obj.getRichFeature());
+		}
+		return false;
 	}
 
 }

@@ -13,7 +13,7 @@ import org.cycads.entities.annotation.dBLink.DBLink;
 import org.cycads.entities.sequence.LocationBJ;
 import org.cycads.general.biojava.TermsAndOntologies;
 
-public class LocationDBLinkBJ extends AnnotationRichFeatureBJ
+public class LocationDBLinkBJ extends AnnotationRichFeatureBJ<LocationDBLinkBJ, LocationDBLinkBJ, LocationDBLinkBJ>
 		implements DBLink<LocationDBLinkBJ, LocationBJ, DBRecordBJ, AnnotationMethodBJ>
 {
 	DBRecordBJ	target;

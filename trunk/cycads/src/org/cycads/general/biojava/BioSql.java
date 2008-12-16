@@ -144,6 +144,20 @@ public class BioSql
 		return features;
 	}
 
+	public static Collection<RichFeature> getFeatureContains(RichFeature feature) {
+		Query query = BioJavaxSession.createQuery("from FeatureRelationship as f "
+			+ "where f.term=:containsTerm and f.object=:feature");
+		query.setParameter("containsTerm", SimpleRichFeatureRelationship.getContainsTerm());
+		query.setParameter("feature", feature);
+		// RichFeatureRelationship featureRelationship = (RichFeatureRelationship) query.uniqueResult();
+		List<RichFeatureRelationship> featureRelations = query.list();
+		Collection<RichFeature> features = new ArrayList<RichFeature>();
+		for (RichFeatureRelationship featureRelation : featureRelations) {
+			features.add(featureRelation.getSubject());
+		}
+		return features;
+	}
+
 	// public static List<RichFeature> getFeatures(ComparableTerm type, Organism organism, int version) {
 	// Query query = session.createQuery("select f from Feature as f join f.parent as b where "
 	// + "b.version=:version and f.typeTerm=:typeTerm and b.taxon=:taxonId ");
