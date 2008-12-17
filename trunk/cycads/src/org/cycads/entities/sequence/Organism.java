@@ -12,20 +12,10 @@ public interface Organism<SEQ extends Sequence< ? , ? , ? , ? , ? , ? >>
 
 	public Collection<SEQ> getSequences(double version);
 
-	/**
-	 * Getter of the property <tt>name</tt>
-	 * 
-	 * @return Returns the name.
-	 * 
-	 */
+	public SEQ createSequence(int seqId);
+
 	public String getName();
 
-	/**
-	 * Getter of the property <tt>id</tt>
-	 * 
-	 * @return Returns the id.
-	 * 
-	 */
 	public int getId();
 
 }
