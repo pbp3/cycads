@@ -9,6 +9,8 @@ import org.cycads.entities.annotation.dBLink.DBLink;
 import org.cycads.entities.annotation.dBLink.BJ.DBRecordBJ;
 import org.cycads.entities.annotation.dBLink.BJ.ExternalDatabaseBJ;
 import org.cycads.entities.sequence.NCBIOrganismBJ;
+import org.cycads.entities.sequence.Sequence;
+import org.cycads.entities.sequence.ThinSequenceBJ;
 
 public class GFF3Loader implements GFF3DocumentHandler
 {
@@ -17,24 +19,31 @@ public class GFF3Loader implements GFF3DocumentHandler
 	NCBIOrganismBJ		organism;
 
 	@Override
-	public void commentLine(String comment) {
-		//Do nothing
+	public void commentLine(String comment)
+	{
+		// Do nothing
 	}
 
 	@Override
-	public void endDocument() {
-		//Do nothing
+	public void endDocument()
+	{
+		// Do nothing
 	}
 
 	@Override
-	public void recordLine(GFF3Record record) {
+	public void recordLine(GFF3Record record)
+	{
 		DBRecordBJ dbRecord = seqDatabase.getOrCreateDBRecord(record.getSequenceID());
 		Collection<DBLink< ? , ? , ? , ? >> dbLinks = dbRecord.getDBLinksFromSequence(organism);
-		if (dbLinks.size() == 0) {
-			//create sequence
+		Sequence seq;
+		if (dbLinks.size() == 0)
+		{
+			// create sequence
+			seq = organism
 		}
-		else {
-			// se maior que um deveria dar erro no banco de dados
+		else
+		{
+			// get the first
 		}
 		String type = record.getType();
 
@@ -43,8 +52,9 @@ public class GFF3Loader implements GFF3DocumentHandler
 	}
 
 	@Override
-	public void startDocument(String locator) {
-		//Do nothing
+	public void startDocument(String locator)
+	{
+		// Do nothing
 	}
 
 }
