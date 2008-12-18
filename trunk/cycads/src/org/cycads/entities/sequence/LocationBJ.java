@@ -49,7 +49,7 @@ public class LocationBJ
 	int					start		= -1;
 	int					end			= -1;
 	ThinSequenceBJ		sequence	= null;
-	RichLocation		richLocation;
+	RichFeature			richFeature;
 
 	public static RichLocation createRichLocation(int start, int end, Collection<Intron> introns) {
 		int rank = 1;
@@ -112,19 +112,21 @@ public class LocationBJ
 		this.end = end;
 		this.introns = introns;
 		this.sequence = sequence;
-		richLocation = createRichLocation(start, end, introns);
-		fillRichFeature(richLocation, method.getTerm(), sequence);
+		richFeature = fillRichFeature(createRichLocation(start, end, introns), method.getTerm(), sequence);
 	}
 
 	public LocationBJ(RichLocation richLocation) {
-		this.richLocation = richLocation;
 		if (!isLocationRichLocation(richLocation)) {
 			throw new IllegalArgumentException();
 		}
+		this.richFeature = richLocation.getFeature();
 	}
 
 	public LocationBJ(RichFeature feature) {
-		this((RichLocation) feature.getLocation());
+		if (!isLocationRichFeature(feature)) {
+			throw new IllegalArgumentException();
+		}
+		this.richFeature = feature;
 	}
 
 	public static boolean isLocationRichFeature(RichFeature feature) {

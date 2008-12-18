@@ -3,7 +3,9 @@
  */
 package org.cycads.loaders.gff3;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Hashtable;
 import java.util.regex.Pattern;
 
 import org.cycads.entities.annotation.dBLink.DBLink;
@@ -15,13 +17,17 @@ import org.cycads.general.ParametersDefault;
 
 public class GFF3Loader implements GFF3DocumentHandler
 {
-	String		seqDatabase;
-	int			seqVersionDefault;
-	Organism	organism;
-	Pattern		exonPattern	= Pattern.compile(ParametersDefault.gff3ExonTagExpression());
-	Pattern		genePattern	= Pattern.compile(ParametersDefault.gff3GeneTagExpression());
-	Pattern		mrnaPattern	= Pattern.compile(ParametersDefault.gff3MRNATagExpression());
-	Pattern		cdsPattern	= Pattern.compile(ParametersDefault.gff3CDSTagExpression());
+	String										seqDatabase;
+	int											seqVersionDefault;
+	Organism									organism;
+	Pattern										genePattern	= Pattern.compile(ParametersDefault.gff3GeneTagExpression());
+	Hashtable<String, GFF3Record>				genes		= new Hashtable<String, GFF3Record>();
+	Hashtable<String, GFF3Record>				mrnas		= new Hashtable<String, GFF3Record>();
+	Hashtable<String, ArrayList<GFF3Record>>	cdss		= new Hashtable<String, ArrayList<GFF3Record>>();
+	Hashtable<String, ArrayList<GFF3Record>>	exons		= new Hashtable<String, ArrayList<GFF3Record>>();
+	ArrayList<GFF3Record>						lastCdsList;
+	ArrayList<GFF3Record>						lastExonList;
+	GFF3Record									lastMrnaCdsList, lastMrnaExonList;
 
 	@Override
 	public void commentLine(String comment) {
@@ -43,24 +49,24 @@ public class GFF3Loader implements GFF3DocumentHandler
 		}
 		else {
 			//sequence accession is external
-			Collection<DBLink< ? , ? extends Sequence, ? , ? >> dbLinks = organism.getDBLinksFromSequence(
+			Collection<DBLink< ? , ? extends Sequence, ? , ? >> dbLinks = organism.getSequenceDBLinks(
 				seqDatabase, seqAccession);
 			if (dbLinks.size() != 1) {
 				throw new InvalidSequence(seqDatabase, seqAccession);
 			}
 			else {
-				// get the first
+				// get the only one
 				seq = dbLinks.iterator().next().getSource();
 			}
 		}
 		Location loc;
 		if (record.getStrand()<0)
 		{
-			loc= seq.createLocation(record.getEnd(),record.getStart(), null);
+			loc= seq.getOrCreateLocation(record.getEnd(),record.getStart(), null);
 		}
 		else
 		{
-			loc = seq.createLocation(record.getStart(), record.getEnd(), null);
+			loc = seq.getOrCreateLocation(record.getStart(), record.getEnd(), null);
 		}
 		String type = record.getType();
 		String method=record.getSource();

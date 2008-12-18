@@ -13,6 +13,7 @@ import org.cycads.entities.note.Note;
 import org.cycads.entities.note.NoteSource;
 import org.cycads.exceptions.MethodNotImplemented;
 import org.cycads.general.Messages;
+import org.cycads.general.ParametersDefault;
 import org.cycads.general.biojava.TermsAndOntologies;
 
 public class AnnotationMethodBJ implements AnnotationMethod
@@ -40,6 +41,10 @@ public class AnnotationMethodBJ implements AnnotationMethod
 			throw new IllegalArgumentException(Messages.ExceptionAnnotationMethodBJConstructorTerm());
 		}
 		return ret;
+	}
+
+	public static AnnotationMethodBJ getMethodGeneral() {
+		return getInstance(ParametersDefault.getMethodNameGeneral());
 	}
 
 	public ComparableTerm getTerm() {
