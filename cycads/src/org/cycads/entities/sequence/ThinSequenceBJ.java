@@ -131,9 +131,8 @@ public class ThinSequenceBJ
 		return addNote(new SimpleNote<ThinSequenceBJ>(this, value, noteTypeName));
 	}
 
-	public LocationBJ createLocation(int start, int end, Collection<Intron> introns) {
-		throw new MethodNotImplemented();
-		// return new LocationBJ(start, end, this, introns);
+	public LocationBJ getOrCreateLocation(int start, int end, Collection<Intron> introns, AnnotationMethodBJ method) {
+		return new LocationBJ(start, end, introns, method, this);
 	}
 
 	public String getDescription() {
@@ -231,6 +230,31 @@ public class ThinSequenceBJ
 	@Override
 	public String toString() {
 		return getRichSeq().getName();
+	}
+
+	@Override
+	public ThinDBLinkBJ<ThinSequenceBJ> createDBLink(String method, DBRecordBJ target) {
+		return createDBLink(AnnotationMethodBJ.getInstance(method), target);
+	}
+
+	@Override
+	public ThinDBLinkBJ<ThinSequenceBJ> createDBLink(String method, String accession, String dbName) {
+		return createDBLink(AnnotationMethodBJ.getInstance(method), accession, dbName);
+	}
+
+	@Override
+	public ThinDBLinkBJ<ThinSequenceBJ> getDBLink(ThinSequenceBJ source, String method, DBRecordBJ target) {
+		return getDBLink(source, AnnotationMethodBJ.getInstance(method), target);
+	}
+
+	@Override
+	public Collection<ThinDBLinkBJ<ThinSequenceBJ>> getDBLinks(String method, DBRecordBJ target) {
+		return getDBLinks(AnnotationMethodBJ.getInstance(method), target);
+	}
+
+	@Override
+	public Collection<ThinDBLinkBJ<ThinSequenceBJ>> getDBLinks(String method, String dbName, String accession) {
+		return getDBLinks(AnnotationMethodBJ.getInstance(method), dbName, accession);
 	}
 
 }

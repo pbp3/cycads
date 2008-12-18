@@ -6,7 +6,7 @@ package org.cycads.entities.annotation.dBLink.BJ;
 import java.util.Collection;
 
 import org.biojavax.RankedCrossRef;
-import org.biojavax.bio.seq.RichLocation;
+import org.biojavax.bio.seq.RichFeature;
 import org.cycads.entities.annotation.AnnotationMethodBJ;
 import org.cycads.entities.annotation.AnnotationRichFeatureBJ;
 import org.cycads.entities.annotation.dBLink.DBLink;
@@ -18,23 +18,19 @@ public class LocationDBLinkBJ extends AnnotationRichFeatureBJ<LocationDBLinkBJ, 
 {
 	DBRecordBJ	target;
 
-	public LocationDBLinkBJ(LocationBJ source) {
-		super(source);
+	public LocationDBLinkBJ(RichFeature feature) {
+		super(feature);
 		//verify consistency of parameter
-		if (!getTypeTerm().equals(TermsAndOntologies.getTermDBLinkType())
-			|| getSource().getRichFeature().getRankedCrossRefs().size() != 1) {
+		if (!feature.getTypeTerm().equals(TermsAndOntologies.getTermDBLinkType())
+			|| feature.getRankedCrossRefs().size() != 1) {
 			throw new IllegalArgumentException();
 		}
-	}
-
-	public LocationDBLinkBJ(RichLocation location) {
-		this(new LocationBJ(location));
 	}
 
 	@Override
 	public DBRecordBJ getDBRecordTarget() {
 		if (target == null) {
-			Collection<RankedCrossRef> crossRefs = getSource().getRichFeature().getRankedCrossRefs();
+			Collection<RankedCrossRef> crossRefs = getRichFeature().getRankedCrossRefs();
 			for (RankedCrossRef crossRef : crossRefs) {
 				target = new DBRecordBJ(crossRef.getCrossRef());
 			}

@@ -15,8 +15,12 @@ public interface FeatureCollection<F extends Feature< ? , ? , ? , ? >, S extends
 
 	public Collection<F> getFeatures(M method, String type);
 
+	public Collection<F> getFeatures(String method, String type);
+
 	public Collection<F> getFeatures(String type);
 
 	public Collection<F> getFeatures(S source, M method, String type);
+
+	public Collection<F> getFeatures(S source, String method, String type);
 
 }
