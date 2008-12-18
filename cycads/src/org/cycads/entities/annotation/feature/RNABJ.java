@@ -18,6 +18,13 @@ public class RNABJ extends AnnotationRichFeatureBJ<RNABJ, CDSBJ, GeneBJ>
 {
 	public RNABJ(RichFeature feature) {
 		super(feature);
+		if (!isRNA(feature)) {
+			throw new IllegalArgumentException(feature.toString());
+		}
+	}
+
+	public static boolean isRNA(RichFeature feature) {
+		return isAnnotation(feature);
 	}
 
 	@Override
@@ -51,7 +58,7 @@ public class RNABJ extends AnnotationRichFeatureBJ<RNABJ, CDSBJ, GeneBJ>
 	}
 
 	public void addCDS(CDSBJ cds) {
-		addRichFeature(cds);
+		addRichFeature(cds.getRichFeature());
 	}
 
 	@Override
@@ -62,6 +69,16 @@ public class RNABJ extends AnnotationRichFeatureBJ<RNABJ, CDSBJ, GeneBJ>
 	@Override
 	public CDSBJ createObjectContains(RichFeature feature) {
 		return new CDSBJ(feature);
+	}
+
+	@Override
+	public boolean isObjectContainer(RichFeature feature) {
+		return GeneBJ.isGene(feature);
+	}
+
+	@Override
+	public boolean isObjectContains(RichFeature feature) {
+		return CDSBJ.isCDS(feature);
 	}
 
 }

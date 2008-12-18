@@ -11,4 +11,8 @@ public interface AnnotationRichFeatureBJFactory<ANNOTATION_TYPE_CONTAINS extends
 
 	public ANNOTATION_TYPE_CONTAINER createObjectContainer(RichFeature feature);
 
+	public boolean isObjectContainer(RichFeature feature);
+
+	public boolean isObjectContains(RichFeature feature);
+
 }

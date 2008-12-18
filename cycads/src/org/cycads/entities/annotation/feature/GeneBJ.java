@@ -19,6 +19,13 @@ public class GeneBJ extends AnnotationRichFeatureBJ<GeneBJ, RNABJ, SimpleFeature
 
 	public GeneBJ(RichFeature feature) {
 		super(feature);
+		if (!isGene(feature)) {
+			throw new IllegalArgumentException(feature.toString());
+		}
+	}
+
+	public static boolean isGene(RichFeature feature) {
+		return isAnnotation(feature) && feature.getType().equals(Feature.GENE_TYPE);
 	}
 
 	@Override
@@ -27,7 +34,7 @@ public class GeneBJ extends AnnotationRichFeatureBJ<GeneBJ, RNABJ, SimpleFeature
 	}
 
 	public void addRNA(RNABJ rna) {
-		addRichFeature(rna);
+		addRichFeature(rna.getRichFeature());
 	}
 
 	@Override
@@ -38,5 +45,15 @@ public class GeneBJ extends AnnotationRichFeatureBJ<GeneBJ, RNABJ, SimpleFeature
 	@Override
 	public RNABJ createObjectContains(RichFeature feature) {
 		return new RNABJ(feature);
+	}
+
+	@Override
+	public boolean isObjectContainer(RichFeature feature) {
+		return SimpleFeatureBJ.isSimpleFeature(feature);
+	}
+
+	@Override
+	public boolean isObjectContains(RichFeature feature) {
+		return RNABJ.isRNA(feature);
 	}
 }
