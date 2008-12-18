@@ -10,8 +10,8 @@ import org.biojavax.RichAnnotation;
 import org.biojavax.bio.seq.RichFeature;
 import org.biojavax.bio.seq.RichLocation;
 import org.biojavax.bio.seq.RichSequence;
-import org.biojavax.bio.seq.SimpleRichFeatureRelationship;
 import org.biojavax.ontology.ComparableTerm;
+import org.cycads.entities.annotation.feature.Feature;
 import org.cycads.entities.change.ChangeListener;
 import org.cycads.entities.change.ChangeType;
 import org.cycads.entities.note.Note;
@@ -25,39 +25,32 @@ import org.cycads.general.biojava.TermsAndOntologies;
 
 //F must be the type of this object
 public class AnnotationRichFeatureBJ<ANNOTATION_TYPE extends AnnotationRichFeatureBJ< ? , ? , ? >, ANNOTATION_TYPE_CONTAINS extends AnnotationRichFeatureBJ< ? , ? , ? >, ANNOTATION_TYPE_CONTAINER extends AnnotationRichFeatureBJ< ? , ? , ? >>
-		implements Annotation<ANNOTATION_TYPE, LocationBJ, AnnotationMethodBJ>
+		implements Feature<ANNOTATION_TYPE, LocationBJ, ThinSequenceBJ, AnnotationMethodBJ>
 {
-	LocationBJ								location;
+	RichFeature								richFeature;
 	NotesHashTable<Note<ANNOTATION_TYPE>>	notes;
 	ThinSequenceBJ							sequence;
 
 	public AnnotationRichFeatureBJ(RichFeature feature) {
-		this(new LocationBJ((RichLocation) feature.getLocation()));
+		this.richFeature = feature;
+		//verify consistency of parameters
+		if (!getRichFeature().getTypeTerm().getOntology().equals(TermsAndOntologies.getOntologyFeatureType())
+			|| !getRichFeature().getSourceTerm().getOntology().equals(TermsAndOntologies.getOntologyMethods())
+			|| getSource() == null) {
+			throw new IllegalArgumentException();
+		}
 	}
 
 	public AnnotationRichFeatureBJ(int featureId) {
 		this(BioSql.getRichFeature(featureId));
 	}
 
-	public AnnotationRichFeatureBJ(RichLocation location) {
-		this(new LocationBJ(location));
-	}
-
-	public AnnotationRichFeatureBJ(LocationBJ location) {
-		//verify consistency of parameters
-		if (!location.getRichFeature().getTypeTerm().getOntology().equals(TermsAndOntologies.getOntologyFeatureType())
-			|| !location.getRichFeature().getSourceTerm().getOntology().equals(TermsAndOntologies.getOntologyMethods())) {
-			throw new IllegalArgumentException();
-		}
-		this.location = location;
-	}
-
 	public RichLocation getRichLocation() {
-		return getSource().getRichLocation();
+		return (RichLocation) getRichFeature().getLocation();
 	}
 
 	public RichFeature getRichFeature() {
-		return getRichLocation().getFeature();
+		return richFeature;
 	}
 
 	public NotesHashTable<Note<ANNOTATION_TYPE>> getNotesHash() {
@@ -141,12 +134,6 @@ public class AnnotationRichFeatureBJ<ANNOTATION_TYPE extends AnnotationRichFeatu
 			features.add(factory.createObjectContainer(feature));
 		}
 		return features;
-	}
-
-	protected void addRichFeature(ANNOTATION_TYPE_CONTAINS feature) {
-		getRichFeature().addFeatureRelationship(
-			new SimpleRichFeatureRelationship(getRichFeature(), feature.getRichFeature(),
-				SimpleRichFeatureRelationship.getContainsTerm(), 0));
 	}
 
 	protected Collection<ANNOTATION_TYPE_CONTAINS> getFeaturesContains(

@@ -81,6 +81,7 @@ public class GFF3Parser
 		handler.startDocument(locator);
 		ArrayList aList = new ArrayList();
 		int lineNum = 0;
+		int recordsOK = 0, recordsError = 0;
 		for (String line = bReader.readLine(); line != null; line = bReader.readLine()) {
 			++lineNum;
 
@@ -114,13 +115,21 @@ public class GFF3Parser
 						}
 					}
 					GFF3Record record = createRecord(handler, aList, rest, comment);
-					handler.recordLine(record);
+					try {
+						handler.recordLine(record);
+					}
+					catch (InvalidSequence e) {
+						e.printStackTrace();
+						throw new IgnoreRecordException();
+					}
+					recordsOK++;
 				}
 			}
 			catch (ParserException ex) {
 				throw new ParserException(ex, "", locator, lineNum, line);
 			}
 			catch (IgnoreRecordException ex) {
+				recordsError++;
 				// Silently skip any more work on this record
 			}
 		}

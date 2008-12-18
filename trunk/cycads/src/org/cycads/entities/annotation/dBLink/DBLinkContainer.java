@@ -18,6 +18,12 @@ public interface DBLinkContainer<D extends DBLink< ? , S, R, M>, S extends DBLin
 
 	public Collection<D> getDBLinks(M method, String dbName, String accession);
 
+	public D getDBLink(S source, String method, R target);
+
+	public Collection<D> getDBLinks(String method, R target);
+
+	public Collection<D> getDBLinks(String method, String dbName, String accession);
+
 	public Collection<D> getDBLinks(DBLinkFilter<D> filter);
 
 }

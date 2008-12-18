@@ -24,6 +24,16 @@ public class ParametersDefault
 		}
 	}
 
+	// General
+
+	public static String methodDescription() {
+		return getString("General.Method.Description");
+	}
+
+	public static String getNameSpaceDefault() {
+		return getString("General.nameSpaceDefault");
+	}
+
 	// LoadTaxonomy
 
 	public static String taxonomyLoaderNodesFileName() {
@@ -305,12 +315,6 @@ public class ParametersDefault
 		return getString("BioCycId.Format");
 	}
 
-	// General
-
-	public static String methodDescription() {
-		return getString("General.Method.Description");
-	}
-
 	// Annotation
 	public static String DBRecordSeparator() {
 		return getString("Annotation.DBLink.DBRecordSeparator");
@@ -330,6 +334,24 @@ public class ParametersDefault
 
 	public static String featureTypeGene() {
 		return getString("Feature.Type.Gene");
+	}
+
+	//GFF3 loader
+
+	public static String gff3ExonTagExpression() {
+		return getString("gff3.file.exonTagExpression");
+	}
+
+	public static String gff3GeneTagExpression() {
+		return getString("gff3.file.geneTagExpression");
+	}
+
+	public static String gff3MRNATagExpression() {
+		return getString("gff3.file.MRNATagExpression");
+	}
+
+	public static String gff3CDSTagExpression() {
+		return getString("gff3.file.CDSTagExpression");
 	}
 
 }

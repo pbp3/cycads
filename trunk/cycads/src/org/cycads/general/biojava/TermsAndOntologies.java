@@ -6,6 +6,7 @@ package org.cycads.general.biojava;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import org.biojava.ontology.Term;
 import org.biojavax.RichObjectFactory;
 import org.biojavax.ontology.ComparableOntology;
 import org.biojavax.ontology.ComparableTerm;
@@ -29,10 +30,6 @@ public class TermsAndOntologies
 			e.printStackTrace();
 			return null;
 		}
-	}
-
-	public static String getNameSpaceDefault() {
-		return getString("nameSpaceDefault");
 	}
 
 	public static ComparableOntology getDefaultOntology() {
@@ -153,6 +150,10 @@ public class TermsAndOntologies
 
 	public static ComparableTerm getTermDBLinkType() {
 		return getTermFeatureType(getString("term.Annotation.DBLinkType"));
+	}
+
+	public static Term getTermSubSequenceType() {
+		return getOntologyGeneral().getOrCreateTerm(getString("term.SubSequence.Type"));
 	}
 
 	// public static SimpleComparableOntology getOntologyFeatures() {

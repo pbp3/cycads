@@ -21,99 +21,82 @@ public class AnnotationMethodBJ implements AnnotationMethod
 	ComparableTerm									term;
 	int												weight	= 0;
 
-	private AnnotationMethodBJ(String methodName)
-	{
+	private AnnotationMethodBJ(String methodName) {
 		term = TermsAndOntologies.getOntologyMethods().getOrCreateTerm(methodName);
 	}
 
-	public static AnnotationMethodBJ getInstance(String methodName)
-	{
+	public static AnnotationMethodBJ getInstance(String methodName) {
 		AnnotationMethodBJ ret = methods.get(methodName);
-		if (ret == null)
-		{
+		if (ret == null) {
 			ret = new AnnotationMethodBJ(methodName);
 			methods.put(methodName, ret);
 		}
 		return ret;
 	}
 
-	public static AnnotationMethodBJ getInstance(ComparableTerm method)
-	{
+	public static AnnotationMethodBJ getInstance(ComparableTerm method) {
 		AnnotationMethodBJ ret = getInstance(method.getName());
-		if (!ret.getTerm().equals(method))
-		{
+		if (!ret.getTerm().equals(method)) {
 			throw new IllegalArgumentException(Messages.ExceptionAnnotationMethodBJConstructorTerm());
 		}
 		return ret;
 	}
 
-	public ComparableTerm getTerm()
-	{
+	public ComparableTerm getTerm() {
 		return term;
 	}
 
 	@Override
-	public String getName()
-	{
+	public String getName() {
 		return term.getName();
 	}
 
 	@Override
-	public int getWeight()
-	{
+	public int getWeight() {
 		return weight;
 	}
 
-	public void setWeight(int weight)
-	{
+	public void setWeight(int weight) {
 		this.weight = weight;
 	}
 
 	@Override
-	public Note< ? extends NoteSource> createNote(String value, String noteTypeName)
-	{
+	public Note< ? extends NoteSource> createNote(String value, String noteTypeName) {
 		throw new MethodNotImplemented();
 	}
 
 	@Override
-	public Note<AnnotationMethod> addNote(Note<AnnotationMethod> note)
-	{
+	public Note<AnnotationMethod> addNote(Note<AnnotationMethod> note) {
 		throw new MethodNotImplemented();
 	}
 
 	@Override
-	public Note<AnnotationMethod> getNote(String value, String noteTypeName)
-	{
+	public Note<AnnotationMethod> getNote(String value, String noteTypeName) {
 		throw new MethodNotImplemented();
 	}
 
 	@Override
-	public Collection<Note<AnnotationMethod>> getNotes()
-	{
+	public Collection<Note<AnnotationMethod>> getNotes() {
 		throw new MethodNotImplemented();
 	}
 
 	@Override
-	public Collection<Note<AnnotationMethod>> getNotes(String noteTypeName)
-	{
+	public Collection<Note<AnnotationMethod>> getNotes(String noteTypeName) {
 		throw new MethodNotImplemented();
 	}
 
 	@Override
-	public void addChangeListener(ChangeListener<Note<AnnotationMethod>> cl, ChangeType ct)
-	{
+	public void addChangeListener(ChangeListener<Note<AnnotationMethod>> cl, ChangeType ct) {
 		throw new MethodNotImplemented();
 	}
 
 	@Override
-	public boolean isUnchanging(ChangeType ct)
-	{
+	public boolean isUnchanging(ChangeType ct) {
 		throw new MethodNotImplemented();
 	}
 
 	@Override
-	public void removeChangeListener(ChangeListener<Note<AnnotationMethod>> cl, ChangeType ct)
-	{
+	public void removeChangeListener(ChangeListener<Note<AnnotationMethod>> cl, ChangeType ct) {
 		throw new MethodNotImplemented();
 	}
 

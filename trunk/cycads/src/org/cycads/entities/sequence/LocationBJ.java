@@ -5,15 +5,24 @@ package org.cycads.entities.sequence;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.biojava.bio.BioException;
+import org.biojavax.RankedCrossRef;
 import org.biojavax.SimpleRankedCrossRef;
 import org.biojavax.SimpleRichAnnotation;
+import org.biojavax.bio.seq.CompoundRichLocation;
 import org.biojavax.bio.seq.RichFeature;
+import org.biojavax.bio.seq.RichFeatureRelationship;
 import org.biojavax.bio.seq.RichLocation;
 import org.biojavax.bio.seq.RichSequence;
+import org.biojavax.bio.seq.SimplePosition;
+import org.biojavax.bio.seq.SimpleRichFeatureRelationship;
+import org.biojavax.bio.seq.SimpleRichLocation;
+import org.biojavax.bio.seq.RichLocation.Strand;
 import org.biojavax.ontology.ComparableTerm;
 import org.cycads.entities.annotation.AnnotationMethodBJ;
 import org.cycads.entities.annotation.dBLink.DBLinkFilter;
@@ -23,11 +32,11 @@ import org.cycads.entities.annotation.dBLink.BJ.LocationDBLinkBJ;
 import org.cycads.entities.annotation.feature.CDSBJ;
 import org.cycads.entities.annotation.feature.Feature;
 import org.cycads.entities.annotation.feature.FeatureFilter;
+import org.cycads.entities.annotation.feature.FeatureFilterByType;
 import org.cycads.entities.annotation.feature.GeneBJ;
 import org.cycads.entities.annotation.feature.RNABJ;
 import org.cycads.entities.annotation.feature.SimpleFeatureBJ;
 import org.cycads.exceptions.MethodNotImplemented;
-import org.cycads.general.biojava.BioSql;
 import org.cycads.general.biojava.TermsAndOntologies;
 
 // receive just a RichLocation
@@ -42,57 +51,122 @@ public class LocationBJ
 	ThinSequenceBJ		sequence	= null;
 	RichLocation		richLocation;
 
+	public static RichLocation createRichLocation(int start, int end, Collection<Intron> introns) {
+		int rank = 1;
+		int min = start < end ? start : end;
+		int max = start > end ? start : end;
+		Strand strand = start <= end ? Strand.POSITIVE_STRAND : Strand.NEGATIVE_STRAND;
+		if (introns == null || introns.size() == 0) {
+			return new SimpleRichLocation(new SimplePosition(min), new SimplePosition(max), rank, strand);
+		}
+		ArrayList<Intron> intronsList = new ArrayList<Intron>(introns);
+		Collections.sort(intronsList);
+		int min1, max1, i = 0;
+		ArrayList<SimpleRichLocation> members = new ArrayList<SimpleRichLocation>(introns.size() + 1);
+		while (min <= max && i < intronsList.size()) {
+			Intron intron = intronsList.get(i);
+			i++;
+			if (min < intron.getMin()) {
+				members.add(new SimpleRichLocation(new SimplePosition(min), new SimplePosition(Math.min(
+					intron.getMin() - 1, max)), rank++, strand));
+			}
+			min = intron.getMax() + 1;
+		}
+		if (min <= max) {
+			members.add(new SimpleRichLocation(new SimplePosition(min), new SimplePosition(max), rank++, strand));
+		}
+		if (members.size() == 0) {
+			return null;
+		}
+		else if (members.size() == 1) {
+			return members.get(0);
+		}
+		else {
+			return new CompoundRichLocation(members);
+		}
+	}
+
+	public static RichFeature fillRichFeature(RichLocation richLocation, ComparableTerm source, ThinSequenceBJ sequence) {
+		// create a feature template
+		RichFeature.Template templ = new RichFeature.Template();
+		// assign the feature template a location, type, and source
+		templ.typeTerm = TermsAndOntologies.getTermSubSequenceType();
+		templ.sourceTerm = source;
+		// assign the rest of the necessary stuff
+		templ.annotation = new SimpleRichAnnotation();
+		templ.featureRelationshipSet = new TreeSet();
+		templ.rankedCrossRefs = new TreeSet();
+		templ.location = richLocation;
+		try {
+			return (RichFeature) sequence.getRichSeq().createFeature(templ);
+		}
+		catch (BioException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+
+	}
+
+	public LocationBJ(int start, int end, Collection<Intron> introns, AnnotationMethodBJ method, ThinSequenceBJ sequence) {
+		this.start = start;
+		this.end = end;
+		this.introns = introns;
+		this.sequence = sequence;
+		richLocation = createRichLocation(start, end, introns);
+		fillRichFeature(richLocation, method.getTerm(), sequence);
+	}
+
 	public LocationBJ(RichLocation richLocation) {
 		this.richLocation = richLocation;
-		if (richLocation != null && richLocation.getFeature() != null
-			&& richLocation.getFeature().getSequence() != null) {
-			this.sequence = new ThinSequenceBJ((RichSequence) richLocation.getFeature().getSequence());
-		}
-		else {
+		if (richLocation == null || richLocation.getFeature() == null
+			|| !richLocation.getFeature().getTypeTerm().equals(TermsAndOntologies.getTermSubSequenceType())) {
 			throw new IllegalArgumentException();
 		}
 
 	}
 
-	protected LocationBJ(RichLocation richLocation, ThinSequenceBJ sequence) {
-		this.richLocation = richLocation;
-		if (richLocation == null) {
-			throw new IllegalArgumentException();
-		}
-		RichSequence seq = null;
-		if (sequence != null) {
-			seq = sequence.getRichSeq();
-		}
-		RichSequence seqLocation = null;
-		if (richLocation.getFeature() != null) {
-			seqLocation = (RichSequence) richLocation.getFeature().getSequence();
-		}
-		// needs at least one sequence. Exception if both don't point to the same sequence.
-		if (seq == null) {
-			if (seqLocation == null) {
-				throw new IllegalArgumentException();
-			}
-			else {
-				this.sequence = new ThinSequenceBJ(seqLocation);
-			}
-		}
-		else {
-			if (seqLocation != null && !seq.equals(seqLocation)) {
-				throw new IllegalArgumentException();
-			}
-			else {
-				this.sequence = sequence;
-			}
-
-		}
-	}
-
+	//	protected LocationBJ(RichLocation richLocation, ThinSequenceBJ sequence) {
+	//		this.richLocation = richLocation;
+	//		if (richLocation == null) {
+	//			throw new IllegalArgumentException();
+	//		}
+	//		RichSequence seq = null;
+	//		if (sequence != null) {
+	//			seq = sequence.getRichSeq();
+	//		}
+	//		RichSequence seqLocation = null;
+	//		if (richLocation.getFeature() != null) {
+	//			seqLocation = (RichSequence) richLocation.getFeature().getSequence();
+	//		}
+	//		// needs at least one sequence. Exception if both don't point to the same sequence.
+	//		if (seq == null) {
+	//			if (seqLocation == null) {
+	//				throw new IllegalArgumentException();
+	//			}
+	//			else {
+	//				this.sequence = new ThinSequenceBJ(seqLocation);
+	//			}
+	//		}
+	//		else {
+	//			if (seqLocation != null && !seq.equals(seqLocation)) {
+	//				throw new IllegalArgumentException();
+	//			}
+	//			else {
+	//				this.sequence = sequence;
+	//			}
+	//
+	//		}
+	//	}
+	//
 	public RichLocation getRichLocation() {
 		return richLocation;
 	}
 
 	@Override
 	public ThinSequenceBJ getSequence() {
+		if (sequence == null) {
+			sequence = new ThinSequenceBJ((RichSequence) getRichFeature().getSequence());
+		}
 		return sequence;
 	}
 
@@ -176,7 +250,7 @@ public class LocationBJ
 		return getStart() <= getEnd();
 	}
 
-	protected RichFeature createRichFeature(AnnotationMethodBJ method, ComparableTerm type) {
+	protected RichFeature createRichFeatureForAnnotation(AnnotationMethodBJ method, ComparableTerm type) {
 		// create a feature template
 		RichFeature.Template templ = new RichFeature.Template();
 		// assign the feature template a location, type, and source
@@ -186,16 +260,15 @@ public class LocationBJ
 		templ.annotation = new SimpleRichAnnotation();
 		templ.featureRelationshipSet = new TreeSet();
 		templ.rankedCrossRefs = new TreeSet();
-		if (getRichFeature() != null) {
-			// create new RichLocation
-			templ.location = getRichLocation().translate(0);
-			// richfeature = (RichFeature) getRichFeature().createFeature(templ);
-		}
-		else {
-			templ.location = getRichLocation();
-		}
+		// create new RichLocation
+		templ.location = getRichLocation().translate(0);
+		// richfeature = (RichFeature) getRichFeature().createFeature(templ);
 		try {
-			return (RichFeature) getSequence().getRichSeq().createFeature(templ);
+			RichFeature richFeature = (RichFeature) getSequence().getRichSeq().createFeature(templ);
+			getRichFeature().addFeatureRelationship(
+				new SimpleRichFeatureRelationship(getRichFeature(), richFeature,
+					SimpleRichFeatureRelationship.getContainsTerm(), 0));
+			return richFeature;
 		}
 		catch (BioException e) {
 			e.printStackTrace();
@@ -206,7 +279,7 @@ public class LocationBJ
 	// create feaure in the sequence
 	@Override
 	public SimpleFeatureBJ createFeature(AnnotationMethodBJ method, String type) {
-		return new SimpleFeatureBJ(createRichFeature(method, TermsAndOntologies.getTermFeatureType(type)));
+		return new SimpleFeatureBJ(createRichFeatureForAnnotation(method, TermsAndOntologies.getTermFeatureType(type)));
 	}
 
 	@Override
@@ -226,7 +299,7 @@ public class LocationBJ
 
 	@Override
 	public void addFeature(SimpleFeatureBJ feature) {
-		// Do nothing. the collection of features of the location are the RichFeatures in the same location
+		// Do nothing. the feature has already a location
 	}
 
 	@Override
@@ -239,33 +312,35 @@ public class LocationBJ
 
 	@Override
 	public Collection<SimpleFeatureBJ> getFeatures(AnnotationMethodBJ method, String type) {
-		Collection<RichFeature> richFeatures = BioSql.getFeatures(getRichLocation(), type, method);
-		Collection<SimpleFeatureBJ> features = new ArrayList<SimpleFeatureBJ>();
-		for (RichFeature richFeature : richFeatures) {
-			features.add(new SimpleFeatureBJ(richFeature));
+		Collection<SimpleFeatureBJ> features = getFeatures(type);
+		for (SimpleFeatureBJ feature : features) {
+			if (feature.getAnnotationMethod() != method) {
+				features.remove(feature);
+			}
 		}
 		return features;
 	}
 
 	@Override
 	public Collection<SimpleFeatureBJ> getFeatures(String type) {
-		Collection<RichFeature> richFeatures = BioSql.getFeatures(getRichLocation(), type);
-		Collection<SimpleFeatureBJ> features = new ArrayList<SimpleFeatureBJ>();
-		for (RichFeature richFeature : richFeatures) {
-			features.add(new SimpleFeatureBJ(richFeature));
-		}
-		return features;
+		return getFeatures(new FeatureFilterByType<SimpleFeatureBJ>(type));
 	}
 
 	@Override
 	public Collection<SimpleFeatureBJ> getFeatures(FeatureFilter<SimpleFeatureBJ> featureFilter) {
-		Collection<RichFeature> richFeatures = BioSql.getFeatures(getRichLocation());
+		//get all features contained in this location
+		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
 		Collection<SimpleFeatureBJ> features = new ArrayList<SimpleFeatureBJ>();
-		SimpleFeatureBJ feature;
-		for (RichFeature richFeature : richFeatures) {
-			feature = new SimpleFeatureBJ(richFeature);
-			if (featureFilter.accept(feature)) {
-				features.add(feature);
+		for (RichFeatureRelationship relation : relations) {
+			RichFeature richFeature = relation.getSubject();
+			try {
+				SimpleFeatureBJ simpleFeature = new SimpleFeatureBJ(richFeature);
+				if (featureFilter.accept(simpleFeature)) {
+					features.add(simpleFeature);
+				}
+			}
+			catch (IllegalArgumentException e) {
+
 			}
 		}
 		return features;
@@ -273,34 +348,9 @@ public class LocationBJ
 
 	@Override
 	public LocationDBLinkBJ createDBLink(AnnotationMethodBJ method, DBRecordBJ target) {
-		// create a feature template
-		RichFeature.Template templ = new RichFeature.Template();
-		// assign the feature template a location, type, and source
-		templ.typeTerm = TermsAndOntologies.getTermDBLinkType();
-		templ.sourceTerm = method.getTerm();
-		// assign the rest of the necessary stuff
-		templ.annotation = new SimpleRichAnnotation();
-		templ.featureRelationshipSet = new TreeSet();
-		templ.rankedCrossRefs = new TreeSet();
-		templ.rankedCrossRefs.add(new SimpleRankedCrossRef(target.getCrossRef(), 0));
-		try {
-			if (getRichFeature() != null) {
-				// create new RichLocation
-				RichLocation loc = (RichLocation) getRichLocation().translate(0);
-				templ.location = loc;
-				getSequence().getRichSeq().createFeature(templ);
-				return new LocationDBLinkBJ(new LocationBJ(loc));
-			}
-			else {
-				templ.location = getRichLocation();
-				getSequence().getRichSeq().createFeature(templ);
-				return new LocationDBLinkBJ(this);
-			}
-		}
-		catch (BioException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		RichFeature richFeature = createRichFeatureForAnnotation(method, TermsAndOntologies.getTermDBLinkType());
+		richFeature.addRankedCrossRef(new SimpleRankedCrossRef(target.getCrossRef(), 0));
+		return new LocationDBLinkBJ(richFeature);
 	}
 
 	@Override
@@ -327,11 +377,21 @@ public class LocationBJ
 
 	@Override
 	public Collection<LocationDBLinkBJ> getDBLinks(AnnotationMethodBJ method, DBRecordBJ target) {
-		Collection<RichFeature> richFeatures = BioSql.getFeatures(getRichLocation(),
-			TermsAndOntologies.getTermDBLinkType(), method);
+		//get all features contained in this location
+		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
+		//get the feature of type dbLink with the method and target
 		Collection<LocationDBLinkBJ> dbLinks = new ArrayList<LocationDBLinkBJ>();
-		for (RichFeature richFeature : richFeatures) {
-			dbLinks.add(new LocationDBLinkBJ((RichLocation) richFeature.getLocation()));
+		for (RichFeatureRelationship relation : relations) {
+			RichFeature richFeature = relation.getSubject();
+			if (richFeature.getTypeTerm().equals(TermsAndOntologies.getTermDBLinkType())
+				&& richFeature.getSourceTerm().equals(method.getTerm())) {
+				Set<RankedCrossRef> crossRefs = richFeature.getRankedCrossRefs();
+				for (RankedCrossRef crossRef : crossRefs) {
+					if (crossRef.getCrossRef().equals(target.getCrossRef())) {
+						dbLinks.add(new LocationDBLinkBJ(richFeature));
+					}
+				}
+			}
 		}
 		return dbLinks;
 	}
@@ -343,17 +403,74 @@ public class LocationBJ
 
 	@Override
 	public Collection<LocationDBLinkBJ> getDBLinks(DBLinkFilter<LocationDBLinkBJ> filter) {
-		Collection<RichFeature> richFeatures = BioSql.getFeatures(getRichLocation(),
-			TermsAndOntologies.getTermDBLinkType());
+		//get all features contained in this location
+		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
 		Collection<LocationDBLinkBJ> dbLinks = new ArrayList<LocationDBLinkBJ>();
-		LocationDBLinkBJ dbLink;
-		for (RichFeature richFeature : richFeatures) {
-			dbLink = new LocationDBLinkBJ((RichLocation) richFeature.getLocation());
-			if (filter.accept(dbLink)) {
-				dbLinks.add(dbLink);
+		for (RichFeatureRelationship relation : relations) {
+			RichFeature richFeature = relation.getSubject();
+			if (richFeature.getTypeTerm().equals(TermsAndOntologies.getTermDBLinkType())) {
+				LocationDBLinkBJ dbLink = new LocationDBLinkBJ(richFeature);
+				if (filter.accept(dbLink)) {
+					dbLinks.add(dbLink);
+				}
 			}
 		}
 		return dbLinks;
+	}
+
+	@Override
+	public CDSBJ createCDS(String method) {
+		return createCDS(AnnotationMethodBJ.getInstance(method));
+	}
+
+	@Override
+	public SimpleFeatureBJ createFeature(String method, String type) {
+		return createFeature(AnnotationMethodBJ.getInstance(method), type);
+	}
+
+	@Override
+	public GeneBJ createGene(String method) {
+		return createGene(AnnotationMethodBJ.getInstance(method));
+	}
+
+	@Override
+	public RNABJ createRNA(String method, String type) {
+		return createRNA(AnnotationMethodBJ.getInstance(method), type);
+	}
+
+	@Override
+	public Collection<SimpleFeatureBJ> getFeatures(String method, String type) {
+		return getFeatures(AnnotationMethodBJ.getInstance(method), type);
+	}
+
+	@Override
+	public Collection<SimpleFeatureBJ> getFeatures(LocationBJ source, String method, String type) {
+		return getFeatures(source, AnnotationMethodBJ.getInstance(method), type);
+	}
+
+	@Override
+	public LocationDBLinkBJ createDBLink(String method, DBRecordBJ target) {
+		return createDBLink(AnnotationMethodBJ.getInstance(method), target);
+	}
+
+	@Override
+	public LocationDBLinkBJ createDBLink(String method, String accession, String dbName) {
+		return createDBLink(AnnotationMethodBJ.getInstance(method), accession, dbName);
+	}
+
+	@Override
+	public LocationDBLinkBJ getDBLink(LocationBJ source, String method, DBRecordBJ target) {
+		return getDBLink(source, AnnotationMethodBJ.getInstance(method), target);
+	}
+
+	@Override
+	public Collection<LocationDBLinkBJ> getDBLinks(String method, DBRecordBJ target) {
+		return getDBLinks(AnnotationMethodBJ.getInstance(method), target);
+	}
+
+	@Override
+	public Collection<LocationDBLinkBJ> getDBLinks(String method, String dbName, String accession) {
+		return getDBLinks(AnnotationMethodBJ.getInstance(method), dbName, accession);
 	}
 
 }

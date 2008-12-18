@@ -5,6 +5,7 @@ package org.cycads.general.biojava;
 
 import org.biojavax.RichObjectFactory;
 import org.cycads.general.CacheCleanerListener;
+import org.cycads.general.ParametersDefault;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -21,7 +22,7 @@ public class BioJavaxSession
 	public static void init() {
 		session = sessionFactory.openSession();
 		RichObjectFactory.connectToBioSQL(session);
-		RichObjectFactory.setDefaultNamespaceName(TermsAndOntologies.getNameSpaceDefault());
+		RichObjectFactory.setDefaultNamespaceName(ParametersDefault.getNameSpaceDefault());
 		transaction = session.beginTransaction();
 	}
 

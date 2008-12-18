@@ -8,4 +8,8 @@ public interface DBLinkSource<D extends DBLink< ? , ? , R, M>, R extends DBRecor
 
 	public D createDBLink(M method, String accession, String dbName);
 
+	public D createDBLink(String method, R target);
+
+	public D createDBLink(String method, String accession, String dbName);
+
 }
