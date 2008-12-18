@@ -354,4 +354,8 @@ public class ParametersDefault
 		return getString("gff3.file.CDSTagExpression");
 	}
 
+	public static String getMethodNameGeneral() {
+		return getString("MethodName.General");
+	}
+
 }

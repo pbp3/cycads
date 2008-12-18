@@ -6,7 +6,6 @@ package org.cycads.entities.sequence;
 import java.util.Collection;
 
 import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.annotation.AnnotationMethodBJ;
 import org.cycads.entities.annotation.dBLink.DBLink;
 import org.cycads.entities.annotation.dBLink.DBLinkContainer;
 import org.cycads.entities.annotation.dBLink.DBLinkSource;
@@ -30,7 +29,7 @@ public interface Sequence<D extends DBLink<D, S, R, M>, S extends Sequence< ? , 
 
 	public Organism<S> getOrganism();
 
-	public L getOrCreateLocation(int start, int end, Collection<Intron> introns, AnnotationMethodBJ method);
+	public L getOrCreateLocation(int start, int end, Collection<Intron> introns);
 
 	public Collection<F> getFeatures(FeatureFilter<F> featureFilter);
 

@@ -20,6 +20,6 @@ public interface Organism<SEQ extends Sequence< ? , ? , ? , ? , ? , ? >>
 
 	public SEQ getOrCreateSequence(String seqAccession, int version);
 
-	public Collection<DBLink< ? , SEQ, ? , ? >> getDBLinksFromSequence(String seqDatabase, String seqAccession);
+	public Collection<DBLink< ? , SEQ, ? , ? >> getSequenceDBLinks(String seqDatabase, String seqAccession);
 
 }

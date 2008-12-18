@@ -88,7 +88,7 @@ public class NCBIOrganismBJ implements Organism<ThinSequenceBJ>
 	}
 
 	@Override
-	public Collection<DBLink< ? , ThinSequenceBJ, ? , ? >> getDBLinksFromSequence(String seqDatabase,
+	public Collection<DBLink< ? , ThinSequenceBJ, ? , ? >> getSequenceDBLinks(String seqDatabase,
 			String seqAccession) {
 		ArrayList<DBLink< ? , ThinSequenceBJ, ? , ? >> ret = new ArrayList<DBLink< ? , ThinSequenceBJ, ? , ? >>();
 		Collection<Integer> seqIds = BioSql.getSequencesIdWithExternalDBLink(seqDatabase, seqAccession, this);

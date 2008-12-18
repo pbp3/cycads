@@ -11,7 +11,10 @@ import java.util.Set;
 import org.biojavax.RankedCrossRef;
 import org.biojavax.RichAnnotation;
 import org.biojavax.SimpleRankedCrossRef;
+import org.biojavax.bio.seq.CompoundRichLocation;
+import org.biojavax.bio.seq.RichLocation;
 import org.biojavax.bio.seq.RichSequence;
+import org.biojavax.bio.seq.SimpleRichLocation;
 import org.biojavax.bio.seq.ThinRichSequence;
 import org.cycads.entities.annotation.AnnotationMethodBJ;
 import org.cycads.entities.annotation.dBLink.DBLinkFilter;
@@ -131,8 +134,23 @@ public class ThinSequenceBJ
 		return addNote(new SimpleNote<ThinSequenceBJ>(this, value, noteTypeName));
 	}
 
-	public LocationBJ getOrCreateLocation(int start, int end, Collection<Intron> introns, AnnotationMethodBJ method) {
-		return new LocationBJ(start, end, introns, method, this);
+	public LocationBJ getOrCreateLocation(int start, int end, Collection<Intron> introns) {
+		RichLocation location = LocationBJ.createRichLocation(start, end, introns);
+		RichLocation simpleRichLocation = location;
+		if (!(simpleRichLocation instanceof SimpleRichLocation)) {
+			simpleRichLocation = (SimpleRichLocation) ((CompoundRichLocation) simpleRichLocation).blockIterator().next();
+		}
+		Collection<RichLocation> locations = BioSql.getLocationsEqual((SimpleRichLocation) simpleRichLocation, this);
+		for (RichLocation richLocation : locations) {
+			if (richLocation.getFeature() != null) {
+				richLocation = (RichLocation) richLocation.getFeature().getLocation();
+				if (richLocation.equals(location) && richLocation != location) {
+					return new LocationBJ(richLocation);
+				}
+			}
+		}
+		return new LocationBJ(LocationBJ.fillRichFeature(location, AnnotationMethodBJ.getMethodGeneral().getTerm(),
+			this));
 	}
 
 	public String getDescription() {
