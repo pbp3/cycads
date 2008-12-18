@@ -21,8 +21,7 @@ public class LocationDBLinkBJ extends AnnotationRichFeatureBJ<LocationDBLinkBJ, 
 	public LocationDBLinkBJ(RichFeature feature) {
 		super(feature);
 		//verify consistency of parameter
-		if (!feature.getTypeTerm().equals(TermsAndOntologies.getTermDBLinkType())
-			|| feature.getRankedCrossRefs().size() != 1) {
+		if (!isDBLink(feature)) {
 			throw new IllegalArgumentException();
 		}
 	}
@@ -36,6 +35,10 @@ public class LocationDBLinkBJ extends AnnotationRichFeatureBJ<LocationDBLinkBJ, 
 			}
 		}
 		return target;
+	}
+
+	public static boolean isDBLink(RichFeature feature) {
+		return (isAnnotation(feature) && feature.getTypeTerm().equals(TermsAndOntologies.getTermDBLinkType()) && feature.getRankedCrossRefs().size() == 1);
 	}
 
 }

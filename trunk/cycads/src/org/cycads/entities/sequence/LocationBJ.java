@@ -36,7 +36,7 @@ import org.cycads.entities.annotation.feature.FeatureFilterByType;
 import org.cycads.entities.annotation.feature.GeneBJ;
 import org.cycads.entities.annotation.feature.RNABJ;
 import org.cycads.entities.annotation.feature.SimpleFeatureBJ;
-import org.cycads.exceptions.MethodNotImplemented;
+import org.cycads.exceptions.InvalidMethod;
 import org.cycads.general.biojava.TermsAndOntologies;
 
 // receive just a RichLocation
@@ -118,11 +118,22 @@ public class LocationBJ
 
 	public LocationBJ(RichLocation richLocation) {
 		this.richLocation = richLocation;
-		if (richLocation == null || richLocation.getFeature() == null
-			|| !richLocation.getFeature().getTypeTerm().equals(TermsAndOntologies.getTermSubSequenceType())) {
+		if (!isLocationRichLocation(richLocation)) {
 			throw new IllegalArgumentException();
 		}
+	}
 
+	public LocationBJ(RichFeature feature) {
+		this((RichLocation) feature.getLocation());
+	}
+
+	public static boolean isLocationRichFeature(RichFeature feature) {
+		return (feature != null && feature.getLocation() != null && feature.getTypeTerm().equals(
+			TermsAndOntologies.getTermSubSequenceType()));
+	}
+
+	public static boolean isLocationRichLocation(RichLocation location) {
+		return (location != null && isLocationRichFeature(location.getFeature()));
 	}
 
 	//	protected LocationBJ(RichLocation richLocation, ThinSequenceBJ sequence) {
@@ -174,18 +185,17 @@ public class LocationBJ
 		return getRichLocation().getFeature();
 	}
 
+	//invalid method. The location is immutable
 	@Override
 	public boolean addIntron(Intron intron) {
-		throw new MethodNotImplemented();
-		// return introns.add(intron);
+		throw new InvalidMethod();
 	}
 
 	@Override
 	public Intron addIntron(int startPos, int endPos) {
-		throw new MethodNotImplemented();
-		// Intron intron = new SimpleIntron(startPos, endPos);
-		// addIntron(intron);
-		// return intron;
+		Intron intron = new SimpleIntron(startPos, endPos);
+		addIntron(intron);
+		return intron;
 	}
 
 	@Override
@@ -228,21 +238,12 @@ public class LocationBJ
 
 	@Override
 	public int getMinPosition() {
-		if (getStart() < getEnd()) {
-			return getStart();
-		}
-		else {
-			return getEnd();
-		}
+		return getStart() > getEnd() ? getEnd() : getStart();
 	}
 
+	@Override
 	public int getMaxPosition() {
-		if (getStart() < getEnd()) {
-			return getEnd();
-		}
-		else {
-			return getStart();
-		}
+		return getStart() < getEnd() ? getEnd() : getStart();
 	}
 
 	@Override
@@ -299,7 +300,7 @@ public class LocationBJ
 
 	@Override
 	public void addFeature(SimpleFeatureBJ feature) {
-		// Do nothing. the feature has already a location
+		// Do nothing. the feature must has already a location
 	}
 
 	@Override
@@ -348,6 +349,10 @@ public class LocationBJ
 
 	@Override
 	public LocationDBLinkBJ createDBLink(AnnotationMethodBJ method, DBRecordBJ target) {
+		LocationDBLinkBJ dbLink;
+		if ((dbLink = getDBLink(this, method, target)) != null) {
+			return dbLink;
+		}
 		RichFeature richFeature = createRichFeatureForAnnotation(method, TermsAndOntologies.getTermDBLinkType());
 		richFeature.addRankedCrossRef(new SimpleRankedCrossRef(target.getCrossRef(), 0));
 		return new LocationDBLinkBJ(richFeature);
@@ -360,7 +365,7 @@ public class LocationBJ
 
 	@Override
 	public void addDBLink(LocationDBLinkBJ link) {
-		// Do nothing. the collection of DBLinks are DBLinks at the same richLocation
+		// Do nothing. the collection of DBLinks are DBLinks contained at the same richLocation
 	}
 
 	@Override

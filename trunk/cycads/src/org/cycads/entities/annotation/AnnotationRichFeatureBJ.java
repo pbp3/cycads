@@ -10,6 +10,7 @@ import org.biojavax.RichAnnotation;
 import org.biojavax.bio.seq.RichFeature;
 import org.biojavax.bio.seq.RichLocation;
 import org.biojavax.bio.seq.RichSequence;
+import org.biojavax.bio.seq.SimpleRichFeatureRelationship;
 import org.biojavax.ontology.ComparableTerm;
 import org.cycads.entities.annotation.feature.Feature;
 import org.cycads.entities.change.ChangeListener;
@@ -30,6 +31,7 @@ public class AnnotationRichFeatureBJ<ANNOTATION_TYPE extends AnnotationRichFeatu
 	RichFeature								richFeature;
 	NotesHashTable<Note<ANNOTATION_TYPE>>	notes;
 	ThinSequenceBJ							sequence;
+	LocationBJ								location;
 
 	public AnnotationRichFeatureBJ(RichFeature feature) {
 		this.richFeature = feature;
@@ -43,6 +45,15 @@ public class AnnotationRichFeatureBJ<ANNOTATION_TYPE extends AnnotationRichFeatu
 
 	public AnnotationRichFeatureBJ(int featureId) {
 		this(BioSql.getRichFeature(featureId));
+	}
+
+	//	public AnnotationRichFeatureBJ(RichLocation loc) {
+	//		this(loc.getFeature());
+	//	}
+	//
+	public static boolean isAnnotation(RichFeature feature) {
+		return (feature.getTypeTerm().getOntology().equals(TermsAndOntologies.getOntologyFeatureType())
+			&& feature.getSourceTerm().getOntology().equals(TermsAndOntologies.getOntologyMethods()) && getLocation(feature) != null);
 	}
 
 	public RichLocation getRichLocation() {
@@ -83,7 +94,20 @@ public class AnnotationRichFeatureBJ<ANNOTATION_TYPE extends AnnotationRichFeatu
 
 	@Override
 	public LocationBJ getSource() {
+		if (location == null) {
+			location = getLocation(getRichFeature());
+		}
 		return location;
+	}
+
+	public static LocationBJ getLocation(RichFeature feature) {
+		Collection<RichFeature> RichFeatures = BioSql.getFeatureContainers(feature);
+		for (RichFeature feature1 : RichFeatures) {
+			if (LocationBJ.isLocationRichFeature(feature1)) {
+				return new LocationBJ(feature1);
+			}
+		}
+		return null;
 	}
 
 	@Override
@@ -131,7 +155,9 @@ public class AnnotationRichFeatureBJ<ANNOTATION_TYPE extends AnnotationRichFeatu
 		ArrayList<ANNOTATION_TYPE_CONTAINER> features = new ArrayList<ANNOTATION_TYPE_CONTAINER>();
 		Collection<RichFeature> RichFeatures = BioSql.getFeatureContainers(getRichFeature());
 		for (RichFeature feature : RichFeatures) {
-			features.add(factory.createObjectContainer(feature));
+			if (factory.isObjectContainer(feature)) {
+				features.add(factory.createObjectContainer(feature));
+			}
 		}
 		return features;
 	}
@@ -141,9 +167,17 @@ public class AnnotationRichFeatureBJ<ANNOTATION_TYPE extends AnnotationRichFeatu
 		ArrayList<ANNOTATION_TYPE_CONTAINS> features = new ArrayList<ANNOTATION_TYPE_CONTAINS>();
 		Collection<RichFeature> RichFeatures = BioSql.getFeatureContains(getRichFeature());
 		for (RichFeature feature : RichFeatures) {
-			features.add(factory.createObjectContains(feature));
+			if (factory.isObjectContains(feature)) {
+				features.add(factory.createObjectContains(feature));
+			}
 		}
 		return features;
+	}
+
+	public void addRichFeature(RichFeature feature) {
+		getRichFeature().addFeatureRelationship(
+			new SimpleRichFeatureRelationship(getRichFeature(), feature,
+				SimpleRichFeatureRelationship.getContainsTerm(), 0));
 	}
 
 	@Override
