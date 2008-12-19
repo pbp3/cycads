@@ -18,8 +18,8 @@ import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
 import org.cycads.general.biojava.TermsAndOntologies;
 
-public class DBRecordDBRecordLinkBJ
-		implements DBLink<DBRecordDBRecordLinkBJ, DBRecordBJ, DBRecordBJ, AnnotationMethodBJ>
+public class DBRecordDBRecordLinkBJ implements
+		DBLink<DBRecordDBRecordLinkBJ, DBRecordBJ, DBRecordBJ, AnnotationMethodBJ>
 {
 
 	public static ComparableOntology	ontDBRecordDBRecordLink	= TermsAndOntologies.getOntologyDBRecordDBRecordLink();
@@ -29,8 +29,10 @@ public class DBRecordDBRecordLinkBJ
 	// TermWithNotes term;
 	ComparableTerm						term;
 
-	protected DBRecordDBRecordLinkBJ(DBRecordBJ source, AnnotationMethodBJ method, DBRecordBJ target) {
-		if (source == null || target == null) {
+	protected DBRecordDBRecordLinkBJ(DBRecordBJ source, AnnotationMethodBJ method, DBRecordBJ target)
+	{
+		if (source == null || target == null)
+		{
 			throw new IllegalArgumentException(Messages.exceptionDBRecordDbRecordLinkBJSourceOrTargetNull());
 		}
 		this.source = source;
@@ -43,29 +45,36 @@ public class DBRecordDBRecordLinkBJ
 		// term.addNote(TermsAndOntologies.getTermNoteTypeAnnotationMethod(), method.getTerm());
 	}
 
-	protected DBRecordDBRecordLinkBJ(ComparableTerm term) {
-		if (term.getOntology() != ontDBRecordDBRecordLink) {
+	protected DBRecordDBRecordLinkBJ(ComparableTerm term)
+	{
+		if (term.getOntology() != ontDBRecordDBRecordLink)
+		{
 			throw new IllegalArgumentException(Messages.ExceptionDBRecordDbRecordLinkBJConstructorTerm());
 		}
 		this.term = term;
 	}
 
-	public static String joinTermName(String source, String method, String target) {
+	public static String joinTermName(String source, String method, String target)
+	{
 		return source + ParametersDefault.DBRecordDBRecordSeparator() + method
 			+ ParametersDefault.DBRecordDBRecordSeparator() + target;
 	}
 
-	public static String[] splitTermName(String termName) {
+	public static String[] splitTermName(String termName)
+	{
 		String[] a = termName.split(ParametersDefault.DBRecordDBRecordSeparator());
-		if (a.length != 3 || a[0].length() == 0 || a[2].length() == 0) {
+		if (a.length != 3 || a[0].length() == 0 || a[2].length() == 0)
+		{
 			throw new IllegalArgumentException(Messages.ExceptionInvalidDBRecordDBRecordLinkName(termName));
 		}
 		return a;
 	}
 
 	@Override
-	public DBRecordBJ getDBRecordTarget() {
-		if (target == null) {
+	public DBRecordBJ getDBRecordTarget()
+	{
+		if (target == null)
+		{
 			String targetDBNameAndAccession = splitTermName(term.getName())[2];
 			String[] a = DBRecordBJ.splitDBNameAndAccession(targetDBNameAndAccession);
 			target = DBRecordBJ.getOrCreateDBRecordBJ(a[0], a[1]);
@@ -74,8 +83,10 @@ public class DBRecordDBRecordLinkBJ
 	}
 
 	@Override
-	public AnnotationMethodBJ getAnnotationMethod() {
-		if (method == null) {
+	public AnnotationMethodBJ getAnnotationMethod()
+	{
+		if (method == null)
+		{
 			String methodName = splitTermName(term.getName())[1];
 			// ComparableTerm termMethod = term.getNoteTerm(TermsAndOntologies.getTermNoteTypeAnnotationMethod());
 			method = AnnotationMethodBJ.getInstance(methodName);
@@ -84,8 +95,10 @@ public class DBRecordDBRecordLinkBJ
 	}
 
 	@Override
-	public DBRecordBJ getSource() {
-		if (source == null) {
+	public DBRecordBJ getSource()
+	{
+		if (source == null)
+		{
 			String sourceDBNameAndAccession = splitTermName(term.getName())[0];
 			String[] a = DBRecordBJ.splitDBNameAndAccession(sourceDBNameAndAccession);
 			source = DBRecordBJ.getOrCreateDBRecordBJ(a[0], a[1]);
@@ -94,48 +107,63 @@ public class DBRecordDBRecordLinkBJ
 	}
 
 	@Override
-	public Note<DBRecordDBRecordLinkBJ> createNote(String value, String noteTypeName) {
+	public Note<DBRecordDBRecordLinkBJ> createNote(String value, String noteTypeName)
+	{
 		throw new MethodNotImplemented();
 	}
 
 	@Override
-	public Note<DBRecordDBRecordLinkBJ> addNote(Note<DBRecordDBRecordLinkBJ> note) {
+	public Note<DBRecordDBRecordLinkBJ> addNote(Note<DBRecordDBRecordLinkBJ> note)
+	{
 		throw new MethodNotImplemented();
 	}
 
 	@Override
-	public Note<DBRecordDBRecordLinkBJ> getNote(String value, String noteTypeName) {
+	public Note<DBRecordDBRecordLinkBJ> getNote(String value, String noteTypeName)
+	{
 		throw new MethodNotImplemented();
 	}
 
 	@Override
-	public Collection<Note<DBRecordDBRecordLinkBJ>> getNotes() {
+	public Collection<Note<DBRecordDBRecordLinkBJ>> getNotes()
+	{
 		throw new MethodNotImplemented();
 	}
 
 	@Override
-	public Collection<Note<DBRecordDBRecordLinkBJ>> getNotes(String noteTypeName) {
+	public Collection<Note<DBRecordDBRecordLinkBJ>> getNotes(String noteTypeName)
+	{
 		throw new MethodNotImplemented();
 	}
 
 	@Override
-	public void addChangeListener(ChangeListener<Note<DBRecordDBRecordLinkBJ>> cl, ChangeType ct) {
+	public void addChangeListener(ChangeListener<Note<DBRecordDBRecordLinkBJ>> cl, ChangeType ct)
+	{
 		throw new MethodNotImplemented();
 	}
 
 	@Override
-	public boolean isUnchanging(ChangeType ct) {
+	public boolean isUnchanging(ChangeType ct)
+	{
 		throw new MethodNotImplemented();
 	}
 
 	@Override
-	public void removeChangeListener(ChangeListener<Note<DBRecordDBRecordLinkBJ>> cl, ChangeType ct) {
+	public void removeChangeListener(ChangeListener<Note<DBRecordDBRecordLinkBJ>> cl, ChangeType ct)
+	{
 		throw new MethodNotImplemented();
 	}
 
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return joinTermName(getSource().toString(), getAnnotationMethod().getName(), getDBRecordTarget().toString());
+	}
+
+	@Override
+	public Note<DBRecordDBRecordLinkBJ> addNote(String value, String type)
+	{
+		return addNote(createNote(value, type));
 	}
 
 }

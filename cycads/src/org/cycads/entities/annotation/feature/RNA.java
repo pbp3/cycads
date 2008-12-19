@@ -20,4 +20,6 @@ public interface RNA<RNA_TYPE extends RNA< ? , ? , ? , ? , ? , ? >, L extends Lo
 
 	public Collection<C> getCDSProducts();
 
+	public boolean isMRNA();
+
 }

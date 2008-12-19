@@ -33,4 +33,6 @@ public interface Sequence<D extends DBLink<D, S, R, M>, S extends Sequence< ? , 
 
 	public Collection<F> getFeatures(FeatureFilter<F> featureFilter);
 
+	public Note<S> addNote(String value, String type);
+
 }

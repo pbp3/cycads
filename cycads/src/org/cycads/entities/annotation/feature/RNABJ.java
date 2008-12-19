@@ -12,73 +12,94 @@ import org.cycads.entities.annotation.AnnotationRichFeatureBJFactory;
 import org.cycads.entities.sequence.LocationBJ;
 import org.cycads.entities.sequence.ThinSequenceBJ;
 
-public class RNABJ extends AnnotationRichFeatureBJ<RNABJ, CDSBJ, GeneBJ>
-		implements RNA<RNABJ, LocationBJ, ThinSequenceBJ, AnnotationMethodBJ, GeneBJ, CDSBJ>,
+public class RNABJ extends AnnotationRichFeatureBJ<RNABJ, CDSBJ, GeneBJ> implements
+		RNA<RNABJ, LocationBJ, ThinSequenceBJ, AnnotationMethodBJ, GeneBJ, CDSBJ>,
 		AnnotationRichFeatureBJFactory<CDSBJ, GeneBJ>
 {
-	public RNABJ(RichFeature feature) {
+	public RNABJ(RichFeature feature)
+	{
 		super(feature);
-		if (!isRNA(feature)) {
+		if (!isRNA(feature))
+		{
 			throw new IllegalArgumentException(feature.toString());
 		}
 	}
 
-	public static boolean isRNA(RichFeature feature) {
+	public static boolean isRNA(RichFeature feature)
+	{
 		return isAnnotation(feature);
 	}
 
 	@Override
-	public Collection<CDSBJ> getCDSProducts() {
+	public Collection<CDSBJ> getCDSProducts()
+	{
 		return getFeaturesContains(this);
 	}
 
 	@Override
-	public GeneBJ getGeneParent() {
+	public GeneBJ getGeneParent()
+	{
 		Collection<GeneBJ> genes = getGenesContains();
-		if (genes.size() > 0) {
+		if (genes.size() > 0)
+		{
 			return genes.iterator().next();
 		}
 		return null;
 	}
 
 	@Override
-	public Collection<GeneBJ> getGenesContains() {
+	public Collection<GeneBJ> getGenesContains()
+	{
 		return getFeaturesContainers(this);
 	}
 
 	@Override
-	public void setGeneParent(GeneBJ gene) {
-		if (gene == null) {
+	public void setGeneParent(GeneBJ gene)
+	{
+		if (gene == null)
+		{
 			throw new IllegalArgumentException();
 		}
 		Collection<GeneBJ> genes = getGenesContains();
-		if (!genes.contains(gene)) {
+		if (!genes.contains(gene))
+		{
 			gene.addRNA(this);
 		}
 	}
 
-	public void addCDS(CDSBJ cds) {
+	public void addCDS(CDSBJ cds)
+	{
 		addRichFeature(cds.getRichFeature());
 	}
 
 	@Override
-	public GeneBJ createObjectContainer(RichFeature feature) {
+	public GeneBJ createObjectContainer(RichFeature feature)
+	{
 		return new GeneBJ(feature);
 	}
 
 	@Override
-	public CDSBJ createObjectContains(RichFeature feature) {
+	public CDSBJ createObjectContains(RichFeature feature)
+	{
 		return new CDSBJ(feature);
 	}
 
 	@Override
-	public boolean isObjectContainer(RichFeature feature) {
+	public boolean isObjectContainer(RichFeature feature)
+	{
 		return GeneBJ.isGene(feature);
 	}
 
 	@Override
-	public boolean isObjectContains(RichFeature feature) {
+	public boolean isObjectContains(RichFeature feature)
+	{
 		return CDSBJ.isCDS(feature);
+	}
+
+	@Override
+	public boolean isMRNA()
+	{
+		return getType().equals(Feature.MRNA_TYPE);
 	}
 
 }
