@@ -14,36 +14,45 @@ import org.cycads.entities.change.ChangeListener;
 import org.cycads.entities.change.ChangeSupport;
 import org.cycads.entities.change.ChangeType;
 
-public class NotesHashTable<N extends Note< ? extends NoteSource>> extends Hashtable<String, Collection<N>>
-		implements NotesContainer<N>
+public class NotesHashTable<N extends Note< ? extends NoteSource>> extends Hashtable<String, Collection<N>> implements
+		NotesContainer<N>
 {
 	ChangeSupport<N>	changeSupport	= new ChangeSupport<N>();
 
-	public NotesHashTable() {
+	public NotesHashTable()
+	{
 		super();
 	}
 
-	public NotesHashTable(int initialCapacity) {
+	public NotesHashTable(int initialCapacity)
+	{
 		super(initialCapacity);
 	}
 
-	public NotesHashTable(int initialCapacity, float loadFactor) {
+	public NotesHashTable(int initialCapacity, float loadFactor)
+	{
 		super(initialCapacity, loadFactor);
 	}
 
-	public NotesHashTable(Map< ? extends String, ? extends Collection<N>> t) {
+	public NotesHashTable(Map< ? extends String, ? extends Collection<N>> t)
+	{
 		super(t);
 	}
 
-	public N addNote(N note) {
+	// add note if it doesn't exist
+	public N addNote(Note< ? > note2)
+	{
+		N note = (N) note2;
 		ChangeEvent<N> ce = new ChangeEvent<N>(this, ChangeType.NOTE, note, null);
 		changeSupport.firePreChangeEvent(ce);
 		N note1 = getNote(note.getValue(), note.getType());
-		if (note1 != null) {
+		if (note1 != null)
+		{
 			return note1;
 		}
 		Collection<N> notes = getNotes(note.getType());
-		if (notes == null) {
+		if (notes == null)
+		{
 			notes = createNotesForEntry();
 			put(note.getType(), notes);
 		}
@@ -52,44 +61,55 @@ public class NotesHashTable<N extends Note< ? extends NoteSource>> extends Hasht
 		return note;
 	}
 
-	private Collection<N> createNotesForEntry() {
+	private Collection<N> createNotesForEntry()
+	{
 		return new ArrayList<N>();
 	}
 
-	public Collection<N> getNotes() {
+	public Collection<N> getNotes()
+	{
 		Collection<N> notes = new LinkedList<N>();
-		for (Collection<N> notes1 : values()) {
+		for (Collection<N> notes1 : values())
+		{
 			notes.addAll(notes1);
 		}
 		return notes;
 	}
 
-	public Collection<N> getNotes(String noteTypeName) {
+	public Collection<N> getNotes(String noteTypeName)
+	{
 		return get(noteTypeName);
 	}
 
-	public N getNote(String value, String noteTypeName) {
+	public N getNote(String value, String noteTypeName)
+	{
 		Collection<N> notes = getNotes(noteTypeName);
-		if (notes == null || notes.size() == 0) {
+		if (notes == null || notes.size() == 0)
+		{
 			return null;
 		}
-		for (N note : notes) {
-			if (note.getValue().equals(value)) {
+		for (N note : notes)
+		{
+			if (note.getValue().equals(value))
+			{
 				return note;
 			}
 		}
 		return null;
 	}
 
-	public void addChangeListener(ChangeListener<N> cl, ChangeType ct) {
+	public void addChangeListener(ChangeListener<N> cl, ChangeType ct)
+	{
 		changeSupport.addChangeListener(cl, ct);
 	}
 
-	public boolean isUnchanging(ChangeType ct) {
+	public boolean isUnchanging(ChangeType ct)
+	{
 		return changeSupport.isUnchanging(ct);
 	}
 
-	public void removeChangeListener(ChangeListener<N> cl, ChangeType ct) {
+	public void removeChangeListener(ChangeListener<N> cl, ChangeType ct)
+	{
 		changeSupport.removeChangeListener(cl, ct);
 	}
 

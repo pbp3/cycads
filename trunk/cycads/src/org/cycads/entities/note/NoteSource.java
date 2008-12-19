@@ -7,4 +7,6 @@ public interface NoteSource
 {
 	public Note< ? extends NoteSource> createNote(String value, String noteTypeName);
 
+	public Note< ? extends NoteSource> createNote(Note< ? extends NoteSource> note);
+
 }

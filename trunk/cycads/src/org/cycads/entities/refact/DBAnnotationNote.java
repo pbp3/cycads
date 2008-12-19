@@ -1,6 +1,6 @@
 package org.cycads.entities.refact;
 
-import org.cycads.entities.annotation.dBLink.DBLink;
+import org.cycads.entities.annotation.dBLink.DBLinkAnnotation;
 
 /*
  * Created on 07/11/2008
@@ -9,12 +9,12 @@ import org.cycads.entities.annotation.dBLink.DBLink;
 public class DBAnnotationNote extends Note implements DBAnnotationNote
 {
 
-	private DBLink	dBLink;
+	private DBLinkAnnotation	dBLink;
 
 	/* (non-Javadoc)
 	 * @see org.cycads.entities.refact.IDBAnnotationNote#getDBAnnotation()
 	 */
-	public DBLink getDBAnnotation()
+	public DBLinkAnnotation getDBAnnotation()
 	{
 		return dBLink;
 	}

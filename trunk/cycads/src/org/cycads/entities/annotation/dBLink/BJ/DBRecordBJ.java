@@ -12,7 +12,7 @@ import org.biojavax.RichObjectFactory;
 import org.biojavax.SimpleCrossRef;
 import org.biojavax.ontology.ComparableTerm;
 import org.cycads.entities.annotation.AnnotationMethodBJ;
-import org.cycads.entities.annotation.dBLink.DBLinkFilter;
+import org.cycads.entities.annotation.dBLink.DBLinkAnnotationFilter;
 import org.cycads.entities.annotation.dBLink.DBRecord;
 import org.cycads.entities.annotation.dBLink.ExternalDatabase;
 import org.cycads.entities.change.ChangeListener;
@@ -164,7 +164,7 @@ public class DBRecordBJ implements DBRecord<DBRecordDBRecordLinkBJ, DBRecordBJ, 
 	}
 
 	@Override
-	public Collection<DBRecordDBRecordLinkBJ> getDBLinks(DBLinkFilter<DBRecordDBRecordLinkBJ> filter)
+	public Collection<DBRecordDBRecordLinkBJ> getDBLinks(DBLinkAnnotationFilter<DBRecordDBRecordLinkBJ> filter)
 	{
 		Collection<ComparableTerm> terms = BioSql.getTermsWithCrossRef(this.getCrossRef());
 		Collection<DBRecordDBRecordLinkBJ> result = new ArrayList<DBRecordDBRecordLinkBJ>(terms.size());
@@ -186,7 +186,13 @@ public class DBRecordBJ implements DBRecord<DBRecordDBRecordLinkBJ, DBRecordBJ, 
 	}
 
 	@Override
-	public Note<DBRecordBJ> addNote(Note<DBRecordBJ> note)
+	public Note<DBRecordBJ> createNote(Note< ? > note)
+	{
+		throw new MethodNotImplemented();
+	}
+
+	@Override
+	public Note<DBRecordBJ> addNote(Note< ? > note)
 	{
 		throw new MethodNotImplemented();
 	}

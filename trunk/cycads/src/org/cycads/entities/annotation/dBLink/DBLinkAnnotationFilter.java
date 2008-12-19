@@ -5,7 +5,7 @@ package org.cycads.entities.annotation.dBLink;
 
 import org.cycads.entities.annotation.AnnotationFilter;
 
-public interface DBLinkFilter<D extends DBLink< ? , ? , ? , ? >> extends AnnotationFilter<D>
+public interface DBLinkAnnotationFilter<D extends DBLinkAnnotation< ? , ? , ? , ? >> extends AnnotationFilter<D>
 {
 
 }

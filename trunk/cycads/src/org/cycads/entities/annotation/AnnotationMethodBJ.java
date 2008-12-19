@@ -81,7 +81,13 @@ public class AnnotationMethodBJ implements AnnotationMethod
 	}
 
 	@Override
-	public Note<AnnotationMethod> addNote(Note<AnnotationMethod> note)
+	public Note<AnnotationMethod> createNote(Note< ? > note)
+	{
+		return createNote(note.getValue(), note.getType());
+	}
+
+	@Override
+	public Note<AnnotationMethod> addNote(Note< ? > note)
 	{
 		throw new MethodNotImplemented();
 	}

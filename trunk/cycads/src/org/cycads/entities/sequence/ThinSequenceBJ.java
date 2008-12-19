@@ -17,7 +17,7 @@ import org.biojavax.bio.seq.RichSequence;
 import org.biojavax.bio.seq.SimpleRichLocation;
 import org.biojavax.bio.seq.ThinRichSequence;
 import org.cycads.entities.annotation.AnnotationMethodBJ;
-import org.cycads.entities.annotation.dBLink.DBLinkFilter;
+import org.cycads.entities.annotation.dBLink.DBLinkAnnotationFilter;
 import org.cycads.entities.annotation.dBLink.BJ.DBRecordBJ;
 import org.cycads.entities.annotation.dBLink.BJ.DBRecordDBRecordLinkBJ;
 import org.cycads.entities.annotation.dBLink.BJ.ExternalDatabaseBJ;
@@ -106,8 +106,12 @@ public class ThinSequenceBJ
 	}
 
 	@Override
-	public Note<ThinSequenceBJ> addNote(Note<ThinSequenceBJ> note)
+	public Note<ThinSequenceBJ> addNote(Note< ? > note)
 	{
+		if (note.getHolder() != this)
+		{
+			note = createNote(note);
+		}
 		return getNotesHash().addNote(note);
 	}
 
@@ -151,6 +155,12 @@ public class ThinSequenceBJ
 	public Note<ThinSequenceBJ> createNote(String value, String noteTypeName)
 	{
 		return addNote(new SimpleNote<ThinSequenceBJ>(this, value, noteTypeName));
+	}
+
+	@Override
+	public Note<ThinSequenceBJ> createNote(Note< ? > note)
+	{
+		return createNote(note.getValue(), note.getType());
 	}
 
 	public LocationBJ getOrCreateLocation(int start, int end, Collection<Intron> introns)
@@ -278,7 +288,7 @@ public class ThinSequenceBJ
 	}
 
 	@Override
-	public Collection<ThinDBLinkBJ<ThinSequenceBJ>> getDBLinks(DBLinkFilter<ThinDBLinkBJ<ThinSequenceBJ>> filter)
+	public Collection<ThinDBLinkBJ<ThinSequenceBJ>> getDBLinks(DBLinkAnnotationFilter<ThinDBLinkBJ<ThinSequenceBJ>> filter)
 	{
 		ArrayList<ThinDBLinkBJ<ThinSequenceBJ>> dbLinks = new ArrayList<ThinDBLinkBJ<ThinSequenceBJ>>();
 		for (ThinDBLinkBJ<ThinSequenceBJ> dbLink : getDBLinksHash().values())

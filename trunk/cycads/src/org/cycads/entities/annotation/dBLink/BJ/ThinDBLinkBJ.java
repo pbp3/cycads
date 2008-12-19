@@ -7,16 +7,16 @@ import java.util.Collection;
 
 import org.biojavax.CrossRef;
 import org.cycads.entities.annotation.AnnotationMethodBJ;
-import org.cycads.entities.annotation.dBLink.DBLink;
-import org.cycads.entities.annotation.dBLink.DBLinkSource;
+import org.cycads.entities.annotation.dBLink.DBLinkAnnotation;
+import org.cycads.entities.annotation.dBLink.DBLinkAnnotationSource;
 import org.cycads.entities.change.ChangeListener;
 import org.cycads.entities.change.ChangeType;
 import org.cycads.entities.note.Note;
 import org.cycads.exceptions.InvalidMethod;
 
 // Without AnnotationMethod and notes. It has just source and target.
-public class ThinDBLinkBJ<S extends DBLinkSource< ? , ? , ? >> implements
-		DBLink<ThinDBLinkBJ<S>, S, DBRecordBJ, AnnotationMethodBJ>
+public class ThinDBLinkBJ<S extends DBLinkAnnotationSource< ? , ? , ? >> implements
+		DBLinkAnnotation<ThinDBLinkBJ<S>, S, DBRecordBJ, AnnotationMethodBJ>
 {
 	S			source;
 	DBRecordBJ	target;
@@ -58,7 +58,13 @@ public class ThinDBLinkBJ<S extends DBLinkSource< ? , ? , ? >> implements
 	}
 
 	@Override
-	public Note<ThinDBLinkBJ<S>> addNote(Note<ThinDBLinkBJ<S>> note)
+	public Note<ThinDBLinkBJ<S>> createNote(Note< ? > note)
+	{
+		return createNote(note.getValue(), note.getType());
+	}
+
+	@Override
+	public Note<ThinDBLinkBJ<S>> addNote(Note< ? > note)
 	{
 		throw new InvalidMethod();
 	}

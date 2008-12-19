@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 import org.biojavax.bio.taxa.NCBITaxon;
-import org.cycads.entities.annotation.dBLink.DBLink;
+import org.cycads.entities.annotation.dBLink.DBLinkAnnotation;
 import org.cycads.entities.annotation.dBLink.BJ.ExternalDatabaseBJ;
 import org.cycads.entities.annotation.dBLink.BJ.ThinDBLinkBJ;
 import org.cycads.exceptions.DBObjectNotFound;
@@ -88,9 +88,9 @@ public class NCBIOrganismBJ implements Organism<ThinSequenceBJ>
 	}
 
 	@Override
-	public Collection<DBLink< ? , ThinSequenceBJ, ? , ? >> getSequenceDBLinks(String seqDatabase,
+	public Collection<DBLinkAnnotation< ? , ThinSequenceBJ, ? , ? >> getSequenceDBLinks(String seqDatabase,
 			String seqAccession) {
-		ArrayList<DBLink< ? , ThinSequenceBJ, ? , ? >> ret = new ArrayList<DBLink< ? , ThinSequenceBJ, ? , ? >>();
+		ArrayList<DBLinkAnnotation< ? , ThinSequenceBJ, ? , ? >> ret = new ArrayList<DBLinkAnnotation< ? , ThinSequenceBJ, ? , ? >>();
 		Collection<Integer> seqIds = BioSql.getSequencesIdWithExternalDBLink(seqDatabase, seqAccession, this);
 		for (int seqId : seqIds) {
 			ret.add(new ThinDBLinkBJ<ThinSequenceBJ>(new ThinSequenceBJ(seqId, this),
