@@ -15,6 +15,6 @@ public interface NotesContainer<N extends Note< ? >> extends Changeable<N>
 
 	public N getNote(String value, String noteTypeName);
 
-	public N addNote(N note);
+	public N addNote(Note< ? > note);
 
 }

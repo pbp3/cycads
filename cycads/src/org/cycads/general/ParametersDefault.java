@@ -464,6 +464,11 @@ public class ParametersDefault
 		return getString("gff3.file.note.dbxref.expression");
 	}
 
+	public static String gff3NoteDBXRefSplit()
+	{
+		return getString("gff3.file.note.dbxref.split");
+	}
+
 	// public static String gff3NoteTypeProduct()
 	// {
 	// return getString("gff3.file.noteType.parent");

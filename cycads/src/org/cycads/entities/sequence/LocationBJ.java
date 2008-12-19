@@ -25,7 +25,7 @@ import org.biojavax.bio.seq.SimpleRichLocation;
 import org.biojavax.bio.seq.RichLocation.Strand;
 import org.biojavax.ontology.ComparableTerm;
 import org.cycads.entities.annotation.AnnotationMethodBJ;
-import org.cycads.entities.annotation.dBLink.DBLinkFilter;
+import org.cycads.entities.annotation.dBLink.DBLinkAnnotationFilter;
 import org.cycads.entities.annotation.dBLink.BJ.DBRecordBJ;
 import org.cycads.entities.annotation.dBLink.BJ.ExternalDatabaseBJ;
 import org.cycads.entities.annotation.dBLink.BJ.LocationDBLinkBJ;
@@ -484,7 +484,7 @@ public class LocationBJ
 	}
 
 	@Override
-	public Collection<LocationDBLinkBJ> getDBLinks(DBLinkFilter<LocationDBLinkBJ> filter)
+	public Collection<LocationDBLinkBJ> getDBLinks(DBLinkAnnotationFilter<LocationDBLinkBJ> filter)
 	{
 		// get all features contained in this location
 		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();

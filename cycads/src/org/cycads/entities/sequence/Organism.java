@@ -5,7 +5,7 @@ package org.cycads.entities.sequence;
 
 import java.util.Collection;
 
-import org.cycads.entities.annotation.dBLink.DBLink;
+import org.cycads.entities.annotation.dBLink.DBLinkAnnotation;
 
 public interface Organism<SEQ extends Sequence< ? , ? , ? , ? , ? , ? >>
 {
@@ -20,6 +20,6 @@ public interface Organism<SEQ extends Sequence< ? , ? , ? , ? , ? , ? >>
 
 	public SEQ getOrCreateSequence(String seqAccession, int version);
 
-	public Collection<DBLink< ? , SEQ, ? , ? >> getSequenceDBLinks(String seqDatabase, String seqAccession);
+	public Collection<DBLinkAnnotation< ? , SEQ, ? , ? >> getSequenceDBLinks(String seqDatabase, String seqAccession);
 
 }

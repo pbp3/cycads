@@ -9,12 +9,12 @@ import org.biojavax.RankedCrossRef;
 import org.biojavax.bio.seq.RichFeature;
 import org.cycads.entities.annotation.AnnotationMethodBJ;
 import org.cycads.entities.annotation.AnnotationRichFeatureBJ;
-import org.cycads.entities.annotation.dBLink.DBLink;
+import org.cycads.entities.annotation.dBLink.DBLinkAnnotation;
 import org.cycads.entities.sequence.LocationBJ;
 import org.cycads.general.biojava.TermsAndOntologies;
 
 public class LocationDBLinkBJ extends AnnotationRichFeatureBJ<LocationDBLinkBJ, LocationDBLinkBJ, LocationDBLinkBJ>
-		implements DBLink<LocationDBLinkBJ, LocationBJ, DBRecordBJ, AnnotationMethodBJ>
+		implements DBLinkAnnotation<LocationDBLinkBJ, LocationBJ, DBRecordBJ, AnnotationMethodBJ>
 {
 	DBRecordBJ	target;
 

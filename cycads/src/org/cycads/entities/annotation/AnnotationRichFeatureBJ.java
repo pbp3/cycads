@@ -135,8 +135,18 @@ public class AnnotationRichFeatureBJ<ANNOTATION_TYPE extends AnnotationRichFeatu
 	}
 
 	@Override
-	public Note<ANNOTATION_TYPE> addNote(Note<ANNOTATION_TYPE> note)
+	public Note<ANNOTATION_TYPE> createNote(Note< ? > note)
 	{
+		return createNote(note.getValue(), note.getType());
+	}
+
+	@Override
+	public Note<ANNOTATION_TYPE> addNote(Note< ? > note)
+	{
+		if (note.getHolder() != this)
+		{
+			note = createNote(note.getValue(), note.getType());
+		}
 		return getNotesHash().addNote(note);
 	}
 
