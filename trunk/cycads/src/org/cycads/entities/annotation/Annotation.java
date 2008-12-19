@@ -15,4 +15,6 @@ public interface Annotation<ANNOTATION_TYPE extends Annotation< ? , ? , ? >, Sou
 
 	public SourceType getSource();
 
+	public Note<ANNOTATION_TYPE> addNote(String value, String type);
+
 }

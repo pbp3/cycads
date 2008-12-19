@@ -15,80 +15,100 @@ import org.cycads.entities.note.Note;
 import org.cycads.exceptions.InvalidMethod;
 
 // Without AnnotationMethod and notes. It has just source and target.
-public class ThinDBLinkBJ<S extends DBLinkSource< ? , ? , ? >>
-		implements DBLink<ThinDBLinkBJ<S>, S, DBRecordBJ, AnnotationMethodBJ>
+public class ThinDBLinkBJ<S extends DBLinkSource< ? , ? , ? >> implements
+		DBLink<ThinDBLinkBJ<S>, S, DBRecordBJ, AnnotationMethodBJ>
 {
 	S			source;
 	DBRecordBJ	target;
 
-	public ThinDBLinkBJ(S source, DBRecordBJ target) {
+	public ThinDBLinkBJ(S source, DBRecordBJ target)
+	{
 		this.source = source;
 		this.target = target;
 	}
 
-	public ThinDBLinkBJ(S source, CrossRef crossRef) {
+	public ThinDBLinkBJ(S source, CrossRef crossRef)
+	{
 		this.source = source;
 		this.target = new DBRecordBJ(crossRef);
 	}
 
 	@Override
-	public DBRecordBJ getDBRecordTarget() {
+	public DBRecordBJ getDBRecordTarget()
+	{
 		return target;
 	}
 
 	@Override
-	public AnnotationMethodBJ getAnnotationMethod() {
+	public AnnotationMethodBJ getAnnotationMethod()
+	{
 		return null;
 	}
 
 	@Override
-	public S getSource() {
+	public S getSource()
+	{
 		return source;
 	}
 
 	@Override
-	public Note<ThinDBLinkBJ<S>> createNote(String value, String noteTypeName) {
+	public Note<ThinDBLinkBJ<S>> createNote(String value, String noteTypeName)
+	{
 		return null;
 	}
 
 	@Override
-	public Note<ThinDBLinkBJ<S>> addNote(Note<ThinDBLinkBJ<S>> note) {
+	public Note<ThinDBLinkBJ<S>> addNote(Note<ThinDBLinkBJ<S>> note)
+	{
 		throw new InvalidMethod();
 	}
 
 	@Override
-	public Note<ThinDBLinkBJ<S>> getNote(String value, String noteTypeName) {
+	public Note<ThinDBLinkBJ<S>> getNote(String value, String noteTypeName)
+	{
 		throw null;
 	}
 
 	@Override
-	public Collection<Note<ThinDBLinkBJ<S>>> getNotes() {
+	public Collection<Note<ThinDBLinkBJ<S>>> getNotes()
+	{
 		return null;
 	}
 
 	@Override
-	public Collection<Note<ThinDBLinkBJ<S>>> getNotes(String noteTypeName) {
+	public Collection<Note<ThinDBLinkBJ<S>>> getNotes(String noteTypeName)
+	{
 		return null;
 	}
 
 	@Override
-	public void addChangeListener(ChangeListener<Note<ThinDBLinkBJ<S>>> cl, ChangeType ct) {
+	public void addChangeListener(ChangeListener<Note<ThinDBLinkBJ<S>>> cl, ChangeType ct)
+	{
 		throw new InvalidMethod();
 	}
 
 	@Override
-	public boolean isUnchanging(ChangeType ct) {
+	public boolean isUnchanging(ChangeType ct)
+	{
 		throw new InvalidMethod();
 	}
 
 	@Override
-	public void removeChangeListener(ChangeListener<Note<ThinDBLinkBJ<S>>> cl, ChangeType ct) {
+	public void removeChangeListener(ChangeListener<Note<ThinDBLinkBJ<S>>> cl, ChangeType ct)
+	{
 		throw new InvalidMethod();
 	}
 
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return DBRecordDBRecordLinkBJ.joinTermName(getSource().toString(), "", getDBRecordTarget().toString());
+	}
+
+	@Override
+	public Note<ThinDBLinkBJ<S>> addNote(String value, String type)
+	{
+		return addNote(createNote(value, type));
 	}
 
 }

@@ -18,7 +18,7 @@ import org.cycads.entities.annotation.feature.Gene;
 import org.cycads.entities.annotation.feature.RNA;
 
 public interface Location<D extends DBLink<D, S, R, M>, S extends Location< ? , ? , ? , ? , ? , ? , ? , ? , ? >, R extends DBRecord< ? , ? , ? , ? >, M extends AnnotationMethod, SEQ extends Sequence< ? , ? , ? , ? , ? , ? >, F extends Feature< ? , ? , ? , ? >, C extends CDS< ? , ? , ? , ? , ? >, RN extends RNA< ? , ? , ? , ? , ? , ? >, G extends Gene< ? , ? , ? , ? , ? >>
-		extends FeatureSource<F, C, RN, G, M>, FeatureCollection<F, S, M>, DBLinkSource<D, R, M>,
+		extends FeatureSource<F, C, RN, G, M>, FeatureCollection<F, S, M, C, RN, G>, DBLinkSource<D, R, M>,
 		DBLinkContainer<D, S, R, M>
 {
 

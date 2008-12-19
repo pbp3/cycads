@@ -8,7 +8,7 @@ import org.cycads.entities.note.Note;
 import org.cycads.entities.note.NoteSource;
 import org.cycads.entities.note.NotesContainer;
 
-//S: same class that implements this interface
+// S: same class that implements this interface
 public interface DBRecord<D extends DBLink< ? , S, R, M>, S extends DBRecord< ? , ? , ? , ? >, R extends DBRecord< ? , ? , ? , ? >, M extends AnnotationMethod>
 		extends DBLinkSource<D, R, M>, DBLinkContainer<D, S, R, M>, NoteSource, NotesContainer<Note<S>>
 
@@ -18,5 +18,7 @@ public interface DBRecord<D extends DBLink< ? , S, R, M>, S extends DBRecord< ? 
 	public ExternalDatabase<S> getDatabase();
 
 	public String getDatabaseName();
+
+	public Note<S> addNote(String value, String type);
 
 }

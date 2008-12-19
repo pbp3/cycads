@@ -13,6 +13,8 @@ public interface FeatureSource<F extends Feature< ? , ? , ? , ? >, C extends CDS
 
 	public R createRNA(M method, String type);
 
+	public R createMRNA(M method);
+
 	public G createGene(M method);
 
 	public F createFeature(String method, String type);
@@ -20,6 +22,8 @@ public interface FeatureSource<F extends Feature< ? , ? , ? , ? >, C extends CDS
 	public C createCDS(String method);
 
 	public R createRNA(String method, String type);
+
+	public R createMRNA(String method);
 
 	public G createGene(String method);
 }
