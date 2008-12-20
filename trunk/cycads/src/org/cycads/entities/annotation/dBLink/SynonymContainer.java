@@ -5,12 +5,10 @@ package org.cycads.entities.annotation.dBLink;
 
 import java.util.Collection;
 
-import org.cycads.entities.annotation.AnnotationMethod;
-
 // public interface DBLinkContainer<S extends DBLinkSource< ? , ? >, R extends DBRecord< ? >>
-public interface ExternalSynonymContainer<D extends ExternalSynonym< ? , ? >, S extends DBLinkAnnotationSource< ? , ? , ? >, R extends DBRecord< ? , ? , ? , ? >, M extends AnnotationMethod>
+public interface SynonymContainer<D extends SynonymLink< ? , ? >, S extends DBLinkAnnotSource< ? , ? , ? >, R extends DBRecord< ? , ? , ? , ? >>
 {
-	public void addDBLink(D dBLink);
+	public void addSynonym(D synonym);
 
 	public D getDBLink(S source, R target);
 
@@ -20,6 +18,6 @@ public interface ExternalSynonymContainer<D extends ExternalSynonym< ? , ? >, S 
 
 	public Collection<D> getDBLinks(String dbName);
 
-	public Collection<D> getDBLinks(ExternalSynonymFilter<D> filter);
+	public Collection<D> getDBLinks(SynonymFilter<D> filter);
 
 }

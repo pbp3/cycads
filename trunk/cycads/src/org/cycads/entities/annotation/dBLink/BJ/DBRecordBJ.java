@@ -12,7 +12,7 @@ import org.biojavax.RichObjectFactory;
 import org.biojavax.SimpleCrossRef;
 import org.biojavax.ontology.ComparableTerm;
 import org.cycads.entities.annotation.AnnotationMethodBJ;
-import org.cycads.entities.annotation.dBLink.DBLinkAnnotationFilter;
+import org.cycads.entities.annotation.dBLink.DBLinkAnnotFilter;
 import org.cycads.entities.annotation.dBLink.DBRecord;
 import org.cycads.entities.annotation.dBLink.ExternalDatabase;
 import org.cycads.entities.change.ChangeListener;
@@ -101,7 +101,7 @@ public class DBRecordBJ implements DBRecord<DBRecordDBRecordLinkBJ, DBRecordBJ, 
 	}
 
 	@Override
-	public void addDBLink(DBRecordDBRecordLinkBJ link)
+	public void addDBLinkAnnot(DBRecordDBRecordLinkBJ link)
 	{
 		// Do nothing. The DBLink collection is handled by DBRecordBJ source term.
 	}
@@ -130,7 +130,7 @@ public class DBRecordBJ implements DBRecord<DBRecordDBRecordLinkBJ, DBRecordBJ, 
 	}
 
 	@Override
-	public DBRecordDBRecordLinkBJ getDBLink(DBRecordBJ source, AnnotationMethodBJ method, DBRecordBJ target)
+	public DBRecordDBRecordLinkBJ getDBLinkAnnot(DBRecordBJ source, AnnotationMethodBJ method, DBRecordBJ target)
 	{
 		if (source != this)
 		{
@@ -140,7 +140,7 @@ public class DBRecordBJ implements DBRecord<DBRecordDBRecordLinkBJ, DBRecordBJ, 
 	}
 
 	@Override
-	public Collection<DBRecordDBRecordLinkBJ> getDBLinks(AnnotationMethodBJ method, DBRecordBJ target)
+	public Collection<DBRecordDBRecordLinkBJ> getDBLinkAnnots(AnnotationMethodBJ method, DBRecordBJ target)
 	{
 		ArrayList<DBRecordDBRecordLinkBJ> ret = new ArrayList<DBRecordDBRecordLinkBJ>();
 		DBRecordDBRecordLinkBJ link = getLink(method.getName(), target.toString());
@@ -152,7 +152,7 @@ public class DBRecordBJ implements DBRecord<DBRecordDBRecordLinkBJ, DBRecordBJ, 
 	}
 
 	@Override
-	public Collection<DBRecordDBRecordLinkBJ> getDBLinks(AnnotationMethodBJ method, String dbName, String accession)
+	public Collection<DBRecordDBRecordLinkBJ> getDBLinkAnnots(AnnotationMethodBJ method, String dbName, String accession)
 	{
 		ArrayList<DBRecordDBRecordLinkBJ> ret = new ArrayList<DBRecordDBRecordLinkBJ>();
 		DBRecordDBRecordLinkBJ link = getLink(method.getName(), DBRecordBJ.joinDBNameAndAccession(dbName, accession));
@@ -164,7 +164,7 @@ public class DBRecordBJ implements DBRecord<DBRecordDBRecordLinkBJ, DBRecordBJ, 
 	}
 
 	@Override
-	public Collection<DBRecordDBRecordLinkBJ> getDBLinks(DBLinkAnnotationFilter<DBRecordDBRecordLinkBJ> filter)
+	public Collection<DBRecordDBRecordLinkBJ> getDBLinkAnnots(DBLinkAnnotFilter<DBRecordDBRecordLinkBJ> filter)
 	{
 		Collection<ComparableTerm> terms = BioSql.getTermsWithCrossRef(this.getCrossRef());
 		Collection<DBRecordDBRecordLinkBJ> result = new ArrayList<DBRecordDBRecordLinkBJ>(terms.size());
@@ -246,21 +246,21 @@ public class DBRecordBJ implements DBRecord<DBRecordDBRecordLinkBJ, DBRecordBJ, 
 	}
 
 	@Override
-	public DBRecordDBRecordLinkBJ getDBLink(DBRecordBJ source, String method, DBRecordBJ target)
+	public DBRecordDBRecordLinkBJ getDBLinkAnnot(DBRecordBJ source, String method, DBRecordBJ target)
 	{
-		return getDBLink(source, AnnotationMethodBJ.getInstance(method), target);
+		return getDBLinkAnnot(source, AnnotationMethodBJ.getInstance(method), target);
 	}
 
 	@Override
-	public Collection<DBRecordDBRecordLinkBJ> getDBLinks(String method, DBRecordBJ target)
+	public Collection<DBRecordDBRecordLinkBJ> getDBLinkAnnots(String method, DBRecordBJ target)
 	{
-		return getDBLinks(AnnotationMethodBJ.getInstance(method), target);
+		return getDBLinkAnnots(AnnotationMethodBJ.getInstance(method), target);
 	}
 
 	@Override
-	public Collection<DBRecordDBRecordLinkBJ> getDBLinks(String method, String dbName, String accession)
+	public Collection<DBRecordDBRecordLinkBJ> getDBLinkAnnots(String method, String dbName, String accession)
 	{
-		return getDBLinks(AnnotationMethodBJ.getInstance(method), dbName, accession);
+		return getDBLinkAnnots(AnnotationMethodBJ.getInstance(method), dbName, accession);
 	}
 
 	@Override
@@ -268,4 +268,5 @@ public class DBRecordBJ implements DBRecord<DBRecordDBRecordLinkBJ, DBRecordBJ, 
 	{
 		return addNote(createNote(value, type));
 	}
+
 }

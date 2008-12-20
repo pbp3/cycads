@@ -3,7 +3,7 @@
  */
 package org.cycads.entities.annotation.dBLink;
 
-public interface ExternalSynonymFilter<E extends ExternalSynonym< ? , ? >>
+public interface SynonymFilter<E extends SynonymLink< ? , ? >>
 {
 	public boolean accept(E synonym);
 }

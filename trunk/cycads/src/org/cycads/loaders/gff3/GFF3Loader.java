@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.regex.Pattern;
 
-import org.cycads.entities.annotation.dBLink.DBLinkAnnotation;
+import org.cycads.entities.annotation.dBLink.DBLinkAnnot;
 import org.cycads.entities.annotation.feature.Gene;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.sequence.Location;
@@ -119,7 +119,7 @@ public class GFF3Loader implements GFF3DocumentHandler
 		else
 		{
 			// sequence accession is external
-			Collection<DBLinkAnnotation< ? , ? extends Sequence, ? , ? >> dbLinks = organism.getSequenceDBLinks(seqDatabase,
+			Collection<DBLinkAnnot< ? , ? extends Sequence, ? , ? >> dbLinks = organism.getSequenceDBLinks(seqDatabase,
 				sequenceID);
 			if (dbLinks.size() != 1)
 			{
