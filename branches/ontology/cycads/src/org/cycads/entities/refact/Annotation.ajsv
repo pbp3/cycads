@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--AgileJ Ltd. (http://www.agilej.com)-->
+<ajsv>
+    <diagram scope="scopeElementSets.elementSet.Switchable Subtypes" style="standardDiagramStyles.diagramStyle.Standard Basic Style" version="1.5.3">
+        <switch switchID="standardDiagramStyles.styleEnumSwitch.Manhattan Lines" switchValue="dependence, fields, inheritance"/>
+        <switch switchID="standardDiagramStyles.styleEnumSwitch.Line Types" switchValue="dependence, field, inheritance"/>
+        <switch switchID="standardDiagramStyles.styleEnumSwitch.Signature Length" switchValue="short"/>
+        <switch switchID="standardDiagramStyles.styleEnumSwitch.Visibility" switchValue="public, protected, package, private"/>
+        <switch switchID="standardDiagramStyles.styleEnumSwitch.Members" switchValue="fields, methods, inners, initializers"/>
+        <class className="org.cycads.entities.refact.AnnotationMethod" project="cycads" xLocation="1293" yLocation="148"/>
+        <class className="org.cycads.entities.refact.Feature" project="cycads" xLocation="776" yLocation="207"/>
+        <class className="org.cycads.entities.refact.CDS" project="cycads" xLocation="981" yLocation="662"/>
+        <class className="org.cycads.entities.refact.Gene" project="cycads" xLocation="599" yLocation="606"/>
+        <class className="org.cycads.entities.refact.RNA" project="cycads" xLocation="839" yLocation="606"/>
+        <class className="org.cycads.entities.refact.FeatureNote" project="cycads" xLocation="1174" yLocation="88"/>
+        <class className="org.cycads.entities.refact.Location" project="cycads" xLocation="1023" yLocation="720"/>
+        <class className="org.cycads.entities.refact.Sequence" project="cycads" xLocation="171" yLocation="198"/>
+        <class className="org.cycads.entities.refact.Organism" project="cycads" xLocation="-109" yLocation="197"/>
+        <class className="org.cycads.entities.refact.Term" project="cycads" xLocation="1498" yLocation="-24"/>
+        <class className="org.cycads.entities.refact.ExternalDatabase" project="cycads" xLocation="-134" yLocation="-207"/>
+        <class className="org.cycads.entities.refact.DBRecord" project="cycads" xLocation="100" yLocation="26"/>
+        <class className="org.cycads.entities.refact.DBAnnotation" project="cycads" xLocation="873" yLocation="-108"/>
+        <class className="org.cycads.entities.refact.FeatureToDBAnnotation" project="cycads" xLocation="626" yLocation="71"/>
+        <class className="org.cycads.entities.refact.DBAnnotationMethod" project="cycads" xLocation="1179" yLocation="-177"/>
+        <class className="org.cycads.entities.refact.DBToDBAnnotation" project="cycads" xLocation="384" yLocation="-109"/>
+        <class className="org.cycads.entities.refact.SequenceToDBAnnotation" project="cycads" xLocation="427" yLocation="178"/>
+        <class className="org.cycads.entities.refact.FeatureAnnotationMethod" project="cycads" xLocation="1244" yLocation="408"/>
+        <class className="org.cycads.entities.refact.DBAnnotationNote" project="cycads" xLocation="1088" yLocation="539"/>
+        <class className="org.cycads.entities.refact.Intron" project="cycads" xLocation="1352" yLocation="745"/>
+        <class className="org.cycads.entities.refact.AnnotationMethodNote" project="cycads" xLocation="1529" yLocation="374"/>
+        <class className="org.cycads.entities.refact.FeatureType" project="cycads" xLocation="263" yLocation="801"/>
+    </diagram>
+</ajsv>
