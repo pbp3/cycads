@@ -9,8 +9,8 @@ import org.cycads.entities.note.NoteSource;
 import org.cycads.entities.note.NotesContainer;
 
 // S: same class that implements this interface
-public interface DBRecord<D extends DBLinkAnnotation< ? , S, R, M>, S extends DBRecord< ? , ? , ? , ? >, R extends DBRecord< ? , ? , ? , ? >, M extends AnnotationMethod>
-		extends DBLinkAnnotationSource<D, R, M>, DBLinkAnnotationContainer<D, S, R, M>, NoteSource, NotesContainer<Note<S>>
+public interface DBRecord<D extends DBLinkAnnot< ? , S, R, M>, S extends DBRecord< ? , ? , ? , ? >, R extends DBRecord< ? , ? , ? , ? >, M extends AnnotationMethod>
+		extends DBLinkAnnotSource<D, R, M>, DBLinkAnnotContainer<D, S, R, M>, NoteSource, NotesContainer<Note<S>>
 
 {
 	public String getAccession();

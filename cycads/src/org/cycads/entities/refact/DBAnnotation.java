@@ -2,10 +2,10 @@ package org.cycads.entities.refact;
 
 import java.util.Collection;
 
-import org.cycads.entities.annotation.dBLink.DBLinkAnnotation;
+import org.cycads.entities.annotation.dBLink.DBLinkAnnot;
 import org.cycads.entities.annotation.dBLink.DBRecord;
 
-public abstract class DBAnnotation implements DBLinkAnnotation
+public abstract class DBAnnotation implements DBLinkAnnot
 {
 
 	private Collection<DBAnnotationNote>	dBAnnotationNotes;

@@ -25,7 +25,7 @@ import org.biojavax.bio.seq.SimpleRichLocation;
 import org.biojavax.bio.seq.RichLocation.Strand;
 import org.biojavax.ontology.ComparableTerm;
 import org.cycads.entities.annotation.AnnotationMethodBJ;
-import org.cycads.entities.annotation.dBLink.DBLinkAnnotationFilter;
+import org.cycads.entities.annotation.dBLink.DBLinkAnnotFilter;
 import org.cycads.entities.annotation.dBLink.BJ.DBRecordBJ;
 import org.cycads.entities.annotation.dBLink.BJ.ExternalDatabaseBJ;
 import org.cycads.entities.annotation.dBLink.BJ.LocationDBLinkBJ;
@@ -415,7 +415,7 @@ public class LocationBJ
 	public LocationDBLinkBJ createDBLink(AnnotationMethodBJ method, DBRecordBJ target)
 	{
 		LocationDBLinkBJ dbLink;
-		if ((dbLink = getDBLink(this, method, target)) != null)
+		if ((dbLink = getDBLinkAnnot(this, method, target)) != null)
 		{
 			return dbLink;
 		}
@@ -431,19 +431,19 @@ public class LocationBJ
 	}
 
 	@Override
-	public void addDBLink(LocationDBLinkBJ link)
+	public void addDBLinkAnnot(LocationDBLinkBJ link)
 	{
 		// Do nothing. the collection of DBLinks are DBLinks contained at the same richLocation
 	}
 
 	@Override
-	public LocationDBLinkBJ getDBLink(LocationBJ source, AnnotationMethodBJ method, DBRecordBJ target)
+	public LocationDBLinkBJ getDBLinkAnnot(LocationBJ source, AnnotationMethodBJ method, DBRecordBJ target)
 	{
 		if (source != this && !source.getRichLocation().equals(this.getRichLocation()))
 		{
 			return null;
 		}
-		Collection<LocationDBLinkBJ> dbLinks = getDBLinks(method, target);
+		Collection<LocationDBLinkBJ> dbLinks = getDBLinkAnnots(method, target);
 		for (LocationDBLinkBJ dbLink : dbLinks)
 		{
 			return dbLink;
@@ -452,7 +452,7 @@ public class LocationBJ
 	}
 
 	@Override
-	public Collection<LocationDBLinkBJ> getDBLinks(AnnotationMethodBJ method, DBRecordBJ target)
+	public Collection<LocationDBLinkBJ> getDBLinkAnnots(AnnotationMethodBJ method, DBRecordBJ target)
 	{
 		// get all features contained in this location
 		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
@@ -478,13 +478,13 @@ public class LocationBJ
 	}
 
 	@Override
-	public Collection<LocationDBLinkBJ> getDBLinks(AnnotationMethodBJ method, String dbName, String accession)
+	public Collection<LocationDBLinkBJ> getDBLinkAnnots(AnnotationMethodBJ method, String dbName, String accession)
 	{
-		return getDBLinks(method, ExternalDatabaseBJ.getOrCreateExternalDB(dbName).getOrCreateDBRecord(accession));
+		return getDBLinkAnnots(method, ExternalDatabaseBJ.getOrCreateExternalDB(dbName).getOrCreateDBRecord(accession));
 	}
 
 	@Override
-	public Collection<LocationDBLinkBJ> getDBLinks(DBLinkAnnotationFilter<LocationDBLinkBJ> filter)
+	public Collection<LocationDBLinkBJ> getDBLinkAnnots(DBLinkAnnotFilter<LocationDBLinkBJ> filter)
 	{
 		// get all features contained in this location
 		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
@@ -559,21 +559,21 @@ public class LocationBJ
 	}
 
 	@Override
-	public LocationDBLinkBJ getDBLink(LocationBJ source, String method, DBRecordBJ target)
+	public LocationDBLinkBJ getDBLinkAnnot(LocationBJ source, String method, DBRecordBJ target)
 	{
-		return getDBLink(source, AnnotationMethodBJ.getInstance(method), target);
+		return getDBLinkAnnot(source, AnnotationMethodBJ.getInstance(method), target);
 	}
 
 	@Override
-	public Collection<LocationDBLinkBJ> getDBLinks(String method, DBRecordBJ target)
+	public Collection<LocationDBLinkBJ> getDBLinkAnnots(String method, DBRecordBJ target)
 	{
-		return getDBLinks(AnnotationMethodBJ.getInstance(method), target);
+		return getDBLinkAnnots(AnnotationMethodBJ.getInstance(method), target);
 	}
 
 	@Override
-	public Collection<LocationDBLinkBJ> getDBLinks(String method, String dbName, String accession)
+	public Collection<LocationDBLinkBJ> getDBLinkAnnots(String method, String dbName, String accession)
 	{
-		return getDBLinks(AnnotationMethodBJ.getInstance(method), dbName, accession);
+		return getDBLinkAnnots(AnnotationMethodBJ.getInstance(method), dbName, accession);
 	}
 
 	@Override

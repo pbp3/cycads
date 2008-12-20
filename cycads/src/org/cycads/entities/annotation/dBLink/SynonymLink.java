@@ -4,7 +4,7 @@
 package org.cycads.entities.annotation.dBLink;
 
 // It is the same that a synonym
-public interface ExternalSynonym<S extends ExternalSynonymSource< ? , ? >, T extends DBRecord< ? , ? , ? , ? >>
+public interface SynonymLink<S extends SynonymSource< ? , ? >, T extends DBRecord< ? , ? , ? , ? >>
 {
 	public S getSource();
 
