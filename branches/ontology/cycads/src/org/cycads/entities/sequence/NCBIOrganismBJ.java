@@ -8,9 +8,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 
 import org.biojavax.bio.taxa.NCBITaxon;
-import org.cycads.entities.annotation.dBLink.OntologyAnnot;
-import org.cycads.entities.annotation.dBLink.BJ.ExternalDatabaseBJ;
-import org.cycads.entities.annotation.dBLink.BJ.DBLinkBJ;
 import org.cycads.exceptions.DBObjectNotFound;
 import org.cycads.general.biojava.BioJavaxSession;
 import org.cycads.general.biojava.BioSql;
@@ -88,13 +85,11 @@ public class NCBIOrganismBJ implements Organism<ThinSequenceBJ>
 	}
 
 	@Override
-	public Collection<OntologyAnnot< ? , ThinSequenceBJ, ? , ? >> getSequenceDBLinks(String seqDatabase,
-			String seqAccession) {
-		ArrayList<OntologyAnnot< ? , ThinSequenceBJ, ? , ? >> ret = new ArrayList<OntologyAnnot< ? , ThinSequenceBJ, ? , ? >>();
+	public Collection<ThinSequenceBJ> getSequences(String seqDatabase, String seqAccession) {
+		ArrayList<ThinSequenceBJ> ret = new ArrayList<ThinSequenceBJ>();
 		Collection<Integer> seqIds = BioSql.getSequencesIdWithExternalDBLink(seqDatabase, seqAccession, this);
 		for (int seqId : seqIds) {
-			ret.add(new DBLinkBJ<ThinSequenceBJ>(new ThinSequenceBJ(seqId, this),
-				ExternalDatabaseBJ.getOrCreateExternalDB(seqDatabase).getOrCreateDBRecord(seqAccession)));
+			ret.add(new ThinSequenceBJ(seqId, this));
 		}
 		return ret;
 	}

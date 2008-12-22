@@ -66,11 +66,11 @@ public class GFF3Loader implements GFF3DocumentHandler
 			Subsequence loc;
 			if (record.getStrand() < 0)
 			{
-				loc = seq.getOrCreateLocation(record.getEnd(), record.getStart(), null);
+				loc = seq.getOrCreateSubsequence(record.getEnd(), record.getStart(), null);
 			}
 			else
 			{
-				loc = seq.getOrCreateLocation(record.getStart(), record.getEnd(), null);
+				loc = seq.getOrCreateSubsequence(record.getStart(), record.getEnd(), null);
 			}
 			Gene gene = loc.getGene(method);
 			if (gene == null)
@@ -119,7 +119,7 @@ public class GFF3Loader implements GFF3DocumentHandler
 		else
 		{
 			// sequence accession is external
-			Collection<OntologyAnnot< ? , ? extends Sequence, ? , ? >> dbLinks = organism.getSequenceDBLinks(seqDatabase,
+			Collection<OntologyAnnot< ? , ? extends Sequence, ? , ? >> dbLinks = organism.getSequences(seqDatabase,
 				sequenceID);
 			if (dbLinks.size() != 1)
 			{

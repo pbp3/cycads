@@ -5,9 +5,7 @@ package org.cycads.entities.sequence;
 
 import java.util.Collection;
 
-import org.cycads.entities.annotation.dBLink.OntologyAnnot;
-
-public interface Organism<SEQ extends Sequence< ? , ? , ? , ? , ? , ? >>
+public interface Organism<SEQ extends Sequence< ? , ? , ? , ? >>
 {
 
 	public Collection<SEQ> getSequences();
@@ -20,6 +18,6 @@ public interface Organism<SEQ extends Sequence< ? , ? , ? , ? , ? , ? >>
 
 	public SEQ getOrCreateSequence(String seqAccession, int version);
 
-	public Collection<OntologyAnnot< ? , SEQ, ? , ? >> getSequenceDBLinks(String seqDatabase, String seqAccession);
+	public Collection<SEQ> getSequences(String seqDatabase, String seqAccession);
 
 }

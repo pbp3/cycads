@@ -3,7 +3,10 @@
  */
 package org.cycads.entities.annotation.dBLink;
 
-public interface Ontology extends DBRecord, OntologyAnnotationSource
+import org.cycads.entities.annotation.AnnotationMethod;
+
+public interface Ontology<OA extends OntologyAnnot< ? , ? , ? , ? >, O extends Ontology< ? , ? , ? >, M extends AnnotationMethod>
+		extends DBRecord, OntologyAnnotSource<OA, O, M>
 {
 	public String[] getFunctions();
 }

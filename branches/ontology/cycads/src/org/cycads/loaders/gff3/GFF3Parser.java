@@ -237,7 +237,7 @@ public class GFF3Parser
 	/**
 	 * Parse <span class="arg">attValList</span> into a <span class="type">Map</span> of attributes and value lists.
 	 * <p>
-	 * Populates an Annotation instance with Ontology Term keys and string/list values.
+	 * Populates an Annotation instance with OntologyBJ Term keys and string/list values.
 	 * </p>
 	 * 
 	 * @param attValList the <span class="type">String</span> to parse

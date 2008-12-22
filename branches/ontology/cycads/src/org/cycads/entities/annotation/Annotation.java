@@ -4,11 +4,10 @@
 package org.cycads.entities.annotation;
 
 import org.cycads.entities.note.Note;
-import org.cycads.entities.note.NoteSource;
-import org.cycads.entities.note.NotesContainer;
+import org.cycads.entities.note.NotesSourceContainer;
 
 public interface Annotation<ANNOTATION_TYPE extends Annotation< ? , ? , ? >, SourceType, M extends AnnotationMethod>
-		extends NoteSource, NotesContainer<Note<ANNOTATION_TYPE>>
+		extends NotesSourceContainer<Note<ANNOTATION_TYPE>>
 {
 
 	public M getAnnotationMethod();

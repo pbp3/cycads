@@ -18,8 +18,8 @@ import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
 import org.cycads.general.biojava.TermsAndOntologies;
 
-public class DBRecordDBRecordLinkBJ implements
-		OntologyAnnot<DBRecordDBRecordLinkBJ, DBRecordBJ, DBRecordBJ, AnnotationMethodBJ>
+public class OntologyOntologyAnnotBJ implements
+		OntologyAnnot<OntologyOntologyAnnotBJ, DBRecordBJ, DBRecordBJ, AnnotationMethodBJ>
 {
 
 	public static ComparableOntology	ontDBRecordDBRecordLink	= TermsAndOntologies.getOntologyDBRecordDBRecordLink();
@@ -29,7 +29,7 @@ public class DBRecordDBRecordLinkBJ implements
 	// TermWithNotes term;
 	ComparableTerm						term;
 
-	protected DBRecordDBRecordLinkBJ(DBRecordBJ source, AnnotationMethodBJ method, DBRecordBJ target)
+	protected OntologyOntologyAnnotBJ(DBRecordBJ source, AnnotationMethodBJ method, DBRecordBJ target)
 	{
 		if (source == null || target == null)
 		{
@@ -45,7 +45,7 @@ public class DBRecordDBRecordLinkBJ implements
 		// term.addNote(TermsAndOntologies.getTermNoteTypeAnnotationMethod(), method.getTerm());
 	}
 
-	protected DBRecordDBRecordLinkBJ(ComparableTerm term)
+	protected OntologyOntologyAnnotBJ(ComparableTerm term)
 	{
 		if (term.getOntology() != ontDBRecordDBRecordLink)
 		{
@@ -107,43 +107,43 @@ public class DBRecordDBRecordLinkBJ implements
 	}
 
 	@Override
-	public Note<DBRecordDBRecordLinkBJ> createNote(String value, String noteTypeName)
+	public Note<OntologyOntologyAnnotBJ> createNote(String value, String noteTypeName)
 	{
 		throw new MethodNotImplemented();
 	}
 
 	@Override
-	public Note<DBRecordDBRecordLinkBJ> createNote(Note< ? > note)
+	public Note<OntologyOntologyAnnotBJ> createNote(Note< ? > note)
 	{
 		return createNote(note.getValue(), note.getType());
 	}
 
 	@Override
-	public Note<DBRecordDBRecordLinkBJ> addNote(Note< ? > note)
+	public Note<OntologyOntologyAnnotBJ> addNote(Note< ? > note)
 	{
 		throw new MethodNotImplemented();
 	}
 
 	@Override
-	public Note<DBRecordDBRecordLinkBJ> getNote(String value, String noteTypeName)
+	public Note<OntologyOntologyAnnotBJ> getNote(String value, String noteTypeName)
 	{
 		throw new MethodNotImplemented();
 	}
 
 	@Override
-	public Collection<Note<DBRecordDBRecordLinkBJ>> getNotes()
+	public Collection<Note<OntologyOntologyAnnotBJ>> getNotes()
 	{
 		throw new MethodNotImplemented();
 	}
 
 	@Override
-	public Collection<Note<DBRecordDBRecordLinkBJ>> getNotes(String noteTypeName)
+	public Collection<Note<OntologyOntologyAnnotBJ>> getNotes(String noteTypeName)
 	{
 		throw new MethodNotImplemented();
 	}
 
 	@Override
-	public void addChangeListener(ChangeListener<Note<DBRecordDBRecordLinkBJ>> cl, ChangeType ct)
+	public void addChangeListener(ChangeListener<Note<OntologyOntologyAnnotBJ>> cl, ChangeType ct)
 	{
 		throw new MethodNotImplemented();
 	}
@@ -155,7 +155,7 @@ public class DBRecordDBRecordLinkBJ implements
 	}
 
 	@Override
-	public void removeChangeListener(ChangeListener<Note<DBRecordDBRecordLinkBJ>> cl, ChangeType ct)
+	public void removeChangeListener(ChangeListener<Note<OntologyOntologyAnnotBJ>> cl, ChangeType ct)
 	{
 		throw new MethodNotImplemented();
 	}
@@ -167,7 +167,7 @@ public class DBRecordDBRecordLinkBJ implements
 	}
 
 	@Override
-	public Note<DBRecordDBRecordLinkBJ> addNote(String value, String type)
+	public Note<OntologyOntologyAnnotBJ> addNote(String value, String type)
 	{
 		return addNote(createNote(value, type));
 	}

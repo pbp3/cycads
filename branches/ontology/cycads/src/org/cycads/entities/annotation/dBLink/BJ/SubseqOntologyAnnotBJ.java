@@ -13,12 +13,12 @@ import org.cycads.entities.annotation.dBLink.OntologyAnnot;
 import org.cycads.entities.sequence.SubsequenceBJ;
 import org.cycads.general.biojava.TermsAndOntologies;
 
-public class LocationDBLinkBJ extends AnnotationRichFeatureBJ<LocationDBLinkBJ, LocationDBLinkBJ, LocationDBLinkBJ>
-		implements OntologyAnnot<LocationDBLinkBJ, SubsequenceBJ, DBRecordBJ, AnnotationMethodBJ>
+public class SubseqOntologyAnnotBJ extends AnnotationRichFeatureBJ<SubseqOntologyAnnotBJ>
+		implements OntologyAnnot<SubseqOntologyAnnotBJ, SubsequenceBJ, DBRecordBJ, AnnotationMethodBJ>
 {
 	DBRecordBJ	target;
 
-	public LocationDBLinkBJ(RichFeature feature) {
+	public SubseqOntologyAnnotBJ(RichFeature feature) {
 		super(feature);
 		//verify consistency of parameter
 		if (!isDBLink(feature)) {

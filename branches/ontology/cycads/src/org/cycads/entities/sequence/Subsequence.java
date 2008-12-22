@@ -6,10 +6,12 @@ package org.cycads.entities.sequence;
 import java.util.Collection;
 
 import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.annotation.dBLink.OntologyAnnot;
-import org.cycads.entities.annotation.dBLink.DBLinkAnnotContainer;
-import org.cycads.entities.annotation.dBLink.DBLinkAnnotSource;
 import org.cycads.entities.annotation.dBLink.DBRecord;
+import org.cycads.entities.annotation.dBLink.DBRecordsContainer;
+import org.cycads.entities.annotation.dBLink.Ontology;
+import org.cycads.entities.annotation.dBLink.OntologyAnnot;
+import org.cycads.entities.annotation.dBLink.OntologyAnnotContainer;
+import org.cycads.entities.annotation.dBLink.OntologyAnnotSource;
 import org.cycads.entities.annotation.feature.CDS;
 import org.cycads.entities.annotation.feature.Feature;
 import org.cycads.entities.annotation.feature.FeatureCollection;
@@ -17,9 +19,9 @@ import org.cycads.entities.annotation.feature.FeatureSource;
 import org.cycads.entities.annotation.feature.Gene;
 import org.cycads.entities.annotation.feature.RNA;
 
-public interface Subsequence<D extends OntologyAnnot<D, S, R, M>, S extends Subsequence< ? , ? , ? , ? , ? , ? , ? , ? , ? >, R extends DBRecord< ? , ? , ? , ? >, M extends AnnotationMethod, SEQ extends Sequence< ? , ? , ? , ? , ? , ? >, F extends Feature< ? , ? , ? , ? >, C extends CDS< ? , ? , ? , ? , ? >, RN extends RNA< ? , ? , ? , ? , ? , ? >, G extends Gene< ? , ? , ? , ? , ? >>
-		extends FeatureSource<F, C, RN, G, M>, FeatureCollection<F, S, M, C, RN, G>, DBLinkAnnotSource<D, R, M>,
-		DBLinkAnnotContainer<D, S, R, M>, OntologyAnnotationSource
+public interface Subsequence<SSEQ extends Subsequence< ? , ? , ? , ? , ? , ? , ? , ? , ? , ? >, OA extends OntologyAnnot<OA, SSEQ, O, M>, O extends Ontology< ? , ? , ? >, M extends AnnotationMethod, R extends DBRecord, SEQ extends Sequence< ? , ? , ? , ? >, F extends Feature< ? , ? , ? , ? >, C extends CDS< ? , ? , ? , ? , ? >, RN extends RNA< ? , ? , ? , ? , ? , ? >, G extends Gene< ? , ? , ? , ? , ? >>
+		extends FeatureSource<F, C, RN, G, M>, FeatureCollection<F, SSEQ, M, C, RN, G>, OntologyAnnotSource<OA, O, M>,
+		OntologyAnnotContainer<OA, SSEQ, O, M>, DBRecordsContainer<R>
 {
 
 	public Collection<Intron> getIntrons();

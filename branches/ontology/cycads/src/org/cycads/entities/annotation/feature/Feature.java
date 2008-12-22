@@ -5,11 +5,11 @@ package org.cycads.entities.annotation.feature;
 
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.sequence.Sequence;
+import org.cycads.entities.sequence.Subsequence;
 import org.cycads.general.ParametersDefault;
 
-public interface Feature<FEATURE_TYPE extends Feature< ? , ? , ? , ? >, L extends Subsequence< ? , ? , ? , ? , ? , ? , ? , ? , ? >, SEQ extends Sequence< ? , ? , ? , ? , ? , ? >, M extends AnnotationMethod>
+public interface Feature<FEATURE_TYPE extends Feature< ? , ? , ? , ? >, L extends Subsequence< ? , ? , ? , ? , ? , ? , ? , ? , ? , ? >, SEQ extends Sequence< ? , ? , ? , ? >, M extends AnnotationMethod>
 		extends Annotation<FEATURE_TYPE, L, M>
 {
 
