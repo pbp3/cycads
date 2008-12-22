@@ -8,7 +8,7 @@ import java.util.Collection;
 import org.cycads.entities.annotation.AnnotationMethod;
 
 // public interface DBLinkContainer<S extends DBLinkSource< ? , ? >, R extends DBRecord< ? >>
-public interface DBLinkAnnotContainer<D extends DBLinkAnnot< ? , S, R, M>, S extends DBLinkAnnotSource< ? , ? , ? >, R extends DBRecord< ? , ? , ? , ? >, M extends AnnotationMethod>
+public interface DBLinkAnnotContainer<D extends OntologyAnnot< ? , S, R, M>, S extends DBLinkAnnotSource< ? , ? , ? >, R extends DBRecord< ? , ? , ? , ? >, M extends AnnotationMethod>
 {
 	public void addDBLinkAnnot(D dBLink);
 

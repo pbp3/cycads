@@ -3,13 +3,13 @@
  */
 package org.cycads.entities.note;
 
-public interface Note<H extends NoteSource>
+public interface Note<S extends NoteSource< ? >>
 {
 
 	public String getType();
 
 	public String getValue();
 
-	public H getHolder();
+	public S getHolder();
 
 }

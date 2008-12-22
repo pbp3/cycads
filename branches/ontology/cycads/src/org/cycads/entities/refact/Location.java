@@ -3,13 +3,13 @@ package org.cycads.entities.refact;
 import java.util.Collection;
 
 import org.cycads.entities.sequence.Intron;
-import org.cycads.entities.sequence.Location;
+import org.cycads.entities.sequence.Subsequence;
 
 /*
  * Created on 07/11/2008
  */
 
-public class Location implements Location
+public class Location implements Subsequence
 {
 	private int					start, end;
 	private Collection<Intron>	introns;

@@ -19,19 +19,19 @@ import org.cycads.entities.note.Note;
 import org.cycads.entities.note.NotesHashTable;
 import org.cycads.entities.note.NotesToAnnotationBJ;
 import org.cycads.entities.note.SimpleNote;
-import org.cycads.entities.sequence.LocationBJ;
+import org.cycads.entities.sequence.SubsequenceBJ;
 import org.cycads.entities.sequence.ThinSequenceBJ;
 import org.cycads.general.biojava.BioSql;
 import org.cycads.general.biojava.TermsAndOntologies;
 
 // F must be the type of this object
 public class AnnotationRichFeatureBJ<ANNOTATION_TYPE extends AnnotationRichFeatureBJ< ? , ? , ? >, ANNOTATION_TYPE_CONTAINS extends AnnotationRichFeatureBJ< ? , ? , ? >, ANNOTATION_TYPE_CONTAINER extends AnnotationRichFeatureBJ< ? , ? , ? >>
-		implements Feature<ANNOTATION_TYPE, LocationBJ, ThinSequenceBJ, AnnotationMethodBJ>
+		implements Feature<ANNOTATION_TYPE, SubsequenceBJ, ThinSequenceBJ, AnnotationMethodBJ>
 {
 	RichFeature								richFeature;
 	NotesHashTable<Note<ANNOTATION_TYPE>>	notes;
 	ThinSequenceBJ							sequence;
-	LocationBJ								location;
+	SubsequenceBJ								location;
 
 	public AnnotationRichFeatureBJ(RichFeature feature)
 	{
@@ -106,7 +106,7 @@ public class AnnotationRichFeatureBJ<ANNOTATION_TYPE extends AnnotationRichFeatu
 	}
 
 	@Override
-	public LocationBJ getSource()
+	public SubsequenceBJ getSource()
 	{
 		if (location == null)
 		{
@@ -115,14 +115,14 @@ public class AnnotationRichFeatureBJ<ANNOTATION_TYPE extends AnnotationRichFeatu
 		return location;
 	}
 
-	public static LocationBJ getLocation(RichFeature feature)
+	public static SubsequenceBJ getLocation(RichFeature feature)
 	{
 		Collection<RichFeature> RichFeatures = BioSql.getFeatureContainers(feature);
 		for (RichFeature feature1 : RichFeatures)
 		{
-			if (LocationBJ.isLocationRichFeature(feature1))
+			if (SubsequenceBJ.isLocationRichFeature(feature1))
 			{
-				return new LocationBJ(feature1);
+				return new SubsequenceBJ(feature1);
 			}
 		}
 		return null;

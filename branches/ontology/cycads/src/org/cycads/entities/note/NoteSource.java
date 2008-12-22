@@ -3,10 +3,10 @@
  */
 package org.cycads.entities.note;
 
-public interface NoteSource
+public interface NoteSource<N extends Note< ? >>
 {
-	public Note< ? extends NoteSource> createNote(String value, String noteTypeName);
+	public N createNote(String value, String noteTypeName);
 
-	public Note< ? extends NoteSource> createNote(Note< ? extends NoteSource> note);
+	public N createNote(Note< ? > note);
 
 }

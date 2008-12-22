@@ -6,7 +6,7 @@ package org.cycads.entities.sequence;
 import java.util.Collection;
 
 import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.annotation.dBLink.DBLinkAnnot;
+import org.cycads.entities.annotation.dBLink.OntologyAnnot;
 import org.cycads.entities.annotation.dBLink.DBLinkAnnotContainer;
 import org.cycads.entities.annotation.dBLink.DBLinkAnnotSource;
 import org.cycads.entities.annotation.dBLink.DBRecord;
@@ -17,9 +17,9 @@ import org.cycads.entities.annotation.feature.FeatureSource;
 import org.cycads.entities.annotation.feature.Gene;
 import org.cycads.entities.annotation.feature.RNA;
 
-public interface Location<D extends DBLinkAnnot<D, S, R, M>, S extends Location< ? , ? , ? , ? , ? , ? , ? , ? , ? >, R extends DBRecord< ? , ? , ? , ? >, M extends AnnotationMethod, SEQ extends Sequence< ? , ? , ? , ? , ? , ? >, F extends Feature< ? , ? , ? , ? >, C extends CDS< ? , ? , ? , ? , ? >, RN extends RNA< ? , ? , ? , ? , ? , ? >, G extends Gene< ? , ? , ? , ? , ? >>
+public interface Subsequence<D extends OntologyAnnot<D, S, R, M>, S extends Subsequence< ? , ? , ? , ? , ? , ? , ? , ? , ? >, R extends DBRecord< ? , ? , ? , ? >, M extends AnnotationMethod, SEQ extends Sequence< ? , ? , ? , ? , ? , ? >, F extends Feature< ? , ? , ? , ? >, C extends CDS< ? , ? , ? , ? , ? >, RN extends RNA< ? , ? , ? , ? , ? , ? >, G extends Gene< ? , ? , ? , ? , ? >>
 		extends FeatureSource<F, C, RN, G, M>, FeatureCollection<F, S, M, C, RN, G>, DBLinkAnnotSource<D, R, M>,
-		DBLinkAnnotContainer<D, S, R, M>
+		DBLinkAnnotContainer<D, S, R, M>, OntologyAnnotationSource
 {
 
 	public Collection<Intron> getIntrons();

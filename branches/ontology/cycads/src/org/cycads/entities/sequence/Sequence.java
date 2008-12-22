@@ -6,7 +6,7 @@ package org.cycads.entities.sequence;
 import java.util.Collection;
 
 import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.annotation.dBLink.DBLinkAnnot;
+import org.cycads.entities.annotation.dBLink.OntologyAnnot;
 import org.cycads.entities.annotation.dBLink.DBLinkAnnotContainer;
 import org.cycads.entities.annotation.dBLink.DBLinkAnnotSource;
 import org.cycads.entities.annotation.dBLink.DBRecord;
@@ -16,7 +16,7 @@ import org.cycads.entities.note.Note;
 import org.cycads.entities.note.NoteSource;
 import org.cycads.entities.note.NotesContainer;
 
-public interface Sequence<D extends DBLinkAnnot<D, S, R, M>, S extends Sequence< ? , ? , ? , ? , ? , ? >, R extends DBRecord< ? , ? , ? , ? >, M extends AnnotationMethod, L extends Location< ? , ? , ? , ? , ? , ? , ? , ? , ? >, F extends Feature< ? , ? , ? , ? >>
+public interface Sequence<D extends OntologyAnnot<D, S, R, M>, S extends Sequence< ? , ? , ? , ? , ? , ? >, R extends DBRecord< ? , ? , ? , ? >, M extends AnnotationMethod, L extends Subsequence< ? , ? , ? , ? , ? , ? , ? , ? , ? >, F extends Feature< ? , ? , ? , ? >>
 		extends NoteSource, NotesContainer<Note<S>>, DBLinkAnnotSource<D, R, M>, DBLinkAnnotContainer<D, S, R, M>
 {
 	public String getDescription();

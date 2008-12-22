@@ -145,7 +145,7 @@ public class SequenceFeatureBJ implements SequenceFeature
 	}
 
 	public Location getLocation() {
-		return new LocationBJ(feature.getLocation());
+		return new SubsequenceBJ(feature.getLocation());
 	}
 
 }

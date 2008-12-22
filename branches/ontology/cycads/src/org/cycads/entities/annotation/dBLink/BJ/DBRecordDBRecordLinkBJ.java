@@ -9,7 +9,7 @@ import org.biojavax.SimpleRankedCrossRef;
 import org.biojavax.ontology.ComparableOntology;
 import org.biojavax.ontology.ComparableTerm;
 import org.cycads.entities.annotation.AnnotationMethodBJ;
-import org.cycads.entities.annotation.dBLink.DBLinkAnnot;
+import org.cycads.entities.annotation.dBLink.OntologyAnnot;
 import org.cycads.entities.change.ChangeListener;
 import org.cycads.entities.change.ChangeType;
 import org.cycads.entities.note.Note;
@@ -19,7 +19,7 @@ import org.cycads.general.ParametersDefault;
 import org.cycads.general.biojava.TermsAndOntologies;
 
 public class DBRecordDBRecordLinkBJ implements
-		DBLinkAnnot<DBRecordDBRecordLinkBJ, DBRecordBJ, DBRecordBJ, AnnotationMethodBJ>
+		OntologyAnnot<DBRecordDBRecordLinkBJ, DBRecordBJ, DBRecordBJ, AnnotationMethodBJ>
 {
 
 	public static ComparableOntology	ontDBRecordDBRecordLink	= TermsAndOntologies.getOntologyDBRecordDBRecordLink();

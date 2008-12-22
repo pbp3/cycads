@@ -9,11 +9,11 @@ import org.biojavax.bio.seq.RichFeature;
 import org.cycads.entities.annotation.AnnotationMethodBJ;
 import org.cycads.entities.annotation.AnnotationRichFeatureBJ;
 import org.cycads.entities.annotation.AnnotationRichFeatureBJFactory;
-import org.cycads.entities.sequence.LocationBJ;
+import org.cycads.entities.sequence.SubsequenceBJ;
 import org.cycads.entities.sequence.ThinSequenceBJ;
 
 public class RNABJ extends AnnotationRichFeatureBJ<RNABJ, CDSBJ, GeneBJ> implements
-		RNA<RNABJ, LocationBJ, ThinSequenceBJ, AnnotationMethodBJ, GeneBJ, CDSBJ>,
+		RNA<RNABJ, SubsequenceBJ, ThinSequenceBJ, AnnotationMethodBJ, GeneBJ, CDSBJ>,
 		AnnotationRichFeatureBJFactory<CDSBJ, GeneBJ>
 {
 	public RNABJ(RichFeature feature)

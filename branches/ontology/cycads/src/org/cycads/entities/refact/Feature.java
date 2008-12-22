@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.cycads.entities.annotation.DBAnnotationMethod;
 import org.cycads.entities.annotation.dBLink.ExternalDatabase;
-import org.cycads.entities.sequence.Location;
+import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.sequence.Sequence;
 import org.cycads.entities.sequence.feature.Feature;
 import org.cycads.entities.sequence.feature.FeatureAnnotationMethod;
@@ -17,7 +17,7 @@ import org.cycads.entities.sequence.feature.FeatureType;
 public class Feature implements Feature
 {
 	private String								name;
-	private Location							location;
+	private Subsequence							location;
 	private FeatureAnnotationMethod			method;
 	private FeatureType						featureType;
 
@@ -37,7 +37,7 @@ public class Feature implements Feature
 	/* (non-Javadoc)
 	 * @see org.cycads.entities.refact.IFeature#getLoaction()
 	 */
-	public Location getLoaction() {
+	public Subsequence getLoaction() {
 		return location;
 	}
 

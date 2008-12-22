@@ -9,10 +9,10 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.regex.Pattern;
 
-import org.cycads.entities.annotation.dBLink.DBLinkAnnot;
+import org.cycads.entities.annotation.dBLink.OntologyAnnot;
 import org.cycads.entities.annotation.feature.Gene;
 import org.cycads.entities.note.Note;
-import org.cycads.entities.sequence.Location;
+import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Sequence;
 import org.cycads.general.Config;
@@ -63,7 +63,7 @@ public class GFF3Loader implements GFF3DocumentHandler
 		if (genePattern.matcher(type).matches())
 		{
 			// record is a gene
-			Location loc;
+			Subsequence loc;
 			if (record.getStrand() < 0)
 			{
 				loc = seq.getOrCreateLocation(record.getEnd(), record.getStart(), null);
@@ -119,7 +119,7 @@ public class GFF3Loader implements GFF3DocumentHandler
 		else
 		{
 			// sequence accession is external
-			Collection<DBLinkAnnot< ? , ? extends Sequence, ? , ? >> dbLinks = organism.getSequenceDBLinks(seqDatabase,
+			Collection<OntologyAnnot< ? , ? extends Sequence, ? , ? >> dbLinks = organism.getSequenceDBLinks(seqDatabase,
 				sequenceID);
 			if (dbLinks.size() != 1)
 			{

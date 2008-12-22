@@ -2,7 +2,7 @@ package org.cycads.entities.annotation.dBLink;
 
 import org.cycads.entities.annotation.AnnotationMethod;
 
-public interface DBLinkAnnotSource<D extends DBLinkAnnot< ? , ? , R, M>, R extends DBRecord< ? , ? , ? , ? >, M extends AnnotationMethod>
+public interface DBLinkAnnotSource<D extends OntologyAnnot< ? , ? , R, M>, R extends DBRecord< ? , ? , ? , ? >, M extends AnnotationMethod>
 
 {
 	public D createDBLink(M method, R target);

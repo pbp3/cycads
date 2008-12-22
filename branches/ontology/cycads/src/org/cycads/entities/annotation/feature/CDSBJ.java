@@ -9,11 +9,11 @@ import org.biojavax.bio.seq.RichFeature;
 import org.cycads.entities.annotation.AnnotationMethodBJ;
 import org.cycads.entities.annotation.AnnotationRichFeatureBJ;
 import org.cycads.entities.annotation.AnnotationRichFeatureBJFactory;
-import org.cycads.entities.sequence.LocationBJ;
+import org.cycads.entities.sequence.SubsequenceBJ;
 import org.cycads.entities.sequence.ThinSequenceBJ;
 
 public class CDSBJ extends AnnotationRichFeatureBJ<CDSBJ, SimpleFeatureBJ, RNABJ>
-		implements CDS<CDSBJ, LocationBJ, ThinSequenceBJ, AnnotationMethodBJ, RNABJ>,
+		implements CDS<CDSBJ, SubsequenceBJ, ThinSequenceBJ, AnnotationMethodBJ, RNABJ>,
 		AnnotationRichFeatureBJFactory<SimpleFeatureBJ, RNABJ>
 {
 

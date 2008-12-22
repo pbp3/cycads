@@ -38,7 +38,7 @@ import org.hibernate.Query;
 
 public class ThinSequenceBJ
 		implements
-		Sequence<DBLinkBJ<ThinSequenceBJ>, ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ, LocationBJ, SimpleFeatureBJ>
+		Sequence<DBLinkBJ<ThinSequenceBJ>, ThinSequenceBJ, DBRecordBJ, AnnotationMethodBJ, SubsequenceBJ, SimpleFeatureBJ>
 {
 	int												id;
 	RichSequence									richSeq	= null;
@@ -163,9 +163,9 @@ public class ThinSequenceBJ
 		return createNote(note.getValue(), note.getType());
 	}
 
-	public LocationBJ getOrCreateLocation(int start, int end, Collection<Intron> introns)
+	public SubsequenceBJ getOrCreateLocation(int start, int end, Collection<Intron> introns)
 	{
-		RichLocation location = LocationBJ.createRichLocation(start, end, introns);
+		RichLocation location = SubsequenceBJ.createRichLocation(start, end, introns);
 		RichLocation simpleRichLocation = location;
 		if (!(simpleRichLocation instanceof SimpleRichLocation))
 		{
@@ -179,11 +179,11 @@ public class ThinSequenceBJ
 				richLocation = (RichLocation) richLocation.getFeature().getLocation();
 				if (richLocation.equals(location) && richLocation != location)
 				{
-					return new LocationBJ(richLocation);
+					return new SubsequenceBJ(richLocation);
 				}
 			}
 		}
-		return new LocationBJ(LocationBJ.fillRichFeature(location, AnnotationMethodBJ.getMethodGeneral().getTerm(),
+		return new SubsequenceBJ(SubsequenceBJ.fillRichFeature(location, AnnotationMethodBJ.getMethodGeneral().getTerm(),
 			this));
 	}
 

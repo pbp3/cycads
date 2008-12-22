@@ -41,9 +41,9 @@ import org.cycads.general.biojava.TermsAndOntologies;
 
 // receive just a RichLocation
 // can add only a feature
-public class LocationBJ
+public class SubsequenceBJ
 		implements
-		Location<LocationDBLinkBJ, LocationBJ, DBRecordBJ, AnnotationMethodBJ, ThinSequenceBJ, SimpleFeatureBJ, CDSBJ, RNABJ, GeneBJ>
+		Subsequence<LocationDBLinkBJ, SubsequenceBJ, DBRecordBJ, AnnotationMethodBJ, ThinSequenceBJ, SimpleFeatureBJ, CDSBJ, RNABJ, GeneBJ>
 {
 	Collection<Intron>	introns		= null;
 	int					start		= -1;
@@ -118,7 +118,7 @@ public class LocationBJ
 
 	}
 
-	public LocationBJ(int start, int end, Collection<Intron> introns, AnnotationMethodBJ method, ThinSequenceBJ sequence)
+	public SubsequenceBJ(int start, int end, Collection<Intron> introns, AnnotationMethodBJ method, ThinSequenceBJ sequence)
 	{
 		this.start = start;
 		this.end = end;
@@ -127,7 +127,7 @@ public class LocationBJ
 		richFeature = fillRichFeature(createRichLocation(start, end, introns), method.getTerm(), sequence);
 	}
 
-	public LocationBJ(RichLocation richLocation)
+	public SubsequenceBJ(RichLocation richLocation)
 	{
 		if (!isLocationRichLocation(richLocation))
 		{
@@ -136,7 +136,7 @@ public class LocationBJ
 		this.richFeature = richLocation.getFeature();
 	}
 
-	public LocationBJ(RichFeature feature)
+	public SubsequenceBJ(RichFeature feature)
 	{
 		if (!isLocationRichFeature(feature))
 		{
@@ -357,7 +357,7 @@ public class LocationBJ
 	}
 
 	@Override
-	public Collection<SimpleFeatureBJ> getFeatures(LocationBJ source, AnnotationMethodBJ method, String type)
+	public Collection<SimpleFeatureBJ> getFeatures(SubsequenceBJ source, AnnotationMethodBJ method, String type)
 	{
 		if (source != this && !source.getRichLocation().equals(this.getRichLocation()))
 		{
@@ -437,7 +437,7 @@ public class LocationBJ
 	}
 
 	@Override
-	public LocationDBLinkBJ getDBLinkAnnot(LocationBJ source, AnnotationMethodBJ method, DBRecordBJ target)
+	public LocationDBLinkBJ getDBLinkAnnot(SubsequenceBJ source, AnnotationMethodBJ method, DBRecordBJ target)
 	{
 		if (source != this && !source.getRichLocation().equals(this.getRichLocation()))
 		{
@@ -541,7 +541,7 @@ public class LocationBJ
 	}
 
 	@Override
-	public Collection<SimpleFeatureBJ> getFeatures(LocationBJ source, String method, String type)
+	public Collection<SimpleFeatureBJ> getFeatures(SubsequenceBJ source, String method, String type)
 	{
 		return getFeatures(source, AnnotationMethodBJ.getInstance(method), type);
 	}
@@ -559,7 +559,7 @@ public class LocationBJ
 	}
 
 	@Override
-	public LocationDBLinkBJ getDBLinkAnnot(LocationBJ source, String method, DBRecordBJ target)
+	public LocationDBLinkBJ getDBLinkAnnot(SubsequenceBJ source, String method, DBRecordBJ target)
 	{
 		return getDBLinkAnnot(source, AnnotationMethodBJ.getInstance(method), target);
 	}
