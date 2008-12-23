@@ -1,7 +1,7 @@
 /*
  * Created on 28/11/2008
  */
-package org.cycads.entities.sequence;
+package org.cycads.entities.sequence.BJ;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,17 +24,21 @@ import org.biojavax.bio.seq.SimpleRichFeatureRelationship;
 import org.biojavax.bio.seq.SimpleRichLocation;
 import org.biojavax.bio.seq.RichLocation.Strand;
 import org.biojavax.ontology.ComparableTerm;
-import org.cycads.entities.annotation.AnnotationMethodBJ;
-import org.cycads.entities.annotation.dBLink.BJ.DBRecordBJ;
-import org.cycads.entities.annotation.dBLink.BJ.ExternalDatabaseBJ;
-import org.cycads.entities.annotation.dBLink.BJ.SubseqOntologyAnnotBJ;
-import org.cycads.entities.annotation.feature.CDSBJ;
-import org.cycads.entities.annotation.feature.Feature;
-import org.cycads.entities.annotation.feature.FeatureFilter;
-import org.cycads.entities.annotation.feature.FeatureFilterByType;
-import org.cycads.entities.annotation.feature.GeneBJ;
-import org.cycads.entities.annotation.feature.RNABJ;
-import org.cycads.entities.annotation.feature.SimpleFeatureBJ;
+import org.cycads.entities.annotation.AnnotFeature;
+import org.cycads.entities.annotation.AnnotFeature;
+import org.cycads.entities.annotation.FeatureFilterByType;
+import org.cycads.entities.annotation.BJ.AnnotationMethodBJ;
+import org.cycads.entities.annotation.BJ.CDSBJ;
+import org.cycads.entities.annotation.BJ.DBRecordBJ;
+import org.cycads.entities.annotation.BJ.ExternalDatabaseBJ;
+import org.cycads.entities.annotation.BJ.GeneBJ;
+import org.cycads.entities.annotation.BJ.OntologyBJ;
+import org.cycads.entities.annotation.BJ.RNABJ;
+import org.cycads.entities.annotation.BJ.SimpleFeatureBJ;
+import org.cycads.entities.annotation.BJ.SubseqOntologyAnnotBJ;
+import org.cycads.entities.sequence.Intron;
+import org.cycads.entities.sequence.SimpleIntron;
+import org.cycads.entities.sequence.Subsequence;
 import org.cycads.exceptions.InvalidMethod;
 import org.cycads.general.biojava.TermsAndOntologies;
 
@@ -42,7 +46,7 @@ import org.cycads.general.biojava.TermsAndOntologies;
 // can add only a feature
 public class SubsequenceBJ
 		implements
-		Subsequence<SubsequenceBJ, DBRecordBJ, AnnotationMethodBJ, ThinSequenceBJ, SimpleFeatureBJ, CDSBJ, RNABJ, GeneBJ>
+		Subsequence<SubseqOntologyAnnotBJ, OntologyBJ, AnnotationMethodBJ, DBRecordBJ, ThinSequenceBJ, SimpleFeatureBJ, CDSBJ, RNABJ, GeneBJ>
 {
 	Collection<Intron>	introns		= null;
 	int					start		= -1;
@@ -85,12 +89,12 @@ public class SubsequenceBJ
 		}
 	}
 
-	public static RichFeature fillRichFeature(RichLocation richLocation, ComparableTerm source, ThinSequenceBJ sequence) {
+	public static RichFeature fillRichFeature(RichLocation richLocation, ComparableTerm method, ThinSequenceBJ sequence) {
 		// create a feature template
 		RichFeature.Template templ = new RichFeature.Template();
 		// assign the feature template a location, type, and source
 		templ.typeTerm = TermsAndOntologies.getTermSubSequenceType();
-		templ.sourceTerm = source;
+		templ.sourceTerm = method;
 		// assign the rest of the necessary stuff
 		templ.annotation = new SimpleRichAnnotation();
 		templ.featureRelationshipSet = new TreeSet();
@@ -287,12 +291,12 @@ public class SubsequenceBJ
 
 	@Override
 	public CDSBJ createCDS(AnnotationMethodBJ method) {
-		return new CDSBJ(createFeature(method, Feature.CDS_TYPE).getRichFeature());
+		return new CDSBJ(createFeature(method, AnnotFeature.CDS_TYPE).getRichFeature());
 	}
 
 	@Override
 	public GeneBJ createGene(AnnotationMethodBJ method) {
-		return new GeneBJ(createFeature(method, Feature.GENE_TYPE).getRichFeature());
+		return new GeneBJ(createFeature(method, AnnotFeature.GENE_TYPE).getRichFeature());
 	}
 
 	@Override
@@ -302,7 +306,7 @@ public class SubsequenceBJ
 
 	@Override
 	public RNABJ createMRNA(AnnotationMethodBJ method) {
-		return new RNABJ(createFeature(method, Feature.MRNA_TYPE).getRichFeature());
+		return new RNABJ(createFeature(method, AnnotFeature.MRNA_TYPE).getRichFeature());
 	}
 
 	@Override
@@ -492,7 +496,7 @@ public class SubsequenceBJ
 
 	@Override
 	public CDSBJ getCDS(AnnotationMethodBJ method) {
-		Collection<SimpleFeatureBJ> features = getFeatures(method, Feature.CDS_TYPE);
+		Collection<SimpleFeatureBJ> features = getFeatures(method, AnnotFeature.CDS_TYPE);
 		if (features == null || features.size() == 0) {
 			return null;
 		}
@@ -506,7 +510,7 @@ public class SubsequenceBJ
 
 	@Override
 	public GeneBJ getGene(AnnotationMethodBJ method) {
-		Collection<SimpleFeatureBJ> features = getFeatures(method, Feature.GENE_TYPE);
+		Collection<SimpleFeatureBJ> features = getFeatures(method, AnnotFeature.GENE_TYPE);
 		if (features == null || features.size() == 0) {
 			return null;
 		}
@@ -520,7 +524,7 @@ public class SubsequenceBJ
 
 	@Override
 	public RNABJ getMRNA(AnnotationMethodBJ method) {
-		Collection<SimpleFeatureBJ> features = getFeatures(method, Feature.MRNA_TYPE);
+		Collection<SimpleFeatureBJ> features = getFeatures(method, AnnotFeature.MRNA_TYPE);
 		if (features == null || features.size() == 0) {
 			return null;
 		}

@@ -5,6 +5,7 @@ package org.cycads.entities.sequence;
 
 import java.util.Collection;
 
+
 public interface Organism<SEQ extends Sequence< ? , ? , ? , ? >>
 {
 

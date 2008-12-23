@@ -1,7 +1,7 @@
 /*
  * Created on 29/10/2008
  */
-package org.cycads.entities.sequence;
+package org.cycads.entities.sequence.BJ;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -16,18 +16,20 @@ import org.biojavax.bio.seq.RichLocation;
 import org.biojavax.bio.seq.RichSequence;
 import org.biojavax.bio.seq.SimpleRichLocation;
 import org.biojavax.bio.seq.ThinRichSequence;
-import org.cycads.entities.annotation.AnnotationMethodBJ;
-import org.cycads.entities.annotation.dBLink.BJ.DBRecordBJ;
-import org.cycads.entities.annotation.dBLink.BJ.OntologyOntologyAnnotBJ;
-import org.cycads.entities.annotation.dBLink.BJ.ExternalDatabaseBJ;
-import org.cycads.entities.annotation.feature.FeatureFilter;
-import org.cycads.entities.annotation.feature.SimpleFeatureBJ;
+import org.cycads.entities.annotation.FeatureFilter;
+import org.cycads.entities.annotation.BJ.AnnotationMethodBJ;
+import org.cycads.entities.annotation.BJ.DBRecordBJ;
+import org.cycads.entities.annotation.BJ.ExternalDatabaseBJ;
+import org.cycads.entities.annotation.BJ.OntologyOntologyAnnotBJ;
+import org.cycads.entities.annotation.BJ.SimpleFeatureBJ;
 import org.cycads.entities.change.ChangeListener;
 import org.cycads.entities.change.ChangeType;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.NotesHashTable;
 import org.cycads.entities.note.NotesToAnnotationBJ;
 import org.cycads.entities.note.SimpleNote;
+import org.cycads.entities.sequence.Intron;
+import org.cycads.entities.sequence.Sequence;
 import org.cycads.exceptions.MethodNotImplemented;
 import org.cycads.general.Messages;
 import org.cycads.general.biojava.BioJavaxSession;
@@ -99,8 +101,8 @@ public class ThinSequenceBJ implements Sequence<ThinSequenceBJ, DBRecordBJ, Subs
 	}
 
 	@Override
-	public Note<ThinSequenceBJ> getNote(String value, String noteTypeName) {
-		return getNotesHash().getNote(value, noteTypeName);
+	public Note<ThinSequenceBJ> getNote(String noteTypeName, String value) {
+		return getNotesHash().getNote(noteTypeName, value);
 	}
 
 	@Override
@@ -129,13 +131,13 @@ public class ThinSequenceBJ implements Sequence<ThinSequenceBJ, DBRecordBJ, Subs
 	}
 
 	@Override
-	public Note<ThinSequenceBJ> createNote(String value, String noteTypeName) {
-		return addNote(new SimpleNote<ThinSequenceBJ>(this, value, noteTypeName));
+	public Note<ThinSequenceBJ> createNote(String type, String value) {
+		return addNote(new SimpleNote<ThinSequenceBJ>(this, type, value));
 	}
 
 	@Override
 	public Note<ThinSequenceBJ> createNote(Note< ? > note) {
-		return createNote(note.getValue(), note.getType());
+		return createNote(note.getType(), note.getValue());
 	}
 
 	public SubsequenceBJ getOrCreateSubsequence(int start, int end, Collection<Intron> introns) {
@@ -280,8 +282,8 @@ public class ThinSequenceBJ implements Sequence<ThinSequenceBJ, DBRecordBJ, Subs
 	}
 
 	@Override
-	public Note<ThinSequenceBJ> addNote(String value, String type) {
-		return addNote(createNote(value, type));
+	public Note<ThinSequenceBJ> addNote(String type, String value) {
+		return addNote(createNote(type, value));
 	}
 
 }

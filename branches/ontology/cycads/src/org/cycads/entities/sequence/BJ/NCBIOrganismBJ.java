@@ -1,13 +1,14 @@
 /*
  * Created on 06/06/2008
  */
-package org.cycads.entities.sequence;
+package org.cycads.entities.sequence.BJ;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 
 import org.biojavax.bio.taxa.NCBITaxon;
+import org.cycads.entities.sequence.Organism;
 import org.cycads.exceptions.DBObjectNotFound;
 import org.cycads.general.biojava.BioJavaxSession;
 import org.cycads.general.biojava.BioSql;
