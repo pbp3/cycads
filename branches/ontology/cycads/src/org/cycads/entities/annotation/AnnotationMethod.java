@@ -12,6 +12,4 @@ public interface AnnotationMethod extends NotesSourceContainer<Note<AnnotationMe
 
 	public int getWeight();
 
-	public Note<AnnotationMethod> addNote(String value, String type);
-
 }
