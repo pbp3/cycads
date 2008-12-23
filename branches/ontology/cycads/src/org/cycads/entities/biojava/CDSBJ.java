@@ -56,7 +56,7 @@ public class CDSBJ implements CDS
 	}
 
 	public static CDS getCDSByProtID(String protId, Organism organism) {
-		Query query = BioJavaxSession.session.createQuery("select f from Feature as f join f.parent as b join f.noteSet as prop "
+		Query query = BioJavaxSession.session.createQuery("select f from AnnotFeature as f join f.parent as b join f.noteSet as prop "
 			+ "where f.typeTerm=:cdsTerm and b.taxon=:taxonId and "
 			+ "prop.term=:termProteinID and prop.value=:protName");
 		query.setString("protName", protId);

@@ -24,7 +24,7 @@ public class ThinSequenceBJ implements Sequence
 	public Collection<SequenceFeature> getFeatures(FeatureFilter featureFilter) {
 		if (featureFilter instanceof FeatureFilterByType) {
 
-			Query query = BioJavaxSession.createQuery("select f.id,f.typeTerm from Feature as f join f.parent as b where "
+			Query query = BioJavaxSession.createQuery("select f.id,f.typeTerm from AnnotFeature as f join f.parent as b where "
 				+ "b.id=:seqId ");
 			query.setInteger("seqId", id);
 			List<Object[]> results = query.list();

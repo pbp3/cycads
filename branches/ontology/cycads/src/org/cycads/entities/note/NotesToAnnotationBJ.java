@@ -12,14 +12,14 @@ import org.cycads.entities.change.ChangeListener;
 import org.cycads.entities.change.ChangeType;
 import org.cycads.general.biojava.TermsAndOntologies;
 
-public class NotesToAnnotationBJ<N extends Note<H>, H extends NoteSource>
+public class NotesToAnnotationBJ<N extends Note< ? >, S extends NoteSource< ? >>
 		implements ChangeListener<N>, org.biojava.utils.ChangeListener
 {
 	NotesContainer<N>	notes;
 	RichAnnotation		annotation;
-	H					source;
+	S					source;
 
-	private NotesToAnnotationBJ(NotesContainer<N> notes, RichAnnotation annotation, H source) {
+	private NotesToAnnotationBJ(NotesContainer<N> notes, RichAnnotation annotation, S source) {
 		this.notes = notes;
 		this.annotation = annotation;
 		this.source = source;
@@ -27,14 +27,14 @@ public class NotesToAnnotationBJ<N extends Note<H>, H extends NoteSource>
 		notes.addChangeListener(this, ChangeType.NOTE);
 	}
 
-	public static <N extends Note<H>, H extends NoteSource> NotesHashTable<N> createNotesHashTable(
+	public static <N extends Note< ? >, H extends NoteSource< ? >> NotesHashTable<N> createNotesHashTable(
 			RichAnnotation annotation, H source) {
 		NotesHashTable<N> notes = new NotesHashTable<N>();
 		new NotesToAnnotationBJ<N, H>(notes, annotation, source);
 		return notes;
 	}
 
-	public static <N extends Note<H>, H extends NoteSource> NotesArrayList<N> createNotesArrayList(
+	public static <N extends Note< ? >, H extends NoteSource< ? >> NotesArrayList<N> createNotesArrayList(
 			RichAnnotation annotation, H source) {
 		NotesArrayList<N> notes = new NotesArrayList<N>();
 		new NotesToAnnotationBJ<N, H>(notes, annotation, source);
@@ -51,7 +51,7 @@ public class NotesToAnnotationBJ<N extends Note<H>, H extends NoteSource>
 		}
 		org.biojavax.Note noteNew = (org.biojavax.Note) cev.getChange();
 		if (noteNew != null) {
-			notes.addNote((N) source.createNote(noteNew.getValue(), noteNew.getTerm().getName()));
+			notes.addNote(source.createNote(noteNew.getTerm().getName(), noteNew.getValue()));
 		}
 
 		notes.addChangeListener(this, ChangeType.NOTE);
@@ -83,11 +83,11 @@ public class NotesToAnnotationBJ<N extends Note<H>, H extends NoteSource>
 		// nothing to do
 	}
 
-	public static org.biojavax.Note addNoteForAnnotation(Note note, RichAnnotation annot) {
+	public org.biojavax.Note addNoteForAnnotation(N note, RichAnnotation annot) {
 		return addNoteForAnnotation(note.getValue(), note.getType(), annot);
 	}
 
-	public static org.biojavax.Note addNoteForAnnotation(String value, String type, RichAnnotation annot) {
+	public org.biojavax.Note addNoteForAnnotation(String value, String type, RichAnnotation annot) {
 		ComparableTerm noteType = TermsAndOntologies.getOntologyNotes().getOrCreateTerm(type);
 		Set<org.biojavax.Note> notes = annot.getNoteSet();
 		int rank = 0;
@@ -104,11 +104,11 @@ public class NotesToAnnotationBJ<N extends Note<H>, H extends NoteSource>
 		return note;
 	}
 
-	public static org.biojavax.Note removeNoteForAnnotation(Note note, RichAnnotation annot) {
+	public org.biojavax.Note removeNoteForAnnotation(N note, RichAnnotation annot) {
 		return removeNoteForAnnotation(note.getValue(), note.getType(), annot);
 	}
 
-	public static org.biojavax.Note removeNoteForAnnotation(String value, String type, RichAnnotation annot) {
+	public org.biojavax.Note removeNoteForAnnotation(String value, String type, RichAnnotation annot) {
 		ComparableTerm noteType = TermsAndOntologies.getOntologyNotes().getOrCreateTerm(type);
 		Set<org.biojavax.Note> notes = annot.getNoteSet();
 		org.biojavax.Note noteToRemove = null;

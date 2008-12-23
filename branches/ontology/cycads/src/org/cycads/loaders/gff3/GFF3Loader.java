@@ -9,12 +9,12 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.regex.Pattern;
 
-import org.cycads.entities.annotation.dBLink.OntologyAnnot;
-import org.cycads.entities.annotation.feature.Gene;
+import org.cycads.entities.annotation.Gene;
+import org.cycads.entities.annotation.AnnotOntology;
 import org.cycads.entities.note.Note;
+import org.cycads.entities.sequence.Sequence;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.sequence.Organism;
-import org.cycads.entities.sequence.Sequence;
 import org.cycads.general.Config;
 import org.cycads.general.ParametersDefault;
 
@@ -95,8 +95,8 @@ public class GFF3Loader implements GFF3DocumentHandler
 				}
 			}
 			// add score as note
-			gene.addNote(NumberFormat.getInstance().format(record.getScore()),
-				ParametersDefault.annotationNoteTypeScore());
+			gene.addNote(ParametersDefault.annotationNoteTypeScore(),
+				NumberFormat.getInstance().format(record.getScore()));
 			Note nameNote = record.getNotes(ParametersDefault.gff3NoteTypeName());
 		}
 		else if (mRNAPattern.matcher(type).matches())
@@ -119,7 +119,7 @@ public class GFF3Loader implements GFF3DocumentHandler
 		else
 		{
 			// sequence accession is external
-			Collection<OntologyAnnot< ? , ? extends Sequence, ? , ? >> dbLinks = organism.getSequences(seqDatabase,
+			Collection<AnnotOntology< ? , ? extends Sequence, ? , ? >> dbLinks = organism.getSequences(seqDatabase,
 				sequenceID);
 			if (dbLinks.size() != 1)
 			{

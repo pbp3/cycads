@@ -5,5 +5,6 @@ package org.cycads.entities.note;
 
 public interface NotesSourceContainer<N extends Note< ? >> extends NoteSource<N>, NotesContainer<N>
 {
+	public N addNote(String type, String value);
 
 }

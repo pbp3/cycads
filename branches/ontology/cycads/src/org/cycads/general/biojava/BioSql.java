@@ -22,7 +22,7 @@ public class BioSql
 {
 
 	public static Collection<Integer> getFeaturesId(int seqId) {
-		Query query = BioJavaxSession.createQuery("select f.id from Feature as f join f.parent as b where "
+		Query query = BioJavaxSession.createQuery("select f.id from AnnotFeature as f join f.parent as b where "
 			+ "b.id=:seqId ");
 		query.setInteger("seqId", seqId);
 		Collection<Integer> results = query.list();
@@ -125,7 +125,7 @@ public class BioSql
 	}
 
 	public static RichFeature getRichFeature(int id) {
-		Query query = BioJavaxSession.createQuery("from Feature where id=:id");
+		Query query = BioJavaxSession.createQuery("from AnnotFeature where id=:id");
 		query.setInteger("id", id);
 		return (RichFeature) query.uniqueResult();
 	}
@@ -159,7 +159,7 @@ public class BioSql
 	}
 
 	// public static List<RichFeature> getFeatures(ComparableTerm type, Organism organism, int version) {
-	// Query query = session.createQuery("select f from Feature as f join f.parent as b where "
+	// Query query = session.createQuery("select f from AnnotFeature as f join f.parent as b where "
 	// + "b.version=:version and f.typeTerm=:typeTerm and b.taxon=:taxonId ");
 	// query.setInteger("version", version);
 	// query.setParameter("taxonId", organism.getTaxon());
@@ -196,7 +196,7 @@ public class BioSql
 	// }
 	//
 	// public static Collection<Integer> getSequencesIdCDStRNAmRNA(Organism organism, int version) {
-	// Query query = session.createQuery("select distinct(b.id) from Feature as f join f.parent as b where "
+	// Query query = session.createQuery("select distinct(b.id) from AnnotFeature as f join f.parent as b where "
 	// + "b.version=:version and b.taxon=:taxonId and (f.typeTerm=:typeCDS or f.typeTerm=:typeMiscRNA or
 	// f.typeTerm=:typetRNA)");
 	// query.setInteger("version", version);
@@ -238,7 +238,7 @@ public class BioSql
 	// }
 	//
 	// public static List<Integer> getCDSMiscRNATRNA(Organism organism, int version) {
-	// Query query = session.createQuery("select f.id from Feature as f join f.parent as b where "
+	// Query query = session.createQuery("select f.id from AnnotFeature as f join f.parent as b where "
 	// + "b.version=:version and (f.typeTerm=:cdsTerm or f.typeTerm=:miscRNATerm or f.typeTerm=:tTRNATerm) "
 	// + "and b.taxon=:taxonId order by b.id");
 	// query.setInteger("version", version);
@@ -250,7 +250,7 @@ public class BioSql
 	// }
 	//
 	// public static List<Integer> getCDSMiscRNATRNABySeqId(Integer seqId) {
-	// Query query = session.createQuery("select f.id from Feature as f join f.parent as b where "
+	// Query query = session.createQuery("select f.id from AnnotFeature as f join f.parent as b where "
 	// + "b.id=:seqId and (f.typeTerm=:cdsTerm or f.typeTerm=:miscRNATerm or f.typeTerm=:tTRNATerm) ");
 	// query.setInteger("seqId", seqId);
 	// query.setParameter("cdsTerm", TermsAndOntologies.getTermCDS());
@@ -260,7 +260,7 @@ public class BioSql
 	// }
 	//
 	// public static Gene getGene(String geneName, Organism organism) {
-	// Query query = session.createQuery("select f from Feature as f join f.parent as b where "
+	// Query query = session.createQuery("select f from AnnotFeature as f join f.parent as b where "
 	// + "f.name=:geneName and f.typeTerm=:geneTerm and b.taxon=:taxonId ");
 	// query.setString("geneName", geneName);
 	// query.setParameter("taxonId", organism.getTaxon());
@@ -275,7 +275,7 @@ public class BioSql
 	// }
 	//
 	// public static CDS getCDS(String cdsName, Organism organism) {
-	// Query query = session.createQuery("select f from Feature as f join f.parent as b where "
+	// Query query = session.createQuery("select f from AnnotFeature as f join f.parent as b where "
 	// + "f.name=:cdsName and f.typeTerm=:cdsTerm and b.taxon=:taxonId ");
 	// query.setString("cdsName", cdsName);
 	// query.setParameter("taxonId", organism.getTaxon());
@@ -357,7 +357,7 @@ public class BioSql
 	//
 	// public static void save(Gene gene) {
 	// session.saveOrUpdate("Sequence", gene.getFeature().getSequence());
-	// session.saveOrUpdate("Feature", gene.getFeature());
+	// session.saveOrUpdate("AnnotFeature", gene.getFeature());
 	// }
 	//
 

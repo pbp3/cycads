@@ -30,7 +30,7 @@ public class SequenceFeatureBJ implements SequenceFeature
 	}
 
 	public static RichFeature getRichFeature(int id) {
-		Query query = BioJavaxSession.createQuery("from Feature where id=:id");
+		Query query = BioJavaxSession.createQuery("from AnnotFeature where id=:id");
 		query.setInteger("id", id);
 		return (RichFeature) query.uniqueResult();
 	}

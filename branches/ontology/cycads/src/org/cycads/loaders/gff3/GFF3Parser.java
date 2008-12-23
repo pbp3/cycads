@@ -249,7 +249,7 @@ public class GFF3Parser
 			String attVal = sTok.nextToken().trim();
 			int spaceIndx = attVal.indexOf("=");
 			if (spaceIndx == -1) {
-				notes.addNote(notes.createNote("", attVal));
+				notes.addNote(notes.createNote(attVal, ""));
 			}
 			else {
 				String attName;
@@ -265,22 +265,22 @@ public class GFF3Parser
 						}
 						while (quoteIndx != -1 && attValList.charAt(quoteIndx - 1) == '\\');
 						if (quoteIndx > 0) {
-							notes.addNote(notes.createNote(attValList.substring(1, quoteIndx), attName));
+							notes.addNote(notes.createNote(attName, attValList.substring(1, quoteIndx)));
 							attValList = attValList.substring(quoteIndx + 1).trim();
 						}
 						else {
-							notes.addNote(notes.createNote(attValList, attName));
+							notes.addNote(notes.createNote(attName, attValList));
 							attValList = "";
 						}
 					}
 					else {
 						int commaIndx = attValList.indexOf(",");
 						if (commaIndx == -1) {
-							notes.addNote(notes.createNote(attValList, attName));
+							notes.addNote(notes.createNote(attName, attValList));
 							attValList = "";
 						}
 						else {
-							notes.addNote(notes.createNote(attValList.substring(0, commaIndx), attName));
+							notes.addNote(notes.createNote(attName, attValList.substring(0, commaIndx)));
 							attValList = attValList.substring(commaIndx + 1).trim();
 						}
 					}

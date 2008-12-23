@@ -156,9 +156,9 @@ public interface GFF3Record<N extends Note< ? >> extends NotesContainer<N>, Note
 		}
 
 		@Override
-		public SimpleNote<Impl> createNote(String value, String noteTypeName)
+		public SimpleNote<Impl> createNote(String type, String value)
 		{
-			return new SimpleNote<Impl>(this, value, type);
+			return new SimpleNote<Impl>(this, type, value);
 		}
 
 		public SimpleNote<Impl> addNote(SimpleNote<Impl> note)
@@ -166,9 +166,9 @@ public interface GFF3Record<N extends Note< ? >> extends NotesContainer<N>, Note
 			return notes.addNote(note);
 		}
 
-		public SimpleNote<Impl> getNote(String value, String noteTypeName)
+		public SimpleNote<Impl> getNote(String noteTypeName, String value)
 		{
-			return notes.getNote(value, noteTypeName);
+			return notes.getNote(noteTypeName, value);
 		}
 
 		public Collection<SimpleNote<Impl>> getNotes()
@@ -200,7 +200,7 @@ public interface GFF3Record<N extends Note< ? >> extends NotesContainer<N>, Note
 		@Override
 		public SimpleNote<Impl> addNote(String value, String type)
 		{
-			return addNote(createNote(value, type));
+			return addNote(createNote(type, value));
 		}
 
 	}

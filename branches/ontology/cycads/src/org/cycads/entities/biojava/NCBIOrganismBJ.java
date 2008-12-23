@@ -45,7 +45,7 @@ public class NCBIOrganismBJ implements Organism
 	}
 
 	public Collection<Sequence> getSequences(int version) {
-		Query query = BioJavaxSession.createQuery("select distinct(b.id) from Feature as f join f.parent as b where "
+		Query query = BioJavaxSession.createQuery("select distinct(b.id) from AnnotFeature as f join f.parent as b where "
 			+ "b.version=:version and b.taxon=:taxonId");
 		query.setInteger("version", version);
 		query.setParameter("taxonId", getTaxon());

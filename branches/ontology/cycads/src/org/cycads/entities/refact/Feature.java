@@ -3,9 +3,9 @@ package org.cycads.entities.refact;
 import java.util.Collection;
 
 import org.cycads.entities.annotation.DBAnnotationMethod;
-import org.cycads.entities.annotation.dBLink.ExternalDatabase;
-import org.cycads.entities.sequence.Subsequence;
+import org.cycads.entities.annotation.ExternalDatabase;
 import org.cycads.entities.sequence.Sequence;
+import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.sequence.feature.Feature;
 import org.cycads.entities.sequence.feature.FeatureAnnotationMethod;
 import org.cycads.entities.sequence.feature.FeatureNote;
@@ -14,7 +14,7 @@ import org.cycads.entities.sequence.feature.FeatureType;
 
 /**
  */
-public class Feature implements Feature
+public class Feature implements AnnotFeature
 {
 	private String								name;
 	private Subsequence							location;

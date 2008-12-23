@@ -11,15 +11,15 @@ public class SimpleNote<H extends NoteSource> implements Note<H>
 	String	noteType;
 	H		holder;
 
-	public SimpleNote(H holder, String value, String noteType) {
+	public SimpleNote(H holder, String type, String value) {
 		this.value = value;
-		this.noteType = noteType;
+		this.noteType = type;
 		this.holder = holder;
 	}
 
-	public SimpleNote(H holder, String value, Term noteType) {
+	public SimpleNote(H holder, Term type, String value) {
 		this.value = value;
-		this.noteType = noteType.getName();
+		this.noteType = type.getName();
 		this.holder = holder;
 	}
 
