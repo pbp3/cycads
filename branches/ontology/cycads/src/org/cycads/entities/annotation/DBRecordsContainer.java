@@ -7,11 +7,11 @@ import java.util.Collection;
 
 public interface DBRecordsContainer<R extends DBRecord< ? >>
 {
-	public R getDBRecord(String database, String accession);
+	public Collection<R> getDBRecords();
 
 	public Collection<R> getDBrecords(String database);
 
-	public void addDBrecord(R dbRecord);
+	public void addDBRecord(R dbRecord);
 
-	public void addDBrecord(String database, String accession);
+	public void addDBRecord(String database, String accession);
 }

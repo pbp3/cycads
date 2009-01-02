@@ -11,32 +11,34 @@ import org.cycads.entities.annotation.AnnotOntology;
 import org.cycads.entities.sequence.BJ.SubsequenceBJ;
 import org.cycads.general.biojava.TermsAndOntologies;
 
-public class SubseqOntologyAnnotBJ extends AnnotationRichFeatureBJ<SubseqOntologyAnnotBJ>
-		implements AnnotOntology<SubseqOntologyAnnotBJ, SubsequenceBJ, DBRecordBJ, AnnotationMethodBJ>
+public class SubseqOntologyAnnotBJ
+		extends
+		AnnotationRichFeatureBJ<SubseqOntologyAnnotBJ, AnnotationRichFeatureBJ< ? , ? , ? >, AnnotationRichFeatureBJ< ? , ? , ? >>
+		implements AnnotOntology<SubseqOntologyAnnotBJ, SubsequenceBJ, OntologyBJ, AnnotationMethodBJ>
 {
-	DBRecordBJ	target;
+	OntologyBJ	target;
 
 	public SubseqOntologyAnnotBJ(RichFeature feature) {
 		super(feature);
 		//verify consistency of parameter
-		if (!isDBLink(feature)) {
+		if (!isOntologyAnnot(feature)) {
 			throw new IllegalArgumentException();
 		}
 	}
 
 	@Override
-	public DBRecordBJ getDBRecordTarget() {
+	public OntologyBJ getOntologyTarget() {
 		if (target == null) {
 			Collection<RankedCrossRef> crossRefs = getRichFeature().getRankedCrossRefs();
 			for (RankedCrossRef crossRef : crossRefs) {
-				target = new DBRecordBJ(crossRef.getCrossRef());
+				target = new OntologyBJ(crossRef.getCrossRef());
 			}
 		}
 		return target;
 	}
 
-	public static boolean isDBLink(RichFeature feature) {
-		return (isAnnotation(feature) && feature.getTypeTerm().equals(TermsAndOntologies.getTermDBLinkType()) && feature.getRankedCrossRefs().size() == 1);
+	public static boolean isOntologyAnnot(RichFeature feature) {
+		return (isAnnotation(feature) && feature.getTypeTerm().equals(TermsAndOntologies.getTermOntologyAnnotType()) && feature.getRankedCrossRefs().size() == 1);
 	}
 
 }

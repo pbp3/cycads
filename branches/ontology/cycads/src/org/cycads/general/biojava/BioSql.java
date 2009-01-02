@@ -8,13 +8,17 @@ import java.util.Collection;
 import java.util.List;
 
 import org.biojavax.CrossRef;
+import org.biojavax.Namespace;
 import org.biojavax.bio.seq.RichFeature;
 import org.biojavax.bio.seq.RichFeatureRelationship;
 import org.biojavax.bio.seq.RichLocation;
 import org.biojavax.bio.seq.RichSequence;
 import org.biojavax.bio.seq.SimpleRichFeatureRelationship;
+import org.biojavax.bio.seq.SimpleRichLocation;
+import org.biojavax.bio.taxa.NCBITaxon;
 import org.biojavax.ontology.ComparableTerm;
 import org.cycads.entities.annotation.AnnotationMethod;
+import org.cycads.entities.sequence.BJ.ThinSequenceBJ;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 
@@ -22,7 +26,7 @@ public class BioSql
 {
 
 	public static Collection<Integer> getFeaturesId(int seqId) {
-		Query query = BioJavaxSession.createQuery("select f.id from AnnotFeature as f join f.parent as b where "
+		Query query = BioJavaxSession.createQuery("select f.id from Feature as f join f.parent as b where "
 			+ "b.id=:seqId ");
 		query.setInteger("seqId", seqId);
 		Collection<Integer> results = query.list();
@@ -39,7 +43,7 @@ public class BioSql
 	public static Collection<ComparableTerm> getTermsWithCrossRef(CrossRef crossRef) {
 		Query query = BioJavaxSession.createQuery("select distinct t from Term as t where "
 			+ "t.rankedCrossRefs.crossRef=:crossRef ");
-		query.setEntity("crossRef", crossRef);
+		query.setParameter("crossRef", crossRef);
 		Collection<ComparableTerm> results = query.list();
 		return results;
 	}
@@ -114,13 +118,14 @@ public class BioSql
 
 	public static int getSequenceId(RichSequence richSeq) {
 		Query query = BioJavaxSession.createQuery("select s.id from ThinSequence s where s=:seq ");
-		query.setEntity("seq", richSeq);
+		query.setParameter("seq", richSeq);
+		//		query.setParameter("seq", richSeq);
 		return (Integer) query.uniqueResult();
 	}
 
 	public static int getTermId(ComparableTerm term) {
 		Query query = BioJavaxSession.createQuery("select t.id from Term t where t=:term ");
-		query.setEntity("term", term);
+		query.setParameter("term", term);
 		return (Integer) query.uniqueResult();
 	}
 
@@ -156,6 +161,36 @@ public class BioSql
 			features.add(featureRelation.getSubject());
 		}
 		return features;
+	}
+
+	public static Collection<RichLocation> getLocationsEqual(SimpleRichLocation location, ThinSequenceBJ sequenceBJ) {
+		Query query = BioJavaxSession.createQuery("from Location as l join l.feature as f where "
+			+ "f.parent=:seq and l.min=:min and l.max=:max and l.strandNum=:strand");
+		query.setParameter("seq", sequenceBJ.getRichSeq());
+		query.setInteger("min", location.getMin());
+		query.setInteger("max", location.getMax());
+		query.setInteger("strand", location.getStrand().intValue());
+		Collection<RichLocation> results = query.list();
+		return results;
+	}
+
+	public static Integer getSequenceId(String accession, int version, Namespace nameSpace) {
+		Query query = BioJavaxSession.createQuery("select b.id from BioEntry b where b.accession=:accession and "
+			+ "b.version=:version and b.namespace=:nameSpace ");
+		query.setString("accession", accession);
+		query.setParameter("nameSpace", nameSpace);
+		query.setInteger("version", version);
+		//		query.setParameter("seq", richSeq);
+		return (Integer) query.uniqueResult();
+	}
+
+	public static Collection<Integer> getSequencesIdByDBXRef(CrossRef crossRef, NCBITaxon ncbiTaxon) {
+		Query query = BioJavaxSession.createQuery("select distinct b.id from BioEntry b where "
+			+ "b.rankedCrossRefs.crossRef=:crossRef and b.taxon=:ncbiTaxon");
+		query.setParameter("crossRef", crossRef);
+		query.setParameter("ncbiTaxon", ncbiTaxon);
+		Collection<Integer> results = query.list();
+		return results;
 	}
 
 	// public static List<RichFeature> getFeatures(ComparableTerm type, Organism organism, int version) {

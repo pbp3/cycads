@@ -62,4 +62,8 @@ public class BioJavaxSession
 	public static SQLQuery createSqlQuery(String query) {
 		return session.createSQLQuery(query);
 	}
+
+	public static void saveOrUpdate(String entityName, Object o) {
+		session.saveOrUpdate(entityName, o);
+	}
 }

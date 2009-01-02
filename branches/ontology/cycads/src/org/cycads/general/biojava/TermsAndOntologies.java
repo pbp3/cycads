@@ -136,8 +136,8 @@ public class TermsAndOntologies
 		return getOntology(getString("ontology.methods"));
 	}
 
-	public static ComparableOntology getOntologyDBRecordDBRecordLink() {
-		return getOntology(getString("ontology.DBRecordDBRecordLink"));
+	public static ComparableOntology getOntologyAnnotOntologyOntology() {
+		return getOntology(getString("ontology.Annotation.OntologyOntology"));
 	}
 
 	public static ComparableOntology getOntologyFeatureType() {
@@ -148,8 +148,8 @@ public class TermsAndOntologies
 		return getOntologyFeatureType().getOrCreateTerm(type);
 	}
 
-	public static ComparableTerm getTermDBLinkType() {
-		return getTermFeatureType(getString("term.Annotation.DBLinkType"));
+	public static ComparableTerm getTermOntologyAnnotType() {
+		return getTermFeatureType(getString("term.Annotation.OntologyAnnotType"));
 	}
 
 	public static Term getTermSubSequenceType() {

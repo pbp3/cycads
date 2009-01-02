@@ -5,7 +5,6 @@ package org.cycads.entities.annotation.BJ;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.NoSuchElementException;
 
 import org.biojavax.CrossRef;
 import org.biojavax.RichObjectFactory;
@@ -55,7 +54,7 @@ public class OntologyBJ extends DBRecordBJ
 		Collection<ComparableTerm> terms = BioSql.getTermsWithCrossRef(this.getCrossRef());
 		for (ComparableTerm term : terms) {
 			OntologyOntologyAnnotBJ annotation = new OntologyOntologyAnnotBJ(term);
-			if (annotation.getAnnotationMethod().equals(method) && annotation.getOntology().equals(target)) {
+			if (annotation.getAnnotationMethod().equals(method) && annotation.getOntologyTarget().equals(target)) {
 				return annotation;
 			}
 		}
@@ -73,7 +72,7 @@ public class OntologyBJ extends DBRecordBJ
 		Collection<OntologyOntologyAnnotBJ> result = new ArrayList<OntologyOntologyAnnotBJ>(terms.size());
 		for (ComparableTerm term : terms) {
 			OntologyOntologyAnnotBJ annotation = new OntologyOntologyAnnotBJ(term);
-			if (annotation.getOntology().equals(target)) {
+			if (annotation.getOntologyTarget().equals(target)) {
 				result.add(annotation);
 			}
 		}
@@ -105,7 +104,7 @@ public class OntologyBJ extends DBRecordBJ
 		Collection<OntologyOntologyAnnotBJ> result = new ArrayList<OntologyOntologyAnnotBJ>(terms.size());
 		for (ComparableTerm term : terms) {
 			OntologyOntologyAnnotBJ annotation = new OntologyOntologyAnnotBJ(term);
-			if (annotation.getOntology().getDatabaseName().equals(dbName)) {
+			if (annotation.getOntologyTarget().getDatabaseName().equals(dbName)) {
 				result.add(annotation);
 			}
 		}
@@ -131,64 +130,64 @@ public class OntologyBJ extends DBRecordBJ
 	}
 
 	///////
-	protected OntologyOntologyAnnotBJ getLink(String methodName, String target) {
-		ComparableTerm term;
-		try {
-			term = (ComparableTerm) OntologyOntologyAnnotBJ.ontDBRecordDBRecordLink.getTerm(OntologyOntologyAnnotBJ.joinTermName(
-				this.toString(), methodName, target));
-		}
-		catch (NoSuchElementException exception) {
-			try {
-				term = (ComparableTerm) OntologyOntologyAnnotBJ.ontDBRecordDBRecordLink.getTerm(OntologyOntologyAnnotBJ.joinTermName(
-					target, methodName, this.toString()));
-			}
-			catch (NoSuchElementException ex) {
-				return null;
-			}
-		}
-		return new OntologyOntologyAnnotBJ(term);
-	}
-
-	@Override
-	public OntologyOntologyAnnotBJ getDBLinkAnnot(DBRecordBJ source, AnnotationMethodBJ method, DBRecordBJ target) {
-		if (source != this) {
-			return null;
-		}
-		return getLink(method.getName(), target.toString());
-	}
-
-	@Override
-	public Collection<OntologyOntologyAnnotBJ> getDBLinkAnnots(AnnotationMethodBJ method, DBRecordBJ target) {
-		ArrayList<OntologyOntologyAnnotBJ> ret = new ArrayList<OntologyOntologyAnnotBJ>();
-		OntologyOntologyAnnotBJ link = getLink(method.getName(), target.toString());
-		if (link != null) {
-			ret.add(link);
-		}
-		return ret;
-	}
-
-	@Override
-	public Collection<OntologyOntologyAnnotBJ> getDBLinkAnnots(AnnotationMethodBJ method, String dbName,
-			String accession) {
-		ArrayList<OntologyOntologyAnnotBJ> ret = new ArrayList<OntologyOntologyAnnotBJ>();
-		OntologyOntologyAnnotBJ link = getLink(method.getName(), DBRecordBJ.joinDBNameAndAccession(dbName, accession));
-		if (link != null) {
-			ret.add(link);
-		}
-		return ret;
-	}
-
-	@Override
-	public Collection<OntologyOntologyAnnotBJ> getDBLinkAnnots(DBLinkAnnotFilter<OntologyOntologyAnnotBJ> filter) {
-		Collection<ComparableTerm> terms = BioSql.getTermsWithCrossRef(this.getCrossRef());
-		Collection<OntologyOntologyAnnotBJ> result = new ArrayList<OntologyOntologyAnnotBJ>(terms.size());
-		for (ComparableTerm term : terms) {
-			OntologyOntologyAnnotBJ link = new OntologyOntologyAnnotBJ(term);
-			if (filter.accept(link)) {
-				result.add(link);
-			}
-		}
-		return result;
-	}
-
+	//	protected OntologyOntologyAnnotBJ getLink(String methodName, String target) {
+	//		ComparableTerm term;
+	//		try {
+	//			term = (ComparableTerm) OntologyOntologyAnnotBJ.ontDBRecordDBRecordLink.getTerm(OntologyOntologyAnnotBJ.joinTermName(
+	//				this.toString(), methodName, target));
+	//		}
+	//		catch (NoSuchElementException exception) {
+	//			try {
+	//				term = (ComparableTerm) OntologyOntologyAnnotBJ.ontDBRecordDBRecordLink.getTerm(OntologyOntologyAnnotBJ.joinTermName(
+	//					target, methodName, this.toString()));
+	//			}
+	//			catch (NoSuchElementException ex) {
+	//				return null;
+	//			}
+	//		}
+	//		return new OntologyOntologyAnnotBJ(term);
+	//	}
+	//
+	//	@Override
+	//	public OntologyOntologyAnnotBJ getDBLinkAnnot(DBRecordBJ source, AnnotationMethodBJ method, DBRecordBJ target) {
+	//		if (source != this) {
+	//			return null;
+	//		}
+	//		return getLink(method.getName(), target.toString());
+	//	}
+	//
+	//	@Override
+	//	public Collection<OntologyOntologyAnnotBJ> getDBLinkAnnots(AnnotationMethodBJ method, DBRecordBJ target) {
+	//		ArrayList<OntologyOntologyAnnotBJ> ret = new ArrayList<OntologyOntologyAnnotBJ>();
+	//		OntologyOntologyAnnotBJ link = getLink(method.getName(), target.toString());
+	//		if (link != null) {
+	//			ret.add(link);
+	//		}
+	//		return ret;
+	//	}
+	//
+	//	@Override
+	//	public Collection<OntologyOntologyAnnotBJ> getDBLinkAnnots(AnnotationMethodBJ method, String dbName,
+	//			String accession) {
+	//		ArrayList<OntologyOntologyAnnotBJ> ret = new ArrayList<OntologyOntologyAnnotBJ>();
+	//		OntologyOntologyAnnotBJ link = getLink(method.getName(), DBRecordBJ.joinDBNameAndAccession(dbName, accession));
+	//		if (link != null) {
+	//			ret.add(link);
+	//		}
+	//		return ret;
+	//	}
+	//
+	//	@Override
+	//	public Collection<OntologyOntologyAnnotBJ> getDBLinkAnnots(DBLinkAnnotFilter<OntologyOntologyAnnotBJ> filter) {
+	//		Collection<ComparableTerm> terms = BioSql.getTermsWithCrossRef(this.getCrossRef());
+	//		Collection<OntologyOntologyAnnotBJ> result = new ArrayList<OntologyOntologyAnnotBJ>(terms.size());
+	//		for (ComparableTerm term : terms) {
+	//			OntologyOntologyAnnotBJ link = new OntologyOntologyAnnotBJ(term);
+	//			if (filter.accept(link)) {
+	//				result.add(link);
+	//			}
+	//		}
+	//		return result;
+	//	}
+	//
 }

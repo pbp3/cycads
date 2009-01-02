@@ -31,14 +31,12 @@ public class AnnotationRichFeatureBJ<ANNOTATION_TYPE extends AnnotationRichFeatu
 	RichFeature								richFeature;
 	NotesHashTable<Note<ANNOTATION_TYPE>>	notes;
 	ThinSequenceBJ							sequence;
-	SubsequenceBJ							location;
+	SubsequenceBJ							subsequence;
 
 	public AnnotationRichFeatureBJ(RichFeature feature) {
 		this.richFeature = feature;
 		// verify consistency of parameters
-		if (!getRichFeature().getTypeTerm().getOntology().equals(TermsAndOntologies.getOntologyFeatureType())
-			|| !getRichFeature().getSourceTerm().getOntology().equals(TermsAndOntologies.getOntologyMethods())
-			|| getSource() == null) {
+		if (!isAnnotation(feature)) {
 			throw new IllegalArgumentException();
 		}
 	}
@@ -53,7 +51,7 @@ public class AnnotationRichFeatureBJ<ANNOTATION_TYPE extends AnnotationRichFeatu
 	//
 	public static boolean isAnnotation(RichFeature feature) {
 		return (feature.getTypeTerm().getOntology().equals(TermsAndOntologies.getOntologyFeatureType())
-			&& feature.getSourceTerm().getOntology().equals(TermsAndOntologies.getOntologyMethods()) && getLocation(feature) != null);
+			&& feature.getSourceTerm().getOntology().equals(TermsAndOntologies.getOntologyMethods()) && getSubsequence(feature) != null);
 	}
 
 	public RichLocation getRichLocation() {
@@ -94,16 +92,16 @@ public class AnnotationRichFeatureBJ<ANNOTATION_TYPE extends AnnotationRichFeatu
 
 	@Override
 	public SubsequenceBJ getSource() {
-		if (location == null) {
-			location = getLocation(getRichFeature());
+		if (subsequence == null) {
+			subsequence = getSubsequence(getRichFeature());
 		}
-		return location;
+		return subsequence;
 	}
 
-	public static SubsequenceBJ getLocation(RichFeature feature) {
+	public static SubsequenceBJ getSubsequence(RichFeature feature) {
 		Collection<RichFeature> RichFeatures = BioSql.getFeatureContainers(feature);
 		for (RichFeature feature1 : RichFeatures) {
-			if (SubsequenceBJ.isLocationRichFeature(feature1)) {
+			if (SubsequenceBJ.isSubsequence(feature1)) {
 				return new SubsequenceBJ(feature1);
 			}
 		}

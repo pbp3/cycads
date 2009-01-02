@@ -7,7 +7,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import org.biojavax.RichObjectFactory;
+import org.biojavax.bio.seq.ThinRichSequence;
 import org.biojavax.bio.taxa.NCBITaxon;
+import org.cycads.entities.annotation.BJ.DBRecordBJ;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.exceptions.DBObjectNotFound;
 import org.cycads.general.biojava.BioJavaxSession;
@@ -73,7 +76,7 @@ public class NCBIOrganismBJ implements Organism<ThinSequenceBJ>
 	@Override
 	public ThinSequenceBJ getOrCreateSequence(String seqAccession, int version) {
 		ThinSequenceBJ seq;
-		int seqId = BioSql.getSequenceId(seqAccession, version);
+		int seqId = BioSql.getSequenceId(seqAccession, version, RichObjectFactory.getDefaultNamespace());
 		if (seqId > 0) {
 			//there is in the database: get the sequence
 			return new ThinSequenceBJ(seqId, this);
@@ -85,10 +88,19 @@ public class NCBIOrganismBJ implements Organism<ThinSequenceBJ>
 		return seq;
 	}
 
+	private ThinSequenceBJ createSequence(String seqAccession, int version) {
+		ThinRichSequence richSeq = new ThinRichSequence(RichObjectFactory.getDefaultNamespace(), seqAccession,
+			seqAccession, version, null, null);
+		richSeq.setTaxon(getTaxon());
+		BioJavaxSession.saveOrUpdate("ThinSequence", richSeq);
+		return new ThinSequenceBJ(richSeq);
+	}
+
 	@Override
 	public Collection<ThinSequenceBJ> getSequences(String seqDatabase, String seqAccession) {
 		ArrayList<ThinSequenceBJ> ret = new ArrayList<ThinSequenceBJ>();
-		Collection<Integer> seqIds = BioSql.getSequencesIdWithExternalDBLink(seqDatabase, seqAccession, this);
+		Collection<Integer> seqIds = BioSql.getSequencesIdByDBXRef(DBRecordBJ.getOrCreateDBRecordBJ(seqDatabase,
+			seqAccession).getCrossRef(), this.getTaxon());
 		for (int seqId : seqIds) {
 			ret.add(new ThinSequenceBJ(seqId, this));
 		}

@@ -25,7 +25,7 @@ import org.biojavax.bio.seq.SimpleRichLocation;
 import org.biojavax.bio.seq.RichLocation.Strand;
 import org.biojavax.ontology.ComparableTerm;
 import org.cycads.entities.annotation.AnnotFeature;
-import org.cycads.entities.annotation.AnnotFeature;
+import org.cycads.entities.annotation.AnnotationFilter;
 import org.cycads.entities.annotation.FeatureFilterByType;
 import org.cycads.entities.annotation.BJ.AnnotationMethodBJ;
 import org.cycads.entities.annotation.BJ.CDSBJ;
@@ -39,7 +39,6 @@ import org.cycads.entities.annotation.BJ.SubseqOntologyAnnotBJ;
 import org.cycads.entities.sequence.Intron;
 import org.cycads.entities.sequence.SimpleIntron;
 import org.cycads.entities.sequence.Subsequence;
-import org.cycads.exceptions.InvalidMethod;
 import org.cycads.general.biojava.TermsAndOntologies;
 
 // receive just a RichLocation
@@ -92,7 +91,7 @@ public class SubsequenceBJ
 	public static RichFeature fillRichFeature(RichLocation richLocation, ComparableTerm method, ThinSequenceBJ sequence) {
 		// create a feature template
 		RichFeature.Template templ = new RichFeature.Template();
-		// assign the feature template a location, type, and source
+		// assign the feature template a subsequence, type, and source
 		templ.typeTerm = TermsAndOntologies.getTermSubSequenceType();
 		templ.sourceTerm = method;
 		// assign the rest of the necessary stuff
@@ -120,26 +119,26 @@ public class SubsequenceBJ
 	}
 
 	public SubsequenceBJ(RichLocation richLocation) {
-		if (!isLocationRichLocation(richLocation)) {
+		if (!isSubsequence(richLocation)) {
 			throw new IllegalArgumentException();
 		}
 		this.richFeature = richLocation.getFeature();
 	}
 
 	public SubsequenceBJ(RichFeature feature) {
-		if (!isLocationRichFeature(feature)) {
+		if (!isSubsequence(feature)) {
 			throw new IllegalArgumentException();
 		}
 		this.richFeature = feature;
 	}
 
-	public static boolean isLocationRichFeature(RichFeature feature) {
+	public static boolean isSubsequence(RichFeature feature) {
 		return (feature != null && feature.getLocation() != null && feature.getTypeTerm().equals(
 			TermsAndOntologies.getTermSubSequenceType()));
 	}
 
-	public static boolean isLocationRichLocation(RichLocation location) {
-		return (location != null && isLocationRichFeature(location.getFeature()));
+	public static boolean isSubsequence(RichLocation location) {
+		return (location != null && isSubsequence(location.getFeature()));
 	}
 
 	// protected LocationBJ(RichLocation richLocation, ThinSequenceBJ sequence) {
@@ -191,19 +190,19 @@ public class SubsequenceBJ
 		return getRichLocation().getFeature();
 	}
 
-	// invalid method. The location is immutable
-	@Override
-	public boolean addIntron(Intron intron) {
-		throw new InvalidMethod();
-	}
-
-	@Override
-	public Intron addIntron(int startPos, int endPos) {
-		Intron intron = new SimpleIntron(startPos, endPos);
-		addIntron(intron);
-		return intron;
-	}
-
+	// invalid method. The subsequence is immutable
+	//	@Override
+	//	public boolean addIntron(Intron intron) {
+	//		throw new InvalidMethod();
+	//	}
+	//
+	//	@Override
+	//	public Intron addIntron(int startPos, int endPos) {
+	//		Intron intron = new SimpleIntron(startPos, endPos);
+	//		addIntron(intron);
+	//		return intron;
+	//	}
+	//
 	@Override
 	public Collection<Intron> getIntrons() {
 		if (introns == null) {
@@ -214,10 +213,10 @@ public class SubsequenceBJ
 				while (it.hasNext()) {
 					RichLocation loc2 = (RichLocation) it.next();
 					if (loc1.getMax() < loc2.getMin()) {
-						addIntron(new SimpleIntron(loc1.getMax() + 1, loc2.getMin() - 1));
+						introns.add(new SimpleIntron(loc1.getMax() + 1, loc2.getMin() - 1));
 					}
 					else if (loc2.getMax() < loc1.getMin()) {
-						addIntron(new SimpleIntron(loc2.getMax() + 1, loc1.getMin() - 1));
+						introns.add(new SimpleIntron(loc2.getMax() + 1, loc1.getMin() - 1));
 					}
 					loc1 = loc2;
 				}
@@ -260,7 +259,7 @@ public class SubsequenceBJ
 	protected RichFeature createRichFeatureForAnnotation(AnnotationMethodBJ method, ComparableTerm type) {
 		// create a feature template
 		RichFeature.Template templ = new RichFeature.Template();
-		// assign the feature template a location, type, and source
+		// assign the feature template a subsequence, type, and source
 		templ.typeTerm = type;
 		templ.sourceTerm = method.getTerm();
 		// assign the rest of the necessary stuff
@@ -283,10 +282,19 @@ public class SubsequenceBJ
 		}
 	}
 
-	// create feaure in the sequence
+	@Override
+	public AnnotationMethodBJ getMethodInstance(String method) {
+		return AnnotationMethodBJ.getInstance(method);
+	}
+
+	// create feature in the sequence
 	@Override
 	public SimpleFeatureBJ createFeature(AnnotationMethodBJ method, String type) {
 		return new SimpleFeatureBJ(createRichFeatureForAnnotation(method, TermsAndOntologies.getTermFeatureType(type)));
+	}
+
+	public SimpleFeatureBJ createFeature(String method, String type) {
+		return createFeature(getMethodInstance(method), type);
 	}
 
 	@Override
@@ -294,9 +302,17 @@ public class SubsequenceBJ
 		return new CDSBJ(createFeature(method, AnnotFeature.CDS_TYPE).getRichFeature());
 	}
 
+	public CDSBJ createCDS(String method) {
+		return createCDS(getMethodInstance(method));
+	}
+
 	@Override
 	public GeneBJ createGene(AnnotationMethodBJ method) {
 		return new GeneBJ(createFeature(method, AnnotFeature.GENE_TYPE).getRichFeature());
+	}
+
+	public GeneBJ createGene(String method) {
+		return createGene(getMethodInstance(method));
 	}
 
 	@Override
@@ -304,22 +320,17 @@ public class SubsequenceBJ
 		return new RNABJ(createFeature(method, type).getRichFeature());
 	}
 
+	public RNABJ createRNA(String method, String type) {
+		return createRNA(getMethodInstance(method), type);
+	}
+
 	@Override
 	public RNABJ createMRNA(AnnotationMethodBJ method) {
 		return new RNABJ(createFeature(method, AnnotFeature.MRNA_TYPE).getRichFeature());
 	}
 
-	@Override
-	public void addFeature(SimpleFeatureBJ feature) {
-		// Do nothing. the feature must has already a location
-	}
-
-	@Override
-	public Collection<SimpleFeatureBJ> getFeatures(SubsequenceBJ source, AnnotationMethodBJ method, String type) {
-		if (source != this && !source.getRichLocation().equals(this.getRichLocation())) {
-			return null;
-		}
-		return getFeatures(method, type);
+	public RNABJ createMRNA(String method) {
+		return createMRNA(getMethodInstance(method));
 	}
 
 	@Override
@@ -333,14 +344,18 @@ public class SubsequenceBJ
 		return features;
 	}
 
+	public Collection<SimpleFeatureBJ> getFeatures(String method, String type) {
+		return getFeatures(getMethodInstance(method), type);
+	}
+
 	@Override
 	public Collection<SimpleFeatureBJ> getFeatures(String type) {
 		return getFeatures(new FeatureFilterByType<SimpleFeatureBJ>(type));
 	}
 
 	@Override
-	public Collection<SimpleFeatureBJ> getFeatures(FeatureFilter<SimpleFeatureBJ> featureFilter) {
-		// get all features contained in this location
+	public Collection<SimpleFeatureBJ> getFeatures(AnnotationFilter<SimpleFeatureBJ> featureFilter) {
+		// get all features contained in this subsequence
 		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
 		Collection<SimpleFeatureBJ> features = new ArrayList<SimpleFeatureBJ>();
 		for (RichFeatureRelationship relation : relations) {
@@ -359,181 +374,179 @@ public class SubsequenceBJ
 	}
 
 	@Override
-	public SubseqOntologyAnnotBJ createDBLink(AnnotationMethodBJ method, DBRecordBJ target) {
+	public Collection<CDSBJ> getCDSs(AnnotationMethodBJ method) {
+		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
+		Collection<CDSBJ> features = new ArrayList<CDSBJ>();
+		for (RichFeatureRelationship relation : relations) {
+			RichFeature richFeature = relation.getSubject();
+			if (CDSBJ.isCDS(richFeature)) {
+				features.add(new CDSBJ(richFeature));
+			}
+		}
+		return features;
+	}
+
+	@Override
+	public Collection<GeneBJ> getGenes(AnnotationMethodBJ method) {
+		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
+		Collection<GeneBJ> features = new ArrayList<GeneBJ>();
+		for (RichFeatureRelationship relation : relations) {
+			RichFeature richFeature = relation.getSubject();
+			if (GeneBJ.isGene(richFeature)) {
+				features.add(new GeneBJ(richFeature));
+			}
+		}
+		return features;
+	}
+
+	@Override
+	public Collection<RNABJ> getMRNAs(AnnotationMethodBJ method) {
+		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
+		Collection<RNABJ> features = new ArrayList<RNABJ>();
+		for (RichFeatureRelationship relation : relations) {
+			RichFeature richFeature = relation.getSubject();
+			if (RNABJ.isMRNA(richFeature)) {
+				features.add(new RNABJ(richFeature));
+			}
+		}
+		return features;
+	}
+
+	@Override
+	public SubseqOntologyAnnotBJ getOrCreateOntologyAnnot(AnnotationMethodBJ method, OntologyBJ target) {
 		SubseqOntologyAnnotBJ dbLink;
-		if ((dbLink = getDBLinkAnnot(this, method, target)) != null) {
+		if ((dbLink = getOntologyAnnot(method, target)) != null) {
 			return dbLink;
 		}
-		RichFeature richFeature = createRichFeatureForAnnotation(method, TermsAndOntologies.getTermDBLinkType());
+		RichFeature richFeature = createRichFeatureForAnnotation(method, TermsAndOntologies.getTermOntologyAnnotType());
 		richFeature.addRankedCrossRef(new SimpleRankedCrossRef(target.getCrossRef(), 0));
 		return new SubseqOntologyAnnotBJ(richFeature);
 	}
 
 	@Override
-	public SubseqOntologyAnnotBJ createDBLink(AnnotationMethodBJ method, String accession, String dbName) {
-		return createDBLink(method, ExternalDatabaseBJ.getOrCreateExternalDB(dbName).getOrCreateDBRecord(accession));
+	public SubseqOntologyAnnotBJ getOrCreateOntologyAnnot(AnnotationMethodBJ method, String accession, String dbName) {
+		return getOrCreateOntologyAnnot(method, ExternalDatabaseBJ.getOrCreateExternalDB(dbName).getOrCreateOntology(
+			accession));
 	}
 
 	@Override
-	public void addDBLinkAnnot(SubseqOntologyAnnotBJ link) {
-		// Do nothing. the collection of DBLinks are DBLinks contained at the same richLocation
-	}
-
-	@Override
-	public SubseqOntologyAnnotBJ getDBLinkAnnot(SubsequenceBJ source, AnnotationMethodBJ method, DBRecordBJ target) {
-		if (source != this && !source.getRichLocation().equals(this.getRichLocation())) {
-			return null;
-		}
-		Collection<SubseqOntologyAnnotBJ> dbLinks = getDBLinkAnnots(method, target);
-		for (SubseqOntologyAnnotBJ dbLink : dbLinks) {
-			return dbLink;
+	public SubseqOntologyAnnotBJ getOntologyAnnot(AnnotationMethodBJ method, OntologyBJ target) {
+		// get all features contained in this subsequence
+		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
+		for (RichFeatureRelationship relation : relations) {
+			RichFeature richFeature = relation.getSubject();
+			if (SubseqOntologyAnnotBJ.isOntologyAnnot(richFeature)
+				&& richFeature.getSourceTerm().equals(method.getTerm())) {
+				Set<RankedCrossRef> crossRefs = richFeature.getRankedCrossRefs();
+				for (RankedCrossRef crossRef : crossRefs) {
+					if (crossRef.getCrossRef().equals(target.getCrossRef())) {
+						return new SubseqOntologyAnnotBJ(richFeature);
+					}
+				}
+			}
 		}
 		return null;
 	}
 
 	@Override
-	public Collection<SubseqOntologyAnnotBJ> getDBLinkAnnots(AnnotationMethodBJ method, DBRecordBJ target) {
-		// get all features contained in this location
+	public SubseqOntologyAnnotBJ getOntologyAnnot(AnnotationMethodBJ method, String dbName, String accession) {
+		return getOntologyAnnot(method, ExternalDatabaseBJ.getOrCreateExternalDB(dbName).getOrCreateOntology(accession));
+	}
+
+	@Override
+	public Collection<SubseqOntologyAnnotBJ> getOntologyAnnots(AnnotationFilter<SubseqOntologyAnnotBJ> filter) {
+		// get all features contained in this subsequence
 		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
-		// get the feature of type dbLink with the method and target
-		Collection<SubseqOntologyAnnotBJ> dbLinks = new ArrayList<SubseqOntologyAnnotBJ>();
+		Collection<SubseqOntologyAnnotBJ> annots = new ArrayList<SubseqOntologyAnnotBJ>();
 		for (RichFeatureRelationship relation : relations) {
 			RichFeature richFeature = relation.getSubject();
-			if (richFeature.getTypeTerm().equals(TermsAndOntologies.getTermDBLinkType())
-				&& richFeature.getSourceTerm().equals(method.getTerm())) {
+			if (SubseqOntologyAnnotBJ.isOntologyAnnot(richFeature)) {
+				SubseqOntologyAnnotBJ annot = new SubseqOntologyAnnotBJ(richFeature);
+				if (filter.accept(annot)) {
+					annots.add(annot);
+				}
+			}
+		}
+		return annots;
+	}
+
+	@Override
+	public Collection<SubseqOntologyAnnotBJ> getOntologyAnnots(OntologyBJ target) {
+		// get all features contained in this subsequence
+		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
+		Collection<SubseqOntologyAnnotBJ> annots = new ArrayList<SubseqOntologyAnnotBJ>();
+		for (RichFeatureRelationship relation : relations) {
+			RichFeature richFeature = relation.getSubject();
+			if (SubseqOntologyAnnotBJ.isOntologyAnnot(richFeature)) {
+				SubseqOntologyAnnotBJ annot = new SubseqOntologyAnnotBJ(richFeature);
 				Set<RankedCrossRef> crossRefs = richFeature.getRankedCrossRefs();
 				for (RankedCrossRef crossRef : crossRefs) {
 					if (crossRef.getCrossRef().equals(target.getCrossRef())) {
-						dbLinks.add(new SubseqOntologyAnnotBJ(richFeature));
+						annots.add(annot);
 					}
 				}
 			}
 		}
-		return dbLinks;
+		return annots;
 	}
 
 	@Override
-	public Collection<SubseqOntologyAnnotBJ> getDBLinkAnnots(AnnotationMethodBJ method, String dbName, String accession) {
-		return getDBLinkAnnots(method, ExternalDatabaseBJ.getOrCreateExternalDB(dbName).getOrCreateDBRecord(accession));
+	public Collection<SubseqOntologyAnnotBJ> getOntologyAnnots(String dbName, String accession) {
+		return getOntologyAnnots(OntologyBJ.getOrCreateOntologyBJ(dbName, accession));
 	}
 
 	@Override
-	public Collection<SubseqOntologyAnnotBJ> getDBLinkAnnots(DBLinkAnnotFilter<SubseqOntologyAnnotBJ> filter) {
-		// get all features contained in this location
+	public Collection<SubseqOntologyAnnotBJ> getOntologyAnnots(String dbName) {
+		// get all features contained in this subsequence
 		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
-		Collection<SubseqOntologyAnnotBJ> dbLinks = new ArrayList<SubseqOntologyAnnotBJ>();
+		Collection<SubseqOntologyAnnotBJ> annots = new ArrayList<SubseqOntologyAnnotBJ>();
 		for (RichFeatureRelationship relation : relations) {
 			RichFeature richFeature = relation.getSubject();
-			if (richFeature.getTypeTerm().equals(TermsAndOntologies.getTermDBLinkType())) {
-				SubseqOntologyAnnotBJ dbLink = new SubseqOntologyAnnotBJ(richFeature);
-				if (filter.accept(dbLink)) {
-					dbLinks.add(dbLink);
+			if (SubseqOntologyAnnotBJ.isOntologyAnnot(richFeature)) {
+				SubseqOntologyAnnotBJ annot = new SubseqOntologyAnnotBJ(richFeature);
+				Set<RankedCrossRef> crossRefs = richFeature.getRankedCrossRefs();
+				for (RankedCrossRef crossRef : crossRefs) {
+					if (crossRef.getCrossRef().getDbname().equals(dbName)) {
+						annots.add(annot);
+					}
 				}
 			}
 		}
-		return dbLinks;
+		return annots;
 	}
 
 	@Override
-	public CDSBJ createCDS(String method) {
-		return createCDS(AnnotationMethodBJ.getInstance(method));
+	public void addDBRecord(DBRecordBJ dbRecord) {
+		getRichFeature().addRankedCrossRef(new SimpleRankedCrossRef(dbRecord.getCrossRef(), 0));
 	}
 
 	@Override
-	public SimpleFeatureBJ createFeature(String method, String type) {
-		return createFeature(AnnotationMethodBJ.getInstance(method), type);
+	public void addDBRecord(String database, String accession) {
+		addDBRecord(DBRecordBJ.getOrCreateDBRecordBJ(database, accession));
 	}
 
 	@Override
-	public GeneBJ createGene(String method) {
-		return createGene(AnnotationMethodBJ.getInstance(method));
-	}
-
-	@Override
-	public RNABJ createRNA(String method, String type) {
-		return createRNA(AnnotationMethodBJ.getInstance(method), type);
-	}
-
-	@Override
-	public RNABJ createMRNA(String method) {
-		return createMRNA(AnnotationMethodBJ.getInstance(method));
-	}
-
-	@Override
-	public Collection<SimpleFeatureBJ> getFeatures(String method, String type) {
-		return getFeatures(AnnotationMethodBJ.getInstance(method), type);
-	}
-
-	@Override
-	public Collection<SimpleFeatureBJ> getFeatures(SubsequenceBJ source, String method, String type) {
-		return getFeatures(source, AnnotationMethodBJ.getInstance(method), type);
-	}
-
-	@Override
-	public SubseqOntologyAnnotBJ createDBLink(String method, DBRecordBJ target) {
-		return createDBLink(AnnotationMethodBJ.getInstance(method), target);
-	}
-
-	@Override
-	public SubseqOntologyAnnotBJ createDBLink(String method, String accession, String dbName) {
-		return createDBLink(AnnotationMethodBJ.getInstance(method), accession, dbName);
-	}
-
-	@Override
-	public SubseqOntologyAnnotBJ getDBLinkAnnot(SubsequenceBJ source, String method, DBRecordBJ target) {
-		return getDBLinkAnnot(source, AnnotationMethodBJ.getInstance(method), target);
-	}
-
-	@Override
-	public Collection<SubseqOntologyAnnotBJ> getDBLinkAnnots(String method, DBRecordBJ target) {
-		return getDBLinkAnnots(AnnotationMethodBJ.getInstance(method), target);
-	}
-
-	@Override
-	public Collection<SubseqOntologyAnnotBJ> getDBLinkAnnots(String method, String dbName, String accession) {
-		return getDBLinkAnnots(AnnotationMethodBJ.getInstance(method), dbName, accession);
-	}
-
-	@Override
-	public CDSBJ getCDS(AnnotationMethodBJ method) {
-		Collection<SimpleFeatureBJ> features = getFeatures(method, AnnotFeature.CDS_TYPE);
-		if (features == null || features.size() == 0) {
-			return null;
+	public Collection<DBRecordBJ> getDBRecords() {
+		Collection<DBRecordBJ> dbRecords = new ArrayList<DBRecordBJ>();
+		Set<RankedCrossRef> crossRefs = getRichFeature().getRankedCrossRefs();
+		for (RankedCrossRef crossRef : crossRefs) {
+			dbRecords.add(DBRecordBJ.getOrCreateDBRecordBJ(crossRef.getCrossRef().getDbname(),
+				crossRef.getCrossRef().getAccession()));
 		}
-		return new CDSBJ(features.iterator().next().getRichFeature());
+		return dbRecords;
 	}
 
 	@Override
-	public CDSBJ getCDS(String method) {
-		return getCDS(AnnotationMethodBJ.getInstance(method));
-	}
-
-	@Override
-	public GeneBJ getGene(AnnotationMethodBJ method) {
-		Collection<SimpleFeatureBJ> features = getFeatures(method, AnnotFeature.GENE_TYPE);
-		if (features == null || features.size() == 0) {
-			return null;
+	public Collection<DBRecordBJ> getDBrecords(String dbName) {
+		Collection<DBRecordBJ> dbRecords = new ArrayList<DBRecordBJ>();
+		Set<RankedCrossRef> crossRefs = getRichFeature().getRankedCrossRefs();
+		for (RankedCrossRef crossRef : crossRefs) {
+			if (crossRef.getCrossRef().getDbname().equals(dbName)) {
+				dbRecords.add(DBRecordBJ.getOrCreateDBRecordBJ(crossRef.getCrossRef().getDbname(),
+					crossRef.getCrossRef().getAccession()));
+			}
 		}
-		return new GeneBJ(features.iterator().next().getRichFeature());
-	}
-
-	@Override
-	public GeneBJ getGene(String method) {
-		return getGene(AnnotationMethodBJ.getInstance(method));
-	}
-
-	@Override
-	public RNABJ getMRNA(AnnotationMethodBJ method) {
-		Collection<SimpleFeatureBJ> features = getFeatures(method, AnnotFeature.MRNA_TYPE);
-		if (features == null || features.size() == 0) {
-			return null;
-		}
-		return new RNABJ(features.iterator().next().getRichFeature());
-	}
-
-	@Override
-	public RNABJ getMRNA(String method) {
-		return getMRNA(AnnotationMethodBJ.getInstance(method));
+		return dbRecords;
 	}
 
 }

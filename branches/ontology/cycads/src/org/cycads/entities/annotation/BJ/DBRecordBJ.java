@@ -139,4 +139,12 @@ public class DBRecordBJ implements DBRecord<ExternalDatabaseBJ>
 		return getNotesHash().isUnchanging(ct);
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null || !(obj instanceof DBRecordBJ)) {
+			return false;
+		}
+		return getCrossRef().equals(((DBRecordBJ) obj).getCrossRef());
+	}
+
 }

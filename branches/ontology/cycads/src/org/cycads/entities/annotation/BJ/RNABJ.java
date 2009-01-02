@@ -25,6 +25,10 @@ public class RNABJ extends AnnotationRichFeatureBJ<RNABJ, CDSBJ, GeneBJ>
 		return isAnnotation(feature);
 	}
 
+	public static boolean isMRNA(RichFeature feature) {
+		return isRNA(feature) && feature.getType().equals(AnnotFeature.MRNA_TYPE);
+	}
+
 	@Override
 	public Collection<CDSBJ> getCDSProducts() {
 		return getFeaturesContains(this);

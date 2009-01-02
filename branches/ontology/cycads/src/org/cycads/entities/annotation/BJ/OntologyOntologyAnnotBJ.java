@@ -18,32 +18,29 @@ import org.cycads.general.ParametersDefault;
 import org.cycads.general.biojava.TermsAndOntologies;
 
 public class OntologyOntologyAnnotBJ
-		implements AnnotOntology<OntologyOntologyAnnotBJ, DBRecordBJ, DBRecordBJ, AnnotationMethodBJ>
+		implements AnnotOntology<OntologyOntologyAnnotBJ, OntologyBJ, OntologyBJ, AnnotationMethodBJ>
 {
 
-	public static ComparableOntology	ontDBRecordDBRecordLink	= TermsAndOntologies.getOntologyDBRecordDBRecordLink();
-	DBRecordBJ							source;
+	public static ComparableOntology	ONTBJ_ONTOLOGY_ONTOLOGY_ANNOT	= TermsAndOntologies.getOntologyAnnotOntologyOntology();
+	OntologyBJ							source;
 	AnnotationMethodBJ					method;
-	DBRecordBJ							target;
+	OntologyBJ							target;
 	// TermWithNotes term;
 	ComparableTerm						term;
 
-	protected OntologyOntologyAnnotBJ(DBRecordBJ source, AnnotationMethodBJ method, DBRecordBJ target) {
+	protected OntologyOntologyAnnotBJ(OntologyBJ source, AnnotationMethodBJ method, OntologyBJ target) {
 		if (source == null || target == null) {
 			throw new IllegalArgumentException(Messages.exceptionDBRecordDbRecordLinkBJSourceOrTargetNull());
 		}
 		this.source = source;
 		this.method = method;
 		this.target = target;
-		term = ontDBRecordDBRecordLink.getOrCreateTerm(joinTermName(source.toString(), method.getTerm().getName(),
-			target.toString()));
-		term.addRankedCrossRef(new SimpleRankedCrossRef(source.getCrossRef(), 0));
-		term.addRankedCrossRef(new SimpleRankedCrossRef(target.getCrossRef(), 0));
+		term = createTermAnnotation(source, method, target);
 		// term.addNote(TermsAndOntologies.getTermNoteTypeAnnotationMethod(), method.getTerm());
 	}
 
-	protected OntologyOntologyAnnotBJ(ComparableTerm term) {
-		if (term.getOntology() != ontDBRecordDBRecordLink) {
+	public OntologyOntologyAnnotBJ(ComparableTerm term) {
+		if (term.getOntology() != ONTBJ_ONTOLOGY_ONTOLOGY_ANNOT) {
 			throw new IllegalArgumentException(Messages.ExceptionDBRecordDbRecordLinkBJConstructorTerm());
 		}
 		this.term = term;
@@ -63,11 +60,11 @@ public class OntologyOntologyAnnotBJ
 	}
 
 	@Override
-	public DBRecordBJ getDBRecordTarget() {
+	public OntologyBJ getOntologyTarget() {
 		if (target == null) {
 			String targetDBNameAndAccession = splitTermName(term.getName())[2];
 			String[] a = DBRecordBJ.splitDBNameAndAccession(targetDBNameAndAccession);
-			target = DBRecordBJ.getOrCreateDBRecordBJ(a[0], a[1]);
+			target = OntologyBJ.getOrCreateOntologyBJ(a[0], a[1]);
 		}
 		return target;
 	}
@@ -83,11 +80,11 @@ public class OntologyOntologyAnnotBJ
 	}
 
 	@Override
-	public DBRecordBJ getSource() {
+	public OntologyBJ getSource() {
 		if (source == null) {
 			String sourceDBNameAndAccession = splitTermName(term.getName())[0];
 			String[] a = DBRecordBJ.splitDBNameAndAccession(sourceDBNameAndAccession);
-			source = DBRecordBJ.getOrCreateDBRecordBJ(a[0], a[1]);
+			source = OntologyBJ.getOrCreateOntologyBJ(a[0], a[1]);
 		}
 		return source;
 	}
@@ -108,12 +105,22 @@ public class OntologyOntologyAnnotBJ
 	}
 
 	@Override
+	public Note<OntologyOntologyAnnotBJ> addNote(String type, String value) {
+		return addNote(createNote(type, value));
+	}
+
+	@Override
 	public Note<OntologyOntologyAnnotBJ> getNote(String noteTypeName, String value) {
 		throw new MethodNotImplemented();
 	}
 
 	@Override
 	public Collection<Note<OntologyOntologyAnnotBJ>> getNotes() {
+		throw new MethodNotImplemented();
+	}
+
+	@Override
+	public Collection<String> getNotesValues(String noteTypeName) {
 		throw new MethodNotImplemented();
 	}
 
@@ -139,17 +146,16 @@ public class OntologyOntologyAnnotBJ
 
 	@Override
 	public String toString() {
-		return joinTermName(getSource().toString(), getAnnotationMethod().getName(), getDBRecordTarget().toString());
-	}
-
-	@Override
-	public Note<OntologyOntologyAnnotBJ> addNote(String type, String value) {
-		return addNote(createNote(type, value));
+		return joinTermName(getSource().toString(), getAnnotationMethod().getName(), getOntologyTarget().toString());
 	}
 
 	public static ComparableTerm createTermAnnotation(OntologyBJ source, AnnotationMethodBJ method, OntologyBJ target) {
-		// TODO Auto-generated method stub
-		return null;
+		ComparableTerm term;
+		term = ONTBJ_ONTOLOGY_ONTOLOGY_ANNOT.getOrCreateTerm(joinTermName(source.toString(),
+			method.getTerm().getName(), target.toString()));
+		term.addRankedCrossRef(new SimpleRankedCrossRef(source.getCrossRef(), 0));
+		term.addRankedCrossRef(new SimpleRankedCrossRef(target.getCrossRef(), 0));
+		return term;
 	}
 
 }

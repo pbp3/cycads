@@ -23,10 +23,10 @@ public interface Subsequence<OA extends AnnotOntology<OA, ? extends Subsequence<
 
 	public Collection<Intron> getIntrons();
 
-	public boolean addIntron(Intron intron);
-
-	public Intron addIntron(int startPos, int endPos);
-
+	//	public boolean addIntron(Intron intron);
+	//
+	//	public Intron addIntron(int startPos, int endPos);
+	//
 	public boolean isPositiveStrand();
 
 	public int getEnd();
