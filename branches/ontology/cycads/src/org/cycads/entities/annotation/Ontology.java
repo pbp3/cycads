@@ -5,12 +5,10 @@ package org.cycads.entities.annotation;
 
 import java.util.Collection;
 
-public interface Ontology<OA extends AnnotOntology< ? , ? , ? , ? >, O extends Ontology< ? , ? , ? , ? >, M extends AnnotationMethod, R extends DBRecord< ? >>
-		extends AnnotOntologySource<OA, O, M>
+public interface Ontology<OA extends AnnotOntology< ? , ? , ? , ? >, O extends Ontology< ? , ? , ? , ? >, M extends AnnotationMethod, DB extends ExternalDatabase< ? >>
+		extends AnnotOntologySource<OA, O, M>, DBRecord<DB>
 {
 	public Collection<String> getFunctions();
 
 	public void addFunction(String function);
-
-	public R getDBRecord();
 }
