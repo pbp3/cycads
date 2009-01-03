@@ -8,7 +8,6 @@ import java.util.Collection;
 import org.biojavax.bio.seq.RichFeature;
 import org.cycads.entities.annotation.AnnotFeature;
 import org.cycads.entities.annotation.CDS;
-import org.cycads.entities.note.Note;
 import org.cycads.entities.sequence.BJ.SubsequenceBJ;
 
 public class CDSBJ extends AnnotationRichFeatureBJ<CDSBJ, SimpleFeatureBJ, RNABJ>
@@ -41,10 +40,14 @@ public class CDSBJ extends AnnotationRichFeatureBJ<CDSBJ, SimpleFeatureBJ, RNABJ
 		if (rnaParent == null) {
 			throw new IllegalArgumentException();
 		}
-		Collection<RNABJ> rnas = getRNAsContains();
-		if (!rnas.contains(rnaParent)) {
-			rnaParent.addCDS(this);
+		Collection<CDSBJ> cdss = rnaParent.getCDSProducts();
+		for (CDSBJ cds : cdss) {
+			if (cds.equals(this)) {
+				//this is already child of the rna
+				return;
+			}
 		}
+		rnaParent.addCDS(this);
 	}
 
 	@Override
@@ -70,16 +73,6 @@ public class CDSBJ extends AnnotationRichFeatureBJ<CDSBJ, SimpleFeatureBJ, RNABJ
 	@Override
 	public boolean isObjectContains(RichFeature feature) {
 		return SimpleFeatureBJ.isSimpleFeature(feature);
-	}
-
-	@Override
-	public void addFunction(String function) {
-		addNote(Note.TYPE_FUCNTION, function);
-	}
-
-	@Override
-	public Collection<String> getFunctions() {
-		return getNotesValues(Note.TYPE_FUCNTION);
 	}
 
 }

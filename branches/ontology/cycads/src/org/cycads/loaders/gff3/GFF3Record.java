@@ -50,8 +50,7 @@ public interface GFF3Record<N extends Note< ? >> extends NotesContainer<N>, Note
 		private int									phase;
 		private NotesArrayList<SimpleNote<Impl>>	notes;
 
-		public Impl()
-		{
+		public Impl() {
 			// do nothing much - initialize us with uninformative data
 			sequenceID = null;
 			source = null;
@@ -75,132 +74,122 @@ public interface GFF3Record<N extends Note< ? >> extends NotesContainer<N>, Note
 		// this.phase = rec.getPhase();
 		// }
 
-		public String getSequenceID()
-		{
+		public String getSequenceID() {
 			return this.sequenceID;
 		}
 
-		public void setSequenceID(String sequenceID)
-		{
+		public void setSequenceID(String sequenceID) {
 			this.sequenceID = sequenceID;
 		}
 
-		public String getSource()
-		{
+		public String getSource() {
 			return this.source;
 		}
 
-		public void setSource(String source)
-		{
+		public void setSource(String source) {
 			this.source = source;
 		}
 
-		public String getType()
-		{
+		public String getType() {
 			return this.type;
 		}
 
-		public void setType(String type)
-		{
+		public void setType(String type) {
 			this.type = type;
 		}
 
-		public int getStart()
-		{
+		public int getStart() {
 			return this.start;
 		}
 
-		public void setStart(int start)
-		{
+		public void setStart(int start) {
 			this.start = start;
 		}
 
-		public int getEnd()
-		{
+		public int getEnd() {
 			return this.end;
 		}
 
-		public void setEnd(int end)
-		{
+		public void setEnd(int end) {
 			this.end = end;
 		}
 
-		public double getScore()
-		{
+		public double getScore() {
 			return this.score;
 		}
 
-		public void setScore(double score)
-		{
+		public void setScore(double score) {
 			this.score = score;
 		}
 
-		public int getStrand()
-		{
+		public int getStrand() {
 			return this.strand;
 		}
 
-		public void setStrand(int strand)
-		{
+		public void setStrand(int strand) {
 			this.strand = strand;
 		}
 
-		public int getPhase()
-		{
+		public int getPhase() {
 			return this.phase;
 		}
 
-		public void setPhase(int phase)
-		{
+		public void setPhase(int phase) {
 			this.phase = phase;
 		}
 
 		@Override
-		public SimpleNote<Impl> createNote(String type, String value)
-		{
+		public SimpleNote<Impl> createNote(String type, String value) {
 			return new SimpleNote<Impl>(this, type, value);
 		}
 
-		public SimpleNote<Impl> addNote(SimpleNote<Impl> note)
-		{
+		public SimpleNote<Impl> addNote(SimpleNote<Impl> note) {
 			return notes.addNote(note);
 		}
 
-		public SimpleNote<Impl> getNote(String noteTypeName, String value)
-		{
+		public SimpleNote<Impl> getNote(String noteTypeName, String value) {
 			return notes.getNote(noteTypeName, value);
 		}
 
-		public Collection<SimpleNote<Impl>> getNotes()
-		{
+		public Collection<SimpleNote<Impl>> getNotes() {
 			return notes;
 		}
 
-		public Collection<SimpleNote<Impl>> getNotes(String noteTypeName)
-		{
+		public Collection<SimpleNote<Impl>> getNotes(String noteTypeName) {
 			return notes.getNotes(noteTypeName);
 		}
 
-		public void addChangeListener(ChangeListener<SimpleNote<Impl>> cl, ChangeType ct)
-		{
+		public void addChangeListener(ChangeListener<SimpleNote<Impl>> cl, ChangeType ct) {
 			notes.addChangeListener(cl, ct);
 		}
 
-		public boolean isUnchanging(ChangeType ct)
-		{
+		public boolean isUnchanging(ChangeType ct) {
 			return notes.isUnchanging(ct);
 		}
 
 		@Override
-		public void removeChangeListener(ChangeListener<SimpleNote<Impl>> cl, ChangeType ct)
-		{
+		public void removeChangeListener(ChangeListener<SimpleNote<Impl>> cl, ChangeType ct) {
 			notes.removeChangeListener(cl, ct);
 		}
 
 		@Override
-		public SimpleNote<Impl> addNote(String value, String type)
-		{
+		public SimpleNote<Impl> addNote(String value, String type) {
 			return addNote(createNote(type, value));
+		}
+
+		@Override
+		public SimpleNote<Impl> addNote(Note< ? > note) {
+			return notes.addNote(note);
+		}
+
+		@Override
+		public Collection<String> getNotesValues(String noteTypeName) {
+			return notes.getNotesValues(noteTypeName);
+		}
+
+		@Override
+		public Note createNote(Note note) {
+			return createNote(note.getType(), note.getValue());
 		}
 
 	}

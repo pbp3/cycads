@@ -21,12 +21,16 @@ public class RNABJ extends AnnotationRichFeatureBJ<RNABJ, CDSBJ, GeneBJ>
 		}
 	}
 
+	public static boolean isRNA(RichFeature feature, String type) {
+		return isRNA(feature) && feature.getType().equals(type);
+	}
+
 	public static boolean isRNA(RichFeature feature) {
 		return isAnnotation(feature);
 	}
 
 	public static boolean isMRNA(RichFeature feature) {
-		return isRNA(feature) && feature.getType().equals(AnnotFeature.MRNA_TYPE);
+		return isRNA(feature, AnnotFeature.MRNA_TYPE);
 	}
 
 	@Override
@@ -53,10 +57,14 @@ public class RNABJ extends AnnotationRichFeatureBJ<RNABJ, CDSBJ, GeneBJ>
 		if (gene == null) {
 			throw new IllegalArgumentException();
 		}
-		Collection<GeneBJ> genes = getGenesContains();
-		if (!genes.contains(gene)) {
-			gene.addRNA(this);
+		Collection<RNABJ> rnas = gene.getRNAProducts();
+		for (RNABJ rna : rnas) {
+			if (rna.equals(this)) {
+				//this is already child of the gene
+				return;
+			}
 		}
+		gene.addRNA(this);
 	}
 
 	public void addCDS(CDSBJ cds) {

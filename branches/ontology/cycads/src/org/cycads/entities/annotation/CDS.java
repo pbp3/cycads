@@ -16,8 +16,4 @@ public interface CDS<CDS_TYPE extends CDS< ? , ? , ? , ? >, SS extends Subsequen
 
 	public void setRNAParent(R rna);
 
-	public Collection<String> getFunctions();
-
-	public void addFunction(String function);
-
 }

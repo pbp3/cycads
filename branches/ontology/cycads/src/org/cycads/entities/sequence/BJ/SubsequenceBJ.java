@@ -289,63 +289,75 @@ public class SubsequenceBJ
 
 	// create feature in the sequence
 	@Override
-	public SimpleFeatureBJ createFeature(AnnotationMethodBJ method, String type) {
+	public SimpleFeatureBJ getOrCreateFeature(AnnotationMethodBJ method, String type) {
+		SimpleFeatureBJ feature = getFeature(method, type);
+		if (feature != null) {
+			return feature;
+		}
 		return new SimpleFeatureBJ(createRichFeatureForAnnotation(method, TermsAndOntologies.getTermFeatureType(type)));
 	}
 
-	public SimpleFeatureBJ createFeature(String method, String type) {
-		return createFeature(getMethodInstance(method), type);
+	public SimpleFeatureBJ getOrCreateFeature(String method, String type) {
+		return getOrCreateFeature(getMethodInstance(method), type);
 	}
 
 	@Override
-	public CDSBJ createCDS(AnnotationMethodBJ method) {
-		return new CDSBJ(createFeature(method, AnnotFeature.CDS_TYPE).getRichFeature());
+	public CDSBJ getOrCreateCDS(AnnotationMethodBJ method) {
+		return new CDSBJ(getOrCreateFeature(method, AnnotFeature.CDS_TYPE).getRichFeature());
 	}
 
-	public CDSBJ createCDS(String method) {
-		return createCDS(getMethodInstance(method));
-	}
-
-	@Override
-	public GeneBJ createGene(AnnotationMethodBJ method) {
-		return new GeneBJ(createFeature(method, AnnotFeature.GENE_TYPE).getRichFeature());
-	}
-
-	public GeneBJ createGene(String method) {
-		return createGene(getMethodInstance(method));
+	public CDSBJ getOrCreateCDS(String method) {
+		return getOrCreateCDS(getMethodInstance(method));
 	}
 
 	@Override
-	public RNABJ createRNA(AnnotationMethodBJ method, String type) {
-		return new RNABJ(createFeature(method, type).getRichFeature());
+	public GeneBJ getOrCreateGene(AnnotationMethodBJ method) {
+		return new GeneBJ(getOrCreateFeature(method, AnnotFeature.GENE_TYPE).getRichFeature());
 	}
 
-	public RNABJ createRNA(String method, String type) {
-		return createRNA(getMethodInstance(method), type);
-	}
-
-	@Override
-	public RNABJ createMRNA(AnnotationMethodBJ method) {
-		return new RNABJ(createFeature(method, AnnotFeature.MRNA_TYPE).getRichFeature());
-	}
-
-	public RNABJ createMRNA(String method) {
-		return createMRNA(getMethodInstance(method));
+	public GeneBJ getOrCreateGene(String method) {
+		return getOrCreateGene(getMethodInstance(method));
 	}
 
 	@Override
-	public Collection<SimpleFeatureBJ> getFeatures(AnnotationMethodBJ method, String type) {
-		Collection<SimpleFeatureBJ> features = getFeatures(type);
-		for (SimpleFeatureBJ feature : features) {
-			if (feature.getAnnotationMethod() != method) {
-				features.remove(feature);
+	public RNABJ getOrCreateRNA(AnnotationMethodBJ method, String type) {
+		return new RNABJ(getOrCreateFeature(method, type).getRichFeature());
+	}
+
+	public RNABJ getOrCreateRNA(String method, String type) {
+		return getOrCreateRNA(getMethodInstance(method), type);
+	}
+
+	@Override
+	public RNABJ getOrCreateMRNA(AnnotationMethodBJ method) {
+		return new RNABJ(getOrCreateFeature(method, AnnotFeature.MRNA_TYPE).getRichFeature());
+	}
+
+	public RNABJ getOrCreateMRNA(String method) {
+		return getOrCreateMRNA(getMethodInstance(method));
+	}
+
+	@Override
+	public SimpleFeatureBJ getFeature(AnnotationMethodBJ method, String type) {
+		// get all features contained in this subsequence
+		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
+		for (RichFeatureRelationship relation : relations) {
+			RichFeature richFeature = relation.getSubject();
+			try {
+				SimpleFeatureBJ simpleFeature = new SimpleFeatureBJ(richFeature);
+				if (simpleFeature.getType().equals(type) && simpleFeature.getAnnotationMethod().equals(method)) {
+					return simpleFeature;
+				}
+			}
+			catch (IllegalArgumentException e) {
+
 			}
 		}
-		return features;
+		return null;
 	}
 
-	public Collection<SimpleFeatureBJ> getFeatures(String method, String type) {
-		return getFeatures(getMethodInstance(method), type);
+	public SimpleFeatureBJ getFeature(String method, String type) {
+		return getFeature(getMethodInstance(method), type);
 	}
 
 	@Override
@@ -374,42 +386,51 @@ public class SubsequenceBJ
 	}
 
 	@Override
-	public Collection<CDSBJ> getCDSs(AnnotationMethodBJ method) {
+	public CDSBJ getCDS(AnnotationMethodBJ method) {
 		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
-		Collection<CDSBJ> features = new ArrayList<CDSBJ>();
 		for (RichFeatureRelationship relation : relations) {
 			RichFeature richFeature = relation.getSubject();
 			if (CDSBJ.isCDS(richFeature)) {
-				features.add(new CDSBJ(richFeature));
+				return new CDSBJ(richFeature);
 			}
 		}
-		return features;
+		return null;
 	}
 
 	@Override
-	public Collection<GeneBJ> getGenes(AnnotationMethodBJ method) {
+	public GeneBJ getGene(AnnotationMethodBJ method) {
 		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
-		Collection<GeneBJ> features = new ArrayList<GeneBJ>();
 		for (RichFeatureRelationship relation : relations) {
 			RichFeature richFeature = relation.getSubject();
 			if (GeneBJ.isGene(richFeature)) {
-				features.add(new GeneBJ(richFeature));
+				return new GeneBJ(richFeature);
 			}
 		}
-		return features;
+		return null;
 	}
 
 	@Override
-	public Collection<RNABJ> getMRNAs(AnnotationMethodBJ method) {
+	public RNABJ getMRNA(AnnotationMethodBJ method) {
 		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
-		Collection<RNABJ> features = new ArrayList<RNABJ>();
 		for (RichFeatureRelationship relation : relations) {
 			RichFeature richFeature = relation.getSubject();
 			if (RNABJ.isMRNA(richFeature)) {
-				features.add(new RNABJ(richFeature));
+				return new RNABJ(richFeature);
 			}
 		}
-		return features;
+		return null;
+	}
+
+	@Override
+	public RNABJ getRNA(AnnotationMethodBJ method, String type) {
+		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
+		for (RichFeatureRelationship relation : relations) {
+			RichFeature richFeature = relation.getSubject();
+			if (RNABJ.isRNA(richFeature, type)) {
+				return new RNABJ(richFeature);
+			}
+		}
+		return null;
 	}
 
 	@Override

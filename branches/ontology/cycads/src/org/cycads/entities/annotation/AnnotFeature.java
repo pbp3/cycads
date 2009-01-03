@@ -3,10 +3,11 @@
  */
 package org.cycads.entities.annotation;
 
-import org.cycads.entities.sequence.Subsequence;
+import java.util.Collection;
+
 import org.cycads.general.ParametersDefault;
 
-public interface AnnotFeature<FEATURE_TYPE extends AnnotFeature< ? , ? , ? >, SS extends Subsequence< ? , ? , ? , ? , ? , ? , ? , ? , ? >, M extends AnnotationMethod>
+public interface AnnotFeature<FEATURE_TYPE extends AnnotFeature< ? , ? , ? >, SS extends AnnotFeatureSource< ? , ? , ? , ? , ? >, M extends AnnotationMethod>
 		extends Annotation<FEATURE_TYPE, SS, M>
 {
 
@@ -15,5 +16,9 @@ public interface AnnotFeature<FEATURE_TYPE extends AnnotFeature< ? , ? , ? >, SS
 	public static String	GENE_TYPE	= ParametersDefault.featureTypeGene();
 
 	public String getType();
+
+	public Collection<String> getFunctions();
+
+	public void addFunction(String function);
 
 }

@@ -120,4 +120,12 @@ public class AnnotationMethodBJ implements AnnotationMethod
 		throw new MethodNotImplemented();
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || !(o instanceof AnnotationMethodBJ)) {
+			return false;
+		}
+		return this.getTerm().equals(((AnnotationMethodBJ) o).getTerm());
+	}
+
 }

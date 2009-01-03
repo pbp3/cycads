@@ -205,4 +205,14 @@ public class AnnotationRichFeatureBJ<ANNOTATION_TYPE extends AnnotationRichFeatu
 		return getNotesHash().getNotesValues(noteTypeName);
 	}
 
+	@Override
+	public void addFunction(String function) {
+		addNote(Note.TYPE_FUCNTION, function);
+	}
+
+	@Override
+	public Collection<String> getFunctions() {
+		return getNotesValues(Note.TYPE_FUCNTION);
+	}
+
 }
