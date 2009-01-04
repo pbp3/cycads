@@ -5,9 +5,11 @@ package org.cycads.entities.annotation.BJ;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
 
 import org.biojavax.RichAnnotation;
 import org.biojavax.bio.seq.RichFeature;
+import org.biojavax.bio.seq.RichFeatureRelationship;
 import org.biojavax.bio.seq.RichLocation;
 import org.biojavax.bio.seq.RichSequence;
 import org.biojavax.bio.seq.SimpleRichFeatureRelationship;
@@ -21,13 +23,13 @@ import org.cycads.entities.note.NotesToAnnotationBJ;
 import org.cycads.entities.note.SimpleNote;
 import org.cycads.entities.sequence.BJ.SubsequenceBJ;
 import org.cycads.entities.sequence.BJ.ThinSequenceBJ;
+import org.cycads.exceptions.MethodNotImplemented;
 import org.cycads.general.biojava.BioSql;
 import org.cycads.general.biojava.TermsAndOntologies;
 
 // F must be the type of this object
 public class AnnotationRichFeatureBJ<ANNOTATION_TYPE extends AnnotationRichFeatureBJ< ? , ? , ? >, ANNOTATION_TYPE_CONTAINS extends AnnotationRichFeatureBJ< ? , ? , ? >, ANNOTATION_TYPE_CONTAINER extends AnnotationRichFeatureBJ< ? , ? , ? >>
-		implements AnnotFeature<ANNOTATION_TYPE, SubsequenceBJ, AnnotationMethodBJ>
-{
+		implements AnnotFeature<ANNOTATION_TYPE, SubsequenceBJ, AnnotationMethodBJ> {
 	RichFeature								richFeature;
 	NotesHashTable<Note<ANNOTATION_TYPE>>	notes;
 	ThinSequenceBJ							sequence;
@@ -93,19 +95,72 @@ public class AnnotationRichFeatureBJ<ANNOTATION_TYPE extends AnnotationRichFeatu
 	@Override
 	public SubsequenceBJ getSource() {
 		if (subsequence == null) {
-			subsequence = getSubsequence(getRichFeature());
+			subsequence = getSubsequence();
 		}
 		return subsequence;
 	}
 
-	public static SubsequenceBJ getSubsequence(RichFeature feature) {
-		Collection<RichFeature> RichFeatures = BioSql.getFeatureContainers(feature);
-		for (RichFeature feature1 : RichFeatures) {
-			if (SubsequenceBJ.isSubsequence(feature1)) {
-				return new SubsequenceBJ(feature1);
+	public static Collection<RichFeature> getFeaturesRelationed(RichFeature richFeature, ComparableTerm typeRelation) {
+		Collection<RichFeature> features = new ArrayList<RichFeature>();
+		Set<RichFeatureRelationship> relations = richFeature.getFeatureRelationshipSet();
+		for (RichFeatureRelationship relation : relations) {
+			if (relation.getTerm().equals(typeRelation)) {
+				features.add(relation.getSubject());
 			}
 		}
+		return features;
+	}
+
+	public Collection<RichFeature> getFeaturesRelationed(ComparableTerm typeRelation) {
+		return (getFeaturesRelationed(getRichFeature(), typeRelation));
+	}
+
+	protected SubsequenceBJ getSubsequenceParent() {
+		Collection<RichFeature> features = getFeaturesRelationed(TermsAndOntologies.getTermParentRelationship());
+		if (features.size() > 1) {
+			throw new RuntimeException("Can not have more than one parent.");
+		}
+		if (features.size() == 1) {
+			return new SubsequenceBJ(features.iterator().next());
+		}
 		return null;
+	}
+
+	protected void setSubsequenceParent(SubsequenceBJ subseqParent) {
+		SubsequenceBJ parent = getSubsequenceParent();
+		if (parent != null) {
+			if (!parent.equals(subseqParent)) {
+				throw new MethodNotImplemented("Replace parent not implemented.");
+			}
+		}
+		else {
+			getRichFeature().addFeatureRelationship(
+				new SimpleRichFeatureRelationship(getRichFeature(), subseqParent.getRichFeature(),
+					TermsAndOntologies.getTermParentRelationship(), 0));
+			subseqParent.getRichFeature().addFeatureRelationship(
+				new SimpleRichFeatureRelationship(subseqParent.getRichFeature(), getRichFeature(),
+					TermsAndOntologies.getTermChildRelationship(), 0));
+		}
+	}
+
+	public static SubsequenceBJ getSubsequence(RichFeature feature) {
+		Collection<RichFeature> features = getFeaturesRelationed(feature,
+			TermsAndOntologies.getTermSourceRelationship());
+		if (features.size() > 1) {
+			throw new RuntimeException("Must have only one source.");
+		}
+		if (features.size() == 1) {
+			return new SubsequenceBJ(features.iterator().next());
+		}
+		return null;
+	}
+
+	public SubsequenceBJ getSubsequence() {
+		SubsequenceBJ ret = getSubsequence(getRichFeature());
+		if (ret == null) {
+			throw new RuntimeException("Must have one source.");
+		}
+		return ret;
 	}
 
 	@Override
@@ -156,35 +211,35 @@ public class AnnotationRichFeatureBJ<ANNOTATION_TYPE extends AnnotationRichFeatu
 		getNotesHash().removeChangeListener(cl, ct);
 	}
 
-	protected Collection<ANNOTATION_TYPE_CONTAINER> getFeaturesContainers(
-			AnnotationRichFeatureBJFactory<ANNOTATION_TYPE_CONTAINS, ANNOTATION_TYPE_CONTAINER> factory) {
-		ArrayList<ANNOTATION_TYPE_CONTAINER> features = new ArrayList<ANNOTATION_TYPE_CONTAINER>();
-		Collection<RichFeature> RichFeatures = BioSql.getFeatureContainers(getRichFeature());
-		for (RichFeature feature : RichFeatures) {
-			if (factory.isObjectContainer(feature)) {
-				features.add(factory.createObjectContainer(feature));
-			}
-		}
-		return features;
-	}
-
-	protected Collection<ANNOTATION_TYPE_CONTAINS> getFeaturesContains(
-			AnnotationRichFeatureBJFactory<ANNOTATION_TYPE_CONTAINS, ANNOTATION_TYPE_CONTAINER> factory) {
-		ArrayList<ANNOTATION_TYPE_CONTAINS> features = new ArrayList<ANNOTATION_TYPE_CONTAINS>();
-		Collection<RichFeature> RichFeatures = BioSql.getFeatureContains(getRichFeature());
-		for (RichFeature feature : RichFeatures) {
-			if (factory.isObjectContains(feature)) {
-				features.add(factory.createObjectContains(feature));
-			}
-		}
-		return features;
-	}
-
-	public void addRichFeature(RichFeature feature) {
-		getRichFeature().addFeatureRelationship(
-			new SimpleRichFeatureRelationship(getRichFeature(), feature,
-				SimpleRichFeatureRelationship.getContainsTerm(), 0));
-	}
+	// protected Collection<ANNOTATION_TYPE_CONTAINER> getFeaturesContainers(
+	// AnnotationRichFeatureBJFactory<ANNOTATION_TYPE_CONTAINS, ANNOTATION_TYPE_CONTAINER> factory) {
+	// ArrayList<ANNOTATION_TYPE_CONTAINER> features = new ArrayList<ANNOTATION_TYPE_CONTAINER>();
+	// Collection<RichFeature> RichFeatures = BioSql.getFeatureContainers(getRichFeature());
+	// for (RichFeature feature : RichFeatures) {
+	// if (factory.isObjectContainer(feature)) {
+	// features.add(factory.createObjectContainer(feature));
+	// }
+	// }
+	// return features;
+	// }
+	//
+	// protected Collection<ANNOTATION_TYPE_CONTAINS> getFeaturesContains(
+	// AnnotationRichFeatureBJFactory<ANNOTATION_TYPE_CONTAINS, ANNOTATION_TYPE_CONTAINER> factory) {
+	// ArrayList<ANNOTATION_TYPE_CONTAINS> features = new ArrayList<ANNOTATION_TYPE_CONTAINS>();
+	// Collection<RichFeature> RichFeatures = BioSql.getFeatureContains(getRichFeature());
+	// for (RichFeature feature : RichFeatures) {
+	// if (factory.isObjectContains(feature)) {
+	// features.add(factory.createObjectContains(feature));
+	// }
+	// }
+	// return features;
+	// }
+	//
+	// public void addRichFeature(RichFeature feature) {
+	// getRichFeature().addFeatureRelationship(
+	// new SimpleRichFeatureRelationship(getRichFeature(), feature,
+	// SimpleRichFeatureRelationship.getContainsTerm(), 0));
+	// }
 
 	@Override
 	public boolean equals(Object o) {

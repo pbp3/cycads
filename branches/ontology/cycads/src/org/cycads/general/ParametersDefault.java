@@ -5,8 +5,7 @@ import java.text.MessageFormat;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-public class ParametersDefault
-{
+public class ParametersDefault {
 	private static final String			BUNDLE_NAME		= "parametersDefault";						//$NON-NLS-1$
 
 	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
@@ -329,15 +328,19 @@ public class ParametersDefault
 	}
 
 	public static String featureTypeCDS() {
-		return getString("AnnotFeature.Type.CDS");
+		return getString("Feature.Type.CDS");
+	}
+
+	public static String featureTypeRNAExpression() {
+		return getString("Feature.Type.RNA.regex");
 	}
 
 	public static String featureTypeMRNA() {
-		return getString("AnnotFeature.Type.MRNA");
+		return getString("Feature.Type.MRNA");
 	}
 
 	public static String featureTypeGene() {
-		return getString("AnnotFeature.Type.Gene");
+		return getString("Feature.Type.Gene");
 	}
 
 	public static String annotationNoteTypeScore() {
@@ -348,48 +351,9 @@ public class ParametersDefault
 		return getString("Annotation.note.type.function");
 	}
 
-	// GFF3 loader
-
-	public static String gff3ExonTagExpression() {
-		return getString("gff3.file.exonTagExpression");
-	}
-
-	public static String gff3GeneTagExpression() {
-		return getString("gff3.file.geneTagExpression");
-	}
-
-	public static String gff3MRNATagExpression() {
-		return getString("gff3.file.MRNATagExpression");
-	}
-
-	public static String gff3CDSTagExpression() {
-		return getString("gff3.file.CDSTagExpression");
-	}
-
-	// public static String gff3NoteTypeName()
-	// {
-	// return getString("gff3.file.noteType.name");
-	// }
-	//
-	public static String gff3NoteIdExpression() {
-		return getString("gff3.file.note.id.expression");
-	}
-
-	public static String gff3NoteParentExpression() {
-		return getString("gff3.file.note.parent.expression");
-	}
-
-	public static String gff3NoteDBXRefExpression() {
-		return getString("gff3.file.note.dbxref.expression");
-	}
-
+	// gff3
 	public static String gff3NoteDBXRefSplit() {
 		return getString("gff3.file.note.dbxref.split");
 	}
 
-	// public static String gff3NoteTypeProduct()
-	// {
-	// return getString("gff3.file.noteType.parent");
-	// }
-	//
 }

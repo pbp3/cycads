@@ -13,8 +13,7 @@ import org.cycads.entities.note.Note;
 import org.cycads.entities.note.NotesSourceContainer;
 
 public interface Sequence<S extends Sequence< ? , ? , ? , ? >, R extends DBRecord< ? >, L extends Subsequence< ? , ? , ? , ? , ? , ? , ? , ? , ? >, F extends AnnotFeature< ? , ? , ? >>
-		extends NotesSourceContainer<Note<S>>, DBRecordsContainer<R>
-{
+		extends NotesSourceContainer<Note<S>>, DBRecordsContainer<R> {
 	public String getDescription();
 
 	public double getVersion();
@@ -28,4 +27,6 @@ public interface Sequence<S extends Sequence< ? , ? , ? , ? >, R extends DBRecor
 	public L getOrCreateSubsequence(int start, int end, Collection<Intron> introns);
 
 	public Collection<F> getFeatures(AnnotationFilter<F> featureFilter);
+
+	public Collection<L> getSubSeqsByDBRecord(String dbName, String accession);
 }

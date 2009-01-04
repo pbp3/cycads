@@ -16,7 +16,6 @@ import org.biojavax.SimpleRankedCrossRef;
 import org.biojavax.SimpleRichAnnotation;
 import org.biojavax.bio.seq.CompoundRichLocation;
 import org.biojavax.bio.seq.RichFeature;
-import org.biojavax.bio.seq.RichFeatureRelationship;
 import org.biojavax.bio.seq.RichLocation;
 import org.biojavax.bio.seq.RichSequence;
 import org.biojavax.bio.seq.SimplePosition;
@@ -28,6 +27,7 @@ import org.cycads.entities.annotation.AnnotFeature;
 import org.cycads.entities.annotation.AnnotationFilter;
 import org.cycads.entities.annotation.FeatureFilterByType;
 import org.cycads.entities.annotation.BJ.AnnotationMethodBJ;
+import org.cycads.entities.annotation.BJ.AnnotationRichFeatureBJ;
 import org.cycads.entities.annotation.BJ.CDSBJ;
 import org.cycads.entities.annotation.BJ.DBRecordBJ;
 import org.cycads.entities.annotation.BJ.ExternalDatabaseBJ;
@@ -45,8 +45,7 @@ import org.cycads.general.biojava.TermsAndOntologies;
 // can add only a feature
 public class SubsequenceBJ
 		implements
-		Subsequence<SubseqOntologyAnnotBJ, OntologyBJ, AnnotationMethodBJ, DBRecordBJ, ThinSequenceBJ, SimpleFeatureBJ, CDSBJ, RNABJ, GeneBJ>
-{
+		Subsequence<SubseqOntologyAnnotBJ, OntologyBJ, AnnotationMethodBJ, DBRecordBJ, ThinSequenceBJ, SimpleFeatureBJ, CDSBJ, RNABJ, GeneBJ> {
 	Collection<Intron>	introns		= null;
 	int					start		= -1;
 	int					end			= -1;
@@ -191,17 +190,17 @@ public class SubsequenceBJ
 	}
 
 	// invalid method. The subsequence is immutable
-	//	@Override
-	//	public boolean addIntron(Intron intron) {
-	//		throw new InvalidMethod();
-	//	}
+	// @Override
+	// public boolean addIntron(Intron intron) {
+	// throw new InvalidMethod();
+	// }
 	//
-	//	@Override
-	//	public Intron addIntron(int startPos, int endPos) {
-	//		Intron intron = new SimpleIntron(startPos, endPos);
-	//		addIntron(intron);
-	//		return intron;
-	//	}
+	// @Override
+	// public Intron addIntron(int startPos, int endPos) {
+	// Intron intron = new SimpleIntron(startPos, endPos);
+	// addIntron(intron);
+	// return intron;
+	// }
 	//
 	@Override
 	public Collection<Intron> getIntrons() {
@@ -273,7 +272,9 @@ public class SubsequenceBJ
 			RichFeature richFeature = (RichFeature) getSequence().getRichSeq().createFeature(templ);
 			getRichFeature().addFeatureRelationship(
 				new SimpleRichFeatureRelationship(getRichFeature(), richFeature,
-					SimpleRichFeatureRelationship.getContainsTerm(), 0));
+					TermsAndOntologies.getTermAnnotationRelationship(), 0));
+			richFeature.addFeatureRelationship(new SimpleRichFeatureRelationship(richFeature, getRichFeature(),
+				TermsAndOntologies.getTermSourceRelationship(), 0));
 			return richFeature;
 		}
 		catch (BioException e) {
@@ -294,7 +295,12 @@ public class SubsequenceBJ
 		if (feature != null) {
 			return feature;
 		}
-		return new SimpleFeatureBJ(createRichFeatureForAnnotation(method, TermsAndOntologies.getTermFeatureType(type)));
+		feature = new SimpleFeatureBJ(createRichFeatureForAnnotation(method,
+			TermsAndOntologies.getTermFeatureType(type)));
+		getRichFeature().addFeatureRelationship(
+			new SimpleRichFeatureRelationship(getRichFeature(), feature.getRichFeature(),
+				TermsAndOntologies.getTermFeatureAnnotRelationship(), 0));
+		return feature;
 	}
 
 	public SimpleFeatureBJ getOrCreateFeature(String method, String type) {
@@ -337,27 +343,9 @@ public class SubsequenceBJ
 		return getOrCreateMRNA(getMethodInstance(method));
 	}
 
-	@Override
-	public SimpleFeatureBJ getFeature(AnnotationMethodBJ method, String type) {
-		// get all features contained in this subsequence
-		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
-		for (RichFeatureRelationship relation : relations) {
-			RichFeature richFeature = relation.getSubject();
-			try {
-				SimpleFeatureBJ simpleFeature = new SimpleFeatureBJ(richFeature);
-				if (simpleFeature.getType().equals(type) && simpleFeature.getAnnotationMethod().equals(method)) {
-					return simpleFeature;
-				}
-			}
-			catch (IllegalArgumentException e) {
-
-			}
-		}
-		return null;
-	}
-
-	public SimpleFeatureBJ getFeature(String method, String type) {
-		return getFeature(getMethodInstance(method), type);
+	protected Collection<RichFeature> getFeaturesAnnotated() {
+		return AnnotationRichFeatureBJ.getFeaturesRelationed(getRichFeature(),
+			TermsAndOntologies.getTermFeatureAnnotRelationship());
 	}
 
 	@Override
@@ -368,30 +356,121 @@ public class SubsequenceBJ
 	@Override
 	public Collection<SimpleFeatureBJ> getFeatures(AnnotationFilter<SimpleFeatureBJ> featureFilter) {
 		// get all features contained in this subsequence
-		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
+		Collection<RichFeature> featuresAnnotated = getFeaturesAnnotated();
 		Collection<SimpleFeatureBJ> features = new ArrayList<SimpleFeatureBJ>();
-		for (RichFeatureRelationship relation : relations) {
-			RichFeature richFeature = relation.getSubject();
-			try {
-				SimpleFeatureBJ simpleFeature = new SimpleFeatureBJ(richFeature);
-				if (featureFilter.accept(simpleFeature)) {
-					features.add(simpleFeature);
-				}
-			}
-			catch (IllegalArgumentException e) {
-
+		for (RichFeature richFeature : featuresAnnotated) {
+			SimpleFeatureBJ simpleFeature = new SimpleFeatureBJ(richFeature);
+			if (featureFilter.accept(simpleFeature)) {
+				features.add(simpleFeature);
 			}
 		}
 		return features;
 	}
 
 	@Override
-	public CDSBJ getCDS(AnnotationMethodBJ method) {
-		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
-		for (RichFeatureRelationship relation : relations) {
-			RichFeature richFeature = relation.getSubject();
+	public Collection<SimpleFeatureBJ> getFeatures(AnnotationMethodBJ method) {
+		Collection<RichFeature> featuresAnnotated = getFeaturesAnnotated();
+		Collection<SimpleFeatureBJ> features = new ArrayList<SimpleFeatureBJ>();
+		for (RichFeature richFeature : featuresAnnotated) {
+			SimpleFeatureBJ simpleFeature = new SimpleFeatureBJ(richFeature);
+			if (simpleFeature.getAnnotationMethod().equals(method)) {
+				features.add(simpleFeature);
+			}
+		}
+		return features;
+	}
+
+	@Override
+	public Collection<SimpleFeatureBJ> getFeatures() {
+		Collection<RichFeature> featuresAnnotated = getFeaturesAnnotated();
+		Collection<SimpleFeatureBJ> features = new ArrayList<SimpleFeatureBJ>();
+		for (RichFeature richFeature : featuresAnnotated) {
+			features.add(new SimpleFeatureBJ(richFeature));
+		}
+		return features;
+	}
+
+	@Override
+	public Collection<CDSBJ> getCDSs() {
+		Collection<RichFeature> featuresAnnotated = getFeaturesAnnotated();
+		Collection<CDSBJ> features = new ArrayList<CDSBJ>();
+		for (RichFeature richFeature : featuresAnnotated) {
 			if (CDSBJ.isCDS(richFeature)) {
-				return new CDSBJ(richFeature);
+				features.add(new CDSBJ(richFeature));
+			}
+		}
+		return features;
+	}
+
+	@Override
+	public Collection<GeneBJ> getGenes() {
+		Collection<RichFeature> featuresAnnotated = getFeaturesAnnotated();
+		Collection<GeneBJ> features = new ArrayList<GeneBJ>();
+		for (RichFeature richFeature : featuresAnnotated) {
+			if (GeneBJ.isGene(richFeature)) {
+				features.add(new GeneBJ(richFeature));
+			}
+		}
+		return features;
+	}
+
+	@Override
+	public Collection<RNABJ> getMRNAs() {
+		Collection<RichFeature> featuresAnnotated = getFeaturesAnnotated();
+		Collection<RNABJ> features = new ArrayList<RNABJ>();
+		for (RichFeature richFeature : featuresAnnotated) {
+			if (RNABJ.isMRNA(richFeature)) {
+				features.add(new RNABJ(richFeature));
+			}
+		}
+		return features;
+	}
+
+	@Override
+	public Collection<RNABJ> getRNAs() {
+		Collection<RichFeature> featuresAnnotated = getFeaturesAnnotated();
+		Collection<RNABJ> features = new ArrayList<RNABJ>();
+		for (RichFeature richFeature : featuresAnnotated) {
+			if (RNABJ.isRNA(richFeature)) {
+				features.add(new RNABJ(richFeature));
+			}
+		}
+		return features;
+	}
+
+	public Collection<RNABJ> getRNAs(String type) {
+		Collection<RichFeature> featuresAnnotated = getFeaturesAnnotated();
+		Collection<RNABJ> features = new ArrayList<RNABJ>();
+		for (RichFeature richFeature : featuresAnnotated) {
+			if (RNABJ.isRNA(richFeature, type)) {
+				features.add(new RNABJ(richFeature));
+			}
+		}
+		return features;
+	}
+
+	@Override
+	public SimpleFeatureBJ getFeature(AnnotationMethodBJ method, String type) {
+		Collection<RichFeature> featuresAnnotated = getFeaturesAnnotated();
+		for (RichFeature richFeature : featuresAnnotated) {
+			SimpleFeatureBJ simpleFeature = new SimpleFeatureBJ(richFeature);
+			if (simpleFeature.getAnnotationMethod().equals(method) && simpleFeature.getType().equals(type)) {
+				return simpleFeature;
+			}
+		}
+		return null;
+	}
+
+	public SimpleFeatureBJ getFeature(String method, String type) {
+		return getFeature(getMethodInstance(method), type);
+	}
+
+	@Override
+	public CDSBJ getCDS(AnnotationMethodBJ method) {
+		Collection<CDSBJ> features = getCDSs();
+		for (CDSBJ feature : features) {
+			if (feature.getAnnotationMethod().equals(method)) {
+				return feature;
 			}
 		}
 		return null;
@@ -399,11 +478,10 @@ public class SubsequenceBJ
 
 	@Override
 	public GeneBJ getGene(AnnotationMethodBJ method) {
-		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
-		for (RichFeatureRelationship relation : relations) {
-			RichFeature richFeature = relation.getSubject();
-			if (GeneBJ.isGene(richFeature)) {
-				return new GeneBJ(richFeature);
+		Collection<GeneBJ> features = getGenes();
+		for (GeneBJ feature : features) {
+			if (feature.getAnnotationMethod().equals(method)) {
+				return feature;
 			}
 		}
 		return null;
@@ -411,11 +489,10 @@ public class SubsequenceBJ
 
 	@Override
 	public RNABJ getMRNA(AnnotationMethodBJ method) {
-		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
-		for (RichFeatureRelationship relation : relations) {
-			RichFeature richFeature = relation.getSubject();
-			if (RNABJ.isMRNA(richFeature)) {
-				return new RNABJ(richFeature);
+		Collection<RNABJ> features = getMRNAs();
+		for (RNABJ feature : features) {
+			if (feature.getAnnotationMethod().equals(method)) {
+				return feature;
 			}
 		}
 		return null;
@@ -423,11 +500,10 @@ public class SubsequenceBJ
 
 	@Override
 	public RNABJ getRNA(AnnotationMethodBJ method, String type) {
-		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
-		for (RichFeatureRelationship relation : relations) {
-			RichFeature richFeature = relation.getSubject();
-			if (RNABJ.isRNA(richFeature, type)) {
-				return new RNABJ(richFeature);
+		Collection<RNABJ> features = getRNAs(type);
+		for (RNABJ feature : features) {
+			if (feature.getAnnotationMethod().equals(method)) {
+				return feature;
 			}
 		}
 		return null;
@@ -435,12 +511,15 @@ public class SubsequenceBJ
 
 	@Override
 	public SubseqOntologyAnnotBJ getOrCreateOntologyAnnot(AnnotationMethodBJ method, OntologyBJ target) {
-		SubseqOntologyAnnotBJ dbLink;
-		if ((dbLink = getOntologyAnnot(method, target)) != null) {
-			return dbLink;
+		SubseqOntologyAnnotBJ ontologyAnnot;
+		if ((ontologyAnnot = getOntologyAnnot(method, target)) != null) {
+			return ontologyAnnot;
 		}
 		RichFeature richFeature = createRichFeatureForAnnotation(method, TermsAndOntologies.getTermOntologyAnnotType());
 		richFeature.addRankedCrossRef(new SimpleRankedCrossRef(target.getCrossRef(), 0));
+		getRichFeature().addFeatureRelationship(
+			new SimpleRichFeatureRelationship(getRichFeature(), richFeature,
+				TermsAndOntologies.getTermOntologyAnnotRelationship(), 0));
 		return new SubseqOntologyAnnotBJ(richFeature);
 	}
 
@@ -450,20 +529,18 @@ public class SubsequenceBJ
 			accession));
 	}
 
+	protected Collection<RichFeature> getOntologiesAnnotated() {
+		return AnnotationRichFeatureBJ.getFeaturesRelationed(getRichFeature(),
+			TermsAndOntologies.getTermOntologyAnnotRelationship());
+	}
+
 	@Override
 	public SubseqOntologyAnnotBJ getOntologyAnnot(AnnotationMethodBJ method, OntologyBJ target) {
-		// get all features contained in this subsequence
-		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
-		for (RichFeatureRelationship relation : relations) {
-			RichFeature richFeature = relation.getSubject();
-			if (SubseqOntologyAnnotBJ.isOntologyAnnot(richFeature)
-				&& richFeature.getSourceTerm().equals(method.getTerm())) {
-				Set<RankedCrossRef> crossRefs = richFeature.getRankedCrossRefs();
-				for (RankedCrossRef crossRef : crossRefs) {
-					if (crossRef.getCrossRef().equals(target.getCrossRef())) {
-						return new SubseqOntologyAnnotBJ(richFeature);
-					}
-				}
+		Collection<RichFeature> features = getOntologiesAnnotated();
+		for (RichFeature richFeature : features) {
+			SubseqOntologyAnnotBJ ontAnnot = new SubseqOntologyAnnotBJ(richFeature);
+			if (ontAnnot.getAnnotationMethod().equals(method) && ontAnnot.getOntologyTarget().equals(target)) {
+				return ontAnnot;
 			}
 		}
 		return null;
@@ -476,16 +553,12 @@ public class SubsequenceBJ
 
 	@Override
 	public Collection<SubseqOntologyAnnotBJ> getOntologyAnnots(AnnotationFilter<SubseqOntologyAnnotBJ> filter) {
-		// get all features contained in this subsequence
-		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
+		Collection<RichFeature> features = getOntologiesAnnotated();
 		Collection<SubseqOntologyAnnotBJ> annots = new ArrayList<SubseqOntologyAnnotBJ>();
-		for (RichFeatureRelationship relation : relations) {
-			RichFeature richFeature = relation.getSubject();
-			if (SubseqOntologyAnnotBJ.isOntologyAnnot(richFeature)) {
-				SubseqOntologyAnnotBJ annot = new SubseqOntologyAnnotBJ(richFeature);
-				if (filter.accept(annot)) {
-					annots.add(annot);
-				}
+		for (RichFeature richFeature : features) {
+			SubseqOntologyAnnotBJ ontAnnot = new SubseqOntologyAnnotBJ(richFeature);
+			if (filter.accept(ontAnnot)) {
+				annots.add(ontAnnot);
 			}
 		}
 		return annots;
@@ -493,19 +566,12 @@ public class SubsequenceBJ
 
 	@Override
 	public Collection<SubseqOntologyAnnotBJ> getOntologyAnnots(OntologyBJ target) {
-		// get all features contained in this subsequence
-		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
+		Collection<RichFeature> features = getOntologiesAnnotated();
 		Collection<SubseqOntologyAnnotBJ> annots = new ArrayList<SubseqOntologyAnnotBJ>();
-		for (RichFeatureRelationship relation : relations) {
-			RichFeature richFeature = relation.getSubject();
-			if (SubseqOntologyAnnotBJ.isOntologyAnnot(richFeature)) {
-				SubseqOntologyAnnotBJ annot = new SubseqOntologyAnnotBJ(richFeature);
-				Set<RankedCrossRef> crossRefs = richFeature.getRankedCrossRefs();
-				for (RankedCrossRef crossRef : crossRefs) {
-					if (crossRef.getCrossRef().equals(target.getCrossRef())) {
-						annots.add(annot);
-					}
-				}
+		for (RichFeature richFeature : features) {
+			SubseqOntologyAnnotBJ ontAnnot = new SubseqOntologyAnnotBJ(richFeature);
+			if (ontAnnot.getOntologyTarget().equals(target)) {
+				annots.add(ontAnnot);
 			}
 		}
 		return annots;
@@ -518,19 +584,12 @@ public class SubsequenceBJ
 
 	@Override
 	public Collection<SubseqOntologyAnnotBJ> getOntologyAnnots(String dbName) {
-		// get all features contained in this subsequence
-		Set<RichFeatureRelationship> relations = getRichFeature().getFeatureRelationshipSet();
+		Collection<RichFeature> features = getOntologiesAnnotated();
 		Collection<SubseqOntologyAnnotBJ> annots = new ArrayList<SubseqOntologyAnnotBJ>();
-		for (RichFeatureRelationship relation : relations) {
-			RichFeature richFeature = relation.getSubject();
-			if (SubseqOntologyAnnotBJ.isOntologyAnnot(richFeature)) {
-				SubseqOntologyAnnotBJ annot = new SubseqOntologyAnnotBJ(richFeature);
-				Set<RankedCrossRef> crossRefs = richFeature.getRankedCrossRefs();
-				for (RankedCrossRef crossRef : crossRefs) {
-					if (crossRef.getCrossRef().getDbname().equals(dbName)) {
-						annots.add(annot);
-					}
-				}
+		for (RichFeature richFeature : features) {
+			SubseqOntologyAnnotBJ ontAnnot = new SubseqOntologyAnnotBJ(richFeature);
+			if (ontAnnot.getOntologyTarget().getDatabaseName().equals(dbName)) {
+				annots.add(ontAnnot);
 			}
 		}
 		return annots;
@@ -568,6 +627,61 @@ public class SubsequenceBJ
 			}
 		}
 		return dbRecords;
+	}
+
+	@Override
+	public boolean contains(Subsequence< ? , ? , ? , ? , ? , ? , ? , ? , ? > subseq) {
+		if (subseq.getMinPosition() < this.getMinPosition() || subseq.getMaxPosition() > this.getMaxPosition()) {
+			return false;
+		}
+		// introns must be in natural order
+		Iterator<Intron> itSubseq = subseq.getIntrons().iterator();
+		Intron intronOtherSubseq = null;
+		if (itSubseq.hasNext()) {
+			intronOtherSubseq = itSubseq.next();
+		}
+		for (Intron intron : this.getIntrons()) {
+			if (intronOtherSubseq == null) {
+				return intron.getMin() > subseq.getMaxPosition();
+			}
+			// get intronOtherSubseq that overlap intron
+			while (intronOtherSubseq.getMax() < intron.getMin()) {
+				if (!itSubseq.hasNext()) {
+					return intron.getMin() > subseq.getMaxPosition();
+				}
+				intronOtherSubseq = itSubseq.next();
+			}
+			if (intronOtherSubseq.getMin() > intron.getMin()) {
+				return intron.getMin() > subseq.getMaxPosition();
+			}
+			else {
+				// intronOtherSubseq.min<=intron.min
+				while (intronOtherSubseq.getMax() < intron.getMax()) {
+					// get nextIntron adjacent
+					if (itSubseq.hasNext()) {
+						Intron nextIntronOtherSubseq = itSubseq.next();
+						if (intronOtherSubseq.getMax() + 1 == nextIntronOtherSubseq.getMin()) {
+							intronOtherSubseq = nextIntronOtherSubseq;
+						}
+						else {
+							return intron.getMin() > subseq.getMaxPosition();
+						}
+					}
+					else {
+						return intron.getMin() > subseq.getMaxPosition();
+					}
+				}
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null || !(obj instanceof SubsequenceBJ)) {
+			return false;
+		}
+		return this.getRichFeature().equals(((SubsequenceBJ) obj).getRichFeature());
 	}
 
 }

@@ -3,17 +3,13 @@
  */
 package org.cycads.entities.annotation.BJ;
 
-import java.util.Collection;
-
 import org.biojavax.bio.seq.RichFeature;
 import org.cycads.entities.annotation.AnnotFeature;
 import org.cycads.entities.annotation.CDS;
 import org.cycads.entities.sequence.BJ.SubsequenceBJ;
 
-public class CDSBJ extends AnnotationRichFeatureBJ<CDSBJ, SimpleFeatureBJ, RNABJ>
-		implements CDS<CDSBJ, SubsequenceBJ, AnnotationMethodBJ, RNABJ>,
-		AnnotationRichFeatureBJFactory<SimpleFeatureBJ, RNABJ>
-{
+public class CDSBJ extends AnnotationRichFeatureBJ<CDSBJ, SimpleFeatureBJ, RNABJ> implements
+		CDS<CDSBJ, SubsequenceBJ, AnnotationMethodBJ> {
 
 	public CDSBJ(RichFeature feature) {
 		super(feature);
@@ -27,52 +23,41 @@ public class CDSBJ extends AnnotationRichFeatureBJ<CDSBJ, SimpleFeatureBJ, RNABJ
 	}
 
 	@Override
-	public RNABJ getRNAParent() {
-		Collection<RNABJ> rnas = getRNAsContains();
-		if (rnas.size() > 0) {
-			return rnas.iterator().next();
-		}
-		return null;
+	public SubsequenceBJ getParent() {
+		return getSubsequenceParent();
 	}
 
 	@Override
-	public void setRNAParent(RNABJ rnaParent) {
-		if (rnaParent == null) {
+	public void setParent(SubsequenceBJ rnaParent) {
+		if (rnaParent.getRNAs().isEmpty()) {
 			throw new IllegalArgumentException();
 		}
-		Collection<CDSBJ> cdss = rnaParent.getCDSProducts();
-		for (CDSBJ cds : cdss) {
-			if (cds.equals(this)) {
-				//this is already child of the rna
-				return;
-			}
-		}
-		rnaParent.addCDS(this);
+		setSubsequenceParent(rnaParent);
 	}
 
-	@Override
-	public Collection<RNABJ> getRNAsContains() {
-		return getFeaturesContainers(this);
-	}
-
-	@Override
-	public RNABJ createObjectContainer(RichFeature feature) {
-		return new RNABJ(feature);
-	}
-
-	@Override
-	public SimpleFeatureBJ createObjectContains(RichFeature feature) {
-		return new SimpleFeatureBJ(feature);
-	}
-
-	@Override
-	public boolean isObjectContainer(RichFeature feature) {
-		return RNABJ.isRNA(feature);
-	}
-
-	@Override
-	public boolean isObjectContains(RichFeature feature) {
-		return SimpleFeatureBJ.isSimpleFeature(feature);
-	}
+	// @Override
+	// public Collection<RNABJ> getRNAsContains() {
+	// return getFeaturesContainers(this);
+	// }
+	//
+	// @Override
+	// public RNABJ createObjectContainer(RichFeature feature) {
+	// return new RNABJ(feature);
+	// }
+	//
+	// @Override
+	// public SimpleFeatureBJ createObjectContains(RichFeature feature) {
+	// return new SimpleFeatureBJ(feature);
+	// }
+	//
+	// @Override
+	// public boolean isObjectContainer(RichFeature feature) {
+	// return RNABJ.isRNA(feature);
+	// }
+	//
+	// @Override
+	// public boolean isObjectContains(RichFeature feature) {
+	// return SimpleFeatureBJ.isSimpleFeature(feature);
+	// }
 
 }

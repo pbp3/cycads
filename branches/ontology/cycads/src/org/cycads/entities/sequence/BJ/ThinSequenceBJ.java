@@ -11,6 +11,7 @@ import org.biojavax.RankedCrossRef;
 import org.biojavax.RichAnnotation;
 import org.biojavax.SimpleRankedCrossRef;
 import org.biojavax.bio.seq.CompoundRichLocation;
+import org.biojavax.bio.seq.RichFeature;
 import org.biojavax.bio.seq.RichLocation;
 import org.biojavax.bio.seq.RichSequence;
 import org.biojavax.bio.seq.SimpleRichLocation;
@@ -31,8 +32,7 @@ import org.cycads.general.biojava.BioJavaxSession;
 import org.cycads.general.biojava.BioSql;
 import org.hibernate.Query;
 
-public class ThinSequenceBJ implements Sequence<ThinSequenceBJ, DBRecordBJ, SubsequenceBJ, SimpleFeatureBJ>
-{
+public class ThinSequenceBJ implements Sequence<ThinSequenceBJ, DBRecordBJ, SubsequenceBJ, SimpleFeatureBJ> {
 	int										id;
 	RichSequence							richSeq	= null;
 	NotesHashTable<Note<ThinSequenceBJ>>	notes;
@@ -221,6 +221,19 @@ public class ThinSequenceBJ implements Sequence<ThinSequenceBJ, DBRecordBJ, Subs
 			}
 		}
 		return dbRecords;
+	}
+
+	@Override
+	public Collection<SubsequenceBJ> getSubSeqsByDBRecord(String dbName, String accession) {
+		ArrayList<SubsequenceBJ> ret = new ArrayList<SubsequenceBJ>();
+		Collection<RichFeature> features = BioSql.getFeaturesByDBXRef(DBRecordBJ.getOrCreateDBRecordBJ(dbName,
+			accession).getCrossRef(), (ThinRichSequence) this.getRichSeq());
+		for (RichFeature feature : features) {
+			if (SubsequenceBJ.isSubsequence(feature)) {
+				ret.add(new SubsequenceBJ(feature));
+			}
+		}
+		return ret;
 	}
 
 }

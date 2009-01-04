@@ -17,15 +17,14 @@ import org.cycads.entities.annotation.Gene;
 import org.cycads.entities.annotation.Ontology;
 import org.cycads.entities.annotation.RNA;
 
-public interface Subsequence<OA extends AnnotOntology<OA, ? extends Subsequence< ? , ? , ? , ? , ? , ? , ? , ? , ? >, O, M>, O extends Ontology< ? , ? , ? , ? >, M extends AnnotationMethod, R extends DBRecord< ? >, SEQ extends Sequence< ? , ? , ? , ? >, F extends AnnotFeature< ? , ? , ? >, C extends CDS< ? , ? , ? , ? >, RN extends RNA< ? , ? , ? , ? , ? >, G extends Gene< ? , ? , ? , ? >>
-		extends AnnotFeatureSource<F, C, RN, G, M>, AnnotOntologySource<OA, O, M>, DBRecordsContainer<R>
-{
+public interface Subsequence<OA extends AnnotOntology<OA, ? extends Subsequence< ? , ? , ? , ? , ? , ? , ? , ? , ? >, O, M>, O extends Ontology< ? , ? , ? , ? >, M extends AnnotationMethod, R extends DBRecord< ? >, SEQ extends Sequence< ? , ? , ? , ? >, F extends AnnotFeature< ? , ? , ? >, C extends CDS< ? , ? , ? >, RN extends RNA< ? , ? , ? >, G extends Gene< ? , ? , ? >>
+		extends AnnotFeatureSource<F, C, RN, G, M>, AnnotOntologySource<OA, O, M>, DBRecordsContainer<R> {
 
 	public Collection<Intron> getIntrons();
 
-	//	public boolean addIntron(Intron intron);
+	// public boolean addIntron(Intron intron);
 	//
-	//	public Intron addIntron(int startPos, int endPos);
+	// public Intron addIntron(int startPos, int endPos);
 	//
 	public boolean isPositiveStrand();
 
@@ -38,5 +37,7 @@ public interface Subsequence<OA extends AnnotOntology<OA, ? extends Subsequence<
 	public int getMaxPosition();
 
 	public SEQ getSequence();
+
+	public boolean contains(Subsequence< ? , ? , ? , ? , ? , ? , ? , ? , ? > subseq);
 
 }

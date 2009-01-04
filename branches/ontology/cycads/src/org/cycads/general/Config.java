@@ -7,8 +7,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
-public class Config
-{
+public class Config {
 	private static final String			BUNDLE_NAME						= "config";											//$NON-NLS-1$
 
 	private static final ResourceBundle	RESOURCE_BUNDLE					= ResourceBundle.getBundle(BUNDLE_NAME);
@@ -16,6 +15,13 @@ public class Config
 	public static List<Pattern>			SEQUENCEFEATURE_TYPE_PATTERNS	= getPatterns("SequenceFeature.Tag.Type.regex");
 	public static List<String>			BIOCYC_RECORD_TYPES				= getStrings("BioCycRecord.Type.value");
 	public static List<String>			SEQUENCEFEATURE_TAG_PRODUCT_IDS	= getStrings("SequenceFeature.Tag.ProductId.value");
+
+	// public static List<Pattern> GFF3_GENE_DBXREF_PATTERNS = getPatterns("gff3.gene.dbxref.regex");
+	// public static List<String> GFF3_GENE_DBXREF_DBNAMES = getStrings("gff3.gene.dbxref.dbName");
+	// public static List<Pattern> GFF3_CDS_DBXREF_PATTERNS = getPatterns("gff3.cds.dbxref.regex");
+	// public static List<String> GFF3_CDS_DBXREF_DBNAMES = getStrings("gff3.cds.dbxref.dbName");
+	// public static List<Pattern> GFF3_MRNA_DBXREF_PATTERNS = getPatterns("gff3.mrna.dbxref.regex");
+	// public static List<String> GFF3_MRNA_DBXREF_DBNAMES = getStrings("gff3.mrna.dbxref.dbName");
 
 	private Config() {
 	}
@@ -229,6 +235,18 @@ public class Config
 		return null;
 	}
 
+	private static String[] transforms(String key, List<Pattern> keyPatterns, List<String> values) {
+		ArrayList<String> rets = new ArrayList<String>();
+		for (int i = 0; i < keyPatterns.size(); i++) {
+			if (keyPatterns.get(i).matcher(key).matches()) {
+				if (values.size() > i) {
+					rets.add(values.get(i));
+				}
+			}
+		}
+		return rets.toArray(new String[0]);
+	}
+
 	private static List<Pattern> getPatterns(String tag) {
 		List<String> patternsStr = getStrings(tag);
 		List<Pattern> patterns = new ArrayList<Pattern>(patternsStr.size());
@@ -254,9 +272,51 @@ public class Config
 		return getString("SequenceFeature.Tag.Name");
 	}
 
-	//	public static String gff3MethodForDBLink()
-	//	{
-	//		return getString("gff3Loader.dbLink.method.name");
-	//	}
+	// GFF3 loader
+
+	public static String gff3ExonTagExpression() {
+		return getString("gff3.file.exonTagExpression");
+	}
+
+	public static String gff3GeneTagExpression() {
+		return getString("gff3.file.geneTagExpression");
+	}
+
+	public static String gff3MRNATagExpression() {
+		return getString("gff3.file.MRNATagExpression");
+	}
+
+	public static String gff3CDSTagExpression() {
+		return getString("gff3.file.CDSTagExpression");
+	}
+
+	public static String gff3NoteIdExpression() {
+		return getString("gff3.file.note.id.expression");
+	}
+
+	public static String gff3NoteParentExpression() {
+		return getString("gff3.file.note.parent.expression");
+	}
+
+	public static String gff3NoteDBXRefExpression() {
+		return getString("gff3.file.note.dbxref.expression");
+	}
+
+	public static String[] gff3GeneDBXRefDBName(String tagNote) {
+		return transforms(tagNote, GFF3_GENE_DBXREF_PATTERNS, GFF3_GENE_DBXREF_DBNAMES);
+	}
+
+	public static String[] gff3CDSDBXRefDBName(String tagNote) {
+		return transforms(tagNote, GFF3_CDS_DBXREF_PATTERNS, GFF3_CDS_DBXREF_DBNAMES);
+	}
+
+	public static String[] gff3MRNADBXRefDBName(String tagNote) {
+		return transforms(tagNote, GFF3_MRNA_DBXREF_PATTERNS, GFF3_MRNA_DBXREF_DBNAMES);
+	}
+
+	// public static String gff3MethodForDBLink()
+	// {
+	// return getString("gff3Loader.dbLink.method.name");
+	// }
 	//
 }

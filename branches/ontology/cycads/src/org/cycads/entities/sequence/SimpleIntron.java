@@ -3,8 +3,7 @@
  */
 package org.cycads.entities.sequence;
 
-public class SimpleIntron implements Intron
-{
+public class SimpleIntron implements Intron {
 	int	start, end;
 
 	public SimpleIntron(int start, int end) {
@@ -42,6 +41,10 @@ public class SimpleIntron implements Intron
 			return this.getMin() - o.getMin();
 		}
 		return this.getMax() - o.getMax();
+	}
+
+	public boolean contains(Intron intron) {
+		return this.getMin() <= intron.getMin() && this.getMax() >= intron.getMax();
 	}
 
 }

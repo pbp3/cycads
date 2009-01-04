@@ -15,6 +15,7 @@ import org.biojavax.bio.seq.RichLocation;
 import org.biojavax.bio.seq.RichSequence;
 import org.biojavax.bio.seq.SimpleRichFeatureRelationship;
 import org.biojavax.bio.seq.SimpleRichLocation;
+import org.biojavax.bio.seq.ThinRichSequence;
 import org.biojavax.bio.taxa.NCBITaxon;
 import org.biojavax.ontology.ComparableTerm;
 import org.cycads.entities.annotation.AnnotationMethod;
@@ -22,8 +23,7 @@ import org.cycads.entities.sequence.BJ.ThinSequenceBJ;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 
-public class BioSql
-{
+public class BioSql {
 
 	public static Collection<Integer> getFeaturesId(int seqId) {
 		Query query = BioJavaxSession.createQuery("select f.id from Feature as f join f.parent as b where "
@@ -116,10 +116,19 @@ public class BioSql
 		return features;
 	}
 
+	public static Collection<RichFeature> getFeaturesByDBXRef(CrossRef crossRef, ThinRichSequence richSeq) {
+		Query query = BioJavaxSession.createQuery("select f from Feature as f where "
+			+ "f.rankedCrossRefs.crossRef=:crossRef and f.parent=:richSeq");
+		query.setParameter("crossRef", crossRef);
+		query.setParameter("richSeq", richSeq);
+		Collection<RichFeature> results = query.list();
+		return results;
+	}
+
 	public static int getSequenceId(RichSequence richSeq) {
 		Query query = BioJavaxSession.createQuery("select s.id from ThinSequence s where s=:seq ");
 		query.setParameter("seq", richSeq);
-		//		query.setParameter("seq", richSeq);
+		// query.setParameter("seq", richSeq);
 		return (Integer) query.uniqueResult();
 	}
 
@@ -180,7 +189,7 @@ public class BioSql
 		query.setString("accession", accession);
 		query.setParameter("nameSpace", nameSpace);
 		query.setInteger("version", version);
-		//		query.setParameter("seq", richSeq);
+		// query.setParameter("seq", richSeq);
 		return (Integer) query.uniqueResult();
 	}
 

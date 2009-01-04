@@ -5,8 +5,7 @@ package org.cycads.entities.annotation;
 
 import java.util.Collection;
 
-public interface AnnotFeatureSource<F extends AnnotFeature< ? , ? , ? >, C extends CDS< ? , ? , ? , ? >, R extends RNA< ? , ? , ? , ? , ? >, G extends Gene< ? , ? , ? , ? >, M extends AnnotationMethod>
-{
+public interface AnnotFeatureSource<F extends AnnotFeature< ? , ? , ? >, C extends CDS< ? , ? , ? >, R extends RNA< ? , ? , ? >, G extends Gene< ? , ? , ? >, M extends AnnotationMethod> {
 	public F getOrCreateFeature(M method, String type);
 
 	public C getOrCreateCDS(M method);
@@ -20,6 +19,18 @@ public interface AnnotFeatureSource<F extends AnnotFeature< ? , ? , ? >, C exten
 	public Collection<F> getFeatures(AnnotationFilter<F> featureFilter);
 
 	public Collection<F> getFeatures(String type);
+
+	public Collection<F> getFeatures(M method);
+
+	public Collection<F> getFeatures();
+
+	public Collection<G> getGenes();
+
+	public Collection<R> getMRNAs();
+
+	public Collection<R> getRNAs();
+
+	public Collection<C> getCDSs();
 
 	public F getFeature(M method, String type);
 

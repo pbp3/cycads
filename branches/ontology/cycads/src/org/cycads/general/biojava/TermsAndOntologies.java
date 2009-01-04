@@ -6,14 +6,12 @@ package org.cycads.general.biojava;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import org.biojava.ontology.Term;
 import org.biojavax.RichObjectFactory;
 import org.biojavax.ontology.ComparableOntology;
 import org.biojavax.ontology.ComparableTerm;
 import org.biojavax.ontology.SimpleComparableOntology;
 
-public class TermsAndOntologies
-{
+public class TermsAndOntologies {
 
 	private static final String			BUNDLE_NAME		= "termsAndOntologies";					//$NON-NLS-1$
 
@@ -152,8 +150,36 @@ public class TermsAndOntologies
 		return getTermFeatureType(getString("term.Annotation.OntologyAnnotType"));
 	}
 
-	public static Term getTermSubSequenceType() {
+	public static ComparableTerm getTermSubSequenceType() {
 		return getOntologyGeneral().getOrCreateTerm(getString("term.SubSequence.Type"));
+	}
+
+	public static ComparableOntology getOntologyAnnotationRelatioship() {
+		return getOntology(getString("ontology.Annotation.Relationship"));
+	}
+
+	public static ComparableTerm getTermOntologyAnnotRelationship() {
+		return getOntologyAnnotationRelatioship().getOrCreateTerm("term.Annotation.Relationship.OntologyAnnot");
+	}
+
+	public static ComparableTerm getTermFeatureAnnotRelationship() {
+		return getOntologyAnnotationRelatioship().getOrCreateTerm("term.Annotation.Relationship.FeatureAnnot");
+	}
+
+	public static ComparableTerm getTermAnnotationRelationship() {
+		return getOntologyAnnotationRelatioship().getOrCreateTerm("term.Annotation.Relationship.Annotation");
+	}
+
+	public static ComparableTerm getTermSourceRelationship() {
+		return getOntologyAnnotationRelatioship().getOrCreateTerm("term.Annotation.Relationship.Source");
+	}
+
+	public static ComparableTerm getTermParentRelationship() {
+		return getOntologyAnnotationRelatioship().getOrCreateTerm("term.Annotation.Relationship.Parent");
+	}
+
+	public static ComparableTerm getTermChildRelationship() {
+		return getOntologyAnnotationRelatioship().getOrCreateTerm("term.Annotation.Relationship.Child");
 	}
 
 	// public static SimpleComparableOntology getOntologyFeatures() {

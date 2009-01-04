@@ -3,8 +3,7 @@
  */
 package org.cycads.entities.sequence;
 
-public interface Intron extends Comparable<Intron>
-{
+public interface Intron extends Comparable<Intron> {
 	public int getStart();
 
 	public int getEnd();
@@ -12,5 +11,7 @@ public interface Intron extends Comparable<Intron>
 	public int getMin();
 
 	public int getMax();
+
+	public boolean contains(Intron intron);
 
 }

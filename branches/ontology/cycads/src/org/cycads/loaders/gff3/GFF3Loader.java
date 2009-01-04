@@ -11,6 +11,7 @@ import java.util.Hashtable;
 import java.util.regex.Pattern;
 
 import org.cycads.entities.annotation.AnnotationMethod;
+import org.cycads.entities.annotation.CDS;
 import org.cycads.entities.annotation.Gene;
 import org.cycads.entities.annotation.RNA;
 import org.cycads.entities.note.Note;
@@ -19,41 +20,35 @@ import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Sequence;
 import org.cycads.entities.sequence.SimpleIntron;
 import org.cycads.entities.sequence.Subsequence;
+import org.cycads.general.Config;
 import org.cycads.general.ParametersDefault;
 
-public class GFF3Loader implements GFF3DocumentHandler
-{
-	Pattern								genePattern					= Pattern.compile(ParametersDefault.gff3GeneTagExpression());
-	Pattern								mRNAPattern					= Pattern.compile(ParametersDefault.gff3MRNATagExpression());
-	Pattern								exonPattern					= Pattern.compile(ParametersDefault.gff3ExonTagExpression());
-	Pattern								cdsPattern					= Pattern.compile(ParametersDefault.gff3CDSTagExpression());
+public class GFF3Loader implements GFF3DocumentHandler {
+	Pattern								genePattern					= Pattern.compile(Config.gff3GeneTagExpression());
+	Pattern								mRNAPattern					= Pattern.compile(Config.gff3MRNATagExpression());
+	Pattern								exonPattern					= Pattern.compile(Config.gff3ExonTagExpression());
+	Pattern								cdsPattern					= Pattern.compile(Config.gff3CDSTagExpression());
 
-	Pattern								dbXREFPattern				= Pattern.compile(ParametersDefault.gff3NoteDBXRefExpression());
+	Pattern								dbXREFPattern				= Pattern.compile(Config.gff3NoteDBXRefExpression());
 
-	Pattern								geneFunctionPattern			= Pattern.compile(ParametersDefault.gff3GeneFunctionExpression());
-	Pattern								geneExcludePattern			= Pattern.compile(ParametersDefault.gff3GeneExcludeExpression());
-	Pattern[]							geneDBXREFPatterns			= ParametersDefault.gff3GeneDBXRefPatterns();
-	String[]							geneDBXREFNames				= ParametersDefault.gff3GeneDBXRefNames();
+	Pattern								geneFunctionPattern			= Pattern.compile(Config.gff3GeneFunctionExpression());
+	Pattern								geneExcludePattern			= Pattern.compile(Config.gff3GeneExcludeExpression());
 
-	Pattern								mRNAFunctionPattern			= Pattern.compile(ParametersDefault.gff3MRNAFunctionExpression());
-	Pattern								mRNAExcludePattern			= Pattern.compile(ParametersDefault.gff3MRNAExcludeExpression());
-	Pattern[]							mRNADBXREFPatterns			= ParametersDefault.gff3MRNADBXRefPatterns();
-	String[]							mRNADBXREFNames				= ParametersDefault.gff3MRNADBXRefNames();
+	Pattern								mRNAFunctionPattern			= Pattern.compile(Config.gff3MRNAFunctionExpression());
+	Pattern								mRNAExcludePattern			= Pattern.compile(Config.gff3MRNAExcludeExpression());
 
-	Pattern								cdsFunctionPattern			= Pattern.compile(ParametersDefault.gff3CDSFunctionExpression());
-	Pattern								cdsExcludePattern			= Pattern.compile(ParametersDefault.gff3CDSExcludeExpression());
-	Pattern[]							cdsDBXREFPatterns			= ParametersDefault.gff3CDSDBXRefPatterns();
-	String[]							cdsDBXREFNames				= ParametersDefault.gff3CDSDBXRefNames();
+	Pattern								cdsFunctionPattern			= Pattern.compile(Config.gff3CDSFunctionExpression());
+	Pattern								cdsExcludePattern			= Pattern.compile(Config.gff3CDSExcludeExpression());
 
-	//Id that will be used by the exons
-	Pattern								mRNAIdPattern				= Pattern.compile(ParametersDefault.gff3MRNAIdExpression());
-	Pattern								exonParentAccesionPattern	= Pattern.compile(ParametersDefault.gff3ExonParentAccesionExpression());
+	// Id that will be used by the exons
+	Pattern								mRNAIdPattern				= Pattern.compile(Config.gff3MRNAIdExpression());
+	Pattern								exonParentAccesionPattern	= Pattern.compile(Config.gff3ExonParentAccesionExpression());
 
-	Pattern								mRNAParentAccesionPattern	= Pattern.compile(ParametersDefault.gff3MRNAParentAccesionExpression());
-	String								mRNAParentDB				= ParametersDefault.gff3MRNAParentDB();
+	Pattern								mRNAParentAccesionPattern	= Pattern.compile(Config.gff3MRNAParentAccesionExpression());
+	String								mRNAParentDB				= Config.gff3MRNAParentDB();
 
-	Pattern								cdsParentAccesionPattern	= Pattern.compile(ParametersDefault.gff3CDSParentAccesionExpression());
-	String								cdsParentDB					= ParametersDefault.gff3CDSParentDB();
+	Pattern								cdsParentAccesionPattern	= Pattern.compile(Config.gff3CDSParentAccesionExpression());
+	String								cdsParentDB					= Config.gff3CDSParentDB();
 
 	String								seqDatabase;
 	int									seqVersionDefault;
@@ -63,10 +58,14 @@ public class GFF3Loader implements GFF3DocumentHandler
 	ArrayList<GFF3Record>				cdss						= new ArrayList<GFF3Record>();
 	Hashtable<String, ArrayList<Exon>>	exons						= new Hashtable<String, ArrayList<Exon>>();
 
-	Sequence							lastSequence;
-	String								lastSeqAccession;
+	Sequence							lastSequence				= null;
+	String								lastSeqAccession			= "";
 
-	//	String										methodForDBLink	= Config.gff3MethodForDBLink();
+	public GFF3Loader(Organism organism, String seqDatabase, int seqVersionDefault) {
+		this.seqDatabase = seqDatabase;
+		this.seqVersionDefault = seqVersionDefault;
+		this.organism = organism;
+	}
 
 	@Override
 	public void commentLine(String comment) {
@@ -126,10 +125,10 @@ public class GFF3Loader implements GFF3DocumentHandler
 				String noteValue = note.getValue();
 				if (!mRNAExcludePattern.matcher(noteType).matches()) {
 					if (mRNAParentAccesionPattern.matcher(noteType).matches()) {
-						Collection<Subsequence> subSeqs = seq.getSubSeqs(mRNAParentDB, noteValue);
-						for (Subsequence subseq1 : subSeqs) {
-							if (subseq1.contains(subseq) && (subseq.getGenes().size() > 0)) {
-								subseq1.generateMRNA(subseq);
+						Collection<Subsequence> subSeqs = seq.getSubSeqsByDBRecord(mRNAParentDB, noteValue);
+						for (Subsequence subseqGene : subSeqs) {
+							if (subseqGene.contains(subseq) && (!subseqGene.getGenes().isEmpty())) {
+								mRNA.setParent(subseqGene);
 							}
 						}
 					}
@@ -141,11 +140,11 @@ public class GFF3Loader implements GFF3DocumentHandler
 							isMRNANote = false;
 						}
 						else {
-							for (int i = 0; i < mRNADBXREFPatterns.length; i++) {
-								if (mRNADBXREFPatterns[i].matcher(noteType).matches()) {
-									subseq.addDBRecord(mRNADBXREFNames[i], noteValue);
-									isMRNANote = false;
-								}
+							for (String dbName : Config.gff3MRNADBXRefDBName(noteType)) {
+								// for (int i = 0; i < mRNADBXREFPatterns.length; i++) {
+								// if (mRNADBXREFPatterns[i].matcher(noteType).matches()) {
+								subseq.addDBRecord(dbName, noteValue);
+								isMRNANote = false;
 							}
 						}
 						if (mRNAFunctionPattern.matcher(noteType).matches()) {
@@ -162,96 +161,72 @@ public class GFF3Loader implements GFF3DocumentHandler
 
 	private void handleCDSs() {
 		for (GFF3Record record : cdss) {
-			//get MRNA Parent SubSequence
-			//get Introns of MRNA parent subsequence
-			//get or Create subsequence of this CDS
-			//associate subsequences as MRNA parent and CDS child
-			//handle Notes of this CDS
-			//exclude notes for exclusion and parent note
-			//handle dbxrefs notes (general and for CDSs) in the subsequence
-			//handle functions notes
-			//handle other notes
-			//add score as note
-			String cdsID = null;
+			Sequence seq = getSequence(record.getSequenceID());
+			CDS cds;
+			// get MRNA Parent SubSequence
+			Subsequence subseq = null;
 			Collection<Note> notes = record.getNotes();
 			for (Note note : notes) {
 				if (!cdsExcludePattern.matcher(note.getType()).matches()
-					&& cdsIdPattern.matcher(note.getType()).matches()) {
-					cdsID = note.getValue();
-				}
-			}
-			ArrayList<Exon> exonsMRNA = exons.get(cdsID);
-			Collections.sort(exonsMRNA);
-			Collection<Intron> introns = new ArrayList<Intron>(exonsMRNA.size() - 1);
-			if (exonsMRNA.size() > 0) {
-				if (record.getStart() < exonsMRNA.get(0).getMin()) {
-					introns.add(new SimpleIntron(record.getStart(), exonsMRNA.get(0).getMin() - 1));
-				}
-				Exon exon1, exon2 = exonsMRNA.get(0);
-				for (int i = 1; i < exonsMRNA.size(); i++) {
-					exon1 = exon2;
-					exon2 = exonsMRNA.get(i);
-					if (exon1.getMax() < (exon2.getMin() - 1)) {
-						introns.add(new SimpleIntron(exon1.getMax() + 1, exon2.getMin() - 1));
+					&& cdsParentAccesionPattern.matcher(note.getType()).matches()) {
+					Collection<Subsequence> subSeqs = seq.getSubSeqsByDBRecord(cdsParentDB, note.getValue());
+					for (Subsequence subseqMRNA : subSeqs) {
+						if (!subseqMRNA.getMRNAs().isEmpty() && subseqMRNA.getMinPosition() <= record.getStart()
+							&& subseqMRNA.getMaxPosition() >= record.getEnd()) {
+							// get Introns of MRNA parent subsequence
+							// get or Create subsequence of this CDS of the MRNA parent
+							if (record.getStrand() < 0) {
+								subseq = seq.getOrCreateSubsequence(record.getEnd(), record.getStart(),
+									subseqMRNA.getIntrons());
+							}
+							else {
+								subseq = seq.getOrCreateSubsequence(record.getStart(), record.getEnd(),
+									subseqMRNA.getIntrons());
+							}
+							cds = subseq.getOrCreateCDS(subseq.getMethodInstance(record.getSource()));
+							// associate subsequences as MRNA parent and CDS child
+							cds.setParent(subseqMRNA);
+						}
 					}
 				}
-				if (exon2.getEnd() < record.getEnd()) {
-					introns.add(new SimpleIntron(exon2.getMax() + 1, record.getEnd()));
-				}
 			}
-			else {
-				introns.add(new SimpleIntron(record.getStart(), record.getEnd()));
-			}
-			Sequence seq = getSequence(record.getSequenceID());
-			Subsequence subseq;
-			if (record.getStrand() < 0) {
-				subseq = seq.getOrCreateSubsequence(record.getEnd(), record.getStart(), introns);
-			}
-			else {
-				subseq = seq.getOrCreateSubsequence(record.getStart(), record.getEnd(), introns);
-			}
-			AnnotationMethod annotationMethod = subseq.getMethodInstance(record.getSource());
-			RNA mRNA = subseq.getOrCreateMRNA(annotationMethod);
+
+			// add score as note
+			cds.addNote(ParametersDefault.annotationNoteTypeScore(), NumberFormat.getInstance().format(
+				record.getScore()));
+			// handle Notes of this record
 			for (Note note : notes) {
 				String noteType = note.getType();
 				String noteValue = note.getValue();
-				if (!mRNAExcludePattern.matcher(noteType).matches()) {
-					if (mRNAParentAccesionPattern.matcher(noteType).matches()) {
-						Collection<Subsequence> subSeqs = seq.getSubSeqs(mRNAParentDB, noteValue);
-						for (Subsequence subseq1 : subSeqs) {
-							if (subseq1.contains(subseq) && (subseq.getGenes().size() > 0)) {
-								subseq1.generateMRNA(subseq);
-							}
-						}
+				// exclude notes for exclusion and parent note
+				if (!cdsExcludePattern.matcher(noteType).matches()
+					&& !cdsParentAccesionPattern.matcher(noteType).matches()) {
+					boolean isCDSNote = true;
+					// handle dbxrefs notes (general and for CDSs) in the subsequence
+					if (dbXREFPattern.matcher(noteType).matches()) {
+						String[] strs = noteValue.split(ParametersDefault.gff3NoteDBXRefSplit());
+						subseq.addDBRecord(strs[0], strs[1]);
+						isCDSNote = false;
 					}
 					else {
-						boolean isMRNANote = true;
-						if (dbXREFPattern.matcher(noteType).matches()) {
-							String[] strs = noteValue.split(ParametersDefault.gff3NoteDBXRefSplit());
-							subseq.addDBRecord(strs[0], strs[1]);
-							isMRNANote = false;
+						for (String dbName : Config.gff3CDSDBXRefDBName(noteType)) {
+							// for (int i = 0; i < cdsDBXREFPatterns.length; i++) {
+							// if (cdsDBXREFPatterns[i].matcher(noteType).matches()) {
+							subseq.addDBRecord(dbName, noteValue);
+							isCDSNote = false;
 						}
-						else {
-							for (int i = 0; i < mRNADBXREFPatterns.length; i++) {
-								if (mRNADBXREFPatterns[i].matcher(noteType).matches()) {
-									subseq.addDBRecord(mRNADBXREFNames[i], noteValue);
-									isMRNANote = false;
-								}
-							}
-						}
-						if (mRNAFunctionPattern.matcher(noteType).matches()) {
-							mRNA.addFunction(noteValue);
-						}
-						if (isMRNANote) {
-							mRNA.addNote(note);
-						}
+					}
+					// handle functions notes
+					if (cdsFunctionPattern.matcher(noteType).matches()) {
+						cds.addFunction(noteValue);
+					}
+					// handle other notes
+					if (isCDSNote) {
+						cds.addNote(note);
 					}
 				}
 			}
 		}
-		// add score as note
-		gene.addNote(ParametersDefault.annotationNoteTypeScore(), NumberFormat.getInstance().format(record.getScore()));
-		Note nameNote = record.getNotes(ParametersDefault.gff3NoteTypeName());
 	}
 
 	@Override
@@ -281,11 +256,12 @@ public class GFF3Loader implements GFF3DocumentHandler
 						isGeneNote = false;
 					}
 					else {
-						for (int i = 0; i < geneDBXREFPatterns.length; i++) {
-							if (geneDBXREFPatterns[i].matcher(noteType).matches()) {
-								subseq.addDBRecord(geneDBXREFNames[i], noteValue);
-								isGeneNote = false;
-							}
+						for (String dbName : Config.gff3GeneDBXRefDBName(noteType)) {
+							// for (int i = 0; i < geneDBXREFPatterns.length; i++) {
+							// if (geneDBXREFPatterns[i].matcher(noteType).matches()) {
+							subseq.addDBRecord(dbName, noteValue);
+							isGeneNote = false;
+							// }
 						}
 					}
 					if (geneFunctionPattern.matcher(noteType).matches()) {
@@ -324,10 +300,11 @@ public class GFF3Loader implements GFF3DocumentHandler
 		if (sequenceID.equals(lastSeqAccession)) {
 			return lastSequence;
 		}
-		Sequence seq;
+		lastSeqAccession = sequenceID;
 		if (ParametersDefault.getNameSpaceDefault().equals(seqDatabase)) {
 			// sequence accession in the database
-			return organism.getOrCreateSequence(sequenceID, seqVersionDefault);
+			lastSequence = organism.getOrCreateSequence(sequenceID, seqVersionDefault);
+			return lastSequence;
 		}
 		else {
 			// sequence accession is external
@@ -337,7 +314,8 @@ public class GFF3Loader implements GFF3DocumentHandler
 			}
 			else {
 				// get the only one
-				return seqs.iterator().next();
+				lastSequence = seqs.iterator().next();
+				return lastSequence;
 			}
 		}
 	}
