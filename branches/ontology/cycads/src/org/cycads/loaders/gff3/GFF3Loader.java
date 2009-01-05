@@ -111,6 +111,8 @@ public class GFF3Loader implements GFF3DocumentHandler {
 		}
 		AnnotationMethod annotationMethod = subseq.getMethodInstance(record.getSource());
 		Gene gene = subseq.getOrCreateGene(annotationMethod);
+		// add score as note
+		gene.addNote(ParametersDefault.annotationNoteTypeScore(), NumberFormat.getInstance().format(record.getScore()));
 		Collection<Note> notes = record.getNotes();
 		for (Note note : notes) {
 			String noteType = note.getType();
@@ -184,6 +186,8 @@ public class GFF3Loader implements GFF3DocumentHandler {
 		}
 		AnnotationMethod annotationMethod = subseq.getMethodInstance(record.getSource());
 		RNA mRNA = subseq.getOrCreateMRNA(annotationMethod);
+		// add score as note
+		mRNA.addNote(ParametersDefault.annotationNoteTypeScore(), NumberFormat.getInstance().format(record.getScore()));
 		for (Note note : notes) {
 			String noteType = note.getType();
 			String noteValue = note.getValue();
@@ -323,27 +327,30 @@ public class GFF3Loader implements GFF3DocumentHandler {
 	}
 
 	private Sequence getSequence(String sequenceID) throws InvalidSequence {
-		if (sequenceID.equals(lastSeqAccession)) {
-			return lastSequence;
-		}
-		lastSeqAccession = sequenceID;
-		if (ParametersDefault.getNameSpaceDefault().equals(seqDatabase)) {
-			// sequence accession in the database
-			lastSequence = organism.getOrCreateSequence(sequenceID, seqVersionDefault);
-			return lastSequence;
-		}
-		else {
-			// sequence accession is external
-			Collection<Sequence> seqs = organism.getSequences(seqDatabase, sequenceID);
-			if (seqs.size() != 1) {
-				throw new InvalidSequence(seqDatabase, sequenceID);
+		if (!sequenceID.equals(lastSeqAccession)) {
+			lastSeqAccession = sequenceID;
+			if (ParametersDefault.getNameSpaceDefault().equals(seqDatabase)) {
+				// sequence accession in the database
+				lastSequence = organism.getOrCreateSequence(sequenceID, seqVersionDefault);
 			}
 			else {
-				// get the only one
-				lastSequence = seqs.iterator().next();
-				return lastSequence;
+				// sequence accession is external
+				Collection<Sequence> seqs = organism.getSequences(seqDatabase, sequenceID);
+				// verify creation of the sequence
+				if (seqs.size() == 0 && createSequence) {
+					lastSequence = organism.getOrCreateSequence(sequenceID, seqVersionDefault);
+					lastSequence.addDBRecord(seqDatabase, sequenceID);
+				}
+				else if (seqs.size() != 1) {
+					throw new InvalidSequence(seqDatabase, sequenceID);
+				}
+				else {
+					// get the only one
+					lastSequence = seqs.iterator().next();
+				}
 			}
 		}
+		return lastSequence;
 	}
 
 	@Override
