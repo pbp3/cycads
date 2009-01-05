@@ -29,8 +29,7 @@ import org.cycads.general.biojava.BioJavaxSession;
 import org.cycads.general.biojava.TermsAndOntologies;
 import org.cycads.ui.progress.Progress;
 
-public class GBKLoaderBJ extends FileLoaderAbstract
-{
+public class GBKLoaderBJ extends FileLoaderAbstract {
 	Method	methodCDSToEC;
 
 	public GBKLoaderBJ(Progress progress, CacheCleanerController cacheCleaner) {
@@ -51,9 +50,9 @@ public class GBKLoaderBJ extends FileLoaderAbstract
 		Pattern rnaPattern = Pattern.compile(ParametersDefault.gbkRNATagExpression());
 		Pattern cdsPattern = Pattern.compile(ParametersDefault.gbkCDSTagExpression());
 
-		//		ComparableTerm ecTerm = TermsAndOntologies.getTermTypeEC();
-		//		ComparableTerm geneTerm = TermsAndOntologies.getTermTypeGene();
-		//		ComparableTerm cdsTerm = TermsAndOntologies.getTermTypeCDS();
+		// ComparableTerm ecTerm = TermsAndOntologies.getTermTypeEC();
+		// ComparableTerm geneTerm = TermsAndOntologies.getTermTypeGene();
+		// ComparableTerm cdsTerm = TermsAndOntologies.getTermTypeCDS();
 		//
 		// we are reading DNA sequences
 		RichSequenceIterator seqs = RichSequence.IOTools.readGenbankDNA(br, RichObjectFactory.getDefaultNamespace());
@@ -67,10 +66,10 @@ public class GBKLoaderBJ extends FileLoaderAbstract
 				throw new IOException(e.getMessage());
 			}
 			Set<RichFeature> features = seq.getFeatureSet();
-			//			ArrayList<RichFeature> genes = new ArrayList<RichFeature>();
+			// ArrayList<RichFeature> genes = new ArrayList<RichFeature>();
 			RichFeature gene = null;
 			ArrayList<RichFeature> rNAs = new ArrayList<RichFeature>();
-			//			ArrayList<RichFeature> cDSs = new ArrayList<RichFeature>();
+			// ArrayList<RichFeature> cDSs = new ArrayList<RichFeature>();
 			for (RichFeature feature : features) {
 				try {
 					ComparableTerm ecTerm = TermsAndOntologies.getTermTypeEC();
@@ -80,7 +79,7 @@ public class GBKLoaderBJ extends FileLoaderAbstract
 					if (genePattern.matcher(feature.getType()).matches()) {
 						gene = feature;
 						rNAs = new ArrayList<RichFeature>();
-						//						genes.add(feature);
+						// genes.add(feature);
 						feature.setTypeTerm(geneTerm);
 					}
 					else if (rnaPattern.matcher(feature.getType()).matches()) {
@@ -95,8 +94,8 @@ public class GBKLoaderBJ extends FileLoaderAbstract
 						RichFeature cDS = feature;
 						progress.completeStep();
 						cDS.setTypeTerm(cdsTerm);
-						//						cDSs.add(feature);
-						//Adjust EC qualifier
+						// cDSs.add(feature);
+						// Adjust EC qualifier
 						SimpleRichAnnotation annot = (SimpleRichAnnotation) feature.getAnnotation();
 						Object[] notes = annot.getNoteSet().toArray();
 						for (Object obj : notes) {
@@ -108,7 +107,7 @@ public class GBKLoaderBJ extends FileLoaderAbstract
 								cds.addAnnotation(methodCDSToEC, note.getValue());
 							}
 						}
-						//put CDS in RNAs
+						// put CDS in RNAs
 						for (RichFeature rNA : rNAs) {
 							if (rNA.getLocation().contains(cDS.getLocation())) {
 								rNA.addFeatureRelationship(new SimpleRichFeatureRelationship(rNA, cDS,
@@ -123,26 +122,25 @@ public class GBKLoaderBJ extends FileLoaderAbstract
 					throw new RuntimeException(e);
 				}
 			}
-			//			for (RichFeature gene : genes) {
-			//				for (RichFeature rNA : rNAs) {
-			//					for (RichFeature cDS : cDSs) {
-			//						if (rNA.getLocation().contains(cDS.getLocation())) {
-			//							rNA.addFeatureRelationship(new SimpleRichFeatureRelationship(rNA, cDS,
-			//								SimpleRichFeatureRelationship.getContainsTerm(), 0));
-			//						}
-			//					}
-			//					if (gene.getLocation().contains(rNA.getLocation())) {
-			//						gene.addFeatureRelationship(new SimpleRichFeatureRelationship(gene, rNA,
-			//							SimpleRichFeatureRelationship.getContainsTerm(), 0));
-			//					}
-			//				}
-			//			}
+			// for (RichFeature gene : genes) {
+			// for (RichFeature rNA : rNAs) {
+			// for (RichFeature cDS : cDSs) {
+			// if (rNA.getLocation().contains(cDS.getLocation())) {
+			// rNA.addFeatureRelationship(new SimpleRichFeatureRelationship(rNA, cDS,
+			// SimpleRichFeatureRelationship.getContainsTerm(), 0));
+			// }
+			// }
+			// if (gene.getLocation().contains(rNA.getLocation())) {
+			// gene.addFeatureRelationship(new SimpleRichFeatureRelationship(gene, rNA,
+			// SimpleRichFeatureRelationship.getContainsTerm(), 0));
+			// }
+			// }
+			// }
 			BioJavaxSession.session.saveOrUpdate("Sequence", seq);
 			cacheCleaner.incCache();
 			MethodTypeBJ.CDS_TO_EC = new MethodTypeBJ(ParametersDefault.cdsToECMethodType());
 			methodCDSToEC = MethodTypeBJ.CDS_TO_EC.getOrCreateMethod(ParametersDefault.gBKLoaderMethodCDSToECName());
 		}
-		Object[] a1 = {progress.getStep()};
-		progress.finish(a1);
+		progress.finish(progress.getStep());
 	}
 }

@@ -1,27 +1,25 @@
 /*
- *                    BioJava development code
- *
- * This code may be freely distributed and modified under the
- * terms of the GNU Lesser General Public Licence.  This should
- * be distributed with the code.  If you do not have a copy,
- * see:
- *
- *      http://www.gnu.org/copyleft/lesser.html
- *
- * Copyright for this code is held jointly by the individual
- * authors.  These should be listed in @author doc comments.
- *
- * For more information on the BioJava project and its aims,
- * or to join the biojava-l mailing list, visit the home page
+ * BioJava development code
+ * 
+ * This code may be freely distributed and modified under the terms of the GNU Lesser General Public Licence. This
+ * should be distributed with the code. If you do not have a copy, see:
+ * 
+ * http://www.gnu.org/copyleft/lesser.html
+ * 
+ * Copyright for this code is held jointly by the individual authors. These should be listed in @author doc comments.
+ * 
+ * For more information on the BioJava project and its aims, or to join the biojava-l mailing list, visit the home page
  * at:
- *
- *      http://www.biojava.org/
- *
+ * 
+ * http://www.biojava.org/
+ * 
  */
 
 package org.cycads.loaders.gff3;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +43,7 @@ import org.biojava.utils.ParserException;
  * 
  * @author Matthew Pocock
  */
-public class GFF3Parser
-{
+public class GFF3Parser {
 	private GFFErrorHandler	errors	= GFFErrorHandler.ABORT_PARSING;
 
 	/**
@@ -76,8 +73,13 @@ public class GFF3Parser
 	 *             error
 	 */
 
-	public void parse(BufferedReader bReader, GFF3DocumentHandler handler, String locator)
-			throws IOException, BioException, ParserException {
+	public void parse(File file, GFF3DocumentHandler handler, String locator) throws IOException, BioException,
+			ParserException {
+		parse(new BufferedReader(new FileReader(file)), handler, locator);
+	}
+
+	public void parse(BufferedReader bReader, GFF3DocumentHandler handler, String locator) throws IOException,
+			BioException, ParserException {
 		handler.startDocument(locator);
 		ArrayList aList = new ArrayList();
 		int lineNum = 0;

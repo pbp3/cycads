@@ -7,8 +7,7 @@ import javax.swing.JProgressBar;
 
 import org.cycads.general.Messages;
 
-public class ProgressBar implements Progress
-{
+public class ProgressBar implements Progress {
 	JProgressBar	progressBar;
 	int				step	= 0;
 
@@ -57,6 +56,11 @@ public class ProgressBar implements Progress
 			str += (Messages.getProgressSeparatorObjects() + o);
 		}
 		finish(str);
+	}
+
+	public void finish(int step) {
+		Object[] a1 = {step};
+		finish(a1);
 	}
 
 	public void init(Object[] a) {

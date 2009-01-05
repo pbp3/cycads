@@ -13,9 +13,16 @@ import org.cycads.entities.biojava.Method;
 import org.cycads.entities.biojava.MethodType;
 import org.cycads.entities.biojava.Organism;
 import org.cycads.exceptions.DBObjectNotFound;
+import org.cycads.general.CacheCleanerListener;
 
-public abstract class Arguments
-{
+public abstract class Arguments {
+
+	public static Arguments getInstanceDefault() {
+		return new ArgumentsBJ();
+	}
+
+	public abstract CacheCleanerListener getCacheCleanerSession();
+
 	public static File getFileToOpen(String[] args, int pos, String fileNameDefault, String fileChooserMsg) {
 		String fileName;
 		if (args.length > pos) {
@@ -171,6 +178,20 @@ public abstract class Arguments
 			}
 		}
 		return new Integer(value);
+	}
+
+	public static String getString(String[] args, int pos, String messageDefault, String valueDefault) {
+		String value;
+		if (args.length > pos) {
+			value = args[pos];
+		}
+		else {
+			value = JOptionPane.showInputDialog(messageDefault, valueDefault);
+			if (value == null) {
+				return null;
+			}
+		}
+		return value;
 	}
 
 	public static Boolean getBoolean(String[] args, int pos, String messageDefault) {

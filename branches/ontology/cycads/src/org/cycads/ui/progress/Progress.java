@@ -3,8 +3,7 @@
  */
 package org.cycads.ui.progress;
 
-public interface Progress
-{
+public interface Progress {
 	public void setTotalSteps(int totalSteps);
 
 	public void completeStep();
@@ -20,6 +19,8 @@ public interface Progress
 	public void init(String beginMsg);
 
 	public void finish();
+
+	public void finish(int step);
 
 	public void finish(Object[] a);
 
