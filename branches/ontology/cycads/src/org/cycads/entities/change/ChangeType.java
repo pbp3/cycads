@@ -67,8 +67,8 @@ public final class ChangeType implements Serializable
 	private final Field				ourField;
 	private final ChangeType		superType;
 
-	public static final ChangeType	NOTE	= new ChangeType("the associated note has changed",
-												"org.cycads.entities.note.NotesContainer", "NOTE");
+	public static final ChangeType	NOTE	= new ChangeType("the associated note has changed", ChangeType.class,
+												"NOTE");
 
 	/**
 	 * Constant ChangeType field which indicates that a change has occured which can't otherwise be represented. Please

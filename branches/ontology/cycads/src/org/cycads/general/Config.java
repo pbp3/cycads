@@ -7,7 +7,8 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
-public class Config {
+public class Config
+{
 	private static final String			BUNDLE_NAME						= "config";											//$NON-NLS-1$
 
 	private static final ResourceBundle	RESOURCE_BUNDLE					= ResourceBundle.getBundle(BUNDLE_NAME);
@@ -16,12 +17,12 @@ public class Config {
 	public static List<String>			BIOCYC_RECORD_TYPES				= getStrings("BioCycRecord.Type.value");
 	public static List<String>			SEQUENCEFEATURE_TAG_PRODUCT_IDS	= getStrings("SequenceFeature.Tag.ProductId.value");
 
-	// public static List<Pattern> GFF3_GENE_DBXREF_PATTERNS = getPatterns("gff3.gene.dbxref.regex");
-	// public static List<String> GFF3_GENE_DBXREF_DBNAMES = getStrings("gff3.gene.dbxref.dbName");
-	// public static List<Pattern> GFF3_CDS_DBXREF_PATTERNS = getPatterns("gff3.cds.dbxref.regex");
-	// public static List<String> GFF3_CDS_DBXREF_DBNAMES = getStrings("gff3.cds.dbxref.dbName");
-	// public static List<Pattern> GFF3_MRNA_DBXREF_PATTERNS = getPatterns("gff3.mrna.dbxref.regex");
-	// public static List<String> GFF3_MRNA_DBXREF_DBNAMES = getStrings("gff3.mrna.dbxref.dbName");
+	// public static List<Pattern> GFF3_GENE_DBXREF_PATTERNS = getPatterns("gff3.file.gene.dbxref.regex");
+	// public static List<String> GFF3_GENE_DBXREF_DBNAMES = getStrings("gff3.file.gene.dbxref.dbName");
+	// public static List<Pattern> GFF3_CDS_DBXREF_PATTERNS = getPatterns("gff3.file.cds.dbxref.regex");
+	// public static List<String> GFF3_CDS_DBXREF_DBNAMES = getStrings("gff3.file.cds.dbxref.dbName");
+	// public static List<Pattern> GFF3_MRNA_DBXREF_PATTERNS = getPatterns("gff3.file.mrna.dbxref.regex");
+	// public static List<String> GFF3_MRNA_DBXREF_DBNAMES = getStrings("gff3.file.mrna.dbxref.dbName");
 
 	private Config() {
 	}
@@ -290,28 +291,109 @@ public class Config {
 		return getString("gff3.file.CDSTagExpression");
 	}
 
-	public static String gff3NoteIdExpression() {
-		return getString("gff3.file.note.id.expression");
-	}
-
-	public static String gff3NoteParentExpression() {
-		return getString("gff3.file.note.parent.expression");
-	}
-
+	//	public static String gff3NoteIdExpression() {
+	//		return getString("gff3.file.note.id.expression");
+	//	}
+	//
+	//	public static String gff3NoteParentExpression() {
+	//		return getString("gff3.file.note.parent.expression");
+	//	}
+	//
 	public static String gff3NoteDBXRefExpression() {
-		return getString("gff3.file.note.dbxref.expression");
+		return getString("gff3.file.note.dbxref.regex");
 	}
 
-	public static String[] gff3GeneDBXRefDBName(String tagNote) {
-		return transforms(tagNote, GFF3_GENE_DBXREF_PATTERNS, GFF3_GENE_DBXREF_DBNAMES);
+	public static String[] gff3GeneDBXRefDBName(String tagNote, String method) {
+		if (method != null && method.length() > 0) {
+			return transforms(tagNote, getPatterns("gff3.file.gene.dbxref.regex." + method),
+				getStrings("gff3.file.gene.dbxref.dbName." + method));
+		}
+		else {
+			return transforms(tagNote, getPatterns("gff3.file.gene.dbxref.regex"),
+				getStrings("gff3.file.gene.dbxref.dbName"));
+		}
 	}
 
-	public static String[] gff3CDSDBXRefDBName(String tagNote) {
-		return transforms(tagNote, GFF3_CDS_DBXREF_PATTERNS, GFF3_CDS_DBXREF_DBNAMES);
+	public static String[] gff3CDSDBXRefDBName(String tagNote, String method) {
+		if (method != null && method.length() > 0) {
+			return transforms(tagNote, getPatterns("gff3.file.cds.dbxref.regex." + method),
+				getStrings("gff3.file.cds.dbxref.dbName." + method));
+		}
+		else {
+			return transforms(tagNote, getPatterns("gff3.file.cds.dbxref.regex"),
+				getStrings("gff3.file.cds.dbxref.dbName"));
+		}
 	}
 
-	public static String[] gff3MRNADBXRefDBName(String tagNote) {
-		return transforms(tagNote, GFF3_MRNA_DBXREF_PATTERNS, GFF3_MRNA_DBXREF_DBNAMES);
+	public static String[] gff3MRNADBXRefDBName(String tagNote, String method) {
+		if (method != null && method.length() > 0) {
+			return transforms(tagNote, getPatterns("gff3.file.mrna.dbxref.regex." + method),
+				getStrings("gff3.file.mrna.dbxref.dbName." + method));
+		}
+		else {
+			return transforms(tagNote, getPatterns("gff3.file.mrna.dbxref.regex"),
+				getStrings("gff3.file.mrna.dbxref.dbName"));
+		}
+	}
+
+	public static String gff3GeneFunctionExpression() {
+		return getString("gff3.file.gene.note.function.regex");
+	}
+
+	public static String gff3GeneExcludeExpression() {
+		return getString("gff3.file.gene.note.exclude.regex");
+	}
+
+	public static String gff3CDSFunctionExpression() {
+		return getString("gff3.file.cds.note.function.regex");
+	}
+
+	public static String gff3CDSExcludeExpression() {
+		return getString("gff3.file.cds.note.exclude.regex");
+	}
+
+	public static String gff3MRNAFunctionExpression() {
+		return getString("gff3.file.mrna.note.function.regex");
+	}
+
+	public static String gff3MRNAExcludeExpression() {
+		return getString("gff3.file.mrna.note.exclude.regex");
+	}
+
+	public static String gff3MRNAIdExpression() {
+		return getString("gff3.file.mrna.note.id.regex");
+	}
+
+	public static String gff3ExonParentAccesionExpression() {
+		return getString("gff3.file.exon.note.parent.regex");
+	}
+
+	public static String gff3MRNAParentAccesionExpression() {
+		return getString("gff3.file.mrna.note.parent.regex");
+	}
+
+	public static String gff3CDSParentAccesionExpression() {
+		return getString("gff3.file.cds.note.parent.regex");
+	}
+
+	public static String gff3MRNAParentDB() {
+		return getString("gff3.file.mrna.note.parent.dbName");
+	}
+
+	public static String gff3CDSParentDB() {
+		return getString("gff3.file.cds.note.parent.dbName");
+	}
+
+	public static String gff3LoaderFileName() {
+		return getString("gff3.loader.fileName");
+	}
+
+	public static int gff3LoaderOrganismNumber() {
+		return Integer.parseInt(getString("gff3.loader.organismNumber"));
+	}
+
+	public static String gff3LoaderSeqDBName() {
+		return getString("gff3.loader.seqDBName");
 	}
 
 	// public static String gff3MethodForDBLink()

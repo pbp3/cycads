@@ -3,7 +3,6 @@
  */
 package org.cycads.entities.sequence.BJ;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -13,12 +12,16 @@ import org.biojavax.bio.taxa.NCBITaxon;
 import org.cycads.entities.annotation.BJ.DBRecordBJ;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.exceptions.DBObjectNotFound;
+import org.cycads.general.ParametersDefault;
 import org.cycads.general.biojava.BioJavaxSession;
 import org.cycads.general.biojava.BioSql;
 import org.hibernate.Query;
 
 public class NCBIOrganismBJ implements Organism<ThinSequenceBJ>
 {
+
+	static int	seqVersionDeafult	= ParametersDefault.sequenceVersion();
+
 	NCBITaxon	taxon;
 
 	public NCBIOrganismBJ(NCBITaxon taxon) {
@@ -73,19 +76,20 @@ public class NCBIOrganismBJ implements Organism<ThinSequenceBJ>
 		return seqs;
 	}
 
-	@Override
-	public ThinSequenceBJ getOrCreateSequence(String seqAccession, int version) {
-		ThinSequenceBJ seq;
-		int seqId = BioSql.getSequenceId(seqAccession, version, RichObjectFactory.getDefaultNamespace());
-		if (seqId > 0) {
-			//there is in the database: get the sequence
-			return new ThinSequenceBJ(seqId, this);
-		}
-		else {
-			//create in the database
-			seq = this.createSequence(seqAccession, version);
+	public ThinSequenceBJ getOrCreateSequence(String seqDatabase, String seqAccession, int version) {
+		ThinSequenceBJ seq = getSequence(seqDatabase, seqAccession);
+		if (seq == null) {
+			seq = createSequence(seqAccession, version);
+			if (!seqDatabase.equals(RichObjectFactory.getDefaultNamespace())) {
+				seq.addDBRecord(seqDatabase, seqAccession);
+			}
 		}
 		return seq;
+	}
+
+	@Override
+	public ThinSequenceBJ getOrCreateSequence(String seqDatabase, String seqAccession) {
+		return getOrCreateSequence(seqDatabase, seqAccession, seqVersionDeafult);
 	}
 
 	private ThinSequenceBJ createSequence(String seqAccession, int version) {
@@ -97,14 +101,32 @@ public class NCBIOrganismBJ implements Organism<ThinSequenceBJ>
 	}
 
 	@Override
-	public Collection<ThinSequenceBJ> getSequences(String seqDatabase, String seqAccession) {
-		ArrayList<ThinSequenceBJ> ret = new ArrayList<ThinSequenceBJ>();
-		Collection<Integer> seqIds = BioSql.getSequencesIdByDBXRef(DBRecordBJ.getOrCreateDBRecordBJ(seqDatabase,
-			seqAccession).getCrossRef(), this.getTaxon());
-		for (int seqId : seqIds) {
-			ret.add(new ThinSequenceBJ(seqId, this));
-		}
-		return ret;
+	public ThinSequenceBJ getSequence(String seqDatabase, String seqAccession) {
+		return getSequence(seqDatabase, seqAccession, seqVersionDeafult);
 	}
 
+	public ThinSequenceBJ getSequence(String seqDatabase, String seqAccession, int version) {
+		if (seqDatabase.equals(RichObjectFactory.getDefaultNamespace())) {
+			//search with internal id
+			int seqId = BioSql.getSequenceId(seqAccession, version, RichObjectFactory.getDefaultNamespace());
+			if (seqId > 0) {
+				//there is in the database: get the sequence
+				return new ThinSequenceBJ(seqId, this);
+			}
+			else {
+				return null;
+			}
+		}
+		else {
+			Collection<Integer> seqIds = BioSql.getSequencesIdByDBXRef(DBRecordBJ.getOrCreateDBRecordBJ(seqDatabase,
+				seqAccession).getCrossRef(), this.getTaxon());
+			if (seqIds.size() == 1) {
+				return new ThinSequenceBJ(seqIds.iterator().next(), this);
+			}
+			if (seqIds.isEmpty()) {
+				return null;
+			}
+			throw new RuntimeException("External ID points to more than one sequence.");
+		}
+	}
 }

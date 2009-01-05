@@ -25,7 +25,8 @@ import org.cycads.general.Config;
 import org.cycads.general.ParametersDefault;
 import org.cycads.ui.progress.Progress;
 
-public class GFF3Loader implements GFF3DocumentHandler {
+public class GFF3Loader implements GFF3DocumentHandler
+{
 	Pattern								genePattern					= Pattern.compile(Config.gff3GeneTagExpression());
 	Pattern								mRNAPattern					= Pattern.compile(Config.gff3MRNATagExpression());
 	Pattern								exonPattern					= Pattern.compile(Config.gff3ExonTagExpression());
@@ -125,7 +126,7 @@ public class GFF3Loader implements GFF3DocumentHandler {
 					isGeneNote = false;
 				}
 				else {
-					for (String dbName : Config.gff3GeneDBXRefDBName(noteType)) {
+					for (String dbName : Config.gff3GeneDBXRefDBName(noteType, record.getSource())) {
 						// for (int i = 0; i < geneDBXREFPatterns.length; i++) {
 						// if (geneDBXREFPatterns[i].matcher(noteType).matches()) {
 						subseq.addDBRecord(dbName, noteValue);
@@ -208,7 +209,7 @@ public class GFF3Loader implements GFF3DocumentHandler {
 						isMRNANote = false;
 					}
 					else {
-						for (String dbName : Config.gff3MRNADBXRefDBName(noteType)) {
+						for (String dbName : Config.gff3MRNADBXRefDBName(noteType, record.getSource())) {
 							// for (int i = 0; i < mRNADBXREFPatterns.length; i++) {
 							// if (mRNADBXREFPatterns[i].matcher(noteType).matches()) {
 							subseq.addDBRecord(dbName, noteValue);
@@ -230,7 +231,7 @@ public class GFF3Loader implements GFF3DocumentHandler {
 
 	private void handleCDS(GFF3Record record) {
 		Sequence seq = getSequence(record.getSequenceID());
-		CDS cds;
+		CDS cds = null;
 		// get MRNA Parent SubSequence
 		Subsequence subseq = null;
 		Collection<Note> notes = record.getNotes();
@@ -275,7 +276,7 @@ public class GFF3Loader implements GFF3DocumentHandler {
 					isCDSNote = false;
 				}
 				else {
-					for (String dbName : Config.gff3CDSDBXRefDBName(noteType)) {
+					for (String dbName : Config.gff3CDSDBXRefDBName(noteType, record.getSource())) {
 						// for (int i = 0; i < cdsDBXREFPatterns.length; i++) {
 						// if (cdsDBXREFPatterns[i].matcher(noteType).matches()) {
 						subseq.addDBRecord(dbName, noteValue);
@@ -326,28 +327,14 @@ public class GFF3Loader implements GFF3DocumentHandler {
 		}
 	}
 
-	private Sequence getSequence(String sequenceID) throws InvalidSequence {
+	private Sequence getSequence(String sequenceID) {
 		if (!sequenceID.equals(lastSeqAccession)) {
 			lastSeqAccession = sequenceID;
-			if (ParametersDefault.getNameSpaceDefault().equals(seqDatabase)) {
-				// sequence accession in the database
-				lastSequence = organism.getOrCreateSequence(sequenceID, seqVersionDefault);
+			if (createSequence) {
+				lastSequence = organism.getOrCreateSequence(seqDatabase, sequenceID);
 			}
 			else {
-				// sequence accession is external
-				Collection<Sequence> seqs = organism.getSequences(seqDatabase, sequenceID);
-				// verify creation of the sequence
-				if (seqs.size() == 0 && createSequence) {
-					lastSequence = organism.getOrCreateSequence(sequenceID, seqVersionDefault);
-					lastSequence.addDBRecord(seqDatabase, sequenceID);
-				}
-				else if (seqs.size() != 1) {
-					throw new InvalidSequence(seqDatabase, sequenceID);
-				}
-				else {
-					// get the only one
-					lastSequence = seqs.iterator().next();
-				}
+				lastSequence = organism.getSequence(seqDatabase, sequenceID);
 			}
 		}
 		return lastSequence;

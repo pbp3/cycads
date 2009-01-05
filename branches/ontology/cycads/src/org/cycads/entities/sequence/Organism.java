@@ -5,7 +5,6 @@ package org.cycads.entities.sequence;
 
 import java.util.Collection;
 
-
 public interface Organism<SEQ extends Sequence< ? , ? , ? , ? >>
 {
 
@@ -17,8 +16,8 @@ public interface Organism<SEQ extends Sequence< ? , ? , ? , ? >>
 
 	public int getId();
 
-	public SEQ getOrCreateSequence(String seqAccession, int version);
+	public SEQ getOrCreateSequence(String seqDatabase, String seqAccession);
 
-	public Collection<SEQ> getSequences(String seqDatabase, String seqAccession);
+	public SEQ getSequence(String seqDatabase, String seqAccession);
 
 }

@@ -5,7 +5,8 @@ import java.text.MessageFormat;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-public class ParametersDefault {
+public class ParametersDefault
+{
 	private static final String			BUNDLE_NAME		= "parametersDefault";						//$NON-NLS-1$
 
 	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
@@ -35,6 +36,10 @@ public class ParametersDefault {
 
 	public static String getMethodNameDefault() {
 		return getString("MethodName.General");
+	}
+
+	public static int sequenceVersion() {
+		return Integer.parseInt(getString("General.sequence.version"));
 	}
 
 	// LoadTaxonomy
