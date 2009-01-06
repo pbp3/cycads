@@ -3,6 +3,9 @@
  */
 package beta;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,6 +22,10 @@ public class PFFileGenerator
 		this.out = out;
 	}
 
+	protected PFFileGenerator(File fileOut) throws FileNotFoundException {
+		this(new PrintStream(new FileOutputStream(fileOut, false)));
+	}
+
 	public void write(CDSSQL cds) {
 
 		out.println("ID" + "\t\t" + cds.acypi);
@@ -31,18 +38,22 @@ public class PFFileGenerator
 
 		Collection<KOAnnot> koAnnots = cds.kOAnnots;
 		HashSet<String> ecs = new HashSet<String>();
+		HashSet<String> kos = new HashSet<String>();
 		ArrayList<String> dbLinks = new ArrayList<String>();
 		for (KOAnnot koAnnot : koAnnots) {
 			KO ko = koAnnot.ko;
-			if (ko.getDefinition() != null && ko.getDefinition().length() > 0) {
-				out.println("FUNCTION" + "\t" + ko.getDefinition());
-				out.println("FUNCTION-COMMENT" + "\t" + "Description of KO " + ko.getId() + " annotated by "
-					+ koAnnot.method.description);
+			if (kos.add(ko.getId())) {
+				if (ko.getDefinition() != null && ko.getDefinition().length() > 0) {
+					out.println("FUNCTION" + "\t" + ko.getDefinition());
+					out.println("FUNCTION-COMMENT" + "\t" + "Description of KO " + ko.getId());
+					//					+ " annotated by "
+					//					+ koAnnot.method.description);
+				}
+				for (EC ec : ko.getECs()) {
+					ecs.add(ec.getId());
+				}
+				dbLinks.add("KO:" + ko.getId());
 			}
-			for (EC ec : ko.getECs()) {
-				ecs.add(ec.getId());
-			}
-			dbLinks.add("KO:" + ko.getId());
 		}
 
 		for (String ec : ecs) {
@@ -67,5 +78,8 @@ public class PFFileGenerator
 			out.println("DBLINK" + "\t\t" + dbLink);
 		}
 
+		out.println("//");
+		out.println();
+		out.flush();
 	}
 }

@@ -25,6 +25,11 @@ public class KOSQL implements KO
 		this.id = id;
 	}
 
+	protected KOSQL(String id, String definition) {
+		this.id = id;
+		this.definition = definition;
+	}
+
 	@Override
 	public Collection<COG> getCOGs() {
 		throw new MethodNotImplemented();
