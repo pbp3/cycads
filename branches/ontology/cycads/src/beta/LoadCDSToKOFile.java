@@ -13,15 +13,15 @@ import org.cycads.ui.Arguments;
 import org.cycads.ui.progress.Progress;
 import org.cycads.ui.progress.ProgressPrintInterval;
 
-public class LoadCDSToKOFile {
+public class LoadCDSToKOFile
+{
 	public static void main(String[] args) {
-		File file = Arguments.getFileToOpen(args, 0, ParametersDefault.cdsToKOLoaderFileName(),
-			Messages.cdsToKOChooseFile());
+		File file = Arguments.getFileToOpen(args, 0, "", Messages.cdsToKOChooseFile());
 		if (file == null) {
 			return;
 		}
 
-		int method = Arguments.getInteger(args, 1, Messages.cdsToKOChooseMethod(), 1);
+		int method = Arguments.getInteger(args, 1, Messages.cdsToKOChooseMethod(), 0);
 		if (method == 0) {
 			return;
 		}

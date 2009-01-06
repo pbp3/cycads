@@ -10,7 +10,8 @@ import java.sql.Statement;
 import org.cycads.general.ParametersDefault;
 import org.cycads.ui.progress.Progress;
 
-public class CDSToKOLoader extends FileLoaderLine {
+public class CDSToKOLoader extends FileLoaderLine
+{
 	int			method;
 	Connection	con;
 	Statement	stmt;
@@ -33,8 +34,8 @@ public class CDSToKOLoader extends FileLoaderLine {
 			String[] sep = line.split(ParametersDefault.cdsToKOLoaderSeparator());
 			if (sep.length == 2) {
 				try {
-					stmt.executeUpdate("INSERT INTO CDS_KO(CDS_ACCESSION, KO_ACCESSION, METHOD_ID) VALUES('" + zzzzz sep[0]
-						+ "','" + sep[1] + "'," + method + ")");
+					stmt.executeUpdate("INSERT INTO CDS_KO(ACYPI, KO_ACCESSION, METHOD_ID) VALUES('" + sep[0] + "','"
+						+ sep[1] + "'," + method + ")");
 					progress.completeStep();
 				}
 				catch (Exception e) {
