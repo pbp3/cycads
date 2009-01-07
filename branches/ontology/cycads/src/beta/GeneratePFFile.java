@@ -18,7 +18,6 @@ import org.cycads.ui.progress.ProgressPrintInterval;
 
 public class GeneratePFFile
 {
-
 	public static void main(String[] args) {
 		File file = Arguments.getFileToSave(args, 0, "", "pf file to generate");
 		Progress progress = new ProgressPrintInterval(System.out, 100, "Generating pf file " + file.getPath(),
@@ -36,10 +35,15 @@ public class GeneratePFFile
 				String name = rs.getString("Name");
 				methods.put(id, new Method(id, name));
 			}
-			rs = stmt.executeQuery("select ACYPI, XP, GLEAN FROM CDS");
+			rs = stmt.executeQuery("select * FROM CDS");
 			ArrayList<CDSSQL> cdss = new ArrayList<CDSSQL>();
 			while (rs.next()) {
-				cdss.add(new CDSSQL(rs.getString(1), rs.getString(2), rs.getString(3)));
+				CDSSQL cds = new CDSSQL(rs.getString("ACYPI"), rs.getString("XP"), rs.getString("GLEAN"));
+				cds.setName(rs.getString("NAME"));
+				cds.setGeneId(rs.getString("DBXREF_GENEID"));
+				cds.setLocGene(rs.getString("LOC_GENE"));
+				cds.setGeneComment(rs.getString("GENE_COMMENT"));
+				cdss.add(cds);
 			}
 			Hashtable<String, KOSQL> kos = new Hashtable<String, KOSQL>();
 			for (CDSSQL cds : cdss) {

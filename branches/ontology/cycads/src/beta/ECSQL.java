@@ -14,7 +14,7 @@ public class ECSQL implements EC
 {
 	String	id;
 
-	protected ECSQL(String id) {
+	public ECSQL(String id) {
 		this.id = id;
 	}
 

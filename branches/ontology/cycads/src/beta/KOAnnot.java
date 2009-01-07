@@ -10,7 +10,7 @@ public class KOAnnot
 	KO		ko;
 	Method	method;
 
-	protected KOAnnot(KO ko, Method method) {
+	public KOAnnot(KO ko, Method method) {
 		this.ko = ko;
 		this.method = method;
 	}

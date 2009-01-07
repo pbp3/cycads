@@ -8,9 +8,17 @@ public class Method
 	int		id;
 	String	description;
 
-	protected Method(int id, String description) {
+	public Method(int id, String description) {
 		this.id = id;
 		this.description = description;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 
 }

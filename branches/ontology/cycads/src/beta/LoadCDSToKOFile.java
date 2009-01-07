@@ -21,7 +21,7 @@ public class LoadCDSToKOFile
 			return;
 		}
 
-		int method = Arguments.getInteger(args, 1, Messages.cdsToKOChooseMethod(), 0);
+		int method = Arguments.getInteger(args, 1, "Method number:", 0);
 		if (method == 0) {
 			return;
 		}

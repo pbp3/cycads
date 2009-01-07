@@ -21,11 +21,11 @@ public class KOSQL implements KO
 	String			definition	= "";
 	ArrayList<EC>	ecs			= new ArrayList<EC>();
 
-	protected KOSQL(String id) {
+	public KOSQL(String id) {
 		this.id = id;
 	}
 
-	protected KOSQL(String id, String definition) {
+	public KOSQL(String id, String definition) {
 		this.id = id;
 		this.definition = definition;
 	}
