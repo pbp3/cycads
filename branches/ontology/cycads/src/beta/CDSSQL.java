@@ -12,7 +12,7 @@ public class CDSSQL
 	Collection<KOAnnot>	kOAnnots	= new ArrayList<KOAnnot>();
 	Collection<String>	functions	= new ArrayList<String>();
 	String				name;
-	String				geneId, locGene, geneComment;
+	String				geneId, locGene, geneComment, geneAphidDBId;
 
 	public CDSSQL(String acypi, String xp, String glean) {
 		this.acypi = acypi;
@@ -81,6 +81,14 @@ public class CDSSQL
 
 	public void setGeneComment(String geneComment) {
 		this.geneComment = geneComment;
+	}
+
+	public String getGeneAphidDBId() {
+		return geneAphidDBId;
+	}
+
+	public void setGeneAphidDBId(String geneAphidDBId) {
+		this.geneAphidDBId = geneAphidDBId;
 	}
 
 }

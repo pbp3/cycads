@@ -113,18 +113,8 @@ public class LoadGFF3Fast implements GFF3DocumentHandler
 
 				}
 				if (record.getSource().equals("GLEAN")) {
-					stmt.executeUpdate("INSERT INTO CDS(ACYPI, NAME, GLEAN, DBXREF_GENEID, LOC_GENE, GENE_COMMENT) VALUES('"
-						+ acypi
-						+ "','"
-						+ name
-						+ "','"
-						+ extDB
-						+ "','"
-						+ dbXRefGeneId
-						+ "','"
-						+ locGene
-						+ "','"
-						+ geneComment + "')");
+					stmt.executeUpdate("INSERT INTO CDS(ACYPI, NAME, GLEAN, DBXREF_GENEID, GENE_COMMENT) VALUES('"
+						+ acypi + "','" + name + "','" + extDB + "','" + dbXRefGeneId + "','" + geneComment + "')");
 				}
 				else {
 					stmt.executeUpdate("INSERT INTO CDS(ACYPI, NAME, XP,DBXREF_GENEID,LOC_GENE,GENE_COMMENT) VALUES('"
