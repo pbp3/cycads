@@ -5,39 +5,40 @@ package org.cycads.entities.sequence;
 
 import java.util.Collection;
 
-import org.cycads.entities.annotation.AnnotFeature;
-import org.cycads.entities.annotation.AnnotFeatureSource;
-import org.cycads.entities.annotation.AnnotOntology;
-import org.cycads.entities.annotation.AnnotOntologySource;
+import org.cycads.entities.annotation.AnnotationFilter;
 import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.annotation.CDS;
-import org.cycads.entities.annotation.DBRecord;
-import org.cycads.entities.annotation.DBRecordsContainer;
-import org.cycads.entities.annotation.Gene;
-import org.cycads.entities.annotation.Ontology;
-import org.cycads.entities.annotation.RNA;
+import org.cycads.entities.note.Noteble;
+import org.cycads.entities.note.Type;
+import org.cycads.entities.synonym.Dbxref;
+import org.cycads.entities.synonym.HasSynonyms;
 
-public interface Subsequence<OA extends AnnotOntology<OA, ? extends Subsequence< ? , ? , ? , ? , ? , ? , ? , ? , ? >, O, M>, O extends Ontology< ? , ? , ? , ? >, M extends AnnotationMethod, R extends DBRecord< ? >, SEQ extends Sequence< ? , ? , ? , ? >, F extends AnnotFeature< ? , ? , ? >, C extends CDS< ? , ? , ? >, RN extends RNA< ? , ? , ? >, G extends Gene< ? , ? , ? >>
-		extends AnnotFeatureSource<F, C, RN, G, M>, AnnotOntologySource<OA, O, M>, DBRecordsContainer<R> {
+public interface Subsequence<X extends Dbxref, T extends Type, M extends AnnotationMethod> extends Noteble, HasSynonyms
+{
 
 	public Collection<Intron> getIntrons();
 
-	// public boolean addIntron(Intron intron);
-	//
-	// public Intron addIntron(int startPos, int endPos);
-	//
 	public boolean isPositiveStrand();
 
-	public int getEnd();
-
 	public int getStart();
+
+	public int getEnd();
 
 	public int getMinPosition();
 
 	public int getMaxPosition();
 
-	public SEQ getSequence();
+	public Sequence< ? extends X, ? extends T, ? extends M> getSequence();
 
-	public boolean contains(Subsequence< ? , ? , ? , ? , ? , ? , ? , ? , ? > subseq);
+	public boolean contains(Subsequence< ? extends X, ? extends T, ? extends M> subseq);
+
+	public Collection<Subsequence< ? extends X, ? extends T, ? extends M>> getSubseqAnnotations(X synonym);
+
+	public Collection<Subsequence< ? extends X, ? extends T, ? extends M>> getSubseqAnnotations(T type);
+
+	public Collection<Subsequence< ? extends X, ? extends T, ? extends M>> getSubseqAnnotations(M method);
+
+	public Collection<Subsequence< ? extends X, ? extends T, ? extends M>> getSubseqAnnotations(M method, T type);
+
+	public Collection<Subsequence< ? extends X, ? extends T, ? extends M>> getSubseqAnnotations(AnnotationFilter filter);
 
 }

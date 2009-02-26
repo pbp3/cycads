@@ -7,7 +7,7 @@ import org.biojava.utils.AbstractChangeable;
 import org.cycads.entities.change.ChangeListener;
 import org.cycads.entities.change.ChangeType;
 import org.cycads.entities.note.Note;
-import org.cycads.entities.note.NoteSource;
+import org.cycads.entities.note.Noteble;
 import org.cycads.entities.note.NotesArrayList;
 import org.cycads.entities.note.NotesContainer;
 import org.cycads.entities.note.SimpleNote;
@@ -17,7 +17,7 @@ import org.cycads.entities.note.SimpleNote;
  * 
  * @author Matthew Pocock
  */
-public interface GFF3Record<N extends Note< ? >> extends NotesContainer<N>, NoteSource
+public interface GFF3Record<N extends Note< ? >> extends NotesContainer<N>, Noteble
 {
 	public String getSequenceID();
 

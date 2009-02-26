@@ -3,17 +3,10 @@
  */
 package org.cycads.entities.note;
 
-import org.cycads.general.ParametersDefault;
-
-public interface Note<S extends NoteSource< ? >>
+public interface Note
 {
-
-	public static final String	TYPE_FUCNTION	= ParametersDefault.annotationNoteTypeFunction();
-
-	public String getType();
+	public Type getType();
 
 	public String getValue();
-
-	public S getHolder();
 
 }

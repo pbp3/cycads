@@ -12,7 +12,7 @@ import org.cycads.entities.change.ChangeListener;
 import org.cycads.entities.change.ChangeType;
 import org.cycads.general.biojava.TermsAndOntologies;
 
-public class NotesToAnnotationBJ<N extends Note< ? >, S extends NoteSource< ? >>
+public class NotesToAnnotationBJ<N extends Note< ? >, S extends Noteble< ? >>
 		implements ChangeListener<N>, org.biojava.utils.ChangeListener
 {
 	NotesContainer<N>	notes;
@@ -27,14 +27,14 @@ public class NotesToAnnotationBJ<N extends Note< ? >, S extends NoteSource< ? >>
 		notes.addChangeListener(this, ChangeType.NOTE);
 	}
 
-	public static <N extends Note< ? >, H extends NoteSource< ? >> NotesHashTable<N> createNotesHashTable(
+	public static <N extends Note< ? >, H extends Noteble< ? >> NotesHashTable<N> createNotesHashTable(
 			RichAnnotation annotation, H source) {
 		NotesHashTable<N> notes = new NotesHashTable<N>();
 		new NotesToAnnotationBJ<N, H>(notes, annotation, source);
 		return notes;
 	}
 
-	public static <N extends Note< ? >, H extends NoteSource< ? >> NotesArrayList<N> createNotesArrayList(
+	public static <N extends Note< ? >, H extends Noteble< ? >> NotesArrayList<N> createNotesArrayList(
 			RichAnnotation annotation, H source) {
 		NotesArrayList<N> notes = new NotesArrayList<N>();
 		new NotesToAnnotationBJ<N, H>(notes, annotation, source);

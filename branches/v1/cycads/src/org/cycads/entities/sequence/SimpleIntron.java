@@ -3,27 +3,42 @@
  */
 package org.cycads.entities.sequence;
 
-public class SimpleIntron implements Intron {
-	int	start, end;
+public class SimpleIntron implements Intron
+{
+	int	position, length;
 
-	public SimpleIntron(int start, int end) {
-		this.start = start;
-		this.end = end;
+	public SimpleIntron(int position, int length) {
+		this.position = position;
+		this.length = length;
 	}
 
+	@Override
+	public int getLength() {
+		return length;
+	}
+
+	@Override
+	public int getPosition() {
+		return position;
+	}
+
+	@Override
 	public int getStart() {
-		return start;
+		return position;
 	}
 
+	@Override
 	public int getEnd() {
-		return end;
+		return position - length - 1;
 	}
 
-	public int getMin() {
+	@Override
+	public int getMinPosition() {
 		return getStart() < getEnd() ? getStart() : getEnd();
 	}
 
-	public int getMax() {
+	@Override
+	public int getMaxPosition() {
 		return getStart() > getEnd() ? getStart() : getEnd();
 	}
 
@@ -37,14 +52,15 @@ public class SimpleIntron implements Intron {
 	}
 
 	public int compareTo(Intron o) {
-		if (this.getMin() - o.getMin() != 0) {
-			return this.getMin() - o.getMin();
+		if (this.getMinPosition() - o.getMinPosition() != 0) {
+			return this.getMinPosition() - o.getMinPosition();
 		}
-		return this.getMax() - o.getMax();
+		return this.getMaxPosition() - o.getMaxPosition();
 	}
 
+	@Override
 	public boolean contains(Intron intron) {
-		return this.getMin() <= intron.getMin() && this.getMax() >= intron.getMax();
+		return this.getMinPosition() <= intron.getMinPosition() && this.getMaxPosition() >= intron.getMaxPosition();
 	}
 
 }

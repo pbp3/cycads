@@ -3,15 +3,14 @@
  */
 package org.cycads.entities.annotation;
 
-import org.cycads.entities.note.Note;
-import org.cycads.entities.note.NotesSourceContainer;
+import org.cycads.entities.note.Noteble;
+import org.cycads.entities.note.Type;
+import org.cycads.entities.synonym.HasSynonyms;
 
-public interface Annotation<ANNOTATION_TYPE extends Annotation< ? , ? , ? >, SourceType, M extends AnnotationMethod>
-		extends NotesSourceContainer<Note<ANNOTATION_TYPE>>
+public interface Annotation<T extends Type, M extends AnnotationMethod> extends Noteble, HasSynonyms
 {
-
 	public M getAnnotationMethod();
 
-	public SourceType getSource();
+	public T getType();
 
 }

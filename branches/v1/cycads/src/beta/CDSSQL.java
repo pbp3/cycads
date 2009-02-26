@@ -4,13 +4,12 @@
 package beta;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class CDSSQL
 {
 	String				acypi, xp, glean;
-	Collection<KOAnnot>	kOAnnots	= new ArrayList<KOAnnot>();
-	Collection<String>	functions	= new ArrayList<String>();
+	ArrayList<KOAnnot>	kOAnnots	= new ArrayList<KOAnnot>();
+	ArrayList<String>	functions	= new ArrayList<String>();
 	String				name;
 	String				geneId, locGene, geneComment, geneAphidDBId;
 
@@ -51,11 +50,11 @@ public class CDSSQL
 		return glean;
 	}
 
-	public Collection<KOAnnot> getKOAnnots() {
+	public ArrayList<KOAnnot> getKOAnnots() {
 		return kOAnnots;
 	}
 
-	public Collection<String> getFunctions() {
+	public ArrayList<String> getFunctions() {
 		return functions;
 	}
 

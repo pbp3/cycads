@@ -5,19 +5,35 @@ package org.cycads.entities.sequence;
 
 import java.util.Collection;
 
-public interface Organism<SEQ extends Sequence< ? , ? , ? , ? >>
+import org.cycads.entities.annotation.AnnotationFilter;
+import org.cycads.entities.annotation.AnnotationMethod;
+import org.cycads.entities.note.Type;
+import org.cycads.entities.synonym.Dbxref;
+
+public interface Organism<X extends Dbxref, T extends Type, M extends AnnotationMethod>
 {
-
-	public Collection<SEQ> getSequences();
-
-	public Collection<SEQ> getSequences(double version);
-
-	public String getName();
-
 	public int getId();
 
-	public SEQ getOrCreateSequence(String seqDatabase, String seqAccession);
+	public Collection<Sequence< ? extends X, ? extends T, ? extends M>> getSequences();
 
-	public SEQ getSequence(String seqDatabase, String seqAccession);
+	public Collection<Sequence< ? extends X, ? extends T, ? extends M>> getSequences(double version);
+
+	public Sequence< ? extends X, ? extends T, ? extends M> getSequence(int id);
+
+	public Sequence< ? extends X, ? extends T, ? extends M> createNewSequence(double version);
+
+	public Collection<Subsequence< ? extends X, ? extends T, ? extends M>> getSubseqAnnotations(T type);
+
+	public Collection<Subsequence< ? extends X, ? extends T, ? extends M>> getSubseqAnnotations(M method);
+
+	public Collection<Subsequence< ? extends X, ? extends T, ? extends M>> getSubseqAnnotations(M method, T type);
+
+	public Collection<Subsequence< ? extends X, ? extends T, ? extends M>> getSubseqAnnotations(AnnotationFilter filter);
+
+	public Collection<Sequence< ? extends X, ? extends T, ? extends M>> getSequences(X synonym);
+
+	public Collection<Subsequence< ? extends X, ? extends T, ? extends M>> getSubsequences(X synonym);
+
+	public Collection<Subsequence< ? extends X, ? extends T, ? extends M>> getSubseqAnnotations(X synonym);
 
 }

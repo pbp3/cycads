@@ -67,11 +67,11 @@ public class SubsequenceBJ
 		while (min <= max && i < intronsList.size()) {
 			Intron intron = intronsList.get(i);
 			i++;
-			if (min < intron.getMin()) {
+			if (min < intron.getMinPosition()) {
 				members.add(new SimpleRichLocation(new SimplePosition(min), new SimplePosition(Math.min(
-					intron.getMin() - 1, max)), rank++, strand));
+					intron.getMinPosition() - 1, max)), rank++, strand));
 			}
-			min = intron.getMax() + 1;
+			min = intron.getMaxPosition() + 1;
 		}
 		if (min <= max) {
 			members.add(new SimpleRichLocation(new SimplePosition(min), new SimplePosition(max), rank++, strand));
@@ -642,33 +642,33 @@ public class SubsequenceBJ
 		}
 		for (Intron intron : this.getIntrons()) {
 			if (intronOtherSubseq == null) {
-				return intron.getMin() > subseq.getMaxPosition();
+				return intron.getMinPosition() > subseq.getMaxPosition();
 			}
 			// get intronOtherSubseq that overlap intron
-			while (intronOtherSubseq.getMax() < intron.getMin()) {
+			while (intronOtherSubseq.getMaxPosition() < intron.getMinPosition()) {
 				if (!itSubseq.hasNext()) {
-					return intron.getMin() > subseq.getMaxPosition();
+					return intron.getMinPosition() > subseq.getMaxPosition();
 				}
 				intronOtherSubseq = itSubseq.next();
 			}
-			if (intronOtherSubseq.getMin() > intron.getMin()) {
-				return intron.getMin() > subseq.getMaxPosition();
+			if (intronOtherSubseq.getMinPosition() > intron.getMinPosition()) {
+				return intron.getMinPosition() > subseq.getMaxPosition();
 			}
 			else {
 				// intronOtherSubseq.min<=intron.min
-				while (intronOtherSubseq.getMax() < intron.getMax()) {
+				while (intronOtherSubseq.getMaxPosition() < intron.getMaxPosition()) {
 					// get nextIntron adjacent
 					if (itSubseq.hasNext()) {
 						Intron nextIntronOtherSubseq = itSubseq.next();
-						if (intronOtherSubseq.getMax() + 1 == nextIntronOtherSubseq.getMin()) {
+						if (intronOtherSubseq.getMaxPosition() + 1 == nextIntronOtherSubseq.getMinPosition()) {
 							intronOtherSubseq = nextIntronOtherSubseq;
 						}
 						else {
-							return intron.getMin() > subseq.getMaxPosition();
+							return intron.getMinPosition() > subseq.getMaxPosition();
 						}
 					}
 					else {
-						return intron.getMin() > subseq.getMaxPosition();
+						return intron.getMinPosition() > subseq.getMaxPosition();
 					}
 				}
 			}
