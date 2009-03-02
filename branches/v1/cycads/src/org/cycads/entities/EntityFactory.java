@@ -9,7 +9,7 @@ import org.cycads.entities.synonym.Dbxref;
 
 public interface EntityFactory
 {
-	public Dbxref getDbxref(String dbName, String accession);
+	public Dbxref< ? > getDbxref(String dbName, String accession);
 
 	public AnnotationMethod getAnnotationMethod(String name);
 

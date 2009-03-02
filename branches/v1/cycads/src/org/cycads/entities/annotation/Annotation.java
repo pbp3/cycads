@@ -5,12 +5,15 @@ package org.cycads.entities.annotation;
 
 import org.cycads.entities.note.Noteble;
 import org.cycads.entities.note.Type;
+import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.HasSynonyms;
 
-public interface Annotation<T extends Type, M extends AnnotationMethod> extends Noteble, HasSynonyms
+public interface Annotation<A extends Annotation< ? , ? , ? , ? >, X extends Dbxref< ? >, T extends Type, M extends AnnotationMethod>
+		extends Noteble, HasSynonyms<X>
 {
 	public M getAnnotationMethod();
 
 	public T getType();
 
+	public A getParent();
 }
