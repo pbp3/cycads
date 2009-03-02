@@ -5,35 +5,27 @@ package org.cycads.entities.sequence;
 
 import java.util.Collection;
 
-import org.cycads.entities.annotation.AnnotationFilter;
+import org.cycads.entities.annotation.Annotation;
+import org.cycads.entities.annotation.AnnotationFinder;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.Dbxref;
 
-public interface Organism<X extends Dbxref, T extends Type, M extends AnnotationMethod>
+public interface Organism<S extends Sequence< ? , ? , ? , ? , ? , ? >, SS extends Subsequence< ? , ? , ? , ? , ? >, A extends Annotation< ? , ? , ? , ? >, X extends Dbxref< ? >, T extends Type, M extends AnnotationMethod>
+		extends AnnotationFinder<A, X, T, M>
 {
 	public int getId();
 
-	public Collection<Sequence< ? extends X, ? extends T, ? extends M>> getSequences();
+	public Collection<S> getSequences();
 
-	public Collection<Sequence< ? extends X, ? extends T, ? extends M>> getSequences(double version);
+	public Collection<S> getSequences(double version);
 
-	public Sequence< ? extends X, ? extends T, ? extends M> getSequence(int id);
+	public S getSequence(int id);
 
-	public Sequence< ? extends X, ? extends T, ? extends M> createNewSequence(double version);
+	public S createNewSequence(double version);
 
-	public Collection<Subsequence< ? extends X, ? extends T, ? extends M>> getSubseqAnnotations(T type);
+	public Collection<S> getSequences(X synonym);
 
-	public Collection<Subsequence< ? extends X, ? extends T, ? extends M>> getSubseqAnnotations(M method);
-
-	public Collection<Subsequence< ? extends X, ? extends T, ? extends M>> getSubseqAnnotations(M method, T type);
-
-	public Collection<Subsequence< ? extends X, ? extends T, ? extends M>> getSubseqAnnotations(AnnotationFilter filter);
-
-	public Collection<Sequence< ? extends X, ? extends T, ? extends M>> getSequences(X synonym);
-
-	public Collection<Subsequence< ? extends X, ? extends T, ? extends M>> getSubsequences(X synonym);
-
-	public Collection<Subsequence< ? extends X, ? extends T, ? extends M>> getSubseqAnnotations(X synonym);
+	public Collection<SS> getSubsequences(X synonym);
 
 }

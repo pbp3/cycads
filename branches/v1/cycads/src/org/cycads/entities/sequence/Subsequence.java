@@ -13,7 +13,7 @@ import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.HasSynonyms;
 
-public interface Subsequence<SA extends SubseqAnnotation< ? , ? extends X, ? extends T, ? extends M>, X extends Dbxref< ? >, T extends Type, M extends AnnotationMethod>
+public interface Subsequence<S extends Sequence< ? , ? , ? , ? , ? , ? >, SA extends SubseqAnnotation< ? , ? , ? , ? , ? >, X extends Dbxref< ? >, T extends Type, M extends AnnotationMethod>
 		extends Noteble, HasSynonyms<X>, AnnotationFinder<SA, X, T, M>
 {
 
@@ -29,8 +29,8 @@ public interface Subsequence<SA extends SubseqAnnotation< ? , ? extends X, ? ext
 
 	public int getMaxPosition();
 
-	public Sequence< ? extends X, ? extends T, ? extends M> getSequence();
+	public S getSequence();
 
-	public boolean contains(Subsequence< ? , ? extends X, ? extends T, ? extends M> subseq);
+	public boolean contains(Subsequence< ? , ? , ? , ? , ? > subseq);
 
 }

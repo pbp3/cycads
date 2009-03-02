@@ -13,7 +13,7 @@ import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.HasSynonyms;
 
-public interface Sequence<O extends Organism< ? , ? , ? >, S extends Subsequence< ? , ? , ? , ? >, A extends Annotation< ? , ? , ? , ? >, X extends Dbxref< ? >, T extends Type, M extends AnnotationMethod>
+public interface Sequence<O extends Organism< ? , ? , ? , ? , ? , ? >, SS extends Subsequence< ? , ? , ? , ? , ? >, A extends Annotation< ? , ? , ? , ? >, X extends Dbxref< ? >, T extends Type, M extends AnnotationMethod>
 		extends Noteble, HasSynonyms<X>, AnnotationFinder<A, X, T, M>
 {
 
@@ -27,12 +27,14 @@ public interface Sequence<O extends Organism< ? , ? , ? >, S extends Subsequence
 
 	public String getSequenceString();
 
-	public S getSubsequence(int start, int end, Collection<Intron> introns);
+	public void setSequenceString(String seqStr);
 
-	public S createSubsequence(int start, int end, Collection<Intron> introns);
+	public SS getSubsequence(int start, int end, Collection<Intron> introns);
 
-	public Collection<S> getSubsequences(int start);
+	public SS createSubsequence(int start, int end, Collection<Intron> introns);
 
-	public Collection<S> getSubsequences(X synonym);
+	public Collection<SS> getSubsequences(int start);
+
+	public Collection<SS> getSubsequences(X synonym);
 
 }
