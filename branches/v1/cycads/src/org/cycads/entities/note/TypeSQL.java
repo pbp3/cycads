@@ -10,11 +10,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class TypeSQL implements Type
-{
-	public final static int	INVALID_ID	= -1;
+import org.cycads.general.ParametersDefault;
 
-	public final static TypeSQL NOTE_TYPE_PARENT= new TypeSQL(0, "Note type", )
+public class TypeSQL implements Type {
+	public final static int	INVALID_ID					= -1;
+
+	public final static int	NOTE_TYPE_PARENT_ID			= ParametersDefault.getNoteTypeId();
+	public final static int	ANNOTATION_TYPE_PARENT_ID	= ParametersDefault.getAnnotationTypeId();
 
 	int						id;
 	int						idParent;

@@ -9,12 +9,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
 
-import org.cycads.entities.note.Note;
 import org.cycads.entities.note.NotesSQL;
-import org.cycads.entities.note.TypeSQL;
 
-public class DbxrefSQL implements Dbxref<DbxrefSQL>
-{
+public class DbxrefSQL implements Dbxref<DbxrefSQL> {
 	public final static int	INVALID_ID	= -1;
 	String					dbName;
 	String					accession;
@@ -133,65 +130,6 @@ public class DbxrefSQL implements Dbxref<DbxrefSQL>
 			DbxrefSQL dbxref = getSynonymsSQL().addSynonym(dbName, accession);
 			dbxref.getSynonymsSQL().addSynonym(this);
 			return dbxref;
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-	}
-
-	@Override
-	public Note addNote(String noteType, String value) {
-		try {
-			return getNotesSQL().addNote(getNoteType(noteType).getId(), value);
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-	}
-
-	@Override
-	public Note getNote(String noteType, String value) {
-		try {
-			return getNotesSQL().getNote(getNoteType(noteType).getId(), value);
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-	}
-
-	@Override
-	public TypeSQL getNoteType(String noteType) {
-	}
-
-	@Override
-	public Collection<Note> getNotes() {
-		try {
-			return getNotesSQL().getNotes();
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-	}
-
-	@Override
-	public Collection<Note> getNotes(String noteType) {
-		try {
-			return getNotesSQL().getNotes(getNoteType(noteType).getId());
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-	}
-
-	@Override
-	public Collection<String> getNotesValues(String noteType) {
-		try {
-			return getNotesSQL().getNotesValues(getNoteType(noteType).getId());
 		}
 		catch (SQLException e) {
 			e.printStackTrace();

@@ -8,8 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class AnnotationMethodSQL implements AnnotationMethod
-{
+import org.cycads.entities.note.AbstractNoteble;
+
+public class AnnotationMethodSQL extends AbstractNoteble implements AnnotationMethod {
 	public final static int	INVALID_ID		= -1;
 	public final static int	WEIGHT_DEAFULT	= 0;
 
@@ -41,7 +42,7 @@ public class AnnotationMethodSQL implements AnnotationMethod
 		ResultSet rs = stmt.executeQuery("SELECT annotation_method_id,last_weight from annotation_method WHERE name='"
 			+ name + "'");
 		if (rs.next()) {
-			//if already exists, just get the id and the weight
+			// if already exists, just get the id and the weight
 			this.id = rs.getInt("annotation_method_id");
 			this.weight = rs.getInt("last_weight");
 		}
@@ -63,7 +64,7 @@ public class AnnotationMethodSQL implements AnnotationMethod
 		ResultSet rs = stmt.executeQuery("SELECT annotation_method_id,last_weight from annotation_method WHERE name='"
 			+ name + "'");
 		if (rs.next()) {
-			//if already exists, just update the weight and get the id
+			// if already exists, just update the weight and get the id
 			id = rs.getInt("annotation_method_id");
 			this.weight = rs.getInt("last_weight");
 			setWeight(weight);
@@ -118,4 +119,20 @@ public class AnnotationMethodSQL implements AnnotationMethod
 			this.weight = weight;
 		}
 	}
+
+	@Override
+	public Connection getConnection() {
+		return con;
+	}
+
+	@Override
+	public String getIdFieldName() {
+		return "annotation_method_id";
+	}
+
+	@Override
+	public String getNoteTableName() {
+		return;
+	}
+
 }
