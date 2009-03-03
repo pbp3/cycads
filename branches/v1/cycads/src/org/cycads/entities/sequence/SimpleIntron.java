@@ -5,31 +5,26 @@ package org.cycads.entities.sequence;
 
 public class SimpleIntron implements Intron
 {
-	int	position, length;
+	int	start, end;
 
-	public SimpleIntron(int position, int length) {
-		this.position = position;
-		this.length = length;
+	public SimpleIntron(int start, int end) {
+		this.start = start;
+		this.end = end;
 	}
 
 	@Override
 	public int getLength() {
-		return length;
-	}
-
-	@Override
-	public int getPosition() {
-		return position;
+		return getMaxPosition() - getMinPosition() + 1;
 	}
 
 	@Override
 	public int getStart() {
-		return position;
+		return start;
 	}
 
 	@Override
 	public int getEnd() {
-		return position - length - 1;
+		return end;
 	}
 
 	@Override

@@ -16,6 +16,10 @@ public interface Organism<S extends Sequence< ? , ? , ? , ? , ? , ? >, SS extend
 {
 	public int getId();
 
+	public String getName();
+
+	public void setName(String name);
+
 	public Collection<S> getSequences();
 
 	public Collection<S> getSequences(double version);

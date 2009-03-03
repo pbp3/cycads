@@ -11,4 +11,6 @@ public interface AnnotationMethod extends Noteble
 
 	public int getWeight();
 
+	public void setWeight(int weight);
+
 }

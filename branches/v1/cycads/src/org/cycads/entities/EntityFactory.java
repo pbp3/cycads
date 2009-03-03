@@ -7,14 +7,14 @@ import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.Dbxref;
 
-public interface EntityFactory
+public interface EntityFactory<D extends Dbxref< ? >, AM extends AnnotationMethod, T extends Type>
 {
-	public Dbxref< ? > getDbxref(String dbName, String accession);
+	public D getDbxref(String dbName, String accession);
 
-	public AnnotationMethod getAnnotationMethod(String name);
+	public AM getAnnotationMethod(String name);
 
-	public Type getNoteType(String name);
+	public T getNoteType(String name);
 
-	public Type getAnnotationType(String name);
+	public T getAnnotationType(String name);
 
 }

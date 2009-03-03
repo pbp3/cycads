@@ -19,6 +19,4 @@ public interface Noteble
 
 	public Type getNoteType(String noteType);
 
-	public Type createNoteType(String noteType);
-
 }

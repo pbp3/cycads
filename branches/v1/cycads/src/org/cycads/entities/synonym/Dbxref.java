@@ -3,7 +3,9 @@
  */
 package org.cycads.entities.synonym;
 
-public interface Dbxref<X extends Dbxref< ? >> extends HasSynonyms<X>
+import org.cycads.entities.note.Noteble;
+
+public interface Dbxref<X extends Dbxref< ? >> extends Noteble, HasSynonyms<X>
 {
 	public String getDbName();
 

@@ -14,6 +14,8 @@ public class TypeSQL implements Type
 {
 	public final static int	INVALID_ID	= -1;
 
+	public final static TypeSQL NOTE_TYPE_PARENT= new TypeSQL(0, "Note type", )
+
 	int						id;
 	int						idParent;
 	String					name, description;
