@@ -7,8 +7,8 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
-import org.cycads.entities.note.TypeSQL;
-import org.cycads.entities.synonym.DbxrefSQL;
+import org.cycads.entities.note.SQL.TypeSQL;
+import org.cycads.entities.synonym.SQL.DbxrefSQL;
 
 public class EntityFactorySQL implements EntityFactory<DbxrefSQL, AnnotationMethodSQL, TypeSQL>
 {

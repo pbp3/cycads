@@ -1,7 +1,7 @@
 /*
  * Created on 24/02/2009
  */
-package org.cycads.entities.synonym;
+package org.cycads.entities.synonym.SQL;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.cycads.entities.note.SQL.NotesSQL;
-import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
+import org.cycads.entities.synonym.Dbxref;
 
 public class DbxrefSQL extends HasSynonymsNotebleSQL implements Dbxref<DbxrefSQL>
 {
@@ -24,16 +24,37 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL implements Dbxref<DbxrefSQL
 	public DbxrefSQL(int id, Connection con) throws SQLException {
 		this.id = id;
 		this.con = con;
-		Statement stmt = con.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT dbname, accession from dbxref WHERE dbxref_id=" + id);
-		if (rs.next()) {
-			dbName = rs.getString("dbname");
-			accession = rs.getString("accession");
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT dbname, accession from dbxref WHERE dbxref_id=" + id);
+			if (rs.next()) {
+				dbName = rs.getString("dbname");
+				accession = rs.getString("accession");
+			}
+			else {
+				throw new SQLException("Dbxref does not exist:" + id);
+			}
 		}
-		else {
-			throw new SQLException("Dbxref does not exist:" + id);
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
 		}
-		stmt.close();
 	}
 
 	public DbxrefSQL(String dbName, String accession, Connection con) throws SQLException {
@@ -42,28 +63,63 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL implements Dbxref<DbxrefSQL
 		this.con = con;
 		this.id = getId(dbName, accession, con);
 		if (this.id == INVALID_ID) {
-			Statement stmt = con.createStatement();
-			stmt.executeUpdate("INSERT INTO dbxref (dbname, accession) VALUES ('" + dbName + "','" + accession + "')");
-			this.id = getId(dbName, accession, con);
-			if (this.id == INVALID_ID) {
-				throw new SQLException("Error creating dbxref:" + dbName + ", " + accession);
+			Statement stmt = null;
+			try {
+				stmt = con.createStatement();
+				stmt.executeUpdate("INSERT INTO dbxref (dbname, accession) VALUES ('" + dbName + "','" + accession
+					+ "')");
+				this.id = getId(dbName, accession, con);
+				if (this.id == INVALID_ID) {
+					throw new SQLException("Error creating dbxref:" + dbName + ", " + accession);
+				}
 			}
-			stmt.close();
+			finally {
+				if (stmt != null) {
+					try {
+						stmt.close();
+					}
+					catch (SQLException ex) {
+						// ignore
+					}
+				}
+			}
 		}
 	}
 
 	public static int getId(String dbName, String accession, Connection con) throws SQLException {
-		Statement stmt = con.createStatement();
-		ResultSet rs = stmt.executeQuery("SELECT dbxref_id from dbxref WHERE dbname='" + dbName + "' AND accession='"
-			+ accession + "'");
-		int id = INVALID_ID;
-		if (rs.next()) {
-			id = rs.getInt("dbxref_id");
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT dbxref_id from dbxref WHERE dbname='" + dbName + "' AND accession='"
+				+ accession + "'");
+			int id = INVALID_ID;
+			if (rs.next()) {
+				id = rs.getInt("dbxref_id");
+			}
+			return id;
 		}
-		stmt.close();
-		return id;
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
 	}
 
+	@Override
 	public int getId() {
 		return id;
 	}

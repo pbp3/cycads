@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 import org.cycads.entities.note.SQL.NotebleSQL;
-import org.cycads.entities.synonym.DbxrefSQL;
 import org.cycads.entities.synonym.HasSynonyms;
 
 public abstract class HasSynonymsNotebleSQL extends NotebleSQL implements HasSynonyms<DbxrefSQL>

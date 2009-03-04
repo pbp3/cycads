@@ -9,7 +9,6 @@ import java.util.Collection;
 
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.Noteble;
-import org.cycads.entities.note.TypeSQL;
 
 public abstract class NotebleSQL implements Noteble {
 	NotesSQL	notes	= null;
