@@ -1,11 +1,15 @@
 /*
  * Created on 03/03/2009
  */
-package org.cycads.entities.note;
+package org.cycads.entities.note.SQL;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
+
+import org.cycads.entities.note.Note;
+import org.cycads.entities.note.Noteble;
+import org.cycads.entities.note.TypeSQL;
 
 public abstract class NotebleSQL implements Noteble {
 	NotesSQL	notes	= null;

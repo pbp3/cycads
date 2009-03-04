@@ -8,7 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.cycads.entities.note.NotesSQL;
+import org.cycads.entities.note.SQL.NotesSQL;
+import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
 public class DbxrefSQL extends HasSynonymsNotebleSQL implements Dbxref<DbxrefSQL>
 {

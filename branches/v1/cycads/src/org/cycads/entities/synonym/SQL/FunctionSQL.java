@@ -1,7 +1,7 @@
 /*
  * Created on 25/02/2009
  */
-package org.cycads.entities.synonym;
+package org.cycads.entities.synonym.SQL;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
 import java.util.HashSet;
+
+import org.cycads.entities.synonym.Function;
 
 public class FunctionSQL implements Function, Comparable<Function>
 {

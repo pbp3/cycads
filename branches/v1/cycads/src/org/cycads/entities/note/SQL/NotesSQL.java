@@ -1,7 +1,7 @@
 /*
  * Created on 23/02/2009
  */
-package org.cycads.entities.note;
+package org.cycads.entities.note.SQL;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -9,6 +9,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import org.cycads.entities.note.Note;
+import org.cycads.entities.note.SimpleNote;
+import org.cycads.entities.note.Type;
+import org.cycads.entities.note.TypeSQL;
 
 public class NotesSQL
 {

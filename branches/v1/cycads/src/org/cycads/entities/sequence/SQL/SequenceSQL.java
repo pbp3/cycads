@@ -1,7 +1,7 @@
 /*
  * Created on 03/03/2009
  */
-package org.cycads.entities.sequence;
+package org.cycads.entities.sequence.SQL;
 
 import java.util.Collection;
 
@@ -9,57 +9,72 @@ import org.cycads.entities.annotation.AnnotationFilter;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.Type;
+import org.cycads.entities.sequence.Organism;
+import org.cycads.entities.sequence.Sequence;
+import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
 
-public class SubsequenceSQL implements Subsequence
+public class SequenceSQL implements Sequence
 {
 
 	@Override
-	public boolean contains(Subsequence subseq) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public int getEnd() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public Collection getIntrons() {
+	public Subsequence createSubsequence(int start, int end, Collection introns) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public int getMaxPosition() {
+	public int getId() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int getMinPosition() {
+	public int getLength() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public Sequence getSequence() {
+	public Organism getOrganism() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public int getStart() {
+	public String getSequenceString() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Subsequence getSubsequence(int start, int end, Collection introns) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection getSubsequences(int start) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection getSubsequences(Dbxref synonym) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double getVersion() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public boolean isPositiveStrand() {
+	public void setSequenceString(String seqStr) {
 		// TODO Auto-generated method stub
-		return false;
+
 	}
 
 	@Override

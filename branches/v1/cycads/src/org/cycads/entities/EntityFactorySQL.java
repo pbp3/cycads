@@ -6,7 +6,7 @@ package org.cycads.entities;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import org.cycads.entities.annotation.AnnotationMethodSQL;
+import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
 import org.cycads.entities.note.TypeSQL;
 import org.cycads.entities.synonym.DbxrefSQL;
 

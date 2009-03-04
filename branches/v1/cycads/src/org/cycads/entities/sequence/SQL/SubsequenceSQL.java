@@ -1,7 +1,7 @@
 /*
  * Created on 03/03/2009
  */
-package org.cycads.entities.sequence;
+package org.cycads.entities.sequence.SQL;
 
 import java.util.Collection;
 
@@ -9,69 +9,59 @@ import org.cycads.entities.annotation.AnnotationFilter;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.Type;
+import org.cycads.entities.sequence.Sequence;
+import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
 
-public class SequenceSQL implements Sequence
+public class SubsequenceSQL implements Subsequence
 {
 
 	@Override
-	public Subsequence createSubsequence(int start, int end, Collection introns) {
+	public boolean contains(Subsequence subseq) {
 		// TODO Auto-generated method stub
-		return null;
+		return false;
 	}
 
 	@Override
-	public int getId() {
+	public int getEnd() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public int getLength() {
+	public Collection getIntrons() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getMaxPosition() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public Organism getOrganism() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getSequenceString() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Subsequence getSubsequence(int start, int end, Collection introns) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Collection getSubsequences(int start) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Collection getSubsequences(Dbxref synonym) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public double getVersion() {
+	public int getMinPosition() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public void setSequenceString(String seqStr) {
+	public Sequence getSequence() {
 		// TODO Auto-generated method stub
+		return null;
+	}
 
+	@Override
+	public int getStart() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public boolean isPositiveStrand() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 	@Override

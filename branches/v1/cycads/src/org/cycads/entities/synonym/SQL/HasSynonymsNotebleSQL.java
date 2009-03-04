@@ -1,12 +1,14 @@
 /*
  * Created on 04/03/2009
  */
-package org.cycads.entities.synonym;
+package org.cycads.entities.synonym.SQL;
 
 import java.sql.SQLException;
 import java.util.Collection;
 
-import org.cycads.entities.note.NotebleSQL;
+import org.cycads.entities.note.SQL.NotebleSQL;
+import org.cycads.entities.synonym.DbxrefSQL;
+import org.cycads.entities.synonym.HasSynonyms;
 
 public abstract class HasSynonymsNotebleSQL extends NotebleSQL implements HasSynonyms<DbxrefSQL>
 {

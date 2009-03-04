@@ -1,7 +1,7 @@
 /*
  * Created on 24/02/2009
  */
-package org.cycads.entities.synonym;
+package org.cycads.entities.synonym.SQL;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -9,6 +9,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import org.cycads.entities.synonym.DbxrefSQL;
 
 public class SynonymsSQL
 {

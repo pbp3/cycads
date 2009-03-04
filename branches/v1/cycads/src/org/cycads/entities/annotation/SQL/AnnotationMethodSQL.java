@@ -1,14 +1,15 @@
 /*
  * Created on 03/03/2009
  */
-package org.cycads.entities.annotation;
+package org.cycads.entities.annotation.SQL;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.cycads.entities.note.NotebleSQL;
+import org.cycads.entities.annotation.AnnotationMethod;
+import org.cycads.entities.note.SQL.NotebleSQL;
 
 public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod
 {
