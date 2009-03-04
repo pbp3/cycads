@@ -91,4 +91,15 @@ public class SynonymsSQL
 		stmt.close();
 		return ret;
 	}
+
+	public boolean isSynonym(String dbName, String accession) throws SQLException {
+		Statement stmt = con.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT dbxref_id from " + tableName + " S ,dbxref X where S." + idFieldName
+			+ "=" + idSynonymSource + " AND S.dbxref_id=X.dbxref_id AND X.dbname='" + dbName + "' AND X.accession='"
+			+ accession + "'");
+		boolean ret = (rs.next());
+		stmt.close();
+		return ret;
+	}
+
 }

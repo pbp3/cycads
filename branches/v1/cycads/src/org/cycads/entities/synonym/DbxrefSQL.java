@@ -7,11 +7,11 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Collection;
 
 import org.cycads.entities.note.NotesSQL;
 
-public class DbxrefSQL implements Dbxref<DbxrefSQL> {
+public class DbxrefSQL extends HasSynonymsNotebleSQL implements Dbxref<DbxrefSQL>
+{
 	public final static int	INVALID_ID	= -1;
 	String					dbName;
 	String					accession;
@@ -77,57 +77,38 @@ public class DbxrefSQL implements Dbxref<DbxrefSQL> {
 		return dbName;
 	}
 
+	@Override
 	public SynonymsSQL getSynonymsSQL() {
 		if (synonymsSQL == null) {
-			synonymsSQL = new SynonymsSQL(getId(), "dbxref_synonym", "dbxref_id1", con);
+			synonymsSQL = new SynonymsSQL(getId(), getSynonymTableName(), "dbxref_id1", getConnection());
 		}
 		return synonymsSQL;
 	}
 
-	public NotesSQL getNotesSQL() {
-		if (notes == null) {
-			notes = new NotesSQL(getId(), "dbxref_note", "dbxref_id", con);
-		}
-		return notes;
+	@Override
+	public String getSynonymTableName() {
+		return "dbxref_synonym";
 	}
 
 	@Override
-	public Collection<DbxrefSQL> getSynonyms() {
-		try {
-			return getSynonymsSQL().getSynonyms();
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+	public Connection getConnection() {
+		return con;
 	}
 
 	@Override
-	public Collection<DbxrefSQL> getSynonyms(String dbName) {
-		try {
-			return getSynonymsSQL().getSynonyms(dbName);
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+	public String getIdFieldName() {
+		return "dbxref_id";
 	}
 
 	@Override
-	public DbxrefSQL getSynonym(String dbName, String accession) {
-		try {
-			return getSynonymsSQL().getSynonym(dbName, accession);
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+	public String getNoteTableName() {
+		return "dbxref_note";
 	}
 
 	@Override
 	public DbxrefSQL addSynonym(String dbName, String accession) {
+		DbxrefSQL dbxref = super.addSynonym(dbName, accession);
 		try {
-			DbxrefSQL dbxref = getSynonymsSQL().addSynonym(dbName, accession);
 			dbxref.getSynonymsSQL().addSynonym(this);
 			return dbxref;
 		}

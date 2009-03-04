@@ -7,7 +7,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
 
-public abstract class AbstractNoteble implements Noteble {
+public abstract class NotebleSQL implements Noteble {
 	NotesSQL	notes	= null;
 
 	public NotesSQL getNotesSQL() {

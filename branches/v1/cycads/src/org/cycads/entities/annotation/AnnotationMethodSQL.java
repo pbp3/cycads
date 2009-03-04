@@ -8,9 +8,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.cycads.entities.note.AbstractNoteble;
+import org.cycads.entities.note.NotebleSQL;
 
-public class AnnotationMethodSQL extends AbstractNoteble implements AnnotationMethod {
+public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod
+{
 	public final static int	INVALID_ID		= -1;
 	public final static int	WEIGHT_DEAFULT	= 0;
 
@@ -132,7 +133,7 @@ public class AnnotationMethodSQL extends AbstractNoteble implements AnnotationMe
 
 	@Override
 	public String getNoteTableName() {
-		return;
+		return "annotation_method_note";
 	}
 
 }

@@ -18,4 +18,8 @@ public interface HasSynonyms<X extends Dbxref< ? >>
 	 */
 	public X addSynonym(String dbName, String accession);
 
+	public boolean isSynonym(X dbxref);
+
+	public boolean isSynonym(String dbName, String accession);
+
 }
