@@ -14,19 +14,20 @@ import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
 public abstract class AnnotationSQL<AParent extends Annotation< ? , ? , ? , ? >> extends HasSynonymsNotebleSQL
-		implements Annotation<AParent, DbxrefSQL, TypeSQL, AnnotationMethodSQL> {
-	public final static int	INVALID_ID_PARENT	= 0;
+		implements Annotation<AParent, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
+{
+	public final static int		INVALID_ID_PARENT	= 0;
 
-	int						id;
-	int						idParent			= INVALID_ID_PARENT;
-	int						idType;
-	int						idMethod;
+	private int					id;
+	private int					parentId			= INVALID_ID_PARENT;
+	private int					typeId;
+	private int					methodId;
 
-	AParent					parent				= null;
-	TypeSQL					type;
-	AnnotationMethodSQL		method;
+	private AParent				parent				= null;
+	private TypeSQL				type;
+	private AnnotationMethodSQL	method;
 
-	Connection				con;
+	private Connection			con;
 
 	public AnnotationSQL(int id, Connection con) throws SQLException {
 		this.id = id;
@@ -37,9 +38,9 @@ public abstract class AnnotationSQL<AParent extends Annotation< ? , ? , ? , ? >>
 			stmt = con.createStatement();
 			rs = stmt.executeQuery("SELECT annotation_parent, type, method from Annotation WHERE annotation_id=" + id);
 			if (rs.next()) {
-				idParent = rs.getInt("annotation_parent");
-				idType = rs.getInt("type");
-				idMethod = rs.getInt("method");
+				parentId = rs.getInt("annotation_parent");
+				typeId = rs.getInt("type");
+				methodId = rs.getInt("method");
 			}
 			else {
 				throw new SQLException("Annotation does not exist:" + id);
@@ -65,7 +66,7 @@ public abstract class AnnotationSQL<AParent extends Annotation< ? , ? , ? , ? >>
 		}
 	}
 
-	public static int createAnnotation(AnnotationSQL< ? > parent, TypeSQL type, AnnotationMethodSQL method,
+	public static int createAnnotationSQL(AnnotationSQL< ? > parent, TypeSQL type, AnnotationMethodSQL method,
 			Connection con) throws SQLException {
 		int id = 0;
 
@@ -160,15 +161,15 @@ public abstract class AnnotationSQL<AParent extends Annotation< ? , ? , ? , ? >>
 	}
 
 	public int getParentId() {
-		return idParent;
+		return parentId;
 	}
 
 	public int getTypeId() {
-		return idType;
+		return typeId;
 	}
 
 	public int getMethodId() {
-		return idMethod;
+		return methodId;
 	}
 
 	@Override

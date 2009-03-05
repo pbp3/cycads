@@ -8,18 +8,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.cycads.entities.note.SQL.NotesSQL;
 import org.cycads.entities.synonym.Dbxref;
 
 public class DbxrefSQL extends HasSynonymsNotebleSQL implements Dbxref<DbxrefSQL>
 {
 	public final static int	INVALID_ID	= -1;
-	String					dbName;
-	String					accession;
-	int						id;
-	SynonymsSQL				synonymsSQL	= null;
-	NotesSQL				notes		= null;
-	Connection				con;
+	private String			dbName;
+	private String			accession;
+	private int				id;
+	private Connection		con;
 
 	public DbxrefSQL(int id, Connection con) throws SQLException {
 		this.id = id;

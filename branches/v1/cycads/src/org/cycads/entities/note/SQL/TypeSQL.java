@@ -20,10 +20,10 @@ public class TypeSQL implements Type
 	public final static int	NOTE_TYPE_PARENT_ID			= ParametersDefault.getNoteTypeId();
 	public final static int	ANNOTATION_TYPE_PARENT_ID	= ParametersDefault.getAnnotationTypeId();
 
-	int						id;
-	int						idParent;
-	String					name, description;
-	Connection				con;
+	private int				id;
+	private int				idParent;
+	private String			name, description;
+	private Connection		con;
 
 	public TypeSQL(int id, Connection con) throws SQLException {
 		this.id = id;

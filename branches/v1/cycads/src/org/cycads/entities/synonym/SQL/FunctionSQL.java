@@ -15,12 +15,12 @@ import org.cycads.entities.synonym.Function;
 public class FunctionSQL implements Function, Comparable<Function>
 {
 	public final static int	INVALID_ID	= -1;
-	int						id;
+	private int				id;
 
-	String					name;
-	String					description;
+	private String			name;
+	private String			description;
 
-	Connection				con;
+	private Connection		con;
 
 	public FunctionSQL(int id, Connection con) throws SQLException {
 		this.id = id;

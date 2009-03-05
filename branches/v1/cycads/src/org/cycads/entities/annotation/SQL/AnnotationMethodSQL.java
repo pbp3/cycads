@@ -16,10 +16,10 @@ public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod
 	public final static int	INVALID_ID		= -1;
 	public final static int	WEIGHT_DEAFULT	= 0;
 
-	int						id;
-	int						weight;
-	String					name;
-	Connection				con;
+	private int				id;
+	private int				weight;
+	private String			name;
+	private Connection		con;
 
 	public AnnotationMethodSQL(int id, Connection con) throws SQLException {
 		this.id = id;

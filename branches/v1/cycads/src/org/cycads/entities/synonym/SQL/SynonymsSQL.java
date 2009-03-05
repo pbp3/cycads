@@ -12,9 +12,9 @@ import java.util.Collection;
 
 public class SynonymsSQL
 {
-	String		tableName, idFieldName;
-	int			idSynonymSource;
-	Connection	con;
+	private String		tableName, idFieldName;
+	private int			idSynonymSource;
+	private Connection	con;
 
 	public SynonymsSQL(int idSynonymSource, String tableName, String idFieldName, Connection con) {
 		this.idSynonymSource = idSynonymSource;

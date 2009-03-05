@@ -12,7 +12,7 @@ import org.cycads.entities.synonym.SQL.DbxrefSQL;
 
 public class EntityFactorySQL implements EntityFactory<DbxrefSQL, AnnotationMethodSQL, TypeSQL>
 {
-	Connection	con;
+	private Connection	con;
 
 	public EntityFactorySQL(Connection con) {
 		this.con = con;

@@ -11,7 +11,7 @@ import org.cycads.entities.synonym.HasSynonyms;
 
 public abstract class HasSynonymsNotebleSQL extends NotebleSQL implements HasSynonyms<DbxrefSQL>
 {
-	SynonymsSQL	synonymsSQL	= null;
+	protected SynonymsSQL	synonymsSQL	= null;
 
 	public SynonymsSQL getSynonymsSQL() {
 		if (synonymsSQL == null) {

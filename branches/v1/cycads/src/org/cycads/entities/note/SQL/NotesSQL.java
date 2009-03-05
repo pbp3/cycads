@@ -16,9 +16,9 @@ import org.cycads.entities.note.Type;
 
 public class NotesSQL
 {
-	String		tableName, idFieldName;
-	int			idNoteSource;
-	Connection	con;
+	private String		tableName, idFieldName;
+	private int			idNoteSource;
+	private Connection	con;
 
 	public NotesSQL(int idNoteSource, String tableName, String idFieldName, Connection con) {
 		this.idNoteSource = idNoteSource;

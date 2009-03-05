@@ -10,8 +10,9 @@ import java.util.Collection;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.Noteble;
 
-public abstract class NotebleSQL implements Noteble {
-	NotesSQL	notes	= null;
+public abstract class NotebleSQL implements Noteble
+{
+	protected NotesSQL	notes	= null;
 
 	public NotesSQL getNotesSQL() {
 		if (notes == null) {
