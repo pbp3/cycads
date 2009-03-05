@@ -14,8 +14,7 @@ import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
 public abstract class AnnotationSQL<AParent extends Annotation< ? , ? , ? , ? >> extends HasSynonymsNotebleSQL
-		implements Annotation<AParent, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
-{
+		implements Annotation<AParent, DbxrefSQL, TypeSQL, AnnotationMethodSQL> {
 	public final static int	INVALID_ID_PARENT	= 0;
 
 	int						id;
@@ -36,7 +35,6 @@ public abstract class AnnotationSQL<AParent extends Annotation< ? , ? , ? , ? >>
 		ResultSet rs = null;
 		try {
 			stmt = con.createStatement();
-
 			rs = stmt.executeQuery("SELECT annotation_parent, type, method from Annotation WHERE annotation_id=" + id);
 			if (rs.next()) {
 				idParent = rs.getInt("annotation_parent");
@@ -46,7 +44,6 @@ public abstract class AnnotationSQL<AParent extends Annotation< ? , ? , ? , ? >>
 			else {
 				throw new SQLException("Annotation does not exist:" + id);
 			}
-
 		}
 		finally {
 			if (rs != null) {
@@ -76,7 +73,6 @@ public abstract class AnnotationSQL<AParent extends Annotation< ? , ? , ? , ? >>
 		ResultSet rs = null;
 		try {
 			stmt = con.createStatement();
-
 			if (parent == null) {
 				stmt.executeUpdate("INSERT INTO Annotation (type, method) VALUES (" + type.getId() + ","
 					+ method.getId() + ")", Statement.RETURN_GENERATED_KEYS);
@@ -93,7 +89,6 @@ public abstract class AnnotationSQL<AParent extends Annotation< ? , ? , ? , ? >>
 				throw new SQLException("Annotation insert didn't return the annotation id.");
 			}
 			return id;
-
 		}
 		finally {
 			if (rs != null) {
@@ -119,7 +114,7 @@ public abstract class AnnotationSQL<AParent extends Annotation< ? , ? , ? , ? >>
 	public AnnotationMethodSQL getAnnotationMethod() {
 		if (method == null) {
 			try {
-				method = new AnnotationMethodSQL(getIdMethod(), getConnection());
+				method = new AnnotationMethodSQL(getMethodId(), getConnection());
 			}
 			catch (SQLException e) {
 				e.printStackTrace();
@@ -131,7 +126,7 @@ public abstract class AnnotationSQL<AParent extends Annotation< ? , ? , ? , ? >>
 
 	@Override
 	public AParent getParent() {
-		if (parent == null && getIdParent() != INVALID_ID_PARENT) {
+		if (parent == null && getParentId() != INVALID_ID_PARENT) {
 			try {
 				parent = createParent();
 			}
@@ -147,7 +142,7 @@ public abstract class AnnotationSQL<AParent extends Annotation< ? , ? , ? , ? >>
 	public TypeSQL getType() {
 		if (type == null) {
 			try {
-				type = new TypeSQL(getIdType(), getConnection());
+				type = new TypeSQL(getTypeId(), getConnection());
 			}
 			catch (SQLException e) {
 				e.printStackTrace();
@@ -164,15 +159,15 @@ public abstract class AnnotationSQL<AParent extends Annotation< ? , ? , ? , ? >>
 		return id;
 	}
 
-	public int getIdParent() {
+	public int getParentId() {
 		return idParent;
 	}
 
-	public int getIdType() {
+	public int getTypeId() {
 		return idType;
 	}
 
-	public int getIdMethod() {
+	public int getMethodId() {
 		return idMethod;
 	}
 
