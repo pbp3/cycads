@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cycads.entities.annotation.AnnotationFilter;
@@ -144,6 +145,10 @@ public class OrganismSQL
 			}
 			return new SequenceSQL(id, getConnection());
 		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 		finally {
 			if (rs != null) {
 				try {
@@ -166,56 +171,361 @@ public class OrganismSQL
 
 	@Override
 	public Collection<SequenceSQL> getSequences() {
-		// TODO Auto-generated method stub
-		return null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT sequence_id from sequence where NCBI_TAXON_ID=" + getId());
+			ArrayList<SequenceSQL> seqs = new ArrayList<SequenceSQL>();
+			while (rs.next()) {
+				seqs.add(new SequenceSQL(rs.getInt("sequence_id"), getConnection()));
+			}
+			return seqs;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
 	}
 
 	@Override
 	public Collection<SequenceSQL> getSequences(String version) {
-		// TODO Auto-generated method stub
-		return null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT sequence_id from sequence where NCBI_TAXON_ID=" + getId() + " AND version='"
+				+ version + "'");
+			ArrayList<SequenceSQL> seqs = new ArrayList<SequenceSQL>();
+			while (rs.next()) {
+				seqs.add(new SequenceSQL(rs.getInt("sequence_id"), getConnection()));
+			}
+			return seqs;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
 	}
 
 	@Override
 	public Collection<SequenceSQL> getSequences(DbxrefSQL synonym) {
-		// TODO Auto-generated method stub
-		return null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT S.sequence_id from sequence S, sequence_synonym SS where S.NCBI_TAXON_ID="
+				+ getId() + " AND S.sequence_id=SS.sequence_id AND SS.dbxref_id=" + synonym.getId());
+			ArrayList<SequenceSQL> seqs = new ArrayList<SequenceSQL>();
+			while (rs.next()) {
+				seqs.add(new SequenceSQL(rs.getInt("sequence_id"), getConnection()));
+			}
+			return seqs;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
 	}
 
 	@Override
 	public Collection<SubsequenceSQL> getSubsequences(DbxrefSQL synonym) {
-		// TODO Auto-generated method stub
-		return null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT SS.subsequence_id from subsequence SS, subsequence_synonym SSS, sequence S"
+				+ " WHERE S.NCBI_TAXON_ID=" + getId()
+				+ " AND S.sequence_id=SS.sequence_id AND SS.subsequence_id=SSS.subsequence_id AND SSS.dbxref_id="
+				+ synonym.getId());
+			ArrayList<SubsequenceSQL> sseqs = new ArrayList<SubsequenceSQL>();
+			while (rs.next()) {
+				sseqs.add(new SubsequenceSQL(rs.getInt("subsequence_id"), getConnection()));
+			}
+			return sseqs;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
 	}
 
 	@Override
 	public Collection<SubseqAnnotationSQL> getSubseqAnnotations(DbxrefSQL synonym) {
-		// TODO Auto-generated method stub
-		return null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT SSA.annotation_id from subseq_annotation SSA, subsequence SS, Annotation_synonym AS, sequence S"
+				+ " WHERE S.NCBI_TAXON_ID="
+				+ getId()
+				+ " AND S.sequence_id=SS.sequence_id AND SS.subsequence_id=SSA.subsequence AND"
+				+ " SSA.annotation_id=AS.annotation_id AND AS.dbxref_id=" + synonym.getId());
+			ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
+			while (rs.next()) {
+				ssas.add(new SubseqAnnotationSQL(rs.getInt("annotation_id"), getConnection()));
+			}
+			return ssas;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
 	}
 
 	@Override
 	public Collection<SubseqAnnotationSQL> getSubseqAnnotations(TypeSQL type) {
-		// TODO Auto-generated method stub
-		return null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT SSA.annotation_id from subseq_annotation SSA, subsequence SS, Annotation A, sequence S"
+				+ " WHERE S.NCBI_TAXON_ID="
+				+ getId()
+				+ " AND S.sequence_id=SS.sequence_id AND SS.subsequence_id=SSA.subsequence AND"
+				+ " SSA.annotation_id=A.annotation_id AND A.type=" + type.getId());
+			ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
+			while (rs.next()) {
+				ssas.add(new SubseqAnnotationSQL(rs.getInt("annotation_id"), getConnection()));
+			}
+			return ssas;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
 	}
 
 	@Override
 	public Collection<SubseqAnnotationSQL> getSubseqAnnotations(AnnotationMethodSQL method) {
-		// TODO Auto-generated method stub
-		return null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT SSA.annotation_id from subseq_annotation SSA, subsequence SS, Annotation A, sequence S"
+				+ " WHERE S.NCBI_TAXON_ID="
+				+ getId()
+				+ " AND S.sequence_id=SS.sequence_id AND SS.subsequence_id=SSA.subsequence AND"
+				+ " SSA.annotation_id=A.annotation_id AND A.method=" + method.getId());
+			ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
+			while (rs.next()) {
+				ssas.add(new SubseqAnnotationSQL(rs.getInt("annotation_id"), getConnection()));
+			}
+			return ssas;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
 	}
 
 	@Override
 	public Collection<SubseqAnnotationSQL> getSubseqAnnotations(AnnotationMethodSQL method, TypeSQL type) {
-		// TODO Auto-generated method stub
-		return null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT SSA.annotation_id from subseq_annotation SSA, subsequence SS, Annotation A, sequence S"
+				+ " WHERE S.NCBI_TAXON_ID="
+				+ getId()
+				+ " AND S.sequence_id=SS.sequence_id AND SS.subsequence_id=SSA.subsequence AND"
+				+ " SSA.annotation_id=A.annotation_id AND A.type=" + type.getId() + " AND A.method=" + method.getId());
+			ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
+			while (rs.next()) {
+				ssas.add(new SubseqAnnotationSQL(rs.getInt("annotation_id"), getConnection()));
+			}
+			return ssas;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
 	}
 
 	@Override
 	public Collection<SubseqAnnotationSQL> getSubseqAnnotations(AnnotationFilter<SubseqAnnotationSQL> filter) {
-		// TODO Auto-generated method stub
-		return null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT SSA.annotation_id from subseq_annotation SSA, subsequence SS, sequence S"
+				+ " WHERE S.NCBI_TAXON_ID=" + getId()
+				+ " AND S.sequence_id=SS.sequence_id AND SS.subsequence_id=SSA.subsequence");
+			ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
+			while (rs.next()) {
+				SubseqAnnotationSQL ssa = new SubseqAnnotationSQL(rs.getInt("annotation_id"), getConnection());
+				if (filter.accept(ssa)) {
+					ssas.add(ssa);
+				}
+			}
+			return ssas;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
 	}
 
 }
