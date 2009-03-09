@@ -11,7 +11,7 @@ import org.cycads.entities.annotation.SubseqAnnotation;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.Dbxref;
 
-public interface Organism<S extends Sequence< ? , ? , ? , ? , ? , ? >, SS extends Subsequence< ? , ? , ? , ? , ? >, SA extends SubseqAnnotation< ? , ? , ? , ? , ? >, X extends Dbxref< ? >, T extends Type, M extends AnnotationMethod>
+public interface Organism<S extends Sequence< ? , ? , ? , ? , ? , ? >, SS extends Subsequence< ? , ? , ? , ? , ? , ? >, SA extends SubseqAnnotation< ? , ? , ? , ? , ? >, X extends Dbxref< ? >, T extends Type, M extends AnnotationMethod>
 		extends AnnotationFinder<SA, X, T, M>
 {
 	public int getId();
