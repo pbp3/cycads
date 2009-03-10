@@ -8,15 +8,13 @@ import java.util.Collection;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.Dbxref;
 
-public interface AnnotationFinder<SA extends SubseqAnnotation< ? , ? , ? , ? , ? >, X extends Dbxref< ? >, T extends Type, M extends AnnotationMethod>
+public interface AnnotationFinder<A extends Annotation< ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
 {
-	public Collection<SA> getSubseqAnnotations(X synonym);
+	/* The arguments (method, type or synonym) null are not considerated */
+	public Collection<A> getAnnotations(M method, T type, X synonym);
 
-	public Collection<SA> getSubseqAnnotations(T type);
+	public Collection<A> getDbxrefAnnotations(M method, X dbxref);
 
-	public Collection<SA> getSubseqAnnotations(M method);
+	public Collection<A> getAnnotations(AnnotationFilter<A> filter);
 
-	public Collection<SA> getSubseqAnnotations(M method, T type);
-
-	public Collection<SA> getSubseqAnnotations(AnnotationFilter<SA> filter);
 }

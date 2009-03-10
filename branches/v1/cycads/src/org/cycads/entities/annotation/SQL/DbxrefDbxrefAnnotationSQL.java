@@ -35,6 +35,9 @@ public class DbxrefDbxrefAnnotationSQL extends AnnotationSQL<DbxrefDbxrefAnnotat
 			else {
 				throw new SQLException("DbxrefDbxrefAnnotation does not exist:" + id);
 			}
+			if (TypeSQL.getId(TypeSQL.ANNOTATION_TYPE_PARENT_ID, "DbxrefDbxrefAnnotation", con) != getTypeId()) {
+				throw new SQLException("The annotation " + id + " is not a DbxrefDbxrefAnnotation type.");
+			}
 		}
 		finally {
 			if (rs != null) {
@@ -56,10 +59,10 @@ public class DbxrefDbxrefAnnotationSQL extends AnnotationSQL<DbxrefDbxrefAnnotat
 		}
 	}
 
-	public static int createDbxrefDbxrefAnnotationSQL(DbxrefDbxrefAnnotationSQL parent, TypeSQL type,
-			AnnotationMethodSQL method, DbxrefSQL dbxrefSource, DbxrefSQL dbxrefTarget, Connection con)
-			throws SQLException {
-		int id = AnnotationSQL.createAnnotationSQL(parent, type, method, con);
+	public static int createDbxrefDbxrefAnnotationSQL(DbxrefDbxrefAnnotationSQL parent, AnnotationMethodSQL method,
+			DbxrefSQL dbxrefSource, DbxrefSQL dbxrefTarget, Connection con) throws SQLException {
+		int id = AnnotationSQL.createAnnotationSQL(parent, new TypeSQL(TypeSQL.ANNOTATION_TYPE_PARENT_ID,
+			"DbxrefDbxrefAnnotation", null, con), method, con);
 
 		Statement stmt = null;
 		try {
@@ -78,6 +81,12 @@ public class DbxrefDbxrefAnnotationSQL extends AnnotationSQL<DbxrefDbxrefAnnotat
 				}
 			}
 		}
+	}
+
+	@Override
+	public TypeSQL getType() {
+		// TODO Auto-generated method stub
+		return super.getType();
 	}
 
 	@Override

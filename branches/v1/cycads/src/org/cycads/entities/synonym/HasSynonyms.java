@@ -5,7 +5,7 @@ package org.cycads.entities.synonym;
 
 import java.util.Collection;
 
-public interface HasSynonyms<X extends Dbxref< ? >>
+public interface HasSynonyms<X extends Dbxref< ? , ? , ? , ? >>
 {
 	public Collection< ? extends X> getSynonyms();
 

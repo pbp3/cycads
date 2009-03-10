@@ -126,6 +126,62 @@ public class NotesSQL
 		}
 	}
 
+	public String getNoteValue(int idNoteType) throws SQLException {
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery("SELECT value from " + tableName + " where " + idFieldName + "=" + idNoteSource
+				+ " and note_type=" + idNoteType);
+			if (rs.next()) {
+				return rs.getString("value");
+			}
+			return null;
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
+	}
+
+	public void setNoteValue(int idNoteType, String value) throws SQLException {
+		if (getNoteValue(idNoteType) == null) {
+			addNote(idNoteType, value);
+		}
+		else {
+			Statement stmt = null;
+			try {
+				stmt = con.createStatement();
+				stmt.executeUpdate("UPDATE " + tableName + " SET value=" + value + " WHERE " + idFieldName + "="
+					+ idNoteSource + " and note_type=" + idNoteType);
+			}
+			finally {
+				if (stmt != null) {
+					try {
+						stmt.close();
+					}
+					catch (SQLException ex) {
+						// ignore
+					}
+				}
+			}
+		}
+	}
+
 	public Note getNote(int idNoteType, String value) throws SQLException {
 		Statement stmt = null;
 		ResultSet rs = null;

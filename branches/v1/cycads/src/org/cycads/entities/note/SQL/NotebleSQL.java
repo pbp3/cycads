@@ -85,6 +85,28 @@ public abstract class NotebleSQL implements Noteble
 	}
 
 	@Override
+	public String getNoteValue(String noteType) {
+		try {
+			return getNotesSQL().getNoteValue(getNoteType(noteType).getId());
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public void setNoteValue(String noteType, String value) {
+		try {
+			getNotesSQL().setNoteValue(getNoteType(noteType).getId(), value);
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
 	public TypeSQL getNoteType(String noteType) {
 		try {
 			return new TypeSQL(TypeSQL.NOTE_TYPE_PARENT_ID, noteType, null, getConnection());
