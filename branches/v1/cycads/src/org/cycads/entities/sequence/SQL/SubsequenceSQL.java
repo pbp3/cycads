@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.TreeSet;
 
 import org.cycads.entities.annotation.AnnotationFilter;
+import org.cycads.entities.annotation.SubseqAnnotation;
 import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
 import org.cycads.entities.annotation.SQL.SubseqAnnotationSQL;
 import org.cycads.entities.annotation.SQL.SubseqDbxrefAnnotationSQL;
@@ -225,10 +226,9 @@ public class SubsequenceSQL extends HasSynonymsNotebleSQL
 	}
 
 	@Override
-	public SubseqFunctionAnnotationSQL createFunctionAnnotation(SubseqAnnotationSQL parent, AnnotationMethodSQL method,
-			FunctionSQL function) {
+	public SubseqFunctionAnnotationSQL createFunctionAnnotation(AnnotationMethodSQL method, FunctionSQL function) {
 		try {
-			int id = SubseqFunctionAnnotationSQL.createSubseqFunctionAnnotationSQL(parent, method, this, function,
+			int id = SubseqFunctionAnnotationSQL.createSubseqFunctionAnnotationSQL(method, this, function,
 				getConnection());
 			return new SubseqFunctionAnnotationSQL(id, getConnection());
 		}
@@ -239,12 +239,24 @@ public class SubsequenceSQL extends HasSynonymsNotebleSQL
 	}
 
 	@Override
-	public SubseqDbxrefAnnotationSQL createDbxrefAnnotation(SubseqAnnotationSQL parent, AnnotationMethodSQL method,
-			DbxrefSQL dbxref) {
+	public SubseqDbxrefAnnotationSQL createDbxrefAnnotation(AnnotationMethodSQL method, DbxrefSQL dbxref) {
 		try {
-			int id = SubseqDbxrefAnnotationSQL.createSubseqDbxrefAnnotationSQL(parent, method, this, dbxref,
-				getConnection());
+			int id = SubseqDbxrefAnnotationSQL.createSubseqDbxrefAnnotationSQL(method, this, dbxref, getConnection());
 			return new SubseqDbxrefAnnotationSQL(id, getConnection());
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public SubseqAnnotation< ? , ? , ? , ? > createAnnotation(TypeSQL type, AnnotationMethodSQL method) {
+		try {
+			int id = SubseqAnnotationSQL.createSubseqAnnotationSQL(method, this, getConnection());
+			SubseqAnnotationSQL annot = new SubseqAnnotationSQL(id, getConnection());
+			annot.addType(type);
+			return annot;
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -447,6 +459,24 @@ public class SubsequenceSQL extends HasSynonymsNotebleSQL
 				}
 			}
 		}
+	}
+
+	@Override
+	public Collection<SubseqAnnotationSQL> getAnnotations(AnnotationMethodSQL method, TypeSQL type, DbxrefSQL synonym) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection<SubseqAnnotationSQL> getAnnotations(AnnotationFilter<SubseqAnnotationSQL> filter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection<SubseqAnnotationSQL> getDbxrefAnnotations(AnnotationMethodSQL method, DbxrefSQL dbxref) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -7,9 +7,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Collection;
 
-import org.cycads.entities.annotation.AnnotationFilter;
 import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
 import org.cycads.entities.annotation.SQL.DbxrefDbxrefAnnotationSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
@@ -232,25 +230,6 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-	}
-
-	@Override
-	public Collection<DbxrefDbxrefAnnotationSQL> getAnnotations(AnnotationMethodSQL method, TypeSQL type,
-			DbxrefSQL synonym) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Collection<DbxrefDbxrefAnnotationSQL> getAnnotations(AnnotationFilter<DbxrefDbxrefAnnotationSQL> filter) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Collection<DbxrefDbxrefAnnotationSQL> getDbxrefAnnotations(AnnotationMethodSQL method, DbxrefSQL dbxref) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
