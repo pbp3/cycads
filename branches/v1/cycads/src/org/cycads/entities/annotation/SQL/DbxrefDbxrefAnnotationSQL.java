@@ -12,8 +12,8 @@ import org.cycads.entities.annotation.DbxrefDbxrefAnnotation;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 
-public class DbxrefDbxrefAnnotationSQL extends AnnotationSQL<DbxrefDbxrefAnnotationSQL>
-		implements DbxrefDbxrefAnnotation<DbxrefDbxrefAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
+public class DbxrefDbxrefAnnotationSQL extends AnnotationSQL
+		implements DbxrefDbxrefAnnotation<DbxrefSQL, TypeSQL, AnnotationMethodSQL>
 {
 	private int			dbxrefSourceId;
 	private int			dbxrefTargetId;
@@ -35,8 +35,15 @@ public class DbxrefDbxrefAnnotationSQL extends AnnotationSQL<DbxrefDbxrefAnnotat
 			else {
 				throw new SQLException("DbxrefDbxrefAnnotation does not exist:" + id);
 			}
-			if (TypeSQL.getId(TypeSQL.ANNOTATION_TYPE_PARENT_ID, "DbxrefDbxrefAnnotation", con) != getTypeId()) {
-				throw new SQLException("The annotation " + id + " is not a DbxrefDbxrefAnnotation type.");
+			rs = stmt.executeQuery("SELECT term_type_id from Annotation_type WHERE annotation_id=" + id
+				+ " AND term_type_id=" + TypeSQL.getDbxrefAnnotationType(con).getId());
+			if (!rs.next()) {
+				throw new SQLException("Annotation don't have the correct type: " + id);
+			}
+			rs = stmt.executeQuery("SELECT term_type_id from Annotation_type WHERE annotation_id=" + id
+				+ " AND term_type_id=" + TypeSQL.getDbxrefSourceAnnotationType(con).getId());
+			if (!rs.next()) {
+				throw new SQLException("Annotation don't have the correct type: " + id);
 			}
 		}
 		finally {
@@ -59,16 +66,19 @@ public class DbxrefDbxrefAnnotationSQL extends AnnotationSQL<DbxrefDbxrefAnnotat
 		}
 	}
 
-	public static int createDbxrefDbxrefAnnotationSQL(DbxrefDbxrefAnnotationSQL parent, AnnotationMethodSQL method,
-			DbxrefSQL dbxrefSource, DbxrefSQL dbxrefTarget, Connection con) throws SQLException {
-		int id = AnnotationSQL.createAnnotationSQL(parent, new TypeSQL(TypeSQL.ANNOTATION_TYPE_PARENT_ID,
-			"DbxrefDbxrefAnnotation", null, con), method, con);
+	public static int createDbxrefDbxrefAnnotationSQL(AnnotationMethodSQL method, DbxrefSQL dbxrefSource,
+			DbxrefSQL dbxrefTarget, Connection con) throws SQLException {
+		int id = AnnotationSQL.createAnnotationSQL(method, con);
 
 		Statement stmt = null;
 		try {
 			stmt = con.createStatement();
 			stmt.executeUpdate("INSERT INTO dbxref_dbxref_annotation (annotation_id, dbxref_source, dbxref_target) VALUES ("
 				+ id + "," + dbxrefSource.getId() + "," + dbxrefTarget.getId() + ")");
+			stmt.executeUpdate("INSERT INTO Annotation_type (annotation_id, term_type_id) VALUES (" + id + ","
+				+ TypeSQL.getDbxrefSourceAnnotationType(con).getId() + ")");
+			stmt.executeUpdate("INSERT INTO Annotation_type (annotation_id, term_type_id) VALUES (" + id + ","
+				+ TypeSQL.getDbxrefAnnotationType(con).getId() + ")");
 			return id;
 		}
 		finally {
@@ -81,17 +91,6 @@ public class DbxrefDbxrefAnnotationSQL extends AnnotationSQL<DbxrefDbxrefAnnotat
 				}
 			}
 		}
-	}
-
-	@Override
-	public TypeSQL getType() {
-		// TODO Auto-generated method stub
-		return super.getType();
-	}
-
-	@Override
-	protected DbxrefDbxrefAnnotationSQL createParent() throws SQLException {
-		return new DbxrefDbxrefAnnotationSQL(getParentId(), getConnection());
 	}
 
 	@Override

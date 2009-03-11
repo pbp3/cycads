@@ -225,11 +225,11 @@ public class SubsequenceSQL extends HasSynonymsNotebleSQL
 	}
 
 	@Override
-	public SubseqFunctionAnnotationSQL createFunctionAnnotation(SubseqAnnotationSQL parent, TypeSQL type,
-			AnnotationMethodSQL method, FunctionSQL function, Connection con) {
+	public SubseqFunctionAnnotationSQL createFunctionAnnotation(SubseqAnnotationSQL parent, AnnotationMethodSQL method,
+			FunctionSQL function) {
 		try {
-			int id = SubseqFunctionAnnotationSQL.createSubseqFunctionAnnotationSQL(parent, type, method, this,
-				function, getConnection());
+			int id = SubseqFunctionAnnotationSQL.createSubseqFunctionAnnotationSQL(parent, method, this, function,
+				getConnection());
 			return new SubseqFunctionAnnotationSQL(id, getConnection());
 		}
 		catch (SQLException e) {
@@ -239,10 +239,10 @@ public class SubsequenceSQL extends HasSynonymsNotebleSQL
 	}
 
 	@Override
-	public SubseqDbxrefAnnotationSQL createDbxrefAnnotation(SubseqAnnotationSQL parent, TypeSQL type,
-			AnnotationMethodSQL method, DbxrefSQL dbxref, Connection con) {
+	public SubseqDbxrefAnnotationSQL createDbxrefAnnotation(SubseqAnnotationSQL parent, AnnotationMethodSQL method,
+			DbxrefSQL dbxref) {
 		try {
-			int id = SubseqDbxrefAnnotationSQL.createSubseqDbxrefAnnotationSQL(parent, type, method, this, dbxref,
+			int id = SubseqDbxrefAnnotationSQL.createSubseqDbxrefAnnotationSQL(parent, method, this, dbxref,
 				getConnection());
 			return new SubseqDbxrefAnnotationSQL(id, getConnection());
 		}

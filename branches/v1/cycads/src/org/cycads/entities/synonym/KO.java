@@ -5,9 +5,10 @@ package org.cycads.entities.synonym;
 
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.annotation.DbxrefDbxrefAnnotation;
+import org.cycads.entities.note.Type;
 
-public interface KO<X extends Dbxref< ? >, A extends DbxrefDbxrefAnnotation< ? , ? , ? , ? >, M extends AnnotationMethod>
-		extends Dbxref<X>
+public interface KO<A extends DbxrefDbxrefAnnotation< ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
+		extends Dbxref<A, X, T, M>
 {
 	public final static String	DBNAME	= "KO";
 

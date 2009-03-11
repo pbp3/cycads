@@ -3,7 +3,8 @@ package org.cycads.general;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-public class ParametersDefault {
+public class ParametersDefault
+{
 	private static final String			BUNDLE_NAME		= "parametersDefault";						//$NON-NLS-1$
 
 	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
@@ -41,16 +42,24 @@ public class ParametersDefault {
 	}
 
 	private static int getInt(String key) {
-		return Integer.parseInt(getString(key));
+		return Integer.parseInt(getStringMandatory(key));
 	}
 
 	// General
 
-	public static int getNoteTypeId() {
-		return getInt("general.type.noteTypeId");
+	public static String getSubseqAnnotationTypeName() {
+		return getStringMandatory("general.type.subseqAnnotationTypeName");
 	}
 
-	public static int getAnnotationTypeId() {
-		return getInt("general.type.annotationTypeId");
+	public static String getDbxrefAnnotationTypeName() {
+		return getStringMandatory("general.type.dbxrefAnnotationTypeName");
+	}
+
+	public static String getFunctionAnnotationTypeName() {
+		return getStringMandatory("general.type.functionAnnotationTypeName");
+	}
+
+	public static String getDbxrefSourceAnnotationTypeName() {
+		return getStringMandatory("general.type.dbxrefSourceAnnotationTypeName");
 	}
 }

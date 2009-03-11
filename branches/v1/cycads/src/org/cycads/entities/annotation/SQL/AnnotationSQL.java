@@ -7,24 +7,24 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
-public abstract class AnnotationSQL<AParent extends Annotation< ? , ? , ? , ? >> extends HasSynonymsNotebleSQL
-		implements Annotation<AParent, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
+public abstract class AnnotationSQL extends HasSynonymsNotebleSQL
+		implements Annotation<DbxrefSQL, TypeSQL, AnnotationMethodSQL>
 {
-	public final static int		INVALID_ID_PARENT	= 0;
+	public final static int		INVALID_PARENT_ID	= 0;
 
 	private int					id;
-	private int					parentId			= INVALID_ID_PARENT;
-	private int					typeId;
 	private int					methodId;
 
-	private AParent				parent				= null;
-	private TypeSQL				type;
+	/*The types are not synchonized*/
+	private Collection<TypeSQL>	types;
 	private AnnotationMethodSQL	method;
 
 	private Connection			con;
@@ -36,10 +36,8 @@ public abstract class AnnotationSQL<AParent extends Annotation< ? , ? , ? , ? >>
 		ResultSet rs = null;
 		try {
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT annotation_parent, type, method from Annotation WHERE annotation_id=" + id);
+			rs = stmt.executeQuery("SELECT method from Annotation WHERE annotation_id=" + id);
 			if (rs.next()) {
-				parentId = rs.getInt("annotation_parent");
-				typeId = rs.getInt("type");
 				methodId = rs.getInt("method");
 			}
 			else {
@@ -66,22 +64,15 @@ public abstract class AnnotationSQL<AParent extends Annotation< ? , ? , ? , ? >>
 		}
 	}
 
-	public static int createAnnotationSQL(AnnotationSQL< ? > parent, TypeSQL type, AnnotationMethodSQL method,
-			Connection con) throws SQLException {
+	public static int createAnnotationSQL(AnnotationMethodSQL method, Connection con) throws SQLException {
 		int id = 0;
 
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
 			stmt = con.createStatement();
-			if (parent == null) {
-				stmt.executeUpdate("INSERT INTO Annotation (type, method) VALUES (" + type.getId() + ","
-					+ method.getId() + ")", Statement.RETURN_GENERATED_KEYS);
-			}
-			else {
-				stmt.executeUpdate("INSERT INTO Annotation (annotation_parent, type, method) VALUES (" + parent.getId()
-					+ "," + type.getId() + "," + method.getId() + ")", Statement.RETURN_GENERATED_KEYS);
-			}
+			stmt.executeUpdate("INSERT INTO Annotation (method) VALUES (" + method.getId() + ")",
+				Statement.RETURN_GENERATED_KEYS);
 			rs = stmt.getGeneratedKeys();
 			if (rs.next()) {
 				id = rs.getInt(1);
@@ -126,46 +117,99 @@ public abstract class AnnotationSQL<AParent extends Annotation< ? , ? , ? , ? >>
 	}
 
 	@Override
-	public AParent getParent() {
-		if (parent == null && getParentId() != INVALID_ID_PARENT) {
+	public Collection<TypeSQL> getTypes() {
+		if (types == null) {
+			Statement stmt = null;
+			ResultSet rs = null;
+			types = new ArrayList<TypeSQL>();
 			try {
-				parent = createParent();
+				stmt = con.createStatement();
+				rs = stmt.executeQuery("SELECT term_type_id from Annotation_type WHERE annotation_id=" + getId());
+				while (rs.next()) {
+					types.add(new TypeSQL(rs.getInt("term_type_id"), getConnection()));
+				}
 			}
 			catch (SQLException e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
 			}
+			finally {
+				if (rs != null) {
+					try {
+						rs.close();
+					}
+					catch (SQLException ex) {
+						// ignore
+					}
+				}
+				if (stmt != null) {
+					try {
+						stmt.close();
+					}
+					catch (SQLException ex) {
+						// ignore
+					}
+				}
+			}
 		}
-		return parent;
+		return types;
 	}
 
 	@Override
-	public TypeSQL getType() {
-		if (type == null) {
-			try {
-				type = new TypeSQL(getTypeId(), getConnection());
-			}
-			catch (SQLException e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
+	public boolean hasType(String typeStr) {
+		for (TypeSQL type : getTypes()) {
+			if (type.getName().equals(typeStr)) {
+				return true;
 			}
 		}
-		return type;
+		return false;
 	}
 
-	protected abstract AParent createParent() throws SQLException;
+	@Override
+	public TypeSQL addType(String typeStr) {
+		try {
+			TypeSQL type = new TypeSQL(typeStr, null, getConnection());
+			return addType(type);
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public TypeSQL addType(TypeSQL type) {
+		Statement stmt = null;
+		try {
+			if (!hasType(type.getName())) {
+				stmt = con.createStatement();
+				stmt.executeUpdate("INSERT INTO Annotation_type (annotation_id, term_type_id) VALUES (" + getId() + ","
+					+ type.getId() + ")");
+			}
+			if (types != null) {
+				types.add(type);
+			}
+			return type;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
+	}
 
 	@Override
 	public int getId() {
 		return id;
-	}
-
-	public int getParentId() {
-		return parentId;
-	}
-
-	public int getTypeId() {
-		return typeId;
 	}
 
 	public int getMethodId() {

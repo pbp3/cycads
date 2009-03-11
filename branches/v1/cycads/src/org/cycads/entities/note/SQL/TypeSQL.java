@@ -7,21 +7,19 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import org.cycads.entities.note.Type;
 import org.cycads.general.ParametersDefault;
 
 public class TypeSQL implements Type
 {
-	public final static int	INVALID_ID					= -1;
-
-	public final static int	NOTE_TYPE_PARENT_ID			= ParametersDefault.getNoteTypeId();
-	public final static int	ANNOTATION_TYPE_PARENT_ID	= ParametersDefault.getAnnotationTypeId();
+	public static final int	INVALID_ID					= -1;
+	public static TypeSQL	subseqAnnotationType		= null;
+	public static TypeSQL	dbxrefAnnotationType		= null;
+	public static TypeSQL	functionAnnotationType		= null;
+	public static TypeSQL	dbxrefSourceAnnotationType	= null;
 
 	private int				id;
-	private int				idParent;
 	private String			name, description;
 	private Connection		con;
 
@@ -32,9 +30,8 @@ public class TypeSQL implements Type
 		ResultSet rs = null;
 		try {
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT term_type_parent, name, description from term_type WHERE term_type_id=" + id);
+			rs = stmt.executeQuery("SELECT name, description from term_type WHERE term_type_id=" + id);
 			if (rs.next()) {
-				idParent = rs.getInt("term_type_parent");
 				name = rs.getString("name");
 				description = rs.getString("description");
 			}
@@ -62,8 +59,7 @@ public class TypeSQL implements Type
 		}
 	}
 
-	public TypeSQL(int idParent, String name, String description, Connection con) throws SQLException {
-		this.idParent = idParent;
+	public TypeSQL(String name, String description, Connection con) throws SQLException {
 		this.name = name;
 		this.description = description;
 		this.con = con;
@@ -71,8 +67,7 @@ public class TypeSQL implements Type
 		ResultSet rs = null;
 		try {
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT term_type_id, description from term_type WHERE term_type_parent=" + idParent
-				+ " AND name='" + name + "'");
+			rs = stmt.executeQuery("SELECT term_type_id, description from term_type WHERE name='" + name + "'");
 			if (rs.next()) {
 				id = rs.getInt("term_type_id");
 				String descriptionDB = rs.getString("description");
@@ -86,16 +81,15 @@ public class TypeSQL implements Type
 			}
 			else {
 				if (description == null) {
-					stmt.executeUpdate("INSERT INTO term_type (term_type_parent, name) VALUES (" + idParent + ",'"
-						+ name + "')");
+					stmt.executeUpdate("INSERT INTO term_type (name) VALUES ('" + name + "')");
 				}
 				else {
-					stmt.executeUpdate("INSERT INTO term_type (term_type_parent, name, description) VALUES ("
-						+ idParent + ",'" + name + "','" + description + "')");
+					stmt.executeUpdate("INSERT INTO term_type (name, description) VALUES ('" + name + "','"
+						+ description + "')");
 				}
-				id = getId(idParent, name, con);
+				id = getId(name, con);
 				if (id == INVALID_ID) {
-					throw new SQLException("Error creating type:" + idParent + ", " + name + ", " + description);
+					throw new SQLException("Error creating type:" + name + ", " + description);
 				}
 			}
 		}
@@ -119,55 +113,17 @@ public class TypeSQL implements Type
 		}
 	}
 
-	public static int getId(int idParent, String name, Connection con) throws SQLException {
+	public static int getId(String name, Connection con) throws SQLException {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT term_type_id from term_type WHERE term_type_parent=" + idParent
-				+ " AND name='" + name + "'");
+			rs = stmt.executeQuery("SELECT term_type_id from term_type WHERE name='" + name + "'");
 			int id = INVALID_ID;
 			if (rs.next()) {
 				id = rs.getInt("term_type_id");
 			}
 			return id;
-		}
-		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-			if (stmt != null) {
-				try {
-					stmt.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-		}
-	}
-
-	@Override
-	public Collection<Type> getChildren() {
-		Statement stmt = null;
-		ResultSet rs = null;
-		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT term_type_id WHERE term_type_parent=" + id);
-			ArrayList<Type> children = new ArrayList<Type>();
-			while (rs.next()) {
-				children.add(new TypeSQL(rs.getInt("term_type_id"), con));
-			}
-			return children;
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Error getting children of type " + id);
 		}
 		finally {
 			if (rs != null) {
@@ -199,18 +155,50 @@ public class TypeSQL implements Type
 		return name;
 	}
 
-	@Override
-	public Type getParent() {
-		try {
-			return new TypeSQL(idParent, con);
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Type Parent(" + idParent + ") of type (" + id + " doesn't exist.");
-		}
-	}
-
 	public int getId() {
 		return id;
 	}
+
+	public Connection getConnection() {
+		return con;
+	}
+
+	public static TypeSQL getSubseqAnnotationType(Connection con) throws SQLException {
+		if (subseqAnnotationType == null) {
+			subseqAnnotationType = new TypeSQL(ParametersDefault.getSubseqAnnotationTypeName(), null, con);
+		}
+		return subseqAnnotationType;
+	}
+
+	public static TypeSQL getDbxrefAnnotationType(Connection con) throws SQLException {
+		if (dbxrefAnnotationType == null) {
+			dbxrefAnnotationType = new TypeSQL(ParametersDefault.getDbxrefAnnotationTypeName(), null, con);
+		}
+		return dbxrefAnnotationType;
+	}
+
+	public static TypeSQL getFunctionAnnotationType(Connection con) throws SQLException {
+		if (functionAnnotationType == null) {
+			functionAnnotationType = new TypeSQL(ParametersDefault.getFunctionAnnotationTypeName(), null, con);
+		}
+		return functionAnnotationType;
+	}
+
+	public static TypeSQL getDbxrefSourceAnnotationType(Connection con) throws SQLException {
+		if (dbxrefSourceAnnotationType == null) {
+			dbxrefSourceAnnotationType = new TypeSQL(ParametersDefault.getDbxrefSourceAnnotationTypeName(), null, con);
+		}
+		return dbxrefSourceAnnotationType;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof TypeSQL)) {
+			return false;
+		}
+		TypeSQL type = (TypeSQL) obj;
+
+		return this.getName().equals(type.getName());
+	}
+
 }

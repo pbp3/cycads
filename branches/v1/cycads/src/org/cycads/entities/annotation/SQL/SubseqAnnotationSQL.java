@@ -13,9 +13,10 @@ import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.sequence.SQL.SubsequenceSQL;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 
-public class SubseqAnnotationSQL extends AnnotationSQL<SubseqAnnotationSQL>
-		implements SubseqAnnotation<SubsequenceSQL, SubseqAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
+public class SubseqAnnotationSQL extends AnnotationSQL
+		implements SubseqAnnotation<SubsequenceSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
 {
+	private static TypeSQL	typeDefault	= null;
 	private int				subseqId;
 	private SubsequenceSQL	subsequence;
 
@@ -31,6 +32,11 @@ public class SubseqAnnotationSQL extends AnnotationSQL<SubseqAnnotationSQL>
 			}
 			else {
 				throw new SQLException("SubsequenceAnnotation does not exist:" + id);
+			}
+			rs = stmt.executeQuery("SELECT term_type_id from Annotation_type WHERE annotation_id=" + id
+				+ " AND term_type_id=" + TypeSQL.getSubseqAnnotationType(con).getId());
+			if (!rs.next()) {
+				throw new SQLException("Annotation don't have the correct type: " + id);
 			}
 		}
 		finally {
@@ -53,15 +59,17 @@ public class SubseqAnnotationSQL extends AnnotationSQL<SubseqAnnotationSQL>
 		}
 	}
 
-	public static int createSubseqAnnotationSQL(SubseqAnnotationSQL parent, TypeSQL type, AnnotationMethodSQL method,
-			SubsequenceSQL subsequence, Connection con) throws SQLException {
-		int id = AnnotationSQL.createAnnotationSQL(parent, type, method, con);
+	public static int createSubseqAnnotationSQL(AnnotationMethodSQL method, SubsequenceSQL subsequence, Connection con)
+			throws SQLException {
+		int id = AnnotationSQL.createAnnotationSQL(method, con);
 
 		Statement stmt = null;
 		try {
 			stmt = con.createStatement();
 			stmt.executeUpdate("INSERT INTO subseq_annotation (annotation_id, subsequence) VALUES (" + id + ","
 				+ subsequence.getId() + ")");
+			stmt.executeUpdate("INSERT INTO Annotation_type (annotation_id, term_type_id) VALUES (" + id + ","
+				+ TypeSQL.getSubseqAnnotationType(con).getId() + ")");
 			return id;
 		}
 		finally {
@@ -74,11 +82,6 @@ public class SubseqAnnotationSQL extends AnnotationSQL<SubseqAnnotationSQL>
 				}
 			}
 		}
-	}
-
-	@Override
-	protected SubseqAnnotationSQL createParent() throws SQLException {
-		return new SubseqAnnotationSQL(getParentId(), getConnection());
 	}
 
 	@Override

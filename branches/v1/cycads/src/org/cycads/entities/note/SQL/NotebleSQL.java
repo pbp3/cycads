@@ -109,7 +109,7 @@ public abstract class NotebleSQL implements Noteble
 	@Override
 	public TypeSQL getNoteType(String noteType) {
 		try {
-			return new TypeSQL(TypeSQL.NOTE_TYPE_PARENT_ID, noteType, null, getConnection());
+			return new TypeSQL(noteType, null, getConnection());
 		}
 		catch (SQLException e) {
 			e.printStackTrace();

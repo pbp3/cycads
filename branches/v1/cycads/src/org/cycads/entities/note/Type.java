@@ -3,7 +3,6 @@
  */
 package org.cycads.entities.note;
 
-import java.util.Collection;
 
 public interface Type
 {
@@ -11,7 +10,4 @@ public interface Type
 
 	public String getDescription();
 
-	public Type getParent();
-
-	public Collection<Type> getChildren();
 }

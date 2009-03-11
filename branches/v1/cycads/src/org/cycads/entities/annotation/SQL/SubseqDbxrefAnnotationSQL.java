@@ -14,7 +14,7 @@ import org.cycads.entities.sequence.SQL.SubsequenceSQL;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 
 public class SubseqDbxrefAnnotationSQL extends SubseqAnnotationSQL
-		implements SubseqDbxrefAnnotation<SubsequenceSQL, SubseqAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
+		implements SubseqDbxrefAnnotation<SubsequenceSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
 {
 	private int			dbxrefId;
 	private DbxrefSQL	dbxref;
@@ -31,6 +31,11 @@ public class SubseqDbxrefAnnotationSQL extends SubseqAnnotationSQL
 			}
 			else {
 				throw new SQLException("SubseqDbxrefAnnotation does not exist:" + id);
+			}
+			rs = stmt.executeQuery("SELECT term_type_id from Annotation_type WHERE annotation_id=" + id
+				+ " AND term_type_id=" + TypeSQL.getDbxrefAnnotationType(con).getId());
+			if (!rs.next()) {
+				throw new SQLException("Annotation don't have the correct type: " + id);
 			}
 		}
 		finally {
@@ -53,16 +58,17 @@ public class SubseqDbxrefAnnotationSQL extends SubseqAnnotationSQL
 		}
 	}
 
-	public static int createSubseqDbxrefAnnotationSQL(SubseqAnnotationSQL parent, TypeSQL type,
-			AnnotationMethodSQL method, SubsequenceSQL subsequence, DbxrefSQL dbxref, Connection con)
-			throws SQLException {
+	public static int createSubseqDbxrefAnnotationSQL(AnnotationMethodSQL method, SubsequenceSQL subsequence,
+			DbxrefSQL dbxref, Connection con) throws SQLException {
 
-		int id = SubseqAnnotationSQL.createSubseqAnnotationSQL(parent, type, method, subsequence, con);
+		int id = SubseqAnnotationSQL.createSubseqAnnotationSQL(method, subsequence, con);
 		Statement stmt = null;
 		try {
 			stmt = con.createStatement();
 			stmt.executeUpdate("INSERT INTO subseq_dbxref_annotation (annotation_id, dbxref) VALUES (" + id + ","
 				+ dbxref.getId() + ")");
+			stmt.executeUpdate("INSERT INTO Annotation_type (annotation_id, term_type_id) VALUES (" + id + ","
+				+ TypeSQL.getDbxrefAnnotationType(con).getId() + ")");
 			return id;
 		}
 		finally {

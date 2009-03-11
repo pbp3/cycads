@@ -6,8 +6,8 @@ package org.cycads.entities.annotation;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.Dbxref;
 
-public interface DbxrefDbxrefAnnotation<AParent extends Annotation< ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
-		extends Annotation<AParent, X, T, M>
+public interface DbxrefDbxrefAnnotation<X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
+		extends Annotation<X, T, M>
 {
 	public X getDbxrefSource();
 
