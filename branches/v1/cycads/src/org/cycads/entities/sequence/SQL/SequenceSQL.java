@@ -393,7 +393,7 @@ public class SequenceSQL extends HasSynonymsNotebleSQL
 			rs = stmt.executeQuery("SELECT SSA.annotation_id from subseq_annotation SSA, subsequence SS, Annotation_synonym AS"
 				+ " WHERE SS.sequence_id="
 				+ getId()
-				+ " AND SS.subsequence_id=SSA.subsequence AND"
+				+ " AND SS.subsequence_id=SSA.subsequence_id AND"
 				+ " SSA.annotation_id=AS.annotation_id AND AS.dbxref_id=" + synonym.getId());
 			ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
 			while (rs.next()) {
@@ -432,7 +432,7 @@ public class SequenceSQL extends HasSynonymsNotebleSQL
 		try {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery("SELECT SSA.annotation_id from subseq_annotation SSA, subsequence SS, Annotation A"
-				+ " WHERE SS.sequence_id=" + getId() + " AND SS.subsequence_id=SSA.subsequence AND"
+				+ " WHERE SS.sequence_id=" + getId() + " AND SS.subsequence_id=SSA.subsequence_id AND"
 				+ " SSA.annotation_id=A.annotation_id AND A.type=" + type.getId());
 			ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
 			while (rs.next()) {
@@ -471,7 +471,7 @@ public class SequenceSQL extends HasSynonymsNotebleSQL
 		try {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery("SELECT SSA.annotation_id from subseq_annotation SSA, subsequence SS, Annotation A"
-				+ " WHERE SS.sequence_id=" + getId() + " AND SS.subsequence_id=SSA.subsequence AND"
+				+ " WHERE SS.sequence_id=" + getId() + " AND SS.subsequence_id=SSA.subsequence_id AND"
 				+ " SSA.annotation_id=A.annotation_id AND A.method=" + method.getId());
 			ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
 			while (rs.next()) {
@@ -510,7 +510,7 @@ public class SequenceSQL extends HasSynonymsNotebleSQL
 		try {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery("SELECT SSA.annotation_id from subseq_annotation SSA, subsequence SS, Annotation A"
-				+ " WHERE SS.sequence_id=" + getId() + " AND SS.subsequence_id=SSA.subsequence AND"
+				+ " WHERE SS.sequence_id=" + getId() + " AND SS.subsequence_id=SSA.subsequence_id AND"
 				+ " SSA.annotation_id=A.annotation_id AND A.type=" + type.getId() + " AND A.method=" + method.getId());
 			ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
 			while (rs.next()) {
@@ -549,7 +549,7 @@ public class SequenceSQL extends HasSynonymsNotebleSQL
 		try {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery("SELECT SSA.annotation_id from subseq_annotation SSA, subsequence SS"
-				+ " WHERE SS.sequence_id=" + getId() + " AND SS.subsequence_id=SSA.subsequence");
+				+ " WHERE SS.sequence_id=" + getId() + " AND SS.subsequence_id=SSA.subsequence_id");
 			ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
 			while (rs.next()) {
 				SubseqAnnotationSQL ssa = new SubseqAnnotationSQL(rs.getInt("annotation_id"), getConnection());

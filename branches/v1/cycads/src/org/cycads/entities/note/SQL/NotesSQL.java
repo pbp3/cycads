@@ -32,11 +32,11 @@ public class NotesSQL
 		ResultSet rs = null;
 		try {
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT note_type, value from " + tableName + " where " + idFieldName + "="
+			rs = stmt.executeQuery("SELECT type_id, value from " + tableName + " where " + idFieldName + "="
 				+ idNoteSource);
 			ArrayList<Note> notes = new ArrayList<Note>();
 			while (rs.next()) {
-				notes.add(new SimpleNote(getNoteType(rs.getInt("note_type")), rs.getString("value")));
+				notes.add(new SimpleNote(getNoteType(rs.getInt("type_id")), rs.getString("value")));
 			}
 			return notes;
 		}
@@ -66,7 +66,7 @@ public class NotesSQL
 		try {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery("SELECT value from " + tableName + " where " + idFieldName + "=" + idNoteSource
-				+ " and note_type=" + idNoteType);
+				+ " and type_id=" + idNoteType);
 			ArrayList<Note> notes = new ArrayList<Note>();
 			while (rs.next()) {
 				notes.add(new SimpleNote(getNoteType(idNoteType), rs.getString("value")));
@@ -99,7 +99,7 @@ public class NotesSQL
 		try {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery("SELECT value from " + tableName + " where " + idFieldName + "=" + idNoteSource
-				+ " and note_type=" + idNoteType);
+				+ " and type_id=" + idNoteType);
 			ArrayList<String> values = new ArrayList<String>();
 			while (rs.next()) {
 				values.add(rs.getString("value"));
@@ -132,7 +132,7 @@ public class NotesSQL
 		try {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery("SELECT value from " + tableName + " where " + idFieldName + "=" + idNoteSource
-				+ " and note_type=" + idNoteType);
+				+ " and type_id=" + idNoteType);
 			if (rs.next()) {
 				return rs.getString("value");
 			}
@@ -167,7 +167,7 @@ public class NotesSQL
 			try {
 				stmt = con.createStatement();
 				stmt.executeUpdate("UPDATE " + tableName + " SET value=" + value + " WHERE " + idFieldName + "="
-					+ idNoteSource + " and note_type=" + idNoteType);
+					+ idNoteSource + " and type_id=" + idNoteType);
 			}
 			finally {
 				if (stmt != null) {
@@ -188,7 +188,7 @@ public class NotesSQL
 		try {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery("SELECT * from " + tableName + " where " + idFieldName + "=" + idNoteSource
-				+ " and note_type=" + idNoteType + " and value='" + value + "'");
+				+ " and type_id=" + idNoteType + " and value='" + value + "'");
 			SimpleNote note = null;
 			if (rs.next()) {
 				note = new SimpleNote(getNoteType(idNoteType), value);
@@ -222,7 +222,7 @@ public class NotesSQL
 		Statement stmt = null;
 		try {
 			stmt = con.createStatement();
-			stmt.executeUpdate("INSERT INTO " + tableName + " (" + idFieldName + ", note_type, value) VALUES("
+			stmt.executeUpdate("INSERT INTO " + tableName + " (" + idFieldName + ", type_id, value) VALUES("
 				+ idNoteSource + "," + idNoteType + ",'" + value + "')");
 			return getNote(idNoteType, value);
 		}

@@ -25,15 +25,15 @@ public class SubseqDbxrefAnnotationSQL extends SubseqAnnotationSQL
 		ResultSet rs = null;
 		try {
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT dbxref from subseq_dbxref_annotation WHERE annotation_id=" + id);
+			rs = stmt.executeQuery("SELECT dbxref_id from subseq_dbxref_annotation WHERE annotation_id=" + id);
 			if (rs.next()) {
-				dbxrefId = rs.getInt("dbxref");
+				dbxrefId = rs.getInt("dbxref_id");
 			}
 			else {
 				throw new SQLException("SubseqDbxrefAnnotation does not exist:" + id);
 			}
-			rs = stmt.executeQuery("SELECT term_type_id from Annotation_type WHERE annotation_id=" + id
-				+ " AND term_type_id=" + TypeSQL.getDbxrefAnnotationType(con).getId());
+			rs = stmt.executeQuery("SELECT type_id from Annotation_type WHERE annotation_id=" + id + " AND type_id="
+				+ TypeSQL.getDbxrefAnnotationType(con).getId());
 			if (!rs.next()) {
 				throw new SQLException("Annotation don't have the correct type: " + id);
 			}
@@ -65,9 +65,9 @@ public class SubseqDbxrefAnnotationSQL extends SubseqAnnotationSQL
 		Statement stmt = null;
 		try {
 			stmt = con.createStatement();
-			stmt.executeUpdate("INSERT INTO subseq_dbxref_annotation (annotation_id, dbxref) VALUES (" + id + ","
+			stmt.executeUpdate("INSERT INTO subseq_dbxref_annotation (annotation_id, dbxref_id) VALUES (" + id + ","
 				+ dbxref.getId() + ")");
-			stmt.executeUpdate("INSERT INTO Annotation_type (annotation_id, term_type_id) VALUES (" + id + ","
+			stmt.executeUpdate("INSERT INTO Annotation_type (annotation_id, type_id) VALUES (" + id + ","
 				+ TypeSQL.getDbxrefAnnotationType(con).getId() + ")");
 			return id;
 		}

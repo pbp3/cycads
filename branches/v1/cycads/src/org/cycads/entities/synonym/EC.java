@@ -3,12 +3,11 @@
  */
 package org.cycads.entities.synonym;
 
-import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.annotation.DbxrefDbxrefAnnotation;
 import org.cycads.entities.note.Type;
 
-public interface EC<AParent extends Annotation< ? , ? , ? >, A extends DbxrefDbxrefAnnotation< ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
+public interface EC<A extends DbxrefDbxrefAnnotation< ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
 		extends Dbxref<A, X, T, M>
 {
 	public final static String	DBNAME	= "EC";

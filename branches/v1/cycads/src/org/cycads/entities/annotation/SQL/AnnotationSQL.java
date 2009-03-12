@@ -124,9 +124,9 @@ public abstract class AnnotationSQL extends HasSynonymsNotebleSQL
 			types = new ArrayList<TypeSQL>();
 			try {
 				stmt = con.createStatement();
-				rs = stmt.executeQuery("SELECT term_type_id from Annotation_type WHERE annotation_id=" + getId());
+				rs = stmt.executeQuery("SELECT type_id from Annotation_type WHERE annotation_id=" + getId());
 				while (rs.next()) {
-					types.add(new TypeSQL(rs.getInt("term_type_id"), getConnection()));
+					types.add(new TypeSQL(rs.getInt("type_id"), getConnection()));
 				}
 			}
 			catch (SQLException e) {
@@ -183,7 +183,7 @@ public abstract class AnnotationSQL extends HasSynonymsNotebleSQL
 		try {
 			if (!hasType(type.getName())) {
 				stmt = con.createStatement();
-				stmt.executeUpdate("INSERT INTO Annotation_type (annotation_id, term_type_id) VALUES (" + getId() + ","
+				stmt.executeUpdate("INSERT INTO Annotation_type (annotation_id, type_id) VALUES (" + getId() + ","
 					+ type.getId() + ")");
 			}
 			if (types != null) {

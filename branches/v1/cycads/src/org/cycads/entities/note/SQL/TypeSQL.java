@@ -14,10 +14,10 @@ import org.cycads.general.ParametersDefault;
 public class TypeSQL implements Type
 {
 	public static final int	INVALID_ID					= -1;
-	public static TypeSQL	subseqAnnotationType		= null;
-	public static TypeSQL	dbxrefAnnotationType		= null;
-	public static TypeSQL	functionAnnotationType		= null;
-	public static TypeSQL	dbxrefSourceAnnotationType	= null;
+	private static TypeSQL	subseqAnnotationType		= null;
+	private static TypeSQL	dbxrefAnnotationType		= null;
+	private static TypeSQL	functionAnnotationType		= null;
+	private static TypeSQL	dbxrefSourceAnnotationType	= null;
 
 	private int				id;
 	private String			name, description;
@@ -30,7 +30,7 @@ public class TypeSQL implements Type
 		ResultSet rs = null;
 		try {
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT name, description from term_type WHERE term_type_id=" + id);
+			rs = stmt.executeQuery("SELECT name, description from term_type WHERE type_id=" + id);
 			if (rs.next()) {
 				name = rs.getString("name");
 				description = rs.getString("description");
@@ -67,9 +67,9 @@ public class TypeSQL implements Type
 		ResultSet rs = null;
 		try {
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT term_type_id, description from term_type WHERE name='" + name + "'");
+			rs = stmt.executeQuery("SELECT type_id, description from term_type WHERE name='" + name + "'");
 			if (rs.next()) {
-				id = rs.getInt("term_type_id");
+				id = rs.getInt("type_id");
 				String descriptionDB = rs.getString("description");
 				if (description == null) {
 					this.description = descriptionDB;
@@ -118,10 +118,10 @@ public class TypeSQL implements Type
 		ResultSet rs = null;
 		try {
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT term_type_id from term_type WHERE name='" + name + "'");
+			rs = stmt.executeQuery("SELECT type_id from term_type WHERE name='" + name + "'");
 			int id = INVALID_ID;
 			if (rs.next()) {
-				id = rs.getInt("term_type_id");
+				id = rs.getInt("type_id");
 			}
 			return id;
 		}

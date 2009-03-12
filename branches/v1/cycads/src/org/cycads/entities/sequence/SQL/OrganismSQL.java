@@ -331,7 +331,7 @@ public class OrganismSQL
 			rs = stmt.executeQuery("SELECT SSA.annotation_id from subseq_annotation SSA, subsequence SS, Annotation_synonym AS, sequence S"
 				+ " WHERE S.NCBI_TAXON_ID="
 				+ getId()
-				+ " AND S.sequence_id=SS.sequence_id AND SS.subsequence_id=SSA.subsequence AND"
+				+ " AND S.sequence_id=SS.sequence_id AND SS.subsequence_id=SSA.subsequence_id AND"
 				+ " SSA.annotation_id=AS.annotation_id AND AS.dbxref_id=" + synonym.getId());
 			ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
 			while (rs.next()) {
@@ -372,7 +372,7 @@ public class OrganismSQL
 			rs = stmt.executeQuery("SELECT SSA.annotation_id from subseq_annotation SSA, subsequence SS, Annotation A, sequence S"
 				+ " WHERE S.NCBI_TAXON_ID="
 				+ getId()
-				+ " AND S.sequence_id=SS.sequence_id AND SS.subsequence_id=SSA.subsequence AND"
+				+ " AND S.sequence_id=SS.sequence_id AND SS.subsequence_id=SSA.subsequence_id AND"
 				+ " SSA.annotation_id=A.annotation_id AND A.type=" + type.getId());
 			ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
 			while (rs.next()) {
@@ -413,7 +413,7 @@ public class OrganismSQL
 			rs = stmt.executeQuery("SELECT SSA.annotation_id from subseq_annotation SSA, subsequence SS, Annotation A, sequence S"
 				+ " WHERE S.NCBI_TAXON_ID="
 				+ getId()
-				+ " AND S.sequence_id=SS.sequence_id AND SS.subsequence_id=SSA.subsequence AND"
+				+ " AND S.sequence_id=SS.sequence_id AND SS.subsequence_id=SSA.subsequence_id AND"
 				+ " SSA.annotation_id=A.annotation_id AND A.method=" + method.getId());
 			ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
 			while (rs.next()) {
@@ -454,7 +454,7 @@ public class OrganismSQL
 			rs = stmt.executeQuery("SELECT SSA.annotation_id from subseq_annotation SSA, subsequence SS, Annotation A, sequence S"
 				+ " WHERE S.NCBI_TAXON_ID="
 				+ getId()
-				+ " AND S.sequence_id=SS.sequence_id AND SS.subsequence_id=SSA.subsequence AND"
+				+ " AND S.sequence_id=SS.sequence_id AND SS.subsequence_id=SSA.subsequence_id AND"
 				+ " SSA.annotation_id=A.annotation_id AND A.type=" + type.getId() + " AND A.method=" + method.getId());
 			ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
 			while (rs.next()) {
@@ -494,7 +494,7 @@ public class OrganismSQL
 			stmt = con.createStatement();
 			rs = stmt.executeQuery("SELECT SSA.annotation_id from subseq_annotation SSA, subsequence SS, sequence S"
 				+ " WHERE S.NCBI_TAXON_ID=" + getId()
-				+ " AND S.sequence_id=SS.sequence_id AND SS.subsequence_id=SSA.subsequence");
+				+ " AND S.sequence_id=SS.sequence_id AND SS.subsequence_id=SSA.subsequence_id");
 			ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
 			while (rs.next()) {
 				SubseqAnnotationSQL ssa = new SubseqAnnotationSQL(rs.getInt("annotation_id"), getConnection());

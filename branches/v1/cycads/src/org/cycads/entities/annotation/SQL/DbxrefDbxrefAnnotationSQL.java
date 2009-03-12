@@ -35,13 +35,13 @@ public class DbxrefDbxrefAnnotationSQL extends AnnotationSQL
 			else {
 				throw new SQLException("DbxrefDbxrefAnnotation does not exist:" + id);
 			}
-			rs = stmt.executeQuery("SELECT term_type_id from Annotation_type WHERE annotation_id=" + id
-				+ " AND term_type_id=" + TypeSQL.getDbxrefAnnotationType(con).getId());
+			rs = stmt.executeQuery("SELECT type_id from Annotation_type WHERE annotation_id=" + id + " AND type_id="
+				+ TypeSQL.getDbxrefAnnotationType(con).getId());
 			if (!rs.next()) {
 				throw new SQLException("Annotation don't have the correct type: " + id);
 			}
-			rs = stmt.executeQuery("SELECT term_type_id from Annotation_type WHERE annotation_id=" + id
-				+ " AND term_type_id=" + TypeSQL.getDbxrefSourceAnnotationType(con).getId());
+			rs = stmt.executeQuery("SELECT type_id from Annotation_type WHERE annotation_id=" + id + " AND type_id="
+				+ TypeSQL.getDbxrefSourceAnnotationType(con).getId());
 			if (!rs.next()) {
 				throw new SQLException("Annotation don't have the correct type: " + id);
 			}
@@ -75,9 +75,9 @@ public class DbxrefDbxrefAnnotationSQL extends AnnotationSQL
 			stmt = con.createStatement();
 			stmt.executeUpdate("INSERT INTO dbxref_dbxref_annotation (annotation_id, dbxref_source, dbxref_target) VALUES ("
 				+ id + "," + dbxrefSource.getId() + "," + dbxrefTarget.getId() + ")");
-			stmt.executeUpdate("INSERT INTO Annotation_type (annotation_id, term_type_id) VALUES (" + id + ","
+			stmt.executeUpdate("INSERT INTO Annotation_type (annotation_id, type_id) VALUES (" + id + ","
 				+ TypeSQL.getDbxrefSourceAnnotationType(con).getId() + ")");
-			stmt.executeUpdate("INSERT INTO Annotation_type (annotation_id, term_type_id) VALUES (" + id + ","
+			stmt.executeUpdate("INSERT INTO Annotation_type (annotation_id, type_id) VALUES (" + id + ","
 				+ TypeSQL.getDbxrefAnnotationType(con).getId() + ")");
 			return id;
 		}

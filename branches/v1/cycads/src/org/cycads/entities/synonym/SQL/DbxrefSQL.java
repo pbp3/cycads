@@ -188,7 +188,7 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL
 	//		try {
 	//			stmt = con.createStatement();
 	//			rs = stmt.executeQuery("SELECT SSA.annotation_id from subseq_annotation SSA, Annotation_synonym AS"
-	//				+ " WHERE SSA.subsequence=" + getId() + " AND SSA.annotation_id=AS.annotation_id AND AS.dbxref_id="
+	//				+ " WHERE SSA.subsequence_id=" + getId() + " AND SSA.annotation_id=AS.annotation_id AND AS.dbxref_id="
 	//				+ synonym.getId());
 	//			ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
 	//			while (rs.next()) {
