@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.cycads.entities.annotation.DbxrefDbxrefAnnotation;
 import org.cycads.entities.note.SQL.TypeSQL;
@@ -127,6 +129,104 @@ public class DbxrefDbxrefAnnotationSQL extends AnnotationSQL
 
 	public int getDbxrefTargetId() {
 		return dbxrefTargetId;
+	}
+
+	public static Collection<SubseqAnnotationSQL> getAnnotations(AnnotationMethodSQL method, Collection<TypeSQL> types,
+			DbxrefSQL synonym, String extraClauseFrom, String extraClauseWhere, Connection con) {
+
+		StringBuffer query = new StringBuffer("SELECT distinct(XXA.annotation_id) FROM dbxref_dbxref_annotation XXA");
+		query.append(getFrom(method, types, synonym, extraClauseFrom)).append(
+			getWhere(method, types, synonym, extraClauseWhere));
+
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query.toString());
+			ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
+			while (rs.next()) {
+				ssas.add(new SubseqAnnotationSQL(rs.getInt("annotation_id"), con));
+			}
+			return ssas;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
+	}
+
+	protected static StringBuffer getFrom(AnnotationMethodSQL method, Collection<TypeSQL> types, DbxrefSQL synonym,
+			String extraClauseFrom) {
+		StringBuffer from = new StringBuffer("");
+		if (method != null) {
+			from.append(", Annotation A");
+		}
+		if (types != null && !types.isEmpty()) {
+			from.append(", Annotation_type AT");
+		}
+		if (synonym != null) {
+			from.append(", Annotation_synonym AS");
+		}
+		return from.append(extraClauseFrom);
+	}
+
+	protected static StringBuffer getWhere(AnnotationMethodSQL method, Collection<TypeSQL> types, DbxrefSQL synonym,
+			String extraClauseWhere) {
+		StringBuffer where = new StringBuffer("");
+		if (method != null) {
+			where.append(" AND A.annotation_id=XXA.annotation_id AND A.annotation_method_id=" + method.getId());
+		}
+		if (types != null && !types.isEmpty()) {
+			if (where.length() > 0) {
+				where.append(" AND");
+			}
+			where.append(" AT.annotation_id=XXA.annotation_id AND AT.type_id");
+			if (types.size() > 1) {
+				StringBuffer whereIn = new StringBuffer("");
+				for (TypeSQL type : types) {
+					if (whereIn.length() > 0) {
+						whereIn.append(",");
+					}
+					whereIn.append("" + type.getId());
+				}
+				where.append(" IN (").append(whereIn).append(")");
+			}
+			else {
+				where.append("=" + types.iterator().next().getId());
+			}
+		}
+		if (synonym != null) {
+			if (where.length() > 0) {
+				where.append(" AND");
+			}
+			where.append(" AS.annotation_id=XXA.annotation_id AND dbxref_id=" + synonym.getId());
+		}
+		if (where.length() > 0 && extraClauseWhere.length() > 0) {
+			where.append(" AND");
+		}
+		where.append(extraClauseWhere);
+		if (where.length() > 0) {
+			where.insert(0, " WHERE");
+		}
+		return where.append(extraClauseWhere);
 	}
 
 }

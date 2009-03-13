@@ -502,14 +502,31 @@ public class SubsequenceSQL extends HasSynonymsNotebleSQL
 
 	@Override
 	public Collection<SubseqAnnotationSQL> getAnnotations(AnnotationFilter<SubseqAnnotationSQL> filter) {
+		String extraWhere = " SSA.subsequence_id=" + getId();
+		String extraFrom = "";
+		Collection<SubseqAnnotationSQL> annots = SubseqAnnotationSQL.getAnnotations(null, null, null, extraFrom,
+			extraWhere, getConnection());
+		Collection<SubseqAnnotationSQL> ret = new ArrayList<SubseqAnnotationSQL>();
+		for (SubseqAnnotationSQL annot : annots) {
+			if (filter.accept(annot)) {
+				ret.add(annot);
+			}
+		}
+		return ret;
+	}
+
+	@Override
+	public Collection<SubseqDbxrefAnnotationSQL> getDbxrefAnnotations(AnnotationMethodSQL method, DbxrefSQL dbxref) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Collection<SubseqAnnotationSQL> getDbxrefAnnotations(AnnotationMethodSQL method, DbxrefSQL dbxref) {
-		// TODO Auto-generated method stub
-		return null;
+	public Collection<SubseqAnnotationSQL> getAnnotations(AnnotationMethodSQL method, Collection<TypeSQL> types,
+			DbxrefSQL synonym) {
+		String extraWhere = " SSA.subsequence_id=" + getId();
+		String extraFrom = "";
+		return SubseqAnnotationSQL.getAnnotations(method, types, synonym, extraFrom, extraWhere, getConnection());
 	}
 
 }
