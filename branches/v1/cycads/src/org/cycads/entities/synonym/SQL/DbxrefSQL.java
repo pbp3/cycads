@@ -7,7 +7,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
 
+import org.cycads.entities.annotation.AnnotationFilter;
 import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
 import org.cycads.entities.annotation.SQL.DbxrefDbxrefAnnotationSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
@@ -230,6 +233,40 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
+	}
+
+	@Override
+	public Collection< ? extends DbxrefDbxrefAnnotationSQL> getAnnotations(AnnotationMethodSQL method,
+			Collection<TypeSQL> types, DbxrefSQL synonym) {
+		String extraWhere = " XXA.dbxref_source=" + getId();
+		String extraFrom = "";
+		return DbxrefDbxrefAnnotationSQL.getAnnotations(method, types, synonym, null, extraFrom, extraWhere,
+			getConnection());
+	}
+
+	@Override
+	public Collection< ? extends DbxrefDbxrefAnnotationSQL> getAnnotations(
+			AnnotationFilter<DbxrefDbxrefAnnotationSQL> filter) {
+		String extraWhere = " XXA.dbxref_source=" + getId();
+		String extraFrom = "";
+		Collection<DbxrefDbxrefAnnotationSQL> annots = DbxrefDbxrefAnnotationSQL.getAnnotations(null, null, null, null,
+			extraFrom, extraWhere, getConnection());
+		Collection<DbxrefDbxrefAnnotationSQL> ret = new ArrayList<DbxrefDbxrefAnnotationSQL>();
+		for (DbxrefDbxrefAnnotationSQL annot : annots) {
+			if (filter.accept(annot)) {
+				ret.add(annot);
+			}
+		}
+		return ret;
+	}
+
+	@Override
+	public Collection< ? extends DbxrefDbxrefAnnotationSQL> getDbxrefAnnotations(AnnotationMethodSQL method,
+			DbxrefSQL dbxref) {
+		String extraWhere = " XXA.dbxref_source=" + getId();
+		String extraFrom = "";
+		return DbxrefDbxrefAnnotationSQL.getAnnotations(method, null, null, dbxref, extraFrom, extraWhere,
+			getConnection());
 	}
 
 }

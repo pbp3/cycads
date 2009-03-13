@@ -20,6 +20,6 @@ public interface KO<A extends DbxrefDbxrefAnnotation< ? , ? , ? >, X extends Dbx
 
 	public void setName(String name);
 
-	public A addEcAnnotation(M method, String ec);
+	public A addEcAnnotation(M method, String ecNumber);
 
 }

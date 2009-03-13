@@ -131,23 +131,24 @@ public class DbxrefDbxrefAnnotationSQL extends AnnotationSQL
 		return dbxrefTargetId;
 	}
 
-	public static Collection<SubseqAnnotationSQL> getAnnotations(AnnotationMethodSQL method, Collection<TypeSQL> types,
-			DbxrefSQL synonym, String extraClauseFrom, String extraClauseWhere, Connection con) {
+	public static Collection<DbxrefDbxrefAnnotationSQL> getAnnotations(AnnotationMethodSQL method,
+			Collection<TypeSQL> types, DbxrefSQL synonym, DbxrefSQL dbxref, String extraClauseFrom,
+			String extraClauseWhere, Connection con) {
 
 		StringBuffer query = new StringBuffer("SELECT distinct(XXA.annotation_id) FROM dbxref_dbxref_annotation XXA");
-		query.append(getFrom(method, types, synonym, extraClauseFrom)).append(
-			getWhere(method, types, synonym, extraClauseWhere));
+		StringBuffer clauseWhere = getWhere(method, types, synonym, dbxref, extraClauseWhere);
+		query.append(getFrom(method, types, synonym, extraClauseFrom)).append(clauseWhere);
 
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
 			stmt = con.createStatement();
 			rs = stmt.executeQuery(query.toString());
-			ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
+			ArrayList<DbxrefDbxrefAnnotationSQL> xxas = new ArrayList<DbxrefDbxrefAnnotationSQL>();
 			while (rs.next()) {
-				ssas.add(new SubseqAnnotationSQL(rs.getInt("annotation_id"), con));
+				xxas.add(new DbxrefDbxrefAnnotationSQL(rs.getInt("annotation_id"), con));
 			}
-			return ssas;
+			return xxas;
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -189,7 +190,7 @@ public class DbxrefDbxrefAnnotationSQL extends AnnotationSQL
 	}
 
 	protected static StringBuffer getWhere(AnnotationMethodSQL method, Collection<TypeSQL> types, DbxrefSQL synonym,
-			String extraClauseWhere) {
+			DbxrefSQL dbxref, String extraClauseWhere) {
 		StringBuffer where = new StringBuffer("");
 		if (method != null) {
 			where.append(" AND A.annotation_id=XXA.annotation_id AND A.annotation_method_id=" + method.getId());
@@ -217,7 +218,13 @@ public class DbxrefDbxrefAnnotationSQL extends AnnotationSQL
 			if (where.length() > 0) {
 				where.append(" AND");
 			}
-			where.append(" AS.annotation_id=XXA.annotation_id AND dbxref_id=" + synonym.getId());
+			where.append(" AS.annotation_id=XXA.annotation_id AND AS.dbxref_id=" + synonym.getId());
+		}
+		if (dbxref != null) {
+			if (where.length() > 0) {
+				where.append(" AND");
+			}
+			where.append(" XXA.dbxref_target=" + dbxref.getId());
 		}
 		if (where.length() > 0 && extraClauseWhere.length() > 0) {
 			where.append(" AND");
@@ -226,7 +233,7 @@ public class DbxrefDbxrefAnnotationSQL extends AnnotationSQL
 		if (where.length() > 0) {
 			where.insert(0, " WHERE");
 		}
-		return where.append(extraClauseWhere);
+		return where;
 	}
 
 }

@@ -14,6 +14,7 @@ import java.util.TreeSet;
 import org.cycads.entities.annotation.AnnotationFilter;
 import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
 import org.cycads.entities.annotation.SQL.SubseqAnnotationSQL;
+import org.cycads.entities.annotation.SQL.SubseqDbxrefAnnotationSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.sequence.Intron;
 import org.cycads.entities.sequence.Sequence;
@@ -385,201 +386,34 @@ public class SequenceSQL extends HasSynonymsNotebleSQL
 	}
 
 	@Override
-	public Collection<SubseqAnnotationSQL> getSubseqAnnotations(DbxrefSQL synonym) {
-		Statement stmt = null;
-		ResultSet rs = null;
-		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT SSA.annotation_id from subseq_annotation SSA, subsequence SS, Annotation_synonym AS"
-				+ " WHERE SS.sequence_id="
-				+ getId()
-				+ " AND SS.subsequence_id=SSA.subsequence_id AND"
-				+ " SSA.annotation_id=AS.annotation_id AND AS.dbxref_id=" + synonym.getId());
-			ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
-			while (rs.next()) {
-				ssas.add(new SubseqAnnotationSQL(rs.getInt("annotation_id"), getConnection()));
-			}
-			return ssas;
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-			if (stmt != null) {
-				try {
-					stmt.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
+	public Collection<SubseqAnnotationSQL> getAnnotations(AnnotationFilter<SubseqAnnotationSQL> filter) {
+		String extraFrom = ", subsequence SS";
+		String extraWhere = " SS.sequence_id=" + getId() + " AND SS.subsequence_id=SSA.subsequence_id";
+		Collection<SubseqAnnotationSQL> annots = SubseqAnnotationSQL.getAnnotations(null, null, null, extraFrom,
+			extraWhere, getConnection());
+		Collection<SubseqAnnotationSQL> ret = new ArrayList<SubseqAnnotationSQL>();
+		for (SubseqAnnotationSQL annot : annots) {
+			if (filter.accept(annot)) {
+				ret.add(annot);
 			}
 		}
+		return ret;
 	}
 
 	@Override
-	public Collection<SubseqAnnotationSQL> getSubseqAnnotations(TypeSQL type) {
-		Statement stmt = null;
-		ResultSet rs = null;
-		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT SSA.annotation_id from subseq_annotation SSA, subsequence SS, Annotation A"
-				+ " WHERE SS.sequence_id=" + getId() + " AND SS.subsequence_id=SSA.subsequence_id AND"
-				+ " SSA.annotation_id=A.annotation_id AND A.type=" + type.getId());
-			ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
-			while (rs.next()) {
-				ssas.add(new SubseqAnnotationSQL(rs.getInt("annotation_id"), getConnection()));
-			}
-			return ssas;
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-			if (stmt != null) {
-				try {
-					stmt.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-		}
+	public Collection<SubseqDbxrefAnnotationSQL> getDbxrefAnnotations(AnnotationMethodSQL method, DbxrefSQL dbxref) {
+		String extraFrom = ", subsequence SS";
+		String extraWhere = " SS.sequence_id=" + getId() + " AND SS.subsequence_id=SSA.subsequence_id";
+		return SubseqDbxrefAnnotationSQL.getAnnotations(method, null, null, dbxref, extraFrom, extraWhere,
+			getConnection());
 	}
 
 	@Override
-	public Collection<SubseqAnnotationSQL> getSubseqAnnotations(AnnotationMethodSQL method) {
-		Statement stmt = null;
-		ResultSet rs = null;
-		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT SSA.annotation_id from subseq_annotation SSA, subsequence SS, Annotation A"
-				+ " WHERE SS.sequence_id=" + getId() + " AND SS.subsequence_id=SSA.subsequence_id AND"
-				+ " SSA.annotation_id=A.annotation_id AND A.method=" + method.getId());
-			ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
-			while (rs.next()) {
-				ssas.add(new SubseqAnnotationSQL(rs.getInt("annotation_id"), getConnection()));
-			}
-			return ssas;
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-			if (stmt != null) {
-				try {
-					stmt.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-		}
+	public Collection<SubseqAnnotationSQL> getAnnotations(AnnotationMethodSQL method, Collection<TypeSQL> types,
+			DbxrefSQL synonym) {
+		String extraFrom = ", subsequence SS";
+		String extraWhere = " SS.sequence_id=" + getId() + " AND SS.subsequence_id=SSA.subsequence_id";
+		return SubseqAnnotationSQL.getAnnotations(method, types, synonym, extraFrom, extraWhere, getConnection());
 	}
 
-	@Override
-	public Collection<SubseqAnnotationSQL> getSubseqAnnotations(AnnotationMethodSQL method, TypeSQL type) {
-		Statement stmt = null;
-		ResultSet rs = null;
-		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT SSA.annotation_id from subseq_annotation SSA, subsequence SS, Annotation A"
-				+ " WHERE SS.sequence_id=" + getId() + " AND SS.subsequence_id=SSA.subsequence_id AND"
-				+ " SSA.annotation_id=A.annotation_id AND A.type=" + type.getId() + " AND A.method=" + method.getId());
-			ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
-			while (rs.next()) {
-				ssas.add(new SubseqAnnotationSQL(rs.getInt("annotation_id"), getConnection()));
-			}
-			return ssas;
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-			if (stmt != null) {
-				try {
-					stmt.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-		}
-	}
-
-	@Override
-	public Collection<SubseqAnnotationSQL> getSubseqAnnotations(AnnotationFilter<SubseqAnnotationSQL> filter) {
-		Statement stmt = null;
-		ResultSet rs = null;
-		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT SSA.annotation_id from subseq_annotation SSA, subsequence SS"
-				+ " WHERE SS.sequence_id=" + getId() + " AND SS.subsequence_id=SSA.subsequence_id");
-			ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
-			while (rs.next()) {
-				SubseqAnnotationSQL ssa = new SubseqAnnotationSQL(rs.getInt("annotation_id"), getConnection());
-				if (filter.accept(ssa)) {
-					ssas.add(ssa);
-				}
-			}
-			return ssas;
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-			if (stmt != null) {
-				try {
-					stmt.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-		}
-	}
 }

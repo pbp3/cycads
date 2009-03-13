@@ -106,7 +106,7 @@ public class SubseqAnnotationSQL extends AnnotationSQL
 	public static Collection<SubseqAnnotationSQL> getAnnotations(AnnotationMethodSQL method, Collection<TypeSQL> types,
 			DbxrefSQL synonym, String extraClauseFrom, String extraClauseWhere, Connection con) {
 
-		StringBuffer query = new StringBuffer("SELECT distinct(SSA.annotation_id) FROM subseq_annotation SSA");
+		StringBuffer query = getQueryBasic();
 		query.append(getFrom(method, types, synonym, extraClauseFrom)).append(
 			getWhere(method, types, synonym, extraClauseWhere));
 
@@ -143,6 +143,10 @@ public class SubseqAnnotationSQL extends AnnotationSQL
 				}
 			}
 		}
+	}
+
+	protected static StringBuffer getQueryBasic() {
+		return new StringBuffer("SELECT distinct(SSA.annotation_id) FROM subseq_annotation SSA");
 	}
 
 	protected static StringBuffer getFrom(AnnotationMethodSQL method, Collection<TypeSQL> types, DbxrefSQL synonym,
@@ -189,7 +193,7 @@ public class SubseqAnnotationSQL extends AnnotationSQL
 			if (where.length() > 0) {
 				where.append(" AND");
 			}
-			where.append(" AS.annotation_id=SSA.annotation_id AND dbxref_id=" + synonym.getId());
+			where.append(" AS.annotation_id=SSA.annotation_id AND AS.dbxref_id=" + synonym.getId());
 		}
 		if (where.length() > 0 && extraClauseWhere.length() > 0) {
 			where.append(" AND");
@@ -200,4 +204,5 @@ public class SubseqAnnotationSQL extends AnnotationSQL
 		}
 		return where;
 	}
+
 }
