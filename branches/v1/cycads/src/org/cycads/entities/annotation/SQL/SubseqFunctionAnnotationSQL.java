@@ -7,6 +7,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.cycads.entities.annotation.SubseqFunctionAnnotation;
 import org.cycads.entities.note.SQL.TypeSQL;
@@ -14,9 +16,8 @@ import org.cycads.entities.sequence.SQL.SubsequenceSQL;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.FunctionSQL;
 
-public class SubseqFunctionAnnotationSQL extends SubseqAnnotationSQL
-		implements SubseqFunctionAnnotation<SubsequenceSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
-{
+public class SubseqFunctionAnnotationSQL extends SubseqAnnotationSQL implements
+		SubseqFunctionAnnotation<SubsequenceSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL> {
 	private int			functionId;
 	private FunctionSQL	function;
 
@@ -100,6 +101,57 @@ public class SubseqFunctionAnnotationSQL extends SubseqAnnotationSQL
 
 	public int getFunctionId() {
 		return functionId;
+	}
+
+	public static Collection<SubseqFunctionAnnotationSQL> getAnnotations(AnnotationMethodSQL method,
+			Collection<TypeSQL> types, DbxrefSQL synonym, FunctionSQL function, String extraClauseFrom,
+			String extraClauseWhere, Connection con) {
+
+		StringBuffer query = getQueryBasic().append(", subseq_function_annotation SSFA");
+
+		StringBuffer clauseWhere = getWhere(method, types, synonym, extraClauseWhere);
+		if (clauseWhere.length() > 0) {
+			clauseWhere.append(" AND");
+		}
+		clauseWhere.append(" SSA.annotation_id=SSFA.annotation_id");
+		if (function != null) {
+			clauseWhere.append(" AND SSFA.function_id=" + function.getId());
+		}
+		query.append(getFrom(method, types, synonym, extraClauseFrom)).append(clauseWhere);
+
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query.toString());
+			ArrayList<SubseqFunctionAnnotationSQL> ssas = new ArrayList<SubseqFunctionAnnotationSQL>();
+			while (rs.next()) {
+				ssas.add(new SubseqFunctionAnnotationSQL(rs.getInt("annotation_id"), con));
+			}
+			return ssas;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
 	}
 
 }

@@ -44,4 +44,30 @@ public class Config {
 		return Integer.parseInt(getString(key));
 	}
 
+	public static String getSQLConnectionUrl() {
+		return getStringMandatory("general.sql.connectionUrl");
+	}
+
+	public static String getSQLUser() {
+		return getStringMandatory("general.sql.usr");
+	}
+
+	public static String getSQLPassword() {
+		return getStringMandatory("general.sql.pass");
+	}
+
+	// KOLoader
+
+	public static String koLoaderFileName() {
+		return getStringMandatory("KOLoader.fileName");
+	}
+
+	public static String getKOLoaderMethodDBLinkName() {
+		return getStringMandatory("KOLoader.DBLinkMethodName");
+	}
+
+	public static String getKOLoaderECAnnotationMethodName() {
+		return getStringMandatory("KOLoader.ECAnnotationMethodName");
+	}
+
 }

@@ -16,9 +16,8 @@ import org.cycads.entities.annotation.SQL.DbxrefDbxrefAnnotationSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.synonym.Dbxref;
 
-public class DbxrefSQL extends HasSynonymsNotebleSQL
-		implements Dbxref<DbxrefDbxrefAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
-{
+public class DbxrefSQL extends HasSynonymsNotebleSQL implements
+		Dbxref<DbxrefDbxrefAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL> {
 	public final static int	INVALID_ID	= -1;
 	private String			dbName;
 	private String			accession;
@@ -184,44 +183,44 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL
 		return getDbName() + ":" + getAccession();
 	}
 
-	//	@Override
-	//	public Collection<DbxrefDbxrefAnnotationSQL> getDbxrefDbxrefAnnotations(DbxrefSQL synonym) {
-	//		Statement stmt = null;
-	//		ResultSet rs = null;
-	//		try {
-	//			stmt = con.createStatement();
-	//			rs = stmt.executeQuery("SELECT SSA.annotation_id from subseq_annotation SSA, Annotation_synonym AS"
-	//				+ " WHERE SSA.subsequence_id=" + getId() + " AND SSA.annotation_id=AS.annotation_id AND AS.dbxref_id="
-	//				+ synonym.getId());
-	//			ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
-	//			while (rs.next()) {
-	//				ssas.add(new SubseqAnnotationSQL(rs.getInt("annotation_id"), getConnection()));
-	//			}
-	//			return ssas;
-	//		}
-	//		catch (SQLException e) {
-	//			e.printStackTrace();
-	//			throw new RuntimeException(e);
-	//		}
-	//		finally {
-	//			if (rs != null) {
-	//				try {
-	//					rs.close();
-	//				}
-	//				catch (SQLException ex) {
-	//					// ignore
-	//				}
-	//			}
-	//			if (stmt != null) {
-	//				try {
-	//					stmt.close();
-	//				}
-	//				catch (SQLException ex) {
-	//					// ignore
-	//				}
-	//			}
-	//		}
-	//	}
+	// @Override
+	// public Collection<DbxrefDbxrefAnnotationSQL> getDbxrefDbxrefAnnotations(DbxrefSQL synonym) {
+	// Statement stmt = null;
+	// ResultSet rs = null;
+	// try {
+	// stmt = con.createStatement();
+	// rs = stmt.executeQuery("SELECT SSA.annotation_id from subseq_annotation SSA, Annotation_synonym AS"
+	// + " WHERE SSA.subsequence_id=" + getId() + " AND SSA.annotation_id=AS.annotation_id AND AS.dbxref_id="
+	// + synonym.getId());
+	// ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
+	// while (rs.next()) {
+	// ssas.add(new SubseqAnnotationSQL(rs.getInt("annotation_id"), getConnection()));
+	// }
+	// return ssas;
+	// }
+	// catch (SQLException e) {
+	// e.printStackTrace();
+	// throw new RuntimeException(e);
+	// }
+	// finally {
+	// if (rs != null) {
+	// try {
+	// rs.close();
+	// }
+	// catch (SQLException ex) {
+	// // ignore
+	// }
+	// }
+	// if (stmt != null) {
+	// try {
+	// stmt.close();
+	// }
+	// catch (SQLException ex) {
+	// // ignore
+	// }
+	// }
+	// }
+	// }
 	//
 	@Override
 	public DbxrefDbxrefAnnotationSQL createDbxrefAnnotation(AnnotationMethodSQL method, DbxrefSQL dbxref) {
@@ -232,6 +231,17 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL
 		catch (SQLException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public DbxrefDbxrefAnnotationSQL addDbxrefAnnotation(AnnotationMethodSQL method, DbxrefSQL dbxref) {
+		Collection< ? extends DbxrefDbxrefAnnotationSQL> annots = getDbxrefAnnotations(method, dbxref);
+		if (annots.isEmpty()) {
+			return createDbxrefAnnotation(method, dbxref);
+		}
+		else {
+			return annots.iterator().next();
 		}
 	}
 

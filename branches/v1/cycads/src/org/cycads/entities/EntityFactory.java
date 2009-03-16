@@ -5,10 +5,11 @@ package org.cycads.entities;
 
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.note.Type;
+import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.synonym.Dbxref;
+import org.cycads.entities.synonym.KO;
 
-public interface EntityFactory<D extends Dbxref< ? , ? , ? , ? >, M extends AnnotationMethod, T extends Type>
-{
+public interface EntityFactory<D extends Dbxref< ? , ? , ? , ? >, M extends AnnotationMethod, T extends Type, O extends Organism< ? , ? , ? , ? , ? , ? >> {
 	public D getDbxref(String dbName, String accession);
 
 	public M getAnnotationMethod(String name);
@@ -17,4 +18,7 @@ public interface EntityFactory<D extends Dbxref< ? , ? , ? , ? >, M extends Anno
 
 	public T getAnnotationType(String name);
 
+	public O getOrganism(int orgId);
+
+	public KO< ? , ? , ? , ? > getKO(String ko);
 }

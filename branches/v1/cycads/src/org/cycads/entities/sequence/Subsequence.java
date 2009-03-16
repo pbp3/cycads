@@ -17,8 +17,7 @@ import org.cycads.entities.synonym.Function;
 import org.cycads.entities.synonym.HasSynonyms;
 
 public interface Subsequence<S extends Sequence< ? , ? , ? , ? , ? , ? >, SA extends SubseqAnnotation< ? , ? , ? , ? >, F extends Function, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
-		extends Noteble, HasSynonyms<X>, AnnotationFinder<SA, X, T, M>
-{
+		extends Noteble, HasSynonyms<X>, AnnotationFinder<SA, X, T, M> {
 
 	public Collection<Intron> getIntrons();
 
@@ -41,5 +40,13 @@ public interface Subsequence<S extends Sequence< ? , ? , ? , ? , ? , ? >, SA ext
 	public SubseqDbxrefAnnotation< ? , ? , ? , ? > createDbxrefAnnotation(M method, X dbxref);
 
 	public SubseqAnnotation< ? , ? , ? , ? > createAnnotation(T type, M method);
+
+	/* Add if Annotation doesn't exist */
+	public SubseqDbxrefAnnotation< ? , ? , ? , ? > addDbxrefAnnotation(M method, X dbxref);
+
+	/* Add if Annotation doesn't exist */
+	public SubseqFunctionAnnotation< ? , ? , ? , ? > addFunctionAnnotation(M method, F function);
+
+	public Collection< ? extends SubseqFunctionAnnotation< ? , ? , ? , ? >> getFunctionAnnotations(M method, F function);
 
 }

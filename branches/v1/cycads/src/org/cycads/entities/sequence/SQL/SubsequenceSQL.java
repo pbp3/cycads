@@ -26,9 +26,8 @@ import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.FunctionSQL;
 import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
-public class SubsequenceSQL extends HasSynonymsNotebleSQL
-		implements Subsequence<SequenceSQL, SubseqAnnotationSQL, FunctionSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
-{
+public class SubsequenceSQL extends HasSynonymsNotebleSQL implements
+		Subsequence<SequenceSQL, SubseqAnnotationSQL, FunctionSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL> {
 	private int					id;
 	private Connection			con;
 	private int					start, end;
@@ -226,6 +225,28 @@ public class SubsequenceSQL extends HasSynonymsNotebleSQL
 	}
 
 	@Override
+	public SubseqDbxrefAnnotationSQL addDbxrefAnnotation(AnnotationMethodSQL method, DbxrefSQL dbxref) {
+		Collection< ? extends SubseqDbxrefAnnotationSQL> annots = getDbxrefAnnotations(method, dbxref);
+		if (annots.isEmpty()) {
+			return createDbxrefAnnotation(method, dbxref);
+		}
+		else {
+			return annots.iterator().next();
+		}
+	}
+
+	@Override
+	public SubseqFunctionAnnotationSQL addFunctionAnnotation(AnnotationMethodSQL method, FunctionSQL function) {
+		Collection<SubseqFunctionAnnotationSQL> annots = getFunctionAnnotations(method, function);
+		if (annots.isEmpty()) {
+			return createFunctionAnnotation(method, function);
+		}
+		else {
+			return annots.iterator().next();
+		}
+	}
+
+	@Override
 	public SubseqFunctionAnnotationSQL createFunctionAnnotation(AnnotationMethodSQL method, FunctionSQL function) {
 		try {
 			int id = SubseqFunctionAnnotationSQL.createSubseqFunctionAnnotationSQL(method, this, function,
@@ -293,6 +314,15 @@ public class SubsequenceSQL extends HasSynonymsNotebleSQL
 		String extraWhere = " SSA.subsequence_id=" + getId();
 		String extraFrom = "";
 		return SubseqAnnotationSQL.getAnnotations(method, types, synonym, extraFrom, extraWhere, getConnection());
+	}
+
+	@Override
+	public Collection<SubseqFunctionAnnotationSQL> getFunctionAnnotations(AnnotationMethodSQL method,
+			FunctionSQL function) {
+		String extraWhere = " SSA.subsequence_id=" + getId();
+		String extraFrom = "";
+		return SubseqFunctionAnnotationSQL.getAnnotations(method, null, null, function, extraFrom, extraWhere,
+			getConnection());
 	}
 
 }
