@@ -7,21 +7,24 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Hashtable;
 
 import org.cycads.entities.note.Type;
 import org.cycads.general.ParametersDefault;
 
 public class TypeSQL implements Type
 {
-	public static final int	INVALID_ID					= -1;
-	private static TypeSQL	subseqAnnotationType		= null;
-	private static TypeSQL	dbxrefAnnotationType		= null;
-	private static TypeSQL	functionAnnotationType		= null;
-	private static TypeSQL	dbxrefSourceAnnotationType	= null;
+	public static final int						INVALID_ID					= -1;
 
-	private int				id;
-	private String			name, description;
-	private Connection		con;
+	public static Hashtable<String, TypeSQL>	typesHash					= new Hashtable<String, TypeSQL>();
+	private static TypeSQL						subseqAnnotationType		= null;
+	private static TypeSQL						dbxrefAnnotationType		= null;
+	private static TypeSQL						functionAnnotationType		= null;
+	private static TypeSQL						dbxrefSourceAnnotationType	= null;
+
+	private int									id;
+	private String								name, description;
+	private Connection							con;
 
 	public TypeSQL(int id, Connection con) throws SQLException {
 		this.id = id;
@@ -143,6 +146,15 @@ public class TypeSQL implements Type
 				}
 			}
 		}
+	}
+
+	public static TypeSQL getType(String name, Connection con) throws SQLException {
+		TypeSQL type = typesHash.get(name);
+		if (type == null) {
+			type = new TypeSQL(name, null, con);
+			typesHash.put(name, type);
+		}
+		return type;
 	}
 
 	@Override

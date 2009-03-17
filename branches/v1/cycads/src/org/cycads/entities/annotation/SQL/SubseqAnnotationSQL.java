@@ -168,7 +168,7 @@ public class SubseqAnnotationSQL extends AnnotationSQL
 			String extraClauseWhere) {
 		StringBuffer where = new StringBuffer("");
 		if (method != null) {
-			where.append(" AND A.annotation_id=SSA.annotation_id AND A.annotation_method_id=" + method.getId());
+			where.append(" A.annotation_id=SSA.annotation_id AND A.annotation_method_id=" + method.getId());
 		}
 		if (types != null && !types.isEmpty()) {
 			if (where.length() > 0) {

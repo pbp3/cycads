@@ -36,9 +36,9 @@ public abstract class AnnotationSQL extends HasSynonymsNotebleSQL
 		ResultSet rs = null;
 		try {
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT method from Annotation WHERE annotation_id=" + id);
+			rs = stmt.executeQuery("SELECT annotation_method_id from Annotation WHERE annotation_id=" + id);
 			if (rs.next()) {
-				methodId = rs.getInt("method");
+				methodId = rs.getInt("annotation_method_id");
 			}
 			else {
 				throw new SQLException("Annotation does not exist:" + id);
@@ -71,7 +71,7 @@ public abstract class AnnotationSQL extends HasSynonymsNotebleSQL
 		ResultSet rs = null;
 		try {
 			stmt = con.createStatement();
-			stmt.executeUpdate("INSERT INTO Annotation (method) VALUES (" + method.getId() + ")",
+			stmt.executeUpdate("INSERT INTO Annotation (annotation_method_id) VALUES (" + method.getId() + ")",
 				Statement.RETURN_GENERATED_KEYS);
 			rs = stmt.getGeneratedKeys();
 			if (rs.next()) {

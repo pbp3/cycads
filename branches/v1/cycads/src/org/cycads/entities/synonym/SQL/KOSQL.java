@@ -12,7 +12,8 @@ import org.cycads.entities.annotation.SQL.DbxrefDbxrefAnnotationSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.synonym.KO;
 
-public class KOSQL extends DbxrefSQL implements KO<DbxrefDbxrefAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL> {
+public class KOSQL extends DbxrefSQL implements KO<DbxrefDbxrefAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
+{
 
 	public KOSQL(int id, Connection con) throws SQLException {
 		super(id, con);
@@ -37,6 +38,7 @@ public class KOSQL extends DbxrefSQL implements KO<DbxrefDbxrefAnnotationSQL, Db
 
 	@Override
 	public void setDefinition(String definition) {
+		definition.replaceAll("\'", "");
 		setNoteValue("Definition", definition);
 	}
 
