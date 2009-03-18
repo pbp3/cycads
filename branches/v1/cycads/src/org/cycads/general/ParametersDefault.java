@@ -6,7 +6,8 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
-public class ParametersDefault {
+public class ParametersDefault
+{
 	private static final String			BUNDLE_NAME		= "parametersDefault";						//$NON-NLS-1$
 
 	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
@@ -159,7 +160,7 @@ public class ParametersDefault {
 	}
 
 	public static String koFileDBLinkDbName(String DBLinkName) {
-		String dbName = transform(DBLinkName, getDBLinkPatterns(), getDBLinkNames());
+		String dbName = transform(DBLinkName, getKODBLinkPatterns(), getfKODBLinkNames());
 		if (dbName == null) {
 			return DBLinkName;
 		}
@@ -168,7 +169,7 @@ public class ParametersDefault {
 
 	public static List<Pattern>	dbLinkPatterns;
 
-	private static List<Pattern> getDBLinkPatterns() {
+	private static List<Pattern> getKODBLinkPatterns() {
 		if (dbLinkPatterns == null) {
 			dbLinkPatterns = getPatterns("KOFile.DBLink.names.regex");
 		}
@@ -177,7 +178,7 @@ public class ParametersDefault {
 
 	public static List<String>	dbLinkNames;
 
-	private static List<String> getDBLinkNames() {
+	private static List<String> getfKODBLinkNames() {
 		if (dbLinkNames == null) {
 			dbLinkNames = getStrings("KOFile.DBLink.dbNames");
 		}

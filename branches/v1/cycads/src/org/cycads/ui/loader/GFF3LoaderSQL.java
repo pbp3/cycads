@@ -18,7 +18,7 @@ import org.cycads.parser.gff3.GFF3Parser;
 import org.cycads.parser.gff3.GFF3Record;
 import org.cycads.ui.Tools;
 
-public class LoadGFF3Fast implements GFF3DocumentHandler
+public class GFF3LoaderSQL implements GFF3DocumentHandler
 {
 
 	Pattern							cdsPattern	= Pattern.compile(Config.gff3CDSTagExpression());
@@ -34,20 +34,11 @@ public class LoadGFF3Fast implements GFF3DocumentHandler
 		if (file == null) {
 			return;
 		}
-		try {
-
-			//Register the JDBC driver for MySQL.
-			Class.forName("com.mysql.jdbc.Driver");
-
-			(new GFF3Parser()).parse(file, new LoadGFF3Fast(), null);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+		(new GFF3Parser()).parse(file, new GFF3LoaderSQL());
 
 	}
 
-	LoadGFF3Fast() {
+	GFF3LoaderSQL() {
 	}
 
 	@Override
@@ -56,7 +47,7 @@ public class LoadGFF3Fast implements GFF3DocumentHandler
 	}
 
 	@Override
-	public void startDocument(String locator) {
+	public void startDocument() {
 		try {
 			factory = new EntityFactorySQL();
 			con = factory.getConnection();
@@ -109,7 +100,6 @@ public class LoadGFF3Fast implements GFF3DocumentHandler
 							geneComment = geneComments.iterator().next();
 						}
 					}
-
 				}
 				if (record.getSource().equals("GLEAN")) {
 					stmt.executeUpdate("INSERT INTO CDS(ACYPI, NAME, GLEAN, DBXREF_GENEID, GENE_COMMENT) VALUES('"
