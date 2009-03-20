@@ -4,6 +4,7 @@
 package org.cycads.entities.sequence.SQL;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -131,12 +132,14 @@ public class OrganismSQL
 	public SequenceSQL createNewSequence(String version) {
 		int id = 0;
 
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.createStatement();
-			stmt.executeUpdate("INSERT INTO sequence (NCBI_TAXON_ID, version) VALUES (" + getId() + ",'" + version
-				+ "')", Statement.RETURN_GENERATED_KEYS);
+			stmt = con.prepareStatement("INSERT INTO sequence (NCBI_TAXON_ID, version) VALUES (?,?)",
+				Statement.RETURN_GENERATED_KEYS);
+			stmt.setInt(1, getId());
+			stmt.setString(2, version);
+			stmt.executeUpdate();
 			rs = stmt.getGeneratedKeys();
 			if (rs.next()) {
 				id = rs.getInt(1);

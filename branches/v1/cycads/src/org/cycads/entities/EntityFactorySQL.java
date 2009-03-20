@@ -15,7 +15,8 @@ import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.KOSQL;
 import org.cycads.general.Config;
 
-public class EntityFactorySQL implements EntityFactory<DbxrefSQL, AnnotationMethodSQL, TypeSQL, OrganismSQL> {
+public class EntityFactorySQL implements EntityFactory<DbxrefSQL, AnnotationMethodSQL, TypeSQL, OrganismSQL>
+{
 	private Connection	con;
 
 	public EntityFactorySQL() {
@@ -68,14 +69,12 @@ public class EntityFactorySQL implements EntityFactory<DbxrefSQL, AnnotationMeth
 
 	@Override
 	public TypeSQL getNoteType(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new RuntimeException("Method not implemented.");
 	}
 
 	@Override
 	public TypeSQL getAnnotationType(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new RuntimeException("Method not implemented.");
 	}
 
 	@Override

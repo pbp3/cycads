@@ -12,7 +12,9 @@ import java.util.Hashtable;
 import java.util.regex.Pattern;
 
 import org.cycads.entities.EntityFactorySQL;
+import org.cycads.entities.sequence.SQL.OrganismSQL;
 import org.cycads.general.Config;
+import org.cycads.general.Messages;
 import org.cycads.parser.gff3.GFF3DocumentHandler;
 import org.cycads.parser.gff3.GFF3Parser;
 import org.cycads.parser.gff3.GFF3Record;
@@ -30,6 +32,20 @@ public class GFF3LoaderSQL implements GFF3DocumentHandler
 	Hashtable<String, GFF3Record>	genes;
 
 	public static void main(String[] args) {
+		EntityFactorySQL factory = new EntityFactorySQL();
+		File file = Tools.getFileToOpen(args, 0, Config.gff3LoaderFileName(), Messages.gff3LoaderChooseFile());
+		if (file == null) {
+			return;
+		}
+		OrganismSQL organism = Tools.getOrganism(args, 1, Config.gff3LoaderOrganismNumber(),
+			Messages.gff3ChooseOrganism());
+		if (organism == null) {
+			return;
+		}
+		String seqDBName = Tools.getString(args, 2, Messages.gff3LoaderChooseSeqDBName(), Config.gff3LoaderSeqDBName());
+		if (seqDBName == null) {
+			return;
+		}
 		File file = Tools.getFileToOpen(args, 0, "/home/avellozo/Pisum/ACYPI.gff3", "File GFF3");
 		if (file == null) {
 			return;

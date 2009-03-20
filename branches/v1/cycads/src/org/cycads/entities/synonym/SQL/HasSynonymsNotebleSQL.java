@@ -59,7 +59,17 @@ public abstract class HasSynonymsNotebleSQL extends NotebleSQL implements HasSyn
 	public DbxrefSQL addSynonym(String dbName, String accession) {
 		try {
 			return getSynonymsSQL().addSynonym(dbName, accession);
-			//			dbxref.getSynonymsSQL().addSynonym(this);
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public void addSynonym(DbxrefSQL dbxref) {
+		try {
+			getSynonymsSQL().addSynonym(dbxref);
 		}
 		catch (SQLException e) {
 			e.printStackTrace();

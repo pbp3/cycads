@@ -8,13 +8,18 @@ public class SimpleIntron implements Intron
 	int	start, end;
 
 	public SimpleIntron(int start, int end) {
+		if (start > end) {
+			int aux = start;
+			start = end;
+			end = aux;
+		}
 		this.start = start;
 		this.end = end;
 	}
 
 	@Override
 	public int getLength() {
-		return getMaxPosition() - getMinPosition() + 1;
+		return getEnd() - getStart() + 1;
 	}
 
 	@Override
@@ -28,16 +33,6 @@ public class SimpleIntron implements Intron
 	}
 
 	@Override
-	public int getMinPosition() {
-		return getStart() < getEnd() ? getStart() : getEnd();
-	}
-
-	@Override
-	public int getMaxPosition() {
-		return getStart() > getEnd() ? getStart() : getEnd();
-	}
-
-	@Override
 	public boolean equals(Object obj) {
 		if (obj == null || !(obj instanceof Intron)) {
 			return false;
@@ -47,15 +42,15 @@ public class SimpleIntron implements Intron
 	}
 
 	public int compareTo(Intron o) {
-		if (this.getMinPosition() - o.getMinPosition() != 0) {
-			return this.getMinPosition() - o.getMinPosition();
+		if (this.getStart() - o.getStart() != 0) {
+			return this.getStart() - o.getStart();
 		}
-		return this.getMaxPosition() - o.getMaxPosition();
+		return this.getEnd() - o.getEnd();
 	}
 
 	@Override
 	public boolean contains(Intron intron) {
-		return this.getMinPosition() <= intron.getMinPosition() && this.getMaxPosition() >= intron.getMaxPosition();
+		return this.getStart() <= intron.getStart() && this.getEnd() >= intron.getEnd();
 	}
 
 }

@@ -16,8 +16,9 @@ import org.cycads.entities.annotation.SQL.DbxrefDbxrefAnnotationSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.synonym.Dbxref;
 
-public class DbxrefSQL extends HasSynonymsNotebleSQL implements
-		Dbxref<DbxrefDbxrefAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL> {
+public class DbxrefSQL extends HasSynonymsNotebleSQL
+		implements Dbxref<DbxrefDbxrefAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
+{
 	public final static int	INVALID_ID	= -1;
 	private String			dbName;
 	private String			accession;
@@ -171,6 +172,18 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL implements
 		try {
 			dbxref.getSynonymsSQL().addSynonym(this);
 			return dbxref;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public void addSynonym(DbxrefSQL dbxref) {
+		super.addSynonym(dbxref);
+		try {
+			dbxref.getSynonymsSQL().addSynonym(this);
 		}
 		catch (SQLException e) {
 			e.printStackTrace();

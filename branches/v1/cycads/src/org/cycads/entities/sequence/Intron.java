@@ -13,8 +13,4 @@ public interface Intron extends Comparable<Intron>
 
 	public int getEnd();
 
-	public int getMinPosition();
-
-	public int getMaxPosition();
-
 }

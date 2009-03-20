@@ -4,6 +4,7 @@
 package org.cycads.entities.sequence.SQL;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -26,8 +27,9 @@ import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.FunctionSQL;
 import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
-public class SubsequenceSQL extends HasSynonymsNotebleSQL implements
-		Subsequence<SequenceSQL, SubseqAnnotationSQL, FunctionSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL> {
+public class SubsequenceSQL extends HasSynonymsNotebleSQL
+		implements Subsequence<SequenceSQL, SubseqAnnotationSQL, FunctionSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
+{
 	private int					id;
 	private Connection			con;
 	private int					start, end;
@@ -143,40 +145,40 @@ public class SubsequenceSQL extends HasSynonymsNotebleSQL implements
 			return false;
 		}
 		// introns must be in natural order
-		Iterator<Intron> itSubseq = (new TreeSet<Intron>(subseq.getIntrons())).iterator();
+		Iterator<Intron> itSubseq = subseq.getIntrons().iterator();
 		Intron intronOtherSubseq = null;
 		if (itSubseq.hasNext()) {
 			intronOtherSubseq = itSubseq.next();
 		}
-		for (Intron intron : new TreeSet<Intron>(this.getIntrons())) {
+		for (Intron intron : this.getIntrons()) {
 			if (intronOtherSubseq == null) {
-				return intron.getMinPosition() > subseq.getMaxPosition();
+				return intron.getStart() > subseq.getMaxPosition();
 			}
 			// get intronOtherSubseq that overlap intron
-			while (intronOtherSubseq.getMaxPosition() < intron.getMinPosition()) {
+			while (intronOtherSubseq.getEnd() < intron.getStart()) {
 				if (!itSubseq.hasNext()) {
-					return intron.getMinPosition() > subseq.getMaxPosition();
+					return intron.getStart() > subseq.getMaxPosition();
 				}
 				intronOtherSubseq = itSubseq.next();
 			}
-			if (intronOtherSubseq.getMinPosition() > intron.getMinPosition()) {
-				return intron.getMinPosition() > subseq.getMaxPosition();
+			if (intronOtherSubseq.getStart() > intron.getStart()) {
+				return intron.getStart() > subseq.getMaxPosition();
 			}
 			else {
 				// intronOtherSubseq.min<=intron.min
-				while (intronOtherSubseq.getMaxPosition() < intron.getMaxPosition()) {
+				while (intronOtherSubseq.getEnd() < intron.getEnd()) {
 					// get nextIntron adjacent
 					if (itSubseq.hasNext()) {
 						Intron nextIntronOtherSubseq = itSubseq.next();
-						if (intronOtherSubseq.getMaxPosition() + 1 == nextIntronOtherSubseq.getMinPosition()) {
+						if (intronOtherSubseq.getEnd() + 1 == nextIntronOtherSubseq.getStart()) {
 							intronOtherSubseq = nextIntronOtherSubseq;
 						}
 						else {
-							return intron.getMinPosition() > subseq.getMaxPosition();
+							return intron.getStart() > subseq.getMaxPosition();
 						}
 					}
 					else {
-						return intron.getMinPosition() > subseq.getMaxPosition();
+						return intron.getStart() > subseq.getMaxPosition();
 					}
 				}
 			}
@@ -193,7 +195,7 @@ public class SubsequenceSQL extends HasSynonymsNotebleSQL implements
 				stmt = con.createStatement();
 				rs = stmt.executeQuery("SELECT start_position, end_position from Intron where subsequence_id="
 					+ getId());
-				introns = new ArrayList<Intron>();
+				introns = new TreeSet<Intron>();
 				while (rs.next()) {
 					introns.add(new SimpleIntron(rs.getInt("start_position"), rs.getInt("end_position")));
 				}
@@ -222,6 +224,98 @@ public class SubsequenceSQL extends HasSynonymsNotebleSQL implements
 			}
 		}
 		return introns;
+	}
+
+	@Override
+	public boolean addIntron(Intron intron) {
+		PreparedStatement stmt = null;
+		try {
+			stmt = con.prepareStatement("INSERT INTO Intron (subsequence_id, start_position, end_position) VALUES (?,?,?)");
+			stmt.setInt(1, getId());
+			stmt.setInt(2, intron.getStart());
+			stmt.setInt(3, intron.getEnd());
+			stmt.executeUpdate();
+			if (introns != null) {
+				introns.add(intron);
+			}
+			return true;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		finally {
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
+	}
+
+	@Override
+	public boolean removeIntron(Intron intron) {
+		PreparedStatement stmt = null;
+		try {
+			stmt = con.prepareStatement("DELETE FROM Intron WHERE subsequence_id=? AND start_position=? AND end_position=?");
+			stmt.setInt(1, getId());
+			stmt.setInt(2, intron.getStart());
+			stmt.setInt(3, intron.getEnd());
+			stmt.executeUpdate();
+			if (introns != null) {
+				introns.remove(intron);
+			}
+			return true;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
+		finally {
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
+	}
+
+	@Override
+	public boolean addExon(int start, int end) {
+		if (start > end) {
+			int aux = start;
+			start = end;
+			end = aux;
+		}
+		Collection<Intron> introns = getIntrons();
+		Collection<Intron> intronsToRemove = new ArrayList<Intron>();
+		Collection<Intron> intronsToAdd = new ArrayList<Intron>();
+		for (Intron intron : introns) {
+			if ((intron.getStart() < start && intron.getEnd() > end)
+				|| (intron.getStart() >= start && intron.getStart() <= end)
+				|| (intron.getEnd() >= start && intron.getEnd() <= end)) {
+				intronsToRemove.add(intron);
+				if (intron.getStart() < start) {
+					intronsToAdd.add(new SimpleIntron(intron.getStart(), start - 1));
+				}
+				if (intron.getEnd() > end) {
+					intronsToAdd.add(new SimpleIntron(end + 1, intron.getEnd()));
+				}
+			}
+		}
+		for (Intron intron : intronsToRemove) {
+			removeIntron(intron);
+		}
+		for (Intron intron : intronsToAdd) {
+			addIntron(intron);
+		}
+		return true;
 	}
 
 	@Override

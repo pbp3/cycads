@@ -17,9 +17,16 @@ import org.cycads.entities.synonym.Function;
 import org.cycads.entities.synonym.HasSynonyms;
 
 public interface Subsequence<S extends Sequence< ? , ? , ? , ? , ? , ? >, SA extends SubseqAnnotation< ? , ? , ? , ? >, F extends Function, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
-		extends Noteble, HasSynonyms<X>, AnnotationFinder<SA, X, T, M> {
+		extends Noteble, HasSynonyms<X>, AnnotationFinder<SA, X, T, M>
+{
 
 	public Collection<Intron> getIntrons();
+
+	public boolean addIntron(Intron intron);
+
+	public boolean removeIntron(Intron intron);
+
+	public boolean addExon(int start, int end);
 
 	public boolean isPositiveStrand();
 
