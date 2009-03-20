@@ -10,7 +10,7 @@ import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.HasSynonyms;
 
-public interface Annotation<X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
+public interface Annotation<AParent extends Annotation< ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
 		extends Noteble, HasSynonyms<X>
 {
 	public M getAnnotationMethod();
@@ -22,4 +22,8 @@ public interface Annotation<X extends Dbxref< ? , ? , ? , ? >, T extends Type, M
 	public T addType(String type);
 
 	public T addType(T type);
+
+	public Collection<AParent> getParents();
+
+	public void addParent(AParent parent);
 }

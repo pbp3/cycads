@@ -366,7 +366,7 @@ public class SubsequenceSQL extends HasSynonymsNotebleSQL
 	}
 
 	@Override
-	public SubseqAnnotation< ? , ? , ? , ? > createAnnotation(TypeSQL type, AnnotationMethodSQL method) {
+	public SubseqAnnotation< ? , ? , ? , ? , ? > createAnnotation(TypeSQL type, AnnotationMethodSQL method) {
 		try {
 			int id = SubseqAnnotationSQL.createSubseqAnnotationSQL(method, this, getConnection());
 			SubseqAnnotationSQL annot = new SubseqAnnotationSQL(id, getConnection());

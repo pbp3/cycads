@@ -16,7 +16,7 @@ import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
 public abstract class AnnotationSQL extends HasSynonymsNotebleSQL
-		implements Annotation<DbxrefSQL, TypeSQL, AnnotationMethodSQL>
+		implements Annotation<AnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
 {
 	public final static int		INVALID_PARENT_ID	= 0;
 

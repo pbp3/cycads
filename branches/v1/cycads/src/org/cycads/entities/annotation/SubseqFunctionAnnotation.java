@@ -8,8 +8,8 @@ import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.Function;
 
-public interface SubseqFunctionAnnotation<SS extends Subsequence< ? , ? , ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
-		extends SubseqAnnotation<SS, X, T, M>
+public interface SubseqFunctionAnnotation<AParent extends Annotation< ? , ? , ? , ? >, SS extends Subsequence< ? , ? , ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
+		extends SubseqAnnotation<AParent, SS, X, T, M>
 {
 	public Function getFunction();
 }

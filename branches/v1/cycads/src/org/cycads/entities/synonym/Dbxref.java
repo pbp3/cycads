@@ -9,8 +9,9 @@ import org.cycads.entities.annotation.DbxrefDbxrefAnnotation;
 import org.cycads.entities.note.Noteble;
 import org.cycads.entities.note.Type;
 
-public interface Dbxref<A extends DbxrefDbxrefAnnotation< ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
-		extends Noteble, HasSynonyms<X>, AnnotationFinder<A, X, T, M> {
+public interface Dbxref<A extends DbxrefDbxrefAnnotation< ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
+		extends Noteble, HasSynonyms<X>, AnnotationFinder<A, X, T, M>
+{
 	public String getDbName();
 
 	public String getAccession();

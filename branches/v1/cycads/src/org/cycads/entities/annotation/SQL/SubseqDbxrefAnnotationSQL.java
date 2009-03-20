@@ -16,7 +16,7 @@ import org.cycads.entities.sequence.SQL.SubsequenceSQL;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 
 public class SubseqDbxrefAnnotationSQL extends SubseqAnnotationSQL
-		implements SubseqDbxrefAnnotation<SubsequenceSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
+		implements SubseqDbxrefAnnotation<AnnotationSQL, SubsequenceSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
 {
 	private int			dbxrefId;
 	private DbxrefSQL	dbxref;

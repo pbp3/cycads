@@ -16,8 +16,9 @@ import org.cycads.entities.sequence.SQL.SubsequenceSQL;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.FunctionSQL;
 
-public class SubseqFunctionAnnotationSQL extends SubseqAnnotationSQL implements
-		SubseqFunctionAnnotation<SubsequenceSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL> {
+public class SubseqFunctionAnnotationSQL extends SubseqAnnotationSQL
+		implements SubseqFunctionAnnotation<AnnotationSQL, SubsequenceSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
+{
 	private int			functionId;
 	private FunctionSQL	function;
 

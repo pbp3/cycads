@@ -15,7 +15,7 @@ import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 
 public class DbxrefDbxrefAnnotationSQL extends AnnotationSQL
-		implements DbxrefDbxrefAnnotation<DbxrefSQL, TypeSQL, AnnotationMethodSQL>
+		implements DbxrefDbxrefAnnotation<AnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
 {
 	private int			dbxrefSourceId;
 	private int			dbxrefTargetId;

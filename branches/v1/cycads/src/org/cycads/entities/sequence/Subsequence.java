@@ -16,18 +16,18 @@ import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.Function;
 import org.cycads.entities.synonym.HasSynonyms;
 
-public interface Subsequence<S extends Sequence< ? , ? , ? , ? , ? , ? >, SA extends SubseqAnnotation< ? , ? , ? , ? >, F extends Function, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
+public interface Subsequence<S extends Sequence< ? , ? , ? , ? , ? , ? >, SA extends SubseqAnnotation< ? , ? , ? , ? , ? >, F extends Function, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
 		extends Noteble, HasSynonyms<X>, AnnotationFinder<SA, X, T, M>
 {
 
 	public Collection<Intron> getIntrons();
 
-	public boolean addIntron(Intron intron);
-
-	public boolean removeIntron(Intron intron);
-
-	public boolean addExon(int start, int end);
-
+	//	public boolean addIntron(Intron intron);
+	//
+	//	public boolean removeIntron(Intron intron);
+	//
+	//	public boolean addExon(int start, int end);
+	//
 	public boolean isPositiveStrand();
 
 	public int getStart();
@@ -42,18 +42,19 @@ public interface Subsequence<S extends Sequence< ? , ? , ? , ? , ? , ? >, SA ext
 
 	public boolean contains(Subsequence< ? , ? , ? , ? , ? , ? > subseq);
 
-	public SubseqFunctionAnnotation< ? , ? , ? , ? > createFunctionAnnotation(M method, F function);
+	public SubseqFunctionAnnotation< ? , ? , ? , ? , ? > createFunctionAnnotation(M method, F function);
 
-	public SubseqDbxrefAnnotation< ? , ? , ? , ? > createDbxrefAnnotation(M method, X dbxref);
+	public SubseqDbxrefAnnotation< ? , ? , ? , ? , ? > createDbxrefAnnotation(M method, X dbxref);
 
-	public SubseqAnnotation< ? , ? , ? , ? > createAnnotation(T type, M method);
-
-	/* Add if Annotation doesn't exist */
-	public SubseqDbxrefAnnotation< ? , ? , ? , ? > addDbxrefAnnotation(M method, X dbxref);
+	public SubseqAnnotation< ? , ? , ? , ? , ? > createAnnotation(T type, M method);
 
 	/* Add if Annotation doesn't exist */
-	public SubseqFunctionAnnotation< ? , ? , ? , ? > addFunctionAnnotation(M method, F function);
+	public SubseqDbxrefAnnotation< ? , ? , ? , ? , ? > addDbxrefAnnotation(M method, X dbxref);
 
-	public Collection< ? extends SubseqFunctionAnnotation< ? , ? , ? , ? >> getFunctionAnnotations(M method, F function);
+	/* Add if Annotation doesn't exist */
+	public SubseqFunctionAnnotation< ? , ? , ? , ? , ? > addFunctionAnnotation(M method, F function);
+
+	public Collection< ? extends SubseqFunctionAnnotation< ? , ? , ? , ? , ? >> getFunctionAnnotations(M method,
+			F function);
 
 }
