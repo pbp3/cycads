@@ -29,11 +29,11 @@ public interface Sequence<O extends Organism< ? , ? , ? , ? , ? , ? >, SS extend
 
 	public void setSequenceString(String seqStr);
 
-	public Collection<SS> getSubsequences(int start, int end, Collection<Intron> introns);
+	public SS getSubsequence(int start, int end, Collection<Intron> introns);
 
 	public SS createSubsequence(int start, int end, Collection<Intron> introns);
 
-	//	public Collection<SS> getSubsequences(int start);
+	public Collection<SS> getSubsequences(int start);
 
 	public Collection<SS> getSubsequences(X synonym);
 

@@ -9,8 +9,8 @@ import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.KO;
 
-public interface EntityFactory<D extends Dbxref< ? , ? , ? , ? >, M extends AnnotationMethod, T extends Type, O extends Organism< ? , ? , ? , ? , ? , ? >> {
-	public D getDbxref(String dbName, String accession);
+public interface EntityFactory<X extends Dbxref< ? , ? , ? , ? >, M extends AnnotationMethod, T extends Type, O extends Organism< ? , ? , ? , ? , ? , ? >> {
+	public X getDbxref(String dbName, String accession);
 
 	public M getAnnotationMethod(String name);
 

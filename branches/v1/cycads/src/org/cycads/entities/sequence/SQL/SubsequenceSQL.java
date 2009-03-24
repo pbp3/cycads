@@ -226,98 +226,98 @@ public class SubsequenceSQL extends HasSynonymsNotebleSQL
 		return introns;
 	}
 
-	@Override
-	public boolean addIntron(Intron intron) {
-		PreparedStatement stmt = null;
-		try {
-			stmt = con.prepareStatement("INSERT INTO Intron (subsequence_id, start_position, end_position) VALUES (?,?,?)");
-			stmt.setInt(1, getId());
-			stmt.setInt(2, intron.getStart());
-			stmt.setInt(3, intron.getEnd());
-			stmt.executeUpdate();
-			if (introns != null) {
-				introns.add(intron);
-			}
-			return true;
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
-		finally {
-			if (stmt != null) {
-				try {
-					stmt.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-		}
-	}
-
-	@Override
-	public boolean removeIntron(Intron intron) {
-		PreparedStatement stmt = null;
-		try {
-			stmt = con.prepareStatement("DELETE FROM Intron WHERE subsequence_id=? AND start_position=? AND end_position=?");
-			stmt.setInt(1, getId());
-			stmt.setInt(2, intron.getStart());
-			stmt.setInt(3, intron.getEnd());
-			stmt.executeUpdate();
-			if (introns != null) {
-				introns.remove(intron);
-			}
-			return true;
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			return false;
-		}
-		finally {
-			if (stmt != null) {
-				try {
-					stmt.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-		}
-	}
-
-	@Override
-	public boolean addExon(int start, int end) {
-		if (start > end) {
-			int aux = start;
-			start = end;
-			end = aux;
-		}
-		Collection<Intron> introns = getIntrons();
-		Collection<Intron> intronsToRemove = new ArrayList<Intron>();
-		Collection<Intron> intronsToAdd = new ArrayList<Intron>();
-		for (Intron intron : introns) {
-			if ((intron.getStart() < start && intron.getEnd() > end)
-				|| (intron.getStart() >= start && intron.getStart() <= end)
-				|| (intron.getEnd() >= start && intron.getEnd() <= end)) {
-				intronsToRemove.add(intron);
-				if (intron.getStart() < start) {
-					intronsToAdd.add(new SimpleIntron(intron.getStart(), start - 1));
-				}
-				if (intron.getEnd() > end) {
-					intronsToAdd.add(new SimpleIntron(end + 1, intron.getEnd()));
-				}
-			}
-		}
-		for (Intron intron : intronsToRemove) {
-			removeIntron(intron);
-		}
-		for (Intron intron : intronsToAdd) {
-			addIntron(intron);
-		}
-		return true;
-	}
-
+//	@Override
+//	public boolean addIntron(Intron intron) {
+//		PreparedStatement stmt = null;
+//		try {
+//			stmt = con.prepareStatement("INSERT INTO Intron (subsequence_id, start_position, end_position) VALUES (?,?,?)");
+//			stmt.setInt(1, getId());
+//			stmt.setInt(2, intron.getStart());
+//			stmt.setInt(3, intron.getEnd());
+//			stmt.executeUpdate();
+//			if (introns != null) {
+//				introns.add(intron);
+//			}
+//			return true;
+//		}
+//		catch (SQLException e) {
+//			e.printStackTrace();
+//			return false;
+//		}
+//		finally {
+//			if (stmt != null) {
+//				try {
+//					stmt.close();
+//				}
+//				catch (SQLException ex) {
+//					// ignore
+//				}
+//			}
+//		}
+//	}
+//
+//	@Override
+//	public boolean removeIntron(Intron intron) {
+//		PreparedStatement stmt = null;
+//		try {
+//			stmt = con.prepareStatement("DELETE FROM Intron WHERE subsequence_id=? AND start_position=? AND end_position=?");
+//			stmt.setInt(1, getId());
+//			stmt.setInt(2, intron.getStart());
+//			stmt.setInt(3, intron.getEnd());
+//			stmt.executeUpdate();
+//			if (introns != null) {
+//				introns.remove(intron);
+//			}
+//			return true;
+//		}
+//		catch (SQLException e) {
+//			e.printStackTrace();
+//			return false;
+//		}
+//		finally {
+//			if (stmt != null) {
+//				try {
+//					stmt.close();
+//				}
+//				catch (SQLException ex) {
+//					// ignore
+//				}
+//			}
+//		}
+//	}
+//
+//	@Override
+//	public boolean addExon(int start, int end) {
+//		if (start > end) {
+//			int aux = start;
+//			start = end;
+//			end = aux;
+//		}
+//		Collection<Intron> introns = getIntrons();
+//		Collection<Intron> intronsToRemove = new ArrayList<Intron>();
+//		Collection<Intron> intronsToAdd = new ArrayList<Intron>();
+//		for (Intron intron : introns) {
+//			if ((intron.getStart() < start && intron.getEnd() > end)
+//				|| (intron.getStart() >= start && intron.getStart() <= end)
+//				|| (intron.getEnd() >= start && intron.getEnd() <= end)) {
+//				intronsToRemove.add(intron);
+//				if (intron.getStart() < start) {
+//					intronsToAdd.add(new SimpleIntron(intron.getStart(), start - 1));
+//				}
+//				if (intron.getEnd() > end) {
+//					intronsToAdd.add(new SimpleIntron(end + 1, intron.getEnd()));
+//				}
+//			}
+//		}
+//		for (Intron intron : intronsToRemove) {
+//			removeIntron(intron);
+//		}
+//		for (Intron intron : intronsToAdd) {
+//			addIntron(intron);
+//		}
+//		return true;
+//	}
+//
 	@Override
 	public SubseqDbxrefAnnotationSQL addDbxrefAnnotation(AnnotationMethodSQL method, DbxrefSQL dbxref) {
 		Collection< ? extends SubseqDbxrefAnnotationSQL> annots = getDbxrefAnnotations(method, dbxref);

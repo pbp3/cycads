@@ -226,7 +226,7 @@ public class NotesSQL
 
 	public Note addNote(int idNoteType, String value) throws SQLException {
 		if (getNote(idNoteType, value) != null) {
-			throw new SQLException("Note already exists: (" + idNoteSource + "," + idNoteType + "," + value + ")");
+			return null;
 		}
 		PreparedStatement stmt = null;
 		try {

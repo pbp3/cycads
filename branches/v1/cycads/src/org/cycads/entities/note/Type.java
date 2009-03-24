@@ -4,7 +4,7 @@
 package org.cycads.entities.note;
 
 
-public interface Type
+public interface Type extends Comparable<Type>
 {
 	public String getName();
 

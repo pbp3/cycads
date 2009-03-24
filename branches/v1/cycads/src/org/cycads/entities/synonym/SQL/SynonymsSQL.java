@@ -125,7 +125,7 @@ public class SynonymsSQL
 
 	public DbxrefSQL addSynonym(String dbName, String accession) throws SQLException {
 		if (getSynonym(dbName, accession) != null) {
-			throw new SQLException("Synonym already exists: (" + idSynonymSource + "," + dbName + "," + accession + ")");
+			return null;
 		}
 		DbxrefSQL dbxref = new DbxrefSQL(dbName, accession, con);
 		Statement stmt = null;
@@ -201,34 +201,7 @@ public class SynonymsSQL
 	}
 
 	public boolean isSynonym(String dbName, String accession) throws SQLException {
-		Statement stmt = null;
-		ResultSet rs = null;
-		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT dbxref_id from " + tableName + " S ,dbxref X where S." + idFieldName + "="
-				+ idSynonymSource + " AND S.dbxref_id=X.dbxref_id AND X.dbname='" + dbName + "' AND X.accession='"
-				+ accession + "'");
-			boolean ret = (rs.next());
-			return ret;
-		}
-		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-			if (stmt != null) {
-				try {
-					stmt.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-		}
+		return (getSynonym(dbName, accession)!=null);
 	}
 
 }

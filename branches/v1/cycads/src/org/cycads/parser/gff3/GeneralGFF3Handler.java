@@ -9,12 +9,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.regex.Pattern;
 
-import old.org.cycads.loaders.gff3.Exon;
-import old.org.cycads.loaders.gff3.GFF3Record;
-
 import org.cycads.entities.EntityFactory;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.note.Note;
+import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Intron;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Sequence;
@@ -27,15 +25,19 @@ import org.cycads.ui.progress.Progress;
 
 public class GeneralGFF3Handler implements GFF3DocumentHandler
 {
-	EntityFactory	factory;
-	Organism		organism;
-	String			seqDBName;
-	String			seqVersion;
-	Progress		progress;
+	private EntityFactory	factory;
+	private Organism		organism;
+	private String			seqDBName;
+	private String			seqVersion;
+	private Progress		progress;
 
-	Pattern			cdsPattern	= Pattern.compile(Config.gff3CDSTagExpression());
-	Pattern			mRNAPattern	= Pattern.compile(Config.gff3MRNATagExpression());
-	Pattern			genePattern	= Pattern.compile(Config.gff3GeneTagExpression());
+	private Pattern			cdsPattern	= Pattern.compile(GFF3FileConfig.cDSTagExpression());
+	private Pattern			mRNAPattern	= Pattern.compile(GFF3FileConfig.mRNATagExpression());
+	private Pattern			genePattern	= Pattern.compile(GFF3FileConfig.geneTagExpression());
+	
+	private Type cdsType;
+	private Type mrnaType;
+	private Type geneType;
 
 	//	Hashtable<String, GFF3Record>	mrnas;
 	//	Hashtable<String, GFF3Record>	genes;
@@ -47,6 +49,9 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 		this.seqDBName = seqDBName;
 		this.progress = progress;
 		this.seqVersion = seqVersion;
+		cdsType=factory.getAnnotationType(ParametersDefault.getCDSTypeName());
+		mrnaType=factory.getAnnotationType(ParametersDefault.getMRNATypeName());
+		geneType=factory.getAnnotationType(ParametersDefault.getGeneTypeName());
 	}
 
 	@Override

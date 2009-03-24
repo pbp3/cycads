@@ -69,12 +69,22 @@ public class EntityFactorySQL implements EntityFactory<DbxrefSQL, AnnotationMeth
 
 	@Override
 	public TypeSQL getNoteType(String name) {
-		throw new RuntimeException("Method not implemented.");
+		try {
+			return TypeSQL.getType(name, getConnection());
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
 	public TypeSQL getAnnotationType(String name) {
-		throw new RuntimeException("Method not implemented.");
+		try {
+			return TypeSQL.getType(name, getConnection());
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cycads.entities.annotation.AnnotationFilter;
+import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
 import org.cycads.entities.annotation.SQL.DbxrefDbxrefAnnotationSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
@@ -291,5 +292,20 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL
 		return DbxrefDbxrefAnnotationSQL.getAnnotations(method, null, null, dbxref, extraFrom, extraWhere,
 			getConnection());
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof DbxrefSQL)
+		{
+			return getId()==((DbxrefSQL) obj).getId();
+		}
+		if (obj instanceof Dbxref)
+		{
+			DbxrefSQL x = (DbxrefSQL) obj;
+			return getDbName().equals(x.getDbName()) && getAccession().equals(x.getAccession());
+		}
+		return false;
+	}
+
 
 }
