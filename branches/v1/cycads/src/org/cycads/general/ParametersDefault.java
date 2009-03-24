@@ -113,6 +113,22 @@ public class ParametersDefault
 		return getStringMandatory("general.type.dbxrefSourceAnnotationTypeName");
 	}
 
+	public static String getScoreAnnotationNoteTypeName() {
+		return getStringMandatory("general.type.scoreAnnotationNoteTypeName");
+	}
+
+	public static String getCDSAnnotationTypeName() {
+		return getStringMandatory("general.type.cdsAnnotationTypeName");
+	}
+
+	public static String getMRNAAnnotationTypeName() {
+		return getStringMandatory("general.type.mrnaAnnotationTypeName");
+	}
+
+	public static String getGeneAnnotationTypeName() {
+		return getStringMandatory("general.type.geneAnnotationTypeName");
+	}
+
 	// KOFile
 
 	public static String koFileEntryTag() {

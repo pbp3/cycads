@@ -16,18 +16,19 @@ import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
-public class AnnotationSQL extends HasSynonymsNotebleSQL implements
-		Annotation<AnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL> {
+public class AnnotationSQL extends HasSynonymsNotebleSQL
+		implements Annotation<AnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
+{
 
-	private int id;
-	private int methodId;
+	private int							id;
+	private int							methodId;
 
 	/* The types are not synchonized */
-	private Collection<TypeSQL> types;
-	private AnnotationMethodSQL method;
-	private Collection<AnnotationSQL> parents;
+	private Collection<TypeSQL>			types;
+	private AnnotationMethodSQL			method;
+	private Collection<AnnotationSQL>	parents;
 
-	private Connection con;
+	private Connection					con;
 
 	public AnnotationSQL(int id, Connection con) throws SQLException {
 		this.id = id;
@@ -35,65 +36,69 @@ public class AnnotationSQL extends HasSynonymsNotebleSQL implements
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con
-					.prepareStatement("SELECT annotation_method_id from Annotation WHERE annotation_id=?");
+			stmt = con.prepareStatement("SELECT annotation_method_id from Annotation WHERE annotation_id=?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
 				methodId = rs.getInt("annotation_method_id");
-			} else {
+			}
+			else {
 				throw new SQLException("Annotation does not exist:" + id);
 			}
-		} finally {
+		}
+		finally {
 			if (rs != null) {
 				try {
 					rs.close();
-				} catch (SQLException ex) {
+				}
+				catch (SQLException ex) {
 					// ignore
 				}
 			}
 			if (stmt != null) {
 				try {
 					stmt.close();
-				} catch (SQLException ex) {
+				}
+				catch (SQLException ex) {
 					// ignore
 				}
 			}
 		}
 	}
 
-	public static int createAnnotationSQL(AnnotationMethodSQL method,
-			Connection con) throws SQLException {
+	public static int createAnnotationSQL(AnnotationMethodSQL method, Connection con) throws SQLException {
 		int id = 0;
 
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement(
-					"INSERT INTO Annotation (annotation_method_id) VALUES (?)",
-					Statement.RETURN_GENERATED_KEYS);
+			stmt = con.prepareStatement("INSERT INTO Annotation (annotation_method_id) VALUES (?)",
+				Statement.RETURN_GENERATED_KEYS);
 			stmt.setInt(1, method.getId());
 			stmt.executeUpdate();
 			rs = stmt.getGeneratedKeys();
 			if (rs.next()) {
 				id = rs.getInt(1);
-			} else {
-				throw new SQLException(
-						"Annotation insert didn't return the annotation id.");
+			}
+			else {
+				throw new SQLException("Annotation insert didn't return the annotation id.");
 			}
 			return id;
-		} finally {
+		}
+		finally {
 			if (rs != null) {
 				try {
 					rs.close();
-				} catch (SQLException ex) {
+				}
+				catch (SQLException ex) {
 					// ignore
 				}
 			}
 			if (stmt != null) {
 				try {
 					stmt.close();
-				} catch (SQLException ex) {
+				}
+				catch (SQLException ex) {
 					// ignore
 				}
 			}
@@ -105,7 +110,8 @@ public class AnnotationSQL extends HasSynonymsNotebleSQL implements
 		if (method == null) {
 			try {
 				method = new AnnotationMethodSQL(getMethodId(), getConnection());
-			} catch (SQLException e) {
+			}
+			catch (SQLException e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
 			}
@@ -120,30 +126,31 @@ public class AnnotationSQL extends HasSynonymsNotebleSQL implements
 			ResultSet rs = null;
 			types = new ArrayList<TypeSQL>();
 			try {
-				stmt = con
-						.prepareStatement("SELECT type_id from Annotation_type WHERE annotation_id=?");
+				stmt = con.prepareStatement("SELECT type_id from Annotation_type WHERE annotation_id=?");
 				stmt.setInt(1, getId());
 				rs = stmt.executeQuery();
 				while (rs.next()) {
-					types
-							.add(new TypeSQL(rs.getInt("type_id"),
-									getConnection()));
+					types.add(new TypeSQL(rs.getInt("type_id"), getConnection()));
 				}
-			} catch (SQLException e) {
+			}
+			catch (SQLException e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
-			} finally {
+			}
+			finally {
 				if (rs != null) {
 					try {
 						rs.close();
-					} catch (SQLException ex) {
+					}
+					catch (SQLException ex) {
 						// ignore
 					}
 				}
 				if (stmt != null) {
 					try {
 						stmt.close();
-					} catch (SQLException ex) {
+					}
+					catch (SQLException ex) {
 						// ignore
 					}
 				}
@@ -167,7 +174,8 @@ public class AnnotationSQL extends HasSynonymsNotebleSQL implements
 		try {
 			TypeSQL type = new TypeSQL(typeStr, null, getConnection());
 			return addType(type);
-		} catch (SQLException e) {
+		}
+		catch (SQLException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
@@ -178,8 +186,7 @@ public class AnnotationSQL extends HasSynonymsNotebleSQL implements
 		PreparedStatement stmt = null;
 		try {
 			if (!hasType(type.getName())) {
-				stmt = con
-						.prepareStatement("INSERT INTO Annotation_type (annotation_id, type_id) VALUES (?,?)");
+				stmt = con.prepareStatement("INSERT INTO Annotation_type (annotation_id, type_id) VALUES (?,?)");
 				stmt.setInt(1, getId());
 				stmt.setInt(2, type.getId());
 				stmt.executeUpdate();
@@ -188,14 +195,17 @@ public class AnnotationSQL extends HasSynonymsNotebleSQL implements
 				types.add(type);
 			}
 			return type;
-		} catch (SQLException e) {
+		}
+		catch (SQLException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
-		} finally {
+		}
+		finally {
 			if (stmt != null) {
 				try {
 					stmt.close();
-				} catch (SQLException ex) {
+				}
+				catch (SQLException ex) {
 					// ignore
 				}
 			}
@@ -236,23 +246,24 @@ public class AnnotationSQL extends HasSynonymsNotebleSQL implements
 		if (!isParent(parent)) {
 			PreparedStatement stmt = null;
 			try {
-				Confirmar nomes dos campos e da tabela;
-				
-				stmt = con.prepareStatement("INSERT INTO Annotation_parent (annotation_id, Annotation_Parent_id) VALUES (?,?)");
+				stmt = con.prepareStatement("INSERT INTO annotation_parent (annotation_id, annotation_parent_id) VALUES (?,?)");
 				stmt.setInt(1, getId());
 				stmt.setInt(2, parent.getId());
 				stmt.executeUpdate();
 				if (parents != null) {
 					parents.add(parent);
 				}
-			} catch (SQLException e) {
+			}
+			catch (SQLException e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
-			} finally {
+			}
+			finally {
 				if (stmt != null) {
 					try {
 						stmt.close();
-					} catch (SQLException ex) {
+					}
+					catch (SQLException ex) {
 						// ignore
 					}
 				}
@@ -267,29 +278,31 @@ public class AnnotationSQL extends HasSynonymsNotebleSQL implements
 			ResultSet rs = null;
 			parents = new ArrayList<AnnotationSQL>();
 			try {
-				stmt = con
-						.prepareStatement("SELECT Annotation_Parent_id from Annotation_parent WHERE annotation_id=?");
+				stmt = con.prepareStatement("SELECT Annotation_Parent_id from Annotation_parent WHERE annotation_id=?");
 				stmt.setInt(1, getId());
 				rs = stmt.executeQuery();
 				while (rs.next()) {
-					parents.add(new AnnotationSQL(rs
-							.getInt("Annotation_Parent_id"), getConnection()));
+					parents.add(new AnnotationSQL(rs.getInt("Annotation_Parent_id"), getConnection()));
 				}
-			} catch (SQLException e) {
+			}
+			catch (SQLException e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
-			} finally {
+			}
+			finally {
 				if (rs != null) {
 					try {
 						rs.close();
-					} catch (SQLException ex) {
+					}
+					catch (SQLException ex) {
 						// ignore
 					}
 				}
 				if (stmt != null) {
 					try {
 						stmt.close();
-					} catch (SQLException ex) {
+					}
+					catch (SQLException ex) {
 						// ignore
 					}
 				}

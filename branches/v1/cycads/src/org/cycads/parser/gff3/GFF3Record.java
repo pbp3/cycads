@@ -1,8 +1,13 @@
 package org.cycads.parser.gff3;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Hashtable;
+
+import org.cycads.entities.note.Note;
+import org.cycads.entities.note.SimpleNote;
+import org.cycads.entities.note.SimpleType;
 
 public class GFF3Record
 {
@@ -113,6 +118,18 @@ public class GFF3Record
 			return null;
 		}
 		return values;
+	}
+
+	public Collection<Note> getNotes() {
+		Collection<Note> ret = new ArrayList<Note>(notes.size());
+		Collection<String> noteKeys = notes.keySet();
+		for (String noteKey : noteKeys) {
+			Collection<String> noteValues = notes.get(noteKey);
+			for (String noteValue : noteValues) {
+				ret.add(new SimpleNote(new SimpleType(noteKey, null), noteValue));
+			}
+		}
+		return ret;
 	}
 
 	/*	public static final class Impl extends AbstractChangeable implements GFF3Record<SimpleNote<Impl>>
