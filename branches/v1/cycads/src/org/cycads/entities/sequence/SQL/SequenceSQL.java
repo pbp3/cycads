@@ -22,17 +22,17 @@ import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
 public class SequenceSQL extends HasSynonymsNotebleSQL
-		implements Sequence<OrganismSQL, SubsequenceSQL, SubseqAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
-{
-	public static final int	INVALID_LENGTH	= -1;
+		implements
+		Sequence<OrganismSQL, SubsequenceSQL, SubseqAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL> {
+	public static final int INVALID_LENGTH = -1;
 
-	private int				id;
-	private String			seqStr;
-	private Connection		con;
-	private int				length			= INVALID_LENGTH;
-	private int				organismId;
-	private OrganismSQL		organism;
-	private String			version;
+	private int id;
+	private String seqStr;
+	private Connection con;
+	private int length = INVALID_LENGTH;
+	private int organismId;
+	private OrganismSQL organism;
+	private String version;
 
 	public SequenceSQL(int id, Connection con) throws SQLException {
 		this.id = id;
@@ -41,37 +41,36 @@ public class SequenceSQL extends HasSynonymsNotebleSQL
 		ResultSet rs = null;
 		try {
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT NCBI_TAXON_ID, version from sequence WHERE sequence_id=" + id);
+			rs = stmt
+					.executeQuery("SELECT NCBI_TAXON_ID, version from sequence WHERE sequence_id="
+							+ id);
 			if (rs.next()) {
 				organismId = rs.getInt("NCBI_TAXON_ID");
 				version = rs.getString("version");
-			}
-			else {
+			} else {
 				throw new SQLException("Sequence does not exist:" + id);
 			}
-			rs = stmt.executeQuery("SELECT length from biosequence WHERE sequence_id=" + id);
+			rs = stmt
+					.executeQuery("SELECT length from biosequence WHERE sequence_id="
+							+ id);
 			if (rs.next()) {
 				length = rs.getInt("length");
-			}
-			else {
+			} else {
 				length = 0;
 				seqStr = "";
 			}
-		}
-		finally {
+		} finally {
 			if (rs != null) {
 				try {
 					rs.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
 			if (stmt != null) {
 				try {
 					stmt.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
@@ -108,8 +107,7 @@ public class SequenceSQL extends HasSynonymsNotebleSQL
 		if (organism == null) {
 			try {
 				organism = new OrganismSQL(organismId, getConnection());
-			}
-			catch (SQLException e) {
+			} catch (SQLException e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
 			}
@@ -124,32 +122,29 @@ public class SequenceSQL extends HasSynonymsNotebleSQL
 			ResultSet rs = null;
 			try {
 				stmt = con.createStatement();
-				rs = stmt.executeQuery("SELECT seq from biosequence WHERE sequence_id=" + id);
+				rs = stmt
+						.executeQuery("SELECT seq from biosequence WHERE sequence_id="
+								+ id);
 				if (rs.next()) {
 					seqStr = rs.getString("seq");
-				}
-				else {
+				} else {
 					seqStr = "";
 				}
-			}
-			catch (SQLException e) {
+			} catch (SQLException e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
-			}
-			finally {
+			} finally {
 				if (rs != null) {
 					try {
 						rs.close();
-					}
-					catch (SQLException ex) {
+					} catch (SQLException ex) {
 						// ignore
 					}
 				}
 				if (stmt != null) {
 					try {
 						stmt.close();
-					}
-					catch (SQLException ex) {
+					} catch (SQLException ex) {
 						// ignore
 					}
 				}
@@ -174,35 +169,38 @@ public class SequenceSQL extends HasSynonymsNotebleSQL
 		ResultSet rs = null;
 		try {
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT length from biosequence WHERE sequence_id=" + id);
+			rs = stmt
+					.executeQuery("SELECT length from biosequence WHERE sequence_id="
+							+ id);
 			if (!rs.next()) {
-				stmt.executeUpdate("INSERT INTO biosequence (sequence_id, length, seq) VALUES (" + getId() + ","
-					+ seqStr.length() + ",'" + seqStr + "')");
-			}
-			else {
-				stmt.executeUpdate("UPDATE biosequence SET seq='" + seqStr + "' WHERE sequence_id=" + getId());
+				stmt
+						.executeUpdate("INSERT INTO biosequence (sequence_id, length, seq) VALUES ("
+								+ getId()
+								+ ","
+								+ seqStr.length()
+								+ ",'"
+								+ seqStr + "')");
+			} else {
+				stmt.executeUpdate("UPDATE biosequence SET seq='" + seqStr
+						+ "' WHERE sequence_id=" + getId());
 			}
 			this.seqStr = seqStr;
 			this.length = seqStr.length();
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
-		}
-		finally {
+		} finally {
 			if (rs != null) {
 				try {
 					rs.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
 			if (stmt != null) {
 				try {
 					stmt.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
@@ -210,48 +208,52 @@ public class SequenceSQL extends HasSynonymsNotebleSQL
 	}
 
 	@Override
-	public SubsequenceSQL createSubsequence(int start, int end, Collection<Intron> introns) {
+	public SubsequenceSQL createSubsequence(int start, int end,
+			Collection<Intron> introns) {
 		int id = 0;
 
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
 			stmt = con.createStatement();
-			stmt.executeUpdate("INSERT INTO subsequence (sequence_id, start_position, end_position) VALUES (" + getId()
-				+ "," + start + "," + end + ")", Statement.RETURN_GENERATED_KEYS);
+			stmt.executeUpdate(
+					"INSERT INTO subsequence (sequence_id, start_position, end_position) VALUES ("
+							+ getId() + "," + start + "," + end + ")",
+					Statement.RETURN_GENERATED_KEYS);
 			rs = stmt.getGeneratedKeys();
 			if (rs.next()) {
 				id = rs.getInt(1);
-			}
-			else {
-				throw new SQLException("Subsequence insert didn't return the id.");
+			} else {
+				throw new SQLException(
+						"Subsequence insert didn't return the id.");
 			}
 			if (introns != null) {
 				for (Intron intron : introns) {
-					stmt.executeUpdate("INSERT INTO Intron (subsequence_id, start_position, end_position) VALUES ("
-						+ id + "," + intron.getStart() + "," + intron.getEnd() + ")");
+					stmt
+							.executeUpdate("INSERT INTO Intron (subsequence_id, start_position, end_position) VALUES ("
+									+ id
+									+ ","
+									+ intron.getStart()
+									+ ","
+									+ intron.getEnd() + ")");
 				}
 			}
 			return new SubsequenceSQL(id, getConnection());
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
-		}
-		finally {
+		} finally {
 			if (rs != null) {
 				try {
 					rs.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
 			if (stmt != null) {
 				try {
 					stmt.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
@@ -259,23 +261,36 @@ public class SequenceSQL extends HasSynonymsNotebleSQL
 	}
 
 	@Override
-	public SubsequenceSQL getSubsequence(int start, int end, Collection<Intron> introns) {
+	public SubsequenceSQL getSubsequence(int start, int end,
+			Collection<Intron> introns) {
 		Statement stmt = null;
 		ResultSet rs = null;
 		try {
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT subsequence_id from subsequence where sequence_id=" + getId()
-				+ " AND start_position=" + start + " AND end_position=" + end);
+			rs = stmt
+					.executeQuery("SELECT subsequence_id from subsequence where sequence_id="
+							+ getId()
+							+ " AND start_position="
+							+ start
+							+ " AND end_position=" + end);
 			ArrayList<SubsequenceSQL> sseqs = new ArrayList<SubsequenceSQL>();
 			while (rs.next()) {
-				sseqs.add(new SubsequenceSQL(rs.getInt("subsequence_id"), getConnection()));
+				sseqs.add(new SubsequenceSQL(rs.getInt("subsequence_id"),
+						getConnection()));
 			}
-			Object[] introns1 = (new TreeSet<Intron>(introns)).toArray();
+			Object[] introns1;
+			if (introns == null) {
+				introns1 = (new TreeSet<Intron>()).toArray();
+			} else {
+				introns1 = (new TreeSet<Intron>(introns)).toArray();
+			}
 			for (SubsequenceSQL subseq : sseqs) {
-				Object[] introns2 = (new TreeSet<Intron>(subseq.getIntrons())).toArray();
+				Object[] introns2 = (new TreeSet<Intron>(subseq.getIntrons()))
+						.toArray();
 				if (introns1.length == introns2.length) {
 					int i = 0;
-					while (i < introns1.length && introns1[i].equals(introns2[i])) {
+					while (i < introns1.length
+							&& introns1[i].equals(introns2[i])) {
 						i++;
 					}
 					if (i == introns1.length) {
@@ -283,25 +298,21 @@ public class SequenceSQL extends HasSynonymsNotebleSQL
 					}
 				}
 			}
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
-		}
-		finally {
+		} finally {
 			if (rs != null) {
 				try {
 					rs.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
 			if (stmt != null) {
 				try {
 					stmt.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
@@ -315,32 +326,30 @@ public class SequenceSQL extends HasSynonymsNotebleSQL
 		ResultSet rs = null;
 		try {
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT subsequence_id from subsequence where sequence_id=" + getId()
-				+ " AND start_position=" + start);
+			rs = stmt
+					.executeQuery("SELECT subsequence_id from subsequence where sequence_id="
+							+ getId() + " AND start_position=" + start);
 			ArrayList<SubsequenceSQL> sseqs = new ArrayList<SubsequenceSQL>();
 			while (rs.next()) {
-				sseqs.add(new SubsequenceSQL(rs.getInt("subsequence_id"), getConnection()));
+				sseqs.add(new SubsequenceSQL(rs.getInt("subsequence_id"),
+						getConnection()));
 			}
 			return sseqs;
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
-		}
-		finally {
+		} finally {
 			if (rs != null) {
 				try {
 					rs.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
 			if (stmt != null) {
 				try {
 					stmt.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
@@ -353,32 +362,32 @@ public class SequenceSQL extends HasSynonymsNotebleSQL
 		ResultSet rs = null;
 		try {
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT SS.subsequence_id from ssubsequence SS, subsequence_synonym SSS where SS.sequence_id="
-				+ getId() + " AND SS.subsequence_id=SSS.subsequence_id AND SSS.dbxref_id=" + synonym.getId());
+			rs = stmt
+					.executeQuery("SELECT SS.subsequence_id from ssubsequence SS, subsequence_synonym SSS where SS.sequence_id="
+							+ getId()
+							+ " AND SS.subsequence_id=SSS.subsequence_id AND SSS.dbxref_id="
+							+ synonym.getId());
 			ArrayList<SubsequenceSQL> sseqs = new ArrayList<SubsequenceSQL>();
 			while (rs.next()) {
-				sseqs.add(new SubsequenceSQL(rs.getInt("subsequence_id"), getConnection()));
+				sseqs.add(new SubsequenceSQL(rs.getInt("subsequence_id"),
+						getConnection()));
 			}
 			return sseqs;
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
-		}
-		finally {
+		} finally {
 			if (rs != null) {
 				try {
 					rs.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
 			if (stmt != null) {
 				try {
 					stmt.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
@@ -386,11 +395,14 @@ public class SequenceSQL extends HasSynonymsNotebleSQL
 	}
 
 	@Override
-	public Collection<SubseqAnnotationSQL> getAnnotations(AnnotationFilter<SubseqAnnotationSQL> filter) {
+	public Collection<SubseqAnnotationSQL> getAnnotations(
+			AnnotationFilter<SubseqAnnotationSQL> filter) {
 		String extraFrom = ", subsequence SS";
-		String extraWhere = " SS.sequence_id=" + getId() + " AND SS.subsequence_id=SSA.subsequence_id";
-		Collection<SubseqAnnotationSQL> annots = SubseqAnnotationSQL.getAnnotations(null, null, null, extraFrom,
-			extraWhere, getConnection());
+		String extraWhere = " SS.sequence_id=" + getId()
+				+ " AND SS.subsequence_id=SSA.subsequence_id";
+		Collection<SubseqAnnotationSQL> annots = SubseqAnnotationSQL
+				.getAnnotations(null, null, null, extraFrom, extraWhere,
+						getConnection());
 		Collection<SubseqAnnotationSQL> ret = new ArrayList<SubseqAnnotationSQL>();
 		for (SubseqAnnotationSQL annot : annots) {
 			if (filter.accept(annot)) {
@@ -401,19 +413,24 @@ public class SequenceSQL extends HasSynonymsNotebleSQL
 	}
 
 	@Override
-	public Collection<SubseqDbxrefAnnotationSQL> getDbxrefAnnotations(AnnotationMethodSQL method, DbxrefSQL dbxref) {
+	public Collection<SubseqDbxrefAnnotationSQL> getDbxrefAnnotations(
+			AnnotationMethodSQL method, DbxrefSQL dbxref) {
 		String extraFrom = ", subsequence SS";
-		String extraWhere = " SS.sequence_id=" + getId() + " AND SS.subsequence_id=SSA.subsequence_id";
-		return SubseqDbxrefAnnotationSQL.getAnnotations(method, null, null, dbxref, extraFrom, extraWhere,
-			getConnection());
+		String extraWhere = " SS.sequence_id=" + getId()
+				+ " AND SS.subsequence_id=SSA.subsequence_id";
+		return SubseqDbxrefAnnotationSQL.getAnnotations(method, null, null,
+				dbxref, extraFrom, extraWhere, getConnection());
 	}
 
 	@Override
-	public Collection<SubseqAnnotationSQL> getAnnotations(AnnotationMethodSQL method, Collection<TypeSQL> types,
+	public Collection<SubseqAnnotationSQL> getAnnotations(
+			AnnotationMethodSQL method, Collection<TypeSQL> types,
 			DbxrefSQL synonym) {
 		String extraFrom = ", subsequence SS";
-		String extraWhere = " SS.sequence_id=" + getId() + " AND SS.subsequence_id=SSA.subsequence_id";
-		return SubseqAnnotationSQL.getAnnotations(method, types, synonym, extraFrom, extraWhere, getConnection());
+		String extraWhere = " SS.sequence_id=" + getId()
+				+ " AND SS.subsequence_id=SSA.subsequence_id";
+		return SubseqAnnotationSQL.getAnnotations(method, types, synonym,
+				extraFrom, extraWhere, getConnection());
 	}
 
 }
