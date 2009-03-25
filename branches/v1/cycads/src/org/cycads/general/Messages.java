@@ -5,7 +5,8 @@ import java.util.Date;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-public class Messages {
+public class Messages
+{
 	private static final String			BUNDLE_NAME		= "messages";								//$NON-NLS-1$
 
 	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
@@ -106,6 +107,42 @@ public class Messages {
 	public static String koLoaderInitMsg(String path) {
 		Object[] a = {path};
 		return MessageFormat.format(getStringMandatory("KOLoader.init"), a);
+	}
+
+	//GFF3 Loader
+
+	public static String gff3LoaderChooseFile() {
+		return getString("gff3Loader.chooseFile");
+	}
+
+	public static String gff3ChooseOrganismNumber() {
+		return getString("gff3Loader.chooseOrganismNumber");
+	}
+
+	public static String gff3ChooseOrganismName() {
+		return getString("gff3Loader.chooseOrganismName");
+	}
+
+	public static String gff3LoaderChooseSeqDBName() {
+		return getString("gff3Loader.chooseSeqDBName");
+	}
+
+	public static String gff3LoaderChooseSeqVersion() {
+		return getString("gff3Loader.chooseSeqVersion");
+	}
+
+	public static int gff3LoaderStepShowInterval() {
+		return getInt("gff3Loader.stepShowInterval");
+	}
+
+	public static String gff3LoaderInitMsg(String path) {
+		Object[] a = {path};
+		return MessageFormat.format(getStringMandatory("gff3Loader.init"), a);
+	}
+
+	public static String gff3LoaderFinalMsg(int step) {
+		Object[] a = {step};
+		return MessageFormat.format(getStringMandatory("gff3Loader.final"), a);
 	}
 
 }

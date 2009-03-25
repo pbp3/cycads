@@ -3,7 +3,8 @@ package org.cycads.general;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-public class Config {
+public class Config
+{
 	private static final String			BUNDLE_NAME		= "config";								//$NON-NLS-1$
 
 	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
@@ -59,15 +60,37 @@ public class Config {
 	// KOLoader
 
 	public static String koLoaderFileName() {
-		return getStringMandatory("KOLoader.fileName");
+		return getStringOptional("KOLoader.fileName");
 	}
 
 	public static String getKOLoaderMethodDBLinkName() {
-		return getStringMandatory("KOLoader.DBLinkMethodName");
+		return getStringOptional("KOLoader.DBLinkMethodName");
 	}
 
 	public static String getKOLoaderECAnnotationMethodName() {
-		return getStringMandatory("KOLoader.ECAnnotationMethodName");
+		return getStringOptional("KOLoader.ECAnnotationMethodName");
+	}
+
+	//GFF3 Loader
+
+	public static String gff3LoaderFileName() {
+		return getStringOptional("gff3.loader.fileName");
+	}
+
+	public static int gff3LoaderOrganismNumber() {
+		return getInt("gff3.loader.organismNumber");
+	}
+
+	public static String gff3LoaderSeqDBName() {
+		return getStringOptional("gff3.loader.sequenceDbName");
+	}
+
+	public static String gff3LoaderSeqVersion() {
+		return getStringOptional("gff3.loader.sequenceVersion");
+	}
+
+	public static String gff3LoaderOrganismName() {
+		return getStringOptional("gff3.loader.organismName");
 	}
 
 }

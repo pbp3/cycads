@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cycads.entities.annotation.AnnotationFilter;
-import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
 import org.cycads.entities.annotation.SQL.DbxrefDbxrefAnnotationSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
@@ -197,45 +196,6 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL
 		return getDbName() + ":" + getAccession();
 	}
 
-	// @Override
-	// public Collection<DbxrefDbxrefAnnotationSQL> getDbxrefDbxrefAnnotations(DbxrefSQL synonym) {
-	// Statement stmt = null;
-	// ResultSet rs = null;
-	// try {
-	// stmt = con.createStatement();
-	// rs = stmt.executeQuery("SELECT SSA.annotation_id from subseq_annotation SSA, Annotation_synonym AS"
-	// + " WHERE SSA.subsequence_id=" + getId() + " AND SSA.annotation_id=AS.annotation_id AND AS.dbxref_id="
-	// + synonym.getId());
-	// ArrayList<SubseqAnnotationSQL> ssas = new ArrayList<SubseqAnnotationSQL>();
-	// while (rs.next()) {
-	// ssas.add(new SubseqAnnotationSQL(rs.getInt("annotation_id"), getConnection()));
-	// }
-	// return ssas;
-	// }
-	// catch (SQLException e) {
-	// e.printStackTrace();
-	// throw new RuntimeException(e);
-	// }
-	// finally {
-	// if (rs != null) {
-	// try {
-	// rs.close();
-	// }
-	// catch (SQLException ex) {
-	// // ignore
-	// }
-	// }
-	// if (stmt != null) {
-	// try {
-	// stmt.close();
-	// }
-	// catch (SQLException ex) {
-	// // ignore
-	// }
-	// }
-	// }
-	// }
-	//
 	@Override
 	public DbxrefDbxrefAnnotationSQL createDbxrefAnnotation(AnnotationMethodSQL method, DbxrefSQL dbxref) {
 		try {
@@ -295,17 +255,14 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof DbxrefSQL)
-		{
-			return getId()==((DbxrefSQL) obj).getId();
+		if (obj instanceof DbxrefSQL) {
+			return getId() == ((DbxrefSQL) obj).getId();
 		}
-		if (obj instanceof Dbxref)
-		{
+		if (obj instanceof Dbxref) {
 			DbxrefSQL x = (DbxrefSQL) obj;
 			return getDbName().equals(x.getDbName()) && getAccession().equals(x.getAccession());
 		}
 		return false;
 	}
-
 
 }

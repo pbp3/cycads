@@ -159,7 +159,7 @@ public class SubseqAnnotationSQL extends AnnotationSQL
 			from.append(", Annotation_type AT");
 		}
 		if (synonym != null) {
-			from.append(", Annotation_synonym AS");
+			from.append(", Annotation_synonym ASY");
 		}
 		return from.append(extraClauseFrom);
 	}
@@ -193,7 +193,7 @@ public class SubseqAnnotationSQL extends AnnotationSQL
 			if (where.length() > 0) {
 				where.append(" AND");
 			}
-			where.append(" AS.annotation_id=SSA.annotation_id AND AS.dbxref_id=" + synonym.getId());
+			where.append(" ASY.annotation_id=SSA.annotation_id AND ASY.dbxref_id=" + synonym.getId());
 		}
 		if (where.length() > 0 && extraClauseWhere.length() > 0) {
 			where.append(" AND");

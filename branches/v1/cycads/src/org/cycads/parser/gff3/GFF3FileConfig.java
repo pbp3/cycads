@@ -8,9 +8,6 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
-import org.cycads.entities.EntityFactory;
-import org.cycads.entities.annotation.AnnotationMethod;
-
 /*
  #the gff3 parameters: gff3.file[.comment].<parameter name>[.<type>][.<source>][.regex][.<i>]
  #type = gene|mrna|cds|exon
@@ -292,29 +289,46 @@ public class GFF3FileConfig
 	}
 
 	static Hashtable<String, Hashtable<String, ArrayList<Pattern>>>	subsequenceSynonymAccessionTagPatterns	= new Hashtable<String, Hashtable<String, ArrayList<Pattern>>>(
-			4);
+																												4);
+
 	public static ArrayList<Pattern> getSubsequenceSynonymAccessionTagPatterns(String type, String source) {
 		return getPatternsTypeSource("subsequenceSynonymAccessionTag", true, type, source,
 			subsequenceSynonymAccessionTagPatterns);
 	}
 
 	static Hashtable<String, Hashtable<String, ArrayList<String>>>	subsequenceSynonymDbNames	= new Hashtable<String, Hashtable<String, ArrayList<String>>>(
-			4);
+																									4);
+
 	public static ArrayList<String> getSubsequenceSynonymDbNames(String type, String source) {
 		return getStringsTypeSource("subsequenceSynonymDbName", true, type, source, subsequenceSynonymDbNames);
 	}
 
 	static Hashtable<String, Hashtable<String, ArrayList<Pattern>>>	noteTypeTagPatterns	= new Hashtable<String, Hashtable<String, ArrayList<Pattern>>>(
-			4);
+																							4);
+
 	public static ArrayList<Pattern> getNoteTypeTagPatterns(String type, String source) {
-		return getPatternsTypeSource("noteTypeTag", true, type, source,
-			noteTypeTagPatterns);
+		return getPatternsTypeSource("noteTypeTag", true, type, source, noteTypeTagPatterns);
 	}
 
 	static Hashtable<String, Hashtable<String, ArrayList<String>>>	noteTypeValues	= new Hashtable<String, Hashtable<String, ArrayList<String>>>(
-			4);
+																						4);
+
 	public static ArrayList<String> getNoteTypeValues(String type, String source) {
 		return getStringsTypeSource("noteTypeValue", true, type, source, noteTypeValues);
+	}
+
+	static Hashtable<String, Hashtable<String, ArrayList<Pattern>>>	functionTagPatterns	= new Hashtable<String, Hashtable<String, ArrayList<Pattern>>>(
+																							4);
+
+	public static ArrayList<Pattern> getFunctionTagPatterns(String type, String source) {
+		return getPatternsTypeSource("functionTag", true, type, source, functionTagPatterns);
+	}
+
+	static Hashtable<String, Hashtable<String, ArrayList<String>>>	functionMethodNames	= new Hashtable<String, Hashtable<String, ArrayList<String>>>(
+																							4);
+
+	public static ArrayList<String> getFunctionMethodNames(String type, String source) {
+		return getStringsTypeSource("functionMethodName", true, type, source, functionMethodNames);
 	}
 
 }

@@ -94,7 +94,7 @@ public class SynonymsSQL
 		ResultSet rs = null;
 		try {
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT dbxref_id from " + tableName + " S ,dbxref X where S." + idFieldName + "="
+			rs = stmt.executeQuery("SELECT X.dbxref_id from " + tableName + " S ,dbxref X where S." + idFieldName + "="
 				+ idSynonymSource + " AND S.dbxref_id=X.dbxref_id AND X.dbname='" + dbName + "' AND X.accession='"
 				+ accession + "'");
 			DbxrefSQL dbxref = null;
@@ -201,7 +201,7 @@ public class SynonymsSQL
 	}
 
 	public boolean isSynonym(String dbName, String accession) throws SQLException {
-		return (getSynonym(dbName, accession)!=null);
+		return (getSynonym(dbName, accession) != null);
 	}
 
 }

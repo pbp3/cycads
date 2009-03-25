@@ -49,6 +49,9 @@ public interface Subsequence<S extends Sequence< ? , ? , ? , ? , ? , ? >, SA ext
 	public SubseqAnnotation< ? , ? , ? , ? , ? > createAnnotation(T type, M method);
 
 	/* Add if Annotation doesn't exist */
+	public SubseqAnnotation< ? , ? , ? , ? , ? > addAnnotation(T type, M method);
+
+	/* Add if Annotation doesn't exist */
 	public SubseqDbxrefAnnotation< ? , ? , ? , ? , ? > addDbxrefAnnotation(M method, X dbxref);
 
 	/* Add if Annotation doesn't exist */

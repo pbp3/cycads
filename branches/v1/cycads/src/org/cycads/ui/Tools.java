@@ -12,7 +12,8 @@ import javax.swing.JOptionPane;
 import org.cycads.entities.EntityFactory;
 import org.cycads.entities.sequence.Organism;
 
-public class Tools {
+public class Tools
+{
 
 	public static File getFileToOpen(String[] args, int pos, String fileNameDefault, String fileChooserMsg) {
 		String fileName;
@@ -106,7 +107,8 @@ public class Tools {
 		return fc.getSelectedFile();
 	}
 
-	public Organism getOrganism(String[] args, int pos, int organismNumberDefault, String organismChooserMsg,
+	public static Organism getOrganism(String[] args, int pos, int organismNumberDefault,
+			String organismNumberChooserMsg, String organismNameDefault, String organismNameChooserMsg,
 			EntityFactory entityFactory) {
 		int orgID = organismNumberDefault;
 		Organism organism = null;
@@ -120,42 +122,23 @@ public class Tools {
 		catch (Exception ex) {
 		}
 		while (organism == null) {
-			respDialog = JOptionPane.showInputDialog(organismChooserMsg, orgID);
+			respDialog = JOptionPane.showInputDialog(organismNumberChooserMsg, orgID);
 			if (respDialog == null) {
 				return null;
 			}
 			try {
 				orgID = Integer.parseInt(respDialog);
 				organism = entityFactory.getOrganism(orgID);
+				if (organism == null) {
+					organism = entityFactory.createOrganism(orgID, JOptionPane.showInputDialog(organismNameChooserMsg,
+						organismNameDefault));
+				}
 			}
 			catch (Exception ex) {
 			}
 		}
 		return organism;
 	}
-
-	// public Method getMethod(MethodType methodType, String[] args, int pos, String methodNameDefault,
-	// String methodChooserMsg) {
-	// String methodName;
-	// if (args.length > pos) {
-	// methodName = args[pos];
-	// }
-	// else {
-	// methodName = JOptionPane.showInputDialog(methodChooserMsg, methodNameDefault);
-	// if (methodName == null) {
-	// return null;
-	// }
-	// }
-	// return methodType.getOrCreateMethod(methodName);
-	// }
-	//
-	// public Method getMethod(String methodType, String[] args, int pos, String methodNameDefault, String
-	// methodChooserMsg) {
-	// return getMethod(createMethodTypeObject(methodType), args, pos, methodNameDefault, methodChooserMsg);
-	//
-	// }
-	//
-	// protected abstract MethodType createMethodTypeObject(String methodType);
 
 	public static Integer getInteger(String[] args, int pos, String messageDefault, int valueDefault) {
 		String value;

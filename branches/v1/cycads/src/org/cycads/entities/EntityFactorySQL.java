@@ -10,8 +10,10 @@ import java.sql.SQLException;
 import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.sequence.SQL.OrganismSQL;
+import org.cycads.entities.synonym.Function;
 import org.cycads.entities.synonym.KO;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
+import org.cycads.entities.synonym.SQL.FunctionSQL;
 import org.cycads.entities.synonym.SQL.KOSQL;
 import org.cycads.general.Config;
 
@@ -71,7 +73,8 @@ public class EntityFactorySQL implements EntityFactory<DbxrefSQL, AnnotationMeth
 	public TypeSQL getNoteType(String name) {
 		try {
 			return TypeSQL.getType(name, getConnection());
-		} catch (SQLException e) {
+		}
+		catch (SQLException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
@@ -81,7 +84,8 @@ public class EntityFactorySQL implements EntityFactory<DbxrefSQL, AnnotationMeth
 	public TypeSQL getAnnotationType(String name) {
 		try {
 			return TypeSQL.getType(name, getConnection());
-		} catch (SQLException e) {
+		}
+		catch (SQLException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
@@ -91,6 +95,16 @@ public class EntityFactorySQL implements EntityFactory<DbxrefSQL, AnnotationMeth
 	public OrganismSQL getOrganism(int orgId) {
 		try {
 			return new OrganismSQL(orgId, getConnection());
+		}
+		catch (SQLException e) {
+			return null;
+		}
+	}
+
+	@Override
+	public OrganismSQL createOrganism(int orgId, String name) {
+		try {
+			return OrganismSQL.createOrganism(orgId, name, getConnection());
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -106,6 +120,17 @@ public class EntityFactorySQL implements EntityFactory<DbxrefSQL, AnnotationMeth
 	public KO< ? , ? , ? , ? > getKO(String ko) {
 		try {
 			return new KOSQL(ko, getConnection());
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public Function getFunction(String name, String description) {
+		try {
+			return new FunctionSQL(name, description, getConnection());
 		}
 		catch (SQLException e) {
 			e.printStackTrace();

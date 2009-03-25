@@ -12,7 +12,6 @@ import java.util.regex.Pattern;
 import org.cycads.entities.EntityFactory;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.annotation.SimpleSubseqFunctionAnnotation;
 import org.cycads.entities.annotation.SubseqAnnotation;
 import org.cycads.entities.annotation.SubseqFunctionAnnotation;
 import org.cycads.entities.note.Note;
@@ -23,6 +22,7 @@ import org.cycads.entities.sequence.Sequence;
 import org.cycads.entities.sequence.SimpleSubsequence;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
+import org.cycads.entities.synonym.Function;
 import org.cycads.general.ParametersDefault;
 import org.cycads.ui.progress.Progress;
 
@@ -92,8 +92,8 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 		if (record.getType().equals(GFF3FileConfig.exonType)) {
 			handleExon(record);
 		}
-		if (record.getType().equals(GFF3FileConfig.geneType)) {
-			handleGene(record);
+		if (record.getType().equals(GFF3FileConfig.cdsType)) {
+			handleCDS(record);
 		}
 	}
 
@@ -160,8 +160,7 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 				mrnaPersisted = mrnasPersisted.iterator().next();
 			}
 			if (mrnaPersisted == null) {
-				mrnaPersisted = subseqPersisted.createAnnotation(
-					factory.getAnnotationType(mrnaAnnotationType.getName()), mrna.getAnnotationMethod());
+				mrnaPersisted = subseqPersisted.addAnnotation(mrnaAnnotationType, mrna.getAnnotationMethod());
 			}
 			notes = mrna.getNotes();
 			for (Note note : notes) {
@@ -198,10 +197,12 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 			}
 		}
 		AnnotationMethod annotationMethod = factory.getAnnotationMethod(GFF3FileConfig.getAnnotationMethod(record));
-		SubseqAnnotation annot = subseq.createAnnotation(geneAnnotationType, annotationMethod);
+		SubseqAnnotation annot = subseq.addAnnotation(geneAnnotationType, annotationMethod);
 		// add score as note
-		annot.addNote(ParametersDefault.getScoreAnnotationNoteTypeName(), NumberFormat.getInstance().format(
-			record.getScore()));
+		double score = record.getScore();
+		if (score != GFF3Record.NO_SCORE) {
+			annot.addNote(ParametersDefault.getScoreAnnotationNoteTypeName(), NumberFormat.getInstance().format(score));
+		}
 		Collection<Note> notes = record.getNotes();
 		for (Note note : notes) {
 			handleAnnotSynonym(note, annot, record);
@@ -211,56 +212,6 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 			handleFunctionAnnot(note, subseq, record);
 		}
 		progress.completeStep();
-	}
-
-	private void handleAnnotNote(Note note, SubseqAnnotation annot, GFF3Record record) {
-		String type = record.getType();
-		String source = record.getSource();
-		String noteType = note.getType().getName();
-		ArrayList<Pattern> patterns = GFF3FileConfig.getNoteTypeTagPatterns(type, source);
-		ArrayList<String> typeValues = GFF3FileConfig.getNoteTypeValues(type, source);
-		for (int i = 0; i < patterns.size(); i++) {
-			if (patterns.get(i).matcher(noteType).matches()) {
-				annot.addNote(typeValues.get(i), note.getValue());
-			}
-		}
-	}
-
-	private void handleAnnotSynonym(Note note, SubseqAnnotation annot, GFF3Record record) {
-		String type = record.getType();
-		String source = record.getSource();
-		String noteType = note.getType().getName();
-		ArrayList<Pattern> patterns = GFF3FileConfig.getCompletSynonymTagPatterns(type, source);
-		for (int i = 0; i < patterns.size(); i++) {
-			if (patterns.get(i).matcher(noteType).matches()) {
-				ArrayList<String> separators = GFF3FileConfig.getCompletSynonymSeparators(type, source);
-				String[] strs = note.getValue().split(separators.get(i));
-				if (strs.length == 2) {
-					annot.addSynonym(strs[0], strs[1]);
-					return;
-				}
-			}
-		}
-		patterns = GFF3FileConfig.getAnnotationSynonymAccessionTagPatterns(type, source);
-		ArrayList<String> dbNames = GFF3FileConfig.getAnnotationSynonymDbNames(type, source);
-		for (int i = 0; i < patterns.size(); i++) {
-			if (patterns.get(i).matcher(noteType).matches()) {
-				annot.addSynonym(dbNames.get(i), note.getValue());
-			}
-		}
-	}
-
-	private void handleSubseqSynonym(Note note, Subsequence subseq, GFF3Record record) {
-		String type = record.getType();
-		String source = record.getSource();
-		String noteType = note.getType().getName();
-		ArrayList<Pattern> patterns = GFF3FileConfig.getSubsequenceSynonymAccessionTagPatterns(type, source);
-		ArrayList<String> dbNames = GFF3FileConfig.getSubsequenceSynonymDbNames(type, source);
-		for (int i = 0; i < patterns.size(); i++) {
-			if (patterns.get(i).matcher(noteType).matches()) {
-				subseq.addSynonym(dbNames.get(i), note.getValue());
-			}
-		}
 	}
 
 	private void handleMRNA(GFF3Record record) {
@@ -273,10 +224,12 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 			subseq = new SimpleSubsequence(factory, seq, record.getStart(), record.getEnd());
 		}
 		AnnotationMethod annotationMethod = factory.getAnnotationMethod(GFF3FileConfig.getAnnotationMethod(record));
-		SubseqAnnotation annot = subseq.createAnnotation(mrnaAnnotationType, annotationMethod);
+		SubseqAnnotation annot = subseq.addAnnotation(mrnaAnnotationType, annotationMethod);
 		// add score as note
-		annot.addNote(ParametersDefault.getScoreAnnotationNoteTypeName(), NumberFormat.getInstance().format(
-			record.getScore()));
+		double score = record.getScore();
+		if (score != GFF3Record.NO_SCORE) {
+			annot.addNote(ParametersDefault.getScoreAnnotationNoteTypeName(), NumberFormat.getInstance().format(score));
+		}
 		Collection<Note> notes = record.getNotes();
 		for (Note note : notes) {
 			handleAnnotSynonym(note, annot, record);
@@ -348,10 +301,12 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 			}
 		}
 		AnnotationMethod annotationMethod = factory.getAnnotationMethod(GFF3FileConfig.getAnnotationMethod(record));
-		SubseqAnnotation annot = subseq.createAnnotation(cdsAnnotationType, annotationMethod);
+		SubseqAnnotation annot = subseq.addAnnotation(cdsAnnotationType, annotationMethod);
 		// add score as note
-		annot.addNote(ParametersDefault.getScoreAnnotationNoteTypeName(), NumberFormat.getInstance().format(
-			record.getScore()));
+		double score = record.getScore();
+		if (score != GFF3Record.NO_SCORE) {
+			annot.addNote(ParametersDefault.getScoreAnnotationNoteTypeName(), NumberFormat.getInstance().format(score));
+		}
 		for (Note note : notes) {
 			handleAnnotSynonym(note, annot, record);
 			handleSubseqSynonym(note, subseq, record);
@@ -360,6 +315,88 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 			handleFunctionAnnot(note, subseq, record);
 		}
 		progress.completeStep();
+	}
+
+	private void handleFunctionAnnot(Note note, Subsequence subseq, GFF3Record record) {
+		String type = record.getType();
+		String source = record.getSource();
+		String noteType = note.getType().getName();
+		ArrayList<Pattern> patterns = GFF3FileConfig.getFunctionTagPatterns(type, source);
+		ArrayList<String> methodNames = GFF3FileConfig.getFunctionMethodNames(type, source);
+		for (int i = 0; i < patterns.size(); i++) {
+			if (patterns.get(i).matcher(noteType).matches()) {
+				Function function = factory.getFunction(note.getValue(), null);
+				AnnotationMethod annotationMethod = factory.getAnnotationMethod(methodNames.get(i));
+				subseq.addFunctionAnnotation(annotationMethod, function);
+			}
+		}
+	}
+
+	private void handleAnnotParent(Note note, SubseqAnnotation annot, GFF3Record record) {
+		String type = record.getType();
+		String source = record.getSource();
+		String noteType = note.getType().getName();
+		ArrayList<Pattern> patterns = GFF3FileConfig.getParentAccessionTagPatterns(type, source);
+		ArrayList<String> dbNames = GFF3FileConfig.getParentDbNames(type, source);
+		for (int i = 0; i < patterns.size(); i++) {
+			if (patterns.get(i).matcher(noteType).matches()) {
+				Collection<Annotation> parents = organism.getAnnotations(null, null, factory.getDbxref(dbNames.get(i),
+					note.getValue()));
+				for (Annotation parent : parents) {
+					annot.addParent(parent);
+				}
+			}
+		}
+	}
+
+	private void handleAnnotNote(Note note, SubseqAnnotation annot, GFF3Record record) {
+		String type = record.getType();
+		String source = record.getSource();
+		String noteType = note.getType().getName();
+		ArrayList<Pattern> patterns = GFF3FileConfig.getNoteTypeTagPatterns(type, source);
+		ArrayList<String> typeValues = GFF3FileConfig.getNoteTypeValues(type, source);
+		for (int i = 0; i < patterns.size(); i++) {
+			if (patterns.get(i).matcher(noteType).matches()) {
+				annot.addNote(typeValues.get(i), note.getValue());
+			}
+		}
+	}
+
+	private void handleAnnotSynonym(Note note, SubseqAnnotation annot, GFF3Record record) {
+		String type = record.getType();
+		String source = record.getSource();
+		String noteType = note.getType().getName();
+		ArrayList<Pattern> patterns = GFF3FileConfig.getCompletSynonymTagPatterns(type, source);
+		for (int i = 0; i < patterns.size(); i++) {
+			if (patterns.get(i).matcher(noteType).matches()) {
+				ArrayList<String> separators = GFF3FileConfig.getCompletSynonymSeparators(type, source);
+				String[] strs = note.getValue().split(separators.get(i));
+				if (strs.length == 2) {
+					annot.addSynonym(strs[0], strs[1]);
+					return;
+				}
+			}
+		}
+		patterns = GFF3FileConfig.getAnnotationSynonymAccessionTagPatterns(type, source);
+		ArrayList<String> dbNames = GFF3FileConfig.getAnnotationSynonymDbNames(type, source);
+		for (int i = 0; i < patterns.size(); i++) {
+			if (patterns.get(i).matcher(noteType).matches()) {
+				annot.addSynonym(dbNames.get(i), note.getValue());
+			}
+		}
+	}
+
+	private void handleSubseqSynonym(Note note, Subsequence subseq, GFF3Record record) {
+		String type = record.getType();
+		String source = record.getSource();
+		String noteType = note.getType().getName();
+		ArrayList<Pattern> patterns = GFF3FileConfig.getSubsequenceSynonymAccessionTagPatterns(type, source);
+		ArrayList<String> dbNames = GFF3FileConfig.getSubsequenceSynonymDbNames(type, source);
+		for (int i = 0; i < patterns.size(); i++) {
+			if (patterns.get(i).matcher(noteType).matches()) {
+				subseq.addSynonym(dbNames.get(i), note.getValue());
+			}
+		}
 	}
 
 	private ArrayList<Dbxref> getParentDbxrefs(Note note, String type, String source) {
