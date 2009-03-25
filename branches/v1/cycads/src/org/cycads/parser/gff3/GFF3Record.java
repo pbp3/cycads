@@ -92,13 +92,26 @@ public class GFF3Record
 		this.phase = phase;
 	}
 
-	public void addNote(String type, String value) {
+	public Note addNote(String type, String value) {
 		HashSet<String> values = notes.get(type);
 		if (values == null) {
 			values = new HashSet<String>();
 			notes.put(type, values);
 		}
 		values.add(value);
+		return new SimpleNote(new SimpleType(type,null), value);
+	}
+
+	public Note removeNote(Note note) {
+		HashSet<String> values = notes.get(note.getType().getName());
+		if (values == null || values.isEmpty()) {
+			return null;
+		}
+		if (values.remove(note.getValue()))
+		{
+			return note;
+		}
+		return null;
 	}
 
 	public String getNoteValue(String type) {
