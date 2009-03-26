@@ -278,11 +278,11 @@ public class AnnotationSQL extends HasSynonymsNotebleSQL
 			ResultSet rs = null;
 			parents = new ArrayList<AnnotationSQL>();
 			try {
-				stmt = con.prepareStatement("SELECT Annotation_Parent_id from Annotation_parent WHERE annotation_id=?");
+				stmt = con.prepareStatement("SELECT annotation_parent_id from annotation_parent WHERE annotation_id=?");
 				stmt.setInt(1, getId());
 				rs = stmt.executeQuery();
 				while (rs.next()) {
-					parents.add(new AnnotationSQL(rs.getInt("Annotation_Parent_id"), getConnection()));
+					parents.add(new AnnotationSQL(rs.getInt("annotation_parent_id"), getConnection()));
 				}
 			}
 			catch (SQLException e) {

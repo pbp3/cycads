@@ -19,6 +19,7 @@ import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Intron;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Sequence;
+import org.cycads.entities.sequence.SimpleIntron;
 import org.cycads.entities.sequence.SimpleSubsequence;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
@@ -219,9 +220,11 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 		SimpleSubsequence subseq;
 		if (record.getStrand() < 0) {
 			subseq = new SimpleSubsequence(factory, seq, record.getEnd(), record.getStart());
+			subseq.addIntron(new SimpleIntron(record.getEnd(), record.getStart()));
 		}
 		else {
 			subseq = new SimpleSubsequence(factory, seq, record.getStart(), record.getEnd());
+			subseq.addIntron(new SimpleIntron(record.getStart(), record.getEnd()));
 		}
 		AnnotationMethod annotationMethod = factory.getAnnotationMethod(GFF3FileConfig.getAnnotationMethod(record));
 		SubseqAnnotation annot = subseq.addAnnotation(mrnaAnnotationType, annotationMethod);

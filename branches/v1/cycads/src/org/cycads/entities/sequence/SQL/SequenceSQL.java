@@ -215,10 +215,12 @@ public class SequenceSQL extends HasSynonymsNotebleSQL
 
 		Statement stmt = null;
 		ResultSet rs = null;
+		String query = "";
 		try {
 			stmt = con.createStatement();
-			stmt.executeUpdate("INSERT INTO subsequence (sequence_id, start_position, end_position) VALUES (" + getId()
-				+ "," + start + "," + end + ")", Statement.RETURN_GENERATED_KEYS);
+			query = "INSERT INTO subsequence (sequence_id, start_position, end_position) VALUES (" + getId() + ","
+				+ start + "," + end + ")";
+			stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
 			rs = stmt.getGeneratedKeys();
 			if (rs.next()) {
 				id = rs.getInt(1);
@@ -251,7 +253,7 @@ public class SequenceSQL extends HasSynonymsNotebleSQL
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			throw new RuntimeException(query, e);
 		}
 		finally {
 			if (rs != null) {

@@ -148,23 +148,24 @@ public class SynonymsSQL
 	}
 
 	public void addSynonym(DbxrefSQL dbxref) throws SQLException {
-		if (isSynonym(dbxref)) {
-			throw new SQLException("Synonym already exists: (" + idSynonymSource + "," + dbxref.getDbName() + ","
-				+ dbxref.getAccession() + ")");
-		}
-		Statement stmt = null;
-		try {
-			stmt = con.createStatement();
-			stmt.executeUpdate("INSERT INTO " + tableName + " (" + idFieldName + ", dbxref_id) VALUES("
-				+ idSynonymSource + "," + dbxref.getId() + ")");
-		}
-		finally {
-			if (stmt != null) {
-				try {
-					stmt.close();
-				}
-				catch (SQLException ex) {
-					// ignore
+		if (!isSynonym(dbxref)) {
+			//			throw new SQLException("Synonym already exists: (" + idSynonymSource + "," + dbxref.getDbName() + ","
+			//				+ dbxref.getAccession() + ")");
+			//		}
+			Statement stmt = null;
+			try {
+				stmt = con.createStatement();
+				stmt.executeUpdate("INSERT INTO " + tableName + " (" + idFieldName + ", dbxref_id) VALUES("
+					+ idSynonymSource + "," + dbxref.getId() + ")");
+			}
+			finally {
+				if (stmt != null) {
+					try {
+						stmt.close();
+					}
+					catch (SQLException ex) {
+						// ignore
+					}
 				}
 			}
 		}

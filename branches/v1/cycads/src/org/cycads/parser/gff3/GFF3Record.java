@@ -57,6 +57,9 @@ public class GFF3Record
 	}
 
 	public void setStart(int start) {
+		if (start < 0) {
+			start = 0;
+		}
 		this.start = start;
 	}
 
@@ -65,6 +68,9 @@ public class GFF3Record
 	}
 
 	public void setEnd(int end) {
+		if (end < 0) {
+			end = 0;
+		}
 		this.end = end;
 	}
 
