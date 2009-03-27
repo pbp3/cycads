@@ -9,14 +9,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cycads.entities.EntityFactorySQL;
+import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Sequence;
 import org.cycads.general.Config;
 import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
-import org.cycads.parser.gff3.GFF3Parser;
-import org.cycads.parser.gff3.GeneralGFF3Handler;
 import org.cycads.ui.Tools;
 import org.cycads.ui.progress.Progress;
 import org.cycads.ui.progress.ProgressPrintInterval;
@@ -48,12 +47,10 @@ public class PFFileGeneratorSQL
 			types.add(factory.getAnnotationType(ParametersDefault.getCDSAnnotationTypeName()));
 			PFFile pfFile = new PFFile(file);
 			PFRecordGenerator pfRecordGenerator = new PFRecordGenerator();
-			for (Sequence seq : seqs)
-			{
+			for (Sequence seq : seqs) {
 				Collection<Annotation> cdss = seq.getAnnotations(null, types, null);
-				for (Annotation cds : cdss)
-				{
-					pfFile.addRecord(pfRecordGenerator.generate(cds));
+				for (Annotation cds : cdss) {
+					pfFile.addRecord(pfRecordGenerator.generateRecord(cds));
 				}
 			}
 			progress.finish(Messages.pfGeneratorFinalMsg(progress.getStep()));
