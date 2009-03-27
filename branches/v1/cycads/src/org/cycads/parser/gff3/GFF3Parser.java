@@ -98,7 +98,7 @@ public class GFF3Parser
 		record.setEnd(Integer.parseInt(aList.get(4)));
 
 		String score = aList.get(5);
-		if (score == null || score.equals("") || score.equals(".") || score.equals("0")) {
+		if (score == null || score.equals("") || score.equals(".")) {
 			record.setScore(GFF3Record.NO_SCORE);
 		}
 		else {

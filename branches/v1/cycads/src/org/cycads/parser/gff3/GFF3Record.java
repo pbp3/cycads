@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Map;
 
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.SimpleNote;
@@ -27,6 +28,42 @@ public class GFF3Record
 	private int									strand;
 	private int									phase;
 	private Hashtable<String, HashSet<String>>	notes			= new Hashtable<String, HashSet<String>>();
+
+	@Override
+	public String toString() {
+		String ret = sequenceID + "\t" + source + "\t" + type + "\t" + start + "\t" + end;
+		if (score == NO_SCORE) {
+			ret += "\t.";
+		}
+		else {
+			ret += "\t" + score;
+		}
+		if (strand > 0) {
+			ret += "\t+";
+		}
+		else if (strand < 0) {
+			ret += "\t+";
+		}
+		else {
+			ret += "\t.";
+		}
+		if (phase == NO_PHASE) {
+			ret += "\t.";
+		}
+		else {
+			ret += "\t" + phase;
+		}
+		ret+="\t";
+		for (Map.Entry<String, HashSet<String>> entry : notes.entrySet()) {
+			for (String value : entry.getValue()) {
+				ret += entry.getKey() + "=" + value + ";";
+			}
+		}
+		if (ret.endsWith(";")) {
+			ret = ret.substring(0, ret.length() - 1);
+		}
+		return ret;
+	}
 
 	public String getSequenceID() {
 		return sequenceID;
@@ -105,7 +142,7 @@ public class GFF3Record
 			notes.put(type, values);
 		}
 		values.add(value);
-		return new SimpleNote(new SimpleType(type,null), value);
+		return new SimpleNote(new SimpleType(type, null), value);
 	}
 
 	public Note removeNote(Note note) {
@@ -113,8 +150,7 @@ public class GFF3Record
 		if (values == null || values.isEmpty()) {
 			return null;
 		}
-		if (values.remove(note.getValue()))
-		{
+		if (values.remove(note.getValue())) {
 			return note;
 		}
 		return null;
@@ -151,160 +187,4 @@ public class GFF3Record
 		return ret;
 	}
 
-	/*	public static final class Impl extends AbstractChangeable implements GFF3Record<SimpleNote<Impl>>
-		{
-
-			private String								sequenceID;
-			private String								source;
-			private String								type;
-			private int									start;
-			private int									end;
-			private double								score;
-			private int									strand;
-			private int									phase;
-			private NotesArrayList<SimpleNote<Impl>>	notes;
-
-			public Impl() {
-				// do nothing much - initialize us with uninformative data
-				sequenceID = null;
-				source = null;
-				type = null;
-				start = Integer.MAX_VALUE;
-				end = Integer.MIN_VALUE;
-				score = GFFTools.NO_SCORE;
-				strand = 0;
-				phase = GFFTools.NO_FRAME;
-				notes = new NotesArrayList<SimpleNote<Impl>>();
-			}
-
-			// public Impl(GFF3Record rec) {
-			// this.sequenceID = rec.getSequenceID();
-			// this.source = rec.getSource();
-			// this.type = rec.getType();
-			// this.start = rec.getStart();
-			// this.end = rec.getEnd();
-			// this.score = rec.getScore();
-			// this.strand = rec.getStrand();
-			// this.phase = rec.getPhase();
-			// }
-
-			public String getSequenceID() {
-				return this.sequenceID;
-			}
-
-			public void setSequenceID(String sequenceID) {
-				this.sequenceID = sequenceID;
-			}
-
-			public String getSource() {
-				return this.source;
-			}
-
-			public void setSource(String source) {
-				this.source = source;
-			}
-
-			public String getType() {
-				return this.type;
-			}
-
-			public void setType(String type) {
-				this.type = type;
-			}
-
-			public int getStart() {
-				return this.start;
-			}
-
-			public void setStart(int start) {
-				this.start = start;
-			}
-
-			public int getEnd() {
-				return this.end;
-			}
-
-			public void setEnd(int end) {
-				this.end = end;
-			}
-
-			public double getScore() {
-				return this.score;
-			}
-
-			public void setScore(double score) {
-				this.score = score;
-			}
-
-			public int getStrand() {
-				return this.strand;
-			}
-
-			public void setStrand(int strand) {
-				this.strand = strand;
-			}
-
-			public int getPhase() {
-				return this.phase;
-			}
-
-			public void setPhase(int phase) {
-				this.phase = phase;
-			}
-
-			@Override
-			public SimpleNote<Impl> createNote(String type, String value) {
-				return new SimpleNote<Impl>(this, type, value);
-			}
-
-			public SimpleNote<Impl> addNote(SimpleNote<Impl> note) {
-				return notes.addNote(note);
-			}
-
-			public SimpleNote<Impl> getNote(String noteTypeName, String value) {
-				return notes.getNote(noteTypeName, value);
-			}
-
-			public Collection<SimpleNote<Impl>> getNotes() {
-				return notes;
-			}
-
-			public Collection<SimpleNote<Impl>> getNotes(String noteTypeName) {
-				return notes.getNotes(noteTypeName);
-			}
-
-			public void addChangeListener(ChangeListener<SimpleNote<Impl>> cl, ChangeType ct) {
-				notes.addChangeListener(cl, ct);
-			}
-
-			public boolean isUnchanging(ChangeType ct) {
-				return notes.isUnchanging(ct);
-			}
-
-			@Override
-			public void removeChangeListener(ChangeListener<SimpleNote<Impl>> cl, ChangeType ct) {
-				notes.removeChangeListener(cl, ct);
-			}
-
-			@Override
-			public SimpleNote<Impl> addNote(String value, String type) {
-				return addNote(createNote(type, value));
-			}
-
-			@Override
-			public SimpleNote<Impl> addNote(Note< ? > note) {
-				return notes.addNote(note);
-			}
-
-			@Override
-			public Collection<String> getNotesValues(String noteTypeName) {
-				return notes.getNotesValues(noteTypeName);
-			}
-
-			@Override
-			public Note createNote(Note note) {
-				return createNote(note.getType(), note.getValue());
-			}
-
-		}*/
 }
