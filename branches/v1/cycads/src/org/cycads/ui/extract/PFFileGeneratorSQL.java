@@ -46,11 +46,11 @@ public class PFFileGeneratorSQL
 			Collection<Type> types = new ArrayList<Type>(1);
 			types.add(factory.getAnnotationType(ParametersDefault.getCDSAnnotationTypeName()));
 			PFFile pfFile = new PFFile(file);
-			PFRecordGenerator pfRecordGenerator = new PFRecordGenerator();
+			CycRecordGenerator cycRecordGenerator = new CycRecordGenerator();
 			for (Sequence seq : seqs) {
 				Collection<Annotation> cdss = seq.getAnnotations(null, types, null);
 				for (Annotation cds : cdss) {
-					pfFile.addRecord(pfRecordGenerator.generateRecord(cds));
+					pfFile.printRecord(cycRecordGenerator.generate(cds));
 				}
 			}
 			progress.finish(Messages.pfGeneratorFinalMsg(progress.getStep()));
