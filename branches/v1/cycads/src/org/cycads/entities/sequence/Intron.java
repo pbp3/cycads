@@ -3,7 +3,9 @@
  */
 package org.cycads.entities.sequence;
 
-public interface Intron extends Comparable<Intron>
+import org.cycads.extract.cyc.CycIntron;
+
+public interface Intron extends Comparable<Intron>, CycIntron
 {
 	public int getLength();
 

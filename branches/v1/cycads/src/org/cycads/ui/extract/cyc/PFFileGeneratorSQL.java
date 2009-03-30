@@ -1,7 +1,7 @@
 /*
  * Created on 05/01/2009
  */
-package org.cycads.ui.extract;
+package org.cycads.ui.extract.cyc;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,10 +9,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cycads.entities.EntityFactorySQL;
-import org.cycads.entities.annotation.Annotation;
+import org.cycads.entities.annotation.SubseqAnnotation;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Sequence;
+import org.cycads.extract.cyc.CycIdGenerator;
+import org.cycads.extract.cyc.CycRecordGenerator;
+import org.cycads.extract.cyc.OrganismCycIdGenerator;
+import org.cycads.extract.cyc.PFFileStream;
+import org.cycads.extract.cyc.SimpleCycRecordGenerator;
 import org.cycads.general.Config;
 import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
@@ -34,23 +39,30 @@ public class PFFileGeneratorSQL
 		if (organism == null) {
 			return;
 		}
-		String seqVersion = Tools.getString(args, 3, Messages.pfGeneratorChooseSeqVersion(),
+		String seqVersion = Tools.getString(args, 2, Messages.pfGeneratorChooseSeqVersion(),
 			Config.pfGeneratorSeqVersion());
 		if (seqVersion == null) {
+			return;
+		}
+
+		Double threshold = Tools.getDouble(args, 3, Messages.pfGeneratorChooseThreshold(),
+			Config.pfGeneratorThreshold());
+		if (threshold == null) {
 			return;
 		}
 		Progress progress = new ProgressPrintInterval(System.out, Messages.pfGeneratorStepShowInterval());
 		try {
 			progress.init(Messages.pfGeneratorInitMsg(file.getPath()));
-			Collection<Sequence> seqs = organism.getSequences(seqVersion);
+			Collection<Sequence< ? , ? , ? , ? , ? , ? >> seqs = organism.getSequences(seqVersion);
 			Collection<Type> types = new ArrayList<Type>(1);
 			types.add(factory.getAnnotationType(ParametersDefault.getCDSAnnotationTypeName()));
-			PFFile pfFile = new PFFile(file);
-			CycRecordGenerator cycRecordGenerator = new CycRecordGenerator();
+			PFFileStream pfFile = new PFFileStream(file, Config.pfGeneratorFileHeader());
+			CycIdGenerator cycIdGenerator = new OrganismCycIdGenerator(organism);
+			CycRecordGenerator cycRecordGenerator = new SimpleCycRecordGenerator(threshold, cycIdGenerator);
 			for (Sequence seq : seqs) {
-				Collection<Annotation> cdss = seq.getAnnotations(null, types, null);
-				for (Annotation cds : cdss) {
-					pfFile.printRecord(cycRecordGenerator.generate(cds));
+				Collection<SubseqAnnotation< ? , ? , ? , ? , ? >> cdss = seq.getAnnotations(null, types, null);
+				for (SubseqAnnotation< ? , ? , ? , ? , ? > cds : cdss) {
+					pfFile.print(cycRecordGenerator.generate(cds));
 				}
 			}
 			progress.finish(Messages.pfGeneratorFinalMsg(progress.getStep()));

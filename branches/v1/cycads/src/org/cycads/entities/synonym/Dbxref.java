@@ -8,9 +8,10 @@ import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.annotation.DbxrefDbxrefAnnotation;
 import org.cycads.entities.note.Noteble;
 import org.cycads.entities.note.Type;
+import org.cycads.extract.cyc.CycDBLink;
 
 public interface Dbxref<A extends DbxrefDbxrefAnnotation< ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
-		extends Noteble, HasSynonyms<X>, AnnotationFinder<A, X, T, M>
+		extends Noteble, HasSynonyms<X>, AnnotationFinder<A, X, T, M>, CycDBLink
 {
 	public String getDbName();
 

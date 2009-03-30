@@ -97,6 +97,10 @@ public class ParametersDefault
 
 	// General
 
+	public static int getNextCycId() {
+		return getInt("general.organism.nextCycId");
+	}
+
 	public static String getSubseqAnnotationTypeName() {
 		return getStringMandatory("general.type.subseqAnnotationTypeName");
 	}
@@ -199,6 +203,24 @@ public class ParametersDefault
 			dbLinkNames = getStrings("KOFile.DBLink.dbNames");
 		}
 		return dbLinkNames;
+	}
+
+	//PFFIle
+
+	public static String getPFFileCommentStart() {
+		return getStringMandatory("pf.file.comment.start");
+	}
+
+	public static String getPFFileFunctionCommentSeparator() {
+		return getStringMandatory("pf.file.function.comment.separator");
+	}
+
+	public static String getPFFileGeneCommentSeparator() {
+		return getStringMandatory("pf.file.gene.comment.separator");
+	}
+
+	public static String getPFFileCycIdNoteType() {
+		return getStringMandatory("pf.file.id.noteType");
 	}
 
 }

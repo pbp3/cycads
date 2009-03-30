@@ -30,4 +30,6 @@ public interface Organism<S extends Sequence< ? , ? , ? , ? , ? , ? >, SS extend
 
 	public Collection<SS> getSubsequences(X synonym);
 
+	public int getNextCycId();
+
 }

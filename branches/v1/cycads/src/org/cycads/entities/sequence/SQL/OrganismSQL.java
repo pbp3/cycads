@@ -18,13 +18,14 @@ import org.cycads.entities.annotation.SQL.SubseqDbxrefAnnotationSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
+import org.cycads.general.ParametersDefault;
 
 public class OrganismSQL
 		implements Organism<SequenceSQL, SubsequenceSQL, SubseqAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
 {
-	private int			id;
-	private String		name;
-	private Connection	con;
+	private final int			id;
+	private String				name;
+	private final Connection	con;
 
 	public OrganismSQL(int id, Connection con) throws SQLException {
 		this.id = id;
@@ -62,15 +63,14 @@ public class OrganismSQL
 	}
 
 	public static OrganismSQL createOrganism(int id, String name, Connection con) throws SQLException {
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		try {
-			stmt = con.createStatement();
-			if (name == null) {
-				stmt.executeUpdate("INSERT INTO Organism (NCBI_TAXON_ID) VALUES (" + id + ")");
-			}
-			else {
-				stmt.executeUpdate("INSERT INTO Organism (NCBI_TAXON_ID, name) VALUES (" + id + ",'" + name + "')");
-			}
+			adicionar na tabela o campo Next_Cyc_Id
+			stmt = con.prepareStatement("INSERT INTO Organism (NCBI_TAXON_ID, name, Next_Cyc_Id) VALUES (?,?,?)");
+			stmt.setInt(1, id);
+			stmt.setString(2, name);
+			stmt.setInt(3, ParametersDefault.getNextCycId());
+			stmt.executeUpdate();
 			return new OrganismSQL(id, con);
 		}
 		finally {
@@ -97,6 +97,45 @@ public class OrganismSQL
 
 	public Connection getConnection() {
 		return con;
+	}
+
+	@Override
+	public int getNextCycId() {
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = con.prepareStatement("SELECT Next_Cyc_Id from Organism WHERE NCBI_TAXON_ID=?");
+			stmt.setInt(1, getId());
+			rs = stmt.executeQuery();
+			int nextCycId = rs.getInt("Next_Cyc_Id");
+			stmt = con.prepareStatement("UPDATE Organism SET Next_Cyc_Id=? WHERE NCBI_TAXON_ID=?");
+			stmt.setInt(1, nextCycId + 1);
+			stmt.setInt(2, getId());
+			stmt.executeUpdate();
+			return nextCycId;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
 	}
 
 	@Override

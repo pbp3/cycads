@@ -1,4 +1,4 @@
-package org.cycads.ui.extract.cyc;
+package org.cycads.extract.cyc;
 
 public interface CycStream
 {

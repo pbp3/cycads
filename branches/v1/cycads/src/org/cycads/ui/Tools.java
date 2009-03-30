@@ -154,6 +154,20 @@ public class Tools
 		return new Integer(value);
 	}
 
+	public static Double getDouble(String[] args, int pos, String messageDefault, double valueDefault) {
+		String value;
+		if (args.length > pos) {
+			value = args[pos];
+		}
+		else {
+			value = JOptionPane.showInputDialog(messageDefault, valueDefault);
+			if (value == null) {
+				return null;
+			}
+		}
+		return new Double(value);
+	}
+
 	public static String getString(String[] args, int pos, String messageDefault, String valueDefault) {
 		String value;
 		if (args.length > pos) {
