@@ -11,9 +11,9 @@ public class SimpleCycRecord implements CycRecord
 	private int						start, end;
 	private String					productType;
 	private String					bioCycID;
+	private Collection<CycIntron>	introns;
 	private String					name;
 	private Collection<CycDBLink>	dBLinks;
-	private Collection<CycIntron>	introns;
 	private Collection<String>		comments;
 	private Collection<String>		synonyms;
 	private Collection<String>		eCs;

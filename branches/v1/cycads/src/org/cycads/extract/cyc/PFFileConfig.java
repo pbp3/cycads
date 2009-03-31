@@ -8,6 +8,8 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
+import org.cycads.parser.gff3.GFF3Record;
+
 /*
  #the gff3 parameters: gff3.file[.comment].<parameter name>[.<type>][.<source>][.regex][.<i>]
  #type = gene|mrna|cds|exon
