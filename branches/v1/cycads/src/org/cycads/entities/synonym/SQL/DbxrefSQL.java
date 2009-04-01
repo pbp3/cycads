@@ -15,6 +15,7 @@ import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
 import org.cycads.entities.annotation.SQL.DbxrefDbxrefAnnotationSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.synonym.Dbxref;
+import org.cycads.general.ParametersDefault;
 
 public class DbxrefSQL extends HasSynonymsNotebleSQL
 		implements Dbxref<DbxrefDbxrefAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
@@ -193,7 +194,7 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL
 
 	@Override
 	public String toString() {
-		return getDbName() + ":" + getAccession();
+		return getDbName() + ParametersDefault.getDbxrefToStringSeparator() + getAccession();
 	}
 
 	@Override

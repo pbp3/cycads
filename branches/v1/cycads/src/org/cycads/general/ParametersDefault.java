@@ -133,6 +133,10 @@ public class ParametersDefault
 		return getStringMandatory("general.type.geneAnnotationTypeName");
 	}
 
+	public static String getDbxrefToStringSeparator() {
+		return getStringMandatory("general.dbxref.toStringSeparator");
+	}
+
 	// KOFile
 
 	public static String koFileEntryTag() {

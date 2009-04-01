@@ -3,6 +3,8 @@ package org.cycads.extract.cyc;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.TreeSet;
+import java.util.regex.Pattern;
 
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationFinder;
@@ -50,9 +52,30 @@ public class SimpleCycRecordGenerator implements CycRecordGenerator
 		record.setStartBase(annot.getSubsequence().getStart());
 		record.setEndtBase(annot.getSubsequence().getEnd());
 		record.setIntrons((Collection<CycIntron>) annot.getSubsequence().getIntrons());
-		record.setName(getName(annot));
+		record.setName(getDataString(annot, PFFileConfig.getPFFileNamesLocs()));
+		record.setComments(getDataStrings(annot, PFFileConfig.getPFFileGeneCommentLocs()));
+		record.setSynonyms(getDataStrings(annot, PFFileConfig.getPFFileGeneSynonymLocs()));
+		record.setDBLinks(getDblinks(annot));
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	private Collection<CycDBLink> getDblinks(SubseqAnnotation annot) {
+		Collection<CycDBLink> cycDbLinks = new ArrayList<CycDBLink>();
+		Collection<String> dbLinksStr = new TreeSet<String>(getDataStrings(annot, PFFileConfig.getPFFileDblinkLocs()));
+		List<Pattern> patterns = PFFileConfig.getDbLinkDbNamePatterns();
+		List<String> values = PFFileConfig.getDbLinkDbNameValues();
+		for (String dbLinkStr : dbLinksStr) {
+			String[] strs = dbLinkStr.split(ParametersDefault.getDbxrefToStringSeparator());
+			for (int i = 0; i < patterns.size(); i++) {
+				if (patterns.get(i).matcher(strs[0]).matches()) {
+					strs[0] = values.get(i);
+					break;
+				}
+			}
+			cycDbLinks.add(new SimpleCycDBLink(strs[0], strs[1]));
+		}
+		return cycDbLinks;
 	}
 
 	private String getID(Annotation annot) {
@@ -63,8 +86,7 @@ public class SimpleCycRecordGenerator implements CycRecordGenerator
 		return id;
 	}
 
-	private String getName(SubseqAnnotation annot) {
-		List<String> locs = PFFileConfig.getPFFileNamesLocs();
+	private String getDataString(SubseqAnnotation annot, List<String> locs) {
 		String ret;
 		for (String loc : locs) {
 			ret = getString(getStrings(annot, loc, null));
@@ -73,6 +95,14 @@ public class SimpleCycRecordGenerator implements CycRecordGenerator
 			}
 		}
 		return null;
+	}
+
+	private List<String> getDataStrings(SubseqAnnotation annot, List<String> locs) {
+		List<String> ret = null;
+		for (String loc : locs) {
+			ret = getStrings(annot, loc, ret);
+		}
+		return ret;
 	}
 
 	private String getString(List<String> strings) {
@@ -209,7 +239,7 @@ public class SimpleCycRecordGenerator implements CycRecordGenerator
 
 	public List<String> getStrings(Collection<SubseqAnnotation> annots, String loc, List<String> ret) {
 		for (SubseqAnnotation parent : annots) {
-			getStrings(parent, loc, ret);
+			ret = getStrings(parent, loc, ret);
 		}
 		return ret;
 	}
@@ -252,7 +282,7 @@ public class SimpleCycRecordGenerator implements CycRecordGenerator
 		}
 
 		for (Dbxref dbxref : dbxrefs) {
-			getStrings(dbxref, loc, ret);
+			ret = getStrings(dbxref, loc, ret);
 		}
 		return ret;
 	}
@@ -398,7 +428,7 @@ public class SimpleCycRecordGenerator implements CycRecordGenerator
 		}
 
 		for (Note note : notes) {
-			getStrings(note, loc, ret);
+			ret = getStrings(note, loc, ret);
 		}
 		return ret;
 	}

@@ -127,4 +127,34 @@ public class PFFileConfig
 		return getStrings("name.loc");
 	}
 
+	public static List<String> getPFFileGeneCommentLocs() {
+		return getStrings("geneComment.loc");
+	}
+
+	public static List<String> getPFFileGeneSynonymLocs() {
+		return getStrings("synonym.loc");
+	}
+
+	public static List<String> getPFFileDblinkLocs() {
+		return getStrings("dbLink.loc");
+	}
+
+	static ArrayList<Pattern>	dbLinkDbNamePatterns;
+
+	public static ArrayList<Pattern> getDbLinkDbNamePatterns() {
+		if (dbLinkDbNamePatterns == null) {
+			dbLinkDbNamePatterns = getPatterns("pf.file.dbLink.dbName", null);
+		}
+		return dbLinkDbNamePatterns;
+	}
+
+	static ArrayList<String>	dbLinkDbNameValues;
+
+	public static ArrayList<String> getDbLinkDbNameValues() {
+		if (dbLinkDbNameValues == null) {
+			dbLinkDbNameValues = getStrings("pf.file.dbLink.dbNameNewValue", null);
+		}
+		return dbLinkDbNameValues;
+	}
+
 }
