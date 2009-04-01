@@ -19,11 +19,11 @@ import org.cycads.entities.synonym.Dbxref;
 public class DbxrefSQL extends HasSynonymsNotebleSQL
 		implements Dbxref<DbxrefDbxrefAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
 {
-	public final static int	INVALID_ID	= -1;
-	private String			dbName;
-	private String			accession;
-	private int				id;
-	private Connection		con;
+	public final static int		INVALID_ID	= -1;
+	private String				dbName;
+	private String				accession;
+	private int					id;
+	private final Connection	con;
 
 	public DbxrefSQL(int id, Connection con) throws SQLException {
 		this.id = id;
@@ -251,6 +251,14 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL
 		String extraFrom = "";
 		return DbxrefDbxrefAnnotationSQL.getAnnotations(method, null, null, dbxref, extraFrom, extraWhere,
 			getConnection());
+	}
+
+	@Override
+	public Collection< ? extends DbxrefDbxrefAnnotationSQL> getDbxrefAnnotations(String dbxrefDbname) {
+		String extraWhere = " XXA.dbxref_source=" + getId() + " AND XXA.dbxref_target=X.dbxref_id AND X.dbname='"
+			+ dbxrefDbname + "'";
+		String extraFrom = " dbxref X";
+		return DbxrefDbxrefAnnotationSQL.getAnnotations(null, null, null, null, extraFrom, extraWhere, getConnection());
 	}
 
 	@Override

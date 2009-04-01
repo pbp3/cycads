@@ -254,6 +254,18 @@ public class SimpleSubsequence<S extends Sequence< ? , ? , ? , ? , ? , ? >, X ex
 		return ret;
 	}
 
+	@Override
+	public Collection< ? extends SimpleSubseqDbxrefAnnotation< ? , ? , ? , ? , ? >> getDbxrefAnnotations(
+			String dbxrefDbname) {
+		Collection<SimpleSubseqDbxrefAnnotation< ? , ? , ? , ? , ? >> ret = new ArrayList<SimpleSubseqDbxrefAnnotation< ? , ? , ? , ? , ? >>();
+		for (SimpleSubseqDbxrefAnnotation< ? , ? , ? , ? , ? > annot : dbxrefAnnots) {
+			if ((dbxrefDbname == null || dbxrefDbname.equals(annot.getDbxref().getDbName()))) {
+				ret.add(annot);
+			}
+		}
+		return ret;
+	}
+
 	public boolean addIntron(Intron intron) {
 		return introns.add(intron);
 	}

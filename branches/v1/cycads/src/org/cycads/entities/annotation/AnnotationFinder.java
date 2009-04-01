@@ -17,4 +17,6 @@ public interface AnnotationFinder<A extends Annotation< ? , ? , ? , ? >, X exten
 
 	public Collection< ? extends A> getAnnotations(AnnotationFilter<A> filter);
 
+	public Collection< ? extends A> getDbxrefAnnotations(String dbxrefDbname);
+
 }

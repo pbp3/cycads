@@ -154,4 +154,52 @@ public class SubseqDbxrefAnnotationSQL extends SubseqAnnotationSQL
 		}
 	}
 
+	public static Collection<SubseqDbxrefAnnotationSQL> getDbxrefAnnotations(String dbxrefDbname,
+			String extraClauseFrom, String extraClauseWhere, Connection con) {
+
+		StringBuffer query = getQueryBasic().append(", subseq_dbxref_annotation SSXA, dbxref X");
+
+		StringBuffer clauseWhere = getWhere(null, null, null, extraClauseWhere);
+		if (clauseWhere.length() > 0) {
+			clauseWhere.append(" AND");
+		}
+		clauseWhere.append(" SSA.annotation_id=SSXA.annotation_id AND SSXA.dbxref_id=Xdbxref_id AND dbname='"
+			+ dbxrefDbname + "'");
+		query.append(getFrom(null, null, null, extraClauseFrom)).append(clauseWhere);
+
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = con.createStatement();
+			rs = stmt.executeQuery(query.toString());
+			ArrayList<SubseqDbxrefAnnotationSQL> ssas = new ArrayList<SubseqDbxrefAnnotationSQL>();
+			while (rs.next()) {
+				ssas.add(new SubseqDbxrefAnnotationSQL(rs.getInt("annotation_id"), con));
+			}
+			return ssas;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
+	}
+
 }

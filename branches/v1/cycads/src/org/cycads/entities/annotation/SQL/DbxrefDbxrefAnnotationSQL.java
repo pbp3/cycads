@@ -238,4 +238,9 @@ public class DbxrefDbxrefAnnotationSQL extends AnnotationSQL
 		return where;
 	}
 
+	@Override
+	public DbxrefSQL getDbxref() {
+		return getDbxrefTarget();
+	}
+
 }

@@ -65,7 +65,6 @@ public class OrganismSQL
 	public static OrganismSQL createOrganism(int id, String name, Connection con) throws SQLException {
 		PreparedStatement stmt = null;
 		try {
-			adicionar na tabela o campo Next_Cyc_Id
 			stmt = con.prepareStatement("INSERT INTO Organism (NCBI_TAXON_ID, name, Next_Cyc_Id) VALUES (?,?,?)");
 			stmt.setInt(1, id);
 			stmt.setString(2, name);
@@ -388,6 +387,14 @@ public class OrganismSQL
 			+ " AND S.sequence_id=SS.sequence_id AND SS.subsequence_id=SSA.subsequence_id";
 		return SubseqDbxrefAnnotationSQL.getAnnotations(method, null, null, dbxref, extraFrom, extraWhere,
 			getConnection());
+	}
+
+	@Override
+	public Collection<SubseqDbxrefAnnotationSQL> getDbxrefAnnotations(String dbxrefDbanme) {
+		String extraFrom = ", subsequence SS, sequence S";
+		String extraWhere = " S.NCBI_TAXON_ID=" + getId()
+			+ " AND S.sequence_id=SS.sequence_id AND SS.subsequence_id=SSA.subsequence_id";
+		return SubseqDbxrefAnnotationSQL.getDbxrefAnnotations(dbxrefDbanme, extraFrom, extraWhere, getConnection());
 	}
 
 	@Override

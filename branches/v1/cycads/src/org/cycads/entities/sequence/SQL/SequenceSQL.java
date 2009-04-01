@@ -24,15 +24,15 @@ import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 public class SequenceSQL extends HasSynonymsNotebleSQL
 		implements Sequence<OrganismSQL, SubsequenceSQL, SubseqAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
 {
-	public static final int	INVALID_LENGTH	= -1;
+	public static final int		INVALID_LENGTH	= -1;
 
-	private int				id;
-	private String			seqStr;
-	private Connection		con;
-	private int				length			= INVALID_LENGTH;
-	private int				organismId;
-	private OrganismSQL		organism;
-	private String			version;
+	private final int			id;
+	private String				seqStr;
+	private final Connection	con;
+	private int					length			= INVALID_LENGTH;
+	private int					organismId;
+	private OrganismSQL			organism;
+	private String				version;
 
 	public SequenceSQL(int id, Connection con) throws SQLException {
 		this.id = id;
@@ -429,6 +429,13 @@ public class SequenceSQL extends HasSynonymsNotebleSQL
 		String extraWhere = " SS.sequence_id=" + getId() + " AND SS.subsequence_id=SSA.subsequence_id";
 		return SubseqDbxrefAnnotationSQL.getAnnotations(method, null, null, dbxref, extraFrom, extraWhere,
 			getConnection());
+	}
+
+	@Override
+	public Collection<SubseqDbxrefAnnotationSQL> getDbxrefAnnotations(String dbxrefDbanme) {
+		String extraFrom = ", subsequence SS";
+		String extraWhere = " SS.sequence_id=" + getId() + " AND SS.subsequence_id=SSA.subsequence_id";
+		return SubseqDbxrefAnnotationSQL.getDbxrefAnnotations(dbxrefDbanme, extraFrom, extraWhere, getConnection());
 	}
 
 	@Override

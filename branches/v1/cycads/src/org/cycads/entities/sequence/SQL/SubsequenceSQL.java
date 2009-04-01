@@ -29,8 +29,8 @@ import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 public class SubsequenceSQL extends HasSynonymsNotebleSQL
 		implements Subsequence<SequenceSQL, SubseqAnnotationSQL, FunctionSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
 {
-	private int					id;
-	private Connection			con;
+	private final int			id;
+	private final Connection	con;
 	private int					start, end;
 	private int					sequenceId;
 	private SequenceSQL			sequence;
@@ -320,6 +320,13 @@ public class SubsequenceSQL extends HasSynonymsNotebleSQL
 		String extraFrom = "";
 		return SubseqDbxrefAnnotationSQL.getAnnotations(method, null, null, dbxref, extraFrom, extraWhere,
 			getConnection());
+	}
+
+	@Override
+	public Collection<SubseqDbxrefAnnotationSQL> getDbxrefAnnotations(String dbxrefDbanme) {
+		String extraWhere = " SSA.subsequence_id=" + getId();
+		String extraFrom = "";
+		return SubseqDbxrefAnnotationSQL.getDbxrefAnnotations(dbxrefDbanme, extraFrom, extraWhere, getConnection());
 	}
 
 	@Override
