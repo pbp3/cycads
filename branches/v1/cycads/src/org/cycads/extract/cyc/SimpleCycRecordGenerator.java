@@ -53,18 +53,23 @@ public class SimpleCycRecordGenerator implements CycRecordGenerator
 		record.setEndtBase(annot.getSubsequence().getEnd());
 		record.setIntrons((Collection<CycIntron>) annot.getSubsequence().getIntrons());
 		record.setName(getDataString(annot, PFFileConfig.getPFFileNamesLocs()));
-		record.setComments(getDataStrings(annot, PFFileConfig.getPFFileGeneCommentLocs()));
-		record.setSynonyms(getDataStrings(annot, PFFileConfig.getPFFileGeneSynonymLocs()));
+		record.setComments(getStrings(getDatasAnnotated(annot, PFFileConfig.getPFFileGeneCommentLocs())));
+		record.setSynonyms(getStrings(getDatasAnnotated(annot, PFFileConfig.getPFFileGeneSynonymLocs())));
 		record.setDBLinks(getDblinks(annot));
+
+		falta EC e function
+
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	private Collection<CycDBLink> getDblinks(SubseqAnnotation annot) {
 		Collection<CycDBLink> cycDbLinks = new ArrayList<CycDBLink>();
-		Collection<String> dbLinksStr = new TreeSet<String>(getDataStrings(annot, PFFileConfig.getPFFileDblinkLocs()));
 		List<Pattern> patterns = PFFileConfig.getDbLinkDbNamePatterns();
 		List<String> values = PFFileConfig.getDbLinkDbNameValues();
+
+		Collection<String> dbLinksStr = getStrings(getDatasAnnotated(annot, PFFileConfig.getPFFileDblinkLocs()));
+
 		for (String dbLinkStr : dbLinksStr) {
 			String[] strs = dbLinkStr.split(ParametersDefault.getDbxrefToStringSeparator());
 			for (int i = 0; i < patterns.size(); i++) {
@@ -88,8 +93,9 @@ public class SimpleCycRecordGenerator implements CycRecordGenerator
 
 	private String getDataString(SubseqAnnotation annot, List<String> locs) {
 		String ret;
+		ArrayList<Annotation> annotList = new ArrayList<Annotation>();
 		for (String loc : locs) {
-			ret = getString(getStrings(annot, loc, null));
+			ret = getString(getStrings(annot, loc, null, annotList, 0));
 			if (ret != null && ret.length() > 0) {
 				return ret;
 			}
@@ -97,22 +103,32 @@ public class SimpleCycRecordGenerator implements CycRecordGenerator
 		return null;
 	}
 
-	private List<String> getDataStrings(SubseqAnnotation annot, List<String> locs) {
-		List<String> ret = null;
+	private List<CycAnnotation> getDatasAnnotated(SubseqAnnotation annot, List<String> locs) {
+		List<CycAnnotation> ret = null;
+		ArrayList<Annotation> annotList = new ArrayList<Annotation>();
 		for (String loc : locs) {
-			ret = getStrings(annot, loc, ret);
+			ret = getStrings(annot, loc, ret, annotList, 0);
 		}
 		return ret;
 	}
 
-	private String getString(List<String> strings) {
-		if (strings != null && !strings.isEmpty()) {
-			return strings.get(0);
+	private String getString(List<CycAnnotation> cycAnnots) {
+		if (cycAnnots != null && !cycAnnots.isEmpty()) {
+			return cycAnnots.get(0).getValue();
 		}
 		return null;
 	}
 
-	private List<String> getStrings(SubseqAnnotation annot, String loc, List<String> ret) {
+	private Collection<String> getStrings(List<CycAnnotation> cycAnnots) {
+		Collection<String> dbLinksStr = new TreeSet<String>();
+		for (CycAnnotation cycAnnot : cycAnnots) {
+			dbLinksStr.add(cycAnnot.getValue());
+		}
+		return dbLinksStr;
+	}
+
+	private List<CycAnnotation> getStrings(SubseqAnnotation annot, String loc, List<CycAnnotation> ret,
+			ArrayList<Annotation> annotList, int nextPosAnnotList) {
 		int i = loc.indexOf('.');
 		String subLoc;
 		if (i == -1) {
@@ -125,24 +141,25 @@ public class SimpleCycRecordGenerator implements CycRecordGenerator
 		}
 
 		if (subLoc.equals(LOC_PARENT)) {
-			return getStrings(annot.getParents(), loc, ret);
+			return getStrings(annot.getParents(), loc, ret, annotList, nextPosAnnotList);
 		}
 		else if (subLoc.equals(LOC_SYNONYM)) {
-			return getStringsBySynonym(annot, loc, ret);
+			return getStringsBySynonym(annot, loc, ret, annotList, nextPosAnnotList);
 		}
 		else if (subLoc.equals(LOC_NOTE)) {
-			return getStringsByNote(annot, loc, ret);
+			return getStringsByNote(annot, loc, ret, annotList, nextPosAnnotList);
 		}
 		else if (subLoc.equals(LOC_SUBSEQUENCE)) {
-			return getStrings(annot.getSubsequence(), loc, ret);
+			return getStrings(annot.getSubsequence(), loc, ret, annotList, nextPosAnnotList);
 		}
 		else if (subLoc.equals(LOC_SEQUENCE)) {
-			return getStrings(annot.getSubsequence().getSequence(), loc, ret);
+			return getStrings(annot.getSubsequence().getSequence(), loc, ret, annotList, nextPosAnnotList);
 		}
 		throw new RuntimeException("Error in the location expression:" + subLoc + "." + loc);
 	}
 
-	private List<String> getStrings(Subsequence subsequence, String loc, List<String> ret) {
+	private List<CycAnnotation> getStrings(Subsequence subsequence, String loc, List<CycAnnotation> ret,
+			ArrayList<Annotation> annotList, int nextPosAnnotList) {
 		int i = loc.indexOf('.');
 		String subLoc;
 		if (i == -1) {
@@ -155,24 +172,26 @@ public class SimpleCycRecordGenerator implements CycRecordGenerator
 		}
 
 		if (subLoc.equals(LOC_SYNONYM)) {
-			return getStringsBySynonym(subsequence, loc, ret);
+			return getStringsBySynonym(subsequence, loc, ret, annotList, nextPosAnnotList);
 		}
 		else if (subLoc.equals(LOC_NOTE)) {
-			return getStringsByNote(subsequence, loc, ret);
+			return getStringsByNote(subsequence, loc, ret, annotList, nextPosAnnotList);
 		}
 		else if (subLoc.equals(LOC_SEQUENCE)) {
-			return getStrings(subsequence.getSequence(), loc, ret);
+			return getStrings(subsequence.getSequence(), loc, ret, annotList, nextPosAnnotList);
 		}
 		else if (subLoc.equals(LOC_DBXREF_ANNOTATION)) {
-			return getStringByDbxrefAnnotations(subsequence, loc, ret);
+			return getStringByDbxrefAnnotations(subsequence, loc, ret, annotList, nextPosAnnotList);
 		}
 		else if (subLoc.equals(LOC_FUNCTION_ANNOTATION)) {
-			return getStringsByFunctions(subsequence.getFunctionAnnotations(null, null), loc, ret);
+			return getStringsByFunctions(subsequence.getFunctionAnnotations(null, null), loc, ret, annotList,
+				nextPosAnnotList);
 		}
 		throw new RuntimeException("Error in the location expression:" + subLoc + "." + loc);
 	}
 
-	private List<String> getStrings(Sequence sequence, String loc, List<String> ret) {
+	private List<CycAnnotation> getStrings(Sequence sequence, String loc, List<CycAnnotation> ret,
+			ArrayList<Annotation> annotList, int nextPosAnnotList) {
 		int i = loc.indexOf('.');
 		String subLoc;
 		if (i == -1) {
@@ -185,16 +204,16 @@ public class SimpleCycRecordGenerator implements CycRecordGenerator
 		}
 
 		if (subLoc.equals(LOC_SYNONYM)) {
-			return getStringsBySynonym(sequence, loc, ret);
+			return getStringsBySynonym(sequence, loc, ret, annotList, nextPosAnnotList);
 		}
 		else if (subLoc.equals(LOC_NOTE)) {
-			return getStringsByNote(sequence, loc, ret);
+			return getStringsByNote(sequence, loc, ret, annotList, nextPosAnnotList);
 		}
 		throw new RuntimeException("Error in the location expression:" + subLoc + "." + loc);
 	}
 
-	private List<String> getStringsByFunctions(Collection<SubseqFunctionAnnotation> functionAnnotations, String loc,
-			List<String> ret) {
+	private List<CycAnnotation> getStringsByFunctions(Collection<SubseqFunctionAnnotation> functionAnnotations,
+			String loc, List<CycAnnotation> ret, ArrayList<Annotation> annotList, int nextPosAnnotList) {
 		int i = loc.indexOf('.');
 		String subLoc;
 		if (i == -1) {
@@ -207,18 +226,36 @@ public class SimpleCycRecordGenerator implements CycRecordGenerator
 		}
 
 		if (subLoc.equals(LOC_SYNONYM)) {
-			for (SubseqFunctionAnnotation subseqFunctionAnnotation : functionAnnotations) {
-				getStringsBySynonym(subseqFunctionAnnotation, loc, ret);
+			for (SubseqFunctionAnnotation annot : functionAnnotations) {
+				if (annotList.size() > nextPosAnnotList) {
+					annotList.set(nextPosAnnotList, annot);
+				}
+				else {
+					annotList.add(annot);
+				}
+				getStringsBySynonym(annot, loc, ret, annotList, nextPosAnnotList + 1);
 			}
 		}
 		else if (subLoc.equals(LOC_NOTE)) {
-			for (SubseqFunctionAnnotation subseqFunctionAnnotation : functionAnnotations) {
-				getStringsByNote(subseqFunctionAnnotation, loc, ret);
+			for (SubseqFunctionAnnotation annot : functionAnnotations) {
+				if (annotList.size() > nextPosAnnotList) {
+					annotList.set(nextPosAnnotList, annot);
+				}
+				else {
+					annotList.add(annot);
+				}
+				getStringsByNote(annot, loc, ret, annotList, nextPosAnnotList + 1);
 			}
 		}
 		else if (subLoc.equals(LOC_FUNCTION)) {
-			for (SubseqFunctionAnnotation subseqFunctionAnnotation : functionAnnotations) {
-				getStrings(subseqFunctionAnnotation.getFunction(), loc, ret);
+			for (SubseqFunctionAnnotation annot : functionAnnotations) {
+				if (annotList.size() > nextPosAnnotList) {
+					annotList.set(nextPosAnnotList, annot);
+				}
+				else {
+					annotList.add(annot);
+				}
+				getStrings(annot.getFunction(), loc, ret, annotList, nextPosAnnotList + 1);
 			}
 		}
 		else {
@@ -227,24 +264,33 @@ public class SimpleCycRecordGenerator implements CycRecordGenerator
 		return ret;
 	}
 
-	private List<String> getStrings(Function function, String loc, List<String> ret) {
+	private List<CycAnnotation> getStrings(Function function, String loc, List<CycAnnotation> ret,
+			ArrayList<Annotation> annotList, int nextPosAnnotList) {
 		if (loc == null || loc.length() == 0) {
-			return getStrings(function.getName(), ret);
+			return getStrings(function.getName(), ret, annotList, nextPosAnnotList);
 		}
 		if (loc.equals("LOC_VALUE")) {
-			return getStrings(function.getName(), ret);
+			return getStrings(function.getName(), ret, annotList, nextPosAnnotList);
 		}
 		throw new RuntimeException("Error in the location expression:" + loc);
 	}
 
-	public List<String> getStrings(Collection<SubseqAnnotation> annots, String loc, List<String> ret) {
-		for (SubseqAnnotation parent : annots) {
-			ret = getStrings(parent, loc, ret);
+	public List<CycAnnotation> getStrings(Collection<SubseqAnnotation> annots, String loc, List<CycAnnotation> ret,
+			ArrayList<Annotation> annotList, int nextPosAnnotList) {
+		for (SubseqAnnotation annot : annots) {
+			if (annotList.size() > nextPosAnnotList) {
+				annotList.set(nextPosAnnotList, annot);
+			}
+			else {
+				annotList.add(annot);
+			}
+			ret = getStrings(annot, loc, ret, annotList, nextPosAnnotList + 1);
 		}
 		return ret;
 	}
 
-	private List<String> getStringsBySynonym(HasSynonyms annot, String loc, List<String> ret) {
+	private List<CycAnnotation> getStringsBySynonym(HasSynonyms annot, String loc, List<CycAnnotation> ret,
+			ArrayList<Annotation> annotList, int nextPosAnnotList) {
 		String subLoc = "*";
 		boolean isRegexFilter = loc.startsWith(LOC_FILTER_REGEX_CHAR + "");
 		boolean isStringFilter = loc.startsWith(LOC_FILTER_STRING_CHAR + "");
@@ -282,25 +328,18 @@ public class SimpleCycRecordGenerator implements CycRecordGenerator
 		}
 
 		for (Dbxref dbxref : dbxrefs) {
-			ret = getStrings(dbxref, loc, ret);
+			ret = getStrings(dbxref, loc, ret, annotList, nextPosAnnotList);
 		}
 		return ret;
 	}
 
-	private List<String> getStrings(String newStr, List<String> ret) {
-		if (ret == null) {
-			ret = new ArrayList<String>();
-		}
-		ret.add(newStr);
-		return ret;
-	}
-
-	private List<String> getStrings(Dbxref dbxref, String loc, List<String> ret) {
+	private List<CycAnnotation> getStrings(Dbxref dbxref, String loc, List<CycAnnotation> ret,
+			ArrayList<Annotation> annotList, int nextPosAnnotList) {
 		if (loc == null || loc.length() == 0) {
-			return getStrings(dbxref.toString(), ret);
+			return getStrings(dbxref.toString(), ret, annotList, nextPosAnnotList);
 		}
 		if (loc.equals("LOC_VALUE")) {
-			return getStrings(dbxref.getAccession(), ret);
+			return getStrings(dbxref.getAccession(), ret, annotList, nextPosAnnotList);
 		}
 		int i = loc.indexOf('.');
 		String subLoc;
@@ -313,18 +352,19 @@ public class SimpleCycRecordGenerator implements CycRecordGenerator
 			loc = loc.substring(i + 1);
 		}
 		if (subLoc.equals(LOC_SYNONYM)) {
-			return getStringsBySynonym(dbxref, loc, ret);
+			return getStringsBySynonym(dbxref, loc, ret, annotList, nextPosAnnotList);
 		}
 		if (subLoc.equals(LOC_NOTE)) {
-			return getStringsByNote(dbxref, loc, ret);
+			return getStringsByNote(dbxref, loc, ret, annotList, nextPosAnnotList);
 		}
 		if (subLoc.equals(LOC_DBXREF_ANNOTATION)) {
-			return getStringByDbxrefAnnotations(dbxref, loc, ret);
+			return getStringByDbxrefAnnotations(dbxref, loc, ret, annotList, nextPosAnnotList);
 		}
 		throw new RuntimeException("Error in the location expression:" + subLoc + "." + loc);
 	}
 
-	private List<String> getStringByDbxrefAnnotations(AnnotationFinder annots, String loc, List<String> ret) {
+	private List<CycAnnotation> getStringByDbxrefAnnotations(AnnotationFinder annots, String loc,
+			List<CycAnnotation> ret, ArrayList<Annotation> annotList, int nextPosAnnotList) {
 		String subLoc = "*";
 		boolean isRegexFilter = loc.startsWith(LOC_FILTER_REGEX_CHAR + "");
 		boolean isStringFilter = loc.startsWith(LOC_FILTER_STRING_CHAR + "");
@@ -361,13 +401,20 @@ public class SimpleCycRecordGenerator implements CycRecordGenerator
 			dbxrefAnnots = annots.getDbxrefAnnotations(subLoc);
 		}
 
-		for (DbxrefAnnotation dbxrefAnnotation : dbxrefAnnots) {
-			ret = getStrings(dbxrefAnnotation, loc, ret);
+		for (DbxrefAnnotation annot : dbxrefAnnots) {
+			if (annotList.size() > nextPosAnnotList) {
+				annotList.set(nextPosAnnotList, annot);
+			}
+			else {
+				annotList.add(annot);
+			}
+			ret = getStrings(annot, loc, ret, annotList, nextPosAnnotList + 1);
 		}
 		return ret;
 	}
 
-	private List<String> getStrings(DbxrefAnnotation dbxrefAnnotation, String loc, List<String> ret) {
+	private List<CycAnnotation> getStrings(DbxrefAnnotation dbxrefAnnotation, String loc, List<CycAnnotation> ret,
+			ArrayList<Annotation> annotList, int nextPosAnnotList) {
 		int i = loc.indexOf('.');
 		String subLoc;
 		if (i == -1) {
@@ -379,18 +426,19 @@ public class SimpleCycRecordGenerator implements CycRecordGenerator
 			loc = loc.substring(i + 1);
 		}
 		if (subLoc.equals(LOC_SYNONYM)) {
-			return getStringsBySynonym(dbxrefAnnotation, loc, ret);
+			return getStringsBySynonym(dbxrefAnnotation, loc, ret, annotList, nextPosAnnotList);
 		}
 		else if (subLoc.equals(LOC_NOTE)) {
-			return getStringsByNote(dbxrefAnnotation, loc, ret);
+			return getStringsByNote(dbxrefAnnotation, loc, ret, annotList, nextPosAnnotList);
 		}
 		else if (subLoc.equals(LOC_DBXREF_VALUE)) {
-			return getStrings(dbxrefAnnotation.getDbxref(), loc, ret);
+			return getStrings(dbxrefAnnotation.getDbxref(), loc, ret, annotList, nextPosAnnotList);
 		}
 		throw new RuntimeException("Error in the location expression:" + subLoc + "." + loc);
 	}
 
-	private List<String> getStringsByNote(Noteble noteble, String loc, List<String> ret) {
+	private List<CycAnnotation> getStringsByNote(Noteble noteble, String loc, List<CycAnnotation> ret,
+			ArrayList<Annotation> annotList, int nextPosAnnotList) {
 		String subLoc = "*";
 		boolean isRegexFilter = loc.startsWith(LOC_FILTER_REGEX_CHAR + "");
 		boolean isStringFilter = loc.startsWith(LOC_FILTER_STRING_CHAR + "");
@@ -428,18 +476,33 @@ public class SimpleCycRecordGenerator implements CycRecordGenerator
 		}
 
 		for (Note note : notes) {
-			ret = getStrings(note, loc, ret);
+			ret = getStrings(note, loc, ret, annotList, nextPosAnnotList);
 		}
 		return ret;
 	}
 
-	private List<String> getStrings(Note note, String loc, List<String> ret) {
+	private List<CycAnnotation> getStrings(Note note, String loc, List<CycAnnotation> ret,
+			ArrayList<Annotation> annotList, int nextPosAnnotList) {
 		if (loc == null || loc.length() == 0) {
-			return getStrings(note.toString(), ret);
+			return getStrings(note.toString(), ret, annotList, nextPosAnnotList);
 		}
 		if (loc.equals("LOC_VALUE")) {
-			return getStrings(note.getValue(), ret);
+			return getStrings(note.getValue(), ret, annotList, nextPosAnnotList);
 		}
 		throw new RuntimeException("Error in the location expression:" + loc);
 	}
+
+	private List<CycAnnotation> getStrings(String newStr, List<CycAnnotation> ret, ArrayList<Annotation> annotList,
+			int nextPosAnnotList) {
+		if (ret == null) {
+			ret = new ArrayList<CycAnnotation>();
+		}
+		ArrayList<Annotation> cycAnnots = new ArrayList<Annotation>(nextPosAnnotList);
+		for (int i = 0; i < nextPosAnnotList; i++) {
+			cycAnnots.add(annotList.get(i));
+		}
+		ret.add(new SimpleCycAnnotation(newStr, cycAnnots));
+		return ret;
+	}
+
 }
