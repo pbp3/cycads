@@ -11,12 +11,11 @@ import org.cycads.entities.annotation.SubseqAnnotation;
 import org.cycads.entities.note.Type;
 
 /*
- #the gff3 parameters: gff3.file[.comment].<parameter name>[.<type>][.<source>][.regex][.<i>]
- #type = gene|mrna|cds|exon
-
+ * #the gff3 parameters: gff3.file[.comment].<parameter name>[.<type>][.<source>][.regex][.<i>] #type =
+ * gene|mrna|cds|exon
+ * 
  */
-public class PFFileConfig
-{
+public class PFFileConfig {
 	private static final String			BUNDLE_NAME		= "GFF3FileConfig";						//$NON-NLS-1$
 
 	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
@@ -137,6 +136,10 @@ public class PFFileConfig
 
 	public static List<String> getPFFileDblinkLocs() {
 		return getStrings("dbLink.loc");
+	}
+
+	public static List<String> getPFFileECLocs() {
+		return getStrings("ec.loc");
 	}
 
 	static ArrayList<Pattern>	dbLinkDbNamePatterns;

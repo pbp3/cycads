@@ -2,26 +2,26 @@ package org.cycads.extract.cyc;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.ResourceBundle;
-import java.util.Set;
 
-public class FileScoreSystem implements ScoreSystem
-{
+public class FileScoreSystem implements ScoreSystem {
 	ArrayList<Score>	scores;
 
 	public FileScoreSystem(String fileName) {
 		ResourceBundle fileMap = ResourceBundle.getBundle(fileName);
-		Set<String> keys = fileMap.keySet();
-		scores = new ArrayList<Score>(keys.size());
-		for (String key : keys) {
+		Enumeration<String> keys = fileMap.getKeys();
+		scores = new ArrayList<Score>();
+		while (keys.hasMoreElements()) {
+			String key = keys.nextElement();
 			scores.add(new Score(Double.parseDouble(key), Double.parseDouble(fileMap.getString(key))));
 		}
 		Collections.sort(scores);
 	}
 
 	@Override
-	public double getScore(double score) {
-		int i = Collections.binarySearch(scores, new Score(score, Double.NEGATIVE_INFINITY));
+	public double getScore(Double scoreNote) {
+		int i = Collections.binarySearch(scores, new Score(scoreNote, Double.NEGATIVE_INFINITY));
 		if (i >= 0) {
 			return Double.NEGATIVE_INFINITY;
 		}
@@ -33,8 +33,7 @@ public class FileScoreSystem implements ScoreSystem
 		return scores.get(i).value;
 	}
 
-	final class Score implements Comparable<Score>
-	{
+	final class Score implements Comparable<Score> {
 		double	limit;
 		double	value;
 
