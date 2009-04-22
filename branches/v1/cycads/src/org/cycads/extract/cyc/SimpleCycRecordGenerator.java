@@ -33,10 +33,19 @@ public class SimpleCycRecordGenerator implements CycRecordGenerator {
 		record.setComments(locInterpreter.getStrings(annot, PFFileConfig.getPFFileGeneCommentLocs()));
 		record.setSynonyms(locInterpreter.getStrings(annot, PFFileConfig.getPFFileGeneSynonymLocs()));
 		record.setDBLinks(getDblinks(annot));
-		Collection<CycValue> values = locInterpreter.getCycValues(annot, PFFileConfig.getPFFileECLocs());
+		Collection<SimpleCycEC> ecs = getCycEcs(annot);
+		for (CycEC1 ec : ecs) {
+			record.addEC(ec.getEcNumber());
+			record.addComment(PFFileConfig.getECScoreComment(ec.getScore()));
+			record.addComment(PFFileConfig.getECMethodsComment(ec.getAnnotationsLists()));
+		}
 		// falta EC e function
 
 		return null;
+	}
+
+	private Collection<SimpleCycEC> getCycEcs(SubseqAnnotation< ? , ? , ? , ? , ? > annot) {
+		Collection<CycValue> values = locInterpreter.getCycValues(annot, PFFileConfig.getPFFileECLocs());
 	}
 
 	private Collection<CycIntron> getIntrons(SubseqAnnotation annot) {
