@@ -34,7 +34,7 @@ public class SimpleCycRecordGenerator implements CycRecordGenerator {
 		record.setSynonyms(locInterpreter.getStrings(annot, PFFileConfig.getPFFileGeneSynonymLocs()));
 		record.setDBLinks(getDblinks(annot));
 		Collection<SimpleCycEC> ecs = getCycEcs(annot);
-		for (CycEC1 ec : ecs) {
+		for (CycEC ec : ecs) {
 			record.addEC(ec.getEcNumber());
 			record.addComment(PFFileConfig.getECScoreComment(ec.getScore()));
 			record.addComment(PFFileConfig.getECMethodsComment(ec.getAnnotationsLists()));

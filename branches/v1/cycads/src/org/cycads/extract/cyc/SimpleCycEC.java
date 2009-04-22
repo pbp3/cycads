@@ -10,7 +10,7 @@ import java.util.List;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.general.ParametersDefault;
 
-public class SimpleCycEC implements CycEC1 {
+public class SimpleCycEC implements CycEC {
 
 	private Hashtable<String, ScoreSystem>	scoreSystems;
 	private String							ecNumber;
