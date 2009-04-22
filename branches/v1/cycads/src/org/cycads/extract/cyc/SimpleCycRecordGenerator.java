@@ -2,6 +2,7 @@ package org.cycads.extract.cyc;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -11,14 +12,17 @@ import org.cycads.general.ParametersDefault;
 
 public class SimpleCycRecordGenerator implements CycRecordGenerator {
 
-	double			threshold;
-	CycIdGenerator	cycIdGenerator;
-	LocInterpreter	locInterpreter;
+	double					threshold;
+	CycIdGenerator			cycIdGenerator;
+	LocInterpreter			locInterpreter;
+	ScoreSystemCollection	scoreSystems;
 
-	public SimpleCycRecordGenerator(double threshold, CycIdGenerator cycIdGenerator, LocInterpreter locInterpreter) {
+	public SimpleCycRecordGenerator(double threshold, CycIdGenerator cycIdGenerator, LocInterpreter locInterpreter,
+			ScoreSystemCollection scoreSystems) {
 		this.threshold = threshold;
 		this.cycIdGenerator = cycIdGenerator;
 		this.locInterpreter = locInterpreter;
+		this.scoreSystems = scoreSystems;
 	}
 
 	@Override
@@ -36,8 +40,7 @@ public class SimpleCycRecordGenerator implements CycRecordGenerator {
 		Collection<SimpleCycEC> ecs = getCycEcs(annot);
 		for (CycEC ec : ecs) {
 			record.addEC(ec.getEcNumber());
-			record.addComment(PFFileConfig.getECScoreComment(ec.getScore()));
-			record.addComment(PFFileConfig.getECMethodsComment(ec.getAnnotationsLists()));
+			record.addComment(PFFileConfig.getECComment(ec));
 		}
 		// falta EC e function
 
@@ -46,6 +49,25 @@ public class SimpleCycRecordGenerator implements CycRecordGenerator {
 
 	private Collection<SimpleCycEC> getCycEcs(SubseqAnnotation< ? , ? , ? , ? , ? > annot) {
 		Collection<CycValue> values = locInterpreter.getCycValues(annot, PFFileConfig.getPFFileECLocs());
+		Hashtable<String, SimpleCycEC> cycEcs = new Hashtable<String, SimpleCycEC>();
+		SimpleCycEC cycEC;
+		String ecNumber;
+		for (CycValue cycValue : values) {
+			ecNumber = cycValue.getValue();
+			cycEC = cycEcs.get(ecNumber);
+			if (cycEC == null) {
+				cycEC = new SimpleCycEC(ecNumber, cycValue.getAnnotations(), scoreSystems);
+				cycEcs.put(ecNumber, cycEC);
+			}
+			cycEC.addAnnotationPath(cycValue.getAnnotations());
+		}
+		List<SimpleCycEC> ret = new ArrayList<SimpleCycEC>();
+		for (SimpleCycEC cycEc : cycEcs.values()) {
+			if (cycEc.getScore() >= threshold) {
+				ret.add(cycEc);
+			}
+		}
+		return ret;
 	}
 
 	private Collection<CycIntron> getIntrons(SubseqAnnotation annot) {

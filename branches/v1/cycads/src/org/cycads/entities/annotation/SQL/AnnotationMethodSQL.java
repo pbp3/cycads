@@ -9,11 +9,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.note.Type;
 import org.cycads.entities.note.SQL.NotebleSQL;
 
-public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod
-{
+public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod {
 	public final static int	INVALID_ID		= -1;
 	public final static int	WEIGHT_DEAFULT	= 0;
 
@@ -241,20 +239,18 @@ public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod
 
 	@Override
 	public boolean equals(Object obj) {
-		if (obj instanceof AnnotationMethodSQL)
-		{
-			return getId()==((AnnotationMethodSQL) obj).getId();
+		if (obj instanceof AnnotationMethodSQL) {
+			return getId() == ((AnnotationMethodSQL) obj).getId();
 		}
-		if (obj instanceof AnnotationMethod)
-		{
+		if (obj instanceof AnnotationMethod) {
 			return getName().equals(((AnnotationMethod) obj).getName());
 		}
 		return false;
 	}
+
 	@Override
 	public int compareTo(AnnotationMethod o) {
 		return getName().compareTo(o.getName());
 	}
-	
 
 }

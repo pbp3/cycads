@@ -9,6 +9,11 @@ public class FixAndFileScoreSystem implements ScoreSystem {
 
 	FileScoreSystem	fileScoreSystem;
 
+	public FixAndFileScoreSystem(double fix, FileScoreSystem fileScoreSystem) {
+		this.fix = fix;
+		this.fileScoreSystem = fileScoreSystem;
+	}
+
 	@Override
 	public double getScore(Double scoreNote) {
 		double ret = fix;

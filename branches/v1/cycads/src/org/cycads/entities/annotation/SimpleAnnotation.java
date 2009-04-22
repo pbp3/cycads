@@ -6,23 +6,19 @@ import java.util.TreeSet;
 
 import org.cycads.entities.EntityFactory;
 import org.cycads.entities.note.Type;
-import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.SimpleHasSynonymsNoteble;
 
-public class SimpleAnnotation<AParent extends Annotation<?, ?, ?, ?>, X extends Dbxref<?, ?, ?, ?>, T extends Type, M extends AnnotationMethod>
-		extends SimpleHasSynonymsNoteble<X> implements
-		Annotation<AParent, X, T, M> {
+public class SimpleAnnotation<AParent extends Annotation< ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
+		extends SimpleHasSynonymsNoteble<X> implements Annotation<AParent, X, T, M> {
 
-	EntityFactory<? extends X, ? extends M, ? extends T, ?> factory;
+	EntityFactory< ? extends X, ? extends M, ? extends T, ? >	factory;
 
-	Collection<AParent> parents = new ArrayList<AParent>();
-	Collection<T> types = new TreeSet<T>();
-	M method;
+	Collection<AParent>											parents	= new ArrayList<AParent>();
+	Collection<T>												types	= new TreeSet<T>();
+	M															method;
 
-	public SimpleAnnotation(
-			EntityFactory<? extends X, ? extends M, ? extends T, ?> factory,
-			M method) {
+	public SimpleAnnotation(EntityFactory< ? extends X, ? extends M, ? extends T, ? > factory, M method) {
 		super(factory);
 		this.factory = factory;
 		this.method = method;
@@ -66,9 +62,9 @@ public class SimpleAnnotation<AParent extends Annotation<?, ?, ?, ?>, X extends 
 		return types.contains(factory.getAnnotationMethod(type));
 	}
 
-//	@Override
-//	public int compareTo(Annotation<?, ?, ?, ?> annot) {
-//		return this.getAnnotationMethod().compareTo(annot.getAnnotationMethod());
-//	}
-//
+	// @Override
+	// public int compareTo(Annotation<?, ?, ?, ?> annot) {
+	// return this.getAnnotationMethod().compareTo(annot.getAnnotationMethod());
+	// }
+	//
 }

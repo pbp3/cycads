@@ -1,5 +1,6 @@
 package org.cycads.extract.cyc;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
+import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.SubseqAnnotation;
 import org.cycads.entities.note.Type;
 
@@ -158,6 +160,34 @@ public class PFFileConfig {
 			dbLinkDbNameValues = getStrings("pf.file.dbLink.dbNameNewValue", null);
 		}
 		return dbLinkDbNameValues;
+	}
+
+	public static String getECComment(CycEC ec) {
+		StringBuffer buf = new StringBuffer();
+		Object[] a = {ec.getEcNumber(), ec.getScore()};
+		buf.append(MessageFormat.format(getStringMandatory("pf.file.geneComment.ecScore"), a));
+		List<List<Annotation>> paths = ec.getAnnotationPaths();
+		if (!paths.isEmpty()) {
+			buf.append(getStringMandatory("pf.file.geneComment.ecMethod"));
+			List<Annotation> path = paths.get(0);
+			buf.append(path.get(0).getAnnotationMethod().getName());
+			String methodSeparator = getStringMandatory("pf.file.geneComment.ecMethodSeparator");
+			for (int i = 1; i < path.size(); i++) {
+				buf.append(methodSeparator);
+				buf.append(path.get(i).getAnnotationMethod().getName());
+			}
+			String pathSeparator = getStringMandatory("pf.file.geneComment.ecPathSeparator");
+			for (int i = 1; i < paths.size(); i++) {
+				buf.append(pathSeparator);
+				path = paths.get(i);
+				buf.append(path.get(0).getAnnotationMethod().getName());
+				for (int j = 1; j < path.size(); j++) {
+					buf.append(methodSeparator);
+					buf.append(path.get(j).getAnnotationMethod().getName());
+				}
+			}
+		}
+		return buf.toString();
 	}
 
 }
