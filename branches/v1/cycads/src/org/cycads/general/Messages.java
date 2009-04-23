@@ -5,8 +5,7 @@ import java.util.Date;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-public class Messages
-{
+public class Messages {
 	private static final String			BUNDLE_NAME		= "messages";								//$NON-NLS-1$
 
 	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
@@ -109,7 +108,7 @@ public class Messages
 		return MessageFormat.format(getStringMandatory("KOLoader.init"), a);
 	}
 
-	//GFF3 Loader
+	// GFF3 Loader
 
 	public static String gff3LoaderChooseFile() {
 		return getString("gff3Loader.chooseFile");
@@ -143,6 +142,40 @@ public class Messages
 	public static String gff3LoaderFinalMsg(int step) {
 		Object[] a = {step};
 		return MessageFormat.format(getStringMandatory("gff3Loader.final"), a);
+	}
+
+	public static String pfGeneratorChooseOrganismName() {
+		return getString("pfFile.extract.chooseOrganismName");
+	}
+
+	public static String pfGeneratorChooseOrganismNumber() {
+		return getString("pfFile.extract.chooseOrganismNumber");
+	}
+
+	public static String pfGeneratorChooseFile() {
+		return getString("pfFile.extract.chooseFile");
+	}
+
+	public static String pfGeneratorChooseSeqVersion() {
+		return getString("pfFile.extract.chooseSeqVersion");
+	}
+
+	public static int pfGeneratorStepShowInterval() {
+		return getInt("pfFile.extract.stepShowInterval");
+	}
+
+	public static String pfGeneratorInitMsg(String path) {
+		Object[] a = {path};
+		return MessageFormat.format(getStringMandatory("pfFile.extract.init"), a);
+	}
+
+	public static String pfGeneratorFinalMsg(int step) {
+		Object[] a = {step};
+		return MessageFormat.format(getStringMandatory("pfFile.extract.final"), a);
+	}
+
+	public static String pfGeneratorChooseThreshold() {
+		return getString("pfFile.extract.chooseThreshold");
 	}
 
 }

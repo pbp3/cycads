@@ -10,14 +10,14 @@ import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.SubseqAnnotation;
 import org.cycads.general.ParametersDefault;
 
-public class SimpleCycRecordGenerator implements CycRecordGenerator {
+public class PFFileCycRecordGenerator implements CycRecordGenerator {
 
 	double					threshold;
 	CycIdGenerator			cycIdGenerator;
 	LocInterpreter			locInterpreter;
 	ScoreSystemCollection	scoreSystems;
 
-	public SimpleCycRecordGenerator(double threshold, CycIdGenerator cycIdGenerator, LocInterpreter locInterpreter,
+	public PFFileCycRecordGenerator(double threshold, CycIdGenerator cycIdGenerator, LocInterpreter locInterpreter,
 			ScoreSystemCollection scoreSystems) {
 		this.threshold = threshold;
 		this.cycIdGenerator = cycIdGenerator;
@@ -31,7 +31,7 @@ public class SimpleCycRecordGenerator implements CycRecordGenerator {
 		String prodtype = PFFileConfig.getProductType(annot);
 		SimpleCycRecord record = new SimpleCycRecord(prodtype, id);
 		record.setStartBase(annot.getSubsequence().getStart());
-		record.setEndtBase(annot.getSubsequence().getEnd());
+		record.setEndBase(annot.getSubsequence().getEnd());
 		record.setIntrons(getIntrons(annot));
 		record.setName(locInterpreter.getFirstString(annot, PFFileConfig.getPFFileNamesLocs()));
 		record.setComments(locInterpreter.getStrings(annot, PFFileConfig.getPFFileGeneCommentLocs()));
@@ -42,9 +42,18 @@ public class SimpleCycRecordGenerator implements CycRecordGenerator {
 			record.addEC(ec.getEcNumber());
 			record.addComment(PFFileConfig.getECComment(ec));
 		}
-		// falta EC e function
+		record.setFunctions(getFunctions(annot));
+		return record;
+	}
 
-		return null;
+	private Collection<CycFunction> getFunctions(SubseqAnnotation< ? , ? , ? , ? , ? > annot) {
+		String functionName = locInterpreter.getFirstString(annot, PFFileConfig.getPFFileFunctionsLocs());
+		CycFunction cycFunction = new SimpleCycFunction(functionName);
+		cycFunction.setSynonyms(locInterpreter.getStrings(annot, PFFileConfig.getPFFileFunctionSynonymLocs()));
+		cycFunction.setComments(locInterpreter.getStrings(annot, PFFileConfig.getPFFileFunctionCommentLocs()));
+		ArrayList<CycFunction> ret = new ArrayList<CycFunction>(1);
+		ret.add(cycFunction);
+		return ret;
 	}
 
 	private Collection<SimpleCycEC> getCycEcs(SubseqAnnotation< ? , ? , ? , ? , ? > annot) {

@@ -5,8 +5,7 @@ package org.cycads.extract.cyc;
 
 import java.util.Collection;
 
-public interface CycRecord
-{
+public interface CycRecord {
 	public String getId();
 
 	public void setID(String bioCycID);
@@ -25,9 +24,9 @@ public interface CycRecord
 
 	public int getEndBase();
 
-	public void setEndtBase(int endBase);
+	public void setEndBase(int endBase);
 
-	//	public void shiftLocation(int shiftQtty);
+	// public void shiftLocation(int shiftQtty);
 
 	public Collection<CycIntron> getIntrons();
 
@@ -35,9 +34,9 @@ public interface CycRecord
 
 	public void addIntron(CycIntron intron);
 
-	//	public String getProductId();
+	// public String getProductId();
 	//
-	//	public void setProductId(String productId);
+	// public void setProductId(String productId);
 	//
 	public Collection<CycDBLink> getDBLinks();
 

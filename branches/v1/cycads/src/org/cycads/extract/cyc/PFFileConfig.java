@@ -190,4 +190,16 @@ public class PFFileConfig {
 		return buf.toString();
 	}
 
+	public static List<String> getPFFileFunctionsLocs() {
+		return getStrings("function.loc");
+	}
+
+	public static List<String> getPFFileFunctionSynonymLocs() {
+		return getStrings("functionSynonym.loc");
+	}
+
+	public static List<String> getPFFileFunctionCommentLocs() {
+		return getStrings("functionComment.loc");
+	}
+
 }

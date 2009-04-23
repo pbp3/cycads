@@ -53,7 +53,7 @@ public class SimpleCycRecord implements CycRecord
 	}
 
 	@Override
-	public void setEndtBase(int endBase) {
+	public void setEndBase(int endBase) {
 		this.end = endBase;
 	}
 

@@ -21,7 +21,7 @@ import org.cycads.extract.cyc.FixAndFileScoreSystem;
 import org.cycads.extract.cyc.OrganismCycIdGenerator;
 import org.cycads.extract.cyc.PFFileConfig;
 import org.cycads.extract.cyc.PFFileStream;
-import org.cycads.extract.cyc.SimpleCycRecordGenerator;
+import org.cycads.extract.cyc.PFFileCycRecordGenerator;
 import org.cycads.extract.cyc.SimpleLocInterpreter;
 import org.cycads.extract.cyc.SimpleScoreSystemCollection;
 import org.cycads.general.Config;
@@ -40,7 +40,8 @@ public class PFFileGeneratorSQL {
 			return;
 		}
 		Organism organism = Tools.getOrganism(args, 1, Config.pfGeneratorOrganismNumber(),
-			Messages.pfGeneratorOrganismNumber(), Messages.pfGeneratorOrganismName(), factory);
+			Messages.pfGeneratorChooseOrganismNumber(), Config.pfGeneratorOrganismName(),
+			Messages.pfGeneratorChooseOrganismName(), factory);
 		if (organism == null) {
 			return;
 		}
@@ -82,7 +83,7 @@ public class PFFileGeneratorSQL {
 					Double.parseDouble(values.get(i)), fileScoreSystem));
 			}
 
-			CycRecordGenerator cycRecordGenerator = new SimpleCycRecordGenerator(threshold, cycIdGenerator,
+			CycRecordGenerator cycRecordGenerator = new PFFileCycRecordGenerator(threshold, cycIdGenerator,
 				new SimpleLocInterpreter(), scoreSystemCollection);
 			for (Sequence seq : seqs) {
 				Collection<SubseqAnnotation< ? , ? , ? , ? , ? >> cdss = seq.getAnnotations(null, types, null);

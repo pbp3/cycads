@@ -5,15 +5,14 @@ package org.cycads.extract.cyc;
 
 import java.util.Collection;
 
-public class SimpleCycFunction implements CycFunction
-{
+public class SimpleCycFunction implements CycFunction {
 	String				name;
 	Collection<String>	comments;
 	Collection<String>	synonyms;
 
-	public SimpleCycFunction(String name) throws Exception {
+	public SimpleCycFunction(String name) {
 		if (name == null || name.length() == 0) {
-			throw new Exception("Function without name.");
+			throw new RuntimeException("Function without name.");
 		}
 		this.name = name;
 	}

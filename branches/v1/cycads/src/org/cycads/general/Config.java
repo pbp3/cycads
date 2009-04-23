@@ -3,8 +3,7 @@ package org.cycads.general;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-public class Config
-{
+public class Config {
 	private static final String			BUNDLE_NAME		= "config";								//$NON-NLS-1$
 
 	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
@@ -45,6 +44,10 @@ public class Config
 		return Integer.parseInt(getString(key));
 	}
 
+	private static double getDouble(String key) {
+		return Double.parseDouble(getString(key));
+	}
+
 	public static String getSQLConnectionUrl() {
 		return getStringMandatory("general.sql.connectionUrl");
 	}
@@ -71,7 +74,7 @@ public class Config
 		return getStringOptional("KOLoader.ECAnnotationMethodName");
 	}
 
-	//GFF3 Loader
+	// GFF3 Loader
 
 	public static String gff3LoaderFileName() {
 		return getStringOptional("gff3.loader.fileName");
@@ -91,6 +94,31 @@ public class Config
 
 	public static String gff3LoaderOrganismName() {
 		return getStringOptional("gff3.loader.organismName");
+	}
+
+	// PFFile Generator
+	public static String pfGeneratorFileName() {
+		return getStringOptional("pffile.extract.fileName");
+	}
+
+	public static int pfGeneratorOrganismNumber() {
+		return getInt("pffile.extract.organismNumber");
+	}
+
+	public static String pfGeneratorSeqVersion() {
+		return getStringOptional("pffile.extract.sequenceVersion");
+	}
+
+	public static double pfGeneratorThreshold() {
+		return getDouble("pffile.extract.threshold");
+	}
+
+	public static String pfGeneratorFileHeader() {
+		return getStringOptional("pffile.extract.fileHeader");
+	}
+
+	public static String pfGeneratorOrganismName() {
+		return getStringOptional("pffile.extract.organismName");
 	}
 
 }
