@@ -121,4 +121,30 @@ public class Config {
 		return getStringOptional("pffile.extract.organismName");
 	}
 
+	// CDS to KO Loader
+
+	public static String cdsToKOFileComment() {
+		return getStringMandatory("cdsToKO.file.comment");
+	}
+
+	public static String cdsToKOFileSeparator() {
+		return getStringMandatory("cdsToKO.file.separator");
+	}
+
+	public static String cdsToKOLoaderFileName() {
+		return getStringOptional("cdsToKO.loader.fileName");
+	}
+
+	public static int cdsToKOLoaderOrganismNumber() {
+		return getInt("cdsToKO.loader.organismNumber");
+	}
+
+	public static String cdsToKOMethodName() {
+		return getStringOptional("cdsToKO.loader.methodName");
+	}
+
+	public static String cdsToKOCDSDBName() {
+		return getStringOptional("cdsToKO.loader.cdsDBName");
+	}
+
 }

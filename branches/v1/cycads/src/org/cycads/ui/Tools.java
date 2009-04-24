@@ -12,8 +12,7 @@ import javax.swing.JOptionPane;
 import org.cycads.entities.EntityFactory;
 import org.cycads.entities.sequence.Organism;
 
-public class Tools
-{
+public class Tools {
 
 	public static File getFileToOpen(String[] args, int pos, String fileNameDefault, String fileChooserMsg) {
 		String fileName;
@@ -107,7 +106,7 @@ public class Tools
 		return fc.getSelectedFile();
 	}
 
-	public static Organism getOrganism(String[] args, int pos, int organismNumberDefault,
+	public static Organism getOrCreateOrganism(String[] args, int pos, int organismNumberDefault,
 			String organismNumberChooserMsg, String organismNameDefault, String organismNameChooserMsg,
 			EntityFactory entityFactory) {
 		int orgID = organismNumberDefault;
@@ -133,6 +132,34 @@ public class Tools
 					organism = entityFactory.createOrganism(orgID, JOptionPane.showInputDialog(organismNameChooserMsg,
 						organismNameDefault));
 				}
+			}
+			catch (Exception ex) {
+			}
+		}
+		return organism;
+	}
+
+	public static Organism getOrganism(String[] args, int pos, int organismNumberDefault,
+			String organismNumberChooserMsg, EntityFactory entityFactory) {
+		int orgID = organismNumberDefault;
+		Organism organism = null;
+		String respDialog;
+		try {
+			if (args.length > pos) {
+				orgID = Integer.parseInt(args[pos]);
+				organism = entityFactory.getOrganism(orgID);
+			}
+		}
+		catch (Exception ex) {
+		}
+		while (organism == null) {
+			respDialog = JOptionPane.showInputDialog(organismNumberChooserMsg, orgID);
+			if (respDialog == null) {
+				return null;
+			}
+			try {
+				orgID = Integer.parseInt(respDialog);
+				organism = entityFactory.getOrganism(orgID);
 			}
 			catch (Exception ex) {
 			}

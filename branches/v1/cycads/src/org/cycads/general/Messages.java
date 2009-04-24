@@ -144,6 +144,8 @@ public class Messages {
 		return MessageFormat.format(getStringMandatory("gff3Loader.final"), a);
 	}
 
+	// pf file generator
+
 	public static String pfGeneratorChooseOrganismName() {
 		return getString("pfFile.extract.chooseOrganismName");
 	}
@@ -176,6 +178,38 @@ public class Messages {
 
 	public static String pfGeneratorChooseThreshold() {
 		return getString("pfFile.extract.chooseThreshold");
+	}
+
+	// CDS to KO loader
+
+	public static String cdsToKOLoaderChooseFile() {
+		return getString("cdsToKOLoader.chooseFile");
+	}
+
+	public static String cdsToKOLoaderChooseOrganismNumber() {
+		return getString("cdsToKOLoader.chooseOrganismNumber");
+	}
+
+	public static String cdsToKOLoaderChooseCDSDBName() {
+		return getString("cdsToKOLoader.chooseCDSDBName");
+	}
+
+	public static String cdsToKOLoaderChooseMethodName() {
+		return getString("cdsToKOLoader.chooseMethodName");
+	}
+
+	public static int cdsToKOLoaderStepShowInterval() {
+		return getInt("cdsToKOLoader.stepShowInterval");
+	}
+
+	public static String cdsToKOLoaderInitMsg(String path) {
+		Object[] a = {path};
+		return MessageFormat.format(getStringMandatory("cdsToKOLoader.init"), a);
+	}
+
+	public static String cdsToKOLoaderFinalMsg(int step) {
+		Object[] a = {step};
+		return MessageFormat.format(getStringMandatory("cdsToKOLoader.final"), a);
 	}
 
 }

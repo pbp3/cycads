@@ -39,7 +39,7 @@ public class PFFileGeneratorSQL {
 		if (file == null) {
 			return;
 		}
-		Organism organism = Tools.getOrganism(args, 1, Config.pfGeneratorOrganismNumber(),
+		Organism organism = Tools.getOrCreateOrganism(args, 1, Config.pfGeneratorOrganismNumber(),
 			Messages.pfGeneratorChooseOrganismNumber(), Config.pfGeneratorOrganismName(),
 			Messages.pfGeneratorChooseOrganismName(), factory);
 		if (organism == null) {
