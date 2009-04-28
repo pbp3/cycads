@@ -20,13 +20,12 @@ import org.cycads.extract.cyc.FileScoreSystem;
 import org.cycads.extract.cyc.FixAndFileScoreSystem;
 import org.cycads.extract.cyc.OrganismCycIdGenerator;
 import org.cycads.extract.cyc.PFFileConfig;
-import org.cycads.extract.cyc.PFFileStream;
 import org.cycads.extract.cyc.PFFileCycRecordGenerator;
+import org.cycads.extract.cyc.PFFileStream;
 import org.cycads.extract.cyc.SimpleLocInterpreter;
 import org.cycads.extract.cyc.SimpleScoreSystemCollection;
 import org.cycads.general.Config;
 import org.cycads.general.Messages;
-import org.cycads.general.ParametersDefault;
 import org.cycads.ui.Tools;
 import org.cycads.ui.progress.Progress;
 import org.cycads.ui.progress.ProgressPrintInterval;
@@ -61,7 +60,7 @@ public class PFFileGeneratorSQL {
 			progress.init(Messages.pfGeneratorInitMsg(file.getPath()));
 			Collection<Sequence< ? , ? , ? , ? , ? , ? >> seqs = organism.getSequences(seqVersion);
 			Collection<Type> types = new ArrayList<Type>(1);
-			types.add(factory.getAnnotationType(ParametersDefault.getCDSAnnotationTypeName()));
+			types.add(factory.getAnnotationTypeCDS());
 			PFFileStream pfFile = new PFFileStream(file, Config.pfGeneratorFileHeader());
 			CycIdGenerator cycIdGenerator = new OrganismCycIdGenerator(organism);
 

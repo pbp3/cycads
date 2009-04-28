@@ -212,4 +212,22 @@ public class Messages {
 		return MessageFormat.format(getStringMandatory("cdsToKOLoader.final"), a);
 	}
 
+	public static String gbkLoaderChooseFile() {
+		return getString("gbkLoader.chooseFile");
+	}
+
+	public static int gbkLoaderStepShowInterval() {
+		return getInt("gbkLoader.stepShowInterval");
+	}
+
+	public static String gbkLoaderInitMsg(String path) {
+		Object[] a = {path};
+		return MessageFormat.format(getStringMandatory("gbkLoader.init"), a);
+	}
+
+	public static String gbkLoaderFinalMsg(int step) {
+		Object[] a = {step};
+		return MessageFormat.format(getStringMandatory("gbkLoader.final"), a);
+	}
+
 }

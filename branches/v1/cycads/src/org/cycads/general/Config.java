@@ -147,4 +147,8 @@ public class Config {
 		return getStringOptional("cdsToKO.loader.cdsDBName");
 	}
 
+	public static String gbkLoaderFileName() {
+		return getStringOptional("gbk.loader.fileName");
+	}
+
 }

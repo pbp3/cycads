@@ -16,9 +16,9 @@ import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.FunctionSQL;
 import org.cycads.entities.synonym.SQL.KOSQL;
 import org.cycads.general.Config;
+import org.cycads.general.ParametersDefault;
 
-public class EntityFactorySQL implements EntityFactory<DbxrefSQL, AnnotationMethodSQL, TypeSQL, OrganismSQL>
-{
+public class EntityFactorySQL implements EntityFactory<DbxrefSQL, AnnotationMethodSQL, TypeSQL, OrganismSQL> {
 	private Connection	con;
 
 	public EntityFactorySQL() {
@@ -136,6 +136,11 @@ public class EntityFactorySQL implements EntityFactory<DbxrefSQL, AnnotationMeth
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
+	}
+
+	@Override
+	public TypeSQL getAnnotationTypeCDS() {
+		return getAnnotationType(ParametersDefault.getCDSAnnotationTypeName());
 	}
 
 }

@@ -10,8 +10,7 @@ import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.Function;
 import org.cycads.entities.synonym.KO;
 
-public interface EntityFactory<X extends Dbxref< ? , ? , ? , ? >, M extends AnnotationMethod, T extends Type, O extends Organism< ? , ? , ? , ? , ? , ? >>
-{
+public interface EntityFactory<X extends Dbxref< ? , ? , ? , ? >, M extends AnnotationMethod, T extends Type, O extends Organism< ? , ? , ? , ? , ? , ? >> {
 	public X getDbxref(String dbName, String accession);
 
 	public M getAnnotationMethod(String name);
@@ -27,4 +26,6 @@ public interface EntityFactory<X extends Dbxref< ? , ? , ? , ? >, M extends Anno
 	public Function getFunction(String name, String description);
 
 	public KO< ? , ? , ? , ? > getKO(String ko);
+
+	public T getAnnotationTypeCDS();
 }

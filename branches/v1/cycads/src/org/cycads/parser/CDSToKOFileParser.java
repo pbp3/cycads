@@ -10,12 +10,16 @@ import java.io.IOException;
 import java.util.Collection;
 
 import org.cycads.entities.EntityFactory;
+import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.annotation.SubseqAnnotation;
 import org.cycads.entities.sequence.Organism;
+import org.cycads.entities.sequence.Sequence;
+import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.KO;
 import org.cycads.general.Config;
+import org.cycads.general.ParametersDefault;
 import org.cycads.ui.progress.Progress;
 
 public class CDSToKOFileParser {
@@ -60,8 +64,8 @@ public class CDSToKOFileParser {
 	private void addAnnotation(String cdsName, String koName) {
 		Dbxref cdsSynonym = factory.getDbxref(cdsDBName, cdsName);
 		Collection<SubseqAnnotation> annots = organism.getAnnotations(null, null, cdsSynonym);
+		KO ko = factory.getKO(koName);
 		if (annots != null && !annots.isEmpty()) {
-			KO ko = factory.getKO(koName);
 			for (SubseqAnnotation annot : annots) {
 				annot.getSubsequence().addDbxrefAnnotation(method, ko);
 				progress.completeStep();
@@ -73,6 +77,15 @@ public class CDSToKOFileParser {
 		else {
 			System.out.println("CDS not found: " + cdsName);
 			progressError.completeStep();
+			Sequence seq = organism.createNewSequence(ParametersDefault.getCDSSeqVersionFake());
+			Subsequence subseq = seq.createSubsequence(ParametersDefault.getCDSSubseqStartFake(),
+				ParametersDefault.getCDSSubseqEndFake(), null);
+			AnnotationMethod methodFake = factory.getAnnotationMethod(ParametersDefault.getCDSAnnotationMethodFake());
+			Annotation annot = subseq.addAnnotation(factory.getAnnotationTypeCDS(), methodFake);
+			annot.addSynonym(cdsSynonym);
+			subseq.addDbxrefAnnotation(method, ko);
+			progress.completeStep();
+
 		}
 	}
 

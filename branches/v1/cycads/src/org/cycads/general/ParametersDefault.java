@@ -6,8 +6,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
-public class ParametersDefault
-{
+public class ParametersDefault {
 	private static final String			BUNDLE_NAME		= "parametersDefault";						//$NON-NLS-1$
 
 	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
@@ -156,7 +155,7 @@ public class ParametersDefault
 	}
 
 	public static int koFileDataPos() {
-		return Integer.parseInt(getString("KOFile.dataPos"));
+		return getInt("KOFile.dataPos");
 	}
 
 	public static String koFileEndRecordStr() {
@@ -209,7 +208,7 @@ public class ParametersDefault
 		return dbLinkNames;
 	}
 
-	//PFFIle
+	// PFFIle
 
 	public static String getPFFileCommentStart() {
 		return getStringMandatory("pf.file.comment.start");
@@ -225,6 +224,24 @@ public class ParametersDefault
 
 	public static String getPFFileCycIdNoteType() {
 		return getStringMandatory("pf.file.id.noteType");
+	}
+
+	// CDS Fake
+
+	public static String getCDSSeqVersionFake() {
+		return getStringMandatory("cds.fake.seqVersion");
+	}
+
+	public static int getCDSSubseqStartFake() {
+		return getInt("cds.fake.subseqStartPos");
+	}
+
+	public static int getCDSSubseqEndFake() {
+		return getInt("cds.fake.subseqEndPos");
+	}
+
+	public static String getCDSAnnotationMethodFake() {
+		return getStringMandatory("cds.fake.annotationMethod");
 	}
 
 }
