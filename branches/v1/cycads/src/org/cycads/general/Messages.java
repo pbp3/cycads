@@ -207,8 +207,8 @@ public class Messages {
 		return MessageFormat.format(getStringMandatory("cdsToKOLoader.init"), a);
 	}
 
-	public static String cdsToKOLoaderFinalMsg(int step) {
-		Object[] a = {step};
+	public static String cdsToKOLoaderFinalMsg(int step, int errorCount) {
+		Object[] a = {step, errorCount};
 		return MessageFormat.format(getStringMandatory("cdsToKOLoader.final"), a);
 	}
 

@@ -20,9 +20,8 @@ import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.general.ParametersDefault;
 
-public class OrganismSQL
-		implements Organism<SequenceSQL, SubsequenceSQL, SubseqAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
-{
+public class OrganismSQL implements
+		Organism<SequenceSQL, SubsequenceSQL, SubseqAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL> {
 	private final int			id;
 	private String				name;
 	private final Connection	con;
@@ -106,7 +105,13 @@ public class OrganismSQL
 			stmt = con.prepareStatement("SELECT Next_Cyc_Id from Organism WHERE NCBI_TAXON_ID=?");
 			stmt.setInt(1, getId());
 			rs = stmt.executeQuery();
-			int nextCycId = rs.getInt("Next_Cyc_Id");
+			int nextCycId;
+			if (rs.next()) {
+				nextCycId = rs.getInt("Next_Cyc_Id");
+			}
+			else {
+				throw new SQLException("Organism does not exist:" + id);
+			}
 			stmt = con.prepareStatement("UPDATE Organism SET Next_Cyc_Id=? WHERE NCBI_TAXON_ID=?");
 			stmt.setInt(1, nextCycId + 1);
 			stmt.setInt(2, getId());

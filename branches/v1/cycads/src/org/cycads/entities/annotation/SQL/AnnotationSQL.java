@@ -16,9 +16,8 @@ import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
-public class AnnotationSQL extends HasSynonymsNotebleSQL
-		implements Annotation<AnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
-{
+public class AnnotationSQL extends HasSynonymsNotebleSQL implements
+		Annotation<AnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL> {
 
 	private int							id;
 	private int							methodId;
@@ -282,7 +281,7 @@ public class AnnotationSQL extends HasSynonymsNotebleSQL
 				stmt.setInt(1, getId());
 				rs = stmt.executeQuery();
 				while (rs.next()) {
-					parents.add(new AnnotationSQL(rs.getInt("annotation_parent_id"), getConnection()));
+					parents.add(new SubseqAnnotationSQL(rs.getInt("annotation_parent_id"), getConnection()));
 				}
 			}
 			catch (SQLException e) {

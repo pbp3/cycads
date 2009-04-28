@@ -67,12 +67,17 @@ public class PFFileGeneratorSQL {
 
 			SimpleScoreSystemCollection scoreSystemCollection = new SimpleScoreSystemCollection();
 			ArrayList<Pattern> patterns = PFFileConfig.getPatterns("pf.file.scoreAnnotation.methodName", null);
-			ArrayList<String> values = PFFileConfig.getStrings("pf.file.scoreAnnotation.value");
-			ArrayList<String> fileNames = PFFileConfig.getStrings("pf.file.scoreAnnotation.scoreNote.file");
+			ArrayList<String> values = PFFileConfig.getStrings("scoreAnnotation.value");
+			ArrayList<String> fileNames = PFFileConfig.getStrings("scoreAnnotation.scoreNote.file");
 			FileScoreSystem fileScoreSystem;
 			String fileName;
 			for (int i = 0; i < patterns.size(); i++) {
-				fileName = fileNames.get(i);
+				if (fileNames.size() > 1) {
+					fileName = fileNames.get(i);
+				}
+				else {
+					fileName = null;
+				}
 				if (fileName != null && fileName.length() > 0) {
 					fileScoreSystem = new FileScoreSystem(fileName);
 				}
@@ -89,6 +94,7 @@ public class PFFileGeneratorSQL {
 				Collection<SubseqAnnotation< ? , ? , ? , ? , ? >> cdss = seq.getAnnotations(null, types, null);
 				for (SubseqAnnotation< ? , ? , ? , ? , ? > cds : cdss) {
 					pfFile.print(cycRecordGenerator.generate(cds));
+					progress.completeStep();
 				}
 			}
 			progress.finish(Messages.pfGeneratorFinalMsg(progress.getStep()));

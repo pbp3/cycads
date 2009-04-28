@@ -15,9 +15,8 @@ import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.sequence.SQL.SubsequenceSQL;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 
-public class SubseqDbxrefAnnotationSQL extends SubseqAnnotationSQL
-		implements SubseqDbxrefAnnotation<AnnotationSQL, SubsequenceSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
-{
+public class SubseqDbxrefAnnotationSQL extends SubseqAnnotationSQL implements
+		SubseqDbxrefAnnotation<AnnotationSQL, SubsequenceSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL> {
 	private int			dbxrefId;
 	private DbxrefSQL	dbxref;
 
@@ -163,7 +162,7 @@ public class SubseqDbxrefAnnotationSQL extends SubseqAnnotationSQL
 		if (clauseWhere.length() > 0) {
 			clauseWhere.append(" AND");
 		}
-		clauseWhere.append(" SSA.annotation_id=SSXA.annotation_id AND SSXA.dbxref_id=Xdbxref_id AND dbname='"
+		clauseWhere.append(" SSA.annotation_id=SSXA.annotation_id AND SSXA.dbxref_id=X.dbxref_id AND dbname='"
 			+ dbxrefDbname + "'");
 		query.append(getFrom(null, null, null, extraClauseFrom)).append(clauseWhere);
 

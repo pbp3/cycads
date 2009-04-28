@@ -16,7 +16,7 @@ public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod 
 	public final static int	WEIGHT_DEAFULT	= 0;
 
 	private int				id;
-	private int				weight;
+	private double			weight;
 	private String			name;
 	private Connection		con;
 
@@ -31,7 +31,7 @@ public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod 
 			rs = stmt.executeQuery("SELECT name, last_weight from annotation_method WHERE annotation_method_id=" + id);
 			if (rs.next()) {
 				name = rs.getString("name");
-				weight = rs.getInt("last_weight");
+				weight = rs.getDouble("last_weight");
 			}
 			else {
 				throw new SQLException("Method does not exist:" + id);
@@ -71,7 +71,7 @@ public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod 
 			if (rs.next()) {
 				// if already exists, just get the id and the weight
 				this.id = rs.getInt("annotation_method_id");
-				this.weight = rs.getInt("last_weight");
+				this.weight = rs.getDouble("last_weight");
 			}
 			else {
 				stmt.executeUpdate("INSERT INTO annotation_method (name, last_weight) VALUES ('" + name + "',"
@@ -116,7 +116,7 @@ public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod 
 			if (rs.next()) {
 				// if already exists, just update the weight and get the id
 				id = rs.getInt("annotation_method_id");
-				this.weight = rs.getInt("last_weight");
+				this.weight = rs.getDouble("last_weight");
 				setWeight(weight);
 			}
 			else {
@@ -192,11 +192,11 @@ public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod 
 		return name;
 	}
 
-	public int getWeight() {
+	public double getWeight() {
 		return weight;
 	}
 
-	public void setWeight(int weight) {
+	public void setWeight(double weight) {
 		if (weight != this.weight) {
 			Statement stmt = null;
 			try {

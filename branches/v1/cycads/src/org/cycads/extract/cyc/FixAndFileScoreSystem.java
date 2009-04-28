@@ -3,9 +3,9 @@
  */
 package org.cycads.extract.cyc;
 
-public class FixAndFileScoreSystem implements ScoreSystem {
+public class FixAndFileScoreSystem implements FixScoreSystem {
 
-	double			fix;
+	public double	fix;
 
 	FileScoreSystem	fileScoreSystem;
 
@@ -21,6 +21,11 @@ public class FixAndFileScoreSystem implements ScoreSystem {
 			ret = ret * fileScoreSystem.getScore(scoreNote);
 		}
 		return ret;
+	}
+
+	@Override
+	public double getFixValue() {
+		return fix;
 	}
 
 }

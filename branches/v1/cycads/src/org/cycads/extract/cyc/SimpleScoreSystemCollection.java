@@ -26,6 +26,12 @@ public class SimpleScoreSystemCollection implements ScoreSystemCollection {
 					ret = scoreSystems.get(i);
 				}
 			}
+			if (ret == null) {
+				ret = new FixAndFileScoreSystem(method.getWeight(), null);
+			}
+			else if (ret instanceof FixScoreSystem) {
+				method.setWeight(((FixScoreSystem) ret).getFixValue());
+			}
 			methods.put(method.getName(), ret);
 		}
 		return ret;

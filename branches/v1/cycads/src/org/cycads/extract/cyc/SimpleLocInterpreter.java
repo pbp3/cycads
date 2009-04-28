@@ -66,7 +66,7 @@ public class SimpleLocInterpreter implements LocInterpreter {
 	}
 
 	public List<CycValue> getCycValues(SubseqAnnotation annot, List<String> locs) {
-		List<CycValue> ret = null;
+		List<CycValue> ret = new ArrayList<CycValue>();
 		ArrayList<Annotation> annotList = new ArrayList<Annotation>();
 		for (String loc : locs) {
 			ret = getCycValues(annot, loc, ret, annotList, 0);
@@ -216,7 +216,7 @@ public class SimpleLocInterpreter implements LocInterpreter {
 		if (loc == null || loc.length() == 0) {
 			return getCycValues(function.getName(), ret, annotList, nextPosAnnotList);
 		}
-		if (loc.equals("LOC_VALUE")) {
+		if (loc.equals(LOC_VALUE)) {
 			return getCycValues(function.getName(), ret, annotList, nextPosAnnotList);
 		}
 		throw new RuntimeException("Error in the location expression:" + loc);
@@ -285,7 +285,7 @@ public class SimpleLocInterpreter implements LocInterpreter {
 		if (loc == null || loc.length() == 0) {
 			return getCycValues(dbxref.toString(), ret, annotList, nextPosAnnotList);
 		}
-		if (loc.equals("LOC_VALUE")) {
+		if (loc.equals(LOC_VALUE)) {
 			return getCycValues(dbxref.getAccession(), ret, annotList, nextPosAnnotList);
 		}
 		int i = loc.indexOf('.');
@@ -433,7 +433,7 @@ public class SimpleLocInterpreter implements LocInterpreter {
 		if (loc == null || loc.length() == 0) {
 			return getCycValues(note.toString(), ret, annotList, nextPosAnnotList);
 		}
-		if (loc.equals("LOC_VALUE")) {
+		if (loc.equals(LOC_VALUE)) {
 			return getCycValues(note.getValue(), ret, annotList, nextPosAnnotList);
 		}
 		throw new RuntimeException("Error in the location expression:" + loc);

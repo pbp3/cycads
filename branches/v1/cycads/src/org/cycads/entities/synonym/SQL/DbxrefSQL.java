@@ -17,9 +17,8 @@ import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.general.ParametersDefault;
 
-public class DbxrefSQL extends HasSynonymsNotebleSQL
-		implements Dbxref<DbxrefDbxrefAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
-{
+public class DbxrefSQL extends HasSynonymsNotebleSQL implements
+		Dbxref<DbxrefDbxrefAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL> {
 	public final static int		INVALID_ID	= -1;
 	private String				dbName;
 	private String				accession;
@@ -258,7 +257,7 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL
 	public Collection< ? extends DbxrefDbxrefAnnotationSQL> getDbxrefAnnotations(String dbxrefDbname) {
 		String extraWhere = " XXA.dbxref_source=" + getId() + " AND XXA.dbxref_target=X.dbxref_id AND X.dbname='"
 			+ dbxrefDbname + "'";
-		String extraFrom = " dbxref X";
+		String extraFrom = ", dbxref X";
 		return DbxrefDbxrefAnnotationSQL.getAnnotations(null, null, null, null, extraFrom, extraWhere, getConnection());
 	}
 

@@ -14,6 +14,7 @@ import org.cycads.general.Messages;
 import org.cycads.parser.CDSToKOFileParser;
 import org.cycads.ui.Tools;
 import org.cycads.ui.progress.Progress;
+import org.cycads.ui.progress.ProgressCount;
 import org.cycads.ui.progress.ProgressPrintInterval;
 
 public class CDSToKOLoaderSQL {
@@ -42,10 +43,11 @@ public class CDSToKOLoaderSQL {
 		}
 
 		Progress progress = new ProgressPrintInterval(System.out, Messages.cdsToKOLoaderStepShowInterval());
+		Progress errorCount = new ProgressCount();
 		try {
 			progress.init(Messages.cdsToKOLoaderInitMsg(file.getPath()));
-			(new CDSToKOFileParser(factory, progress, method, organism, cdsDBName)).parse(file);
-			progress.finish(Messages.cdsToKOLoaderFinalMsg(progress.getStep()));
+			(new CDSToKOFileParser(factory, progress, method, organism, cdsDBName, errorCount)).parse(file);
+			progress.finish(Messages.cdsToKOLoaderFinalMsg(progress.getStep(), errorCount.getStep()));
 		}
 		catch (IOException e) {
 			e.printStackTrace();

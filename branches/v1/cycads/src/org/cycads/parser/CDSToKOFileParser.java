@@ -22,14 +22,16 @@ public class CDSToKOFileParser {
 
 	EntityFactory		factory;
 	Progress			progress;
+	Progress			progressError;
 	AnnotationMethod	method;
 	Organism			organism;
 	String				cdsDBName;
 
 	public CDSToKOFileParser(EntityFactory factory, Progress progress, AnnotationMethod method, Organism organism,
-			String cdsDBName) {
+			String cdsDBName, Progress progressError) {
 		this.factory = factory;
 		this.progress = progress;
+		this.progressError = progressError;
 		this.method = method;
 		this.organism = organism;
 		this.cdsDBName = cdsDBName;
@@ -61,12 +63,16 @@ public class CDSToKOFileParser {
 		if (annots != null && !annots.isEmpty()) {
 			KO ko = factory.getKO(koName);
 			for (SubseqAnnotation annot : annots) {
-				((SubseqAnnotation) annot).getSubsequence().addDbxrefAnnotation(method, ko);
+				annot.getSubsequence().addDbxrefAnnotation(method, ko);
 				progress.completeStep();
+			}
+			if (annots.size() != 1) {
+				System.out.println("Many (" + annots.size() + ") CDS annotations: " + cdsName);
 			}
 		}
 		else {
 			System.out.println("CDS not found: " + cdsName);
+			progressError.completeStep();
 		}
 	}
 

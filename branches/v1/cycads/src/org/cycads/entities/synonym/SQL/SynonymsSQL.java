@@ -10,8 +10,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class SynonymsSQL
-{
+public class SynonymsSQL {
 	private String		tableName, idFieldName;
 	private int			idSynonymSource;
 	private Connection	con;
@@ -61,7 +60,7 @@ public class SynonymsSQL
 		ResultSet rs = null;
 		try {
 			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT dbxref_id from " + tableName + " S ,dbxref X where S." + idFieldName + "="
+			rs = stmt.executeQuery("SELECT X.dbxref_id from " + tableName + " S ,dbxref X where S." + idFieldName + "="
 				+ idSynonymSource + " AND S.dbxref_id=X.dbxref_id AND X.dbname='" + dbName + "'");
 			ArrayList<DbxrefSQL> dbxrefs = new ArrayList<DbxrefSQL>();
 			while (rs.next()) {
@@ -149,9 +148,9 @@ public class SynonymsSQL
 
 	public void addSynonym(DbxrefSQL dbxref) throws SQLException {
 		if (!isSynonym(dbxref)) {
-			//			throw new SQLException("Synonym already exists: (" + idSynonymSource + "," + dbxref.getDbName() + ","
-			//				+ dbxref.getAccession() + ")");
-			//		}
+			// throw new SQLException("Synonym already exists: (" + idSynonymSource + "," + dbxref.getDbName() + ","
+			// + dbxref.getAccession() + ")");
+			// }
 			Statement stmt = null;
 			try {
 				stmt = con.createStatement();

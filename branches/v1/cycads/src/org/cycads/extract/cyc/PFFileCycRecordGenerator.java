@@ -61,14 +61,18 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator {
 		Hashtable<String, SimpleCycEC> cycEcs = new Hashtable<String, SimpleCycEC>();
 		SimpleCycEC cycEC;
 		String ecNumber;
-		for (CycValue cycValue : values) {
-			ecNumber = cycValue.getValue();
-			cycEC = cycEcs.get(ecNumber);
-			if (cycEC == null) {
-				cycEC = new SimpleCycEC(ecNumber, cycValue.getAnnotations(), scoreSystems);
-				cycEcs.put(ecNumber, cycEC);
+		if (values != null) {
+			for (CycValue cycValue : values) {
+				ecNumber = cycValue.getValue();
+				cycEC = cycEcs.get(ecNumber);
+				if (cycEC == null) {
+					cycEC = new SimpleCycEC(ecNumber, cycValue.getAnnotations(), scoreSystems);
+					cycEcs.put(ecNumber, cycEC);
+				}
+				else {
+					cycEC.addAnnotationPath(cycValue.getAnnotations());
+				}
 			}
-			cycEC.addAnnotationPath(cycValue.getAnnotations());
 		}
 		List<SimpleCycEC> ret = new ArrayList<SimpleCycEC>();
 		for (SimpleCycEC cycEc : cycEcs.values()) {
@@ -108,6 +112,7 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator {
 		String id = annot.getNoteValue(ParametersDefault.getPFFileCycIdNoteType());
 		if (id == null || id.length() == 0) {
 			id = cycIdGenerator.getNewID();
+			annot.addNote(ParametersDefault.getPFFileCycIdNoteType(), id);
 		}
 		return id;
 	}

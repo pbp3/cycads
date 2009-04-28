@@ -18,7 +18,7 @@ import org.cycads.entities.note.Type;
  * 
  */
 public class PFFileConfig {
-	private static final String			BUNDLE_NAME		= "GFF3FileConfig";						//$NON-NLS-1$
+	private static final String			BUNDLE_NAME		= "pFFileConfig";							//$NON-NLS-1$
 
 	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
 
