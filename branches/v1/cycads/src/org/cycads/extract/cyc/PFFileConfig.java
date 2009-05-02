@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.SubseqAnnotation;
 import org.cycads.entities.note.Type;
+import org.cycads.general.ParametersDefault;
 
 /*
  * #the gff3 parameters: gff3.file[.comment].<parameter name>[.<type>][.<source>][.regex][.<i>] #type =
@@ -200,6 +201,14 @@ public class PFFileConfig {
 
 	public static List<String> getPFFileFunctionCommentLocs() {
 		return getStrings("functionComment.loc");
+	}
+
+	public static String getScoreAnnotationNoteTypeName() {
+		String ret = getStringOptional("pf.file.scoreAnnotationNoteTypeName");
+		if (ret == null || ret.length() == 0) {
+			ret = ParametersDefault.getScoreAnnotationNoteTypeName();
+		}
+		return ret;
 	}
 
 }

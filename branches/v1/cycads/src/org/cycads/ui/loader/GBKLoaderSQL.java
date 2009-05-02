@@ -7,8 +7,8 @@ import java.io.File;
 import java.io.IOException;
 
 import org.cycads.entities.EntityFactorySQL;
-import org.cycads.general.Config;
 import org.cycads.general.Messages;
+import org.cycads.parser.gbk.GBKFileConfig;
 import org.cycads.parser.gbk.GBKFileParser;
 import org.cycads.ui.Tools;
 import org.cycads.ui.progress.Progress;
@@ -18,14 +18,19 @@ public class GBKLoaderSQL {
 
 	public static void main(String[] args) {
 		EntityFactorySQL factory = new EntityFactorySQL();
-		File file = Tools.getFileToOpen(args, 0, Config.gbkLoaderFileName(), Messages.gbkLoaderChooseFile());
+		File file = Tools.getFileToOpen(args, 0, GBKFileConfig.gbkLoaderFileName(), Messages.gbkLoaderChooseFile());
 		if (file == null) {
+			return;
+		}
+		String seqDBName = Tools.getString(args, 1, Messages.gbkLoaderChooseSeqDBName(),
+			GBKFileConfig.gbkLoaderSeqDBName());
+		if (seqDBName == null) {
 			return;
 		}
 		Progress progress = new ProgressPrintInterval(System.out, Messages.gbkLoaderStepShowInterval());
 		try {
 			progress.init(Messages.gbkLoaderInitMsg(file.getPath()));
-			(new GBKFileParser()).parse(file);
+			(new GBKFileParser(factory, seqDBName, progress)).parse(file);
 			progress.finish(Messages.gbkLoaderFinalMsg(progress.getStep()));
 		}
 		catch (IOException e) {

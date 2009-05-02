@@ -212,6 +212,8 @@ public class Messages {
 		return MessageFormat.format(getStringMandatory("cdsToKOLoader.final"), a);
 	}
 
+	// gbkLoader
+
 	public static String gbkLoaderChooseFile() {
 		return getString("gbkLoader.chooseFile");
 	}
@@ -228,6 +230,58 @@ public class Messages {
 	public static String gbkLoaderFinalMsg(int step) {
 		Object[] a = {step};
 		return MessageFormat.format(getStringMandatory("gbkLoader.final"), a);
+	}
+
+	public static String gbkLoaderChooseSeqDBName() {
+		return getStringMandatory("gbkLoader.chooseSeqDBName");
+	}
+
+	// cdsToDbxrefLoader
+
+	public static String cdsToDbxrefLoaderChooseFile() {
+		return getStringMandatory("cdsToDbxrefLoader.chooseFile");
+	}
+
+	public static String cdsToDbxrefLoaderChooseOrganismNumber() {
+		return getStringMandatory("cdsToDbxrefLoader.chooseOrganismNumber");
+	}
+
+	public static String cdsToDbxrefLoaderChooseMethodName() {
+		return getStringMandatory("cdsToDbxrefLoader.chooseMethodName");
+	}
+
+	public static String cdsToDbxrefLoaderChooseCDSColumnIndex() {
+		return getStringMandatory("cdsToDbxrefLoader.chooseCDSColumnIndex");
+	}
+
+	public static String cdsToDbxrefLoaderChooseCDSDBName() {
+		return getStringMandatory("cdsToDbxrefLoader.chooseCDSDBName");
+	}
+
+	public static String cdsToDbxrefLoaderChooseDbxrefColumnIndex() {
+		return getStringMandatory("cdsToDbxrefLoader.chooseDbxrefColumnIndex");
+	}
+
+	public static String cdsToDbxrefLoaderChooseDbxrefDBName() {
+		return getStringMandatory("cdsToDbxrefLoader.chooseDbxrefDBName");
+	}
+
+	public static String cdsToDbxrefLoaderChooseScoreColumnIndex() {
+		return getStringMandatory("cdsToDbxrefLoader.chooseScoreColumnIndex");
+	}
+
+	public static int cdsToDbxrefLoaderStepShowInterval() {
+		return getInt("cdsToDbxrefLoader.stepShowInterval");
+	}
+
+	public static String cdsToDbxrefLoaderInitMsg(String path) {
+		Object[] a = {path};
+		return MessageFormat.format(getStringMandatory("cdsToDbxrefLoader.init"), a);
+	}
+
+	public static String cdsToDbxrefLoaderFinalMsg(int step, int errorStep) {
+		Object[] a = {step, errorStep};
+		return MessageFormat.format(getStringMandatory("cdsToDbxrefLoader.final"), a);
 	}
 
 }

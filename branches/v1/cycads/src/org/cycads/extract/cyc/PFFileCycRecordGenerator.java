@@ -97,13 +97,15 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator {
 
 		for (String dbLinkStr : dbLinksStr) {
 			String[] strs = dbLinkStr.split(ParametersDefault.getDbxrefToStringSeparator());
+			boolean foundDbName = false;
 			for (int i = 0; i < patterns.size(); i++) {
 				if (patterns.get(i).matcher(strs[0]).matches()) {
-					strs[0] = values.get(i);
-					break;
+					foundDbName = cycDbLinks.add(new SimpleCycDBLink(values.get(i), strs[1]));
 				}
 			}
-			cycDbLinks.add(new SimpleCycDBLink(strs[0], strs[1]));
+			if (!foundDbName) {
+				cycDbLinks.add(new SimpleCycDBLink(strs[0], strs[1]));
+			}
 		}
 		return cycDbLinks;
 	}

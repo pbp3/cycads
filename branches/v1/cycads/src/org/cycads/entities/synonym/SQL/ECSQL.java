@@ -11,8 +11,7 @@ import org.cycads.entities.annotation.SQL.DbxrefDbxrefAnnotationSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.synonym.EC;
 
-public class ECSQL extends DbxrefSQL implements EC<DbxrefDbxrefAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
-{
+public class ECSQL extends DbxrefSQL implements EC<DbxrefDbxrefAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL> {
 
 	public ECSQL(int id, Connection con) throws SQLException {
 		super(id, con);
@@ -21,7 +20,7 @@ public class ECSQL extends DbxrefSQL implements EC<DbxrefDbxrefAnnotationSQL, Db
 		}
 	}
 
-	protected ECSQL(String accession, Connection con) throws SQLException {
+	public ECSQL(String accession, Connection con) throws SQLException {
 		super(DBNAME, accession, con);
 	}
 

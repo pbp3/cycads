@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.cycads.entities.annotation.Annotation;
-import org.cycads.general.ParametersDefault;
 
 public class SimpleCycEC implements CycEC {
 
@@ -44,7 +43,7 @@ public class SimpleCycEC implements CycEC {
 			double scoreAnnotationPath = 1;
 			for (Annotation annot : annotationPath) {
 				scoreSystem = scoreSystems.getScoreSystem(annot.getAnnotationMethod());
-				scoreNote = annot.getNoteValue(ParametersDefault.getScoreAnnotationNoteTypeName());
+				scoreNote = annot.getNoteValue(PFFileConfig.getScoreAnnotationNoteTypeName());
 				if (scoreNote != null) {
 					scoreAnnotation = scoreSystem.getScore(Double.parseDouble(scoreNote));
 				}

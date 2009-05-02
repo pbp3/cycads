@@ -7,39 +7,43 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.biojava.bio.BioException;
+import org.biojava.bio.seq.Feature;
+import org.biojava.bio.symbol.Location;
 import org.biojavax.Comment;
+import org.biojavax.Note;
+import org.biojavax.RankedCrossRef;
 import org.biojavax.RichObjectFactory;
+import org.biojavax.SimpleRichAnnotation;
+import org.biojavax.bio.seq.RichFeature;
 import org.biojavax.bio.seq.RichSequence;
 import org.biojavax.bio.seq.RichSequenceIterator;
 import org.cycads.entities.EntityFactory;
-import org.cycads.entities.note.Type;
+import org.cycads.entities.annotation.Annotation;
+import org.cycads.entities.annotation.SubseqAnnotation;
+import org.cycads.entities.sequence.Intron;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Sequence;
+import org.cycads.entities.sequence.SimpleIntron;
+import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
-import org.cycads.general.ParametersDefault;
 import org.cycads.ui.progress.Progress;
 
 public class GBKFileParser {
 
-	EntityFactory		factory;
-	private String		seqDBName;
-	private Progress	progress;
-
-	private Type		cdsAnnotationType;
-	private Type		mrnaAnnotationType;
-	private Type		geneAnnotationType;
+	private EntityFactory	factory;
+	private String			seqDBName;
+	private Progress		progress;
 
 	public GBKFileParser(EntityFactory factory, String seqDBName, Progress progress) {
 		this.factory = factory;
 		this.seqDBName = seqDBName;
 		this.progress = progress;
-		cdsAnnotationType = factory.getAnnotationType(ParametersDefault.getCDSAnnotationTypeName());
-		mrnaAnnotationType = factory.getAnnotationType(ParametersDefault.getMRNAAnnotationTypeName());
-		geneAnnotationType = factory.getAnnotationType(ParametersDefault.getGeneAnnotationTypeName());
 	}
 
 	public void parse(File f) throws IOException {
@@ -52,13 +56,16 @@ public class GBKFileParser {
 
 	public void parse(BufferedReader br) throws IOException {
 		Sequence sequence;
+		RichSequence richSeq;
 		RichSequenceIterator seqs = RichSequence.IOTools.readGenbankDNA(br, RichObjectFactory.getDefaultNamespace());
 		while (seqs.hasNext()) {
-			RichSequence richSeq;
+
 			try {
 				richSeq = seqs.nextRichSequence();
 				sequence = getSequence(richSeq);
-				sequence.createSubsequence(start, end, introns);
+				for (Feature feature : richSeq.getFeatureSet()) {
+					handleFeature((RichFeature) feature, sequence);
+				}
 			}
 			catch (BioException e) {
 				e.printStackTrace();
@@ -88,5 +95,99 @@ public class GBKFileParser {
 			sequence.addNote(GBKFileConfig.getSeqCommentNoteType(), comment.getComment());
 		}
 		return sequence;
+	}
+
+	public void handleFeature(RichFeature feature, Sequence sequence) {
+		String type = GBKFileConfig.getType(feature.getType());
+		if (type != null && type.length() > 0) {
+			Subsequence subseq = getSubsequence(feature, sequence);
+			SubseqAnnotation annot = subseq.addAnnotation(factory.getAnnotationType(type),
+				factory.getAnnotationMethod(GBKFileConfig.getAnnotationMethodName(type)));
+			for (Object o : feature.getRankedCrossRefs()) {
+				RankedCrossRef rankedCrossRef = (RankedCrossRef) o;
+				annot.addSynonym(rankedCrossRef.getCrossRef().getDbname(), rankedCrossRef.getCrossRef().getAccession());
+			}
+			// AnnotationSynonym, parent, EC and function
+			Object[] notes = ((SimpleRichAnnotation) feature.getAnnotation()).getNoteSet().toArray();
+			for (Object obj : notes) {
+				Note note = (Note) obj;
+				boolean parentNote = false, synonymNote = false, ecNote = false, functionNote = false;
+				String tag = GBKFileConfig.getTag(note.getTerm().getName(), type);
+				ArrayList<String> parentDBNames = GBKFileConfig.getParentDBNames(tag, type);
+				ArrayList<String> synonymDBNames = GBKFileConfig.getSynonymDBNames(tag, type);
+				ArrayList<String> ecMethodNames = GBKFileConfig.getECMethodNames(tag, type);
+				ArrayList<String> functionMethodNames = GBKFileConfig.getFunctionMethodNames(tag, type);
+				if (parentDBNames != null) {
+					for (String parentDBName : parentDBNames) {
+						parentNote = true;
+						Dbxref parentSynonym = factory.getDbxref(parentDBName, note.getValue());
+						Collection<Annotation> parents = annot.getSubsequence().getSequence().getOrganism().getAnnotations(
+							null, null, parentSynonym);
+						for (Annotation parent : parents) {
+							annot.addParent(parent);
+						}
+					}
+				}
+				if (synonymDBNames != null) {
+					for (String synonymDBName : synonymDBNames) {
+						synonymNote = true;
+						Dbxref synonym = factory.getDbxref(synonymDBName, note.getValue());
+						annot.addSynonym(synonym);
+					}
+				}
+				if (ecMethodNames != null) {
+					for (String ecMethodName : ecMethodNames) {
+						ecNote = true;
+						annot.getSubsequence().addDbxrefAnnotation(factory.getAnnotationMethod(ecMethodName),
+							factory.getEC(note.getValue()));
+					}
+				}
+				if (functionMethodNames != null) {
+					for (String functionMethodName : functionMethodNames) {
+						functionNote = true;
+						annot.getSubsequence().addFunctionAnnotation(factory.getAnnotationMethod(functionMethodName),
+							factory.getFunction(note.getValue(), null));
+					}
+				}
+				// add as Note
+				if (!parentNote && !synonymNote && !ecNote && !functionNote) {
+					annot.addNote(tag, note.getValue());
+				}
+			}
+			progress.completeStep();
+		}
+	}
+
+	public Subsequence getSubsequence(RichFeature feature, Sequence sequence) {
+		int start, end;
+		Location location = feature.getLocation();
+		if (feature.getStrand().equals(feature.POSITIVE)) {
+			start = location.getMin();
+			end = location.getMax();
+		}
+		else {
+			start = location.getMax();
+			end = location.getMin();
+		}
+		ArrayList<Intron> introns = new ArrayList<Intron>();
+		if (!location.isContiguous()) {
+			Iterator it = location.blockIterator();
+			Location loc1 = (Location) it.next();
+			while (it.hasNext()) {
+				Location loc2 = (Location) it.next();
+				if (loc1.getMax() < loc2.getMin()) {
+					introns.add(new SimpleIntron(loc1.getMax() + 1, loc2.getMin() - 1));
+				}
+				else if (loc2.getMax() < loc1.getMin()) {
+					introns.add(new SimpleIntron(loc2.getMax() + 1, loc1.getMin() - 1));
+				}
+				loc1 = loc2;
+			}
+		}
+		Subsequence subseq = sequence.getSubsequence(start, end, introns);
+		if (subseq == null) {
+			subseq = sequence.createSubsequence(start, end, introns);
+		}
+		return subseq;
 	}
 }

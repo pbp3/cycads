@@ -147,8 +147,50 @@ public class Config {
 		return getStringOptional("cdsToKO.loader.cdsDBName");
 	}
 
-	public static String gbkLoaderFileName() {
-		return getStringOptional("gbk.loader.fileName");
+	// cdsToDbxrefLoader
+
+	public static String cdsToDbxrefLoaderFileName() {
+		return getStringOptional("cdsToDbxref.loader.fileName");
+	}
+
+	public static int cdsToDbxrefLoaderOrganismNumber() {
+		return getInt("cdsToDbxref.loader.organismNumber");
+	}
+
+	public static String cdsToDbxrefLoaderMethodName() {
+		return getStringOptional("cdsToDbxref.loader.methodName");
+	}
+
+	public static int cdsToDbxrefLoaderCDSColumnIndex() {
+		return getInt("cdsToDbxref.loader.cdsColumnIndex");
+	}
+
+	public static String cdsToDbxrefCDSDBName() {
+		return getStringOptional("cdsToDbxref.loader.cdsDBName");
+	}
+
+	public static int cdsToDbxrefLoaderDbxrefColumnIndex() {
+		return getInt("cdsToDbxref.loader.dbxrefColumnIndex");
+	}
+
+	public static String cdsToDbxrefLoaderDbxrefDBName() {
+		return getStringOptional("cdsToDbxref.loader.dbxrefDBName");
+	}
+
+	public static int cdsToDbxrefLoaderScoreColumnIndex() {
+		return getInt("cdsToDbxref.loader.scoreColumnIndex");
+	}
+
+	public static String cdsToDbxrefFileComment() {
+		return getStringMandatory("cdsToDbxref.file.comment");
+	}
+
+	public static String cdsToDbxrefFileSeparator() {
+		return getStringMandatory("cdsToDbxref.file.separator");
+	}
+
+	public static String cdsToDbxrefTextDelimiter() {
+		return getStringMandatory("cdsToDbxref.file.textDelimiter");
 	}
 
 }

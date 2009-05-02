@@ -7,6 +7,7 @@ import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.synonym.Dbxref;
+import org.cycads.entities.synonym.EC;
 import org.cycads.entities.synonym.Function;
 import org.cycads.entities.synonym.KO;
 
@@ -26,6 +27,8 @@ public interface EntityFactory<X extends Dbxref< ? , ? , ? , ? >, M extends Anno
 	public Function getFunction(String name, String description);
 
 	public KO< ? , ? , ? , ? > getKO(String ko);
+
+	public EC< ? , ? , ? , ? > getEC(String ecNumber);
 
 	public T getAnnotationTypeCDS();
 }

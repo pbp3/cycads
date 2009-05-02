@@ -10,9 +10,11 @@ import java.sql.SQLException;
 import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.sequence.SQL.OrganismSQL;
+import org.cycads.entities.synonym.EC;
 import org.cycads.entities.synonym.Function;
 import org.cycads.entities.synonym.KO;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
+import org.cycads.entities.synonym.SQL.ECSQL;
 import org.cycads.entities.synonym.SQL.FunctionSQL;
 import org.cycads.entities.synonym.SQL.KOSQL;
 import org.cycads.general.Config;
@@ -141,6 +143,17 @@ public class EntityFactorySQL implements EntityFactory<DbxrefSQL, AnnotationMeth
 	@Override
 	public TypeSQL getAnnotationTypeCDS() {
 		return getAnnotationType(ParametersDefault.getCDSAnnotationTypeName());
+	}
+
+	@Override
+	public EC< ? , ? , ? , ? > getEC(String ecNumber) {
+		try {
+			return new ECSQL(ecNumber, getConnection());
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
 	}
 
 }

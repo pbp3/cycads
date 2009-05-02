@@ -244,4 +244,8 @@ public class ParametersDefault {
 		return getStringMandatory("cds.fake.annotationMethod");
 	}
 
+	public static String CDSToDbxrefLoaderDbxrefsSeparator() {
+		return getStringMandatory("cdsToDbxrefLoader.DbxrefsSeparator");
+	}
+
 }

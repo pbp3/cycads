@@ -21,9 +21,8 @@ import org.cycads.entities.sequence.Sequence;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
-public class SequenceSQL extends HasSynonymsNotebleSQL
-		implements Sequence<OrganismSQL, SubsequenceSQL, SubseqAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
-{
+public class SequenceSQL extends HasSynonymsNotebleSQL implements
+		Sequence<OrganismSQL, SubsequenceSQL, SubseqAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL> {
 	public static final int		INVALID_LENGTH	= -1;
 
 	private final int			id;
@@ -230,15 +229,22 @@ public class SequenceSQL extends HasSynonymsNotebleSQL
 			}
 			if (introns != null) {
 				int intronStart, intronEnd;
+				int minStart = start;
+				int maxEnd = end;
+				if (minStart > maxEnd) {
+					int aux = minStart;
+					minStart = maxEnd;
+					maxEnd = aux;
+				}
 				for (Intron intron : introns) {
-					if (intron.getStart() < start) {
-						intronStart = start;
+					if (intron.getStart() < minStart) {
+						intronStart = minStart;
 					}
 					else {
 						intronStart = intron.getStart();
 					}
-					if (intron.getEnd() > end) {
-						intronEnd = end;
+					if (intron.getEnd() > maxEnd) {
+						intronEnd = maxEnd;
 					}
 					else {
 						intronEnd = intron.getEnd();
