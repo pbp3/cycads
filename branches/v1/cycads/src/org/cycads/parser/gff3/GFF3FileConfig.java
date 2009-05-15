@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  */
 public class GFF3FileConfig
 {
-	private static final String			BUNDLE_NAME		= "GFF3FileConfig";						//$NON-NLS-1$
+	private static final String			BUNDLE_NAME		= "config";								//$NON-NLS-1$
 
 	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
 

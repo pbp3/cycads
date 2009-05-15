@@ -1,9 +1,13 @@
 package org.cycads.general;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 
-public class Config {
+public class Config
+{
 	private static final String			BUNDLE_NAME		= "config";								//$NON-NLS-1$
 
 	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
@@ -41,12 +45,61 @@ public class Config {
 	}
 
 	private static int getInt(String key) {
-		return Integer.parseInt(getString(key));
+		return Integer.parseInt(getStringMandatory(key));
 	}
 
 	private static double getDouble(String key) {
-		return Double.parseDouble(getString(key));
+		return Double.parseDouble(getStringMandatory(key));
 	}
+
+	private static String transform(String key, List<Pattern> keyPatterns, List<String> values) {
+		for (int i = 0; i < keyPatterns.size(); i++) {
+			if (keyPatterns.get(i).matcher(key).matches()) {
+				if (values.size() > i) {
+					return values.get(i);
+				}
+				else {
+					return null;
+				}
+			}
+		}
+		return null;
+	}
+
+	private static String[] transforms(String key, List<Pattern> keyPatterns, List<String> values) {
+		ArrayList<String> rets = new ArrayList<String>();
+		for (int i = 0; i < keyPatterns.size(); i++) {
+			if (keyPatterns.get(i).matcher(key).matches()) {
+				if (values.size() > i) {
+					rets.add(values.get(i));
+				}
+			}
+		}
+		return rets.toArray(new String[0]);
+	}
+
+	private static List<Pattern> getPatterns(String tag) {
+		List<String> patternsStr = getStrings(tag);
+		List<Pattern> patterns = new ArrayList<Pattern>(patternsStr.size());
+		for (String str : patternsStr) {
+			patterns.add(Pattern.compile(str));
+		}
+		return patterns;
+	}
+
+	private static List<String> getStrings(String tag) {
+		ArrayList<String> values = new ArrayList<String>(4);
+		int i = 0;
+		String str;
+		while ((str = getStringOptional(tag + "." + i)) != null) {
+			values.add(str);
+			i++;
+		}
+		values.trimToSize();
+		return values;
+	}
+
+	//General
 
 	public static String getSQLConnectionUrl() {
 		return getStringMandatory("general.sql.connectionUrl");
@@ -98,27 +151,27 @@ public class Config {
 
 	// PFFile Generator
 	public static String pfGeneratorFileName() {
-		return getStringOptional("pffile.extract.fileName");
+		return getStringOptional("pf.file.extract.fileName");
 	}
 
 	public static int pfGeneratorOrganismNumber() {
-		return getInt("pffile.extract.organismNumber");
+		return getInt("pf.file.extract.organismNumber");
 	}
 
 	public static String pfGeneratorSeqVersion() {
-		return getStringOptional("pffile.extract.sequenceVersion");
+		return getStringOptional("pf.file.extract.sequenceVersion");
 	}
 
 	public static double pfGeneratorThreshold() {
-		return getDouble("pffile.extract.threshold");
+		return getDouble("pf.file.extract.threshold");
 	}
 
 	public static String pfGeneratorFileHeader() {
-		return getStringOptional("pffile.extract.fileHeader");
+		return getStringOptional("pf.file.extract.fileHeader");
 	}
 
 	public static String pfGeneratorOrganismName() {
-		return getStringOptional("pffile.extract.organismName");
+		return getStringOptional("pf.file.extract.organismName");
 	}
 
 	// CDS to KO Loader

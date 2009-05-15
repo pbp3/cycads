@@ -15,8 +15,9 @@ import org.cycads.general.ParametersDefault;
  * gene|mrna|cds|exon
  * 
  */
-public class GBKFileConfig {
-	private static final String			BUNDLE_NAME		= "GBKFileConfig";							//$NON-NLS-1$
+public class GBKFileConfig
+{
+	private static final String			BUNDLE_NAME		= "config";								//$NON-NLS-1$
 
 	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
 

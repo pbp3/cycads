@@ -6,8 +6,9 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
-public class ParametersDefault {
-	private static final String			BUNDLE_NAME		= "parametersDefault";						//$NON-NLS-1$
+public class ParametersDefault
+{
+	private static final String			BUNDLE_NAME		= "config";								//$NON-NLS-1$
 
 	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
 

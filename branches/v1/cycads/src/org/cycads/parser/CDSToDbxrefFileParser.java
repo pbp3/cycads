@@ -21,19 +21,20 @@ import org.cycads.general.Config;
 import org.cycads.general.ParametersDefault;
 import org.cycads.ui.progress.Progress;
 
-public class CDSToDbxrefFileParser {
+public class CDSToDbxrefFileParser
+{
 
-	private static final String	DBNAME_GENERIC	= "*";
-	private EntityFactory		factory;
-	private Progress			progress;
-	private Progress			progressError;
-	private AnnotationMethod	method;
-	private Organism			organism;
-	private String				cdsDBName;
-	private int					dbxrefColumnIndex;
-	private String				dbxrefDBName;
-	private int					scoreColumnIndex;
-	private int					cdsColumnIndex;
+	private static final String		DBNAME_GENERIC	= "*";
+	private final EntityFactory		factory;
+	private final Progress			progress;
+	private final Progress			progressError;
+	private final AnnotationMethod	method;
+	private final Organism			organism;
+	private final String			cdsDBName;
+	private final int				dbxrefColumnIndex;
+	private final String			dbxrefDBName;
+	private final int				scoreColumnIndex;
+	private final int				cdsColumnIndex;
 
 	public CDSToDbxrefFileParser(EntityFactory factory, Progress progress, AnnotationMethod method, Organism organism,
 			int cdsColumnIndex, String cdsDBName, int dbxrefColumnIndex, String dbxrefDBName, int scoreColumnIndex,
@@ -76,6 +77,9 @@ public class CDSToDbxrefFileParser {
 	}
 
 	private String cleanTextDelimiter(String text) {
+		if (text == null || text.length() == 0) {
+			return text;
+		}
 		int start = 0, end = text.length();
 		if (text.startsWith(Config.cdsToDbxrefTextDelimiter())) {
 			start = 1;
