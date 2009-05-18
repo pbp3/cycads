@@ -3,7 +3,8 @@
  */
 package org.cycads.extract.cyc;
 
-public class FixAndFileScoreSystem implements FixScoreSystem {
+public class FixAndFileScoreSystem implements FixScoreSystem
+{
 
 	public double	fix;
 
@@ -17,8 +18,13 @@ public class FixAndFileScoreSystem implements FixScoreSystem {
 	@Override
 	public double getScore(Double scoreNote) {
 		double ret = fix;
-		if (scoreNote != null && fileScoreSystem != null) {
-			ret = ret * fileScoreSystem.getScore(scoreNote);
+		if (scoreNote != null) {
+			if (fileScoreSystem != null) {
+				ret = ret * fileScoreSystem.getScore(scoreNote);
+			}
+			else {
+				ret = ret * scoreNote;
+			}
 		}
 		return ret;
 	}

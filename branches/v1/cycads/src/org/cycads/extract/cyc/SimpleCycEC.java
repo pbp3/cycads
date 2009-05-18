@@ -3,17 +3,21 @@
  */
 package org.cycads.extract.cyc;
 
+import java.text.NumberFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.cycads.entities.annotation.Annotation;
 
-public class SimpleCycEC implements CycEC {
+public class SimpleCycEC implements CycEC
+{
 
-	private ScoreSystemCollection	scoreSystems;
-	private String					ecNumber;
-	private List<List<Annotation>>	annotationPaths	= new ArrayList<List<Annotation>>();
-	private double					score			= 0;
+	private final ScoreSystemCollection		scoreSystems;
+	private final String					ecNumber;
+	private final List<List<Annotation>>	annotationPaths	= new ArrayList<List<Annotation>>();
+	private double							score			= 0;
 
 	public SimpleCycEC(String ecNumber, ScoreSystemCollection scoreSystems) {
 		this.ecNumber = ecNumber;
@@ -44,12 +48,27 @@ public class SimpleCycEC implements CycEC {
 			for (Annotation annot : annotationPath) {
 				scoreSystem = scoreSystems.getScoreSystem(annot.getAnnotationMethod());
 				scoreNote = annot.getNoteValue(PFFileConfig.getScoreAnnotationNoteTypeName());
+				Double scoreDbl = null;
 				if (scoreNote != null) {
-					scoreAnnotation = scoreSystem.getScore(Double.parseDouble(scoreNote));
+					NumberFormat numberFormat;
+					if (scoreNote.indexOf('%') != -1) {
+						numberFormat = NumberFormat.getPercentInstance(Locale.US);
+					}
+					else if (scoreNote.indexOf('E') != -1) {
+						numberFormat = NumberFormat.getNumberInstance(Locale.US);
+					}
+					else {
+						numberFormat = NumberFormat.getNumberInstance(Locale.US);
+					}
+					try {
+						scoreDbl = numberFormat.parse(scoreNote).doubleValue();
+					}
+					catch (ParseException e) {
+						e.printStackTrace();
+						throw new RuntimeException(e);
+					}
 				}
-				else {
-					scoreAnnotation = scoreSystem.getScore(null);
-				}
+				scoreAnnotation = scoreSystem.getScore(scoreDbl);
 				scoreAnnotationPath = scoreAnnotationPath * scoreAnnotation;
 			}
 			score = score + scoreAnnotationPath;
