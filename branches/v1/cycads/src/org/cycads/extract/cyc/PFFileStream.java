@@ -14,16 +14,18 @@ import org.cycads.general.ParametersDefault;
 public class PFFileStream implements CycStream
 {
 	PrintStream	out;
+	boolean		sequenceLocation	= true;
 
-	public PFFileStream(String fileOutName, String header) throws FileNotFoundException {
-		this(new File(fileOutName), header);
+	public PFFileStream(String fileOutName, String header, boolean sequenceLocation) throws FileNotFoundException {
+		this(new File(fileOutName), header, sequenceLocation);
 	}
 
-	public PFFileStream(File fileOut, String header) throws FileNotFoundException {
+	public PFFileStream(File fileOut, String header, boolean sequenceLocation) throws FileNotFoundException {
 		out = new PrintStream(new FileOutputStream(fileOut, false));
 		if (header != null && header.length() > 0) {
 			printComment(header);
 		}
+		this.sequenceLocation = sequenceLocation;
 	}
 
 	public void printComment(String str) {
@@ -76,12 +78,14 @@ public class PFFileStream implements CycStream
 			}
 		}
 
-		out.println("STARTBASE" + "\t" + cycRecord.getStartBase());
-		out.println("ENDBASE" + "\t\t" + cycRecord.getEndBase());
-		Collection< ? extends CycIntron> introns = cycRecord.getIntrons();
-		if (introns != null) {
-			for (CycIntron intron : introns) {
-				out.println("INTRON" + "\t\t" + intron.getStart() + "-" + intron.getEnd());
+		if (sequenceLocation) {
+			out.println("STARTBASE" + "\t" + cycRecord.getStartBase());
+			out.println("ENDBASE" + "\t\t" + cycRecord.getEndBase());
+			Collection< ? extends CycIntron> introns = cycRecord.getIntrons();
+			if (introns != null) {
+				for (CycIntron intron : introns) {
+					out.println("INTRON" + "\t\t" + intron.getStart() + "-" + intron.getEnd());
+				}
 			}
 		}
 

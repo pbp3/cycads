@@ -30,7 +30,8 @@ import org.cycads.ui.Tools;
 import org.cycads.ui.progress.Progress;
 import org.cycads.ui.progress.ProgressPrintInterval;
 
-public class PFFileGeneratorSQL {
+public class PFFileGeneratorSQL
+{
 
 	public static void main(String[] args) {
 		EntityFactorySQL factory = new EntityFactorySQL();
@@ -55,13 +56,16 @@ public class PFFileGeneratorSQL {
 		if (threshold == null) {
 			return;
 		}
+
+		boolean sequenceLocation = Tools.getBoolean(args, 4, Messages.pfGeneratorChooseSequenceLocation());
+
 		Progress progress = new ProgressPrintInterval(System.out, Messages.pfGeneratorStepShowInterval());
 		try {
 			progress.init(Messages.pfGeneratorInitMsg(file.getPath()));
 			Collection<Sequence< ? , ? , ? , ? , ? , ? >> seqs = organism.getSequences(seqVersion);
 			Collection<Type> types = new ArrayList<Type>(1);
 			types.add(factory.getAnnotationTypeCDS());
-			PFFileStream pfFile = new PFFileStream(file, Config.pfGeneratorFileHeader());
+			PFFileStream pfFile = new PFFileStream(file, Config.pfGeneratorFileHeader(), sequenceLocation);
 			CycIdGenerator cycIdGenerator = new OrganismCycIdGenerator(organism);
 
 			SimpleScoreSystemCollection scoreSystemCollection = new SimpleScoreSystemCollection();

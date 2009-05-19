@@ -146,11 +146,20 @@ public class PFFileConfig
 		return getStrings("ec.loc");
 	}
 
+	static ArrayList<Pattern>	dbLinkDbNameRemovePatterns;
+
+	public static ArrayList<Pattern> getDbLinkDbNameRemovePatterns() {
+		if (dbLinkDbNameRemovePatterns == null) {
+			dbLinkDbNameRemovePatterns = getPatterns("pf.file.dbLink.dbName.remove", null);
+		}
+		return dbLinkDbNameRemovePatterns;
+	}
+
 	static ArrayList<Pattern>	dbLinkDbNamePatterns;
 
 	public static ArrayList<Pattern> getDbLinkDbNamePatterns() {
 		if (dbLinkDbNamePatterns == null) {
-			dbLinkDbNamePatterns = getPatterns("pf.file.dbLink.dbName", null);
+			dbLinkDbNamePatterns = getPatterns("pf.file.dbLink.dbName.change", null);
 		}
 		return dbLinkDbNamePatterns;
 	}

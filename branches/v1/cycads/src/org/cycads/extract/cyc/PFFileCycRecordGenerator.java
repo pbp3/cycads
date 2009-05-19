@@ -10,7 +10,8 @@ import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.SubseqAnnotation;
 import org.cycads.general.ParametersDefault;
 
-public class PFFileCycRecordGenerator implements CycRecordGenerator {
+public class PFFileCycRecordGenerator implements CycRecordGenerator
+{
 
 	double					threshold;
 	CycIdGenerator			cycIdGenerator;
@@ -35,7 +36,11 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator {
 		record.setIntrons(getIntrons(annot));
 		record.setName(locInterpreter.getFirstString(annot, PFFileConfig.getPFFileNamesLocs()));
 		record.setComments(locInterpreter.getStrings(annot, PFFileConfig.getPFFileGeneCommentLocs()));
-		record.setSynonyms(locInterpreter.getStrings(annot, PFFileConfig.getPFFileGeneSynonymLocs()));
+		Collection<String> syns = locInterpreter.getStrings(annot, PFFileConfig.getPFFileGeneSynonymLocs());
+		if (record.getName() != null && record.getName().length() > 0) {
+			syns.remove(record.getName());
+		}
+		record.setSynonyms(syns);
 		record.setDBLinks(getDblinks(annot));
 		Collection<SimpleCycEC> ecs = getCycEcs(annot);
 		for (CycEC ec : ecs) {
@@ -49,7 +54,11 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator {
 	private Collection<CycFunction> getFunctions(SubseqAnnotation< ? , ? , ? , ? , ? > annot) {
 		String functionName = locInterpreter.getFirstString(annot, PFFileConfig.getPFFileFunctionsLocs());
 		CycFunction cycFunction = new SimpleCycFunction(functionName);
-		cycFunction.setSynonyms(locInterpreter.getStrings(annot, PFFileConfig.getPFFileFunctionSynonymLocs()));
+		Collection<String> syns = locInterpreter.getStrings(annot, PFFileConfig.getPFFileFunctionSynonymLocs());
+		if (functionName != null && functionName.length() > 0) {
+			syns.remove(functionName);
+		}
+		cycFunction.setSynonyms(syns);
 		cycFunction.setComments(locInterpreter.getStrings(annot, PFFileConfig.getPFFileFunctionCommentLocs()));
 		ArrayList<CycFunction> ret = new ArrayList<CycFunction>(1);
 		ret.add(cycFunction);
@@ -92,19 +101,22 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator {
 		Collection<CycDBLink> cycDbLinks = new ArrayList<CycDBLink>();
 		List<Pattern> patterns = PFFileConfig.getDbLinkDbNamePatterns();
 		List<String> values = PFFileConfig.getDbLinkDbNameValues();
+		List<Pattern> patternsRemove = PFFileConfig.getDbLinkDbNameRemovePatterns();
 
 		Collection<String> dbLinksStr = locInterpreter.getStrings(annot, PFFileConfig.getPFFileDblinkLocs());
 
 		for (String dbLinkStr : dbLinksStr) {
 			String[] strs = dbLinkStr.split(ParametersDefault.getDbxrefToStringSeparator());
-			boolean foundDbName = false;
-			for (int i = 0; i < patterns.size(); i++) {
-				if (patterns.get(i).matcher(strs[0]).matches()) {
-					foundDbName = cycDbLinks.add(new SimpleCycDBLink(values.get(i), strs[1]));
+			if (!PFFileConfig.matches(strs[0], patternsRemove)) {
+				boolean foundDbName = false;
+				for (int i = 0; i < patterns.size(); i++) {
+					if (patterns.get(i).matcher(strs[0]).matches()) {
+						foundDbName = cycDbLinks.add(new SimpleCycDBLink(values.get(i), strs[1]));
+					}
 				}
-			}
-			if (!foundDbName) {
-				cycDbLinks.add(new SimpleCycDBLink(strs[0], strs[1]));
+				if (!foundDbName) {
+					cycDbLinks.add(new SimpleCycDBLink(strs[0], strs[1]));
+				}
 			}
 		}
 		return cycDbLinks;
