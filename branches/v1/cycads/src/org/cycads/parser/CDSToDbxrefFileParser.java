@@ -90,7 +90,7 @@ public class CDSToDbxrefFileParser
 		return text.substring(start, end);
 	}
 
-	private Annotation addAnnotation(String cdsName, String synName, String score) {
+	private void addAnnotation(String cdsName, String synName, String score) {
 		Dbxref cdsSynonym = factory.getDbxref(cdsDBName, cdsName);
 		Collection<SubseqAnnotation> annots = organism.getAnnotations(null, null, cdsSynonym);
 		String[] syns = synName.split(ParametersDefault.CDSToDbxrefLoaderDbxrefsSeparator());
@@ -118,7 +118,7 @@ public class CDSToDbxrefFileParser
 				// }
 			}
 			else {
-				System.out.println("CDS not found: " + cdsName);
+				//				System.out.println("CDS not found: " + cdsName);
 				progressError.completeStep();
 				Sequence seq = organism.createNewSequence(ParametersDefault.getCDSSeqVersionFake());
 				Subsequence subseq = seq.createSubsequence(ParametersDefault.getCDSSubseqStartFake(),
@@ -133,7 +133,7 @@ public class CDSToDbxrefFileParser
 				}
 			}
 		}
-		return ret;
+		//		return ret;
 	}
 
 }
