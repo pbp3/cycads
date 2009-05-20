@@ -69,8 +69,8 @@ public class CDSToDbxrefFileParser
 					if (sep.length > scoreColumnIndex && scoreColumnIndex >= 0) {
 						score = sep[scoreColumnIndex];
 					}
-					addAnnotation(cleanTextDelimiter(sep[cdsColumnIndex]), cleanTextDelimiter(sep[dbxrefColumnIndex]),
-						cleanTextDelimiter(score));
+					addAnnotation(cleanTextDelimiter(sep[cdsColumnIndex]).trim(), cleanTextDelimiter(
+						sep[dbxrefColumnIndex]).trim(), cleanTextDelimiter(score));
 				}
 			}
 		}
@@ -97,9 +97,10 @@ public class CDSToDbxrefFileParser
 		Annotation ret = null;
 		for (String syn : syns) {
 			Dbxref dbxref;
+			syn = syn.trim();
 			if (dbxrefDBName.equals(DBNAME_GENERIC)) {
 				String[] syns1 = syn.split(ParametersDefault.getDbxrefToStringSeparator());
-				dbxref = factory.getDbxref(syns1[0], syns1[1]);
+				dbxref = factory.getDbxref(syns1[0].trim(), syns1[1].trim());
 			}
 			else {
 				dbxref = factory.getDbxref(dbxrefDBName, synName);

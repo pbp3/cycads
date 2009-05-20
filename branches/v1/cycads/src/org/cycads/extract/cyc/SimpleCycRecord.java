@@ -89,6 +89,11 @@ public class SimpleCycRecord implements CycRecord
 		if (dBLinks == null) {
 			dBLinks = new ArrayList<CycDBLink>();
 		}
+		for (CycDBLink dbLink1 : dBLinks) {
+			if (dbLink1.equals(dbLink)) {
+				return;
+			}
+		}
 		dBLinks.add(dbLink);
 	}
 

@@ -21,4 +21,13 @@ public class SimpleCycDBLink implements CycDBLink
 		return accession;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof CycDBLink)) {
+			return false;
+		}
+		CycDBLink o = (CycDBLink) obj;
+		return o.getAccession().equals(this.getAccession()) && o.getDbName().equals(this.getDbName());
+	}
+
 }

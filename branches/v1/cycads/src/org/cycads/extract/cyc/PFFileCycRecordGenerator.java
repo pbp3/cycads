@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.SubseqAnnotation;
+import org.cycads.entities.synonym.EC;
 import org.cycads.general.ParametersDefault;
 
 public class PFFileCycRecordGenerator implements CycRecordGenerator
@@ -16,14 +17,14 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 	double					threshold;
 	CycIdGenerator			cycIdGenerator;
 	LocInterpreter			locInterpreter;
-	ScoreSystemCollection	scoreSystems;
+	ScoreSystemCollection	ecScoreSystems;
 
 	public PFFileCycRecordGenerator(double threshold, CycIdGenerator cycIdGenerator, LocInterpreter locInterpreter,
-			ScoreSystemCollection scoreSystems) {
+			ScoreSystemCollection ecScoreSystems) {
 		this.threshold = threshold;
 		this.cycIdGenerator = cycIdGenerator;
 		this.locInterpreter = locInterpreter;
-		this.scoreSystems = scoreSystems;
+		this.ecScoreSystems = ecScoreSystems;
 	}
 
 	@Override
@@ -44,7 +45,13 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 		record.setDBLinks(getDblinks(annot));
 		Collection<SimpleCycEC> ecs = getCycEcs(annot);
 		for (CycEC ec : ecs) {
-			record.addEC(ec.getEcNumber());
+			if (ec.getScore() >= threshold) {
+				record.addEC(ec.getEcNumber());
+			}
+			Collection<CycDBLink> dbLinks = createDBLink(EC.DBNAME, ec.getEcNumber());
+			for (CycDBLink dbLink : dbLinks) {
+				record.addDBLink(dbLink);
+			}
 			record.addComment(PFFileConfig.getECComment(ec));
 		}
 		record.setFunctions(getFunctions(annot));
@@ -75,7 +82,7 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 				ecNumber = cycValue.getValue();
 				cycEC = cycEcs.get(ecNumber);
 				if (cycEC == null) {
-					cycEC = new SimpleCycEC(ecNumber, cycValue.getAnnotations(), scoreSystems);
+					cycEC = new SimpleCycEC(ecNumber, cycValue.getAnnotations(), ecScoreSystems);
 					cycEcs.put(ecNumber, cycEC);
 				}
 				else {
@@ -83,13 +90,14 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 				}
 			}
 		}
-		List<SimpleCycEC> ret = new ArrayList<SimpleCycEC>();
-		for (SimpleCycEC cycEc : cycEcs.values()) {
-			if (cycEc.getScore() >= threshold) {
-				ret.add(cycEc);
-			}
-		}
-		return ret;
+		return cycEcs.values();
+		//		List<SimpleCycEC> ret = new ArrayList<SimpleCycEC>();
+		//		for (SimpleCycEC cycEc : cycEcs.values()) {
+		//			if (cycEc.getScore() >= threshold) {
+		//				ret.add(cycEc);
+		//			}
+		//		}
+		//		return ret;
 	}
 
 	private Collection<CycIntron> getIntrons(SubseqAnnotation annot) {
@@ -99,24 +107,32 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 
 	private Collection<CycDBLink> getDblinks(SubseqAnnotation annot) {
 		Collection<CycDBLink> cycDbLinks = new ArrayList<CycDBLink>();
-		List<Pattern> patterns = PFFileConfig.getDbLinkDbNamePatterns();
-		List<String> values = PFFileConfig.getDbLinkDbNameValues();
-		List<Pattern> patternsRemove = PFFileConfig.getDbLinkDbNameRemovePatterns();
 
 		Collection<String> dbLinksStr = locInterpreter.getStrings(annot, PFFileConfig.getPFFileDblinkLocs());
 
 		for (String dbLinkStr : dbLinksStr) {
 			String[] strs = dbLinkStr.split(ParametersDefault.getDbxrefToStringSeparator());
-			if (!PFFileConfig.matches(strs[0], patternsRemove)) {
-				boolean foundDbName = false;
-				for (int i = 0; i < patterns.size(); i++) {
-					if (patterns.get(i).matcher(strs[0]).matches()) {
-						foundDbName = cycDbLinks.add(new SimpleCycDBLink(values.get(i), strs[1]));
-					}
+			cycDbLinks.addAll(createDBLink(strs[0], strs[1]));
+		}
+		return cycDbLinks;
+	}
+
+	private Collection<CycDBLink> createDBLink(String dbName, String accession) {
+		Collection<CycDBLink> cycDbLinks = new ArrayList<CycDBLink>();
+		dbName = dbName.trim();
+		accession = accession.trim();
+		List<Pattern> patterns = PFFileConfig.getDbLinkDbNamePatterns();
+		List<String> values = PFFileConfig.getDbLinkDbNameValues();
+		List<Pattern> patternsRemove = PFFileConfig.getDbLinkDbNameRemovePatterns();
+		if (!PFFileConfig.matches(dbName, patternsRemove)) {
+			boolean foundDbName = false;
+			for (int i = 0; i < patterns.size(); i++) {
+				if (patterns.get(i).matcher(dbName).matches()) {
+					foundDbName = cycDbLinks.add(new SimpleCycDBLink(values.get(i), accession));
 				}
-				if (!foundDbName) {
-					cycDbLinks.add(new SimpleCycDBLink(strs[0], strs[1]));
-				}
+			}
+			if (!foundDbName) {
+				cycDbLinks.add(new SimpleCycDBLink(dbName, accession));
 			}
 		}
 		return cycDbLinks;
