@@ -7,11 +7,11 @@ java -cp cycads.jar org.cycads.ui.loader.CDSToDbxrefLoaderSQL /home/avellozo/cyc
 java -cp cycads.jar org.cycads.ui.extract.cyc.PFFileGeneratorSQL /home/avellozo/cycads-data/acypi.pf 7029 1.0 3.0 n
 
 #echo create dblinks in pathwaytools
-#AphidBase ---> http://genoweb1.irisa.fr/cgi-bin/gbrowse/gbrowse_details/aphidbase?name=~A
-#AphidBaseS ---> http://genoweb1.irisa.fr/cgi-bin/gbrowse/gbrowse_details/aphidbase?name=~A
-#AphidBaseR ---> http://genoweb1.irisa.fr/cgi-bin/gbrowse/gbrowse_details/aphidbase?name=~A
-#GLEAN ---> http://genoweb1.irisa.fr/cgi-bin/gbrowse/gbrowse_details/aphidbase?name=~A
-#AphidBaseP ---> http://phylomedb.org/?seqid=~A
-#KO ---> http://www.genome.jp/dbget-bin/www_bget?ko+~A
+#AphidBase ---> AphidBase ---> http://genoweb1.irisa.fr/cgi-bin/gbrowse/gbrowse_details/aphidbase?name=~A
+#AphidBaseS ---> AphidBase ---> http://genoweb1.irisa.fr/cgi-bin/gbrowse/gbrowse_details/aphidbase?name=~A
+#AphidBaseR ---> AphidBase ---> http://genoweb1.irisa.fr/cgi-bin/gbrowse/gbrowse_details/aphidbase?name=~A
+#GLEAN ---> AphidBase ---> http://genoweb1.irisa.fr/cgi-bin/gbrowse/gbrowse_details/aphidbase?name=~A
+#AphidBaseP ---> PhylomeDB ---> http://phylomedb.org/?seqid=~A
+#KO ---> KO ---> http://www.genome.jp/dbget-bin/www_bget?ko+~A
 
 
