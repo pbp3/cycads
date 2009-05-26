@@ -155,22 +155,40 @@ public class PFFileConfig
 		return dbLinkDbNameRemovePatterns;
 	}
 
-	static ArrayList<Pattern>	dbLinkDbNamePatterns;
+	static ArrayList<Pattern>	dbLinkDbNameChangePatterns;
 
-	public static ArrayList<Pattern> getDbLinkDbNamePatterns() {
-		if (dbLinkDbNamePatterns == null) {
-			dbLinkDbNamePatterns = getPatterns("pf.file.dbLink.dbName.change", null);
+	public static ArrayList<Pattern> getDbLinkDbNameChangePatterns() {
+		if (dbLinkDbNameChangePatterns == null) {
+			dbLinkDbNameChangePatterns = getPatterns("pf.file.dbLink.dbName.change", null);
 		}
-		return dbLinkDbNamePatterns;
+		return dbLinkDbNameChangePatterns;
 	}
 
-	static ArrayList<String>	dbLinkDbNameValues;
+	static ArrayList<String>	dbLinkDbNameChangeValues;
 
-	public static ArrayList<String> getDbLinkDbNameValues() {
-		if (dbLinkDbNameValues == null) {
-			dbLinkDbNameValues = getStrings("pf.file.dbLink.dbNameNewValue", null);
+	public static ArrayList<String> getDbLinkDbNameChangeValues() {
+		if (dbLinkDbNameChangeValues == null) {
+			dbLinkDbNameChangeValues = getStrings("pf.file.dbLink.dbName.change.newValue", null);
 		}
-		return dbLinkDbNameValues;
+		return dbLinkDbNameChangeValues;
+	}
+
+	static ArrayList<Pattern>	dbLinkDbNameCopyPatterns;
+
+	public static ArrayList<Pattern> getDbLinkDbNameCopyPatterns() {
+		if (dbLinkDbNameCopyPatterns == null) {
+			dbLinkDbNameCopyPatterns = getPatterns("pf.file.dbLink.dbName.copy", null);
+		}
+		return dbLinkDbNameCopyPatterns;
+	}
+
+	static ArrayList<String>	dbLinkDbNameCopyValues;
+
+	public static ArrayList<String> getDbLinkDbNameCopyValues() {
+		if (dbLinkDbNameCopyValues == null) {
+			dbLinkDbNameCopyValues = getStrings("pf.file.dbLink.dbName.copy.newValue", null);
+		}
+		return dbLinkDbNameCopyValues;
 	}
 
 	public static String getECComment(CycEC ec) {

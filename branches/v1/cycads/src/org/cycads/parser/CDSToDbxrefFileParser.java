@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cycads.entities.EntityFactory;
@@ -35,6 +36,7 @@ public class CDSToDbxrefFileParser
 	private final String			dbxrefDBName;
 	private final int				scoreColumnIndex;
 	private final int				cdsColumnIndex;
+	private final boolean			isAnnotation;
 
 	public CDSToDbxrefFileParser(EntityFactory factory, Progress progress, AnnotationMethod method, Organism organism,
 			int cdsColumnIndex, String cdsDBName, int dbxrefColumnIndex, String dbxrefDBName, int scoreColumnIndex,
@@ -49,6 +51,22 @@ public class CDSToDbxrefFileParser
 		this.dbxrefColumnIndex = dbxrefColumnIndex;
 		this.dbxrefDBName = dbxrefDBName;
 		this.scoreColumnIndex = scoreColumnIndex;
+		this.isAnnotation = true;
+	}
+
+	public CDSToDbxrefFileParser(EntityFactory factory, Progress progress, Organism organism, int cdsColumnIndex,
+			String cdsDBName, int dbxrefColumnIndex, String dbxrefDBName, Progress progressError) {
+		this.factory = factory;
+		this.progress = progress;
+		this.progressError = progressError;
+		this.method = null;
+		this.organism = organism;
+		this.cdsColumnIndex = cdsColumnIndex;
+		this.cdsDBName = cdsDBName;
+		this.dbxrefColumnIndex = dbxrefColumnIndex;
+		this.dbxrefDBName = dbxrefDBName;
+		this.scoreColumnIndex = -1;
+		this.isAnnotation = false;
 	}
 
 	public void parse(File f) throws IOException {
@@ -66,11 +84,11 @@ public class CDSToDbxrefFileParser
 				String[] sep = line.split(Config.cdsToDbxrefFileSeparator());
 				if (sep.length > dbxrefColumnIndex) {
 					String score = null;
-					if (sep.length > scoreColumnIndex && scoreColumnIndex >= 0) {
+					if (isAnnotation && sep.length > scoreColumnIndex && scoreColumnIndex >= 0) {
 						score = sep[scoreColumnIndex];
 					}
-					addAnnotation(cleanTextDelimiter(sep[cdsColumnIndex]).trim(), cleanTextDelimiter(
-						sep[dbxrefColumnIndex]).trim(), cleanTextDelimiter(score));
+					addDbxref(cleanTextDelimiter(sep[cdsColumnIndex]).trim(),
+						cleanTextDelimiter(sep[dbxrefColumnIndex]).trim(), cleanTextDelimiter(score));
 				}
 			}
 		}
@@ -90,50 +108,51 @@ public class CDSToDbxrefFileParser
 		return text.substring(start, end);
 	}
 
-	private void addAnnotation(String cdsName, String synName, String score) {
-		Dbxref cdsSynonym = factory.getDbxref(cdsDBName, cdsName);
-		Collection<SubseqAnnotation> annots = organism.getAnnotations(null, null, cdsSynonym);
-		String[] syns = synName.split(ParametersDefault.CDSToDbxrefLoaderDbxrefsSeparator());
-		Annotation ret = null;
-		for (String syn : syns) {
-			Dbxref dbxref;
-			syn = syn.trim();
-			if (dbxrefDBName.equals(DBNAME_GENERIC)) {
-				String[] syns1 = syn.split(ParametersDefault.getDbxrefToStringSeparator());
-				dbxref = factory.getDbxref(syns1[0].trim(), syns1[1].trim());
-			}
-			else {
-				dbxref = factory.getDbxref(dbxrefDBName, synName);
-			}
-			if (annots != null && !annots.isEmpty()) {
-				for (SubseqAnnotation annot : annots) {
-					ret = annot.getSubsequence().addDbxrefAnnotation(method, dbxref);
-					progress.completeStep();
-					if (ret != null && score != null) {
-						ret.addNote(ParametersDefault.getScoreAnnotationNoteTypeName(), score);
-					}
-				}
-				// if (annots.size() != 1) {
-				// System.out.println("Many (" + annots.size() + ") CDS annotations: " + cdsName);
-				// }
-			}
-			else {
-				//				System.out.println("CDS not found: " + cdsName);
+	private void addDbxref(String annotsSynStr, String dbxrefsNames, String score) {
+		String[] annotSynStrs = annotsSynStr.split(ParametersDefault.CDSToDbxrefLoaderAnnotsSeparator());
+		for (String annotSynStr : annotSynStrs) {
+			annotSynStr = annotSynStr.trim();
+			Dbxref annotSynonym = factory.getDbxref(cdsDBName, annotSynStr);
+			Collection<SubseqAnnotation> annots = organism.getAnnotations(null, null, annotSynonym);
+			if (annots == null || annots.isEmpty()) {
+				System.out.println("CDS not found: " + annotSynStr);
 				progressError.completeStep();
 				Sequence seq = organism.createNewSequence(ParametersDefault.getCDSSeqVersionFake());
 				Subsequence subseq = seq.createSubsequence(ParametersDefault.getCDSSubseqStartFake(),
 					ParametersDefault.getCDSSubseqEndFake(), null);
 				AnnotationMethod methodFake = factory.getAnnotationMethod(ParametersDefault.getCDSAnnotationMethodFake());
-				Annotation annot = subseq.addAnnotation(factory.getAnnotationTypeCDS(), methodFake);
-				annot.addSynonym(cdsSynonym);
-				ret = subseq.addDbxrefAnnotation(method, dbxref);
+				SubseqAnnotation annot = subseq.addAnnotation(factory.getAnnotationTypeCDS(), methodFake);
+				annot.addSynonym(annotSynonym);
+				if (annots == null) {
+					annots = new ArrayList<SubseqAnnotation>(1);
+				}
+				annots.add(annot);
+			}
+			String[] dbxrefNames = dbxrefsNames.split(ParametersDefault.CDSToDbxrefLoaderDbxrefsSeparator());
+			for (String dbxrefName : dbxrefNames) {
+				Dbxref dbxref;
+				dbxrefName = dbxrefName.trim();
+				if (dbxrefDBName.equals(DBNAME_GENERIC)) {
+					String[] syns1 = dbxrefName.split(ParametersDefault.getDbxrefToStringSeparator());
+					dbxref = factory.getDbxref(syns1[0].trim(), syns1[1].trim());
+				}
+				else {
+					dbxref = factory.getDbxref(dbxrefDBName, dbxrefName);
+				}
 				progress.completeStep();
-				if (ret != null && score != null) {
-					ret.addNote(ParametersDefault.getScoreAnnotationNoteTypeName(), score);
+				for (SubseqAnnotation annot : annots) {
+					if (isAnnotation) {
+						Annotation ret = annot.getSubsequence().addDbxrefAnnotation(method, dbxref);
+						if (ret != null && score != null) {
+							ret.addNote(ParametersDefault.getScoreAnnotationNoteTypeName(), score);
+						}
+					}
+					else {
+						annot.addSynonym(dbxref);
+					}
 				}
 			}
 		}
-		//		return ret;
 	}
 
 }

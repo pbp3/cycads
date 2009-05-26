@@ -121,18 +121,25 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 		Collection<CycDBLink> cycDbLinks = new ArrayList<CycDBLink>();
 		dbName = dbName.trim();
 		accession = accession.trim();
-		List<Pattern> patterns = PFFileConfig.getDbLinkDbNamePatterns();
-		List<String> values = PFFileConfig.getDbLinkDbNameValues();
+		List<Pattern> changePatterns = PFFileConfig.getDbLinkDbNameChangePatterns();
+		List<String> changeValues = PFFileConfig.getDbLinkDbNameChangeValues();
+		List<Pattern> copyPatterns = PFFileConfig.getDbLinkDbNameCopyPatterns();
+		List<String> copyValues = PFFileConfig.getDbLinkDbNameCopyValues();
 		List<Pattern> patternsRemove = PFFileConfig.getDbLinkDbNameRemovePatterns();
 		if (!PFFileConfig.matches(dbName, patternsRemove)) {
 			boolean foundDbName = false;
-			for (int i = 0; i < patterns.size(); i++) {
-				if (patterns.get(i).matcher(dbName).matches()) {
-					foundDbName = cycDbLinks.add(new SimpleCycDBLink(values.get(i), accession));
+			for (int i = 0; i < changePatterns.size(); i++) {
+				if (changePatterns.get(i).matcher(dbName).matches()) {
+					foundDbName = cycDbLinks.add(new SimpleCycDBLink(changeValues.get(i), accession));
 				}
 			}
 			if (!foundDbName) {
 				cycDbLinks.add(new SimpleCycDBLink(dbName, accession));
+			}
+			for (int i = 0; i < copyPatterns.size(); i++) {
+				if (copyPatterns.get(i).matcher(dbName).matches()) {
+					cycDbLinks.add(new SimpleCycDBLink(copyValues.get(i), accession));
+				}
 			}
 		}
 		return cycDbLinks;
