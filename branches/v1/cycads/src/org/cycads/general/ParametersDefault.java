@@ -229,24 +229,46 @@ public class ParametersDefault
 
 	// CDS Fake
 
-	public static String getCDSSeqVersionFake() {
-		return getStringMandatory("cds.fake.seqVersion");
+	public static String getSeqVersionFake() {
+		return getStringMandatory("annot.fake.seqVersion");
 	}
 
-	public static int getCDSSubseqStartFake() {
-		return getInt("cds.fake.subseqStartPos");
+	public static int getSubseqStartFake() {
+		return getInt("annot.fake.subseqStartPos");
 	}
 
-	public static int getCDSSubseqEndFake() {
-		return getInt("cds.fake.subseqEndPos");
+	public static int getSubseqEndFake() {
+		return getInt("annot.fake.subseqEndPos");
 	}
 
-	public static String getCDSAnnotationMethodFake() {
-		return getStringMandatory("cds.fake.annotationMethod");
+	public static String getAnnotationMethodFake() {
+		return getStringMandatory("annot.fake.annotationMethod");
 	}
 
-	public static String CDSToDbxrefLoaderDbxrefsSeparator() {
-		return getStringMandatory("cdsToDbxrefLoader.DbxrefsSeparator");
+	public static String getAnnotationFakeType() {
+		return getStringMandatory("annot.fake.annotationType");
+	}
+
+	//annotatToDbxrefParser
+
+	public static String annotToDbxrefFileComment() {
+		return getStringMandatory("annotToDbxref.file.comment");
+	}
+
+	public static String annotToDbxrefFileSeparator() {
+		return getStringMandatory("annotToDbxref.file.separator");
+	}
+
+	public static String annotToDbxrefFileTextDelimiter() {
+		return getStringMandatory("annotToDbxref.file.textDelimiter");
+	}
+
+	public static String annotToDbxrefFileDbxrefsSeparator() {
+		return getStringMandatory("annotToDbxref.file.dbxrefsSeparator");
+	}
+
+	public static String annotToDbxrefFileAnnotsSeparator() {
+		return getStringMandatory("annotToDbxref.file.annotsSeparator");
 	}
 
 }

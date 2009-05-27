@@ -77,10 +77,10 @@ public class CDSToKOFileParser {
 		else {
 			System.out.println("CDS not found: " + cdsName);
 			progressError.completeStep();
-			Sequence seq = organism.createNewSequence(ParametersDefault.getCDSSeqVersionFake());
-			Subsequence subseq = seq.createSubsequence(ParametersDefault.getCDSSubseqStartFake(),
-				ParametersDefault.getCDSSubseqEndFake(), null);
-			AnnotationMethod methodFake = factory.getAnnotationMethod(ParametersDefault.getCDSAnnotationMethodFake());
+			Sequence seq = organism.createNewSequence(ParametersDefault.getSeqVersionFake());
+			Subsequence subseq = seq.createSubsequence(ParametersDefault.getSubseqStartFake(),
+				ParametersDefault.getSubseqEndFake(), null);
+			AnnotationMethod methodFake = factory.getAnnotationMethod(ParametersDefault.getAnnotationMethodFake());
 			Annotation annot = subseq.addAnnotation(factory.getAnnotationTypeCDS(), methodFake);
 			annot.addSynonym(cdsSynonym);
 			subseq.addDbxrefAnnotation(method, ko);

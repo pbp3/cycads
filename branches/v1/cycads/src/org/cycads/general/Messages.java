@@ -241,52 +241,92 @@ public class Messages
 		return getStringMandatory("gbkLoader.chooseSeqDBName");
 	}
 
-	// cdsToDbxrefLoader
+	// subseqAnnotationLoader
 
-	public static String cdsToDbxrefLoaderChooseFile() {
-		return getStringMandatory("cdsToDbxrefLoader.chooseFile");
+	public static String subseqAnnotationLoaderChooseFile() {
+		return getStringMandatory("subseqAnnotationLoader.chooseFile");
 	}
 
-	public static String cdsToDbxrefLoaderChooseOrganismNumber() {
-		return getStringMandatory("cdsToDbxrefLoader.chooseOrganismNumber");
+	public static String subseqAnnotationLoaderChooseOrganismNumber() {
+		return getStringMandatory("subseqAnnotationLoader.chooseOrganismNumber");
 	}
 
-	public static String cdsToDbxrefLoaderChooseMethodName() {
-		return getStringMandatory("cdsToDbxrefLoader.chooseMethodName");
+	public static String subseqAnnotationLoaderChooseMethodName() {
+		return getStringMandatory("subseqAnnotationLoader.chooseMethodName");
 	}
 
-	public static String cdsToDbxrefLoaderChooseCDSColumnIndex() {
-		return getStringMandatory("cdsToDbxrefLoader.chooseCDSColumnIndex");
+	public static String subseqAnnotationLoaderChooseAnnotColumnIndex() {
+		return getStringMandatory("subseqAnnotationLoader.chooseAnnotColumnIndex");
 	}
 
-	public static String cdsToDbxrefLoaderChooseCDSDBName() {
-		return getStringMandatory("cdsToDbxrefLoader.chooseCDSDBName");
+	public static String subseqAnnotationLoaderChooseAnnotDBName() {
+		return getStringMandatory("subseqAnnotationLoader.chooseAnnotDBName");
 	}
 
-	public static String cdsToDbxrefLoaderChooseDbxrefColumnIndex() {
-		return getStringMandatory("cdsToDbxrefLoader.chooseDbxrefColumnIndex");
+	public static String subseqAnnotationLoaderChooseDbxrefColumnIndex() {
+		return getStringMandatory("subseqAnnotationLoader.chooseDbxrefColumnIndex");
 	}
 
-	public static String cdsToDbxrefLoaderChooseDbxrefDBName() {
-		return getStringMandatory("cdsToDbxrefLoader.chooseDbxrefDBName");
+	public static String subseqAnnotationLoaderChooseDbxrefDBName() {
+		return getStringMandatory("subseqAnnotationLoader.chooseDbxrefDBName");
 	}
 
-	public static String cdsToDbxrefLoaderChooseScoreColumnIndex() {
-		return getStringMandatory("cdsToDbxrefLoader.chooseScoreColumnIndex");
+	public static String subseqAnnotationLoaderChooseScoreColumnIndex() {
+		return getStringMandatory("subseqAnnotationLoader.chooseScoreColumnIndex");
 	}
 
-	public static int cdsToDbxrefLoaderStepShowInterval() {
-		return getInt("cdsToDbxrefLoader.stepShowInterval");
+	public static int subseqAnnotationLoaderStepShowInterval() {
+		return getInt("subseqAnnotationLoader.stepShowInterval");
 	}
 
-	public static String cdsToDbxrefLoaderInitMsg(String path) {
+	public static String subseqAnnotationLoaderInitMsg(String path) {
 		Object[] a = {path};
-		return MessageFormat.format(getStringMandatory("cdsToDbxrefLoader.init"), a);
+		return MessageFormat.format(getStringMandatory("subseqAnnotationLoader.init"), a);
 	}
 
-	public static String cdsToDbxrefLoaderFinalMsg(int step, int errorStep) {
+	public static String subseqAnnotationLoaderFinalMsg(int step, int errorStep) {
 		Object[] a = {step, errorStep};
-		return MessageFormat.format(getStringMandatory("cdsToDbxrefLoader.final"), a);
+		return MessageFormat.format(getStringMandatory("subseqAnnotationLoader.final"), a);
+	}
+
+	// synonymLoader
+
+	public static String synonymLoaderChooseFile() {
+		return getStringMandatory("synonymLoader.chooseFile");
+	}
+
+	public static String synonymLoaderChooseOrganismNumber() {
+		return getStringMandatory("synonymLoader.chooseOrganismNumber");
+	}
+
+	public static String synonymLoaderChooseAnnotColumnIndex() {
+		return getStringMandatory("synonymLoader.chooseAnnotColumnIndex");
+	}
+
+	public static String synonymLoaderChooseAnnotDBName() {
+		return getStringMandatory("synonymLoader.chooseAnnotDBName");
+	}
+
+	public static String synonymLoaderChooseDbxrefColumnIndex() {
+		return getStringMandatory("synonymLoader.chooseDbxrefColumnIndex");
+	}
+
+	public static String synonymLoaderChooseDbxrefDBName() {
+		return getStringMandatory("synonymLoader.chooseDbxrefDBName");
+	}
+
+	public static int synonymLoaderStepShowInterval() {
+		return getInt("synonymLoader.stepShowInterval");
+	}
+
+	public static String synonymLoaderInitMsg(String path) {
+		Object[] a = {path};
+		return MessageFormat.format(getStringMandatory("synonymLoader.init"), a);
+	}
+
+	public static String synonymLoaderFinalMsg(int step, int errorStep) {
+		Object[] a = {step, errorStep};
+		return MessageFormat.format(getStringMandatory("synonymLoader.final"), a);
 	}
 
 }
