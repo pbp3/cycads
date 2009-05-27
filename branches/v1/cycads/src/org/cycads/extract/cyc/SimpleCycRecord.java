@@ -16,7 +16,8 @@ public class SimpleCycRecord implements CycRecord
 	private Collection<CycDBLink>	dBLinks;
 	private Collection<String>		comments;
 	private Collection<String>		synonyms;
-	private Collection<String>		eCs;
+	private Collection<String>		ecs;
+	private Collection<String>		gos;
 	private Collection<CycFunction>	functions;
 
 	public SimpleCycRecord(String productType, String bioCycID) {
@@ -126,11 +127,6 @@ public class SimpleCycRecord implements CycRecord
 	}
 
 	@Override
-	public Collection<String> getECs() {
-		return eCs;
-	}
-
-	@Override
 	public void setFunctions(Collection<CycFunction> functions) {
 		this.functions = functions;
 	}
@@ -144,11 +140,39 @@ public class SimpleCycRecord implements CycRecord
 	}
 
 	@Override
+	public Collection<String> getECs() {
+		return ecs;
+	}
+
+	@Override
 	public void addEC(String ec) {
-		if (eCs == null) {
-			eCs = new ArrayList<String>();
+		if (ecs == null) {
+			ecs = new ArrayList<String>();
 		}
-		eCs.add(ec);
+		ecs.add(ec);
+	}
+
+	@Override
+	public void setECs(Collection<String> eCs) {
+		this.ecs = eCs;
+	}
+
+	@Override
+	public Collection<String> getGOs() {
+		return gos;
+	}
+
+	@Override
+	public void addGO(String go) {
+		if (gos == null) {
+			gos = new ArrayList<String>();
+		}
+		gos.add(go);
+	}
+
+	@Override
+	public void setGOs(Collection<String> gos) {
+		this.gos = gos;
 	}
 
 	@Override
@@ -162,11 +186,6 @@ public class SimpleCycRecord implements CycRecord
 	@Override
 	public void setComments(Collection<String> comments) {
 		this.comments = comments;
-	}
-
-	@Override
-	public void setECs(Collection<String> eCs) {
-		this.eCs = eCs;
 	}
 
 	@Override

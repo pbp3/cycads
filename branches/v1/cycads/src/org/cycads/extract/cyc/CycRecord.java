@@ -5,7 +5,8 @@ package org.cycads.extract.cyc;
 
 import java.util.Collection;
 
-public interface CycRecord {
+public interface CycRecord
+{
 	public String getId();
 
 	public void setID(String bioCycID);
@@ -55,6 +56,12 @@ public interface CycRecord {
 	public void setECs(Collection<String> eCs);
 
 	public void addEC(String eC);
+
+	public Collection<String> getGOs();
+
+	public void setGOs(Collection<String> gos);
+
+	public void addGO(String go);
 
 	public Collection<String> getComments();
 

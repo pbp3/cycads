@@ -11,27 +11,31 @@ import java.util.Locale;
 
 import org.cycads.entities.annotation.Annotation;
 
-public class SimpleCycEC implements CycEC
+public class SimpleCycDbxrefAnnotation implements CycDbxrefAnnotation
 {
 
 	private final ScoreSystemCollection		scoreSystems;
-	private final String					ecNumber;
+	private final String					accession;
+	private final String					dbName;
 	private final List<List<Annotation>>	annotationPaths	= new ArrayList<List<Annotation>>();
 	private double							score			= 0;
 
-	public SimpleCycEC(String ecNumber, ScoreSystemCollection scoreSystems) {
-		this.ecNumber = ecNumber;
+	public SimpleCycDbxrefAnnotation(String dbName, String accession, ScoreSystemCollection scoreSystems) {
+		this.dbName = dbName;
+		this.accession = accession;
 		this.scoreSystems = scoreSystems;
 	}
 
-	public SimpleCycEC(String ecNumber, List<Annotation> annotationsList, ScoreSystemCollection scoreSystems) {
-		this.ecNumber = ecNumber;
+	public SimpleCycDbxrefAnnotation(String dbName, String accession, List<Annotation> annotationsList,
+			ScoreSystemCollection scoreSystems) {
+		this.dbName = dbName;
+		this.accession = accession;
 		this.scoreSystems = scoreSystems;
 		addAnnotationPath(annotationsList);
 	}
 
-	public String getEcNumber() {
-		return ecNumber;
+	public String getAccession() {
+		return accession;
 	}
 
 	public List<List<Annotation>> getAnnotationPaths() {
@@ -77,6 +81,11 @@ public class SimpleCycEC implements CycEC
 
 	public double getScore() {
 		return score;
+	}
+
+	@Override
+	public String getDbName() {
+		return dbName;
 	}
 
 }

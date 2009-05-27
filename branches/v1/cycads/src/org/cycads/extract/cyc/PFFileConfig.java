@@ -146,6 +146,26 @@ public class PFFileConfig
 		return getStrings("ec.loc");
 	}
 
+	public static List<String> getPFFileKOLocs() {
+		return getStrings("go.loc");
+	}
+
+	public static List<String> getPFFileGOLocs() {
+		return getStrings("ko.loc");
+	}
+
+	public static String getECDbName() {
+		return getString("pf.file.ec.dbName");
+	}
+
+	public static String getGODbName() {
+		return getString("pf.file.go.dbName");
+	}
+
+	public static String getKODbName() {
+		return getString("pf.file.ko.dbName");
+	}
+
 	static ArrayList<Pattern>	dbLinkDbNameRemovePatterns;
 
 	public static ArrayList<Pattern> getDbLinkDbNameRemovePatterns() {
@@ -191,21 +211,21 @@ public class PFFileConfig
 		return dbLinkDbNameCopyValues;
 	}
 
-	public static String getECComment(CycEC ec) {
+	public static String getAnnotationComment(CycDbxrefAnnotation annotation) {
 		StringBuffer buf = new StringBuffer();
-		Object[] a = {ec.getEcNumber(), ec.getScore()};
-		buf.append(MessageFormat.format(getStringMandatory("pf.file.geneComment.ecScore"), a));
-		List<List<Annotation>> paths = ec.getAnnotationPaths();
+		Object[] a = {annotation.getDbName(), annotation.getAccession(), annotation.getScore()};
+		buf.append(MessageFormat.format(getStringMandatory("pf.file.geneComment.Score"), a));
+		List<List<Annotation>> paths = annotation.getAnnotationPaths();
 		if (!paths.isEmpty()) {
-			buf.append(getStringMandatory("pf.file.geneComment.ecMethod"));
+			buf.append(getStringMandatory("pf.file.geneComment.Method"));
 			List<Annotation> path = paths.get(0);
 			buf.append(path.get(0).getAnnotationMethod().getName());
-			String methodSeparator = getStringMandatory("pf.file.geneComment.ecMethodSeparator");
+			String methodSeparator = getStringMandatory("pf.file.geneComment.MethodSeparator");
 			for (int i = 1; i < path.size(); i++) {
 				buf.append(methodSeparator);
 				buf.append(path.get(i).getAnnotationMethod().getName());
 			}
-			String pathSeparator = getStringMandatory("pf.file.geneComment.ecPathSeparator");
+			String pathSeparator = getStringMandatory("pf.file.geneComment.PathSeparator");
 			for (int i = 1; i < paths.size(); i++) {
 				buf.append(pathSeparator);
 				path = paths.get(i);
@@ -237,6 +257,84 @@ public class PFFileConfig
 			ret = ParametersDefault.getScoreAnnotationNoteTypeName();
 		}
 		return ret;
+	}
+
+	public static ScoreSystemCollection getEcScoreSystems() {
+		SimpleScoreSystemCollection scoreSystemCollection = new SimpleScoreSystemCollection();
+		ArrayList<Pattern> patterns = PFFileConfig.getPatterns("pf.file.scoreAnnotation.ec.methodName", null);
+		ArrayList<String> values = PFFileConfig.getStrings("scoreAnnotation.ec.value");
+		ArrayList<String> fileNames = PFFileConfig.getStrings("scoreAnnotation.ec.scoreNote.file");
+		FileScoreSystem fileScoreSystem;
+		String fileName;
+		for (int i = 0; i < patterns.size(); i++) {
+			if (fileNames.size() > i) {
+				fileName = fileNames.get(i);
+			}
+			else {
+				fileName = null;
+			}
+			if (fileName != null && fileName.length() > 0) {
+				fileScoreSystem = new FileScoreSystem(fileName);
+			}
+			else {
+				fileScoreSystem = null;
+			}
+			scoreSystemCollection.addScoreSystem(patterns.get(i), new FixAndFileScoreSystem(
+				Double.parseDouble(values.get(i)), fileScoreSystem));
+		}
+		return scoreSystemCollection;
+	}
+
+	public static ScoreSystemCollection getGoScoreSystems() {
+		SimpleScoreSystemCollection scoreSystemCollection = new SimpleScoreSystemCollection();
+		ArrayList<Pattern> patterns = PFFileConfig.getPatterns("pf.file.scoreAnnotation.go.methodName", null);
+		ArrayList<String> values = PFFileConfig.getStrings("scoreAnnotation.go.value");
+		ArrayList<String> fileNames = PFFileConfig.getStrings("scoreAnnotation.go.scoreNote.file");
+		FileScoreSystem fileScoreSystem;
+		String fileName;
+		for (int i = 0; i < patterns.size(); i++) {
+			if (fileNames.size() > i) {
+				fileName = fileNames.get(i);
+			}
+			else {
+				fileName = null;
+			}
+			if (fileName != null && fileName.length() > 0) {
+				fileScoreSystem = new FileScoreSystem(fileName);
+			}
+			else {
+				fileScoreSystem = null;
+			}
+			scoreSystemCollection.addScoreSystem(patterns.get(i), new FixAndFileScoreSystem(
+				Double.parseDouble(values.get(i)), fileScoreSystem));
+		}
+		return scoreSystemCollection;
+	}
+
+	public static ScoreSystemCollection getKoScoreSystems() {
+		SimpleScoreSystemCollection scoreSystemCollection = new SimpleScoreSystemCollection();
+		ArrayList<Pattern> patterns = PFFileConfig.getPatterns("pf.file.scoreAnnotation.ko.methodName", null);
+		ArrayList<String> values = PFFileConfig.getStrings("scoreAnnotation.ko.value");
+		ArrayList<String> fileNames = PFFileConfig.getStrings("scoreAnnotation.ko.scoreNote.file");
+		FileScoreSystem fileScoreSystem;
+		String fileName;
+		for (int i = 0; i < patterns.size(); i++) {
+			if (fileNames.size() > i) {
+				fileName = fileNames.get(i);
+			}
+			else {
+				fileName = null;
+			}
+			if (fileName != null && fileName.length() > 0) {
+				fileScoreSystem = new FileScoreSystem(fileName);
+			}
+			else {
+				fileScoreSystem = null;
+			}
+			scoreSystemCollection.addScoreSystem(patterns.get(i), new FixAndFileScoreSystem(
+				Double.parseDouble(values.get(i)), fileScoreSystem));
+		}
+		return scoreSystemCollection;
 	}
 
 }

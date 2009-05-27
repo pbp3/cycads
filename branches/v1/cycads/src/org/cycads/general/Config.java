@@ -162,8 +162,16 @@ public class Config
 		return getStringOptional("pf.file.extract.sequenceVersion");
 	}
 
-	public static double pfGeneratorThreshold() {
-		return getDouble("pf.file.extract.threshold");
+	public static double pfEcThreshold() {
+		return getDouble("pf.file.ec.threshold");
+	}
+
+	public static double pfGoThreshold() {
+		return getDouble("pf.file.go.threshold");
+	}
+
+	public static double pfKoThreshold() {
+		return getDouble("pf.file.ko.threshold");
 	}
 
 	public static String pfGeneratorFileHeader() {

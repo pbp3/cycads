@@ -177,8 +177,16 @@ public class Messages
 		return MessageFormat.format(getStringMandatory("pfFile.extract.final"), a);
 	}
 
-	public static String pfGeneratorChooseThreshold() {
-		return getString("pfFile.extract.chooseThreshold");
+	public static String pfGeneratorChooseEcThreshold() {
+		return getString("pfFile.extract.chooseEcThreshold");
+	}
+
+	public static String pfGeneratorChooseGoThreshold() {
+		return getString("pfFile.extract.chooseGoThreshold");
+	}
+
+	public static String pfGeneratorChooseKoThreshold() {
+		return getString("pfFile.extract.chooseKoThreshold");
 	}
 
 	public static String pfGeneratorChooseSequenceLocation() {

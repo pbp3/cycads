@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.regex.Pattern;
 
 import org.cycads.entities.EntityFactorySQL;
 import org.cycads.entities.annotation.SubseqAnnotation;
@@ -16,14 +15,12 @@ import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Sequence;
 import org.cycads.extract.cyc.CycIdGenerator;
 import org.cycads.extract.cyc.CycRecordGenerator;
-import org.cycads.extract.cyc.FileScoreSystem;
-import org.cycads.extract.cyc.FixAndFileScoreSystem;
 import org.cycads.extract.cyc.OrganismCycIdGenerator;
 import org.cycads.extract.cyc.PFFileConfig;
 import org.cycads.extract.cyc.PFFileCycRecordGenerator;
 import org.cycads.extract.cyc.PFFileStream;
+import org.cycads.extract.cyc.ScoreSystemCollection;
 import org.cycads.extract.cyc.SimpleLocInterpreter;
-import org.cycads.extract.cyc.SimpleScoreSystemCollection;
 import org.cycads.general.Config;
 import org.cycads.general.Messages;
 import org.cycads.ui.Tools;
@@ -51,13 +48,22 @@ public class PFFileGeneratorSQL
 			return;
 		}
 
-		Double threshold = Tools.getDouble(args, 3, Messages.pfGeneratorChooseThreshold(),
-			Config.pfGeneratorThreshold());
-		if (threshold == null) {
+		boolean sequenceLocation = Tools.getBoolean(args, 3, Messages.pfGeneratorChooseSequenceLocation());
+
+		Double ecThreshold = Tools.getDouble(args, 4, Messages.pfGeneratorChooseEcThreshold(), Config.pfEcThreshold());
+		if (ecThreshold == null) {
 			return;
 		}
 
-		boolean sequenceLocation = Tools.getBoolean(args, 4, Messages.pfGeneratorChooseSequenceLocation());
+		Double goThreshold = Tools.getDouble(args, 5, Messages.pfGeneratorChooseGoThreshold(), Config.pfGoThreshold());
+		if (goThreshold == null) {
+			return;
+		}
+
+		Double koThreshold = Tools.getDouble(args, 6, Messages.pfGeneratorChooseKoThreshold(), Config.pfKoThreshold());
+		if (koThreshold == null) {
+			return;
+		}
 
 		Progress progress = new ProgressPrintInterval(System.out, Messages.pfGeneratorStepShowInterval());
 		try {
@@ -68,31 +74,13 @@ public class PFFileGeneratorSQL
 			PFFileStream pfFile = new PFFileStream(file, Config.pfGeneratorFileHeader(), sequenceLocation);
 			CycIdGenerator cycIdGenerator = new OrganismCycIdGenerator(organism);
 
-			SimpleScoreSystemCollection scoreSystemCollection = new SimpleScoreSystemCollection();
-			ArrayList<Pattern> patterns = PFFileConfig.getPatterns("pf.file.scoreAnnotation.methodName", null);
-			ArrayList<String> values = PFFileConfig.getStrings("scoreAnnotation.value");
-			ArrayList<String> fileNames = PFFileConfig.getStrings("scoreAnnotation.scoreNote.file");
-			FileScoreSystem fileScoreSystem;
-			String fileName;
-			for (int i = 0; i < patterns.size(); i++) {
-				if (fileNames.size() > 1) {
-					fileName = fileNames.get(i);
-				}
-				else {
-					fileName = null;
-				}
-				if (fileName != null && fileName.length() > 0) {
-					fileScoreSystem = new FileScoreSystem(fileName);
-				}
-				else {
-					fileScoreSystem = null;
-				}
-				scoreSystemCollection.addScoreSystem(patterns.get(i), new FixAndFileScoreSystem(
-					Double.parseDouble(values.get(i)), fileScoreSystem));
-			}
+			ScoreSystemCollection ecScoreSystemCollection = PFFileConfig.getEcScoreSystems();
+			ScoreSystemCollection goScoreSystemCollection = PFFileConfig.getGoScoreSystems();
+			ScoreSystemCollection koScoreSystemCollection = PFFileConfig.getKoScoreSystems();
 
-			CycRecordGenerator cycRecordGenerator = new PFFileCycRecordGenerator(threshold, cycIdGenerator,
-				new SimpleLocInterpreter(), scoreSystemCollection);
+			CycRecordGenerator cycRecordGenerator = new PFFileCycRecordGenerator(cycIdGenerator,
+				new SimpleLocInterpreter(), ecThreshold, ecScoreSystemCollection, goThreshold, goScoreSystemCollection,
+				koThreshold, koScoreSystemCollection);
 			for (Sequence seq : seqs) {
 				Collection<SubseqAnnotation< ? , ? , ? , ? , ? >> cdss = seq.getAnnotations(null, types, null);
 				for (SubseqAnnotation< ? , ? , ? , ? , ? > cds : cdss) {

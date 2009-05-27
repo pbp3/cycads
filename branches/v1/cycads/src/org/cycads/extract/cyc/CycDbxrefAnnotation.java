@@ -7,9 +7,12 @@ import java.util.List;
 
 import org.cycads.entities.annotation.Annotation;
 
-public interface CycEC {
+public interface CycDbxrefAnnotation
+{
 
-	public abstract String getEcNumber();
+	public abstract String getAccession();
+
+	public abstract String getDbName();
 
 	public abstract List<List<Annotation>> getAnnotationPaths();
 

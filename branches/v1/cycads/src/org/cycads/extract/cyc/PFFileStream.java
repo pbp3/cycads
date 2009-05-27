@@ -71,6 +71,15 @@ public class PFFileStream implements CycStream
 			}
 		}
 
+		Collection<String> gos = cycRecord.getGOs();
+		if (gos != null) {
+			for (String go : gos) {
+				if (go != null && go.length() > 0) {
+					out.println("DBLINK" + "\t\t" + "GO:" + go);
+				}
+			}
+		}
+
 		Collection<CycDBLink> dbLinks = cycRecord.getDBLinks();
 		if (dbLinks != null) {
 			for (CycDBLink dbLink : dbLinks) {
