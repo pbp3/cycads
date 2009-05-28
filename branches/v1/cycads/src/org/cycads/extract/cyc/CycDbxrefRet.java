@@ -2,7 +2,7 @@ package org.cycads.extract.cyc;
 
 import org.cycads.entities.synonym.Dbxref;
 
-public interface CycDbxref extends CycValue
+public interface CycDbxrefRet extends CycValueRet
 {
 	public Dbxref getDbxref();
 }

@@ -150,6 +150,10 @@ public class PFFileConfig
 		return getLocs("go");
 	}
 
+	public static List<String> getPFFileGeneCommentAnnotationsLocs() {
+		return getLocs("geneComment.annotations");
+	}
+
 	public static List<String> getLocs(String locName) {
 		return getStrings(locName + ".loc");
 	}
@@ -215,7 +219,7 @@ public class PFFileConfig
 		return dbLinkDbNameCopyValues;
 	}
 
-	public static String getAnnotationComment(CycDbxrefPathAnnotation annotation) {
+	public static String getAnnotationComment(CycDbxrefAnnotationPaths annotation) {
 		StringBuffer buf = new StringBuffer();
 		Object[] a = {annotation.getDbName(), annotation.getAccession(), annotation.getScore()};
 		buf.append(MessageFormat.format(getStringMandatory("pf.file.geneComment.Score"), a));

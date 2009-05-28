@@ -8,17 +8,17 @@ import java.util.List;
 
 import org.cycads.entities.annotation.Annotation;
 
-public class SimpleCycValue implements CycValue
+public class SimpleCycValueRet implements CycValueRet
 {
 	String				value;
 	List<Annotation>	annotations	= new ArrayList<Annotation>(3);
 
-	public SimpleCycValue(String value, List<Annotation> annotations) {
+	public SimpleCycValueRet(String value, List<Annotation> annotations) {
 		this.value = value;
 		this.annotations = annotations;
 	}
 
-	public SimpleCycValue(String value) {
+	public SimpleCycValueRet(String value) {
 		this.value = value;
 	}
 

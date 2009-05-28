@@ -12,7 +12,7 @@ import java.util.Locale;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.synonym.Dbxref;
 
-public class SimpleCycDbxrefPathAnnotation implements CycDbxrefPathAnnotation
+public class SimpleCycDbxrefAnnotationPaths implements CycDbxrefAnnotationPaths
 {
 
 	private final ScoreSystemCollection		scoreSystems;
@@ -20,12 +20,12 @@ public class SimpleCycDbxrefPathAnnotation implements CycDbxrefPathAnnotation
 	private double							score			= 0;
 	private final Dbxref					dbxref;
 
-	public SimpleCycDbxrefPathAnnotation(Dbxref dbxref, ScoreSystemCollection scoreSystems) {
+	public SimpleCycDbxrefAnnotationPaths(Dbxref dbxref, ScoreSystemCollection scoreSystems) {
 		this.dbxref = dbxref;
 		this.scoreSystems = scoreSystems;
 	}
 
-	public SimpleCycDbxrefPathAnnotation(Dbxref dbxref, List<Annotation> annotationsList, ScoreSystemCollection scoreSystems) {
+	public SimpleCycDbxrefAnnotationPaths(Dbxref dbxref, List<Annotation> annotationsList, ScoreSystemCollection scoreSystems) {
 		this.dbxref = dbxref;
 		this.scoreSystems = scoreSystems;
 		addAnnotationPath(annotationsList);

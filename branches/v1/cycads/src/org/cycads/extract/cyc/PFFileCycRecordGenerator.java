@@ -51,9 +51,9 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 		record.setSynonyms(syns);
 		record.setDBLinks(getDblinks(annot));
 
-		Collection<CycDbxrefPathAnnotation> ecs = locInterpreter.getCycDbxrefPathAnnots(annot, PFFileConfig.getPFFileECLocs(),
-			ecScoreSystems);
-		for (CycDbxrefPathAnnotation ec : ecs) {
+		Collection<CycDbxrefAnnotationPaths> ecs = locInterpreter.getCycDbxrefPathAnnots(annot,
+			PFFileConfig.getPFFileECLocs(), ecScoreSystems);
+		for (CycDbxrefAnnotationPaths ec : ecs) {
 			if (ec.getScore() >= ecThreshold) {
 				record.addEC(ec.getAccession());
 			}
@@ -64,9 +64,9 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 			record.addComment(PFFileConfig.getAnnotationComment(ec));
 		}
 
-		Collection<CycDbxrefPathAnnotation> gos = locInterpreter.getCycDbxrefPathAnnots(annot, PFFileConfig.getPFFileGOLocs(),
-			goScoreSystems);
-		for (CycDbxrefPathAnnotation go : gos) {
+		Collection<CycDbxrefAnnotationPaths> gos = locInterpreter.getCycDbxrefPathAnnots(annot,
+			PFFileConfig.getPFFileGOLocs(), goScoreSystems);
+		for (CycDbxrefAnnotationPaths go : gos) {
 			if (go.getScore() >= goThreshold) {
 				record.addGO(go.getAccession());
 			}
@@ -75,6 +75,22 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 				record.addDBLink(dbLink);
 			}
 			record.addComment(PFFileConfig.getAnnotationComment(go));
+		}
+
+		Collection<CycValueRet> cycValueRets = locInterpreter.getCycValues(annot,
+			PFFileConfig.getPFFileGeneCommentAnnotationsLocs());
+		for (CycValueRet cycValueRet : cycValueRets) {
+			if (cycValueRet instanceof CycDbxrefAnnotationPathsRet) {
+				CycDbxrefAnnotationPaths cycDbxrefAnnotationPaths = ((CycDbxrefAnnotationPathsRet) cycValueRet).getCycDbxrefAnnotationPaths();
+				List<Annotation> initialAnnots = cycValueRet.getAnnotations();
+				for (List<Annotation> annots : cycDbxrefAnnotationPaths.getAnnotationPaths()) {
+					annots.addAll(0, initialAnnots);
+				}
+				record.addComment(PFFileConfig.getAnnotationComment(cycDbxrefAnnotationPaths));
+			}
+			else {
+				throw new RuntimeException("Error in the gene comment annotation loc.");
+			}
 		}
 
 		record.setFunctions(getFunctions(annot));

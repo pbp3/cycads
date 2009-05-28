@@ -7,12 +7,12 @@ import java.util.List;
 
 import org.cycads.entities.annotation.Annotation;
 
-public interface CycValue
+public interface CycValueRet
 {
 	public String getValue();
 
-	// annotations walked to arrive this value
 	public void addAnnotation(Annotation annot);
 
+	// annotations walked to arrive this value
 	public List<Annotation> getAnnotations();
 }

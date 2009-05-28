@@ -50,7 +50,7 @@ public class SimpleLocInterpreter implements LocInterpreter
 
 	public String getFirstString(SubseqAnnotation annot, List<String> locs) {
 		String ret;
-		List<CycValue> cycAnnots;
+		List<CycValueRet> cycAnnots;
 		ArrayList<Annotation> annotList = new ArrayList<Annotation>();
 		for (String loc : locs) {
 			cycAnnots = getCycValues(annot, loc, null, annotList, 0);
@@ -68,16 +68,16 @@ public class SimpleLocInterpreter implements LocInterpreter
 		return getStrings(getCycValues(annot, locs));
 	}
 
-	private Collection<String> getStrings(List<CycValue> cycAnnots) {
+	private Collection<String> getStrings(List<CycValueRet> cycAnnots) {
 		Collection<String> dbLinksStr = new TreeSet<String>();
-		for (CycValue cycAnnot : cycAnnots) {
+		for (CycValueRet cycAnnot : cycAnnots) {
 			dbLinksStr.add(cycAnnot.getValue());
 		}
 		return dbLinksStr;
 	}
 
-	public List<CycValue> getCycValues(SubseqAnnotation annot, List<String> locs) {
-		List<CycValue> ret = new ArrayList<CycValue>();
+	public List<CycValueRet> getCycValues(SubseqAnnotation annot, List<String> locs) {
+		List<CycValueRet> ret = new ArrayList<CycValueRet>();
 		ArrayList<Annotation> annotList = new ArrayList<Annotation>();
 		for (String loc : locs) {
 			ret = getCycValues(annot, loc, ret, annotList, 0);
@@ -85,7 +85,7 @@ public class SimpleLocInterpreter implements LocInterpreter
 		return ret;
 	}
 
-	private List<CycValue> getCycValues(SubseqAnnotation annot, String loc, List<CycValue> ret,
+	private List<CycValueRet> getCycValues(SubseqAnnotation annot, String loc, List<CycValueRet> ret,
 			ArrayList<Annotation> annotList, int nextPosAnnotList) {
 		int i = loc.indexOf('.');
 		String subLoc;
@@ -119,7 +119,7 @@ public class SimpleLocInterpreter implements LocInterpreter
 		throw new RuntimeException("Error in the location expression:" + subLoc + "." + loc);
 	}
 
-	private List<CycValue> getCycValuesBySynonym(HasSynonyms annot, String loc, List<CycValue> ret,
+	private List<CycValueRet> getCycValuesBySynonym(HasSynonyms annot, String loc, List<CycValueRet> ret,
 			ArrayList<Annotation> annotList, int nextPosAnnotList) {
 		String subLoc = "*";
 		boolean isRegexFilter = loc.startsWith(LOC_FILTER_REGEX_CHAR + "");
@@ -163,7 +163,7 @@ public class SimpleLocInterpreter implements LocInterpreter
 		return ret;
 	}
 
-	private List<CycValue> getCycValuesByDbxrefSet(SubseqAnnotation annot, String loc, List<CycValue> ret,
+	private List<CycValueRet> getCycValuesByDbxrefSet(SubseqAnnotation annot, String loc, List<CycValueRet> ret,
 			ArrayList<Annotation> annotList, int nextPosAnnotList) {
 		if (!loc.startsWith(LOC_FILTER_STRING_CHAR + "")) {
 			throw new RuntimeException("Error in the location expression:" + loc);
@@ -195,17 +195,52 @@ public class SimpleLocInterpreter implements LocInterpreter
 				loc = "";
 			}
 		}
-		Collection<CycDbxrefPathAnnotation> dbxrefAnnots = getCycDbxrefPathAnnots(annot, locContainer.getLocs(subLoc),
-			scoreSystemsContainer.getScoreSystems(subLoc));
-		for (CycDbxrefPathAnnotation dbxrefAnnotation : dbxrefAnnots) {
-			if (!hasThreshold || dbxrefAnnotation.getScore() >= threshold) {
-				ret = getCycValues(dbxrefAnnotation, loc, ret, annotList, nextPosAnnotList);
+		Collection<CycDbxrefAnnotationPaths> dbxrefAnnotationsPaths = getCycDbxrefPathAnnots(annot,
+			locContainer.getLocs(subLoc), scoreSystemsContainer.getScoreSystems(subLoc));
+		for (CycDbxrefAnnotationPaths dbxrefAnnotationPaths : dbxrefAnnotationsPaths) {
+			if (!hasThreshold || dbxrefAnnotationPaths.getScore() >= threshold) {
+				ret = getCycValues(dbxrefAnnotationPaths, loc, ret, annotList, nextPosAnnotList);
 			}
 		}
 		return ret;
 	}
 
-	private List<CycValue> getCycValues(Subsequence subsequence, String loc, List<CycValue> ret,
+	private List<CycValueRet> getCycValues(CycDbxrefAnnotationPaths dbxrefAnnotationPaths, String loc,
+			List<CycValueRet> ret, ArrayList<Annotation> annotList, int nextPosAnnotList) {
+		if (loc == null || loc.length() == 0) {
+			return getCycDbxrefAnnotation(dbxrefAnnotationPaths, ret, annotList, nextPosAnnotList);
+		}
+		List<List<Annotation>> paths = dbxrefAnnotationPaths.getAnnotationPaths();
+		for (List<Annotation> annots : paths) {
+			int i = nextPosAnnotList;
+			for (Annotation annot : annots) {
+				if (annotList.size() > i) {
+					annotList.set(i, annot);
+				}
+				else {
+					annotList.add(annot);
+				}
+				i++;
+			}
+			ret = getCycValues(dbxrefAnnotationPaths.getDbxref(), loc, ret, annotList, i);
+		}
+		return ret;
+	}
+
+	private List<CycValueRet> getCycDbxrefAnnotation(CycDbxrefAnnotationPaths dbxrefAnnotationPaths,
+			List<CycValueRet> ret, ArrayList<Annotation> annotList, int nextPosAnnotList) {
+		if (ret == null) {
+			ret = new ArrayList<CycValueRet>();
+		}
+		ArrayList<Annotation> cycAnnots = new ArrayList<Annotation>(nextPosAnnotList);
+		for (int i = 0; i < nextPosAnnotList; i++) {
+			cycAnnots.add(annotList.get(i));
+		}
+		ret.add(new SimpleCycDbxrefAnnotationPathsRet(dbxrefAnnotationPaths, cycAnnots));
+		return ret;
+	}
+
+	private List<CycValueRet> getCycValues(Subsequence subsequence, String loc, List<CycValueRet> ret,
 			ArrayList<Annotation> annotList, int nextPosAnnotList) {
 		int i = loc.indexOf('.');
 		String subLoc;
@@ -237,7 +272,7 @@ public class SimpleLocInterpreter implements LocInterpreter
 		throw new RuntimeException("Error in the location expression:" + subLoc + "." + loc);
 	}
 
-	private List<CycValue> getCycValues(Sequence sequence, String loc, List<CycValue> ret,
+	private List<CycValueRet> getCycValues(Sequence sequence, String loc, List<CycValueRet> ret,
 			ArrayList<Annotation> annotList, int nextPosAnnotList) {
 		int i = loc.indexOf('.');
 		String subLoc;
@@ -259,8 +294,8 @@ public class SimpleLocInterpreter implements LocInterpreter
 		throw new RuntimeException("Error in the location expression:" + subLoc + "." + loc);
 	}
 
-	private List<CycValue> getCycValuesByFunctions(Collection<SubseqFunctionAnnotation> functionAnnotations,
-			String loc, List<CycValue> ret, ArrayList<Annotation> annotList, int nextPosAnnotList) {
+	private List<CycValueRet> getCycValuesByFunctions(Collection<SubseqFunctionAnnotation> functionAnnotations,
+			String loc, List<CycValueRet> ret, ArrayList<Annotation> annotList, int nextPosAnnotList) {
 		int i = loc.indexOf('.');
 		String subLoc;
 		if (i == -1) {
@@ -311,7 +346,7 @@ public class SimpleLocInterpreter implements LocInterpreter
 		return ret;
 	}
 
-	private List<CycValue> getCycValues(Function function, String loc, List<CycValue> ret,
+	private List<CycValueRet> getCycValues(Function function, String loc, List<CycValueRet> ret,
 			ArrayList<Annotation> annotList, int nextPosAnnotList) {
 		if (loc == null || loc.length() == 0) {
 			return getCycValues(function.getName(), ret, annotList, nextPosAnnotList);
@@ -322,7 +357,7 @@ public class SimpleLocInterpreter implements LocInterpreter
 		throw new RuntimeException("Error in the location expression:" + loc);
 	}
 
-	private List<CycValue> getCycValues(Collection<SubseqAnnotation> annots, String loc, List<CycValue> ret,
+	private List<CycValueRet> getCycValues(Collection<SubseqAnnotation> annots, String loc, List<CycValueRet> ret,
 			ArrayList<Annotation> annotList, int nextPosAnnotList) {
 		for (SubseqAnnotation annot : annots) {
 			if (annotList.size() > nextPosAnnotList) {
@@ -336,8 +371,8 @@ public class SimpleLocInterpreter implements LocInterpreter
 		return ret;
 	}
 
-	private List<CycValue> getCycValues(Dbxref dbxref, String loc, List<CycValue> ret, ArrayList<Annotation> annotList,
-			int nextPosAnnotList) {
+	private List<CycValueRet> getCycValues(Dbxref dbxref, String loc, List<CycValueRet> ret,
+			ArrayList<Annotation> annotList, int nextPosAnnotList) {
 		if (loc == null || loc.length() == 0) {
 			return getCycDbxref(dbxref, ret, annotList, nextPosAnnotList);
 		}
@@ -366,8 +401,8 @@ public class SimpleLocInterpreter implements LocInterpreter
 		throw new RuntimeException("Error in the location expression:" + subLoc + "." + loc);
 	}
 
-	private List<CycValue> getCycValuesByDbxrefAnnotations(AnnotationFinder annots, String loc, List<CycValue> ret,
-			ArrayList<Annotation> annotList, int nextPosAnnotList) {
+	private List<CycValueRet> getCycValuesByDbxrefAnnotations(AnnotationFinder annots, String loc,
+			List<CycValueRet> ret, ArrayList<Annotation> annotList, int nextPosAnnotList) {
 		String subLoc = "*";
 		boolean isRegexFilter = loc.startsWith(LOC_FILTER_REGEX_CHAR + "");
 		boolean isStringFilter = loc.startsWith(LOC_FILTER_STRING_CHAR + "");
@@ -416,7 +451,7 @@ public class SimpleLocInterpreter implements LocInterpreter
 		return ret;
 	}
 
-	private List<CycValue> getCycValues(DbxrefAnnotation dbxrefAnnotation, String loc, List<CycValue> ret,
+	private List<CycValueRet> getCycValues(DbxrefAnnotation dbxrefAnnotation, String loc, List<CycValueRet> ret,
 			ArrayList<Annotation> annotList, int nextPosAnnotList) {
 		int i = loc.indexOf('.');
 		String subLoc;
@@ -440,7 +475,7 @@ public class SimpleLocInterpreter implements LocInterpreter
 		throw new RuntimeException("Error in the location expression:" + subLoc + "." + loc);
 	}
 
-	private List<CycValue> getCycValuesByNote(Noteble noteble, String loc, List<CycValue> ret,
+	private List<CycValueRet> getCycValuesByNote(Noteble noteble, String loc, List<CycValueRet> ret,
 			ArrayList<Annotation> annotList, int nextPosAnnotList) {
 		String subLoc = "*";
 		boolean isRegexFilter = loc.startsWith(LOC_FILTER_REGEX_CHAR + "");
@@ -484,8 +519,8 @@ public class SimpleLocInterpreter implements LocInterpreter
 		return ret;
 	}
 
-	private List<CycValue> getCycValues(Note note, String loc, List<CycValue> ret, ArrayList<Annotation> annotList,
-			int nextPosAnnotList) {
+	private List<CycValueRet> getCycValues(Note note, String loc, List<CycValueRet> ret,
+			ArrayList<Annotation> annotList, int nextPosAnnotList) {
 		if (loc == null || loc.length() == 0) {
 			return getCycValues(note.toString(), ret, annotList, nextPosAnnotList);
 		}
@@ -495,67 +530,46 @@ public class SimpleLocInterpreter implements LocInterpreter
 		throw new RuntimeException("Error in the location expression:" + loc);
 	}
 
-	private List<CycValue> getCycValues(CycDbxrefPathAnnotation dbxrefAnnotation, String loc, List<CycValue> ret,
-			ArrayList<Annotation> annotList, int nextPosAnnotList) {
-		if (loc == null || loc.length() == 0) {
-			return getCycDbxrefAnnotation(dbxrefAnnotation, ret, annotList, nextPosAnnotList);
-		}
-		return getCycValues(dbxrefAnnotation.getDbxref(), loc, ret, annotList, nextPosAnnotList);
-	}
-
-	private List<CycValue> getCycDbxrefAnnotation(CycDbxrefPathAnnotation dbxrefAnnotation, List<CycValue> ret,
-			ArrayList<Annotation> annotList, int nextPosAnnotList) {
+	private List<CycValueRet> getCycValues(String newStr, List<CycValueRet> ret, ArrayList<Annotation> annotList,
+			int nextPosAnnotList) {
 		if (ret == null) {
-			ret = new ArrayList<CycValue>();
+			ret = new ArrayList<CycValueRet>();
 		}
 		ArrayList<Annotation> cycAnnots = new ArrayList<Annotation>(nextPosAnnotList);
 		for (int i = 0; i < nextPosAnnotList; i++) {
 			cycAnnots.add(annotList.get(i));
 		}
-		ret.add(new SimpleCycDbxrefAnnot(dbxrefAnnotation, cycAnnots));
+		ret.add(new SimpleCycValueRet(newStr, cycAnnots));
 		return ret;
 	}
 
-	private List<CycValue> getCycValues(String newStr, List<CycValue> ret, ArrayList<Annotation> annotList,
+	private List<CycValueRet> getCycDbxref(Dbxref dbxref, List<CycValueRet> ret, ArrayList<Annotation> annotList,
 			int nextPosAnnotList) {
 		if (ret == null) {
-			ret = new ArrayList<CycValue>();
+			ret = new ArrayList<CycValueRet>();
 		}
 		ArrayList<Annotation> cycAnnots = new ArrayList<Annotation>(nextPosAnnotList);
 		for (int i = 0; i < nextPosAnnotList; i++) {
 			cycAnnots.add(annotList.get(i));
 		}
-		ret.add(new SimpleCycValue(newStr, cycAnnots));
-		return ret;
-	}
-
-	private List<CycValue> getCycDbxref(Dbxref dbxref, List<CycValue> ret, ArrayList<Annotation> annotList,
-			int nextPosAnnotList) {
-		if (ret == null) {
-			ret = new ArrayList<CycValue>();
-		}
-		ArrayList<Annotation> cycAnnots = new ArrayList<Annotation>(nextPosAnnotList);
-		for (int i = 0; i < nextPosAnnotList; i++) {
-			cycAnnots.add(annotList.get(i));
-		}
-		ret.add(new SimpleCycDbxref(dbxref, cycAnnots));
+		ret.add(new SimpleCycDbxrefRet(dbxref, cycAnnots));
 		return ret;
 	}
 
 	@Override
-	public Collection<CycDbxrefPathAnnotation> getCycDbxrefPathAnnots(SubseqAnnotation< ? , ? , ? , ? , ? > annot,
+	public Collection<CycDbxrefAnnotationPaths> getCycDbxrefPathAnnots(SubseqAnnotation< ? , ? , ? , ? , ? > annot,
 			List<String> locs, ScoreSystemCollection scoreSystems) {
-		Collection<CycValue> values = getCycValues(annot, locs);
-		Hashtable<String, CycDbxrefPathAnnotation> cycAnnots = new Hashtable<String, CycDbxrefPathAnnotation>();
-		CycDbxrefPathAnnotation cycAnnot;
+		Collection<CycValueRet> values = getCycValues(annot, locs);
+		Hashtable<String, CycDbxrefAnnotationPaths> cycAnnots = new Hashtable<String, CycDbxrefAnnotationPaths>();
+		CycDbxrefAnnotationPaths cycAnnot;
 		Dbxref dbxref;
 		if (values != null) {
-			for (CycValue cycValue : values) {
-				if (cycValue instanceof CycDbxref) {
-					dbxref = ((CycDbxref) cycValue).getDbxref();
+			for (CycValueRet cycValue : values) {
+				if (cycValue instanceof CycDbxrefRet) {
+					dbxref = ((CycDbxrefRet) cycValue).getDbxref();
 					cycAnnot = cycAnnots.get(dbxref.toString());
 					if (cycAnnot == null) {
-						cycAnnot = new SimpleCycDbxrefPathAnnotation(dbxref, cycValue.getAnnotations(), scoreSystems);
+						cycAnnot = new SimpleCycDbxrefAnnotationPaths(dbxref, cycValue.getAnnotations(), scoreSystems);
 						cycAnnots.put(dbxref.toString(), cycAnnot);
 					}
 					else {

@@ -8,9 +8,8 @@ import java.util.List;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.synonym.Dbxref;
 
-public interface CycDbxrefPathAnnotation
+public interface CycDbxrefAnnotationPaths
 {
-
 	public Dbxref getDbxref();
 
 	public String getAccession();
@@ -22,5 +21,4 @@ public interface CycDbxrefPathAnnotation
 	public void addAnnotationPath(List<Annotation> annotationPath);
 
 	public double getScore();
-
 }
