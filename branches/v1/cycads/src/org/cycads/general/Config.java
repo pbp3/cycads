@@ -170,10 +170,10 @@ public class Config
 		return getDouble("pf.file.go.threshold");
 	}
 
-	public static double pfKoThreshold() {
-		return getDouble("pf.file.ko.threshold");
-	}
-
+	//	public static double pfKoThreshold() {
+	//		return getDouble("pf.file.ko.threshold");
+	//	}
+	//
 	public static String pfGeneratorFileHeader() {
 		return getStringOptional("pf.file.extract.fileHeader");
 	}

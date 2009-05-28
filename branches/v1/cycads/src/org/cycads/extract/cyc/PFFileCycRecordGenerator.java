@@ -2,7 +2,6 @@ package org.cycads.extract.cyc;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -19,20 +18,20 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 	ScoreSystemCollection	ecScoreSystems;
 	double					goThreshold;
 	ScoreSystemCollection	goScoreSystems;
-	double					koThreshold;
-	ScoreSystemCollection	koScoreSystems;
+
+	//	double					koThreshold;
+	//	ScoreSystemCollection	koScoreSystems;
 
 	public PFFileCycRecordGenerator(CycIdGenerator cycIdGenerator, LocInterpreter locInterpreter, double ecThreshold,
-			ScoreSystemCollection ecScoreSystems, double goThreshold, ScoreSystemCollection goScoreSystems,
-			double koThreshold, ScoreSystemCollection koScoreSystems) {
+			ScoreSystemCollection ecScoreSystems, double goThreshold, ScoreSystemCollection goScoreSystems) {
 		this.cycIdGenerator = cycIdGenerator;
 		this.locInterpreter = locInterpreter;
 		this.ecThreshold = ecThreshold;
 		this.ecScoreSystems = goScoreSystems;
 		this.goThreshold = goThreshold;
 		this.goScoreSystems = ecScoreSystems;
-		this.koThreshold = koThreshold;
-		this.koScoreSystems = koScoreSystems;
+		//		this.koThreshold = koThreshold;
+		//		this.koScoreSystems = koScoreSystems;
 	}
 
 	@Override
@@ -52,24 +51,26 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 		record.setSynonyms(syns);
 		record.setDBLinks(getDblinks(annot));
 
-		Collection<SimpleCycDbxrefAnnotation> ecs = getCycEcs(annot);
-		for (CycDbxrefAnnotation ec : ecs) {
+		Collection<CycDbxrefPathAnnotation> ecs = locInterpreter.getCycDbxrefPathAnnots(annot, PFFileConfig.getPFFileECLocs(),
+			ecScoreSystems);
+		for (CycDbxrefPathAnnotation ec : ecs) {
 			if (ec.getScore() >= ecThreshold) {
 				record.addEC(ec.getAccession());
 			}
-			Collection<CycDBLink> dbLinks = createDBLink(PFFileConfig.getECDbName(), ec.getAccession());
+			Collection<CycDBLink> dbLinks = createDBLink(ec.getDbName(), ec.getAccession());
 			for (CycDBLink dbLink : dbLinks) {
 				record.addDBLink(dbLink);
 			}
 			record.addComment(PFFileConfig.getAnnotationComment(ec));
 		}
 
-		Collection<SimpleCycDbxrefAnnotation> gos = getCycGos(annot);
-		for (CycDbxrefAnnotation go : gos) {
+		Collection<CycDbxrefPathAnnotation> gos = locInterpreter.getCycDbxrefPathAnnots(annot, PFFileConfig.getPFFileGOLocs(),
+			goScoreSystems);
+		for (CycDbxrefPathAnnotation go : gos) {
 			if (go.getScore() >= goThreshold) {
 				record.addGO(go.getAccession());
 			}
-			Collection<CycDBLink> dbLinks = createDBLink(PFFileConfig.getGODbName(), go.getAccession());
+			Collection<CycDBLink> dbLinks = createDBLink(go.getDbName(), go.getAccession());
 			for (CycDBLink dbLink : dbLinks) {
 				record.addDBLink(dbLink);
 			}
@@ -77,6 +78,23 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 		}
 
 		record.setFunctions(getFunctions(annot));
+
+		//		Collection<SimpleCycDbxrefAnnotation> kos = getCycKos(annot);
+		//		for (CycDbxrefAnnotation ko : kos) {
+		//			if (ko.getScore() >= koThreshold) {
+		//				Collection<CycFunction> functions = record.getFunctions();
+		//				for (CycFunction function : functions) {
+		//					function.addSynonyms();
+		//				}
+		//				record.addKO(ko.getAccession());
+		//			}
+		//			Collection<CycDBLink> dbLinks = createDBLink(PFFileConfig.getKODbName(), ko.getAccession());
+		//			for (CycDBLink dbLink : dbLinks) {
+		//				record.addDBLink(dbLink);
+		//			}
+		//			record.addComment(PFFileConfig.getAnnotationComment(ko));
+		//		}
+
 		return record;
 	}
 
@@ -92,41 +110,6 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 		ArrayList<CycFunction> ret = new ArrayList<CycFunction>(1);
 		ret.add(cycFunction);
 		return ret;
-	}
-
-	private Collection<SimpleCycDbxrefAnnotation> getCycEcs(SubseqAnnotation< ? , ? , ? , ? , ? > annot) {
-		return getCycDbxrefAnnots(annot, PFFileConfig.getPFFileECLocs(), PFFileConfig.getECDbName(), ecScoreSystems);
-	}
-
-	private Collection<SimpleCycDbxrefAnnotation> getCycGos(SubseqAnnotation< ? , ? , ? , ? , ? > annot) {
-		return getCycDbxrefAnnots(annot, PFFileConfig.getPFFileGOLocs(), PFFileConfig.getGODbName(), goScoreSystems);
-	}
-
-	private Collection<SimpleCycDbxrefAnnotation> getCycKos(SubseqAnnotation< ? , ? , ? , ? , ? > annot) {
-		return getCycDbxrefAnnots(annot, PFFileConfig.getPFFileKOLocs(), PFFileConfig.getKODbName(), koScoreSystems);
-	}
-
-	private Collection<SimpleCycDbxrefAnnotation> getCycDbxrefAnnots(SubseqAnnotation< ? , ? , ? , ? , ? > annot,
-			List<String> locs, String dbName, ScoreSystemCollection scoreSystems) {
-		Collection<CycValue> values = locInterpreter.getCycValues(annot, locs);
-		Hashtable<String, SimpleCycDbxrefAnnotation> cycAnnots = new Hashtable<String, SimpleCycDbxrefAnnotation>();
-		SimpleCycDbxrefAnnotation cycAnnot;
-		String annotNumber;
-		if (values != null) {
-			for (CycValue cycValue : values) {
-				annotNumber = cycValue.getValue();
-				cycAnnot = cycAnnots.get(annotNumber);
-				if (cycAnnot == null) {
-					cycAnnot = new SimpleCycDbxrefAnnotation(dbName, annotNumber, cycValue.getAnnotations(),
-						scoreSystems);
-					cycAnnots.put(annotNumber, cycAnnot);
-				}
-				else {
-					cycAnnot.addAnnotationPath(cycValue.getAnnotations());
-				}
-			}
-		}
-		return cycAnnots.values();
 	}
 
 	private Collection<CycIntron> getIntrons(SubseqAnnotation annot) {

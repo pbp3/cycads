@@ -22,9 +22,9 @@ public class SimpleCycValue implements CycValue
 		this.value = value;
 	}
 
-	public SimpleCycValue() {
-	}
-
+	//	public SimpleCycValue() {
+	//	}
+	//
 	@Override
 	public void addAnnotation(Annotation annot) {
 		annotations.add(annot);
@@ -40,7 +40,6 @@ public class SimpleCycValue implements CycValue
 		return value;
 	}
 
-	@Override
 	public void setValue(String value) {
 		this.value = value;
 	}

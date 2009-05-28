@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.cycads.entities.EntityFactorySQL;
 import org.cycads.entities.annotation.SubseqAnnotation;
@@ -15,11 +16,13 @@ import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Sequence;
 import org.cycads.extract.cyc.CycIdGenerator;
 import org.cycads.extract.cyc.CycRecordGenerator;
+import org.cycads.extract.cyc.LocContainer;
 import org.cycads.extract.cyc.OrganismCycIdGenerator;
 import org.cycads.extract.cyc.PFFileConfig;
 import org.cycads.extract.cyc.PFFileCycRecordGenerator;
 import org.cycads.extract.cyc.PFFileStream;
 import org.cycads.extract.cyc.ScoreSystemCollection;
+import org.cycads.extract.cyc.ScoreSystemsContainer;
 import org.cycads.extract.cyc.SimpleLocInterpreter;
 import org.cycads.general.Config;
 import org.cycads.general.Messages;
@@ -60,10 +63,10 @@ public class PFFileGeneratorSQL
 			return;
 		}
 
-		Double koThreshold = Tools.getDouble(args, 6, Messages.pfGeneratorChooseKoThreshold(), Config.pfKoThreshold());
-		if (koThreshold == null) {
-			return;
-		}
+		//		Double koThreshold = Tools.getDouble(args, 6, Messages.pfGeneratorChooseKoThreshold(), Config.pfKoThreshold());
+		//		if (koThreshold == null) {
+		//			return;
+		//		}
 
 		Progress progress = new ProgressPrintInterval(System.out, Messages.pfGeneratorStepShowInterval());
 		try {
@@ -76,11 +79,12 @@ public class PFFileGeneratorSQL
 
 			ScoreSystemCollection ecScoreSystemCollection = PFFileConfig.getEcScoreSystems();
 			ScoreSystemCollection goScoreSystemCollection = PFFileConfig.getGoScoreSystems();
-			ScoreSystemCollection koScoreSystemCollection = PFFileConfig.getKoScoreSystems();
+			//			ScoreSystemCollection koScoreSystemCollection = PFFileConfig.getKoScoreSystems();
 
+			Locs locs = new Locs();
 			CycRecordGenerator cycRecordGenerator = new PFFileCycRecordGenerator(cycIdGenerator,
-				new SimpleLocInterpreter(), ecThreshold, ecScoreSystemCollection, goThreshold, goScoreSystemCollection,
-				koThreshold, koScoreSystemCollection);
+				new SimpleLocInterpreter(locs, locs), ecThreshold, ecScoreSystemCollection, goThreshold,
+				goScoreSystemCollection);
 			for (Sequence seq : seqs) {
 				Collection<SubseqAnnotation< ? , ? , ? , ? , ? >> cdss = seq.getAnnotations(null, types, null);
 				for (SubseqAnnotation< ? , ? , ? , ? , ? > cds : cdss) {
@@ -92,6 +96,20 @@ public class PFFileGeneratorSQL
 		}
 		catch (IOException e) {
 			e.printStackTrace();
+		}
+
+	}
+
+	public static class Locs implements ScoreSystemsContainer, LocContainer
+	{
+		@Override
+		public ScoreSystemCollection getScoreSystems(String scoreName) {
+			return PFFileConfig.getScoreSystems(scoreName);
+		}
+
+		@Override
+		public List<String> getLocs(String locName) {
+			return PFFileConfig.getLocs(locName);
 		}
 
 	}

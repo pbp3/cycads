@@ -5,6 +5,7 @@ package org.cycads.extract.cyc;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -21,21 +22,31 @@ import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.Function;
 import org.cycads.entities.synonym.HasSynonyms;
 
-public class SimpleLocInterpreter implements LocInterpreter {
+public class SimpleLocInterpreter implements LocInterpreter
+{
 
-	static final char	LOC_FILTER_REGEX_CHAR	= '#';
-	static final char	LOC_FILTER_STRING_CHAR	= '!';
+	static final char		LOC_FILTER_REGEX_CHAR	= '#';
+	static final char		LOC_FILTER_STRING_CHAR	= '!';
 
-	static final String	LOC_SYNONYM				= "SY";
-	static final String	LOC_PARENT				= "P";
-	static final String	LOC_NOTE				= "N";
-	static final String	LOC_SUBSEQUENCE			= "SS";
-	static final String	LOC_SEQUENCE			= "SQ";
-	static final String	LOC_DBXREF_ANNOTATION	= "XA";
-	static final String	LOC_FUNCTION_ANNOTATION	= "FA";
-	static final String	LOC_FUNCTION			= "F";
-	static final String	LOC_VALUE				= "V";
-	static final String	LOC_DBXREF_VALUE		= "XV";
+	static final String		LOC_SYNONYM				= "SY";
+	static final String		LOC_PARENT				= "P";
+	static final String		LOC_NOTE				= "N";
+	static final String		LOC_SUBSEQUENCE			= "SS";
+	static final String		LOC_SEQUENCE			= "SQ";
+	static final String		LOC_DBXREF_ANNOTATION	= "XA";
+	static final String		LOC_FUNCTION_ANNOTATION	= "FA";
+	static final String		LOC_FUNCTION			= "F";
+	static final String		LOC_VALUE				= "V";
+	static final String		LOC_DBXREF_VALUE		= "XV";
+	static final String		LOC_DBXREF_SET			= "XR";
+
+	ScoreSystemsContainer	scoreSystemsContainer;
+	LocContainer			locContainer;
+
+	public SimpleLocInterpreter(ScoreSystemsContainer scoreSystemsContainer, LocContainer locContainer) {
+		this.scoreSystemsContainer = scoreSystemsContainer;
+		this.locContainer = locContainer;
+	}
 
 	public String getFirstString(SubseqAnnotation annot, List<String> locs) {
 		String ret;
@@ -102,7 +113,96 @@ public class SimpleLocInterpreter implements LocInterpreter {
 		else if (subLoc.equals(LOC_SEQUENCE)) {
 			return getCycValues(annot.getSubsequence().getSequence(), loc, ret, annotList, nextPosAnnotList);
 		}
+		else if (subLoc.equals(LOC_DBXREF_SET)) {
+			return getCycValuesByDbxrefSet(annot, loc, ret, annotList, nextPosAnnotList);
+		}
 		throw new RuntimeException("Error in the location expression:" + subLoc + "." + loc);
+	}
+
+	private List<CycValue> getCycValuesBySynonym(HasSynonyms annot, String loc, List<CycValue> ret,
+			ArrayList<Annotation> annotList, int nextPosAnnotList) {
+		String subLoc = "*";
+		boolean isRegexFilter = loc.startsWith(LOC_FILTER_REGEX_CHAR + "");
+		boolean isStringFilter = loc.startsWith(LOC_FILTER_STRING_CHAR + "");
+		int i = 0;
+		if (isRegexFilter) {
+			i = loc.indexOf(LOC_FILTER_REGEX_CHAR, 1);
+		}
+		else if (isStringFilter) {
+			i = loc.indexOf(LOC_FILTER_STRING_CHAR, 1);
+		}
+		if (isRegexFilter || isStringFilter) {
+			subLoc = loc.substring(1, i);
+			if (i + 1 < loc.length()) {
+				loc = loc.substring(i + 2);
+			}
+			else {
+				loc = "";
+			}
+		}
+		Collection<Dbxref> dbxrefs;
+		if (subLoc.equals("*")) {
+			dbxrefs = annot.getSynonyms();
+		}
+		else if (isRegexFilter) {
+			dbxrefs = annot.getSynonyms();
+			Collection<Dbxref> dbxrefs1 = new ArrayList<Dbxref>(dbxrefs);
+			for (Dbxref dbxref : dbxrefs1) {
+				if (!dbxref.getDbName().matches(subLoc)) {
+					dbxrefs.remove(dbxref);
+				}
+			}
+		}
+		else {
+			dbxrefs = annot.getSynonyms(subLoc);
+		}
+
+		for (Dbxref dbxref : dbxrefs) {
+			ret = getCycValues(dbxref, loc, ret, annotList, nextPosAnnotList);
+		}
+		return ret;
+	}
+
+	private List<CycValue> getCycValuesByDbxrefSet(SubseqAnnotation annot, String loc, List<CycValue> ret,
+			ArrayList<Annotation> annotList, int nextPosAnnotList) {
+		if (!loc.startsWith(LOC_FILTER_STRING_CHAR + "")) {
+			throw new RuntimeException("Error in the location expression:" + loc);
+		}
+		int i = loc.indexOf(LOC_FILTER_STRING_CHAR, 1);
+		if (i == -1) {
+			throw new RuntimeException("Error in the location expression:" + loc);
+		}
+		String subLoc;
+		subLoc = loc.substring(1, i);
+		if (i + 1 < loc.length()) {
+			loc = loc.substring(i + 2);
+		}
+		else {
+			loc = "";
+		}
+		double threshold = Double.NEGATIVE_INFINITY;
+		boolean hasThreshold = loc.startsWith(LOC_FILTER_STRING_CHAR + "");
+		if (hasThreshold) {
+			i = loc.indexOf(LOC_FILTER_STRING_CHAR, 1);
+			if (i == -1) {
+				throw new RuntimeException("Error in the location expression:" + loc);
+			}
+			threshold = Double.parseDouble(loc.substring(1, i));
+			if (i + 1 < loc.length()) {
+				loc = loc.substring(i + 2);
+			}
+			else {
+				loc = "";
+			}
+		}
+		Collection<CycDbxrefPathAnnotation> dbxrefAnnots = getCycDbxrefPathAnnots(annot, locContainer.getLocs(subLoc),
+			scoreSystemsContainer.getScoreSystems(subLoc));
+		for (CycDbxrefPathAnnotation dbxrefAnnotation : dbxrefAnnots) {
+			if (!hasThreshold || dbxrefAnnotation.getScore() >= threshold) {
+				ret = getCycValues(dbxrefAnnotation, loc, ret, annotList, nextPosAnnotList);
+			}
+		}
+		return ret;
 	}
 
 	private List<CycValue> getCycValues(Subsequence subsequence, String loc, List<CycValue> ret,
@@ -236,54 +336,10 @@ public class SimpleLocInterpreter implements LocInterpreter {
 		return ret;
 	}
 
-	private List<CycValue> getCycValuesBySynonym(HasSynonyms annot, String loc, List<CycValue> ret,
-			ArrayList<Annotation> annotList, int nextPosAnnotList) {
-		String subLoc = "*";
-		boolean isRegexFilter = loc.startsWith(LOC_FILTER_REGEX_CHAR + "");
-		boolean isStringFilter = loc.startsWith(LOC_FILTER_STRING_CHAR + "");
-		int i = 0;
-		if (isRegexFilter) {
-			i = loc.indexOf(LOC_FILTER_REGEX_CHAR, 1);
-		}
-		else if (isStringFilter) {
-			i = loc.indexOf(LOC_FILTER_STRING_CHAR, 1);
-		}
-		if (isRegexFilter || isStringFilter) {
-			subLoc = loc.substring(1, i);
-			if (i + 1 < loc.length()) {
-				loc = loc.substring(i + 2);
-			}
-			else {
-				loc = "";
-			}
-		}
-		Collection<Dbxref> dbxrefs;
-		if (subLoc.equals("*")) {
-			dbxrefs = annot.getSynonyms();
-		}
-		else if (isRegexFilter) {
-			dbxrefs = annot.getSynonyms();
-			Collection<Dbxref> dbxrefs1 = new ArrayList<Dbxref>(dbxrefs);
-			for (Dbxref dbxref : dbxrefs1) {
-				if (!dbxref.getDbName().matches(subLoc)) {
-					dbxrefs.remove(dbxref);
-				}
-			}
-		}
-		else {
-			dbxrefs = annot.getSynonyms(subLoc);
-		}
-
-		for (Dbxref dbxref : dbxrefs) {
-			ret = getCycValues(dbxref, loc, ret, annotList, nextPosAnnotList);
-		}
-		return ret;
-	}
-
 	private List<CycValue> getCycValues(Dbxref dbxref, String loc, List<CycValue> ret, ArrayList<Annotation> annotList,
 			int nextPosAnnotList) {
 		if (loc == null || loc.length() == 0) {
-			return getCycValues(dbxref.toString(), ret, annotList, nextPosAnnotList);
+			return getCycDbxref(dbxref, ret, annotList, nextPosAnnotList);
 		}
 		if (loc.equals(LOC_VALUE)) {
 			return getCycValues(dbxref.getAccession(), ret, annotList, nextPosAnnotList);
@@ -439,6 +495,27 @@ public class SimpleLocInterpreter implements LocInterpreter {
 		throw new RuntimeException("Error in the location expression:" + loc);
 	}
 
+	private List<CycValue> getCycValues(CycDbxrefPathAnnotation dbxrefAnnotation, String loc, List<CycValue> ret,
+			ArrayList<Annotation> annotList, int nextPosAnnotList) {
+		if (loc == null || loc.length() == 0) {
+			return getCycDbxrefAnnotation(dbxrefAnnotation, ret, annotList, nextPosAnnotList);
+		}
+		return getCycValues(dbxrefAnnotation.getDbxref(), loc, ret, annotList, nextPosAnnotList);
+	}
+
+	private List<CycValue> getCycDbxrefAnnotation(CycDbxrefPathAnnotation dbxrefAnnotation, List<CycValue> ret,
+			ArrayList<Annotation> annotList, int nextPosAnnotList) {
+		if (ret == null) {
+			ret = new ArrayList<CycValue>();
+		}
+		ArrayList<Annotation> cycAnnots = new ArrayList<Annotation>(nextPosAnnotList);
+		for (int i = 0; i < nextPosAnnotList; i++) {
+			cycAnnots.add(annotList.get(i));
+		}
+		ret.add(new SimpleCycDbxrefAnnot(dbxrefAnnotation, cycAnnots));
+		return ret;
+	}
+
 	private List<CycValue> getCycValues(String newStr, List<CycValue> ret, ArrayList<Annotation> annotList,
 			int nextPosAnnotList) {
 		if (ret == null) {
@@ -450,6 +527,47 @@ public class SimpleLocInterpreter implements LocInterpreter {
 		}
 		ret.add(new SimpleCycValue(newStr, cycAnnots));
 		return ret;
+	}
+
+	private List<CycValue> getCycDbxref(Dbxref dbxref, List<CycValue> ret, ArrayList<Annotation> annotList,
+			int nextPosAnnotList) {
+		if (ret == null) {
+			ret = new ArrayList<CycValue>();
+		}
+		ArrayList<Annotation> cycAnnots = new ArrayList<Annotation>(nextPosAnnotList);
+		for (int i = 0; i < nextPosAnnotList; i++) {
+			cycAnnots.add(annotList.get(i));
+		}
+		ret.add(new SimpleCycDbxref(dbxref, cycAnnots));
+		return ret;
+	}
+
+	@Override
+	public Collection<CycDbxrefPathAnnotation> getCycDbxrefPathAnnots(SubseqAnnotation< ? , ? , ? , ? , ? > annot,
+			List<String> locs, ScoreSystemCollection scoreSystems) {
+		Collection<CycValue> values = getCycValues(annot, locs);
+		Hashtable<String, CycDbxrefPathAnnotation> cycAnnots = new Hashtable<String, CycDbxrefPathAnnotation>();
+		CycDbxrefPathAnnotation cycAnnot;
+		Dbxref dbxref;
+		if (values != null) {
+			for (CycValue cycValue : values) {
+				if (cycValue instanceof CycDbxref) {
+					dbxref = ((CycDbxref) cycValue).getDbxref();
+					cycAnnot = cycAnnots.get(dbxref.toString());
+					if (cycAnnot == null) {
+						cycAnnot = new SimpleCycDbxrefPathAnnotation(dbxref, cycValue.getAnnotations(), scoreSystems);
+						cycAnnots.put(dbxref.toString(), cycAnnot);
+					}
+					else {
+						cycAnnot.addAnnotationPath(cycValue.getAnnotations());
+					}
+				}
+				else {
+					throw new RuntimeException("Invalid dbxref locs:" + locs.toString());
+				}
+			}
+		}
+		return cycAnnots.values();
 	}
 
 }

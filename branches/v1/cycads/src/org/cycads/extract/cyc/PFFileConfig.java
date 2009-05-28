@@ -143,28 +143,32 @@ public class PFFileConfig
 	}
 
 	public static List<String> getPFFileECLocs() {
-		return getStrings("ec.loc");
-	}
-
-	public static List<String> getPFFileKOLocs() {
-		return getStrings("go.loc");
+		return getLocs("ec");
 	}
 
 	public static List<String> getPFFileGOLocs() {
-		return getStrings("ko.loc");
+		return getLocs("go");
 	}
 
-	public static String getECDbName() {
-		return getString("pf.file.ec.dbName");
+	public static List<String> getLocs(String locName) {
+		return getStrings(locName + ".loc");
 	}
 
-	public static String getGODbName() {
-		return getString("pf.file.go.dbName");
-	}
+	//	public static List<String> getPFFileKOLocs() {
+	//		return getStrings("ko.loc");
+	//	}
+	//
+	//	public static String getECDbName() {
+	//		return getString("pf.file.ec.dbName");
+	//	}
+	//
+	//	public static String getGODbName() {
+	//		return getString("pf.file.go.dbName");
+	//	}
 
-	public static String getKODbName() {
-		return getString("pf.file.ko.dbName");
-	}
+	//	public static String getKODbName() {
+	//		return getString("pf.file.ko.dbName");
+	//	}
 
 	static ArrayList<Pattern>	dbLinkDbNameRemovePatterns;
 
@@ -211,7 +215,7 @@ public class PFFileConfig
 		return dbLinkDbNameCopyValues;
 	}
 
-	public static String getAnnotationComment(CycDbxrefAnnotation annotation) {
+	public static String getAnnotationComment(CycDbxrefPathAnnotation annotation) {
 		StringBuffer buf = new StringBuffer();
 		Object[] a = {annotation.getDbName(), annotation.getAccession(), annotation.getScore()};
 		buf.append(MessageFormat.format(getStringMandatory("pf.file.geneComment.Score"), a));
@@ -260,62 +264,18 @@ public class PFFileConfig
 	}
 
 	public static ScoreSystemCollection getEcScoreSystems() {
-		SimpleScoreSystemCollection scoreSystemCollection = new SimpleScoreSystemCollection();
-		ArrayList<Pattern> patterns = PFFileConfig.getPatterns("pf.file.scoreAnnotation.ec.methodName", null);
-		ArrayList<String> values = PFFileConfig.getStrings("scoreAnnotation.ec.value");
-		ArrayList<String> fileNames = PFFileConfig.getStrings("scoreAnnotation.ec.scoreNote.file");
-		FileScoreSystem fileScoreSystem;
-		String fileName;
-		for (int i = 0; i < patterns.size(); i++) {
-			if (fileNames.size() > i) {
-				fileName = fileNames.get(i);
-			}
-			else {
-				fileName = null;
-			}
-			if (fileName != null && fileName.length() > 0) {
-				fileScoreSystem = new FileScoreSystem(fileName);
-			}
-			else {
-				fileScoreSystem = null;
-			}
-			scoreSystemCollection.addScoreSystem(patterns.get(i), new FixAndFileScoreSystem(
-				Double.parseDouble(values.get(i)), fileScoreSystem));
-		}
-		return scoreSystemCollection;
+		return getScoreSystems("ec");
 	}
 
 	public static ScoreSystemCollection getGoScoreSystems() {
-		SimpleScoreSystemCollection scoreSystemCollection = new SimpleScoreSystemCollection();
-		ArrayList<Pattern> patterns = PFFileConfig.getPatterns("pf.file.scoreAnnotation.go.methodName", null);
-		ArrayList<String> values = PFFileConfig.getStrings("scoreAnnotation.go.value");
-		ArrayList<String> fileNames = PFFileConfig.getStrings("scoreAnnotation.go.scoreNote.file");
-		FileScoreSystem fileScoreSystem;
-		String fileName;
-		for (int i = 0; i < patterns.size(); i++) {
-			if (fileNames.size() > i) {
-				fileName = fileNames.get(i);
-			}
-			else {
-				fileName = null;
-			}
-			if (fileName != null && fileName.length() > 0) {
-				fileScoreSystem = new FileScoreSystem(fileName);
-			}
-			else {
-				fileScoreSystem = null;
-			}
-			scoreSystemCollection.addScoreSystem(patterns.get(i), new FixAndFileScoreSystem(
-				Double.parseDouble(values.get(i)), fileScoreSystem));
-		}
-		return scoreSystemCollection;
+		return getScoreSystems("go");
 	}
 
-	public static ScoreSystemCollection getKoScoreSystems() {
+	public static ScoreSystemCollection getScoreSystems(String scoreName) {
 		SimpleScoreSystemCollection scoreSystemCollection = new SimpleScoreSystemCollection();
-		ArrayList<Pattern> patterns = PFFileConfig.getPatterns("pf.file.scoreAnnotation.ko.methodName", null);
-		ArrayList<String> values = PFFileConfig.getStrings("scoreAnnotation.ko.value");
-		ArrayList<String> fileNames = PFFileConfig.getStrings("scoreAnnotation.ko.scoreNote.file");
+		ArrayList<Pattern> patterns = PFFileConfig.getPatterns("pf.file.scoreAnnotation.methodName." + scoreName, null);
+		ArrayList<String> values = PFFileConfig.getStrings("scoreAnnotation.value." + scoreName);
+		ArrayList<String> fileNames = PFFileConfig.getStrings("scoreAnnotation.scoreNote.file." + scoreName);
 		FileScoreSystem fileScoreSystem;
 		String fileName;
 		for (int i = 0; i < patterns.size(); i++) {

@@ -8,10 +8,15 @@ import java.util.List;
 
 import org.cycads.entities.annotation.SubseqAnnotation;
 
-public interface LocInterpreter {
+public interface LocInterpreter
+{
 	public List<CycValue> getCycValues(SubseqAnnotation annot, List<String> locs);
 
 	public String getFirstString(SubseqAnnotation annot, List<String> locs);
 
 	public Collection<String> getStrings(SubseqAnnotation annot, List<String> locs);
+
+	public Collection<CycDbxrefPathAnnotation> getCycDbxrefPathAnnots(SubseqAnnotation< ? , ? , ? , ? , ? > annot,
+			List<String> locs, ScoreSystemCollection scoreSystems);
+
 }

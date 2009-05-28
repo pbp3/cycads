@@ -79,15 +79,30 @@ public class AnnotToDbxrefFileParser
 	public void parse(BufferedReader br) throws IOException {
 		String line;
 		while ((line = br.readLine()) != null) {
-			if (line.length() > annotColumnIndex && !line.startsWith(ParametersDefault.annotToDbxrefFileComment())) {
+			if (line.length() > 0 && !line.startsWith(ParametersDefault.annotToDbxrefFileComment())) {
 				String[] sep = line.split(ParametersDefault.annotToDbxrefFileSeparator());
-				if (sep.length > dbxrefColumnIndex) {
-					String score = null;
-					if (isAnnotation && sep.length > scoreColumnIndex && scoreColumnIndex >= 0) {
-						score = sep[scoreColumnIndex];
+				if (sep.length > annotColumnIndex) {
+					String[] annotSynStrs = cleanTextDelimiter(sep[annotColumnIndex]).trim().split(
+						ParametersDefault.annotToDbxrefFileAnnotsSeparator());
+					for (String annotSynStr : annotSynStrs) {
+						annotSynStr = annotSynStr.trim();
+						Dbxref annotSynonym = factory.getDbxref(annotDBName, annotSynStr);
+						Collection<SubseqAnnotation> annots = organism.getAnnotations(null, null, annotSynonym);
+						if (annots == null || annots.isEmpty()) {
+							SubseqAnnotation annot = createFakeAnnot(annotSynonym);
+							if (annots == null) {
+								annots = new ArrayList<SubseqAnnotation>(1);
+							}
+							annots.add(annot);
+						}
+						if (sep.length > dbxrefColumnIndex) {
+							String score = null;
+							if (isAnnotation && sep.length > scoreColumnIndex && scoreColumnIndex >= 0) {
+								score = cleanTextDelimiter(sep[scoreColumnIndex]);
+							}
+							addDbxref(annots, cleanTextDelimiter(sep[dbxrefColumnIndex]).trim(), score);
+						}
 					}
-					addDbxref(cleanTextDelimiter(sep[annotColumnIndex]).trim(), cleanTextDelimiter(
-						sep[dbxrefColumnIndex]).trim(), cleanTextDelimiter(score));
 				}
 			}
 		}
@@ -107,41 +122,28 @@ public class AnnotToDbxrefFileParser
 		return text.substring(start, end);
 	}
 
-	private void addDbxref(String annotsSynStr, String dbxrefsNames, String score) {
-		String[] annotSynStrs = annotsSynStr.split(ParametersDefault.annotToDbxrefFileAnnotsSeparator());
-		for (String annotSynStr : annotSynStrs) {
-			annotSynStr = annotSynStr.trim();
-			Dbxref annotSynonym = factory.getDbxref(annotDBName, annotSynStr);
-			Collection<SubseqAnnotation> annots = organism.getAnnotations(null, null, annotSynonym);
-			if (annots == null || annots.isEmpty()) {
-				SubseqAnnotation annot = createFakeAnnot(annotSynonym);
-				if (annots == null) {
-					annots = new ArrayList<SubseqAnnotation>(1);
-				}
-				annots.add(annot);
+	private void addDbxref(Collection<SubseqAnnotation> annots, String dbxrefsNames, String score) {
+		String[] dbxrefNames = dbxrefsNames.split(ParametersDefault.annotToDbxrefFileDbxrefsSeparator());
+		for (String dbxrefName : dbxrefNames) {
+			Dbxref dbxref;
+			dbxrefName = dbxrefName.trim();
+			if (dbxrefDBName.equals(DBNAME_GENERIC)) {
+				String[] syns1 = dbxrefName.split(ParametersDefault.getDbxrefToStringSeparator());
+				dbxref = factory.getDbxref(syns1[0].trim(), syns1[1].trim());
 			}
-			String[] dbxrefNames = dbxrefsNames.split(ParametersDefault.annotToDbxrefFileDbxrefsSeparator());
-			for (String dbxrefName : dbxrefNames) {
-				Dbxref dbxref;
-				dbxrefName = dbxrefName.trim();
-				if (dbxrefDBName.equals(DBNAME_GENERIC)) {
-					String[] syns1 = dbxrefName.split(ParametersDefault.getDbxrefToStringSeparator());
-					dbxref = factory.getDbxref(syns1[0].trim(), syns1[1].trim());
+			else {
+				dbxref = factory.getDbxref(dbxrefDBName, dbxrefName);
+			}
+			progress.completeStep();
+			for (SubseqAnnotation annot : annots) {
+				if (isAnnotation) {
+					Annotation ret = annot.getSubsequence().addDbxrefAnnotation(method, dbxref);
+					if (ret != null && score != null) {
+						ret.addNote(ParametersDefault.getScoreAnnotationNoteTypeName(), score);
+					}
 				}
 				else {
-					dbxref = factory.getDbxref(dbxrefDBName, dbxrefName);
-				}
-				progress.completeStep();
-				for (SubseqAnnotation annot : annots) {
-					if (isAnnotation) {
-						Annotation ret = annot.getSubsequence().addDbxrefAnnotation(method, dbxref);
-						if (ret != null && score != null) {
-							ret.addNote(ParametersDefault.getScoreAnnotationNoteTypeName(), score);
-						}
-					}
-					else {
-						annot.addSynonym(dbxref);
-					}
+					annot.addSynonym(dbxref);
 				}
 			}
 		}

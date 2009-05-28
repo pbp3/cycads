@@ -185,10 +185,10 @@ public class Messages
 		return getString("pfFile.extract.chooseGoThreshold");
 	}
 
-	public static String pfGeneratorChooseKoThreshold() {
-		return getString("pfFile.extract.chooseKoThreshold");
-	}
-
+	//	public static String pfGeneratorChooseKoThreshold() {
+	//		return getString("pfFile.extract.chooseKoThreshold");
+	//	}
+	//
 	public static String pfGeneratorChooseSequenceLocation() {
 		return getString("pfFile.extract.chooseSequenceLocation");
 	}

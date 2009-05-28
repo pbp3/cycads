@@ -10,32 +10,39 @@ import java.util.List;
 import java.util.Locale;
 
 import org.cycads.entities.annotation.Annotation;
+import org.cycads.entities.synonym.Dbxref;
 
-public class SimpleCycDbxrefAnnotation implements CycDbxrefAnnotation
+public class SimpleCycDbxrefPathAnnotation implements CycDbxrefPathAnnotation
 {
 
 	private final ScoreSystemCollection		scoreSystems;
-	private final String					accession;
-	private final String					dbName;
 	private final List<List<Annotation>>	annotationPaths	= new ArrayList<List<Annotation>>();
 	private double							score			= 0;
+	private final Dbxref					dbxref;
 
-	public SimpleCycDbxrefAnnotation(String dbName, String accession, ScoreSystemCollection scoreSystems) {
-		this.dbName = dbName;
-		this.accession = accession;
+	public SimpleCycDbxrefPathAnnotation(Dbxref dbxref, ScoreSystemCollection scoreSystems) {
+		this.dbxref = dbxref;
 		this.scoreSystems = scoreSystems;
 	}
 
-	public SimpleCycDbxrefAnnotation(String dbName, String accession, List<Annotation> annotationsList,
-			ScoreSystemCollection scoreSystems) {
-		this.dbName = dbName;
-		this.accession = accession;
+	public SimpleCycDbxrefPathAnnotation(Dbxref dbxref, List<Annotation> annotationsList, ScoreSystemCollection scoreSystems) {
+		this.dbxref = dbxref;
 		this.scoreSystems = scoreSystems;
 		addAnnotationPath(annotationsList);
 	}
 
+	@Override
+	public Dbxref getDbxref() {
+		return dbxref;
+	}
+
+	@Override
+	public String getDbName() {
+		return dbxref.getDbName();
+	}
+
 	public String getAccession() {
-		return accession;
+		return dbxref.getAccession();
 	}
 
 	public List<List<Annotation>> getAnnotationPaths() {
@@ -81,11 +88,6 @@ public class SimpleCycDbxrefAnnotation implements CycDbxrefAnnotation
 
 	public double getScore() {
 		return score;
-	}
-
-	@Override
-	public String getDbName() {
-		return dbName;
 	}
 
 }
