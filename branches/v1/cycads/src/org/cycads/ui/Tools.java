@@ -12,7 +12,8 @@ import javax.swing.JOptionPane;
 import org.cycads.entities.EntityFactory;
 import org.cycads.entities.sequence.Organism;
 
-public class Tools {
+public class Tools
+{
 
 	public static File getFileToOpen(String[] args, int pos, String fileNameDefault, String fileChooserMsg) {
 		String fileName;
@@ -116,6 +117,9 @@ public class Tools {
 			if (args.length > pos) {
 				orgID = Integer.parseInt(args[pos]);
 				organism = entityFactory.getOrganism(orgID);
+				if (organism == null) {
+					organism = entityFactory.createOrganism(orgID, organismNameDefault);
+				}
 			}
 		}
 		catch (Exception ex) {

@@ -79,6 +79,7 @@ public class AnnotToDbxrefFileParser
 	public void parse(BufferedReader br) throws IOException {
 		String line;
 		while ((line = br.readLine()) != null) {
+			line = line.trim();
 			if (line.length() > 0 && !line.startsWith(ParametersDefault.annotToDbxrefFileComment())) {
 				String[] sep = line.split(ParametersDefault.annotToDbxrefFileSeparator());
 				if (sep.length > annotColumnIndex) {
@@ -86,21 +87,23 @@ public class AnnotToDbxrefFileParser
 						ParametersDefault.annotToDbxrefFileAnnotsSeparator());
 					for (String annotSynStr : annotSynStrs) {
 						annotSynStr = annotSynStr.trim();
-						Dbxref annotSynonym = factory.getDbxref(annotDBName, annotSynStr);
-						Collection<SubseqAnnotation> annots = organism.getAnnotations(null, null, annotSynonym);
-						if (annots == null || annots.isEmpty()) {
-							SubseqAnnotation annot = createFakeAnnot(annotSynonym);
-							if (annots == null) {
-								annots = new ArrayList<SubseqAnnotation>(1);
+						if (annotSynStr.length() > 0) {
+							Dbxref annotSynonym = factory.getDbxref(annotDBName, annotSynStr);
+							Collection<SubseqAnnotation> annots = organism.getAnnotations(null, null, annotSynonym);
+							if (annots == null || annots.isEmpty()) {
+								SubseqAnnotation annot = createFakeAnnot(annotSynonym);
+								if (annots == null) {
+									annots = new ArrayList<SubseqAnnotation>(1);
+								}
+								annots.add(annot);
 							}
-							annots.add(annot);
-						}
-						if (sep.length > dbxrefColumnIndex) {
-							String score = null;
-							if (isAnnotation && sep.length > scoreColumnIndex && scoreColumnIndex >= 0) {
-								score = cleanTextDelimiter(sep[scoreColumnIndex]);
+							if (sep.length > dbxrefColumnIndex) {
+								String score = null;
+								if (isAnnotation && sep.length > scoreColumnIndex && scoreColumnIndex >= 0) {
+									score = cleanTextDelimiter(sep[scoreColumnIndex]);
+								}
+								addDbxref(annots, cleanTextDelimiter(sep[dbxrefColumnIndex]).trim(), score);
 							}
-							addDbxref(annots, cleanTextDelimiter(sep[dbxrefColumnIndex]).trim(), score);
 						}
 					}
 				}

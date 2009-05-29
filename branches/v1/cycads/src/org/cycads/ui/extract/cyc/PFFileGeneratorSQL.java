@@ -15,6 +15,7 @@ import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Sequence;
 import org.cycads.extract.cyc.CycIdGenerator;
+import org.cycads.extract.cyc.CycRecord;
 import org.cycads.extract.cyc.CycRecordGenerator;
 import org.cycads.extract.cyc.LocContainer;
 import org.cycads.extract.cyc.OrganismCycIdGenerator;
@@ -88,8 +89,11 @@ public class PFFileGeneratorSQL
 			for (Sequence seq : seqs) {
 				Collection<SubseqAnnotation< ? , ? , ? , ? , ? >> cdss = seq.getAnnotations(null, types, null);
 				for (SubseqAnnotation< ? , ? , ? , ? , ? > cds : cdss) {
-					pfFile.print(cycRecordGenerator.generate(cds));
-					progress.completeStep();
+					CycRecord record = cycRecordGenerator.generate(cds);
+					if (record != null) {
+						pfFile.print(record);
+						progress.completeStep();
+					}
 				}
 			}
 			progress.finish(Messages.pfGeneratorFinalMsg(progress.getStep()));

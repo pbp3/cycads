@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.Collection;
+import java.util.Iterator;
 
 import org.cycads.general.ParametersDefault;
 
@@ -109,14 +110,16 @@ public class PFFileStream implements CycStream
 
 		Collection<String> comments = cycRecord.getComments();
 		StringBuffer commentAll = new StringBuffer();
-		for (String comment : comments) {
-			if (comment != null && comment.length() > 0) {
-				commentAll.append(comment);
+		if (comments != null && !comments.isEmpty()) {
+			Iterator<String> iterator = comments.iterator();
+			commentAll.append(iterator.next());
+			while (iterator.hasNext()) {
 				commentAll.append(ParametersDefault.getPFFileGeneCommentSeparator());
+				commentAll.append(iterator.next());
 			}
 		}
 		if (commentAll.length() > 0) {
-			out.println("GENE-COMMENT" + "\t" + commentAll.substring(0, commentAll.length() - 1));
+			out.println("GENE-COMMENT" + "\t" + commentAll);
 		}
 
 		out.println("//");

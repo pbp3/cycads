@@ -27,9 +27,9 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 		this.cycIdGenerator = cycIdGenerator;
 		this.locInterpreter = locInterpreter;
 		this.ecThreshold = ecThreshold;
-		this.ecScoreSystems = goScoreSystems;
+		this.ecScoreSystems = ecScoreSystems;
 		this.goThreshold = goThreshold;
-		this.goScoreSystems = ecScoreSystems;
+		this.goScoreSystems = goScoreSystems;
 		//		this.koThreshold = koThreshold;
 		//		this.koScoreSystems = koScoreSystems;
 	}
@@ -39,83 +39,102 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 		String id = getID(annot);
 		String prodtype = PFFileConfig.getProductType(annot);
 		SimpleCycRecord record = new SimpleCycRecord(prodtype, id);
-		record.setStartBase(annot.getSubsequence().getStart());
-		record.setEndBase(annot.getSubsequence().getEnd());
-		record.setIntrons(getIntrons(annot));
-		record.setName(locInterpreter.getFirstString(annot, PFFileConfig.getPFFileNamesLocs()));
-		record.setComments(locInterpreter.getStrings(annot, PFFileConfig.getPFFileGeneCommentLocs()));
-		Collection<String> syns = locInterpreter.getStrings(annot, PFFileConfig.getPFFileGeneSynonymLocs());
-		if (record.getName() != null && record.getName().length() > 0) {
-			syns.remove(record.getName());
-		}
-		record.setSynonyms(syns);
-		record.setDBLinks(getDblinks(annot));
+		try {
+			record.setStartBase(annot.getSubsequence().getStart());
+			record.setEndBase(annot.getSubsequence().getEnd());
+			record.setIntrons(getIntrons(annot));
+			String name = locInterpreter.getFirstString(annot, PFFileConfig.getPFFileNamesLocs());
+			record.setName(name);
+			record.setFunctions(getFunctions(annot, record));
+			record.setComments(locInterpreter.getStrings(annot, PFFileConfig.getPFFileGeneCommentLocs()));
+			Collection<String> syns = locInterpreter.getStrings(annot, PFFileConfig.getPFFileGeneSynonymLocs());
+			if (record.getName() != null && record.getName().length() > 0) {
+				syns.remove(record.getName());
+			}
+			record.setSynonyms(syns);
+			record.setDBLinks(getDblinks(annot));
 
-		Collection<CycDbxrefAnnotationPaths> ecs = locInterpreter.getCycDbxrefPathAnnots(annot,
-			PFFileConfig.getPFFileECLocs(), ecScoreSystems);
-		for (CycDbxrefAnnotationPaths ec : ecs) {
-			if (ec.getScore() >= ecThreshold) {
-				record.addEC(ec.getAccession());
-			}
-			Collection<CycDBLink> dbLinks = createDBLink(ec.getDbName(), ec.getAccession());
-			for (CycDBLink dbLink : dbLinks) {
-				record.addDBLink(dbLink);
-			}
-			record.addComment(PFFileConfig.getAnnotationComment(ec));
-		}
-
-		Collection<CycDbxrefAnnotationPaths> gos = locInterpreter.getCycDbxrefPathAnnots(annot,
-			PFFileConfig.getPFFileGOLocs(), goScoreSystems);
-		for (CycDbxrefAnnotationPaths go : gos) {
-			if (go.getScore() >= goThreshold) {
-				record.addGO(go.getAccession());
-			}
-			Collection<CycDBLink> dbLinks = createDBLink(go.getDbName(), go.getAccession());
-			for (CycDBLink dbLink : dbLinks) {
-				record.addDBLink(dbLink);
-			}
-			record.addComment(PFFileConfig.getAnnotationComment(go));
-		}
-
-		Collection<CycValueRet> cycValueRets = locInterpreter.getCycValues(annot,
-			PFFileConfig.getPFFileGeneCommentAnnotationsLocs());
-		for (CycValueRet cycValueRet : cycValueRets) {
-			if (cycValueRet instanceof CycDbxrefAnnotationPathsRet) {
-				CycDbxrefAnnotationPaths cycDbxrefAnnotationPaths = ((CycDbxrefAnnotationPathsRet) cycValueRet).getCycDbxrefAnnotationPaths();
-				List<Annotation> initialAnnots = cycValueRet.getAnnotations();
-				for (List<Annotation> annots : cycDbxrefAnnotationPaths.getAnnotationPaths()) {
-					annots.addAll(0, initialAnnots);
+			Collection<CycDbxrefAnnotationPaths> ecs = locInterpreter.getCycDbxrefPathAnnots(annot,
+				PFFileConfig.getPFFileECLocs(), ecScoreSystems);
+			for (CycDbxrefAnnotationPaths ec : ecs) {
+				if (ec.getScore() >= ecThreshold) {
+					record.addEC(ec.getAccession());
 				}
-				record.addComment(PFFileConfig.getAnnotationComment(cycDbxrefAnnotationPaths));
+				Collection<CycDBLink> dbLinks = createDBLink(ec.getDbName(), ec.getAccession());
+				for (CycDBLink dbLink : dbLinks) {
+					record.addDBLink(dbLink);
+				}
+				record.addComment(PFFileConfig.getAnnotationComment(ec));
 			}
-			else {
-				throw new RuntimeException("Error in the gene comment annotation loc.");
+
+			Collection<CycDbxrefAnnotationPaths> gos = locInterpreter.getCycDbxrefPathAnnots(annot,
+				PFFileConfig.getPFFileGOLocs(), goScoreSystems);
+			for (CycDbxrefAnnotationPaths go : gos) {
+				if (go.getScore() >= goThreshold) {
+					record.addGO(go.getAccession());
+				}
+				Collection<CycDBLink> dbLinks = createDBLink(go.getDbName(), go.getAccession());
+				for (CycDBLink dbLink : dbLinks) {
+					record.addDBLink(dbLink);
+				}
+				record.addComment(PFFileConfig.getAnnotationComment(go));
 			}
+
+			Collection<CycValueRet> cycValueRets = locInterpreter.getCycValues(annot,
+				PFFileConfig.getPFFileGeneCommentAnnotationsLocs());
+			for (CycValueRet cycValueRet : cycValueRets) {
+				if (cycValueRet instanceof CycDbxrefAnnotationPathsRet) {
+					CycDbxrefAnnotationPaths cycDbxrefAnnotationPaths = ((CycDbxrefAnnotationPathsRet) cycValueRet).getCycDbxrefAnnotationPaths();
+					List<Annotation> initialAnnots = cycValueRet.getAnnotations();
+					for (List<Annotation> annots : cycDbxrefAnnotationPaths.getAnnotationPaths()) {
+						annots.addAll(0, initialAnnots);
+					}
+					record.addComment(PFFileConfig.getAnnotationComment(cycDbxrefAnnotationPaths));
+				}
+				else {
+					throw new RuntimeException("Error in the gene comment annotation loc.");
+				}
+			}
+
+			//		Collection<SimpleCycDbxrefAnnotation> kos = getCycKos(annot);
+			//		for (CycDbxrefAnnotation ko : kos) {
+			//			if (ko.getScore() >= koThreshold) {
+			//				Collection<CycFunction> functions = record.getFunctions();
+			//				for (CycFunction function : functions) {
+			//					function.addSynonyms();
+			//				}
+			//				record.addKO(ko.getAccession());
+			//			}
+			//			Collection<CycDBLink> dbLinks = createDBLink(PFFileConfig.getKODbName(), ko.getAccession());
+			//			for (CycDBLink dbLink : dbLinks) {
+			//				record.addDBLink(dbLink);
+			//			}
+			//			record.addComment(PFFileConfig.getAnnotationComment(ko));
+			//		}
+
 		}
-
-		record.setFunctions(getFunctions(annot));
-
-		//		Collection<SimpleCycDbxrefAnnotation> kos = getCycKos(annot);
-		//		for (CycDbxrefAnnotation ko : kos) {
-		//			if (ko.getScore() >= koThreshold) {
-		//				Collection<CycFunction> functions = record.getFunctions();
-		//				for (CycFunction function : functions) {
-		//					function.addSynonyms();
-		//				}
-		//				record.addKO(ko.getAccession());
-		//			}
-		//			Collection<CycDBLink> dbLinks = createDBLink(PFFileConfig.getKODbName(), ko.getAccession());
-		//			for (CycDBLink dbLink : dbLinks) {
-		//				record.addDBLink(dbLink);
-		//			}
-		//			record.addComment(PFFileConfig.getAnnotationComment(ko));
-		//		}
-
+		catch (RecordErrorException e) {
+			System.err.println(record.getId() + " - " + e.getMessage());
+			return null;
+		}
 		return record;
 	}
 
-	private Collection<CycFunction> getFunctions(SubseqAnnotation< ? , ? , ? , ? , ? > annot) {
+	private Collection<CycFunction> getFunctions(SubseqAnnotation< ? , ? , ? , ? , ? > annot, CycRecord record)
+			throws RecordErrorException {
 		String functionName = locInterpreter.getFirstString(annot, PFFileConfig.getPFFileFunctionsLocs());
+		if (functionName == null || functionName.length() == 0) {
+			functionName = record.getName();
+			if (functionName == null || functionName.length() == 0) {
+				throw new RecordErrorException("Function:" + functionName + ";");
+			}
+		}
+		else {
+			String name = record.getName();
+			if (name == null || name.length() == 0) {
+				record.setName(functionName);
+			}
+		}
 		CycFunction cycFunction = new SimpleCycFunction(functionName);
 		Collection<String> syns = locInterpreter.getStrings(annot, PFFileConfig.getPFFileFunctionSynonymLocs());
 		if (functionName != null && functionName.length() > 0) {
@@ -140,7 +159,12 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 
 		for (String dbLinkStr : dbLinksStr) {
 			String[] strs = dbLinkStr.split(ParametersDefault.getDbxrefToStringSeparator());
-			cycDbLinks.addAll(createDBLink(strs[0], strs[1]));
+			if (strs.length == 2) {
+				cycDbLinks.addAll(createDBLink(strs[0], strs[1]));
+			}
+			else {
+				System.err.println("DBLInk error:" + dbLinkStr);
+			}
 		}
 		return cycDbLinks;
 	}
