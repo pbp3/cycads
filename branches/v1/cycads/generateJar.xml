@@ -6,7 +6,7 @@
         <jar destfile="/home/avellozo/cycads.jar" filesetmanifest="mergewithoutmain">
             <manifest>
                 <attribute name="Built-By" value="${user.name}"/>
-                <attribute name="Main-Class" value="org.cycads.ui.loader.GFF3LoaderSQL"/>
+                <attribute name="Main-Class" value="org.cycads.ui.loader.SubseqAnnotationLoaderSQL"/>
                 <attribute name="Class-Path" value="."/>
             </manifest>
             <fileset dir="/home/avellozo/workspace/cycads/bin"/>
