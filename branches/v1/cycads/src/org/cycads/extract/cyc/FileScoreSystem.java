@@ -1,20 +1,25 @@
 package org.cycads.extract.cyc;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.ResourceBundle;
+import java.util.Properties;
 
-public class FileScoreSystem implements ScoreSystem {
+public class FileScoreSystem implements ScoreSystem
+{
 	ArrayList<Score>	scores;
 
-	public FileScoreSystem(String fileName) {
-		ResourceBundle fileMap = ResourceBundle.getBundle(fileName);
-		Enumeration<String> keys = fileMap.getKeys();
+	public FileScoreSystem(String fileName) throws FileNotFoundException, IOException {
+		Properties fileMap = new Properties();
+		fileMap.load(new FileInputStream(fileName));
+		Enumeration<Object> keys = fileMap.keys();
 		scores = new ArrayList<Score>();
 		while (keys.hasMoreElements()) {
-			String key = keys.nextElement();
-			scores.add(new Score(Double.parseDouble(key), Double.parseDouble(fileMap.getString(key))));
+			String key = (String) keys.nextElement();
+			scores.add(new Score(Double.parseDouble(key), Double.parseDouble(fileMap.getProperty(key))));
 		}
 		Collections.sort(scores);
 	}
@@ -33,7 +38,8 @@ public class FileScoreSystem implements ScoreSystem {
 		return scores.get(i).value;
 	}
 
-	final class Score implements Comparable<Score> {
+	final class Score implements Comparable<Score>
+	{
 		double	limit;
 		double	value;
 

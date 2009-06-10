@@ -1,23 +1,42 @@
 package org.cycads.general;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import java.util.Properties;
 import java.util.regex.Pattern;
 
 public class Config
 {
-	private static final String			BUNDLE_NAME		= "config";								//$NON-NLS-1$
+	private static final String		BUNDLE_NAME		= "config.properties";	//$NON-NLS-1$
 
-	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
+	public static final Properties	RESOURCE_BUNDLE	= new Properties();
+
+	static {
+		try {
+			RESOURCE_BUNDLE.load(new FileInputStream(BUNDLE_NAME));
+		}
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	//	ResourceBundle.getBundle(BUNDLE_NAME);
 
 	private Config() {
 	}
 
-	private static String getString(String key) {
+	public static String getString(String key) {
 		try {
-			return RESOURCE_BUNDLE.getString(key);
+			return RESOURCE_BUNDLE.getProperty(key);
 		}
 		catch (MissingResourceException e) {
 			e.printStackTrace();
@@ -25,18 +44,22 @@ public class Config
 		}
 	}
 
-	private static String getStringOptional(String key) {
+	public static String getStringOptional(String key) {
 		try {
-			return RESOURCE_BUNDLE.getString(key);
+			return RESOURCE_BUNDLE.getProperty(key);
 		}
 		catch (MissingResourceException e) {
 			return null;
 		}
 	}
 
-	private static String getStringMandatory(String key) {
+	public static String getStringMandatory(String key) {
 		try {
-			return RESOURCE_BUNDLE.getString(key);
+			String ret = RESOURCE_BUNDLE.getProperty(key);
+			if (ret == null) {
+				throw new MissingResourceException("", BUNDLE_NAME, key);
+			}
+			return ret;
 		}
 		catch (MissingResourceException e) {
 			e.printStackTrace();

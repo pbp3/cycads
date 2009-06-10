@@ -3,21 +3,20 @@ package org.cycads.general;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 public class ParametersDefault
 {
-	private static final String			BUNDLE_NAME		= "config";								//$NON-NLS-1$
-
-	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
+	//	private static final String		BUNDLE_NAME		= "config";				//$NON-NLS-1$
+	//
+	//	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
 
 	private ParametersDefault() {
 	}
 
 	private static String getString(String key) {
 		try {
-			return RESOURCE_BUNDLE.getString(key);
+			return Config.getString(key);
 		}
 		catch (MissingResourceException e) {
 			e.printStackTrace();
@@ -27,7 +26,7 @@ public class ParametersDefault
 
 	private static String getStringOptional(String key) {
 		try {
-			return RESOURCE_BUNDLE.getString(key);
+			return Config.getString(key);
 		}
 		catch (MissingResourceException e) {
 			return null;
@@ -36,7 +35,7 @@ public class ParametersDefault
 
 	private static String getStringMandatory(String key) {
 		try {
-			return RESOURCE_BUNDLE.getString(key);
+			return Config.getString(key);
 		}
 		catch (MissingResourceException e) {
 			e.printStackTrace();

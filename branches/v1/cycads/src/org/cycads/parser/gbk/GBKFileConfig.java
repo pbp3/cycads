@@ -5,9 +5,9 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
+import org.cycads.general.Config;
 import org.cycads.general.ParametersDefault;
 
 /*
@@ -17,16 +17,16 @@ import org.cycads.general.ParametersDefault;
  */
 public class GBKFileConfig
 {
-	private static final String			BUNDLE_NAME		= "config";								//$NON-NLS-1$
-
-	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
+	//	private static final String			BUNDLE_NAME		= "config";								//$NON-NLS-1$
+	//
+	//	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
 
 	private GBKFileConfig() {
 	}
 
 	private static String getString(String key) {
 		try {
-			return RESOURCE_BUNDLE.getString(key);
+			return Config.getString(key);
 		}
 		catch (MissingResourceException e) {
 			e.printStackTrace();
@@ -36,7 +36,7 @@ public class GBKFileConfig
 
 	private static String getStringOptional(String key) {
 		try {
-			return RESOURCE_BUNDLE.getString(key);
+			return Config.getString(key);
 		}
 		catch (MissingResourceException e) {
 			return null;
@@ -45,7 +45,7 @@ public class GBKFileConfig
 
 	private static String getStringMandatory(String key) {
 		try {
-			return RESOURCE_BUNDLE.getString(key);
+			return Config.getString(key);
 		}
 		catch (MissingResourceException e) {
 			e.printStackTrace();

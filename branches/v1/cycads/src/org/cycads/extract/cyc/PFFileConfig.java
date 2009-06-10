@@ -1,16 +1,18 @@
 package org.cycads.extract.cyc;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.SubseqAnnotation;
 import org.cycads.entities.note.Type;
+import org.cycads.general.Config;
 import org.cycads.general.ParametersDefault;
 
 /*
@@ -20,16 +22,16 @@ import org.cycads.general.ParametersDefault;
  */
 public class PFFileConfig
 {
-	private static final String			BUNDLE_NAME		= "config";								//$NON-NLS-1$
-
-	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
+	//	private static final String			BUNDLE_NAME		= "config";								//$NON-NLS-1$
+	//
+	//	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
 
 	private PFFileConfig() {
 	}
 
 	private static String getString(String key) {
 		try {
-			return RESOURCE_BUNDLE.getString(key);
+			return Config.getString(key);
 		}
 		catch (MissingResourceException e) {
 			e.printStackTrace();
@@ -39,7 +41,7 @@ public class PFFileConfig
 
 	private static String getStringOptional(String key) {
 		try {
-			return RESOURCE_BUNDLE.getString(key);
+			return Config.getString(key);
 		}
 		catch (MissingResourceException e) {
 			return null;
@@ -48,7 +50,7 @@ public class PFFileConfig
 
 	private static String getStringMandatory(String key) {
 		try {
-			return RESOURCE_BUNDLE.getString(key);
+			return Config.getString(key);
 		}
 		catch (MissingResourceException e) {
 			e.printStackTrace();
@@ -290,7 +292,17 @@ public class PFFileConfig
 				fileName = null;
 			}
 			if (fileName != null && fileName.length() > 0) {
-				fileScoreSystem = new FileScoreSystem(fileName);
+				try {
+					fileScoreSystem = new FileScoreSystem(fileName);
+				}
+				catch (FileNotFoundException e) {
+					e.printStackTrace();
+					throw new RuntimeException(e);
+				}
+				catch (IOException e) {
+					e.printStackTrace();
+					throw new RuntimeException(e);
+				}
 			}
 			else {
 				fileScoreSystem = null;
