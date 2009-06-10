@@ -1,7 +1,7 @@
 CREATE TABLE Organism (
   NCBI_TAXON_ID INTEGER UNSIGNED NOT NULL,
   name TEXT NULL,
-  Next_Cyc_Id INTEGER UNSIGNED NOT NULL,
+  Next_Cyc_Id INTEGER UNSIGNED NOT NULL DEFAULT '1',
   PRIMARY KEY(NCBI_TAXON_ID)
 )
 TYPE=InnoDB;
@@ -89,7 +89,7 @@ CREATE TABLE Annotation (
   PRIMARY KEY(annotation_id),
   FOREIGN KEY(annotation_method_id)
     REFERENCES annotation_method(annotation_method_id)
-      ON DELETE RESTRICT
+      ON DELETE CASCADE
       ON UPDATE CASCADE
 )
 TYPE=InnoDB;
@@ -104,7 +104,7 @@ CREATE TABLE sequence_note (
       ON UPDATE CASCADE,
   FOREIGN KEY(type_id)
     REFERENCES term_type(type_id)
-      ON DELETE RESTRICT
+      ON DELETE CASCADE
       ON UPDATE CASCADE
 )
 TYPE=InnoDB;
@@ -119,7 +119,7 @@ CREATE TABLE subsequence_note (
       ON UPDATE CASCADE,
   FOREIGN KEY(type_id)
     REFERENCES term_type(type_id)
-      ON DELETE RESTRICT
+      ON DELETE CASCADE
       ON UPDATE CASCADE
 )
 TYPE=InnoDB;
@@ -210,7 +210,7 @@ CREATE TABLE annotation_method_note (
       ON UPDATE CASCADE,
   FOREIGN KEY(type_id)
     REFERENCES term_type(type_id)
-      ON DELETE RESTRICT
+      ON DELETE CASCADE
       ON UPDATE CASCADE
 )
 TYPE=InnoDB;
@@ -225,7 +225,7 @@ CREATE TABLE Annotation_note (
       ON UPDATE CASCADE,
   FOREIGN KEY(type_id)
     REFERENCES term_type(type_id)
-      ON DELETE RESTRICT
+      ON DELETE CASCADE
       ON UPDATE CASCADE
 )
 TYPE=InnoDB;
@@ -236,12 +236,12 @@ CREATE TABLE Annotation_type (
   PRIMARY KEY(annotation_id, type_id),
   FOREIGN KEY(annotation_id)
     REFERENCES Annotation(annotation_id)
-      ON DELETE NO ACTION
-      ON UPDATE NO ACTION,
+      ON DELETE CASCADE
+      ON UPDATE CASCADE,
   FOREIGN KEY(type_id)
     REFERENCES term_type(type_id)
-      ON DELETE NO ACTION
-      ON UPDATE NO ACTION
+      ON DELETE CASCADE
+      ON UPDATE CASCADE
 )
 TYPE=InnoDB;
 
@@ -285,7 +285,7 @@ CREATE TABLE dbxref_note (
       ON UPDATE CASCADE,
   FOREIGN KEY(type_id)
     REFERENCES term_type(type_id)
-      ON DELETE RESTRICT
+      ON DELETE CASCADE
       ON UPDATE CASCADE
 )
 TYPE=InnoDB;
@@ -332,7 +332,7 @@ CREATE TABLE subseq_dbxref_annotation (
       ON UPDATE CASCADE,
   FOREIGN KEY(dbxref_id)
     REFERENCES dbxref(dbxref_id)
-      ON DELETE RESTRICT
+      ON DELETE CASCADE
       ON UPDATE CASCADE
 )
 TYPE=InnoDB;
@@ -347,7 +347,7 @@ CREATE TABLE subseq_function_annotation (
       ON UPDATE CASCADE,
   FOREIGN KEY(function_id)
     REFERENCES biofunction(function_id)
-      ON DELETE RESTRICT
+      ON DELETE CASCADE
       ON UPDATE CASCADE
 )
 TYPE=InnoDB;
