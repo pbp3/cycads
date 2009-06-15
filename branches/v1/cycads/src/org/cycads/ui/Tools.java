@@ -47,9 +47,7 @@ public class Tools
 		if (args.length > pos) {
 			fileName = args[pos];
 			file = new File(fileName);
-			if (file.canRead()) {
-				return file;
-			}
+			return file;
 		}
 		else {
 			fileName = fileNameDefault;
