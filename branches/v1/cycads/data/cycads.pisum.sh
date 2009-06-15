@@ -1,10 +1,20 @@
-java -Xmx512M -cp cycads.jar org.cycads.ui.loader.KOLoaderSQL /home/avellozo/cycads-data/ko > /home/avellozo/cycads-data/KOLoaderSQL.out
-java -Xmx512M -cp cycads.jar org.cycads.ui.loader.GFF3LoaderSQL /home/avellozo/cycads-data/ACYPI.gff3 7029 AphidBaseS 1.0 > /home/avellozo/cycads-data/GFF3LoaderSQL.out
-java -Xmx512M -cp cycads.jar org.cycads.ui.loader.SubseqAnnotationLoaderSQL /home/avellozo/cycads-data/2810_KO_for34821_ACYPI_BBH-subsetEukaryotes 7029 KAAS-subset-eukaryotes 0 AphidBaseP 1 KO -1  > /home/avellozo/cycads-data/SubseqAnnotationLoaderSQL.subset-eukaryotes.out
-java -Xmx512M -cp cycads.jar org.cycads.ui.loader.SubseqAnnotationLoaderSQL /home/avellozo/cycads-data/3018_KO_for34821_ACYPI_BBH-RepSet-genes 7029 KAAS-repset-genes 0 AphidBaseP 1 KO -1 > /home/avellozo/cycads-data/SubseqAnnotationLoaderSQL.repset-genes.out
-java -Xmx512M -cp cycads.jar org.cycads.ui.loader.SubseqAnnotationLoaderSQL /home/avellozo/cycads-data/3570_KO_for34821_ACYPI_BBH-RepSet-eukaryotes 7029 KAAS-repset-eukaryotes 0 AphidBaseP 1 KO -1  > /home/avellozo/cycads-data/SubseqAnnotationLoaderSQL.repset-eukaryotes.out
-java -Xmx512M -cp cycads.jar org.cycads.ui.loader.SubseqAnnotationLoaderSQL /home/avellozo/cycads-data/blast2go_Annot_010409.txt 7029 Blast2Go 0 AphidBaseP 8 "*" 5 > /home/avellozo/cycads-data/SubseqAnnotationLoaderSQL.Blast2Go.out
-java -Xmx512M -cp cycads.jar org.cycads.ui.extract.cyc.PFFileGeneratorSQL /home/avellozo/cycads-data/acypi.pf 7029 1.0 n 1.9 1.5 > /home/avellozo/cycads-data/PFFileGeneratorSQL.out
+time=`date +%H%M`
+day=`date +%d%m%y`
+dirout="cycads-out/$day/$time"
+dirin="cycads-data"
+mkdir -p $dirout
+jar=cycads.jar
+cp $jar $dirout/.
+cp config.properties $dirout/.
+
+
+java -Xmx512M -cp $jar org.cycads.ui.loader.KOLoaderSQL $dirin/ko > $dirout/KOLoaderSQL.out
+java -Xmx512M -cp $jar org.cycads.ui.loader.GFF3LoaderSQL $dirin/ACYPI.gff3 7029 AphidBaseS 1.0 > $dirout/GFF3LoaderSQL.out
+java -Xmx512M -cp $jar org.cycads.ui.loader.SubseqAnnotationLoaderSQL $dirin/2810_KO_for34821_ACYPI_BBH-subsetEukaryotes 7029 KAAS-subset-eukaryotes 0 AphidBaseP 1 KO -1  > $dirout/SubseqAnnotationLoaderSQL.subset-eukaryotes.out
+java -Xmx512M -cp $jar org.cycads.ui.loader.SubseqAnnotationLoaderSQL $dirin/3018_KO_for34821_ACYPI_BBH-RepSet-genes 7029 KAAS-repset-genes 0 AphidBaseP 1 KO -1 > $dirout/SubseqAnnotationLoaderSQL.repset-genes.out
+java -Xmx512M -cp $jar org.cycads.ui.loader.SubseqAnnotationLoaderSQL $dirin/3570_KO_for34821_ACYPI_BBH-RepSet-eukaryotes 7029 KAAS-repset-eukaryotes 0 AphidBaseP 1 KO -1  > $dirout/SubseqAnnotationLoaderSQL.repset-eukaryotes.out
+java -Xmx512M -cp $jar org.cycads.ui.loader.SubseqAnnotationLoaderSQL $dirin/blast2go_Annot_010409.txt 7029 Blast2Go 0 AphidBaseP 8 "*" 5 > $dirout/SubseqAnnotationLoaderSQL.Blast2Go.out
+java -Xmx512M -cp $jar org.cycads.ui.extract.cyc.PFFileGeneratorSQL $dirout/acypi.pf 7029 1.0 n 1.9 1.5 > $dirout/PFFileGeneratorSQL.out
 
 #echo create dblinks in pathwaytools
 #AphidBase ---> AphidBase-Gene ---> http://genoweb1.irisa.fr/cgi-bin/gbrowse/gbrowse_details/aphidbase?name=~A
