@@ -18,12 +18,13 @@ java -Xmx512M -cp $jar org.cycads.ui.extract.cyc.PFFileGeneratorSQL $dirout/acyp
 
 #echo create dblinks in pathwaytools
 #AphidBase ---> AphidBase-Gene ---> http://genoweb1.irisa.fr/cgi-bin/gbrowse/gbrowse_details/aphidbase?name=~A
-#AphidBaseS ---> AphidBase ---> http://genoweb1.irisa.fr/cgi-bin/gbrowse/gbrowse_details/aphidbase?name=~A
 #AphidBaseR ---> AphidBase-mRNA ---> http://genoweb1.irisa.fr/cgi-bin/gbrowse/gbrowse_details/aphidbase?name=~A
 #GLEAN ---> AphidBase ---> http://genoweb1.irisa.fr/cgi-bin/gbrowse/gbrowse_details/aphidbase?name=~A
-#AphidBaseP ---> PhylomeDB ---> http://phylomedb.org/?seqid=~A
 #PhylomeDB ---> PhylomeDB ---> http://phylomedb.org/?seqid=~A
 #KO ---> KO ---> http://www.genome.jp/dbget-bin/www_bget?ko+~A
 #RefSeqP ---> Refseq-Protein ---> http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=~A
 #RefSeqM ---> Refseq-mRNA ---> http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=~A
+
+#AphidBaseS ---> AphidBase ---> http://genoweb1.irisa.fr/cgi-bin/gbrowse/gbrowse_details/aphidbase?name=~A
+#AphidBaseP ---> PhylomeDB ---> http://phylomedb.org/?seqid=~A
 
