@@ -17,8 +17,8 @@ java -Xmx512M -cp $jar org.cycads.ui.loader.SubseqAnnotationLoaderSQL $dirin/bla
 java -Xmx512M -cp $jar org.cycads.ui.extract.cyc.PFFileGeneratorSQL $dirout/acypi.pf 7029 1.0 n 1.9 1.5 > $dirout/PFFileGeneratorSQL.out
 
 #echo create dblinks in pathwaytools
-#AphidBase ---> AphidBase-Gene ---> http://genoweb1.irisa.fr/cgi-bin/gbrowse/gbrowse_details/aphidbase?name=~A
-#AphidBaseR ---> AphidBase-mRNA ---> http://genoweb1.irisa.fr/cgi-bin/gbrowse/gbrowse_details/aphidbase?name=~A
+#AphidBase ---> AphidBase-GeneReport ---> http://genoweb.irisa.fr:8383/grs-1.0/grs?reportID=chado_genome_report&objectID=~A
+#AphidBaseR ---> AphidBase-GBrowse ---> http://genoweb1.irisa.fr/cgi-bin/gbrowse/gbrowse_details/aphidbase?name=~A
 #GLEAN ---> AphidBase ---> http://genoweb1.irisa.fr/cgi-bin/gbrowse/gbrowse_details/aphidbase?name=~A
 #PhylomeDB ---> PhylomeDB ---> http://phylomedb.org/?seqid=~A
 #KO ---> KO ---> http://www.genome.jp/dbget-bin/www_bget?ko+~A
