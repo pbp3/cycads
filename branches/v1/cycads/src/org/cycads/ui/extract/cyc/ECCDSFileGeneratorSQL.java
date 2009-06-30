@@ -4,7 +4,9 @@
 package org.cycads.ui.extract.cyc;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -14,6 +16,8 @@ import org.cycads.entities.annotation.SubseqAnnotation;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Sequence;
+import org.cycads.extract.cyc.CycDBLink;
+import org.cycads.extract.cyc.CycDbxrefAnnotationPaths;
 import org.cycads.extract.cyc.CycIdGenerator;
 import org.cycads.extract.cyc.CycRecord;
 import org.cycads.extract.cyc.CycRecordGenerator;
@@ -21,7 +25,6 @@ import org.cycads.extract.cyc.LocContainer;
 import org.cycads.extract.cyc.OrganismCycIdGenerator;
 import org.cycads.extract.cyc.PFFileConfig;
 import org.cycads.extract.cyc.PFFileCycRecordGenerator;
-import org.cycads.extract.cyc.PFFileStream;
 import org.cycads.extract.cyc.ScoreSystemCollection;
 import org.cycads.extract.cyc.ScoreSystemsContainer;
 import org.cycads.extract.cyc.SimpleLocInterpreter;
@@ -31,66 +34,59 @@ import org.cycads.ui.Tools;
 import org.cycads.ui.progress.Progress;
 import org.cycads.ui.progress.ProgressPrintInterval;
 
-public class PFFileGeneratorSQL
+public class ECCDSFileGeneratorSQL
 {
+	static char					columnSeparator		= Config.ecCDSFileGeneratorColumnSeparator();
+	static char					dbLinkSeparator		= Config.ecCDSFileGeneratorDBLinkSeparator();
+	static String				dbLinkNotPresent	= Config.ecCDSFileGeneratorDBLinkNotPresentStr();
+	static Collection<String>	dbNames				= Config.ecCDSFileGeneratorDBNames();
 
 	public static void main(String[] args) {
 		EntityFactorySQL factory = new EntityFactorySQL();
-		File file = Tools.getFileToSave(args, 0, Config.pfGeneratorFileName(), Messages.pfGeneratorChooseFile());
+		File file = Tools.getFileToSave(args, 0, Config.ecCDSFileGeneratorFileName(),
+			Messages.ecCDSFileGeneratorChooseFile());
 		if (file == null) {
 			return;
 		}
-		Organism organism = Tools.getOrganism(args, 1, Config.pfGeneratorOrganismNumber(),
-			Messages.pfGeneratorChooseOrganismNumber(), factory);
+		PrintStream out = new PrintStream(new FileOutputStream(file, false));
+
+		Organism organism = Tools.getOrganism(args, 1, Config.ecCDSFileGeneratorOrganismNumber(),
+			Messages.ecCDSFileGeneratorChooseOrganismNumber(), factory);
 		if (organism == null) {
 			return;
 		}
-		String seqVersion = Tools.getString(args, 2, Messages.pfGeneratorChooseSeqVersion(),
-			Config.pfGeneratorSeqVersion());
+		String seqVersion = Tools.getString(args, 2, Messages.ecCDSFileGeneratorChooseSeqVersion(),
+			Config.ecCDSFileGeneratorSeqVersion());
 		if (seqVersion == null) {
 			return;
 		}
 
-		boolean sequenceLocation = Tools.getBoolean(args, 3, Messages.pfGeneratorChooseSequenceLocation());
-
-		Double ecThreshold = Tools.getDouble(args, 4, Messages.pfGeneratorChooseEcThreshold(), Config.pfEcThreshold());
-		if (ecThreshold == null) {
-			return;
-		}
-
-		Double goThreshold = Tools.getDouble(args, 5, Messages.pfGeneratorChooseGoThreshold(), Config.pfGoThreshold());
-		if (goThreshold == null) {
-			return;
-		}
-
-		//		Double koThreshold = Tools.getDouble(args, 6, Messages.pfGeneratorChooseKoThreshold(), Config.pfKoThreshold());
-		//		if (koThreshold == null) {
-		//			return;
-		//		}
-
-		Progress progress = new ProgressPrintInterval(System.out, Messages.pfGeneratorStepShowInterval());
+		Progress progress = new ProgressPrintInterval(System.out, Messages.ecCDSFileGeneratorStepShowInterval());
 		try {
-			progress.init(Messages.pfGeneratorInitMsg(file.getPath()));
+			progress.init(Messages.ecCDSFileGeneratorInitMsg(file.getPath()));
 			Collection<Sequence< ? , ? , ? , ? , ? , ? >> seqs = organism.getSequences(seqVersion);
 			Collection<Type> types = new ArrayList<Type>(1);
 			types.add(factory.getAnnotationTypeCDS());
-			PFFileStream pfFile = new PFFileStream(file, Config.pfGeneratorFileHeader(), sequenceLocation);
 			CycIdGenerator cycIdGenerator = new OrganismCycIdGenerator(organism);
 
 			LocAndScores locAndScores = new LocAndScores();
 			ScoreSystemCollection ecScoreSystemCollection = locAndScores.getScoreSystems("ec");
 			ScoreSystemCollection goScoreSystemCollection = locAndScores.getScoreSystems("go");
 
-			CycRecordGenerator cycRecordGenerator = new PFFileCycRecordGenerator(cycIdGenerator,
-				new SimpleLocInterpreter(locAndScores, locAndScores), ecThreshold, ecScoreSystemCollection,
-				goThreshold, goScoreSystemCollection);
+			SimpleLocInterpreter locInterpreter = new SimpleLocInterpreter(locAndScores, locAndScores);
+			CycRecordGenerator cycRecordGenerator = new PFFileCycRecordGenerator(cycIdGenerator, locInterpreter, 0,
+				ecScoreSystemCollection, 0, goScoreSystemCollection);
 			for (Sequence seq : seqs) {
 				Collection<SubseqAnnotation< ? , ? , ? , ? , ? >> cdss = seq.getAnnotations(null, types, null);
 				for (SubseqAnnotation< ? , ? , ? , ? , ? > cds : cdss) {
 					CycRecord record = cycRecordGenerator.generate(cds);
 					if (record != null) {
-						pfFile.print(record);
-						progress.completeStep();
+						Collection<CycDbxrefAnnotationPaths> ecs = locInterpreter.getCycDbxrefPathAnnots(cds,
+							PFFileConfig.getPFFileECLocs(), ecScoreSystemCollection);
+						for (CycDbxrefAnnotationPaths ec : ecs) {
+							print(ec, record, out);
+							progress.completeStep();
+						}
 					}
 				}
 			}
@@ -100,6 +96,32 @@ public class PFFileGeneratorSQL
 			e.printStackTrace();
 		}
 
+	}
+
+	protected static void print(CycDbxrefAnnotationPaths ec, CycRecord record, PrintStream out) {
+		StringBuffer line = new StringBuffer(ec.getAccession());
+		line.append(columnSeparator);
+		line.append(ec.getScore());
+		line.append(columnSeparator);
+		line.append(Config.ecCDSFileGeneratorMethods(ec));
+		for (String dbName : dbNames) {
+			line.append(columnSeparator);
+			boolean found = false;
+			Collection<CycDBLink> dbLinks = record.getDBLinks();
+			for (CycDBLink dbLink : dbLinks) {
+				if (dbLink.getDbName().equals(dbName)) {
+					if (found) {
+						line.append(dbLinkSeparator);
+					}
+					found = true;
+					line.append(dbLink.getAccession());
+				}
+			}
+			if (!found) {
+				line.append(dbLinkNotPresent);
+			}
+		}
+		out.println(line);
 	}
 
 	public static class LocAndScores implements ScoreSystemsContainer, LocContainer
@@ -113,7 +135,6 @@ public class PFFileGeneratorSQL
 		public List<String> getLocs(String locName) {
 			return PFFileConfig.getLocs(locName);
 		}
-
 	}
 
 }

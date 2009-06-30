@@ -35,7 +35,7 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 	}
 
 	@Override
-	public CycRecord generate(SubseqAnnotation< ? , ? , ? , ? , ? > annot) {
+	public SimpleCycRecord generate(SubseqAnnotation< ? , ? , ? , ? , ? > annot) {
 		String id = getID(annot);
 		String prodtype = PFFileConfig.getProductType(annot);
 		SimpleCycRecord record = new SimpleCycRecord(prodtype, id);
@@ -95,22 +95,6 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 					throw new RuntimeException("Error in the gene comment annotation loc.");
 				}
 			}
-
-			//		Collection<SimpleCycDbxrefAnnotation> kos = getCycKos(annot);
-			//		for (CycDbxrefAnnotation ko : kos) {
-			//			if (ko.getScore() >= koThreshold) {
-			//				Collection<CycFunction> functions = record.getFunctions();
-			//				for (CycFunction function : functions) {
-			//					function.addSynonyms();
-			//				}
-			//				record.addKO(ko.getAccession());
-			//			}
-			//			Collection<CycDBLink> dbLinks = createDBLink(PFFileConfig.getKODbName(), ko.getAccession());
-			//			for (CycDBLink dbLink : dbLinks) {
-			//				record.addDBLink(dbLink);
-			//			}
-			//			record.addComment(PFFileConfig.getAnnotationComment(ko));
-			//		}
 
 		}
 		catch (RecordErrorException e) {

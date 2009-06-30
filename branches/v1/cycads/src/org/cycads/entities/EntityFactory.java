@@ -11,7 +11,8 @@ import org.cycads.entities.synonym.EC;
 import org.cycads.entities.synonym.Function;
 import org.cycads.entities.synonym.KO;
 
-public interface EntityFactory<X extends Dbxref< ? , ? , ? , ? >, M extends AnnotationMethod, T extends Type, O extends Organism< ? , ? , ? , ? , ? , ? >> {
+public interface EntityFactory<X extends Dbxref< ? , ? , ? , ? >, M extends AnnotationMethod, T extends Type, O extends Organism< ? , ? , ? , ? , ? , ? >>
+{
 	public X getDbxref(String dbName, String accession);
 
 	public M getAnnotationMethod(String name);
@@ -31,4 +32,6 @@ public interface EntityFactory<X extends Dbxref< ? , ? , ? , ? >, M extends Anno
 	public EC< ? , ? , ? , ? > getEC(String ecNumber);
 
 	public T getAnnotationTypeCDS();
+
+	public T getAnnotationTypeGene();
 }

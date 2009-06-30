@@ -201,10 +201,6 @@ public class Config
 		return getStringOptional("pf.file.extract.fileHeader");
 	}
 
-	public static String pfGeneratorOrganismName() {
-		return getStringOptional("pf.file.extract.organismName");
-	}
-
 	// CDS to KO Loader
 
 	public static String cdsToKOFileComment() {

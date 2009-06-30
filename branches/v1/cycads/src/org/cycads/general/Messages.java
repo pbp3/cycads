@@ -147,10 +147,6 @@ public class Messages
 
 	// pf file generator
 
-	public static String pfGeneratorChooseOrganismName() {
-		return getString("pfFile.extract.chooseOrganismName");
-	}
-
 	public static String pfGeneratorChooseOrganismNumber() {
 		return getString("pfFile.extract.chooseOrganismNumber");
 	}
