@@ -4,8 +4,8 @@
 package org.cycads.ui.extract.cyc;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -38,7 +38,7 @@ public class ECCDSFileGeneratorSQL
 {
 	static char					columnSeparator		= Config.ecCDSFileGeneratorColumnSeparator();
 	static char					dbLinkSeparator		= Config.ecCDSFileGeneratorDBLinkSeparator();
-	static String				dbLinkNotPresent	= Config.ecCDSFileGeneratorDBLinkNotPresentStr();
+	static String				dbLinkNotPresent	= Config.ecCDSFileGeneratorAtributeNotPresentStr();
 	static Collection<String>	dbNames				= Config.ecCDSFileGeneratorDBNames();
 
 	public static void main(String[] args) {
@@ -48,7 +48,14 @@ public class ECCDSFileGeneratorSQL
 		if (file == null) {
 			return;
 		}
-		PrintStream out = new PrintStream(new FileOutputStream(file, false));
+		PrintStream out;
+		try {
+			out = new PrintStream(new FileOutputStream(file, false));
+		}
+		catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+			return;
+		}
 
 		Organism organism = Tools.getOrganism(args, 1, Config.ecCDSFileGeneratorOrganismNumber(),
 			Messages.ecCDSFileGeneratorChooseOrganismNumber(), factory);
@@ -62,39 +69,34 @@ public class ECCDSFileGeneratorSQL
 		}
 
 		Progress progress = new ProgressPrintInterval(System.out, Messages.ecCDSFileGeneratorStepShowInterval());
-		try {
-			progress.init(Messages.ecCDSFileGeneratorInitMsg(file.getPath()));
-			Collection<Sequence< ? , ? , ? , ? , ? , ? >> seqs = organism.getSequences(seqVersion);
-			Collection<Type> types = new ArrayList<Type>(1);
-			types.add(factory.getAnnotationTypeCDS());
-			CycIdGenerator cycIdGenerator = new OrganismCycIdGenerator(organism);
+		progress.init(Messages.ecCDSFileGeneratorInitMsg(file.getPath()));
+		Collection<Sequence< ? , ? , ? , ? , ? , ? >> seqs = organism.getSequences(seqVersion);
+		Collection<Type> types = new ArrayList<Type>(1);
+		types.add(factory.getAnnotationTypeCDS());
+		CycIdGenerator cycIdGenerator = new OrganismCycIdGenerator(organism);
 
-			LocAndScores locAndScores = new LocAndScores();
-			ScoreSystemCollection ecScoreSystemCollection = locAndScores.getScoreSystems("ec");
-			ScoreSystemCollection goScoreSystemCollection = locAndScores.getScoreSystems("go");
+		LocAndScores locAndScores = new LocAndScores();
+		ScoreSystemCollection ecScoreSystemCollection = locAndScores.getScoreSystems("ec");
+		ScoreSystemCollection goScoreSystemCollection = locAndScores.getScoreSystems("go");
 
-			SimpleLocInterpreter locInterpreter = new SimpleLocInterpreter(locAndScores, locAndScores);
-			CycRecordGenerator cycRecordGenerator = new PFFileCycRecordGenerator(cycIdGenerator, locInterpreter, 0,
-				ecScoreSystemCollection, 0, goScoreSystemCollection);
-			for (Sequence seq : seqs) {
-				Collection<SubseqAnnotation< ? , ? , ? , ? , ? >> cdss = seq.getAnnotations(null, types, null);
-				for (SubseqAnnotation< ? , ? , ? , ? , ? > cds : cdss) {
-					CycRecord record = cycRecordGenerator.generate(cds);
-					if (record != null) {
-						Collection<CycDbxrefAnnotationPaths> ecs = locInterpreter.getCycDbxrefPathAnnots(cds,
-							PFFileConfig.getPFFileECLocs(), ecScoreSystemCollection);
-						for (CycDbxrefAnnotationPaths ec : ecs) {
-							print(ec, record, out);
-							progress.completeStep();
-						}
+		SimpleLocInterpreter locInterpreter = new SimpleLocInterpreter(locAndScores, locAndScores);
+		CycRecordGenerator cycRecordGenerator = new PFFileCycRecordGenerator(cycIdGenerator, locInterpreter, 0,
+			ecScoreSystemCollection, 0, goScoreSystemCollection);
+		for (Sequence seq : seqs) {
+			Collection<SubseqAnnotation< ? , ? , ? , ? , ? >> cdss = seq.getAnnotations(null, types, null);
+			for (SubseqAnnotation< ? , ? , ? , ? , ? > cds : cdss) {
+				CycRecord record = cycRecordGenerator.generate(cds);
+				if (record != null) {
+					Collection<CycDbxrefAnnotationPaths> ecs = locInterpreter.getCycDbxrefPathAnnots(cds,
+						PFFileConfig.getPFFileECLocs(), ecScoreSystemCollection);
+					for (CycDbxrefAnnotationPaths ec : ecs) {
+						print(ec, record, out);
+						progress.completeStep();
 					}
 				}
 			}
-			progress.finish(Messages.pfGeneratorFinalMsg(progress.getStep()));
 		}
-		catch (IOException e) {
-			e.printStackTrace();
-		}
+		progress.finish(Messages.ecCDSFileGeneratorFinalMsg(progress.getStep()));
 
 	}
 

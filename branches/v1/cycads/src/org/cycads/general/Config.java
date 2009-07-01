@@ -9,6 +9,9 @@ import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
+import org.cycads.entities.annotation.Annotation;
+import org.cycads.extract.cyc.CycDbxrefAnnotationPaths;
+
 public class Config
 {
 	private static final String		BUNDLE_NAME		= "config.properties";	//$NON-NLS-1$
@@ -285,6 +288,64 @@ public class Config
 
 	public static String synonymLoaderDbxrefDBName() {
 		return getStringOptional("synonym.loader.dbxrefDBName");
+	}
+
+	//ecCDSFileGenerator
+
+	public static String ecCDSFileGeneratorMethods(CycDbxrefAnnotationPaths ec) {
+		StringBuffer buf = new StringBuffer();
+		List<List<Annotation>> paths = ec.getAnnotationPaths();
+		if (!paths.isEmpty()) {
+			List<Annotation> path = paths.get(0);
+			buf.append(path.get(0).getAnnotationMethod().getName());
+			String methodSeparator = getStringMandatory("ecCDS.file.methodSeparator");
+			for (int i = 1; i < path.size(); i++) {
+				buf.append(methodSeparator);
+				buf.append(path.get(i).getAnnotationMethod().getName());
+			}
+			String pathSeparator = getStringMandatory("ecCDS.file.pathSeparator");
+			for (int i = 1; i < paths.size(); i++) {
+				buf.append(pathSeparator);
+				path = paths.get(i);
+				buf.append(path.get(0).getAnnotationMethod().getName());
+				for (int j = 1; j < path.size(); j++) {
+					buf.append(methodSeparator);
+					buf.append(path.get(j).getAnnotationMethod().getName());
+				}
+			}
+		}
+		else {
+			return ecCDSFileGeneratorAtributeNotPresentStr();
+		}
+		return buf.toString();
+	}
+
+	public static String ecCDSFileGeneratorAtributeNotPresentStr() {
+		return getStringMandatory("ecCDS.file.atributeNotPresentStr");
+	}
+
+	public static char ecCDSFileGeneratorColumnSeparator() {
+		return getStringMandatory("ecCDS.file.columnSeparator").charAt(0);
+	}
+
+	public static char ecCDSFileGeneratorDBLinkSeparator() {
+		return getStringMandatory("ecCDS.file.dBLinkSeparator").charAt(0);
+	}
+
+	public static List<String> ecCDSFileGeneratorDBNames() {
+		return getStrings("ecCDS.file.dBName");
+	}
+
+	public static String ecCDSFileGeneratorFileName() {
+		return getStringMandatory("ecCDS.file.fileName");
+	}
+
+	public static int ecCDSFileGeneratorOrganismNumber() {
+		return getInt("ecCDS.file.organismNumber");
+	}
+
+	public static String ecCDSFileGeneratorSeqVersion() {
+		return getStringMandatory("ecCDS.file.seqVersion");
 	}
 
 }

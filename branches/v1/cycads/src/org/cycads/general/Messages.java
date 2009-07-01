@@ -333,4 +333,32 @@ public class Messages
 		return MessageFormat.format(getStringMandatory("synonymLoader.final"), a);
 	}
 
+	//ecCDS file Generator
+
+	public static String ecCDSFileGeneratorChooseFile() {
+		return getString("ecCDSFile.extract.chooseFile");
+	}
+
+	public static String ecCDSFileGeneratorChooseOrganismNumber() {
+		return getString("ecCDSFile.extract.chooseOrganismNumber");
+	}
+
+	public static String ecCDSFileGeneratorChooseSeqVersion() {
+		return getString("ecCDSFile.extract.chooseSeqVersion");
+	}
+
+	public static int ecCDSFileGeneratorStepShowInterval() {
+		return getInt("ecCDSFile.extract.stepShowInterval");
+	}
+
+	public static String ecCDSFileGeneratorInitMsg(String path) {
+		Object[] a = {path};
+		return MessageFormat.format(getStringMandatory("ecCDSFile.extract.init"), a);
+	}
+
+	public static String ecCDSFileGeneratorFinalMsg(int step) {
+		Object[] a = {step};
+		return MessageFormat.format(getStringMandatory("ecCDSFile.extract.final"), a);
+	}
+
 }
