@@ -56,6 +56,7 @@ public class ECCDSFileGeneratorSQL
 			e1.printStackTrace();
 			return;
 		}
+		printHeader(out);
 
 		Organism organism = Tools.getOrganism(args, 1, Config.ecCDSFileGeneratorOrganismNumber(),
 			Messages.ecCDSFileGeneratorChooseOrganismNumber(), factory);
@@ -98,6 +99,19 @@ public class ECCDSFileGeneratorSQL
 		}
 		progress.finish(Messages.ecCDSFileGeneratorFinalMsg(progress.getStep()));
 
+	}
+
+	private static void printHeader(PrintStream out) {
+		out.print("EC");
+		out.print(columnSeparator);
+		out.print("EC Score");
+		out.print(columnSeparator);
+		out.print("EC Methods Annotation");
+		for (String dbName : dbNames) {
+			out.print(columnSeparator);
+			out.print(dbName);
+		}
+		out.println();
 	}
 
 	protected static void print(CycDbxrefAnnotationPaths ec, CycRecord record, PrintStream out) {
