@@ -9,7 +9,7 @@ import org.cycads.entities.note.Noteble;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.HasSynonyms;
 
-public interface Pathway<X extends Dbxref< ? , ? , ? , ? >, R extends Reaction< ? , ? , ? >>
+public interface Pathway<X extends Dbxref< ? , ? , ? , ? >, R extends Reaction< ? , ? , ? , ? >>
 		extends Noteble, HasSynonyms<X>
 {
 	public Collection<R> getReactions();

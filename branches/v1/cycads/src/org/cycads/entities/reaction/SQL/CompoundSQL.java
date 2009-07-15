@@ -134,10 +134,6 @@ public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound<Dbxre
 				throw new SQLException("Compound insert didn't return the id.");
 			}
 		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
 		finally {
 			if (rs != null) {
 				try {
@@ -186,6 +182,15 @@ public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound<Dbxre
 	@Override
 	public boolean isSmallMolecule() {
 		return isSmallMolecule;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof CompoundSQL)) {
+			return false;
+		}
+		CompoundSQL o = (CompoundSQL) obj;
+		return (o.getId() == this.getId());
 	}
 
 }
