@@ -60,8 +60,18 @@ public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound<Dbxre
 	}
 
 	public CompoundSQL(boolean isSmallMolecule, String dbName, String accession, Connection con) throws SQLException {
-		nnnnn
-		this(isSmallMolecule, con);
+		this.isSmallMolecule = isSmallMolecule;
+		this.con = con;
+		ArrayList<CompoundSQL> comps = getCompounds(dbName, accession, con);
+		if (comps.size() > 0) {
+			for (CompoundSQL comp : comps) {
+				if (comp.isSmallMolecule == isSmallMolecule) {
+					this.id = comp.getId();
+					return;
+				}
+			}
+		}
+		this.id = createNewCompound(isSmallMolecule, con);
 		addSynonym(dbName, accession);
 	}
 
