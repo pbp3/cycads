@@ -70,6 +70,7 @@ public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound<Dbxre
 					return;
 				}
 			}
+			throw new SQLException("Small molecule field diferent to create the object compound.");
 		}
 		this.id = createNewCompound(isSmallMolecule, con);
 		addSynonym(dbName, accession);
