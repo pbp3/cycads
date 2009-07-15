@@ -1,7 +1,7 @@
 <?xml version="1.0" standalone="yes" ?>
 <DBMODEL Version="4.0">
 <SETTINGS>
-<GLOBALSETTINGS ModelName="cycads1.0" IDModel="1" IDVersion="1" VersionStr="1.0.0.0" Comments="" UseVersionHistroy="1" AutoIncVersion="1" DatabaseType="MySQL" ZoomFac="65.00" XPos="660" YPos="490" DefaultDataType="5" DefaultTablePrefix="0" DefSaveDBConn="local cycads1" DefSyncDBConn="" DefQueryDBConn="" Printer="LaserJet-4250-Postscript-(recommended)" HPageCount="3.564838990426458" PageAspectRatio="1.524904214559387" PageOrientation="0" PageFormat="A4 (210x297 mm, 8.26x11.7 inches)" SelectedPages="0" UsePositionGrid="0" PositionGridX="20" PositionGridY="20" TableNameInRefs="0" DefaultTableType="0" ActivateRefDefForNewRelations="1" FKPrefix="" FKPostfix="" CreateFKRefDefIndex="0" DBQuoteCharacter="`" CreateSQLforLinkedObjects="0" DefModelFont="Nimbus Sans L" CanvasWidth="4096" CanvasHeight="2842" />
+<GLOBALSETTINGS ModelName="cycads1.0" IDModel="1" IDVersion="1" VersionStr="1.0.0.0" Comments="" UseVersionHistroy="1" AutoIncVersion="1" DatabaseType="MySQL" ZoomFac="65.00" XPos="0" YPos="0" DefaultDataType="5" DefaultTablePrefix="0" DefSaveDBConn="local cycads1" DefSyncDBConn="" DefQueryDBConn="" Printer="LaserJet-4250-Postscript-(recommended)" HPageCount="3.564838990426458" PageAspectRatio="1.524904214559387" PageOrientation="0" PageFormat="A4 (210x297 mm, 8.26x11.7 inches)" SelectedPages="0" UsePositionGrid="0" PositionGridX="20" PositionGridY="20" TableNameInRefs="0" DefaultTableType="0" ActivateRefDefForNewRelations="1" FKPrefix="" FKPostfix="" CreateFKRefDefIndex="0" DBQuoteCharacter="`" CreateSQLforLinkedObjects="0" DefModelFont="Nimbus Sans L" CanvasWidth="4096" CanvasHeight="2842" />
 <DATATYPEGROUPS>
 <DATATYPEGROUP Name="Numeric Types" Icon="1" />
 <DATATYPEGROUP Name="Date and Time Types" Icon="2" />
@@ -258,14 +258,14 @@
 </SETTINGS>
 <METADATA>
 <REGIONS>
-<REGION ID="2115" RegionName="Reactions" XPos="1111" YPos="903" Width="395" Height="1082" RegionColor="4" TablePrefix="0" TableType="1" OverwriteTablePrefix="0" OverwriteTableType="1" Comments="" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="70" />
-<REGION ID="1942" RegionName="Sequence" XPos="2094" YPos="1431" Width="529" Height="553" RegionColor="0" TablePrefix="0" TableType="1" OverwriteTablePrefix="0" OverwriteTableType="1" Comments="" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="64" />
-<REGION ID="1946" RegionName="Notes" XPos="2075" YPos="922" Width="546" Height="478" RegionColor="1" TablePrefix="0" TableType="1" OverwriteTablePrefix="0" OverwriteTableType="1" Comments="" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="65" />
-<REGION ID="1947" RegionName="Annotation" XPos="1508" YPos="903" Width="564" Height="603" RegionColor="2" TablePrefix="0" TableType="1" OverwriteTablePrefix="0" OverwriteTableType="1" Comments="" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="66" />
-<REGION ID="1948" RegionName="Synonym" XPos="1511" YPos="1520" Width="576" Height="464" RegionColor="3" TablePrefix="0" TableType="1" OverwriteTablePrefix="0" OverwriteTableType="1" Comments="" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="67" />
+<REGION ID="2115" RegionName="Reactions" XPos="29" YPos="51" Width="395" Height="1082" RegionColor="4" TablePrefix="0" TableType="1" OverwriteTablePrefix="0" OverwriteTableType="1" Comments="" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="70" />
+<REGION ID="1942" RegionName="Sequence" XPos="1012" YPos="578" Width="529" Height="553" RegionColor="0" TablePrefix="0" TableType="1" OverwriteTablePrefix="0" OverwriteTableType="1" Comments="" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="64" />
+<REGION ID="1946" RegionName="Notes" XPos="994" YPos="69" Width="546" Height="478" RegionColor="1" TablePrefix="0" TableType="1" OverwriteTablePrefix="0" OverwriteTableType="1" Comments="" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="65" />
+<REGION ID="1947" RegionName="Annotation" XPos="426" YPos="51" Width="564" Height="603" RegionColor="2" TablePrefix="0" TableType="1" OverwriteTablePrefix="0" OverwriteTableType="1" Comments="" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="66" />
+<REGION ID="1948" RegionName="Synonym" XPos="429" YPos="668" Width="576" Height="464" RegionColor="3" TablePrefix="0" TableType="1" OverwriteTablePrefix="0" OverwriteTableType="1" Comments="" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="67" />
 </REGIONS>
 <TABLES>
-<TABLE ID="1243" Tablename="sequence" PrevTableName="bioentry" XPos="2222" YPos="1847" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="3" >
+<TABLE ID="1243" Tablename="sequence" PrevTableName="bioentry" XPos="1140" YPos="995" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="3" >
 <COLUMNS>
 <COLUMN ID="1698" ColName="sequence_id" PrevColName="" Pos="6" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="1" IsForeignKey="0" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -307,7 +307,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="1244" Tablename="sequence_synonym" PrevTableName="bioentry_dbxref" XPos="1900" YPos="1897" TableType="1" TablePrefix="0" nmTable="1" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="4" >
+<TABLE ID="1244" Tablename="sequence_synonym" PrevTableName="bioentry_dbxref" XPos="818" YPos="1045" TableType="1" TablePrefix="0" nmTable="1" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="4" >
 <COLUMNS>
 <COLUMN ID="1703" ColName="sequence_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -340,7 +340,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="1249" Tablename="biosequence" PrevTableName="" XPos="2443" YPos="1721" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="9" >
+<TABLE ID="1249" Tablename="biosequence" PrevTableName="" XPos="1362" YPos="869" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="9" >
 <COLUMNS>
 <COLUMN ID="1707" ColName="sequence_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -375,7 +375,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="1251" Tablename="dbxref" PrevTableName="" XPos="1969" YPos="1652" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="11" >
+<TABLE ID="1251" Tablename="dbxref" PrevTableName="" XPos="888" YPos="800" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="11" >
 <COLUMNS>
 <COLUMN ID="1338" ColName="dbxref_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="(10)" Width="0" Prec="0" PrimaryKey="1" NotNull="1" AutoInc="1" IsForeignKey="0" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -423,7 +423,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="1253" Tablename="subsequence" PrevTableName="location" XPos="2281" YPos="1481" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="13" >
+<TABLE ID="1253" Tablename="subsequence" PrevTableName="location" XPos="1200" YPos="629" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="13" >
 <COLUMNS>
 <COLUMN ID="1629" ColName="subsequence_id" PrevColName="location_id" Pos="3" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="1" IsForeignKey="0" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -473,7 +473,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="1264" Tablename="term_type" PrevTableName="term" XPos="2402" YPos="1144" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="24" >
+<TABLE ID="1264" Tablename="term_type" PrevTableName="term" XPos="1320" YPos="292" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="24" >
 <COLUMNS>
 <COLUMN ID="1441" ColName="type_id" PrevColName="term_type_id" Pos="1" idDatatype="5" DatatypeParams="(10)" Width="0" Prec="0" PrimaryKey="1" NotNull="1" AutoInc="1" IsForeignKey="0" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -520,7 +520,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="1612" Tablename="Intron" PrevTableName="Table_28" XPos="2455" YPos="1601" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="72" >
+<TABLE ID="1612" Tablename="Intron" PrevTableName="Table_28" XPos="1374" YPos="749" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="72" >
 <COLUMNS>
 <COLUMN ID="1633" ColName="subsequence_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -553,7 +553,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="1252" Tablename="dbxref_note" PrevTableName="dbxref_qualifier_value" XPos="2081" YPos="1194" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="12" >
+<TABLE ID="1252" Tablename="dbxref_note" PrevTableName="dbxref_qualifier_value" XPos="1000" YPos="342" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="12" >
 <COLUMNS>
 <COLUMN ID="1345" ColName="dbxref_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="(10)" Width="0" Prec="0" PrimaryKey="0" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -577,7 +577,7 @@
 <RELATION_END ID="1521" />
 </RELATIONS_END>
 </TABLE>
-<TABLE ID="1731" Tablename="dbxref_synonym" PrevTableName="dbxref_has_dbxref" XPos="1753" YPos="1598" TableType="1" TablePrefix="0" nmTable="1" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="1" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="33" >
+<TABLE ID="1731" Tablename="dbxref_synonym" PrevTableName="dbxref_has_dbxref" XPos="671" YPos="746" TableType="1" TablePrefix="0" nmTable="1" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="1" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="33" >
 <COLUMNS>
 <COLUMN ID="1738" ColName="dbxref_id1" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="(10)" Width="0" Prec="0" PrimaryKey="1" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -605,7 +605,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="1795" Tablename="subsequence_synonym" PrevTableName="subsequence_has_dbxref" XPos="1726" YPos="1817" TableType="1" TablePrefix="0" nmTable="1" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="28" >
+<TABLE ID="1795" Tablename="subsequence_synonym" PrevTableName="subsequence_has_dbxref" XPos="645" YPos="965" TableType="1" TablePrefix="0" nmTable="1" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="28" >
 <COLUMNS>
 <COLUMN ID="1798" ColName="subsequence_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -633,7 +633,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="1802" Tablename="subsequence_note" PrevTableName="subsequence_has_term_type" XPos="2357" YPos="1302" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="31" >
+<TABLE ID="1802" Tablename="subsequence_note" PrevTableName="subsequence_has_term_type" XPos="1275" YPos="449" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="31" >
 <COLUMNS>
 <COLUMN ID="1805" ColName="subsequence_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="0" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -657,7 +657,7 @@
 <RELATION_END ID="1804" />
 </RELATIONS_END>
 </TABLE>
-<TABLE ID="1811" Tablename="Annotation" PrevTableName="Table_20" XPos="1711" YPos="1026" TableType="0" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="34" >
+<TABLE ID="1811" Tablename="Annotation" PrevTableName="Table_20" XPos="629" YPos="174" TableType="0" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="34" >
 <COLUMNS>
 <COLUMN ID="1813" ColName="annotation_id" PrevColName="" Pos="0" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="1" IsForeignKey="0" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -693,7 +693,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="1815" Tablename="annotation_method" PrevTableName="Table_21" XPos="1909" YPos="924" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="35" >
+<TABLE ID="1815" Tablename="annotation_method" PrevTableName="Table_21" XPos="828" YPos="72" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="35" >
 <COLUMNS>
 <COLUMN ID="1817" ColName="annotation_method_id" PrevColName="" Pos="0" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="1" IsForeignKey="0" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -729,7 +729,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="1852" Tablename="Annotation_note" PrevTableName="Annotation_has_term_type" XPos="2193" YPos="990" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="41" >
+<TABLE ID="1852" Tablename="Annotation_note" PrevTableName="Annotation_has_term_type" XPos="1111" YPos="138" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="41" >
 <COLUMNS>
 <COLUMN ID="1855" ColName="annotation_id" PrevColName="" Pos="2" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="0" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -753,7 +753,7 @@
 <RELATION_END ID="1854" />
 </RELATIONS_END>
 </TABLE>
-<TABLE ID="1872" Tablename="Annotation_synonym" PrevTableName="Annotation_has_dbxref" XPos="1663" YPos="1716" TableType="1" TablePrefix="0" nmTable="1" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="44" >
+<TABLE ID="1872" Tablename="Annotation_synonym" PrevTableName="Annotation_has_dbxref" XPos="582" YPos="863" TableType="1" TablePrefix="0" nmTable="1" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="44" >
 <COLUMNS>
 <COLUMN ID="1875" ColName="annotation_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -781,7 +781,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="1880" Tablename="biofunction" PrevTableName="Table_22" XPos="1566" YPos="1630" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="47" >
+<TABLE ID="1880" Tablename="biofunction" PrevTableName="Table_22" XPos="485" YPos="778" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="47" >
 <COLUMNS>
 <COLUMN ID="1882" ColName="function_id" PrevColName="" Pos="0" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="1" IsForeignKey="0" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -817,7 +817,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="1888" Tablename="function_synonym" PrevTableName="biofunction_has_biofunction" XPos="1515" YPos="1797" TableType="1" TablePrefix="0" nmTable="1" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="48" >
+<TABLE ID="1888" Tablename="function_synonym" PrevTableName="biofunction_has_biofunction" XPos="434" YPos="945" TableType="1" TablePrefix="0" nmTable="1" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="48" >
 <COLUMNS>
 <COLUMN ID="1894" ColName="function_id1" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -845,7 +845,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="1905" Tablename="subseq_annotation" PrevTableName="Table_24" XPos="1513" YPos="1172" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="52" >
+<TABLE ID="1905" Tablename="subseq_annotation" PrevTableName="Table_24" XPos="431" YPos="320" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="52" >
 <COLUMNS>
 <COLUMN ID="1908" ColName="annotation_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -877,7 +877,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="1913" Tablename="subseq_function_annotation" PrevTableName="Table_25" XPos="1517" YPos="1280" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="54" >
+<TABLE ID="1913" Tablename="subseq_function_annotation" PrevTableName="Table_25" XPos="435" YPos="428" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="54" >
 <COLUMNS>
 <COLUMN ID="1916" ColName="annotation_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -904,7 +904,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="1923" Tablename="subseq_dbxref_annotation" PrevTableName="Table_26" XPos="1858" YPos="1118" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="57" >
+<TABLE ID="1923" Tablename="subseq_dbxref_annotation" PrevTableName="Table_26" XPos="777" YPos="266" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="57" >
 <COLUMNS>
 <COLUMN ID="1926" ColName="annotation_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -931,7 +931,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="1931" Tablename="dbxref_dbxref_annotation" PrevTableName="Table_27" XPos="1749" YPos="1411" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="60" >
+<TABLE ID="1931" Tablename="dbxref_dbxref_annotation" PrevTableName="Table_27" XPos="668" YPos="558" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="60" >
 <COLUMNS>
 <COLUMN ID="1934" ColName="annotation_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -965,7 +965,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="1955" Tablename="sequence_note" PrevTableName="sequence_has_term_type" XPos="2155" YPos="1295" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="68" >
+<TABLE ID="1955" Tablename="sequence_note" PrevTableName="sequence_has_term_type" XPos="1074" YPos="443" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="68" >
 <COLUMNS>
 <COLUMN ID="1958" ColName="sequence_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="0" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -989,7 +989,7 @@
 <RELATION_END ID="1957" />
 </RELATIONS_END>
 </TABLE>
-<TABLE ID="1968" Tablename="annotation_method_note" PrevTableName="annotation_method_has_term_type" XPos="2395" YPos="938" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="68" >
+<TABLE ID="1968" Tablename="annotation_method_note" PrevTableName="annotation_method_has_term_type" XPos="1314" YPos="86" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="68" >
 <COLUMNS>
 <COLUMN ID="1971" ColName="annotation_method_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="0" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -1013,7 +1013,7 @@
 <RELATION_END ID="1970" />
 </RELATIONS_END>
 </TABLE>
-<TABLE ID="1991" Tablename="Organism" PrevTableName="Table_27" XPos="2462" YPos="1890" TableType="0" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="65" >
+<TABLE ID="1991" Tablename="Organism" PrevTableName="Table_27" XPos="1380" YPos="1037" TableType="0" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="65" >
 <COLUMNS>
 <COLUMN ID="1993" ColName="NCBI_TAXON_ID" PrevColName="" Pos="0" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="0" IsForeignKey="0" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -1044,7 +1044,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="2018" Tablename="Annotation_type" PrevTableName="Annotation_has_term_type" XPos="2154" YPos="1085" TableType="0" TablePrefix="0" nmTable="1" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="65" >
+<TABLE ID="2018" Tablename="Annotation_type" PrevTableName="Annotation_has_term_type" XPos="1072" YPos="232" TableType="0" TablePrefix="0" nmTable="1" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="65" >
 <COLUMNS>
 <COLUMN ID="2021" ColName="annotation_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -1072,7 +1072,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="2096" Tablename="annotation_parent" PrevTableName="Annotation_has_Annotation" XPos="1690" YPos="909" TableType="1" TablePrefix="0" nmTable="1" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="67" >
+<TABLE ID="2096" Tablename="annotation_parent" PrevTableName="Annotation_has_Annotation" XPos="608" YPos="57" TableType="1" TablePrefix="0" nmTable="1" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="67" >
 <COLUMNS>
 <COLUMN ID="2099" ColName="annotation_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -1100,7 +1100,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="2116" Tablename="pathway" PrevTableName="Table_27" XPos="1145" YPos="1048" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="71" >
+<TABLE ID="2116" Tablename="pathway" PrevTableName="Table_27" XPos="63" YPos="195" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="71" >
 <COLUMNS>
 <COLUMN ID="2118" ColName="pathway_id" PrevColName="" Pos="0" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="1" IsForeignKey="0" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -1123,7 +1123,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="2120" Tablename="reaction" PrevTableName="Table_28" XPos="1160" YPos="1342" TableType="0" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="72" >
+<TABLE ID="2120" Tablename="reaction" PrevTableName="Table_28" XPos="78" YPos="489" TableType="0" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="72" >
 <COLUMNS>
 <COLUMN ID="2122" ColName="reaction_id" PrevColName="" Pos="0" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="1" IsForeignKey="0" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -1137,11 +1137,7 @@
 <OPTIONSELECT Value="0" />
 </OPTIONSELECTED>
 </COLUMN>
-<COLUMN ID="2124" ColName="a_to_b" PrevColName="" Pos="1" idDatatype="22" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="0" NotNull="1" AutoInc="0" IsForeignKey="0" DefaultValue="" Comments="">
-<OPTIONSELECTED>
-</OPTIONSELECTED>
-</COLUMN>
-<COLUMN ID="2125" ColName="b_to_a" PrevColName="" Pos="2" idDatatype="22" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="0" NotNull="1" AutoInc="0" IsForeignKey="0" DefaultValue="" Comments="">
+<COLUMN ID="2124" ColName="reversible" PrevColName="a_to_b" Pos="1" idDatatype="22" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="0" NotNull="1" AutoInc="0" IsForeignKey="0" DefaultValue="" Comments="">
 <OPTIONSELECTED>
 </OPTIONSELECTED>
 </COLUMN>
@@ -1164,7 +1160,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="2126" Tablename="compound" PrevTableName="Table_29" XPos="1149" YPos="1700" TableType="0" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="73" >
+<TABLE ID="2126" Tablename="compound" PrevTableName="Table_29" XPos="68" YPos="848" TableType="0" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="73" >
 <COLUMNS>
 <COLUMN ID="2128" ColName="compound_id" PrevColName="" Pos="0" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="1" IsForeignKey="0" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -1190,7 +1186,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="2136" Tablename="pathway_has_reaction" PrevTableName="" XPos="1168" YPos="1205" TableType="0" TablePrefix="0" nmTable="1" Temporary="0" UseStandardInserts="0" StandardInserts="" TableOptions="" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="74" >
+<TABLE ID="2136" Tablename="pathway_has_reaction" PrevTableName="" XPos="86" YPos="352" TableType="0" TablePrefix="0" nmTable="1" Temporary="0" UseStandardInserts="0" StandardInserts="" TableOptions="" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="74" >
 <COLUMNS>
 <COLUMN ID="2139" ColName="pathway_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -1218,7 +1214,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="2142" Tablename="reaction_has_compound" PrevTableName="" XPos="1152" YPos="1498" TableType="0" TablePrefix="0" nmTable="1" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="77" >
+<TABLE ID="2142" Tablename="reaction_has_compound" PrevTableName="" XPos="71" YPos="646" TableType="0" TablePrefix="0" nmTable="1" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="77" >
 <COLUMNS>
 <COLUMN ID="2145" ColName="reaction_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -1256,7 +1252,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="2151" Tablename="pathway_synonym" PrevTableName="pathway_has_dbxref" XPos="1309" YPos="1140" TableType="0" TablePrefix="0" nmTable="1" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="80" >
+<TABLE ID="2151" Tablename="pathway_synonym" PrevTableName="pathway_has_dbxref" XPos="228" YPos="288" TableType="0" TablePrefix="0" nmTable="1" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="80" >
 <COLUMNS>
 <COLUMN ID="2154" ColName="pathway_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -1284,7 +1280,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="2157" Tablename="reaction_synonym" PrevTableName="reaction_has_dbxref" XPos="1337" YPos="1280" TableType="0" TablePrefix="0" nmTable="1" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="83" >
+<TABLE ID="2157" Tablename="reaction_synonym" PrevTableName="reaction_has_dbxref" XPos="255" YPos="428" TableType="0" TablePrefix="0" nmTable="1" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="83" >
 <COLUMNS>
 <COLUMN ID="2160" ColName="reaction_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -1312,7 +1308,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="2165" Tablename="compound_synonym" PrevTableName="compound_has_dbxref" XPos="1325" YPos="1626" TableType="0" TablePrefix="0" nmTable="1" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="86" >
+<TABLE ID="2165" Tablename="compound_synonym" PrevTableName="compound_has_dbxref" XPos="243" YPos="774" TableType="0" TablePrefix="0" nmTable="1" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="86" >
 <COLUMNS>
 <COLUMN ID="2168" ColName="compound_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -1340,7 +1336,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="2180" Tablename="subseq_reaction_annotation" PrevTableName="Table_36" XPos="1809" YPos="1297" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="90" >
+<TABLE ID="2180" Tablename="subseq_reaction_annotation" PrevTableName="Table_36" XPos="728" YPos="445" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="90" >
 <COLUMNS>
 <COLUMN ID="2182" ColName="annotation_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -1367,7 +1363,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="2188" Tablename="pathway_organism_annotation" PrevTableName="Table_37" XPos="1385" YPos="1042" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="93" >
+<TABLE ID="2188" Tablename="pathway_organism_annotation" PrevTableName="Table_37" XPos="303" YPos="189" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="93" >
 <COLUMNS>
 <COLUMN ID="2190" ColName="annotation_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="1" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -1401,7 +1397,7 @@
 </INDEX>
 </INDICES>
 </TABLE>
-<TABLE ID="2203" Tablename="compound_note" PrevTableName="Table_38" XPos="1298" YPos="1818" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="97" >
+<TABLE ID="2203" Tablename="compound_note" PrevTableName="Table_38" XPos="217" YPos="966" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="97" >
 <COLUMNS>
 <COLUMN ID="2212" ColName="type_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="(10)" Width="0" Prec="0" PrimaryKey="0" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -1425,7 +1421,7 @@
 <RELATION_END ID="2211" />
 </RELATIONS_END>
 </TABLE>
-<TABLE ID="2215" Tablename="reaction_note" PrevTableName="Table_39" XPos="1383" YPos="1449" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="100" >
+<TABLE ID="2215" Tablename="reaction_note" PrevTableName="Table_39" XPos="302" YPos="597" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="100" >
 <COLUMNS>
 <COLUMN ID="2223" ColName="type_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="(10)" Width="0" Prec="0" PrimaryKey="0" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>
@@ -1449,7 +1445,7 @@
 <RELATION_END ID="2222" />
 </RELATIONS_END>
 </TABLE>
-<TABLE ID="2226" Tablename="pathway_note" PrevTableName="Table_40" XPos="1268" YPos="954" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="103" >
+<TABLE ID="2226" Tablename="pathway_note" PrevTableName="Table_40" XPos="186" YPos="102" TableType="1" TablePrefix="0" nmTable="0" Temporary="0" UseStandardInserts="0" StandardInserts="\n" TableOptions="DelayKeyTblUpdates=0\nPackKeys=0\nRowChecksum=0\nRowFormat=0\nUseRaid=0\nRaidType=0\n" Comments="" Collapsed="0" IsLinkedObject="0" IDLinkedModel="-1" Obj_id_Linked="-1" OrderPos="103" >
 <COLUMNS>
 <COLUMN ID="2230" ColName="pathway_id" PrevColName="" Pos="1" idDatatype="5" DatatypeParams="" Width="-1" Prec="-1" PrimaryKey="0" NotNull="1" AutoInc="0" IsForeignKey="1" DefaultValue="" Comments="">
 <OPTIONSELECTED>

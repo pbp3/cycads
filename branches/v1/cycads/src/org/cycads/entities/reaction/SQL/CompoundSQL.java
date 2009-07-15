@@ -13,9 +13,9 @@ import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
 public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound<DbxrefSQL>
 {
-	Connection	con;
-	int			id;
-	boolean		isSmallMolecule;
+	private Connection	con;
+	private int			id;
+	private boolean		smallMolecule;
 
 	public CompoundSQL(int id, Connection con) throws SQLException {
 		this.id = id;
@@ -27,7 +27,7 @@ public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound<Dbxre
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
-				isSmallMolecule = rs.getBoolean("small_molecule");
+				smallMolecule = rs.getBoolean("small_molecule");
 			}
 			else {
 				throw new SQLException("Compound does not exist:" + id);
@@ -53,26 +53,26 @@ public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound<Dbxre
 		}
 	}
 
-	protected CompoundSQL(boolean isSmallMolecule, Connection con) throws SQLException {
-		this.isSmallMolecule = isSmallMolecule;
+	protected CompoundSQL(boolean smallMolecule, Connection con) throws SQLException {
+		this.smallMolecule = smallMolecule;
 		this.con = con;
-		this.id = createNewCompound(isSmallMolecule, con);
+		this.id = createNewCompound(smallMolecule, con);
 	}
 
-	public CompoundSQL(boolean isSmallMolecule, String dbName, String accession, Connection con) throws SQLException {
-		this.isSmallMolecule = isSmallMolecule;
+	public CompoundSQL(boolean smallMolecule, String dbName, String accession, Connection con) throws SQLException {
+		this.smallMolecule = smallMolecule;
 		this.con = con;
 		ArrayList<CompoundSQL> comps = getCompounds(dbName, accession, con);
 		if (comps.size() > 0) {
 			for (CompoundSQL comp : comps) {
-				if (comp.isSmallMolecule == isSmallMolecule) {
+				if (comp.isSmallMolecule() == smallMolecule) {
 					this.id = comp.getId();
 					return;
 				}
 			}
 			throw new SQLException("Small molecule field diferent to create the object compound.");
 		}
-		this.id = createNewCompound(isSmallMolecule, con);
+		this.id = createNewCompound(smallMolecule, con);
 		addSynonym(dbName, accession);
 	}
 
@@ -118,13 +118,13 @@ public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound<Dbxre
 		}
 	}
 
-	protected int createNewCompound(boolean isSmallMolecule, Connection con) throws SQLException {
+	private int createNewCompound(boolean smallMolecule, Connection con) throws SQLException {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
 			stmt = con.prepareStatement("INSERT INTO compound (small_molecule) VALUES (?)",
 				Statement.RETURN_GENERATED_KEYS);
-			stmt.setBoolean(1, isSmallMolecule);
+			stmt.setBoolean(1, smallMolecule);
 			stmt.executeUpdate();
 			rs = stmt.getGeneratedKeys();
 			if (rs.next()) {
@@ -181,7 +181,7 @@ public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound<Dbxre
 
 	@Override
 	public boolean isSmallMolecule() {
-		return isSmallMolecule;
+		return smallMolecule;
 	}
 
 	@Override
