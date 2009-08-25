@@ -1,0 +1,15 @@
+Cycads home page
+
+= Introduction =
+
+Introduction paragraph
+
+
+= Details =
+
+Current home page [http://acypicyc.cyadsys.org]
+
+Add your content here.  Format your content with:
+  * Text in *bold* or _italic_
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
