@@ -1,4 +1,4 @@
-Cycads home page
+Cycads home page http://pbil.univ-lyon1.fr/software/cycads/images/pisum_logo.jpg
 
 = Introduction =
 
