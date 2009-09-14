@@ -355,4 +355,8 @@ public class GBKFileConfig
 		return getStringOptional("gbk.file.fileName");
 	}
 
+	public static String getOutputFile() {
+		return getStringOptional("gbk.file.debug.outputGbkFile");
+	}
+
 }

@@ -361,4 +361,8 @@ public class Messages
 		return MessageFormat.format(getStringMandatory("ecCDSFile.extract.final"), a);
 	}
 
+	public static String copyException() {
+		return getString("gbk.file.exception.copy");
+	}
+
 }

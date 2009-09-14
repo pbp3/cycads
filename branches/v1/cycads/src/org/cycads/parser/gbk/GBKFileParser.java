@@ -5,6 +5,7 @@ package org.cycads.parser.gbk;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,7 +35,8 @@ import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.ui.progress.Progress;
 
-public class GBKFileParser {
+public class GBKFileParser
+{
 
 	private EntityFactory	factory;
 	private String			seqDBName;
@@ -64,7 +66,19 @@ public class GBKFileParser {
 				richSeq = seqs.nextRichSequence();
 				sequence = getSequence(richSeq);
 				for (Feature feature : richSeq.getFeatureSet()) {
-					handleFeature((RichFeature) feature, sequence);
+					String type = GBKFileConfig.getType(feature.getType());
+					if (type != null && type.length() > 0) {
+						feature.setType(type);
+						handleFeature((RichFeature) feature, sequence);
+					}
+					else {
+						richSeq.removeFeature(feature);
+					}
+				}
+				String outputFileName = GBKFileConfig.getOutputFile();
+				if (outputFileName != null) {
+					RichSequence.IOTools.writeGenbank(new FileOutputStream(outputFileName, false), richSeq,
+						RichObjectFactory.getDefaultNamespace());
 				}
 			}
 			catch (BioException e) {
@@ -98,19 +112,37 @@ public class GBKFileParser {
 	}
 
 	public void handleFeature(RichFeature feature, Sequence sequence) {
-		String type = GBKFileConfig.getType(feature.getType());
-		if (type != null && type.length() > 0) {
-			Subsequence subseq = getSubsequence(feature, sequence);
-			SubseqAnnotation annot = subseq.addAnnotation(factory.getAnnotationType(type),
-				factory.getAnnotationMethod(GBKFileConfig.getAnnotationMethodName(type)));
-			for (Object o : feature.getRankedCrossRefs()) {
-				RankedCrossRef rankedCrossRef = (RankedCrossRef) o;
-				annot.addSynonym(rankedCrossRef.getCrossRef().getDbname(), rankedCrossRef.getCrossRef().getAccession());
+		String type = feature.getType();
+		Subsequence subseq = getSubsequence(feature, sequence);
+		SubseqAnnotation annot = subseq.addAnnotation(factory.getAnnotationType(type),
+			factory.getAnnotationMethod(GBKFileConfig.getAnnotationMethodName(type)));
+
+		for (Object o : feature.getRankedCrossRefs()) {
+			RankedCrossRef rankedCrossRef = (RankedCrossRef) o;
+			annot.addSynonym(rankedCrossRef.getCrossRef().getDbname(), rankedCrossRef.getCrossRef().getAccession());
+		}
+
+		// AnnotationSynonym, parent, EC and function
+		SimpleRichAnnotation annots = ((SimpleRichAnnotation) feature.getAnnotation());
+
+		ArrayList<Note> notes = new ArrayList<Note>(annots.getNoteSet());
+		for (int i = 0; i < notes.size(); i++) {
+			Note note = notes.get(i);
+			Collection<Note> changedNotes = getChangedNotes(note, type);
+			boolean removeNote = true;
+			for (Note changedNote : changedNotes) {
+				if (changedNote.equals(note)) {
+					removeNote = false;
+				}
+				else {
+					annots.addNote(changedNote);
+					notes.add(changedNote);
+				}
 			}
-			// AnnotationSynonym, parent, EC and function
-			Object[] notes = ((SimpleRichAnnotation) feature.getAnnotation()).getNoteSet().toArray();
-			for (Object obj : notes) {
-				Note note = (Note) obj;
+			if (removeNote) {
+				annots.removeNote(note);
+			}
+			else {
 				boolean parentNote = false, synonymNote = false, ecNote = false, functionNote = false;
 				String tag = GBKFileConfig.getTag(note.getTerm().getName(), type);
 				ArrayList<String> parentDBNames = GBKFileConfig.getParentDBNames(tag, type);
@@ -156,6 +188,21 @@ public class GBKFileParser {
 			}
 			progress.completeStep();
 		}
+	}
+
+	// return zero, one or many notes changed or not
+	private Collection<Note> getChangedNotes(Note note, String type) {
+		Collection<Note> ret = new ArrayList<Note>();
+		Collection<Operation> operations = GBKFileConfig.getOperations(type);
+		if (operations == null || operations.isEmpty()) {
+			ret.add(note);
+		}
+		else {
+			for (Operation operation : operations) {
+				ret.addAll(operation.transform(note));
+			}
+		}
+		return ret;
 	}
 
 	public Subsequence getSubsequence(RichFeature feature, Sequence sequence) {
