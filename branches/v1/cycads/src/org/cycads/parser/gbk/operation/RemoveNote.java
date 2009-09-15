@@ -8,10 +8,10 @@ import java.util.regex.Pattern;
 
 import org.biojavax.Note;
 
-public class Remove extends SimpleOperation implements Operation
+public class RemoveNote extends SimpleNoteOperation implements NoteOperation
 {
 
-	protected Remove(Pattern tagNameRegex, Pattern tagValueRegex) {
+	protected RemoveNote(Pattern tagNameRegex, Pattern tagValueRegex) {
 		super(tagNameRegex, tagValueRegex);
 	}
 

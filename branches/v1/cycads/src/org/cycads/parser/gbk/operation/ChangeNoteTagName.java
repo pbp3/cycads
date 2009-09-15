@@ -9,11 +9,11 @@ import java.util.regex.Pattern;
 import org.biojavax.Note;
 import org.biojavax.RichObjectFactory;
 
-public class ChangeTagName extends SimpleOperation implements Operation
+public class ChangeNoteTagName extends SimpleNoteOperation implements NoteOperation
 {
 	String	newTagName;
 
-	protected ChangeTagName(Pattern tagNameRegex, Pattern tagValueRegex, String newTagName) {
+	protected ChangeNoteTagName(Pattern tagNameRegex, Pattern tagValueRegex, String newTagName) {
 		super(tagNameRegex, tagValueRegex);
 		this.newTagName = newTagName;
 	}

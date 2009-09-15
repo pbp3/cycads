@@ -9,11 +9,11 @@ import java.util.regex.Pattern;
 import org.biojavax.Note;
 import org.biojavax.SimpleNote;
 
-public class Split extends SimpleOperation implements Operation
+public class SplitNote extends SimpleNoteOperation implements NoteOperation
 {
 	String	separator;
 
-	protected Split(Pattern tagNameRegex, Pattern tagValueRegex, String separator) {
+	protected SplitNote(Pattern tagNameRegex, Pattern tagValueRegex, String separator) {
 		super(tagNameRegex, tagValueRegex);
 		this.separator = separator;
 	}

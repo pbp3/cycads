@@ -8,11 +8,11 @@ import java.util.regex.Pattern;
 
 import org.biojavax.Note;
 
-public abstract class SimpleOperation implements Operation
+public abstract class SimpleNoteOperation implements NoteOperation
 {
 	Pattern	tagNameRegex, tagValueRegex;
 
-	protected SimpleOperation(Pattern tagNameRegex, Pattern tagValueRegex) {
+	protected SimpleNoteOperation(Pattern tagNameRegex, Pattern tagValueRegex) {
 		this.tagNameRegex = tagNameRegex;
 		this.tagValueRegex = tagValueRegex;
 	}

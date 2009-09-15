@@ -11,12 +11,12 @@ import org.biojavax.RichObjectFactory;
 import org.biojavax.SimpleNote;
 import org.cycads.general.Messages;
 
-public class Copy extends SimpleOperation implements Operation
+public class CopyNote extends SimpleNoteOperation implements NoteOperation
 {
 
 	String	newTagName;
 
-	protected Copy(Pattern tagNameRegex, Pattern tagValueRegex, String newTagName) {
+	protected CopyNote(Pattern tagNameRegex, Pattern tagValueRegex, String newTagName) {
 		super(tagNameRegex, tagValueRegex);
 		this.newTagName = newTagName;
 		if (newTagName == null || newTagName.length() == 0 || tagNameRegex.matcher(newTagName).matches()) {

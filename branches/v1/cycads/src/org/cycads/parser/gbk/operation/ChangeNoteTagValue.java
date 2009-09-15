@@ -9,13 +9,13 @@ import java.util.regex.Pattern;
 
 import org.biojavax.Note;
 
-public class ChangeTagValue extends SimpleOperation implements Operation
+public class ChangeNoteTagValue extends SimpleNoteOperation implements NoteOperation
 {
 
 	List<String>	substSourceTagValues;
 	List<String>	substTargetTagValues;
 
-	protected ChangeTagValue(Pattern tagNameRegex, Pattern tagValueRegex, List<String> substSourceTagValues,
+	protected ChangeNoteTagValue(Pattern tagNameRegex, Pattern tagValueRegex, List<String> substSourceTagValues,
 			List<String> substTargetTagValues) {
 		super(tagNameRegex, tagValueRegex);
 		this.substSourceTagValues = substSourceTagValues;
