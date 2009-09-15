@@ -7,9 +7,7 @@ import java.util.Collection;
 
 import org.biojavax.Note;
 
-public interface NoteOperation
+public interface NoteOperation extends Operation
 {
-	public boolean match(Note note);
-
 	public Note transform(Note note, Collection<Note> newNotes);
 }
