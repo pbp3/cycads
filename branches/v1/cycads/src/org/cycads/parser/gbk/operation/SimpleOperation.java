@@ -1,9 +1,8 @@
 /*
  * Created on 14/09/2009
  */
-package org.cycads.parser.gbk;
+package org.cycads.parser.gbk.operation;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
@@ -25,15 +24,13 @@ public abstract class SimpleOperation implements Operation
 	}
 
 	@Override
-	public Collection<Note> transform(Note note) {
+	public Note transform(Note note, Collection<Note> newNotes) {
 		if (match(note)) {
-			return execute(note);
+			return execute(note, newNotes);
 		}
-		Collection<Note> ret = new ArrayList<Note>();
-		ret.add(note);
-		return ret;
+		return note;
 	}
 
-	protected abstract Collection<Note> execute(Note note);
+	protected abstract Note execute(Note note, Collection<Note> newNotes);
 
 }

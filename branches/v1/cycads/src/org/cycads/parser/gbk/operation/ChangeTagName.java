@@ -1,9 +1,8 @@
 /*
  * Created on 14/09/2009
  */
-package org.cycads.parser.gbk;
+package org.cycads.parser.gbk.operation;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
@@ -20,10 +19,8 @@ public class ChangeTagName extends SimpleOperation implements Operation
 	}
 
 	@Override
-	protected Collection<Note> execute(Note note) {
+	protected Note execute(Note note, Collection<Note> newNotes) {
 		note.setTerm(RichObjectFactory.getDefaultOntology().getOrCreateTerm(newTagName));
-		Collection<Note> ret = new ArrayList<Note>();
-		ret.add(note);
-		return ret;
+		return note;
 	}
 }

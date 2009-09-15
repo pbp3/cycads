@@ -1,9 +1,8 @@
 /*
  * Created on 14/09/2009
  */
-package org.cycads.parser.gbk;
+package org.cycads.parser.gbk.operation;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -24,12 +23,10 @@ public class ChangeTagValue extends SimpleOperation implements Operation
 	}
 
 	@Override
-	protected Collection<Note> execute(Note note) {
+	protected Note execute(Note note, Collection<Note> newNotes) {
 		for (int i = 0; i < substSourceTagValues.size(); i++) {
 			note.setValue(note.getValue().replaceAll(substSourceTagValues.get(i), substTargetTagValues.get(i)));
 		}
-		Collection<Note> ret = new ArrayList<Note>();
-		ret.add(note);
-		return ret;
+		return note;
 	}
 }

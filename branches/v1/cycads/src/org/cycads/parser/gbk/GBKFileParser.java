@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import org.biojava.bio.BioException;
@@ -33,6 +34,7 @@ import org.cycads.entities.sequence.Sequence;
 import org.cycads.entities.sequence.SimpleIntron;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
+import org.cycads.parser.gbk.operation.Operation;
 import org.cycads.ui.progress.Progress;
 
 public class GBKFileParser
@@ -122,27 +124,31 @@ public class GBKFileParser
 			annot.addSynonym(rankedCrossRef.getCrossRef().getDbname(), rankedCrossRef.getCrossRef().getAccession());
 		}
 
-		// AnnotationSynonym, parent, EC and function
 		SimpleRichAnnotation annots = ((SimpleRichAnnotation) feature.getAnnotation());
-
 		ArrayList<Note> notes = new ArrayList<Note>(annots.getNoteSet());
+		List<Operation> operations = GBKFileConfig.getOperations(type);
+		Collection<Note> newNotes = new ArrayList<Note>();
 		for (int i = 0; i < notes.size(); i++) {
 			Note note = notes.get(i);
-			Collection<Note> changedNotes = getChangedNotes(note, type);
-			boolean removeNote = true;
-			for (Note changedNote : changedNotes) {
-				if (changedNote.equals(note)) {
-					removeNote = false;
-				}
-				else {
-					annots.addNote(changedNote);
-					notes.add(changedNote);
-				}
+			annots.removeNote(note);
+
+			//transform and get new notes for each note (Operations)
+			newNotes.clear();
+			int operationIndex = 0;
+			while (note != null && i < operations.size()) {
+				note = operations.get(operationIndex++).transform(note, newNotes);
 			}
-			if (removeNote) {
-				annots.removeNote(note);
+
+			//put new notes to analyze and to feature
+			for (Note newNote : newNotes) {
+				notes.add(newNote);
+				annots.addNote(newNote);
 			}
-			else {
+
+			//analyse transformed note
+			if (note != null) {
+				annots.addNote(note);
+				// AnnotationSynonym, parent, EC and function
 				boolean parentNote = false, synonymNote = false, ecNote = false, functionNote = false;
 				String tag = GBKFileConfig.getTag(note.getTerm().getName(), type);
 				ArrayList<String> parentDBNames = GBKFileConfig.getParentDBNames(tag, type);
@@ -188,21 +194,6 @@ public class GBKFileParser
 			}
 			progress.completeStep();
 		}
-	}
-
-	// return zero, one or many notes changed or not
-	private Collection<Note> getChangedNotes(Note note, String type) {
-		Collection<Note> ret = new ArrayList<Note>();
-		Collection<Operation> operations = GBKFileConfig.getOperations(type);
-		if (operations == null || operations.isEmpty()) {
-			ret.add(note);
-		}
-		else {
-			for (Operation operation : operations) {
-				ret.addAll(operation.transform(note));
-			}
-		}
-		return ret;
 	}
 
 	public Subsequence getSubsequence(RichFeature feature, Sequence sequence) {

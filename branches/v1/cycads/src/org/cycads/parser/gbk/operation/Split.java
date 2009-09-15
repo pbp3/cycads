@@ -1,9 +1,8 @@
 /*
  * Created on 14/09/2009
  */
-package org.cycads.parser.gbk;
+package org.cycads.parser.gbk.operation;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
@@ -20,20 +19,17 @@ public class Split extends SimpleOperation implements Operation
 	}
 
 	@Override
-	public Collection<Note> execute(Note note) {
+	public Note execute(Note note, Collection<Note> newNotes) {
 		String value = note.getValue();
 		String[] values = value.split(separator);
 
-		Collection<Note> ret = new ArrayList<Note>();
-		if (values.length == 1) {
-			ret.add(note);
-		}
-		else {
+		if (values.length > 1) {
 			for (String newValue : values) {
-				ret.add(new SimpleNote(note.getTerm(), newValue, 0));
+				newNotes.add(new SimpleNote(note.getTerm(), newValue, 0));
 			}
+			note = null;
 		}
-		return ret;
+		return note;
 	}
 
 }

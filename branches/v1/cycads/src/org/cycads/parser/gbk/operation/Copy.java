@@ -1,9 +1,8 @@
 /*
  * Created on 14/09/2009
  */
-package org.cycads.parser.gbk;
+package org.cycads.parser.gbk.operation;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
@@ -26,10 +25,9 @@ public class Copy extends SimpleOperation implements Operation
 	}
 
 	@Override
-	protected Collection<Note> execute(Note note) {
-		Collection<Note> ret = new ArrayList<Note>();
-		ret.add(note);
-		ret.add(new SimpleNote(RichObjectFactory.getDefaultOntology().getOrCreateTerm(newTagName), note.getValue(), 0));
-		return ret;
+	protected Note execute(Note note, Collection<Note> newNotes) {
+		newNotes.add(new SimpleNote(RichObjectFactory.getDefaultOntology().getOrCreateTerm(newTagName),
+			note.getValue(), 0));
+		return note;
 	}
 }

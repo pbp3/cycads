@@ -1,7 +1,7 @@
 /*
  * Created on 14/09/2009
  */
-package org.cycads.parser.gbk;
+package org.cycads.parser.gbk.operation;
 
 import java.util.Collection;
 
@@ -11,5 +11,5 @@ public interface Operation
 {
 	public boolean match(Note note);
 
-	public Collection<Note> transform(Note note);
+	public Note transform(Note note, Collection<Note> newNotes);
 }
