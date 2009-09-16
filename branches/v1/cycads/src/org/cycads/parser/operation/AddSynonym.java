@@ -25,7 +25,17 @@ public class AddSynonym<S extends HasSynonyms> extends SimpleRelationshipOperati
 
 	@Override
 	protected Collection<Dbxref> execute(S source, Note note) {
-		Dbxref synonym = factory.getDbxref(synonymDBName, note.getValue());
+		String dbName, accession;
+
+		if (synonymDBName == null || synonymDBName.length() == 0) {
+
+		}
+		else {
+			dbName = synonymDBName;
+			accession = note.getValue();
+		}
+
+		Dbxref synonym = factory.getDbxref(dbName, accession);
 		source.addSynonym(synonym);
 		Collection<Dbxref> ret = new ArrayList<Dbxref>();
 		ret.add(synonym);
