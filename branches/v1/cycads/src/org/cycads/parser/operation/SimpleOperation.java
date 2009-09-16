@@ -1,11 +1,9 @@
 /*
  * Created on 15/09/2009
  */
-package org.cycads.parser.gbk.operation;
+package org.cycads.parser.operation;
 
 import java.util.regex.Pattern;
-
-import org.biojavax.Note;
 
 public class SimpleOperation implements Operation
 {
@@ -19,7 +17,7 @@ public class SimpleOperation implements Operation
 
 	@Override
 	public boolean match(Note note) {
-		return (tagNameRegex == null || tagNameRegex.matcher(note.getTerm().getName()).matches())
+		return (tagNameRegex == null || tagNameRegex.matcher(note.getType()).matches())
 			&& (tagValueRegex == null || tagValueRegex.matcher(note.getValue()).matches());
 	}
 

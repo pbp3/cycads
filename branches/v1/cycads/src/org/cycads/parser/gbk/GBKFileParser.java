@@ -21,6 +21,7 @@ import org.biojavax.Comment;
 import org.biojavax.Note;
 import org.biojavax.RankedCrossRef;
 import org.biojavax.RichObjectFactory;
+import org.biojavax.SimpleNote;
 import org.biojavax.SimpleRichAnnotation;
 import org.biojavax.bio.seq.RichFeature;
 import org.biojavax.bio.seq.RichSequence;
@@ -34,7 +35,8 @@ import org.cycads.entities.sequence.Sequence;
 import org.cycads.entities.sequence.SimpleIntron;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
-import org.cycads.parser.gbk.operation.NoteOperation;
+import org.cycads.parser.operation.NoteBiojava;
+import org.cycads.parser.operation.NoteOperation;
 import org.cycads.ui.progress.Progress;
 
 public class GBKFileParser
@@ -126,27 +128,30 @@ public class GBKFileParser
 
 		SimpleRichAnnotation annots = ((SimpleRichAnnotation) feature.getAnnotation());
 		ArrayList<Note> notes = new ArrayList<Note>(annots.getNoteSet());
-		List<NoteOperation> noteOperations = GBKFileConfig.getOperations(type);
-		Collection<Note> newNotes = new ArrayList<Note>();
+		List<NoteOperation> noteOperations = GBKFileConfig.getNoteOperations(type);
+		Collection<org.cycads.parser.operation.Note> newNotes = new ArrayList<org.cycads.parser.operation.Note>();
 		for (int i = 0; i < notes.size(); i++) {
 			Note note = notes.get(i);
 			annots.removeNote(note);
 
+			org.cycads.parser.operation.Note noteForOperation = new NoteBiojava(note);
 			//transform and get new notes for each note (Operations)
 			newNotes.clear();
 			int operationIndex = 0;
-			while (note != null && i < noteOperations.size()) {
-				note = noteOperations.get(operationIndex++).transform(note, newNotes);
+			while (noteForOperation != null && i < noteOperations.size()) {
+				noteForOperation = noteOperations.get(operationIndex++).transform(noteForOperation, newNotes);
 			}
 
 			//put new notes to analyze and to feature
-			for (Note newNote : newNotes) {
-				notes.add(newNote);
-				annots.addNote(newNote);
+			for (org.cycads.parser.operation.Note newNote : newNotes) {
+				Note newBiojavaNote = new SimpleNote(RichObjectFactory.getDefaultOntology().getOrCreateTerm(
+					newNote.getType()), newNote.getValue(), 0);
+				notes.add(newBiojavaNote);
+				annots.addNote(newBiojavaNote);
 			}
 
 			//analyse transformed note
-			if (note != null) {
+			if (noteForOperation != null) {
 				annots.addNote(note);
 				// AnnotationSynonym, parent, EC and function
 				boolean parentNote = false, synonymNote = false, dbxrefAnnotNote = false, functionAnnotNote = false;

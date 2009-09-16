@@ -1,13 +1,10 @@
 /*
  * Created on 14/09/2009
  */
-package org.cycads.parser.gbk.operation;
+package org.cycads.parser.operation;
 
 import java.util.Collection;
 import java.util.regex.Pattern;
-
-import org.biojavax.Note;
-import org.biojavax.SimpleNote;
 
 public class SplitNote extends SimpleNoteOperation implements NoteOperation
 {
@@ -25,7 +22,7 @@ public class SplitNote extends SimpleNoteOperation implements NoteOperation
 
 		if (values.length > 1) {
 			for (String newValue : values) {
-				newNotes.add(new SimpleNote(note.getTerm(), newValue, 0));
+				newNotes.add(new SimpleNote(note.getType(), newValue));
 			}
 			note = null;
 		}

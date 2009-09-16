@@ -1,12 +1,10 @@
 /*
  * Created on 14/09/2009
  */
-package org.cycads.parser.gbk.operation;
+package org.cycads.parser.operation;
 
 import java.util.Collection;
 import java.util.regex.Pattern;
-
-import org.biojavax.Note;
 
 public class RemoveNote extends SimpleNoteOperation implements NoteOperation
 {

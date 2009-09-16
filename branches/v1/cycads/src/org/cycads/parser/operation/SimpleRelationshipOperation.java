@@ -1,12 +1,10 @@
 /*
  * Created on 15/09/2009
  */
-package org.cycads.parser.gbk.operation;
+package org.cycads.parser.operation;
 
 import java.util.Collection;
 import java.util.regex.Pattern;
-
-import org.biojavax.Note;
 
 public abstract class SimpleRelationshipOperation<S, O> extends SimpleOperation implements RelationshipOperation<S, O>
 {

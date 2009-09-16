@@ -1,13 +1,10 @@
 /*
  * Created on 14/09/2009
  */
-package org.cycads.parser.gbk.operation;
+package org.cycads.parser.operation;
 
 import java.util.Collection;
 import java.util.regex.Pattern;
-
-import org.biojavax.Note;
-import org.biojavax.RichObjectFactory;
 
 public class ChangeNoteTagName extends SimpleNoteOperation implements NoteOperation
 {
@@ -20,7 +17,7 @@ public class ChangeNoteTagName extends SimpleNoteOperation implements NoteOperat
 
 	@Override
 	protected Note execute(Note note, Collection<Note> newNotes) {
-		note.setTerm(RichObjectFactory.getDefaultOntology().getOrCreateTerm(newTagName));
+		note.setType(newTagName);
 		return note;
 	}
 }

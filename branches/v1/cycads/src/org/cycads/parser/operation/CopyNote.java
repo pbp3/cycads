@@ -1,14 +1,11 @@
 /*
  * Created on 14/09/2009
  */
-package org.cycads.parser.gbk.operation;
+package org.cycads.parser.operation;
 
 import java.util.Collection;
 import java.util.regex.Pattern;
 
-import org.biojavax.Note;
-import org.biojavax.RichObjectFactory;
-import org.biojavax.SimpleNote;
 import org.cycads.general.Messages;
 
 public class CopyNote extends SimpleNoteOperation implements NoteOperation
@@ -26,8 +23,7 @@ public class CopyNote extends SimpleNoteOperation implements NoteOperation
 
 	@Override
 	protected Note execute(Note note, Collection<Note> newNotes) {
-		newNotes.add(new SimpleNote(RichObjectFactory.getDefaultOntology().getOrCreateTerm(newTagName),
-			note.getValue(), 0));
+		newNotes.add(new SimpleNote(newTagName, note.getValue()));
 		return note;
 	}
 }

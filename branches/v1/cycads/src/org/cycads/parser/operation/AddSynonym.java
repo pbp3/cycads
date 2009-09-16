@@ -1,13 +1,12 @@
 /*
  * Created on 15/09/2009
  */
-package org.cycads.parser.gbk.operation;
+package org.cycads.parser.operation;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
-import org.biojavax.Note;
 import org.cycads.entities.EntityFactory;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.HasSynonyms;

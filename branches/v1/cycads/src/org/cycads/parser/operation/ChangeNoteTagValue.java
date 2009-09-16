@@ -1,13 +1,11 @@
 /*
  * Created on 14/09/2009
  */
-package org.cycads.parser.gbk.operation;
+package org.cycads.parser.operation;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
-
-import org.biojavax.Note;
 
 public class ChangeNoteTagValue extends SimpleNoteOperation implements NoteOperation
 {
