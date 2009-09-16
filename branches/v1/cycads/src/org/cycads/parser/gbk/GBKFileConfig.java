@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.regex.Pattern;
 
+import org.cycads.entities.annotation.AnnotationFinder;
+import org.cycads.entities.sequence.Sequence;
 import org.cycads.general.Config;
 import org.cycads.general.ParametersDefault;
 
@@ -357,6 +359,12 @@ public class GBKFileConfig
 
 	public static String getOutputFile() {
 		return getStringOptional("gbk.file.debug.outputGbkFile");
+	}
+
+	static AnnotationFinder	AnnotFinderForParent;
+
+	public static void setAnnotFinderForParent(Sequence sequence) {
+		AnnotFinderForParent = sequence;
 	}
 
 }

@@ -27,7 +27,6 @@ import org.biojavax.bio.seq.RichFeature;
 import org.biojavax.bio.seq.RichSequence;
 import org.biojavax.bio.seq.RichSequenceIterator;
 import org.cycads.entities.EntityFactory;
-import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.SubseqAnnotation;
 import org.cycads.entities.sequence.Intron;
 import org.cycads.entities.sequence.Organism;
@@ -35,8 +34,10 @@ import org.cycads.entities.sequence.Sequence;
 import org.cycads.entities.sequence.SimpleIntron;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
+import org.cycads.parser.operation.AnnotationRelationshipOperation;
 import org.cycads.parser.operation.NoteBiojava;
 import org.cycads.parser.operation.NoteOperation;
+import org.cycads.parser.operation.SubsequenceRelationshipOperation;
 import org.cycads.ui.progress.Progress;
 
 public class GBKFileParser
@@ -69,6 +70,7 @@ public class GBKFileParser
 			try {
 				richSeq = seqs.nextRichSequence();
 				sequence = getSequence(richSeq);
+				GBKFileConfig.setAnnotFinderForParent(sequence);
 				for (Feature feature : richSeq.getFeatureSet()) {
 					String type = GBKFileConfig.getType(feature.getType());
 					if (type != null && type.length() > 0) {
@@ -129,6 +131,9 @@ public class GBKFileParser
 		SimpleRichAnnotation annots = ((SimpleRichAnnotation) feature.getAnnotation());
 		ArrayList<Note> notes = new ArrayList<Note>(annots.getNoteSet());
 		List<NoteOperation> noteOperations = GBKFileConfig.getNoteOperations(type);
+		List<AnnotationRelationshipOperation> annotationOperations = GBKFileConfig.getAnnotationOperations(type);
+		List<SubsequenceRelationshipOperation> subseqOperations = GBKFileConfig.getSubseqOperations(type);
+
 		Collection<org.cycads.parser.operation.Note> newNotes = new ArrayList<org.cycads.parser.operation.Note>();
 		for (int i = 0; i < notes.size(); i++) {
 			Note note = notes.get(i);
@@ -153,49 +158,29 @@ public class GBKFileParser
 			//analyse transformed note
 			if (noteForOperation != null) {
 				annots.addNote(note);
-				// AnnotationSynonym, parent, EC and function
-				boolean parentNote = false, synonymNote = false, dbxrefAnnotNote = false, functionAnnotNote = false;
-				String tag = GBKFileConfig.getTag(note.getTerm().getName(), type);
-				ArrayList<String> parentDBNames = GBKFileConfig.getParentDBNames(tag, type);
-				ArrayList<String> synonymDBNames = GBKFileConfig.getSynonymDBNames(tag, type);
-				ArrayList<String> ecMethodNames = GBKFileConfig.getECMethodNames(tag, type);
-				ArrayList<String> functionMethodNames = GBKFileConfig.getFunctionMethodNames(tag, type);
 
-				if (parentDBNames != null) {
-					for (String parentDBName : parentDBNames) {
-						parentNote = true;
-						Dbxref parentSynonym = factory.getDbxref(parentDBName, note.getValue());
-						Collection<Annotation> parents = annot.getSubsequence().getSequence().getOrganism().getAnnotations(
-							null, null, parentSynonym);
-						for (Annotation parent : parents) {
-							annot.addParent(parent);
-						}
+				// AnnotationSynonym and parent
+
+				boolean used = false;
+				Collection< ? > retOps;
+				for (AnnotationRelationshipOperation< ? > operation : annotationOperations) {
+					retOps = operation.relate(annot, noteForOperation);
+					if (retOps != null && !retOps.isEmpty()) {
+						used = true;
 					}
 				}
-				if (synonymDBNames != null) {
-					for (String synonymDBName : synonymDBNames) {
-						synonymNote = true;
-						Dbxref synonym = factory.getDbxref(synonymDBName, note.getValue());
-						annot.addSynonym(synonym);
+
+				// EC and function
+				for (SubsequenceRelationshipOperation< ? > operation : subseqOperations) {
+					retOps = operation.relate(subseq, noteForOperation);
+					if (retOps != null && !retOps.isEmpty()) {
+						used = true;
 					}
 				}
-				if (ecMethodNames != null) {
-					for (String ecMethodName : ecMethodNames) {
-						dbxrefAnnotNote = true;
-						annot.getSubsequence().addDbxrefAnnotation(factory.getAnnotationMethod(ecMethodName),
-							factory.getEC(note.getValue()));
-					}
-				}
-				if (functionMethodNames != null) {
-					for (String functionMethodName : functionMethodNames) {
-						functionAnnotNote = true;
-						annot.getSubsequence().addFunctionAnnotation(factory.getAnnotationMethod(functionMethodName),
-							factory.getFunction(note.getValue(), null));
-					}
-				}
+
 				// add as Note
-				if (!parentNote && !synonymNote && !dbxrefAnnotNote && !functionAnnotNote) {
-					annot.addNote(tag, note.getValue());
+				if (!used) {
+					annot.addNote(noteForOperation.getType(), noteForOperation.getValue());
 				}
 			}
 			progress.completeStep();

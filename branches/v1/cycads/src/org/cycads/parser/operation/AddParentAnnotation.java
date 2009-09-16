@@ -36,4 +36,28 @@ public class AddParentAnnotation extends SimpleRelationshipOperation<Annotation,
 		return parents;
 	}
 
+	public EntityFactory getFactory() {
+		return factory;
+	}
+
+	public void setFactory(EntityFactory factory) {
+		this.factory = factory;
+	}
+
+	public String getParentDBName() {
+		return parentDBName;
+	}
+
+	public void setParentDBName(String parentDBName) {
+		this.parentDBName = parentDBName;
+	}
+
+	public AnnotationFinder getAnnotationFinder() {
+		return annotationFinder;
+	}
+
+	public void setAnnotationFinder(AnnotationFinder annotationFinder) {
+		this.annotationFinder = annotationFinder;
+	}
+
 }

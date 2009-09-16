@@ -18,6 +18,7 @@ import org.cycads.entities.synonym.SQL.ECSQL;
 import org.cycads.entities.synonym.SQL.FunctionSQL;
 import org.cycads.entities.synonym.SQL.KOSQL;
 import org.cycads.general.Config;
+import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
 
 public class EntityFactorySQL implements EntityFactory<DbxrefSQL, AnnotationMethodSQL, TypeSQL, OrganismSQL>
@@ -63,6 +64,17 @@ public class EntityFactorySQL implements EntityFactory<DbxrefSQL, AnnotationMeth
 
 	@Override
 	public DbxrefSQL getDbxref(String dbName, String accession) {
+		String[] strs = accession.split(ParametersDefault.getDbxrefToStringSeparator());
+		if (strs.length == 2) {
+			dbName = strs[0];
+			accession = strs[1];
+		}
+		if (dbName == null || dbName.length() == 0) {
+			throw new RuntimeException(Messages.dbxrefWithoutDBNameException());
+		}
+		if (accession == null || accession.length() == 0) {
+			throw new RuntimeException(Messages.dbxrefWithoutAccessionException());
+		}
 		try {
 			return new DbxrefSQL(dbName, accession, getConnection());
 		}

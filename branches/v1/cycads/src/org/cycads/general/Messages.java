@@ -362,7 +362,15 @@ public class Messages
 	}
 
 	public static String copyException() {
-		return getString("gbk.file.exception.copy");
+		return getString("operation.exception.copy");
+	}
+
+	public static String dbxrefWithoutDBNameException() {
+		return getString("dbxref.exception.withoutDBNamee");
+	}
+
+	public static String dbxrefWithoutAccessionException() {
+		return getString("dbxref.exception.withoutAccession");
 	}
 
 }
