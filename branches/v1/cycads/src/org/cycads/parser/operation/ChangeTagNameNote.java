@@ -6,11 +6,11 @@ package org.cycads.parser.operation;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
-public class ChangeNoteTagName extends SimpleNoteOperation implements NoteOperation
+public class ChangeTagNameNote extends SimpleNoteOperation implements NoteOperation
 {
 	String	newTagName;
 
-	protected ChangeNoteTagName(Pattern tagNameRegex, Pattern tagValueRegex, String newTagName) {
+	public ChangeTagNameNote(Pattern tagNameRegex, Pattern tagValueRegex, String newTagName) {
 		super(tagNameRegex, tagValueRegex);
 		this.newTagName = newTagName;
 	}

@@ -10,7 +10,7 @@ public class SplitNote extends SimpleNoteOperation implements NoteOperation
 {
 	String	separator;
 
-	protected SplitNote(Pattern tagNameRegex, Pattern tagValueRegex, String separator) {
+	public SplitNote(Pattern tagNameRegex, Pattern tagValueRegex, String separator) {
 		super(tagNameRegex, tagValueRegex);
 		this.separator = separator;
 	}

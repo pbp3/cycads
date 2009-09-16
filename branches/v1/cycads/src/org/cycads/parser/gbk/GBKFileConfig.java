@@ -8,9 +8,14 @@ import java.util.MissingResourceException;
 import java.util.regex.Pattern;
 
 import org.cycads.entities.annotation.AnnotationFinder;
-import org.cycads.entities.sequence.Sequence;
 import org.cycads.general.Config;
 import org.cycads.general.ParametersDefault;
+import org.cycads.parser.operation.ChangeTagNameNote;
+import org.cycads.parser.operation.ChangeTagValueNote;
+import org.cycads.parser.operation.CopyNote;
+import org.cycads.parser.operation.NoteOperation;
+import org.cycads.parser.operation.RemoveNote;
+import org.cycads.parser.operation.SplitNote;
 
 /*
  * #the gff3 parameters: gff3.file[.comment].<parameter name>[.<type>][.<source>][.regex][.<i>] #type =
@@ -363,8 +368,80 @@ public class GBKFileConfig
 
 	static AnnotationFinder	AnnotFinderForParent;
 
-	public static void setAnnotFinderForParent(Sequence sequence) {
-		AnnotFinderForParent = sequence;
+	public static void setAnnotFinderForParent(AnnotationFinder annotationFinder) {
+		AnnotFinderForParent = annotationFinder;
 	}
 
+	static Hashtable<String, ArrayList<NoteOperation>>	noteOperationsHash	= new Hashtable<String, ArrayList<NoteOperation>>();
+
+	public static List<NoteOperation> getNoteOperations(String type) {
+		ArrayList<NoteOperation> ret = noteOperationsHash.get(type);
+		if (ret == null) {
+			ret = new ArrayList<NoteOperation>();
+			ArrayList<String> operationNames = getStringsByType("tagOperation", type);
+			String operationName;
+			for (int i = 0; i < operationNames.size(); i++) {
+				operationName = operationNames.get(i);
+				if (operationName.equals("remove")) {
+					ret.add(getRemoveNoteOperation(type, i));
+				}
+				else if (operationName.equals("split")) {
+					ret.add(getSplitNoteOperation(type, i));
+				}
+				else if (operationName.equals("changeTagName")) {
+					ret.add(getChangeTagNameNoteOperation(type, i));
+				}
+				else if (operationName.equals("changeTagValue")) {
+					ret.add(getChangeTagValueNoteOperation(type, i));
+				}
+				else if (operationName.equals("copy")) {
+					ret.add(getCopyNoteOperation(type, i));
+				}
+			}
+			noteOperationsHash.put(type, ret);
+		}
+		return ret;
+	}
+
+	private static NoteOperation getCopyNoteOperation(String type, int i) {
+		String tagName, tagValue, newTagName;
+		tagName = getStringByType("tagOperation." + i + ".copy.tagName.regex", type);
+		tagValue = getStringByType("tagOperation." + i + ".copy.tagValue.regex", type);
+		newTagName = getStringByType("tagOperation." + i + ".copy.newTagName", type);
+		return new CopyNote(Pattern.compile(tagName), Pattern.compile(tagValue), newTagName);
+	}
+
+	private static NoteOperation getChangeTagValueNoteOperation(String type, int i) {
+		String tagName, tagValue;
+		List<String> substSourceTagValue, substTargetTagValue;
+		tagName = getStringByType("tagOperation." + i + ".changeTagValue.tagName.regex", type);
+		tagValue = getStringByType("tagOperation." + i + ".changeTagValue.tagValue.regex", type);
+		substSourceTagValue = getStringsByType("tagOperation." + i + ".changeTagValue.substSourceTagValue.regex", type);
+		substTargetTagValue = getStringsByType("tagOperation." + i + ".changeTagValue.substTargetTagValue", type);
+		return new ChangeTagValueNote(Pattern.compile(tagName), Pattern.compile(tagValue), substSourceTagValue,
+			substTargetTagValue);
+	}
+
+	private static NoteOperation getChangeTagNameNoteOperation(String type, int i) {
+		String tagName, tagValue, newTagName;
+		tagName = getStringByType("tagOperation." + i + ".changeTagName.tagName.regex", type);
+		tagValue = getStringByType("tagOperation." + i + ".changeTagName.tagValue.regex", type);
+		newTagName = getStringByType("tagOperation." + i + ".changeTagName.newTagName", type);
+		return new ChangeTagNameNote(Pattern.compile(tagName), Pattern.compile(tagValue), newTagName);
+	}
+
+	private static NoteOperation getSplitNoteOperation(String type, int i) {
+		String tagName, tagValue, separator;
+		tagName = getStringByType("tagOperation." + i + ".split.tagName.regex", type);
+		tagValue = getStringByType("tagOperation." + i + ".split.tagValue.regex", type);
+		separator = getStringByType("tagOperation." + i + ".split.separator.regex", type);
+		return new SplitNote(Pattern.compile(tagName), Pattern.compile(tagValue), separator);
+	}
+
+	private static NoteOperation getRemoveNoteOperation(String type, int i) {
+		String tagName, tagValue;
+		tagName = getStringByType("tagOperation." + i + ".remove.tagName.regex", type);
+		tagValue = getStringByType("tagOperation." + i + ".remove.tagValue.regex", type);
+		return new RemoveNote(Pattern.compile(tagName), Pattern.compile(tagValue));
+	}
 }

@@ -7,13 +7,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class ChangeNoteTagValue extends SimpleNoteOperation implements NoteOperation
+public class ChangeTagValueNote extends SimpleNoteOperation implements NoteOperation
 {
 
 	List<String>	substSourceTagValues;
 	List<String>	substTargetTagValues;
 
-	protected ChangeNoteTagValue(Pattern tagNameRegex, Pattern tagValueRegex, List<String> substSourceTagValues,
+	public ChangeTagValueNote(Pattern tagNameRegex, Pattern tagValueRegex, List<String> substSourceTagValues,
 			List<String> substTargetTagValues) {
 		super(tagNameRegex, tagValueRegex);
 		this.substSourceTagValues = substSourceTagValues;

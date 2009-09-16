@@ -17,7 +17,7 @@ public class AddSynonym<S extends HasSynonyms> extends SimpleRelationshipOperati
 	private EntityFactory	factory;
 	private String			synonymDBName;
 
-	protected AddSynonym(Pattern tagNameRegex, Pattern tagValueRegex, String synonymDBName, EntityFactory factory) {
+	public AddSynonym(Pattern tagNameRegex, Pattern tagValueRegex, String synonymDBName, EntityFactory factory) {
 		super(tagNameRegex, tagValueRegex);
 		this.synonymDBName = synonymDBName;
 		this.factory = factory;

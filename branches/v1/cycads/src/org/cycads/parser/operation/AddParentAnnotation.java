@@ -18,8 +18,8 @@ public class AddParentAnnotation extends SimpleRelationshipOperation<Annotation,
 	private String				parentDBName;
 	private AnnotationFinder	annotationFinder;
 
-	protected AddParentAnnotation(Pattern tagNameRegex, Pattern tagValueRegex, String parentDBName,
-			EntityFactory factory, AnnotationFinder annotationFinder) {
+	public AddParentAnnotation(Pattern tagNameRegex, Pattern tagValueRegex, String parentDBName, EntityFactory factory,
+			AnnotationFinder annotationFinder) {
 		super(tagNameRegex, tagValueRegex);
 		this.parentDBName = parentDBName;
 		this.factory = factory;

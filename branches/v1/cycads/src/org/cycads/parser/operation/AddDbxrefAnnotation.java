@@ -20,7 +20,7 @@ public class AddDbxrefAnnotation<S extends DbxrefAnnotable> extends SimpleRelati
 	private String				dbxrefDBName;
 	private AnnotationMethod	method;
 
-	protected AddDbxrefAnnotation(Pattern tagNameRegex, Pattern tagValueRegex, String dbxrefDBName, String methodName,
+	public AddDbxrefAnnotation(Pattern tagNameRegex, Pattern tagValueRegex, String dbxrefDBName, String methodName,
 			EntityFactory factory) {
 		super(tagNameRegex, tagValueRegex);
 		this.dbxrefDBName = dbxrefDBName;

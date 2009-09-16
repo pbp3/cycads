@@ -20,8 +20,7 @@ public class AddFunctionAnnotation<S extends FunctionAnnotable>
 	private EntityFactory		factory;
 	private AnnotationMethod	method;
 
-	protected AddFunctionAnnotation(Pattern tagNameRegex, Pattern tagValueRegex, String methodName,
-			EntityFactory factory) {
+	public AddFunctionAnnotation(Pattern tagNameRegex, Pattern tagValueRegex, String methodName, EntityFactory factory) {
 		super(tagNameRegex, tagValueRegex);
 		this.factory = factory;
 		this.method = factory.getAnnotationMethod(methodName);

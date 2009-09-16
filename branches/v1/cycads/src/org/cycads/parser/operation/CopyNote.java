@@ -13,7 +13,7 @@ public class CopyNote extends SimpleNoteOperation implements NoteOperation
 
 	String	newTagName;
 
-	protected CopyNote(Pattern tagNameRegex, Pattern tagValueRegex, String newTagName) {
+	public CopyNote(Pattern tagNameRegex, Pattern tagValueRegex, String newTagName) {
 		super(tagNameRegex, tagValueRegex);
 		this.newTagName = newTagName;
 		if (newTagName == null || newTagName.length() == 0 || tagNameRegex.matcher(newTagName).matches()) {

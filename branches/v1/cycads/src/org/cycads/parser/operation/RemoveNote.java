@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 public class RemoveNote extends SimpleNoteOperation implements NoteOperation
 {
 
-	protected RemoveNote(Pattern tagNameRegex, Pattern tagValueRegex) {
+	public RemoveNote(Pattern tagNameRegex, Pattern tagValueRegex) {
 		super(tagNameRegex, tagValueRegex);
 	}
 
