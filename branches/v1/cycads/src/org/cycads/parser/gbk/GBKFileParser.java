@@ -34,7 +34,7 @@ import org.cycads.entities.sequence.Sequence;
 import org.cycads.entities.sequence.SimpleIntron;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
-import org.cycads.parser.gbk.operation.Operation;
+import org.cycads.parser.gbk.operation.NoteOperation;
 import org.cycads.ui.progress.Progress;
 
 public class GBKFileParser
@@ -126,7 +126,7 @@ public class GBKFileParser
 
 		SimpleRichAnnotation annots = ((SimpleRichAnnotation) feature.getAnnotation());
 		ArrayList<Note> notes = new ArrayList<Note>(annots.getNoteSet());
-		List<Operation> operations = GBKFileConfig.getOperations(type);
+		List<NoteOperation> noteOperations = GBKFileConfig.getOperations(type);
 		Collection<Note> newNotes = new ArrayList<Note>();
 		for (int i = 0; i < notes.size(); i++) {
 			Note note = notes.get(i);
@@ -135,8 +135,8 @@ public class GBKFileParser
 			//transform and get new notes for each note (Operations)
 			newNotes.clear();
 			int operationIndex = 0;
-			while (note != null && i < operations.size()) {
-				note = operations.get(operationIndex++).transform(note, newNotes);
+			while (note != null && i < noteOperations.size()) {
+				note = noteOperations.get(operationIndex++).transform(note, newNotes);
 			}
 
 			//put new notes to analyze and to feature
@@ -149,12 +149,13 @@ public class GBKFileParser
 			if (note != null) {
 				annots.addNote(note);
 				// AnnotationSynonym, parent, EC and function
-				boolean parentNote = false, synonymNote = false, ecNote = false, functionNote = false;
+				boolean parentNote = false, synonymNote = false, dbxrefAnnotNote = false, functionAnnotNote = false;
 				String tag = GBKFileConfig.getTag(note.getTerm().getName(), type);
 				ArrayList<String> parentDBNames = GBKFileConfig.getParentDBNames(tag, type);
 				ArrayList<String> synonymDBNames = GBKFileConfig.getSynonymDBNames(tag, type);
 				ArrayList<String> ecMethodNames = GBKFileConfig.getECMethodNames(tag, type);
 				ArrayList<String> functionMethodNames = GBKFileConfig.getFunctionMethodNames(tag, type);
+
 				if (parentDBNames != null) {
 					for (String parentDBName : parentDBNames) {
 						parentNote = true;
@@ -175,20 +176,20 @@ public class GBKFileParser
 				}
 				if (ecMethodNames != null) {
 					for (String ecMethodName : ecMethodNames) {
-						ecNote = true;
+						dbxrefAnnotNote = true;
 						annot.getSubsequence().addDbxrefAnnotation(factory.getAnnotationMethod(ecMethodName),
 							factory.getEC(note.getValue()));
 					}
 				}
 				if (functionMethodNames != null) {
 					for (String functionMethodName : functionMethodNames) {
-						functionNote = true;
+						functionAnnotNote = true;
 						annot.getSubsequence().addFunctionAnnotation(factory.getAnnotationMethod(functionMethodName),
 							factory.getFunction(note.getValue(), null));
 					}
 				}
 				// add as Note
-				if (!parentNote && !synonymNote && !ecNote && !functionNote) {
+				if (!parentNote && !synonymNote && !dbxrefAnnotNote && !functionAnnotNote) {
 					annot.addNote(tag, note.getValue());
 				}
 			}
