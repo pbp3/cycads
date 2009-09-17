@@ -11,7 +11,7 @@ import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationFinder;
 import org.cycads.entities.synonym.Dbxref;
 
-public class AddParentAnnotation extends SimpleRelationshipOperation<Annotation, Annotation>
+public class AddParentAnnotation<A extends Annotation> extends SimpleRelationshipOperation<A, Annotation>
 {
 
 	private EntityFactory		factory;
@@ -27,7 +27,7 @@ public class AddParentAnnotation extends SimpleRelationshipOperation<Annotation,
 	}
 
 	@Override
-	protected Collection<Annotation> execute(Annotation source, Note note) {
+	protected Collection<Annotation> execute(A source, Note note) {
 		Dbxref parentSynonym = factory.getDbxref(parentDBName, note.getValue());
 		Collection<Annotation> parents = annotationFinder.getAnnotations(null, null, parentSynonym);
 		for (Annotation parent : parents) {

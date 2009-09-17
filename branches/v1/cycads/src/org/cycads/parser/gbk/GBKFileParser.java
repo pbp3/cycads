@@ -34,10 +34,9 @@ import org.cycads.entities.sequence.Sequence;
 import org.cycads.entities.sequence.SimpleIntron;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
-import org.cycads.parser.operation.AnnotationRelationshipOperation;
 import org.cycads.parser.operation.NoteBiojava;
 import org.cycads.parser.operation.NoteOperation;
-import org.cycads.parser.operation.SubsequenceRelationshipOperation;
+import org.cycads.parser.operation.RelationshipOperation;
 import org.cycads.ui.progress.Progress;
 
 public class GBKFileParser
@@ -70,7 +69,6 @@ public class GBKFileParser
 			try {
 				richSeq = seqs.nextRichSequence();
 				sequence = getSequence(richSeq);
-				GBKFileConfig.setAnnotFinderForParent(sequence);
 				for (Feature feature : richSeq.getFeatureSet()) {
 					String type = GBKFileConfig.getType(feature.getType());
 					if (type != null && type.length() > 0) {
@@ -131,8 +129,9 @@ public class GBKFileParser
 		SimpleRichAnnotation annots = ((SimpleRichAnnotation) feature.getAnnotation());
 		ArrayList<Note> notes = new ArrayList<Note>(annots.getNoteSet());
 		List<NoteOperation> noteOperations = GBKFileConfig.getNoteOperations(type);
-		List<AnnotationRelationshipOperation> annotationOperations = GBKFileConfig.getAnnotationOperations(type);
-		List<SubsequenceRelationshipOperation> subseqOperations = GBKFileConfig.getSubseqOperations(type);
+		List<RelationshipOperation<SubseqAnnotation, ? >> annotationOperations = GBKFileConfig.getSubseqAnnotationOperations(
+			type, factory, sequence);
+		List<RelationshipOperation<Subsequence, ? >> subseqOperations = GBKFileConfig.getSubseqOperations(type, factory);
 
 		Collection<org.cycads.parser.operation.Note> newNotes = new ArrayList<org.cycads.parser.operation.Note>();
 		for (int i = 0; i < notes.size(); i++) {
@@ -161,25 +160,25 @@ public class GBKFileParser
 
 				// AnnotationSynonym and parent
 
-				boolean used = false;
+				boolean noteUsed = false;
 				Collection< ? > retOps;
-				for (AnnotationRelationshipOperation< ? > operation : annotationOperations) {
+				for (RelationshipOperation<SubseqAnnotation, ? > operation : annotationOperations) {
 					retOps = operation.relate(annot, noteForOperation);
 					if (retOps != null && !retOps.isEmpty()) {
-						used = true;
+						noteUsed = true;
 					}
 				}
 
 				// EC and function
-				for (SubsequenceRelationshipOperation< ? > operation : subseqOperations) {
+				for (RelationshipOperation<Subsequence, ? > operation : subseqOperations) {
 					retOps = operation.relate(subseq, noteForOperation);
 					if (retOps != null && !retOps.isEmpty()) {
-						used = true;
+						noteUsed = true;
 					}
 				}
 
 				// add as Note
-				if (!used) {
+				if (!noteUsed) {
 					annot.addNote(noteForOperation.getType(), noteForOperation.getValue());
 				}
 			}
