@@ -69,7 +69,8 @@ public class GBKFileParser
 			try {
 				richSeq = seqs.nextRichSequence();
 				sequence = getSequence(richSeq);
-				for (Feature feature : richSeq.getFeatureSet()) {
+				ArrayList<Feature> features = new ArrayList<Feature>(richSeq.getFeatureSet());
+				for (Feature feature : features) {
 					String type = GBKFileConfig.getType(feature.getType());
 					if (type != null && type.length() > 0) {
 						feature.setType(type);
@@ -127,6 +128,7 @@ public class GBKFileParser
 		}
 
 		SimpleRichAnnotation annots = ((SimpleRichAnnotation) feature.getAnnotation());
+		int noteRank = annots.getNoteSet().size();
 		ArrayList<Note> notes = new ArrayList<Note>(annots.getNoteSet());
 		List<NoteOperation> noteOperations = GBKFileConfig.getNoteOperations(type);
 		List<RelationshipOperation<SubseqAnnotation, ? >> annotationOperations = GBKFileConfig.getSubseqAnnotationOperations(
@@ -142,14 +144,18 @@ public class GBKFileParser
 			//transform and get new notes for each note (Operations)
 			newNotes.clear();
 			int operationIndex = 0;
-			while (noteForOperation != null && i < noteOperations.size()) {
+			while (noteForOperation != null && operationIndex < noteOperations.size()) {
 				noteForOperation = noteOperations.get(operationIndex++).transform(noteForOperation, newNotes);
 			}
 
 			//put new notes to analyze and to feature
 			for (org.cycads.parser.operation.Note newNote : newNotes) {
 				Note newBiojavaNote = new SimpleNote(RichObjectFactory.getDefaultOntology().getOrCreateTerm(
-					newNote.getType()), newNote.getValue(), 0);
+					newNote.getType()), newNote.getValue(), ++noteRank);
+				//test rank
+				while (annots.contains(newBiojavaNote)) {
+					newBiojavaNote.setRank(++noteRank);
+				}
 				notes.add(newBiojavaNote);
 				annots.addNote(newBiojavaNote);
 			}
@@ -182,8 +188,8 @@ public class GBKFileParser
 					annot.addNote(noteForOperation.getType(), noteForOperation.getValue());
 				}
 			}
-			progress.completeStep();
 		}
+		progress.completeStep();
 	}
 
 	public Subsequence getSubsequence(RichFeature feature, Sequence sequence) {

@@ -122,8 +122,15 @@ public class GBKFileConfig
 		if (patterns == null) {
 			patterns = new ArrayList<Pattern>(patternsStr.size());
 		}
+		Pattern pattern;
 		for (String str : patternsStr) {
-			patterns.add(Pattern.compile(str));
+			//			if (str != null && str.length() != 0) {
+			pattern = Pattern.compile(str);
+			//			}
+			//			else {
+			//				pattern = null;
+			//			}
+			patterns.add(pattern);
 		}
 		return patterns;
 	}
@@ -151,7 +158,7 @@ public class GBKFileConfig
 	public static int matches(String input, Collection<Pattern> patterns) {
 		int i = 0;
 		for (Pattern pattern : patterns) {
-			if (pattern.matcher(input).matches()) {
+			if (pattern != null && pattern.matcher(input).matches()) {
 				return i;
 			}
 			i++;
@@ -227,141 +234,36 @@ public class GBKFileConfig
 		return methodName;
 	}
 
-	private static ArrayList<Pattern> getPatterns(String type, Hashtable<String, ArrayList<Pattern>> patternsHash,
-			String parameterName) {
-		ArrayList<Pattern> ret = patternsHash.get(type);
-		if (ret == null) {
-			ret = getPatternsByType(parameterName, type);
-			patternsHash.put(type, ret);
-		}
-		return ret;
-	}
-
-	private static ArrayList<String> getStrings(String type, Hashtable<String, ArrayList<String>> stringsHash,
-			String parameterName) {
-		ArrayList<String> ret = stringsHash.get(type);
-		if (ret == null) {
-			ret = getStringsByType(parameterName, type);
-			stringsHash.put(type, ret);
-		}
-		return ret;
-	}
-
-	static Hashtable<String, ArrayList<Pattern>>	removeTagPatterns	= new Hashtable<String, ArrayList<Pattern>>();
-	static Hashtable<String, ArrayList<Pattern>>	changeTagPatterns	= new Hashtable<String, ArrayList<Pattern>>();
-	static Hashtable<String, ArrayList<String>>		newValueTags		= new Hashtable<String, ArrayList<String>>();
-
-	private static ArrayList<Pattern> getRemoveTagPatterns(String type) {
-		return getPatterns(type, removeTagPatterns, "removeTag");
-	}
-
-	private static ArrayList<Pattern> getChangeTagPatterns(String type) {
-		return getPatterns(type, changeTagPatterns, "changeTag");
-	}
-
-	private static ArrayList<String> getNewValueTags(String type) {
-		return getStrings(type, newValueTags, "changeTag.newValue");
-	}
-
-	static Hashtable<String, Hashtable<String, String>>	tagHash	= new Hashtable<String, Hashtable<String, String>>();
-
-	public static String getTag(String tag, String type) {
-		Hashtable<String, String> tags = tagHash.get(type);
-		if (tags == null) {
-			tags = new Hashtable<String, String>();
-			tagHash.put(type, tags);
-		}
-		String newValue = tags.get(tag);
-		if (newValue == null) {
-			String oldTag = tag;
-
-			if (matches(tag, getRemoveTagPatterns(type)) >= 0) {
-				newValue = "";
-			}
-			else {
-				newValue = tag;
-				int i = matches(tag, getChangeTagPatterns(type));
-				if (i >= 0) {
-					newValue = getNewValueTags(type).get(i);
-					tag = newValue;
-				}
-			}
-
-			tags.put(oldTag, newValue);
-		}
-		return newValue;
-	}
-
-	private static ArrayList<String> filter(ArrayList<String> results, ArrayList<Pattern> patterns, String expression) {
-		ArrayList<String> ret = new ArrayList<String>();
-		for (int i = 0; i < patterns.size(); i++) {
-			if (patterns.get(i).matcher(expression).matches()) {
-				ret.add(results.get(i));
-			}
-		}
-		return ret;
-	}
-
-	static Hashtable<String, ArrayList<Pattern>>	parentAccessionTagPatterns	= new Hashtable<String, ArrayList<Pattern>>();
-	static Hashtable<String, ArrayList<String>>		parentDbNames				= new Hashtable<String, ArrayList<String>>();
-
-	private static ArrayList<Pattern> getParentAccessionTagPatterns(String type) {
-		return getPatterns(type, parentAccessionTagPatterns, "parentAccessionTag");
-	}
-
-	private static ArrayList<String> getParentDBNames(String type) {
-		return getStrings(type, parentDbNames, "parentDbName");
-	}
-
-	public static ArrayList<String> getParentDBNames(String tag, String type) {
-		return filter(getParentDBNames(type), getParentAccessionTagPatterns(type), tag);
-	}
-
-	static Hashtable<String, ArrayList<Pattern>>	annotationSynonymAccessionTagPatterns	= new Hashtable<String, ArrayList<Pattern>>();
-	static Hashtable<String, ArrayList<String>>		annotationSynonymDbNames				= new Hashtable<String, ArrayList<String>>();
-
-	private static ArrayList<Pattern> getAnnotationSynonymAccessionTagPatterns(String type) {
-		return getPatterns(type, annotationSynonymAccessionTagPatterns, "annotationSynonymAccessionTag");
-	}
-
-	private static ArrayList<String> getAnnotationSynonymDbNames(String type) {
-		return getStrings(type, annotationSynonymDbNames, "annotationSynonymDbName");
-	}
-
-	public static ArrayList<String> getSynonymDBNames(String tag, String type) {
-		return filter(getAnnotationSynonymDbNames(type), getAnnotationSynonymAccessionTagPatterns(type), tag);
-	}
-
-	static Hashtable<String, ArrayList<Pattern>>	ecPatterns		= new Hashtable<String, ArrayList<Pattern>>();
-	static Hashtable<String, ArrayList<String>>		ecMethodNames	= new Hashtable<String, ArrayList<String>>();
-
-	private static ArrayList<Pattern> getEcPatterns(String type) {
-		return getPatterns(type, ecPatterns, "ecTag");
-	}
-
-	private static ArrayList<String> getEcMethodNames(String type) {
-		return getStrings(type, ecMethodNames, "ecMethodName");
-	}
-
-	public static ArrayList<String> getECMethodNames(String tag, String type) {
-		return filter(getEcMethodNames(type), getEcPatterns(type), tag);
-	}
-
-	static Hashtable<String, ArrayList<Pattern>>	functionTagPatterns	= new Hashtable<String, ArrayList<Pattern>>();
-	static Hashtable<String, ArrayList<String>>		functionMethodNames	= new Hashtable<String, ArrayList<String>>();
-
-	private static ArrayList<Pattern> getFunctionTagPatterns(String type) {
-		return getPatterns(type, functionTagPatterns, "functionTag");
-	}
-
-	private static ArrayList<String> getFunctionMethodNames(String type) {
-		return getStrings(type, functionMethodNames, "functionMethodName");
-	}
-
-	public static ArrayList<String> getFunctionMethodNames(String tag, String type) {
-		return filter(getFunctionMethodNames(type), getFunctionTagPatterns(type), tag);
-	}
-
+	//	private static ArrayList<Pattern> getPatterns(String type, Hashtable<String, ArrayList<Pattern>> patternsHash,
+	//			String parameterName) {
+	//		ArrayList<Pattern> ret = patternsHash.get(type);
+	//		if (ret == null) {
+	//			ret = getPatternsByType(parameterName, type);
+	//			patternsHash.put(type, ret);
+	//		}
+	//		return ret;
+	//	}
+	//
+	//	private static ArrayList<String> getStrings(String type, Hashtable<String, ArrayList<String>> stringsHash,
+	//			String parameterName) {
+	//		ArrayList<String> ret = stringsHash.get(type);
+	//		if (ret == null) {
+	//			ret = getStringsByType(parameterName, type);
+	//			stringsHash.put(type, ret);
+	//		}
+	//		return ret;
+	//	}
+	//
+	//	private static ArrayList<String> filter(ArrayList<String> results, ArrayList<Pattern> patterns, String expression) {
+	//		ArrayList<String> ret = new ArrayList<String>();
+	//		for (int i = 0; i < patterns.size(); i++) {
+	//			if (patterns.get(i).matcher(expression).matches()) {
+	//				ret.add(results.get(i));
+	//			}
+	//		}
+	//		return ret;
+	//	}
+	//
 	public static String gbkLoaderSeqDBName() {
 		return getStringOptional("gbk.file.sequence.dbName");
 	}
