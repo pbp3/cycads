@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -52,15 +53,15 @@ public class GBKFileParser
 		this.progress = progress;
 	}
 
-	public void parse(File f) throws IOException {
-		parse(new BufferedReader(new FileReader(f)));
+	public void parse(File f, File out) throws IOException {
+		parse(new BufferedReader(new FileReader(f)), new FileOutputStream(out, false));
 	}
 
-	public void parse(String fileName) throws IOException {
-		parse(new BufferedReader(new FileReader(fileName)));
+	public void parse(String fileName, String outputFileName) throws IOException {
+		parse(new BufferedReader(new FileReader(fileName)), new FileOutputStream(outputFileName, false));
 	}
 
-	public void parse(BufferedReader br) throws IOException {
+	public void parse(BufferedReader br, OutputStream outputStream) throws IOException {
 		Sequence sequence;
 		RichSequence richSeq;
 		RichSequenceIterator seqs = RichSequence.IOTools.readGenbankDNA(br, RichObjectFactory.getDefaultNamespace());
@@ -80,10 +81,8 @@ public class GBKFileParser
 						richSeq.removeFeature(feature);
 					}
 				}
-				String outputFileName = GBKFileConfig.getOutputFile();
-				if (outputFileName != null) {
-					RichSequence.IOTools.writeGenbank(new FileOutputStream(outputFileName, false), richSeq,
-						RichObjectFactory.getDefaultNamespace());
+				if (outputStream != null) {
+					RichSequence.IOTools.writeGenbank(outputStream, richSeq, RichObjectFactory.getDefaultNamespace());
 				}
 			}
 			catch (BioException e) {

@@ -79,8 +79,9 @@ public class EntityFactorySQL implements EntityFactory<DbxrefSQL, AnnotationMeth
 			return new DbxrefSQL(dbName, accession, getConnection());
 		}
 		catch (SQLException e) {
+
 			e.printStackTrace();
-			throw new RuntimeException(e);
+			throw new RuntimeException(e.getMessage() + " with dbName=" + dbName + " and accession=" + accession, e);
 		}
 	}
 

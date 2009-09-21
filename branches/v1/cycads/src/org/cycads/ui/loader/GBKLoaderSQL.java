@@ -14,12 +14,13 @@ import org.cycads.ui.Tools;
 import org.cycads.ui.progress.Progress;
 import org.cycads.ui.progress.ProgressPrintInterval;
 
-public class GBKLoaderSQL {
+public class GBKLoaderSQL
+{
 
 	public static void main(String[] args) {
 		EntityFactorySQL factory = new EntityFactorySQL();
-		File file = Tools.getFileToOpen(args, 0, GBKFileConfig.gbkLoaderFileName(), Messages.gbkLoaderChooseFile());
-		if (file == null) {
+		File fileIn = Tools.getFileToOpen(args, 0, GBKFileConfig.gbkLoaderFileName(), Messages.gbkLoaderChooseFile());
+		if (fileIn == null) {
 			return;
 		}
 		String seqDBName = Tools.getString(args, 1, Messages.gbkLoaderChooseSeqDBName(),
@@ -27,10 +28,18 @@ public class GBKLoaderSQL {
 		if (seqDBName == null) {
 			return;
 		}
+		String outputFileName = GBKFileConfig.getOutputFile();
+		File fileOut;
+		if (outputFileName == null || outputFileName.length() == 0) {
+			fileOut = null;
+		}
+		else {
+			fileOut = new File(outputFileName.replaceAll("\\*", fileIn.getName()));
+		}
 		Progress progress = new ProgressPrintInterval(System.out, Messages.gbkLoaderStepShowInterval());
 		try {
-			progress.init(Messages.gbkLoaderInitMsg(file.getPath()));
-			(new GBKFileParser(factory, seqDBName, progress)).parse(file);
+			progress.init(Messages.gbkLoaderInitMsg(fileIn.getPath()));
+			(new GBKFileParser(factory, seqDBName, progress)).parse(fileIn, fileOut);
 			progress.finish(Messages.gbkLoaderFinalMsg(progress.getStep()));
 		}
 		catch (IOException e) {
@@ -38,5 +47,4 @@ public class GBKLoaderSQL {
 		}
 
 	}
-
 }

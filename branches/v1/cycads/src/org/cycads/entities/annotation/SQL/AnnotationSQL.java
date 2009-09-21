@@ -16,8 +16,9 @@ import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
-public class AnnotationSQL extends HasSynonymsNotebleSQL implements
-		Annotation<AnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL> {
+public class AnnotationSQL extends HasSynonymsNotebleSQL
+		implements Annotation<AnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
+{
 
 	private int							id;
 	private int							methodId;
