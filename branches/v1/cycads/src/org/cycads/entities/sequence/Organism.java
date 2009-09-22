@@ -28,6 +28,8 @@ public interface Organism<S extends Sequence< ? , ? , ? , ? , ? , ? >, SS extend
 
 	public Collection<S> getSequences(X synonym);
 
+	public Collection<S> getSequences(X synonym, String version);
+
 	public Collection<SS> getSubsequences(X synonym);
 
 	public int getNextCycId();

@@ -184,6 +184,10 @@ public class Config
 		return getInt("pf.file.extract.organismNumber");
 	}
 
+	public static String pfGeneratorSeqSynonym() {
+		return getStringOptional("pf.file.extract.sequenceSynonym");
+	}
+
 	public static String pfGeneratorSeqVersion() {
 		return getStringOptional("pf.file.extract.sequenceVersion");
 	}
@@ -196,10 +200,6 @@ public class Config
 		return getDouble("pf.file.go.threshold");
 	}
 
-	//	public static double pfKoThreshold() {
-	//		return getDouble("pf.file.ko.threshold");
-	//	}
-	//
 	public static String pfGeneratorFileHeader() {
 		return getStringOptional("pf.file.extract.fileHeader");
 	}

@@ -155,6 +155,10 @@ public class Messages
 		return getString("pfFile.extract.chooseFile");
 	}
 
+	public static String pfGeneratorChooseSeqSynonym() {
+		return getString("pfFile.extract.chooseSeqSynonym");
+	}
+
 	public static String pfGeneratorChooseSeqVersion() {
 		return getString("pfFile.extract.chooseSeqVersion");
 	}

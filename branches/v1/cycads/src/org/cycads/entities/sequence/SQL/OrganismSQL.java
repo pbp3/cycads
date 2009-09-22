@@ -20,8 +20,9 @@ import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.general.ParametersDefault;
 
-public class OrganismSQL implements
-		Organism<SequenceSQL, SubsequenceSQL, SubseqAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL> {
+public class OrganismSQL
+		implements Organism<SequenceSQL, SubsequenceSQL, SubseqAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
+{
 	private final int			id;
 	private String				name;
 	private final Connection	con;
@@ -299,6 +300,47 @@ public class OrganismSQL implements
 			stmt = con.createStatement();
 			rs = stmt.executeQuery("SELECT S.sequence_id from sequence S, sequence_synonym SS where S.NCBI_TAXON_ID="
 				+ getId() + " AND S.sequence_id=SS.sequence_id AND SS.dbxref_id=" + synonym.getId());
+			ArrayList<SequenceSQL> seqs = new ArrayList<SequenceSQL>();
+			while (rs.next()) {
+				seqs.add(new SequenceSQL(rs.getInt("sequence_id"), getConnection()));
+			}
+			return seqs;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
+	}
+
+	@Override
+	public Collection<SequenceSQL> getSequences(DbxrefSQL synonym, String version) {
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = con.prepareStatement("SELECT S.sequence_id from sequence S, sequence_synonym SS where S.NCBI_TAXON_ID=?"
+				+ " AND S.version=? AND S.sequence_id=SS.sequence_id AND SS.dbxref_id=?");
+			stmt.setInt(1, getId());
+			stmt.setString(2, version);
+			stmt.setInt(3, synonym.getId());
+			rs = stmt.executeQuery();
 			ArrayList<SequenceSQL> seqs = new ArrayList<SequenceSQL>();
 			while (rs.next()) {
 				seqs.add(new SequenceSQL(rs.getInt("sequence_id"), getConnection()));

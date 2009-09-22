@@ -87,6 +87,9 @@ public class SimpleLocInterpreter implements LocInterpreter
 
 	private List<CycValueRet> getCycValues(SubseqAnnotation annot, String loc, List<CycValueRet> ret,
 			ArrayList<Annotation> annotList, int nextPosAnnotList) {
+		if (loc == null || loc.length() == 0) {
+			return ret;
+		}
 		int i = loc.indexOf('.');
 		String subLoc;
 		if (i == -1) {

@@ -14,6 +14,7 @@ import org.cycads.entities.annotation.SubseqAnnotation;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Sequence;
+import org.cycads.entities.synonym.Dbxref;
 import org.cycads.extract.cyc.CycIdGenerator;
 import org.cycads.extract.cyc.CycRecord;
 import org.cycads.extract.cyc.CycRecordGenerator;
@@ -45,20 +46,42 @@ public class PFFileGeneratorSQL
 		if (organism == null) {
 			return;
 		}
-		String seqVersion = Tools.getString(args, 2, Messages.pfGeneratorChooseSeqVersion(),
+		String seqSynonym = Tools.getString(args, 2, Messages.pfGeneratorChooseSeqSynonym(),
+			Config.pfGeneratorSeqSynonym());
+		String seqDbname = null, seqAccession = null;
+		while (seqSynonym != null && !seqSynonym.equals("*") && seqDbname == null && seqAccession == null) {
+			String[] strs = seqSynonym.split(":");
+			if (strs.length == 2) {
+				seqDbname = strs[0];
+				seqAccession = strs[1];
+			}
+			else {
+				if (args.length > 2) {
+					throw new RuntimeException("Sequence synonym error: " + seqSynonym);
+				}
+				else {
+					seqSynonym = Tools.getString(args, 2, Messages.pfGeneratorChooseSeqSynonym(), seqSynonym);
+				}
+			}
+		}
+		if (seqSynonym == null) {
+			return;
+		}
+
+		String seqVersion = Tools.getString(args, 3, Messages.pfGeneratorChooseSeqVersion(),
 			Config.pfGeneratorSeqVersion());
 		if (seqVersion == null) {
 			return;
 		}
 
-		boolean sequenceLocation = Tools.getBoolean(args, 3, Messages.pfGeneratorChooseSequenceLocation());
+		boolean sequenceLocation = Tools.getBoolean(args, 4, Messages.pfGeneratorChooseSequenceLocation());
 
-		Double ecThreshold = Tools.getDouble(args, 4, Messages.pfGeneratorChooseEcThreshold(), Config.pfEcThreshold());
+		Double ecThreshold = Tools.getDouble(args, 5, Messages.pfGeneratorChooseEcThreshold(), Config.pfEcThreshold());
 		if (ecThreshold == null) {
 			return;
 		}
 
-		Double goThreshold = Tools.getDouble(args, 5, Messages.pfGeneratorChooseGoThreshold(), Config.pfGoThreshold());
+		Double goThreshold = Tools.getDouble(args, 6, Messages.pfGeneratorChooseGoThreshold(), Config.pfGoThreshold());
 		if (goThreshold == null) {
 			return;
 		}
@@ -71,9 +94,18 @@ public class PFFileGeneratorSQL
 		Progress progress = new ProgressPrintInterval(System.out, Messages.pfGeneratorStepShowInterval());
 		try {
 			progress.init(Messages.pfGeneratorInitMsg(file.getPath()));
-			Collection<Sequence< ? , ? , ? , ? , ? , ? >> seqs = organism.getSequences(seqVersion);
+			Collection<Sequence< ? , ? , ? , ? , ? , ? >> seqs;
+			if (seqDbname == null) {
+				seqs = organism.getSequences(seqVersion);
+			}
+			else {
+				Dbxref synonym = factory.getDbxref(seqDbname, seqAccession);
+				seqs = organism.getSequences(synonym, seqVersion);
+			}
+
 			Collection<Type> types = new ArrayList<Type>(1);
 			types.add(factory.getAnnotationTypeCDS());
+			types.add(factory.getAnnotationType("TRNA"));
 			PFFileStream pfFile = new PFFileStream(file, Config.pfGeneratorFileHeader(), sequenceLocation);
 			CycIdGenerator cycIdGenerator = new OrganismCycIdGenerator(organism);
 
