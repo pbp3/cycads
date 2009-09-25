@@ -377,4 +377,9 @@ public class Messages
 		return getString("dbxref.exception.withoutAccession");
 	}
 
+	public static String subsequenceNotExists(String value) {
+		Object[] a = {value};
+		return MessageFormat.format(getStringMandatory("subsequence.exception.doesntExist"), a);
+	}
+
 }

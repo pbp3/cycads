@@ -14,81 +14,51 @@ import org.cycads.entities.EntityFactory;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.annotation.SubseqAnnotation;
-import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Sequence;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.general.ParametersDefault;
-import org.cycads.ui.progress.Progress;
 
-public class AnnotToDbxrefFileParser
+public abstract class AssociationFileParser
 {
 
-	private static final String		DBNAME_GENERIC	= "*";
-	private final EntityFactory		factory;
-	private final Progress			progress;
-	private final Progress			progressError;
-	private final AnnotationMethod	method;
-	private final Organism			organism;
-	private final String			annotDBName;
-	private final int				dbxrefColumnIndex;
-	private final String			dbxrefDBName;
-	private final int				scoreColumnIndex;
-	private final int				annotColumnIndex;
-	private final boolean			isSynonym;
+	private static final String	DBNAME_GENERIC	= "*";
+	private String				fileComment;
+	private String				fileSeparator;
+	private String				dbxrefInstancesSeparator;
+	private String				dbxref1Delimiter;
+	private String				dbxref2Separator;
+	private String				dbxref2Delimiter;
 
-	public AnnotToDbxrefFileParser(EntityFactory factory, Progress progress, AnnotationMethod method,
-			Organism organism, int annotColumnIndex, String annotDBName, int dbxrefColumnIndex, String dbxrefDBName,
-			int scoreColumnIndex, Progress progressError) {
-		this.factory = factory;
-		this.progress = progress;
-		this.progressError = progressError;
-		this.method = method;
-		this.organism = organism;
-		this.annotColumnIndex = annotColumnIndex;
-		this.annotDBName = annotDBName;
-		this.dbxrefColumnIndex = dbxrefColumnIndex;
-		this.dbxrefDBName = dbxrefDBName;
-		this.scoreColumnIndex = scoreColumnIndex;
-		this.isSynonym = false;
+	public AssociationFileParser() {
 	}
 
-	public AnnotToDbxrefFileParser(EntityFactory factory, Progress progress, Organism organism, int annotColumnIndex,
-			String annotDBName, int dbxrefColumnIndex, String dbxrefDBName, Progress progressError) {
-		this.factory = factory;
-		this.progress = progress;
-		this.progressError = progressError;
-		this.method = null;
-		this.organism = organism;
-		this.annotColumnIndex = annotColumnIndex;
-		this.annotDBName = annotDBName;
-		this.dbxrefColumnIndex = dbxrefColumnIndex;
-		this.dbxrefDBName = dbxrefDBName;
-		this.scoreColumnIndex = -1;
-		this.isSynonym = true;
+	public void parse(File f, int accession1ColumnIndex, String dBName1, int accession2ColumnIndex, String dBName2,
+			EntityFactory factory) throws IOException {
+		parse(new BufferedReader(new FileReader(f)), accession1ColumnIndex, dBName1, accession2ColumnIndex, dBName2,
+			factory);
 	}
 
-	public void parse(File f) throws IOException {
-		parse(new BufferedReader(new FileReader(f)));
+	public void parse(String fileName, int accession1ColumnIndex, String dBName1, int accession2ColumnIndex,
+			String dBName2, EntityFactory factory) throws IOException {
+		parse(new BufferedReader(new FileReader(fileName)), accession1ColumnIndex, dBName1, accession2ColumnIndex,
+			dBName2, factory);
 	}
 
-	public void parse(String fileName) throws IOException {
-		parse(new BufferedReader(new FileReader(fileName)));
-	}
-
-	public void parse(BufferedReader br) throws IOException {
+	public void parse(BufferedReader br, int accession1ColumnIndex, String dBName1, int accession2ColumnIndex,
+			String dBName2, EntityFactory factory) throws IOException {
 		String line;
 		while ((line = br.readLine()) != null) {
 			line = line.trim();
-			if (line.length() > 0 && !line.startsWith(ParametersDefault.annotToDbxrefFileComment())) {
-				String[] sep = line.split(ParametersDefault.annotToDbxrefFileSeparator());
-				if (sep.length > annotColumnIndex) {
-					String[] annotSynStrs = cleanTextDelimiter(sep[annotColumnIndex]).trim().split(
+			if (line.length() > 0 && !line.startsWith(ParametersDefault.associationFileComment())) {
+				String[] sep = line.split(ParametersDefault.associationFileSeparator());
+				if (sep.length > accession2ColumnIndex) {
+					String[] annotSynStrs = cleanTextDelimiter(sep[accession2ColumnIndex]).trim().split(
 						ParametersDefault.annotToDbxrefFileAnnotsSeparator());
 					for (String annotSynStr : annotSynStrs) {
 						annotSynStr = annotSynStr.trim();
 						if (annotSynStr.length() > 0) {
-							Dbxref annotSynonym = factory.getDbxref(annotDBName, annotSynStr);
+							Dbxref annotSynonym = factory.getDbxref(dBName1, annotSynStr);
 							Collection<SubseqAnnotation> annots = organism.getAnnotations(null, null, annotSynonym);
 							if (annots == null || annots.isEmpty()) {
 								SubseqAnnotation annot = createFakeAnnot(annotSynonym);
@@ -97,12 +67,12 @@ public class AnnotToDbxrefFileParser
 								}
 								annots.add(annot);
 							}
-							if (sep.length > dbxrefColumnIndex) {
+							if (sep.length > accession1ColumnIndex) {
 								String score = null;
 								if (!isSynonym && sep.length > scoreColumnIndex && scoreColumnIndex >= 0) {
 									score = cleanTextDelimiter(sep[scoreColumnIndex]);
 								}
-								addDbxref(annots, cleanTextDelimiter(sep[dbxrefColumnIndex]).trim(), score);
+								addDbxref(annots, cleanTextDelimiter(sep[accession1ColumnIndex]).trim(), score);
 							}
 						}
 					}
@@ -130,12 +100,12 @@ public class AnnotToDbxrefFileParser
 		for (String dbxrefName : dbxrefNames) {
 			Dbxref dbxref;
 			dbxrefName = dbxrefName.trim();
-			if (dbxrefDBName.equals(DBNAME_GENERIC)) {
+			if (dBName2.equals(DBNAME_GENERIC)) {
 				String[] syns1 = dbxrefName.split(ParametersDefault.getDbxrefToStringSeparator());
 				dbxref = factory.getDbxref(syns1[0].trim(), syns1[1].trim());
 			}
 			else {
-				dbxref = factory.getDbxref(dbxrefDBName, dbxrefName);
+				dbxref = factory.getDbxref(dBName2, dbxrefName);
 			}
 			progress.completeStep();
 			for (SubseqAnnotation annot : annots) {
