@@ -6,7 +6,7 @@ package org.cycads.ui.loader;
 import java.io.File;
 import java.io.IOException;
 
-import org.cycads.entities.EntityFactorySQL;
+import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.general.Config;
 import org.cycads.general.Messages;
@@ -30,26 +30,26 @@ public class SynonymLoaderSQL
 			return;
 		}
 
-		Integer annotColumnIndex = Tools.getInteger(args, 2, Messages.synonymLoaderChooseAnnotColumnIndex(),
-			Config.synonymLoaderAnnotColumnIndex());
+		Integer annotColumnIndex = Tools.getInteger(args, 2, Config.synonymLoaderAnnotColumnIndex(),
+			Messages.synonymLoaderChooseAnnotColumnIndex());
 		if (annotColumnIndex == null) {
 			return;
 		}
 
-		String annotDBName = Tools.getString(args, 3, Messages.synonymLoaderChooseAnnotDBName(),
-			Config.synonymLoaderAnnotDBName());
+		String annotDBName = Tools.getString(args, 3, Config.synonymLoaderAnnotDBName(),
+			Messages.synonymLoaderChooseAnnotDBName());
 		if (annotDBName == null) {
 			return;
 		}
 
-		Integer dbxrefColumnIndex = Tools.getInteger(args, 4, Messages.synonymLoaderChooseDbxrefColumnIndex(),
-			Config.synonymLoaderDbxrefColumnIndex());
+		Integer dbxrefColumnIndex = Tools.getInteger(args, 4, Config.synonymLoaderDbxrefColumnIndex(),
+			Messages.synonymLoaderChooseDbxrefColumnIndex());
 		if (dbxrefColumnIndex == null) {
 			return;
 		}
 
-		String dbxrefDBName = Tools.getString(args, 5, Messages.synonymLoaderChooseDbxrefDBName(),
-			Config.synonymLoaderDbxrefDBName());
+		String dbxrefDBName = Tools.getString(args, 5, Config.synonymLoaderDbxrefDBName(),
+			Messages.synonymLoaderChooseDbxrefDBName());
 		if (dbxrefDBName == null) {
 			return;
 		}

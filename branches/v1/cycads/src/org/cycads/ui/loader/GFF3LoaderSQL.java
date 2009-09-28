@@ -6,7 +6,7 @@ package org.cycads.ui.loader;
 import java.io.File;
 import java.io.IOException;
 
-import org.cycads.entities.EntityFactorySQL;
+import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.general.Config;
 import org.cycads.general.Messages;
@@ -31,12 +31,12 @@ public class GFF3LoaderSQL
 		if (organism == null) {
 			return;
 		}
-		String seqDBName = Tools.getString(args, 2, Messages.gff3LoaderChooseSeqDBName(), Config.gff3LoaderSeqDBName());
+		String seqDBName = Tools.getString(args, 2, Config.gff3LoaderSeqDBName(), Messages.gff3LoaderChooseSeqDBName());
 		if (seqDBName == null) {
 			return;
 		}
-		String seqVersion = Tools.getString(args, 3, Messages.gff3LoaderChooseSeqVersion(),
-			Config.gff3LoaderSeqVersion());
+		String seqVersion = Tools.getString(args, 3, Config.gff3LoaderSeqVersion(),
+			Messages.gff3LoaderChooseSeqVersion());
 		if (seqVersion == null) {
 			return;
 		}

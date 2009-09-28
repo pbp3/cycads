@@ -8,9 +8,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.cycads.entities.EntityFactorySQL;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.annotation.DbxrefAnnotation;
+import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.general.Config;
@@ -31,8 +31,8 @@ public class DbxrefDbxrefAnnotationLoaderSQL
 {
 	public static void main(String[] args) {
 		EntityFactorySQL factory = new EntityFactorySQL();
-		File file = Tools.getFileToOpen(args, 0, Config.subseqAnnotationLoaderFileName(),
-			Messages.subseqAnnotationLoaderChooseFile());
+		File file = Tools.getFileToOpen(args, 0, Config.dbxrefDbxrefAnnotationLoaderFileName(),
+			Messages.generalChooseFileToLoad());
 		BufferedReader br;
 		if (file == null) {
 			return;
@@ -41,68 +41,72 @@ public class DbxrefDbxrefAnnotationLoaderSQL
 			br = new BufferedReader(new FileReader(file));
 		}
 		Organism< ? , ? , ? , ? , ? , ? > organism = Tools.getOrganism(args, 1,
-			Config.subseqAnnotationLoaderOrganismNumber(), Messages.subseqAnnotationLoaderChooseOrganismNumber(),
-			factory);
+			Config.dbxrefDbxrefAnnotationLoaderOrganismNumber(), Messages.generalChooseOrganismNumber(), factory);
 		if (organism == null) {
 			return;
 		}
 
-		String methodName = Tools.getString(args, 2, Messages.subseqAnnotationLoaderChooseMethodName(),
-			Config.subseqAnnotationLoaderMethodName());
+		String methodName = Tools.getString(args, 2, Config.dbxrefDbxrefAnnotationLoaderMethodName(),
+			Messages.generalChooseMethodName());
 		if (methodName == null) {
 			return;
 		}
 		AnnotationMethod method = factory.getAnnotationMethod(methodName);
 
-		Integer annotColumnIndex = Tools.getInteger(args, 3, Messages.subseqAnnotationLoaderChooseAnnotColumnIndex(),
-			Config.subseqAnnotationLoaderAnnotColumnIndex());
-		if (annotColumnIndex == null) {
+		Integer dbxrefSourceColumnIndex = Tools.getInteger(args, 3,
+			Config.dbxrefDbxrefAnnotationLoaderSourceColumnIndex(),
+			Messages.dbxrefDbxrefAnnotationLoaderChooseSourceColumnIndex());
+		if (dbxrefSourceColumnIndex == null) {
 			return;
 		}
 
-		String annotDBName = Tools.getString(args, 4, Messages.subseqAnnotationLoaderChooseAnnotDBName(),
-			Config.subseqAnnotationLoaderAnnotDBName());
-		if (annotDBName == null) {
+		String dbxrefSourceDBName = Tools.getString(args, 4, Config.dbxrefDbxrefAnnotationLoaderSourceDBName(),
+			Messages.dbxrefDbxrefAnnotationLoaderChooseSourceDBName());
+		if (dbxrefSourceDBName == null) {
 			return;
 		}
 
-		Integer dbxrefColumnIndex = Tools.getInteger(args, 5, Messages.subseqAnnotationLoaderChooseDbxrefColumnIndex(),
-			Config.subseqAnnotationLoaderDbxrefColumnIndex());
-		if (dbxrefColumnIndex == null) {
+		Integer dbxrefTargetColumnIndex = Tools.getInteger(args, 5,
+			Config.dbxrefDbxrefAnnotationLoaderTargetColumnIndex(),
+			Messages.dbxrefDbxrefAnnotationLoaderChooseTargetColumnIndex());
+		if (dbxrefTargetColumnIndex == null) {
 			return;
 		}
 
-		String dbxrefDBName = Tools.getString(args, 6, Messages.subseqAnnotationLoaderChooseDbxrefDBName(),
-			Config.subseqAnnotationLoaderDbxrefDBName());
-		if (dbxrefDBName == null) {
+		String dbxrefTargetDBName = Tools.getString(args, 6, Config.dbxrefDbxrefAnnotationLoaderTargetDBName(),
+			Messages.dbxrefDbxrefAnnotationLoaderChooseTargetDBName());
+		if (dbxrefTargetDBName == null) {
 			return;
 		}
 
-		Integer scoreColumnIndex = Tools.getInteger(args, 7, Messages.subseqAnnotationLoaderChooseScoreColumnIndex(),
-			Config.subseqAnnotationLoaderScoreColumnIndex());
+		Integer scoreColumnIndex = Tools.getInteger(args, 7, Config.dbxrefDbxrefAnnotationLoaderScoreColumnIndex(),
+			Messages.dbxrefDbxrefAnnotationLoaderChooseScoreColumnIndex());
 		if (scoreColumnIndex == null) {
 			return;
 		}
 
-		DbnameTransformer dbNameSource = new SimpleDbnameTransformer(annotDBName);
-		DbnameTransformer dbNameTarget = new SimpleDbnameTransformer(dbxrefDBName);
+		DbnameTransformer dbNameSource = new SimpleDbnameTransformer(dbxrefSourceDBName);
+		DbnameTransformer dbNameTarget = new SimpleDbnameTransformer(dbxrefTargetDBName);
 
 		DbxrefFactory sourceFactory = new DbxrefFactory(ParametersDefault.getDbxrefToStringSeparator(),
-			ParametersDefault.dbxrefDbxrefAnnotationSourceDelimiter(), dbNameSource, factory);
+			Config.dbxrefDbxrefAnnotationSourceDelimiter(), dbNameSource, factory);
 
 		DbxrefFactory targetFactory = new DbxrefFactory(ParametersDefault.getDbxrefToStringSeparator(),
-			ParametersDefault.dbxrefDbxrefAnnotationTargetDelimiter(), dbNameTarget, factory);
+			Config.dbxrefDbxrefAnnotationTargetDelimiter(), dbNameTarget, factory);
 
 		SimpleAnnotationRecordFactory<Dbxref, Dbxref> recordFactory = new SimpleAnnotationRecordFactory<Dbxref, Dbxref>(
-			annotColumnIndex, sourceFactory, dbxrefColumnIndex, targetFactory, scoreColumnIndex);
+			dbxrefSourceColumnIndex, sourceFactory, dbxrefTargetColumnIndex, targetFactory, scoreColumnIndex);
 
 		LineRecordFileReader<AnnotationRecord<Dbxref, Dbxref>> fileReader = new LineRecordFileReader<AnnotationRecord<Dbxref, Dbxref>>(
-			br, ParametersDefault.dbxrefDbxrefAnnotationColumnSeparator(),
-			ParametersDefault.dbxrefDbxrefAnnotationLineComment(), recordFactory);
-		Progress progress = new ProgressPrintInterval(System.out, Messages.subseqAnnotationLoaderStepShowInterval());
+			br, Config.dbxrefDbxrefAnnotationColumnSeparator(), Config.dbxrefDbxrefAnnotationLineComment(),
+			recordFactory);
+		Progress progress = new ProgressPrintInterval(System.out,
+			Messages.dbxrefDbxrefAnnotationLoaderStepShowInterval());
 		Progress errorCount = new ProgressCount();
 		try {
-			progress.init(Messages.subseqAnnotationLoaderInitMsg(file.getPath()));
+			progress.init(Messages.dbxrefDbxrefAnnotationLoaderInitMsg(file.getPath()));
+
+			//Colocar em una nova classe ????
 
 			AnnotationRecord<Dbxref, Dbxref> record;
 
@@ -110,8 +114,9 @@ public class DbxrefDbxrefAnnotationLoaderSQL
 				DbxrefAnnotation annot = record.getSource().addDbxrefAnnotation(method, record.getTarget());
 				String score = record.getScore();
 				if (annot != null && score != null) {
-					annot.addNote(ParametersDefault.getScoreAnnotationNoteTypeName(), score);
+					annot.setScore(score);
 				}
+				//criar fakeannotation????
 			}
 		}
 		catch (IOException e) {

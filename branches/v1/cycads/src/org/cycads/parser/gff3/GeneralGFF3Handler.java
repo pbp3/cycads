@@ -9,11 +9,11 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.regex.Pattern;
 
-import org.cycads.entities.EntityFactory;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.annotation.SubseqAnnotation;
 import org.cycads.entities.annotation.SubseqFunctionAnnotation;
+import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Intron;
@@ -202,7 +202,7 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 		// add score as note
 		double score = record.getScore();
 		if (score != GFF3Record.NO_SCORE) {
-			annot.addNote(ParametersDefault.getScoreAnnotationNoteTypeName(), NumberFormat.getInstance().format(score));
+			annot.setScore(NumberFormat.getInstance().format(score));
 		}
 		Collection<Note> notes = record.getNotes();
 		for (Note note : notes) {
@@ -231,7 +231,7 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 		// add score as note
 		double score = record.getScore();
 		if (score != GFF3Record.NO_SCORE) {
-			annot.addNote(ParametersDefault.getScoreAnnotationNoteTypeName(), NumberFormat.getInstance().format(score));
+			annot.setScore(NumberFormat.getInstance().format(score));
 		}
 		Collection<Note> notes = record.getNotes();
 		for (Note note : notes) {
@@ -305,10 +305,9 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 		}
 		AnnotationMethod annotationMethod = factory.getAnnotationMethod(GFF3FileConfig.getAnnotationMethod(record));
 		SubseqAnnotation annot = subseq.addAnnotation(cdsAnnotationType, annotationMethod);
-		// add score as note
 		double score = record.getScore();
 		if (score != GFF3Record.NO_SCORE) {
-			annot.addNote(ParametersDefault.getScoreAnnotationNoteTypeName(), NumberFormat.getInstance().format(score));
+			annot.setScore(NumberFormat.getInstance().format(score));
 		}
 		for (Note note : notes) {
 			handleAnnotSynonym(note, annot, record);

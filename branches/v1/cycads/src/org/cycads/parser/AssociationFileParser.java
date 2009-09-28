@@ -10,10 +10,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cycads.entities.EntityFactory;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.annotation.SubseqAnnotation;
+import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.sequence.Sequence;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
@@ -112,7 +112,7 @@ public abstract class AssociationFileParser
 				if (!isSynonym) {
 					Annotation ret = annot.getSubsequence().addDbxrefAnnotation(method, dbxref);
 					if (ret != null && score != null) {
-						ret.addNote(ParametersDefault.getScoreAnnotationNoteTypeName(), score);
+						ret.setScore(score);
 					}
 				}
 				else {

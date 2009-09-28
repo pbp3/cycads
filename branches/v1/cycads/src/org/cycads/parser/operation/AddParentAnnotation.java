@@ -6,9 +6,9 @@ package org.cycads.parser.operation;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
-import org.cycads.entities.EntityFactory;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationFinder;
+import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.synonym.Dbxref;
 
 public class AddParentAnnotation<A extends Annotation> extends SimpleRelationshipOperation<A, Annotation>

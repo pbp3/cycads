@@ -1,15 +1,18 @@
 /*
  * Created on 03/03/2009
  */
-package org.cycads.entities;
+package org.cycads.entities.factory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Collection;
 
 import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
+import org.cycads.entities.annotation.SQL.AnnotationSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.sequence.SQL.OrganismSQL;
+import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.EC;
 import org.cycads.entities.synonym.Function;
 import org.cycads.entities.synonym.KO;
@@ -21,7 +24,8 @@ import org.cycads.general.Config;
 import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
 
-public class EntityFactorySQL implements EntityFactory<DbxrefSQL, AnnotationMethodSQL, TypeSQL, OrganismSQL>
+public class EntityFactorySQL
+		implements EntityFactory<DbxrefSQL, AnnotationMethodSQL, TypeSQL, OrganismSQL, AnnotationSQL>
 {
 	private Connection	con;
 
@@ -168,6 +172,17 @@ public class EntityFactorySQL implements EntityFactory<DbxrefSQL, AnnotationMeth
 	public EC< ? , ? , ? , ? > getEC(String ecNumber) {
 		try {
 			return new ECSQL(ecNumber, getConnection());
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public Collection<AnnotationSQL> getAnnotations(Dbxref< ? , ? , ? , ? > dbxref) {
+		try {
+			return AnnotationSQL.getAnnotations(dbxref, getConnection());
 		}
 		catch (SQLException e) {
 			e.printStackTrace();

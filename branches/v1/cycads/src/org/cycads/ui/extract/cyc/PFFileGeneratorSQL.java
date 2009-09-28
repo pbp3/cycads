@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.cycads.entities.EntityFactorySQL;
 import org.cycads.entities.annotation.SubseqAnnotation;
+import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Sequence;
@@ -46,8 +46,8 @@ public class PFFileGeneratorSQL
 		if (organism == null) {
 			return;
 		}
-		String seqSynonym = Tools.getString(args, 2, Messages.pfGeneratorChooseSeqSynonym(),
-			Config.pfGeneratorSeqSynonym());
+		String seqSynonym = Tools.getString(args, 2, Config.pfGeneratorSeqSynonym(),
+			Messages.pfGeneratorChooseSeqSynonym());
 		String seqDbname = null, seqAccession = null;
 		while (seqSynonym != null && !seqSynonym.equals("*") && seqDbname == null && seqAccession == null) {
 			String[] strs = seqSynonym.split(":");
@@ -60,7 +60,7 @@ public class PFFileGeneratorSQL
 					throw new RuntimeException("Sequence synonym error: " + seqSynonym);
 				}
 				else {
-					seqSynonym = Tools.getString(args, 2, Messages.pfGeneratorChooseSeqSynonym(), seqSynonym);
+					seqSynonym = Tools.getString(args, 2, seqSynonym, Messages.pfGeneratorChooseSeqSynonym());
 				}
 			}
 		}
@@ -68,20 +68,20 @@ public class PFFileGeneratorSQL
 			return;
 		}
 
-		String seqVersion = Tools.getString(args, 3, Messages.pfGeneratorChooseSeqVersion(),
-			Config.pfGeneratorSeqVersion());
+		String seqVersion = Tools.getString(args, 3, Config.pfGeneratorSeqVersion(),
+			Messages.pfGeneratorChooseSeqVersion());
 		if (seqVersion == null) {
 			return;
 		}
 
 		boolean sequenceLocation = Tools.getBoolean(args, 4, Messages.pfGeneratorChooseSequenceLocation());
 
-		Double ecThreshold = Tools.getDouble(args, 5, Messages.pfGeneratorChooseEcThreshold(), Config.pfEcThreshold());
+		Double ecThreshold = Tools.getDouble(args, 5, Config.pfEcThreshold(), Messages.pfGeneratorChooseEcThreshold());
 		if (ecThreshold == null) {
 			return;
 		}
 
-		Double goThreshold = Tools.getDouble(args, 6, Messages.pfGeneratorChooseGoThreshold(), Config.pfGoThreshold());
+		Double goThreshold = Tools.getDouble(args, 6, Config.pfGoThreshold(), Messages.pfGeneratorChooseGoThreshold());
 		if (goThreshold == null) {
 			return;
 		}

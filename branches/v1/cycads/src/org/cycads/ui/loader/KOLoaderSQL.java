@@ -6,9 +6,9 @@ package org.cycads.ui.loader;
 import java.io.File;
 import java.io.IOException;
 
-import org.cycads.entities.EntityFactory;
-import org.cycads.entities.EntityFactorySQL;
 import org.cycads.entities.annotation.AnnotationMethod;
+import org.cycads.entities.factory.EntityFactory;
+import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.general.Config;
 import org.cycads.general.Messages;
 import org.cycads.parser.FileParserError;

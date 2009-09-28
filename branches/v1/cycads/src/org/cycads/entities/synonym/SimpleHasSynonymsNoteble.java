@@ -7,21 +7,19 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.Map.Entry;
 
-import org.cycads.entities.EntityFactory;
-import org.cycads.entities.note.Note;
-import org.cycads.entities.note.SimpleNote;
+import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.note.SimpleNoteble;
-import org.cycads.entities.note.Type;
 
-public class SimpleHasSynonymsNoteble<X extends Dbxref<?, ?, ?, ?>> extends
-		SimpleNoteble implements HasSynonyms<X> {
+public class SimpleHasSynonymsNoteble<X extends Dbxref< ? , ? , ? , ? >> extends SimpleNoteble
+		implements HasSynonyms<X>
+{
 
-	protected EntityFactory<? extends X, ?, ?, ?> factory;
-	private Hashtable<String, Collection<String>> synonyms = new Hashtable<String, Collection<String>>();
+	protected EntityFactory< ? extends X, ? , ? , ? , ? >	factory;
+	private Hashtable<String, Collection<String>>			synonyms	= new Hashtable<String, Collection<String>>();
 
-	public SimpleHasSynonymsNoteble(EntityFactory<? extends X, ?, ?, ?> factory) {
+	public SimpleHasSynonymsNoteble(EntityFactory< ? extends X, ? , ? , ? , ? > factory) {
 		super(factory);
-		this.factory=factory;
+		this.factory = factory;
 	}
 
 	@Override
@@ -33,7 +31,8 @@ public class SimpleHasSynonymsNoteble<X extends Dbxref<?, ?, ?, ?>> extends
 		}
 		if (accessions.add(accession)) {
 			return factory.getDbxref(dbName, accession);
-		} else {
+		}
+		else {
 			return null;
 		}
 	}
@@ -60,7 +59,7 @@ public class SimpleHasSynonymsNoteble<X extends Dbxref<?, ?, ?, ?>> extends
 	}
 
 	@Override
-	public Collection<? extends X> getSynonyms() {
+	public Collection< ? extends X> getSynonyms() {
 		Collection<X> ret = new ArrayList<X>();
 		Set<Entry<String, Collection<String>>> entries = synonyms.entrySet();
 		for (Entry<String, Collection<String>> entry : entries) {
@@ -73,7 +72,7 @@ public class SimpleHasSynonymsNoteble<X extends Dbxref<?, ?, ?, ?>> extends
 	}
 
 	@Override
-	public Collection<? extends X> getSynonyms(String dbName) {
+	public Collection< ? extends X> getSynonyms(String dbName) {
 		Collection<X> ret = new ArrayList<X>();
 		Collection<String> accessions = synonyms.get(dbName);
 		for (String accession : accessions) {
@@ -89,7 +88,7 @@ public class SimpleHasSynonymsNoteble<X extends Dbxref<?, ?, ?, ?>> extends
 
 	@Override
 	public boolean isSynonym(String dbName, String accession) {
-		return (getSynonym(dbName,accession)!=null);
+		return (getSynonym(dbName, accession) != null);
 	}
 
 }

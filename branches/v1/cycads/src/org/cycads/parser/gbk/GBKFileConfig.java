@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.regex.Pattern;
 
-import org.cycads.entities.EntityFactory;
 import org.cycads.entities.annotation.AnnotationFinder;
 import org.cycads.entities.annotation.SubseqAnnotation;
+import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.general.Config;
 import org.cycads.general.ParametersDefault;

@@ -26,4 +26,8 @@ public interface Annotation<AParent extends Annotation< ? , ? , ? , ? >, X exten
 	public Collection<AParent> getParents();
 
 	public void addParent(AParent parent);
+
+	public void setScore(String score);
+
+	public String getScore();
 }

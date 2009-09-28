@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
-import org.cycads.entities.EntityFactory;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.annotation.DbxrefAnnotable;
 import org.cycads.entities.annotation.DbxrefAnnotation;
+import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.synonym.Dbxref;
 
 public class AddDbxrefAnnotation<S extends DbxrefAnnotable> extends SimpleRelationshipOperation<S, DbxrefAnnotation>

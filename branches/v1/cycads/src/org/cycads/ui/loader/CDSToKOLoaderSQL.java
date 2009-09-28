@@ -6,8 +6,8 @@ package org.cycads.ui.loader;
 import java.io.File;
 import java.io.IOException;
 
-import org.cycads.entities.EntityFactorySQL;
 import org.cycads.entities.annotation.AnnotationMethod;
+import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.general.Config;
 import org.cycads.general.Messages;
@@ -30,14 +30,14 @@ public class CDSToKOLoaderSQL {
 			return;
 		}
 
-		String methodName = Tools.getString(args, 2, Messages.cdsToKOLoaderChooseMethodName(),
-			Config.cdsToKOMethodName());
+		String methodName = Tools.getString(args, 2, Config.cdsToKOMethodName(),
+			Messages.cdsToKOLoaderChooseMethodName());
 		if (methodName == null) {
 			return;
 		}
 		AnnotationMethod method = factory.getAnnotationMethod(methodName);
 
-		String cdsDBName = Tools.getString(args, 3, Messages.cdsToKOLoaderChooseCDSDBName(), Config.cdsToKOCDSDBName());
+		String cdsDBName = Tools.getString(args, 3, Config.cdsToKOCDSDBName(), Messages.cdsToKOLoaderChooseCDSDBName());
 		if (cdsDBName == null) {
 			return;
 		}

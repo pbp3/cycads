@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import org.cycads.entities.EntityFactorySQL;
+import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.general.Config;
 import org.cycads.general.Messages;
@@ -27,7 +27,7 @@ public class GenerateFirstSequencesGFF3
 		if (file == null) {
 			return;
 		}
-		int i = Tools.getInteger(args, 1, "Quantity of sequences" , 10);
+		int i = Tools.getInteger(args, 1, 10 , "Quantity of sequences");
 		File fileOut = Tools.getFileToSave(args, 2, Config.gff3LoaderFileName()+"."+i, "Choose the file to save");
 			try {
 				(new GFF3Parser()).parse(file, new FirstSequencesGFF3Handler(new PrintStream(fileOut),i));

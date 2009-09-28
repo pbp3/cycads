@@ -3,7 +3,7 @@
  */
 package org.cycads.parser.association;
 
-import org.cycads.entities.EntityFactory;
+import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.general.Messages;
 import org.cycads.parser.FileParserError;

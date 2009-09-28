@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.cycads.entities.EntityFactorySQL;
 import org.cycads.entities.annotation.SubseqAnnotation;
+import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Sequence;
@@ -63,8 +63,8 @@ public class ECCDSFileGeneratorSQL
 		if (organism == null) {
 			return;
 		}
-		String seqVersion = Tools.getString(args, 2, Messages.ecCDSFileGeneratorChooseSeqVersion(),
-			Config.ecCDSFileGeneratorSeqVersion());
+		String seqVersion = Tools.getString(args, 2, Config.ecCDSFileGeneratorSeqVersion(),
+			Messages.ecCDSFileGeneratorChooseSeqVersion());
 		if (seqVersion == null) {
 			return;
 		}

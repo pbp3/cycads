@@ -6,7 +6,7 @@ package org.cycads.ui.loader;
 import java.io.File;
 import java.io.IOException;
 
-import org.cycads.entities.EntityFactorySQL;
+import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.general.Messages;
 import org.cycads.parser.gbk.GBKFileConfig;
 import org.cycads.parser.gbk.GBKFileParser;
@@ -23,8 +23,8 @@ public class GBKLoaderSQL
 		if (fileIn == null) {
 			return;
 		}
-		String seqDBName = Tools.getString(args, 1, Messages.gbkLoaderChooseSeqDBName(),
-			GBKFileConfig.gbkLoaderSeqDBName());
+		String seqDBName = Tools.getString(args, 1, GBKFileConfig.gbkLoaderSeqDBName(),
+			Messages.gbkLoaderChooseSeqDBName());
 		if (seqDBName == null) {
 			return;
 		}

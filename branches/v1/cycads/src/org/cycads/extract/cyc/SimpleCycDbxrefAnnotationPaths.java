@@ -25,7 +25,8 @@ public class SimpleCycDbxrefAnnotationPaths implements CycDbxrefAnnotationPaths
 		this.scoreSystems = scoreSystems;
 	}
 
-	public SimpleCycDbxrefAnnotationPaths(Dbxref dbxref, List<Annotation> annotationsList, ScoreSystemCollection scoreSystems) {
+	public SimpleCycDbxrefAnnotationPaths(Dbxref dbxref, List<Annotation> annotationsList,
+			ScoreSystemCollection scoreSystems) {
 		this.dbxref = dbxref;
 		this.scoreSystems = scoreSystems;
 		addAnnotationPath(annotationsList);
@@ -58,7 +59,7 @@ public class SimpleCycDbxrefAnnotationPaths implements CycDbxrefAnnotationPaths
 			double scoreAnnotationPath = 1;
 			for (Annotation annot : annotationPath) {
 				scoreSystem = scoreSystems.getScoreSystem(annot.getAnnotationMethod());
-				scoreNote = annot.getNoteValue(PFFileConfig.getScoreAnnotationNoteTypeName());
+				scoreNote = annot.getScore();
 				Double scoreDbl = null;
 				if (scoreNote != null) {
 					NumberFormat numberFormat;

@@ -13,12 +13,16 @@ import java.util.Collection;
 
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.note.SQL.TypeSQL;
+import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
+import org.cycads.general.ParametersDefault;
 
 public class AnnotationSQL extends HasSynonymsNotebleSQL
 		implements Annotation<AnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
 {
+
+	public static String				ScoreNoteTypeName	= ParametersDefault.getScoreAnnotationNoteTypeName();
 
 	private int							id;
 	private int							methodId;
@@ -320,4 +324,53 @@ public class AnnotationSQL extends HasSynonymsNotebleSQL
 		return false;
 	}
 
+	@Override
+	public String getScore() {
+		return getNoteValue(ScoreNoteTypeName);
+	}
+
+	@Override
+	public void setScore(String score) {
+		setNoteValue(ScoreNoteTypeName, score);
+	}
+
+	public static Collection<AnnotationSQL> getAnnotations(Dbxref dbxref, Connection con) throws SQLException {
+		int dbxrefId;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			if (dbxref instanceof DbxrefSQL) {
+				dbxrefId = ((DbxrefSQL) dbxref).getId();
+			}
+			else {
+				dbxrefId = DbxrefSQL.getId(dbxref.getDbName(), dbxref.getAccession(), con);
+			}
+			stmt = con.prepareStatement("SELECT annotation_id from Annotation_synonym WHERE dbxref_id=?");
+			stmt.setInt(1, dbxrefId);
+			rs = stmt.executeQuery();
+			ArrayList<AnnotationSQL> ret = new ArrayList<AnnotationSQL>();
+			while (rs.next()) {
+				ret.add(new AnnotationSQL(rs.getInt("annotation_id"), con));
+			}
+			return ret;
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
+	}
 }

@@ -6,8 +6,8 @@ package org.cycads.ui.loader;
 import java.io.File;
 import java.io.IOException;
 
-import org.cycads.entities.EntityFactorySQL;
 import org.cycads.entities.annotation.AnnotationMethod;
+import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.general.Config;
 import org.cycads.general.Messages;
@@ -33,39 +33,39 @@ public class SubseqAnnotationLoaderSQL
 			return;
 		}
 
-		String methodName = Tools.getString(args, 2, Messages.subseqAnnotationLoaderChooseMethodName(),
-			Config.subseqAnnotationLoaderMethodName());
+		String methodName = Tools.getString(args, 2, Config.subseqAnnotationLoaderMethodName(),
+			Messages.subseqAnnotationLoaderChooseMethodName());
 		if (methodName == null) {
 			return;
 		}
 		AnnotationMethod method = factory.getAnnotationMethod(methodName);
 
-		Integer annotColumnIndex = Tools.getInteger(args, 3, Messages.subseqAnnotationLoaderChooseAnnotColumnIndex(),
-			Config.subseqAnnotationLoaderAnnotColumnIndex());
+		Integer annotColumnIndex = Tools.getInteger(args, 3, Config.subseqAnnotationLoaderAnnotColumnIndex(),
+			Messages.subseqAnnotationLoaderChooseAnnotColumnIndex());
 		if (annotColumnIndex == null) {
 			return;
 		}
 
-		String annotDBName = Tools.getString(args, 4, Messages.subseqAnnotationLoaderChooseAnnotDBName(),
-			Config.subseqAnnotationLoaderAnnotDBName());
+		String annotDBName = Tools.getString(args, 4, Config.subseqAnnotationLoaderAnnotDBName(),
+			Messages.subseqAnnotationLoaderChooseAnnotDBName());
 		if (annotDBName == null) {
 			return;
 		}
 
-		Integer dbxrefColumnIndex = Tools.getInteger(args, 5, Messages.subseqAnnotationLoaderChooseDbxrefColumnIndex(),
-			Config.subseqAnnotationLoaderDbxrefColumnIndex());
+		Integer dbxrefColumnIndex = Tools.getInteger(args, 5, Config.subseqAnnotationLoaderDbxrefColumnIndex(),
+			Messages.subseqAnnotationLoaderChooseDbxrefColumnIndex());
 		if (dbxrefColumnIndex == null) {
 			return;
 		}
 
-		String dbxrefDBName = Tools.getString(args, 6, Messages.subseqAnnotationLoaderChooseDbxrefDBName(),
-			Config.subseqAnnotationLoaderDbxrefDBName());
+		String dbxrefDBName = Tools.getString(args, 6, Config.subseqAnnotationLoaderDbxrefDBName(),
+			Messages.subseqAnnotationLoaderChooseDbxrefDBName());
 		if (dbxrefDBName == null) {
 			return;
 		}
 
-		Integer scoreColumnIndex = Tools.getInteger(args, 7, Messages.subseqAnnotationLoaderChooseScoreColumnIndex(),
-			Config.subseqAnnotationLoaderScoreColumnIndex());
+		Integer scoreColumnIndex = Tools.getInteger(args, 7, Config.subseqAnnotationLoaderScoreColumnIndex(),
+			Messages.subseqAnnotationLoaderChooseScoreColumnIndex());
 		if (scoreColumnIndex == null) {
 			return;
 		}

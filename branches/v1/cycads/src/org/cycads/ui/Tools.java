@@ -9,7 +9,7 @@ import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-import org.cycads.entities.EntityFactory;
+import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.sequence.Organism;
 
 public class Tools
@@ -169,7 +169,7 @@ public class Tools
 		return organism;
 	}
 
-	public static Integer getInteger(String[] args, int pos, String messageDefault, int valueDefault) {
+	public static Integer getInteger(String[] args, int pos, int valueDefault, String messageDefault) {
 		String value;
 		if (args.length > pos) {
 			value = args[pos];
@@ -183,7 +183,7 @@ public class Tools
 		return new Integer(value);
 	}
 
-	public static Double getDouble(String[] args, int pos, String messageDefault, double valueDefault) {
+	public static Double getDouble(String[] args, int pos, double valueDefault, String messageDefault) {
 		String value;
 		if (args.length > pos) {
 			value = args[pos];
@@ -197,7 +197,7 @@ public class Tools
 		return new Double(value);
 	}
 
-	public static String getString(String[] args, int pos, String messageDefault, String valueDefault) {
+	public static String getString(String[] args, int pos, String valueDefault, String messageDefault) {
 		String value;
 		if (args.length > pos) {
 			value = args[pos];

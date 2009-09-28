@@ -9,8 +9,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
 
-import org.cycads.entities.EntityFactory;
 import org.cycads.entities.annotation.AnnotationMethod;
+import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.synonym.KO;
 import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;

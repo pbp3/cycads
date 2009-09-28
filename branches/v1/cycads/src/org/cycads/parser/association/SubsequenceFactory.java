@@ -5,7 +5,6 @@ package org.cycads.parser.association;
 
 import java.util.Collection;
 
-import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.SubseqAnnotation;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Subsequence;
@@ -31,11 +30,9 @@ public class SubsequenceFactory implements FieldFactory<Subsequence>
 		if (!subsequences.isEmpty()) {
 			return subsequences.iterator().next();
 		}
-		Collection<Annotation> annots = organism.getDbxrefAnnotations(value);
-		for (Annotation annot : annots) {
-			if (annot instanceof SubseqAnnotation) {
-				return ((SubseqAnnotation) annot).getSubsequence();
-			}
+		Collection<SubseqAnnotation> annots = organism.getDbxrefAnnotations(value);
+		for (SubseqAnnotation annot : annots) {
+			return ((SubseqAnnotation) annot).getSubsequence();
 		}
 		throw new FileParserError(Messages.subsequenceNotExists(value));
 	}

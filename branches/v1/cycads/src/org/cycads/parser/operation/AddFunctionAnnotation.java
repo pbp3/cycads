@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
-import org.cycads.entities.EntityFactory;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.annotation.FunctionAnnotable;
 import org.cycads.entities.annotation.FunctionAnnotation;
+import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.synonym.Function;
 
 public class AddFunctionAnnotation<S extends FunctionAnnotable>
