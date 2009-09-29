@@ -3,18 +3,31 @@
  */
 package org.cycads.entities.annotation;
 
-import org.cycads.entities.note.Note;
-import org.cycads.entities.note.NoteSource;
-import org.cycads.entities.note.NotesContainer;
+import java.util.Collection;
 
-public interface Annotation<ANNOTATION_TYPE extends Annotation< ? , ? , ? >, SourceType, M extends AnnotationMethod>
-		extends NoteSource, NotesContainer<Note<ANNOTATION_TYPE>>
+import org.cycads.entities.note.Noteble;
+import org.cycads.entities.note.Type;
+import org.cycads.entities.synonym.Dbxref;
+import org.cycads.entities.synonym.HasSynonyms;
+
+public interface Annotation<AParent extends Annotation< ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
+		extends Noteble, HasSynonyms<X>
 {
-
 	public M getAnnotationMethod();
 
-	public SourceType getSource();
+	public Collection<T> getTypes();
 
-	public Note<ANNOTATION_TYPE> addNote(String value, String type);
+	public boolean hasType(String type);
 
+	public T addType(String type);
+
+	public T addType(T type);
+
+	public Collection<AParent> getParents();
+
+	public void addParent(AParent parent);
+
+	public void setScore(String score);
+
+	public String getScore();
 }

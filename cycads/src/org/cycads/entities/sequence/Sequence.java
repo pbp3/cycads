@@ -5,34 +5,36 @@ package org.cycads.entities.sequence;
 
 import java.util.Collection;
 
+import org.cycads.entities.annotation.AnnotationFinder;
 import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.annotation.dBLink.DBLinkAnnot;
-import org.cycads.entities.annotation.dBLink.DBLinkAnnotContainer;
-import org.cycads.entities.annotation.dBLink.DBLinkAnnotSource;
-import org.cycads.entities.annotation.dBLink.DBRecord;
-import org.cycads.entities.annotation.feature.Feature;
-import org.cycads.entities.annotation.feature.FeatureFilter;
-import org.cycads.entities.note.Note;
-import org.cycads.entities.note.NoteSource;
-import org.cycads.entities.note.NotesContainer;
+import org.cycads.entities.annotation.SubseqAnnotation;
+import org.cycads.entities.note.Noteble;
+import org.cycads.entities.note.Type;
+import org.cycads.entities.synonym.Dbxref;
+import org.cycads.entities.synonym.HasSynonyms;
 
-public interface Sequence<D extends DBLinkAnnot<D, S, R, M>, S extends Sequence< ? , ? , ? , ? , ? , ? >, R extends DBRecord< ? , ? , ? , ? >, M extends AnnotationMethod, L extends Location< ? , ? , ? , ? , ? , ? , ? , ? , ? >, F extends Feature< ? , ? , ? , ? >>
-		extends NoteSource, NotesContainer<Note<S>>, DBLinkAnnotSource<D, R, M>, DBLinkAnnotContainer<D, S, R, M>
+public interface Sequence<O extends Organism< ? , ? , ? , ? , ? , ? >, SS extends Subsequence< ? , ? , ? , ? , ? , ? >, SA extends SubseqAnnotation< ? , ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
+		extends Noteble, HasSynonyms<X>, AnnotationFinder<SA, X, T, M>
 {
-	public String getDescription();
 
-	public double getVersion();
-
-	public String getName();
+	public String getVersion();
 
 	public int getId();
 
-	public Organism<S> getOrganism();
+	public O getOrganism();
 
-	public L getOrCreateLocation(int start, int end, Collection<Intron> introns);
+	public int getLength();
 
-	public Collection<F> getFeatures(FeatureFilter<F> featureFilter);
+	public String getSequenceString();
 
-	public Note<S> addNote(String value, String type);
+	public void setSequenceString(String seqStr);
+
+	public SS getSubsequence(int start, int end, Collection<Intron> introns);
+
+	public SS createSubsequence(int start, int end, Collection<Intron> introns);
+
+	public Collection<SS> getSubsequences(int start);
+
+	public Collection<SS> getSubsequences(X synonym);
 
 }

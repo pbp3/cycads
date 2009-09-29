@@ -1,0 +1,3 @@
+mysqladmin -u root -p drop cycads1
+mysqladmin -u root -p create cycads1
+mysql -u root -p cycads1 < cycadsv1.sql
