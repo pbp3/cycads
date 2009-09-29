@@ -5,23 +5,19 @@ package org.cycads.entities.sequence;
 
 import java.util.Collection;
 
+import org.cycads.entities.Function;
+import org.cycads.entities.annotation.Annotable;
+import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationFinder;
 import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.annotation.DbxrefAnnotable;
-import org.cycads.entities.annotation.FunctionAnnotable;
-import org.cycads.entities.annotation.SubseqAnnotation;
-import org.cycads.entities.annotation.SubseqDbxrefAnnotation;
-import org.cycads.entities.annotation.SubseqFunctionAnnotation;
 import org.cycads.entities.note.Noteble;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.Dbxref;
-import org.cycads.entities.synonym.Function;
 import org.cycads.entities.synonym.HasSynonyms;
 
-public interface Subsequence<S extends Sequence< ? , ? , ? , ? , ? , ? >, SA extends SubseqAnnotation< ? , ? , ? , ? , ? >, F extends Function, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
-		extends Noteble, HasSynonyms<X>, AnnotationFinder<SA, X, T, M>,
-		DbxrefAnnotable<SubseqDbxrefAnnotation< ? , ? , ? , ? , ? >, X, M>,
-		FunctionAnnotable<SubseqFunctionAnnotation< ? , ? , ? , ? , ? >, F, M>
+public interface Subsequence<S extends Sequence< ? , ? , ? , ? , ? , ? >, SSA extends Subsequence< ? , ? , ? , ? , ? , ? >, F extends Function, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
+		extends Noteble, HasSynonyms<X>, AnnotationFinder<SSA, X, T, M>,
+		Annotable<X, Annotation< ? , X, ? , ? , ? , M>, M>, Annotable<F, Annotation< ? , F, ? , ? , ? , M>, M>
 {
 
 	public Collection<Intron> getIntrons();

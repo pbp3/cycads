@@ -137,7 +137,7 @@ public class KOFileParser {
 	}
 
 	protected void newDBLink(String dbName, String accession) {
-		ko.addDbxrefAnnotation(methodDBLink, factory.getDbxref(dbName, accession));
+		ko.addDbxrefTargetAnnotation(methodDBLink, factory.getDbxref(dbName, accession));
 	}
 
 	protected void newDefinition(String def) {

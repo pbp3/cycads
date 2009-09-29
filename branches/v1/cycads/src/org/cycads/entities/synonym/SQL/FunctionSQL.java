@@ -11,7 +11,7 @@ import java.sql.Statement;
 import java.util.Collection;
 import java.util.HashSet;
 
-import org.cycads.entities.synonym.Function;
+import org.cycads.entities.Function;
 
 public class FunctionSQL implements Function, Comparable<Function>
 {

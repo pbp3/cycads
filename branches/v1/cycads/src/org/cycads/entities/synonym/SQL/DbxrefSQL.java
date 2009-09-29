@@ -207,7 +207,7 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL
 	}
 
 	@Override
-	public DbxrefDbxrefAnnotationSQL createDbxrefAnnotation(AnnotationMethodSQL method, DbxrefSQL dbxref) {
+	public DbxrefDbxrefAnnotationSQL createDbxrefTargetAnnotation(AnnotationMethodSQL method, DbxrefSQL dbxref) {
 		try {
 			return new DbxrefDbxrefAnnotationSQL(DbxrefDbxrefAnnotationSQL.createDbxrefDbxrefAnnotationSQL(method,
 				this, dbxref, getConnection()), getConnection());
@@ -219,10 +219,10 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL
 	}
 
 	@Override
-	public DbxrefDbxrefAnnotationSQL addDbxrefAnnotation(AnnotationMethodSQL method, DbxrefSQL dbxref) {
+	public DbxrefDbxrefAnnotationSQL addDbxrefTargetAnnotation(AnnotationMethodSQL method, DbxrefSQL dbxref) {
 		Collection< ? extends DbxrefDbxrefAnnotationSQL> annots = getDbxrefAnnotations(method, dbxref);
 		if (annots.isEmpty()) {
-			return createDbxrefAnnotation(method, dbxref);
+			return createDbxrefTargetAnnotation(method, dbxref);
 		}
 		else {
 			return annots.iterator().next();

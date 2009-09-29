@@ -8,13 +8,13 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Collection;
 
+import org.cycads.entities.Function;
 import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
 import org.cycads.entities.annotation.SQL.AnnotationSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.sequence.SQL.OrganismSQL;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.EC;
-import org.cycads.entities.synonym.Function;
 import org.cycads.entities.synonym.KO;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.ECSQL;

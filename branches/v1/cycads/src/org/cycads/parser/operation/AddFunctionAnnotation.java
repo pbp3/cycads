@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
+import org.cycads.entities.Function;
 import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.annotation.FunctionAnnotable;
+import org.cycads.entities.annotation.FunctionTargetAnnotable;
 import org.cycads.entities.annotation.FunctionAnnotation;
 import org.cycads.entities.factory.EntityFactory;
-import org.cycads.entities.synonym.Function;
 
-public class AddFunctionAnnotation<S extends FunctionAnnotable>
+public class AddFunctionAnnotation<S extends FunctionTargetAnnotable>
 		extends SimpleRelationshipOperation<S, FunctionAnnotation>
 {
 

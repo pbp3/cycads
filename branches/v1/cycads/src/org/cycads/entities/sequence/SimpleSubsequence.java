@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.TreeSet;
 
+import org.cycads.entities.Function;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationFilter;
 import org.cycads.entities.annotation.AnnotationMethod;
@@ -17,7 +18,6 @@ import org.cycads.entities.annotation.SubseqFunctionAnnotation;
 import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.Dbxref;
-import org.cycads.entities.synonym.Function;
 import org.cycads.entities.synonym.SimpleHasSynonymsNoteble;
 
 public class SimpleSubsequence<S extends Sequence< ? , ? , ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
@@ -127,11 +127,11 @@ public class SimpleSubsequence<S extends Sequence< ? , ? , ? , ? , ? , ? >, X ex
 	}
 
 	@Override
-	public SubseqDbxrefAnnotation< ? , ? , ? , ? , ? > addDbxrefAnnotation(M method, X dbxref) {
+	public SubseqDbxrefAnnotation< ? , ? , ? , ? , ? > addDbxrefTargetAnnotation(M method, X dbxref) {
 		SubseqDbxrefAnnotation< ? , ? , ? , ? , ? > annot;
 		Collection< ? extends SubseqDbxrefAnnotation< ? , ? , ? , ? , ? >> annots = getDbxrefAnnotations(method, dbxref);
 		if (annots.isEmpty()) {
-			annot = createDbxrefAnnotation(method, dbxref);
+			annot = createDbxrefTargetAnnotation(method, dbxref);
 		}
 		else {
 			annot = annots.iterator().next();
@@ -178,7 +178,7 @@ public class SimpleSubsequence<S extends Sequence< ? , ? , ? , ? , ? , ? >, X ex
 	}
 
 	@Override
-	public SubseqDbxrefAnnotation< ? , ? , ? , ? , ? > createDbxrefAnnotation(M method, X dbxref) {
+	public SubseqDbxrefAnnotation< ? , ? , ? , ? , ? > createDbxrefTargetAnnotation(M method, X dbxref) {
 		SimpleSubseqDbxrefAnnotation< ? , ? , ? , ? , ? > annot = new SimpleSubseqDbxrefAnnotation<Annotation< ? , ? , ? , ? >, SimpleSubsequence<S, X, T, M>, X, T, M>(
 			factory, this, dbxref, method);
 		dbxrefAnnots.add(annot);

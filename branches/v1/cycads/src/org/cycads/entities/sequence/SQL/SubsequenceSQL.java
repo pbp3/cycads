@@ -239,10 +239,10 @@ public class SubsequenceSQL extends HasSynonymsNotebleSQL
 	}
 
 	@Override
-	public SubseqDbxrefAnnotationSQL addDbxrefAnnotation(AnnotationMethodSQL method, DbxrefSQL dbxref) {
+	public SubseqDbxrefAnnotationSQL addDbxrefTargetAnnotation(AnnotationMethodSQL method, DbxrefSQL dbxref) {
 		Collection< ? extends SubseqDbxrefAnnotationSQL> annots = getDbxrefAnnotations(method, dbxref);
 		if (annots.isEmpty()) {
-			return createDbxrefAnnotation(method, dbxref);
+			return createDbxrefTargetAnnotation(method, dbxref);
 		}
 		else {
 			return annots.iterator().next();
@@ -274,7 +274,7 @@ public class SubsequenceSQL extends HasSynonymsNotebleSQL
 	}
 
 	@Override
-	public SubseqDbxrefAnnotationSQL createDbxrefAnnotation(AnnotationMethodSQL method, DbxrefSQL dbxref) {
+	public SubseqDbxrefAnnotationSQL createDbxrefTargetAnnotation(AnnotationMethodSQL method, DbxrefSQL dbxref) {
 		try {
 			int id = SubseqDbxrefAnnotationSQL.createSubseqDbxrefAnnotationSQL(method, this, dbxref, getConnection());
 			return new SubseqDbxrefAnnotationSQL(id, getConnection());

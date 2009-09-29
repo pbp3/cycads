@@ -1,10 +1,10 @@
 package org.cycads.entities.annotation;
 
+import org.cycads.entities.Function;
 import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
-import org.cycads.entities.synonym.Function;
 
 public class SimpleSubseqFunctionAnnotation<AParent extends Annotation< ? , ? , ? , ? >, SS extends Subsequence< ? , ? , ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
 		extends SimpleSubseqAnnotation<AParent, SS, X, T, M> implements SubseqFunctionAnnotation<AParent, SS, X, T, M>

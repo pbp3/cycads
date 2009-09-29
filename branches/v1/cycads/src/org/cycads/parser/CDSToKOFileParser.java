@@ -67,7 +67,7 @@ public class CDSToKOFileParser {
 		KO ko = factory.getKO(koName);
 		if (annots != null && !annots.isEmpty()) {
 			for (SubseqAnnotation annot : annots) {
-				annot.getSubsequence().addDbxrefAnnotation(method, ko);
+				annot.getSubsequence().addDbxrefTargetAnnotation(method, ko);
 				progress.completeStep();
 			}
 			if (annots.size() != 1) {
@@ -83,7 +83,7 @@ public class CDSToKOFileParser {
 			AnnotationMethod methodFake = factory.getAnnotationMethod(ParametersDefault.getAnnotationMethodFake());
 			Annotation annot = subseq.addAnnotation(factory.getAnnotationTypeCDS(), methodFake);
 			annot.addSynonym(cdsSynonym);
-			subseq.addDbxrefAnnotation(method, ko);
+			subseq.addDbxrefTargetAnnotation(method, ko);
 			progress.completeStep();
 
 		}

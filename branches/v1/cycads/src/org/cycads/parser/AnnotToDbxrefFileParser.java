@@ -140,7 +140,7 @@ public class AnnotToDbxrefFileParser
 			progress.completeStep();
 			for (SubseqAnnotation annot : annots) {
 				if (!isSynonym) {
-					Annotation ret = annot.getSubsequence().addDbxrefAnnotation(method, dbxref);
+					Annotation ret = annot.getSubsequence().addDbxrefTargetAnnotation(method, dbxref);
 					if (ret != null && score != null) {
 						ret.setScore(score);
 					}

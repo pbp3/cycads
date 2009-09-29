@@ -111,7 +111,7 @@ public class DbxrefDbxrefAnnotationLoaderSQL
 			AnnotationRecord<Dbxref, Dbxref> record;
 
 			while ((record = fileReader.read()) != null) {
-				DbxrefAnnotation annot = record.getSource().addDbxrefAnnotation(method, record.getTarget());
+				DbxrefAnnotation annot = record.getSource().addDbxrefTargetAnnotation(method, record.getTarget());
 				String score = record.getScore();
 				if (annot != null && score != null) {
 					annot.setScore(score);

@@ -5,14 +5,14 @@ package org.cycads.entities.sequence;
 
 import java.util.Collection;
 
+import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationFinder;
 import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.annotation.SubseqAnnotation;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.Dbxref;
 
-public interface Organism<S extends Sequence< ? , ? , ? , ? , ? , ? >, SS extends Subsequence< ? , ? , ? , ? , ? , ? >, SA extends SubseqAnnotation< ? , ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
-		extends AnnotationFinder<SA, X, T, M>
+public interface Organism<S extends Sequence< ? , ? , ? , ? , ? , ? >, SS extends Subsequence< ? , ? , ? , ? , ? , ? >, SA extends Annotation<SS, ? , ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
+		extends AnnotationFinder<SA, X, X, T, M>
 {
 	public int getId();
 
