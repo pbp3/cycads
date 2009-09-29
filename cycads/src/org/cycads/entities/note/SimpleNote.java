@@ -3,27 +3,17 @@
  */
 package org.cycads.entities.note;
 
-import org.biojava.ontology.Term;
-
-public class SimpleNote<H extends NoteSource> implements Note<H>
+public class SimpleNote implements Note
 {
 	String	value;
-	String	noteType;
-	H		holder;
+	Type	noteType;
 
-	public SimpleNote(H holder, String value, String noteType) {
+	public SimpleNote(Type type, String value) {
 		this.value = value;
-		this.noteType = noteType;
-		this.holder = holder;
+		this.noteType = type;
 	}
 
-	public SimpleNote(H holder, String value, Term noteType) {
-		this.value = value;
-		this.noteType = noteType.getName();
-		this.holder = holder;
-	}
-
-	public String getType() {
+	public Type getType() {
 		return noteType;
 	}
 
@@ -38,10 +28,6 @@ public class SimpleNote<H extends NoteSource> implements Note<H>
 		}
 		Note o = (Note) obj;
 		return (o.getValue().equals(this.getValue()) && o.getType().equals(this.getType()));
-	}
-
-	public H getHolder() {
-		return holder;
 	}
 
 }

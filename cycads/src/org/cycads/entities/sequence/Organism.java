@@ -5,21 +5,33 @@ package org.cycads.entities.sequence;
 
 import java.util.Collection;
 
-import org.cycads.entities.annotation.dBLink.DBLinkAnnot;
+import org.cycads.entities.annotation.Annotation;
+import org.cycads.entities.annotation.AnnotationFinder;
+import org.cycads.entities.annotation.AnnotationMethod;
+import org.cycads.entities.note.Type;
+import org.cycads.entities.synonym.Dbxref;
 
-public interface Organism<SEQ extends Sequence< ? , ? , ? , ? , ? , ? >>
+public interface Organism<S extends Sequence< ? , ? , ? , ? , ? , ? >, SS extends Subsequence< ? , ? , ? , ? , ? , ? >, SA extends Annotation<SS, ? , ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
+		extends AnnotationFinder<SA, X, X, T, M>
 {
-
-	public Collection<SEQ> getSequences();
-
-	public Collection<SEQ> getSequences(double version);
+	public int getId();
 
 	public String getName();
 
-	public int getId();
+	public void setName(String name);
 
-	public SEQ getOrCreateSequence(String seqAccession, int version);
+	public S createNewSequence(String version);
 
-	public Collection<DBLinkAnnot< ? , SEQ, ? , ? >> getSequenceDBLinks(String seqDatabase, String seqAccession);
+	public Collection<S> getSequences();
+
+	public Collection<S> getSequences(String version);
+
+	public Collection<S> getSequences(X synonym);
+
+	public Collection<S> getSequences(X synonym, String version);
+
+	public Collection<SS> getSubsequences(X synonym);
+
+	public int getNextCycId();
 
 }

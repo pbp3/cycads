@@ -8,8 +8,7 @@ import java.text.MessageFormat;
 
 import org.cycads.general.Messages;
 
-public class ProgressPrintStream implements Progress
-{
+public class ProgressPrintStream implements Progress {
 	PrintStream	out;
 	int			step			= 0;
 	String		initialMessage	= null;
@@ -107,6 +106,11 @@ public class ProgressPrintStream implements Progress
 			}
 			finish(str);
 		}
+	}
+
+	public void finish(int step) {
+		Object[] a1 = {step};
+		finish(a1);
 	}
 
 	public int getStep() {
