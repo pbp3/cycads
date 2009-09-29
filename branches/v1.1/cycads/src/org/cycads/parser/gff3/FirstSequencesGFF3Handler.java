@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.regex.Pattern;
 
+import org.cycads.entities.Function;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.annotation.SubseqAnnotation;
@@ -24,7 +25,6 @@ import org.cycads.entities.sequence.SimpleIntron;
 import org.cycads.entities.sequence.SimpleSubsequence;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
-import org.cycads.entities.synonym.Function;
 import org.cycads.general.ParametersDefault;
 import org.cycads.ui.progress.Progress;
 

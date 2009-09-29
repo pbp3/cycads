@@ -348,4 +348,62 @@ public class Config
 		return getStringMandatory("ecCDS.file.seqVersion");
 	}
 
+	//dbxrefDbxrefAnnotationLoader
+
+	public static String dbxrefDbxrefAnnotationLoaderFileName() {
+		return getStringOptional("dbxrefDbxrefAnnotationLoader.fileName");
+	}
+
+	public static int dbxrefDbxrefAnnotationLoaderOrganismNumber() {
+		return getInt("dbxrefDbxrefAnnotationLoader.organismNumber");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderMethodName() {
+		return getStringOptional("dbxrefDbxrefAnnotationLoader.methodName");
+	}
+
+	public static int dbxrefDbxrefAnnotationLoaderSourceColumnIndex() {
+		return getInt("dbxrefDbxrefAnnotationLoader.sourceColumnIndex");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderSourceDBName() {
+		return getStringOptional("dbxrefDbxrefAnnotationLoader.sourceDBName");
+	}
+
+	public static int dbxrefDbxrefAnnotationLoaderTargetColumnIndex() {
+		return getInt("dbxrefDbxrefAnnotationLoader.targetColumnIndex");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderTargetDBName() {
+		return getStringOptional("dbxrefDbxrefAnnotationLoader.targetDBName");
+	}
+
+	public static int dbxrefDbxrefAnnotationLoaderScoreColumnIndex() {
+		return getInt("dbxrefDbxrefAnnotationLoader.scoreColumnIndex");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderSourceDelimiter() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.sourceDelimiter");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderTargetDelimiter() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.targetDelimiter");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderLineComment() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.lineComment");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderColumnSeparator() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.columnSeparator");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderSourceDbxrefsSeparator() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.sourceDbxrefsSeparator");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderTargetDbxrefsSeparator() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.targetDbxrefsSeparator");
+	}
+
 }

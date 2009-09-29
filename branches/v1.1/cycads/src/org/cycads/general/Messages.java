@@ -249,54 +249,6 @@ public class Messages
 		return getStringMandatory("gbkLoader.chooseSeqDBName");
 	}
 
-	// subseqAnnotationLoader
-
-	public static String subseqAnnotationLoaderChooseFile() {
-		return getStringMandatory("subseqAnnotationLoader.chooseFile");
-	}
-
-	public static String subseqAnnotationLoaderChooseOrganismNumber() {
-		return getStringMandatory("subseqAnnotationLoader.chooseOrganismNumber");
-	}
-
-	public static String subseqAnnotationLoaderChooseMethodName() {
-		return getStringMandatory("subseqAnnotationLoader.chooseMethodName");
-	}
-
-	public static String subseqAnnotationLoaderChooseAnnotColumnIndex() {
-		return getStringMandatory("subseqAnnotationLoader.chooseAnnotColumnIndex");
-	}
-
-	public static String subseqAnnotationLoaderChooseAnnotDBName() {
-		return getStringMandatory("subseqAnnotationLoader.chooseAnnotDBName");
-	}
-
-	public static String subseqAnnotationLoaderChooseDbxrefColumnIndex() {
-		return getStringMandatory("subseqAnnotationLoader.chooseDbxrefColumnIndex");
-	}
-
-	public static String subseqAnnotationLoaderChooseDbxrefDBName() {
-		return getStringMandatory("subseqAnnotationLoader.chooseDbxrefDBName");
-	}
-
-	public static String subseqAnnotationLoaderChooseScoreColumnIndex() {
-		return getStringMandatory("subseqAnnotationLoader.chooseScoreColumnIndex");
-	}
-
-	public static int subseqAnnotationLoaderStepShowInterval() {
-		return getInt("subseqAnnotationLoader.stepShowInterval");
-	}
-
-	public static String subseqAnnotationLoaderInitMsg(String path) {
-		Object[] a = {path};
-		return MessageFormat.format(getStringMandatory("subseqAnnotationLoader.init"), a);
-	}
-
-	public static String subseqAnnotationLoaderFinalMsg(int step, int errorStep) {
-		Object[] a = {step, errorStep};
-		return MessageFormat.format(getStringMandatory("subseqAnnotationLoader.final"), a);
-	}
-
 	// synonymLoader
 
 	public static String synonymLoaderChooseFile() {
@@ -380,6 +332,107 @@ public class Messages
 	public static String subsequenceNotExists(String value) {
 		Object[] a = {value};
 		return MessageFormat.format(getStringMandatory("subsequence.exception.doesntExist"), a);
+	}
+
+	// general messages
+	public static String generalChooseFileToLoad() {
+		return getString("general.loader.chooseFile");
+	}
+
+	public static String generalChooseFileToExtract() {
+		return getString("general.extracter.chooseFile");
+	}
+
+	public static String generalChooseOrganismNumber() {
+		return getString("general.chooseOrganismNumber");
+	}
+
+	public static String generalChooseMethodName() {
+		return getStringMandatory("general.chooseMethodName");
+	}
+
+	//dbxrefDbxrefAnnotationLoader
+
+	public static String dbxrefDbxrefAnnotationLoaderChooseSourceColumnIndex() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.chooseSourceColumnIndex");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderChooseSourceDBName() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.chooseSourceDBName");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderChooseTargetColumnIndex() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.chooseTargetColumnIndex");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderChooseTargetDBName() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.chooseTargetDBName");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderChooseScoreColumnIndex() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.chooseScoreColumnIndex");
+	}
+
+	public static int dbxrefDbxrefAnnotationLoaderStepShowInterval() {
+		return getInt("dbxrefDbxrefAnnotationLoader.stepShowInterval");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderInitMsg(String file) {
+		Object[] a = {file};
+		return MessageFormat.format(getStringMandatory("dbxrefDbxrefAnnotationLoader.init"), a);
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderFinalMsg(int stepsOK, int stepsError) {
+		Object[] a = {stepsOK, stepsError};
+		return MessageFormat.format(getStringMandatory("dbxrefDbxrefAnnotationLoader.final"), a);
+	}
+
+	// subseqAnnotationLoader
+
+	public static String subseqAnnotationLoaderChooseFile() {
+		return getStringMandatory("subseqAnnotationLoader.chooseFile");
+	}
+
+	public static String subseqAnnotationLoaderChooseOrganismNumber() {
+		return getStringMandatory("subseqAnnotationLoader.chooseOrganismNumber");
+	}
+
+	public static String subseqAnnotationLoaderChooseMethodName() {
+		return getStringMandatory("subseqAnnotationLoader.chooseMethodName");
+	}
+
+	public static String subseqAnnotationLoaderChooseAnnotColumnIndex() {
+		return getStringMandatory("subseqAnnotationLoader.chooseAnnotColumnIndex");
+	}
+
+	public static String subseqAnnotationLoaderChooseAnnotDBName() {
+		return getStringMandatory("subseqAnnotationLoader.chooseAnnotDBName");
+	}
+
+	public static String subseqAnnotationLoaderChooseDbxrefColumnIndex() {
+		return getStringMandatory("subseqAnnotationLoader.chooseDbxrefColumnIndex");
+	}
+
+	public static String subseqAnnotationLoaderChooseDbxrefDBName() {
+		return getStringMandatory("subseqAnnotationLoader.chooseDbxrefDBName");
+	}
+
+	public static String subseqAnnotationLoaderChooseScoreColumnIndex() {
+		return getStringMandatory("subseqAnnotationLoader.chooseScoreColumnIndex");
+	}
+
+	public static int subseqAnnotationLoaderStepShowInterval() {
+		return getInt("subseqAnnotationLoader.stepShowInterval");
+	}
+
+	public static String subseqAnnotationLoaderInitMsg(String path) {
+		Object[] a = {path};
+		return MessageFormat.format(getStringMandatory("subseqAnnotationLoader.init"), a);
+	}
+
+	public static String subseqAnnotationLoaderFinalMsg(int step, int errorStep) {
+		Object[] a = {step, errorStep};
+		return MessageFormat.format(getStringMandatory("subseqAnnotationLoader.final"), a);
 	}
 
 }

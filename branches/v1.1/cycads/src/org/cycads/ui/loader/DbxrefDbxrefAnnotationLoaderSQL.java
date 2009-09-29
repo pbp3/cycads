@@ -5,21 +5,23 @@ package org.cycads.ui.loader;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
 import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.annotation.DbxrefAnnotation;
 import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.sequence.Organism;
-import org.cycads.entities.synonym.Dbxref;
 import org.cycads.general.Config;
 import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
-import org.cycads.parser.association.AnnotationRecord;
 import org.cycads.parser.association.DbnameTransformer;
 import org.cycads.parser.association.DbxrefFactory;
+import org.cycads.parser.association.Dbxrefs;
+import org.cycads.parser.association.DbxrefsFactory;
 import org.cycads.parser.association.LineRecordFileReader;
+import org.cycads.parser.association.RecordFactory;
+import org.cycads.parser.association.SimpleAnnotationRecord;
 import org.cycads.parser.association.SimpleAnnotationRecordFactory;
 import org.cycads.parser.association.SimpleDbnameTransformer;
 import org.cycads.ui.Tools;
@@ -38,7 +40,13 @@ public class DbxrefDbxrefAnnotationLoaderSQL
 			return;
 		}
 		else {
-			br = new BufferedReader(new FileReader(file));
+			try {
+				br = new BufferedReader(new FileReader(file));
+			}
+			catch (FileNotFoundException e) {
+				e.printStackTrace();
+				return;
+			}
 		}
 		Organism< ? , ? , ? , ? , ? , ? > organism = Tools.getOrganism(args, 1,
 			Config.dbxrefDbxrefAnnotationLoaderOrganismNumber(), Messages.generalChooseOrganismNumber(), factory);
@@ -88,42 +96,38 @@ public class DbxrefDbxrefAnnotationLoaderSQL
 		DbnameTransformer dbNameSource = new SimpleDbnameTransformer(dbxrefSourceDBName);
 		DbnameTransformer dbNameTarget = new SimpleDbnameTransformer(dbxrefTargetDBName);
 
-		DbxrefFactory sourceFactory = new DbxrefFactory(ParametersDefault.getDbxrefToStringSeparator(),
-			Config.dbxrefDbxrefAnnotationSourceDelimiter(), dbNameSource, factory);
+		DbxrefFactory sourceFactory = new DbxrefFactory(ParametersDefault.getDbxrefToStringSeparator(), dbNameSource,
+			factory);
 
-		DbxrefFactory targetFactory = new DbxrefFactory(ParametersDefault.getDbxrefToStringSeparator(),
-			Config.dbxrefDbxrefAnnotationTargetDelimiter(), dbNameTarget, factory);
+		DbxrefFactory targetFactory = new DbxrefFactory(ParametersDefault.getDbxrefToStringSeparator(), dbNameTarget,
+			factory);
 
-		SimpleAnnotationRecordFactory<Dbxref, Dbxref> recordFactory = new SimpleAnnotationRecordFactory<Dbxref, Dbxref>(
-			dbxrefSourceColumnIndex, sourceFactory, dbxrefTargetColumnIndex, targetFactory, scoreColumnIndex);
+		DbxrefsFactory sourcesFactory = new DbxrefsFactory(Config.dbxrefDbxrefAnnotationLoaderSourceDbxrefsSeparator(),
+			Config.dbxrefDbxrefAnnotationLoaderSourceDelimiter(), sourceFactory);
 
-		LineRecordFileReader<AnnotationRecord<Dbxref, Dbxref>> fileReader = new LineRecordFileReader<AnnotationRecord<Dbxref, Dbxref>>(
-			br, Config.dbxrefDbxrefAnnotationColumnSeparator(), Config.dbxrefDbxrefAnnotationLineComment(),
+		DbxrefsFactory targetsFactory = new DbxrefsFactory(Config.dbxrefDbxrefAnnotationLoaderTargetDbxrefsSeparator(),
+			Config.dbxrefDbxrefAnnotationLoaderTargetDelimiter(), targetFactory);
+
+		RecordFactory<SimpleAnnotationRecord<Dbxrefs, Dbxrefs>> recordFactory = new SimpleAnnotationRecordFactory<Dbxrefs, Dbxrefs>(
+			dbxrefSourceColumnIndex, sourcesFactory, dbxrefTargetColumnIndex, targetsFactory, scoreColumnIndex);
+
+		LineRecordFileReader<SimpleAnnotationRecord<Dbxrefs, Dbxrefs>> fileReader = new LineRecordFileReader<SimpleAnnotationRecord<Dbxrefs, Dbxrefs>>(
+			br, Config.dbxrefDbxrefAnnotationLoaderColumnSeparator(), Config.dbxrefDbxrefAnnotationLoaderLineComment(),
 			recordFactory);
 		Progress progress = new ProgressPrintInterval(System.out,
 			Messages.dbxrefDbxrefAnnotationLoaderStepShowInterval());
 		Progress errorCount = new ProgressCount();
+		progress.init(Messages.dbxrefDbxrefAnnotationLoaderInitMsg(file.getPath()));
+
 		try {
-			progress.init(Messages.dbxrefDbxrefAnnotationLoaderInitMsg(file.getPath()));
-
-			//Colocar em una nova classe ????
-
-			AnnotationRecord<Dbxref, Dbxref> record;
-
-			while ((record = fileReader.read()) != null) {
-				DbxrefAnnotation annot = record.getSource().addDbxrefAnnotation(method, record.getTarget());
-				String score = record.getScore();
-				if (annot != null && score != null) {
-					annot.setScore(score);
-				}
-				//criar fakeannotation????
-			}
+			Loaders.loadDbxrefsDbxrefsAnnotation(fileReader, method, progress, errorCount);
 		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}
 		finally {
-			((EntityFactorySQL) factory).finish();
+			progress.finish(Messages.dbxrefDbxrefAnnotationLoaderFinalMsg(progress.getStep(), errorCount.getStep()));
+			factory.finish();
 		}
 	}
 }

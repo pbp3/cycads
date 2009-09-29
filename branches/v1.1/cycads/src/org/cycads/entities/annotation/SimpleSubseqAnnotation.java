@@ -14,7 +14,7 @@ public class SimpleSubseqAnnotation<AParent extends Annotation< ? , ? , ? , ? >,
 	SS	subsequence;
 	M	method;
 
-	public SimpleSubseqAnnotation(EntityFactory< ? extends X, ? extends M, ? extends T, ? , ? > factory,
+	public SimpleSubseqAnnotation(EntityFactory< ? extends X, ? extends M, ? extends T, ? , ? , ? > factory,
 			SS subsequence, M method) {
 		super(factory, method);
 		this.subsequence = subsequence;

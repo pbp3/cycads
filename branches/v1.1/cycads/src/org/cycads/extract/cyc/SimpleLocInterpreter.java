@@ -9,6 +9,7 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.TreeSet;
 
+import org.cycads.entities.Function;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationFinder;
 import org.cycads.entities.annotation.DbxrefAnnotation;
@@ -19,7 +20,6 @@ import org.cycads.entities.note.Noteble;
 import org.cycads.entities.sequence.Sequence;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
-import org.cycads.entities.synonym.Function;
 import org.cycads.entities.synonym.HasSynonyms;
 
 public class SimpleLocInterpreter implements LocInterpreter

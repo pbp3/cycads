@@ -11,7 +11,7 @@ public class SimpleSubseqDbxrefAnnotation<AParent extends Annotation< ? , ? , ? 
 
 	private X	dbxref;
 
-	public SimpleSubseqDbxrefAnnotation(EntityFactory< ? extends X, ? extends M, ? extends T, ? , ? > factory,
+	public SimpleSubseqDbxrefAnnotation(EntityFactory< ? extends X, ? extends M, ? extends T, ? , ? , ? > factory,
 			SS subsequence, X dbxref, M method) {
 		super(factory, subsequence, method);
 		this.dbxref = dbxref;
