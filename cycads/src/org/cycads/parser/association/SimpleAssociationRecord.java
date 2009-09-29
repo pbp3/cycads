@@ -20,7 +20,7 @@ public class SimpleAssociationRecord<S, T> implements AssociationRecord<S, T>
 
 	@Override
 	public String getNote(int index) {
-		if (index < values.length) {
+		if (index >= 0 && index < values.length) {
 			return values[index];
 		}
 		else {

@@ -11,11 +11,11 @@ import org.cycads.entities.factory.EntityFactory;
 
 public class SimpleNoteble implements Noteble
 {
-	protected EntityFactory< ? , ? , ? , ? , ? >	factory;
+	protected EntityFactory< ? , ? , ? , ? , ? , ? >	factory;
 
-	private Hashtable<String, Collection<String>>	notes	= new Hashtable<String, Collection<String>>();
+	private Hashtable<String, Collection<String>>		notes	= new Hashtable<String, Collection<String>>();
 
-	public SimpleNoteble(EntityFactory< ? , ? , ? , ? , ? > factory) {
+	public SimpleNoteble(EntityFactory< ? , ? , ? , ? , ? , ? > factory) {
 		super();
 		this.factory = factory;
 	}

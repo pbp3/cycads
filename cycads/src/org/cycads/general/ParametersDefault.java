@@ -136,6 +136,10 @@ public class ParametersDefault
 		return getStringMandatory("general.dbxref.toStringSeparator");
 	}
 
+	public static boolean isDebugging() {
+		return new Boolean(getStringMandatory("general.debug"));
+	}
+
 	// KOFile
 
 	public static String koFileEntryTag() {

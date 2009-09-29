@@ -13,14 +13,14 @@ public class SimpleAnnotation<AParent extends Annotation< ? , ? , ? , ? >, X ext
 		extends SimpleHasSynonymsNoteble<X> implements Annotation<AParent, X, T, M>
 {
 
-	EntityFactory< ? extends X, ? extends M, ? extends T, ? , ? >	factory;
+	EntityFactory< ? extends X, ? extends M, ? extends T, ? , ? , ? >	factory;
 
-	Collection<AParent>												parents	= new ArrayList<AParent>();
-	Collection<T>													types	= new TreeSet<T>();
-	M																method;
-	String															score;
+	Collection<AParent>													parents	= new ArrayList<AParent>();
+	Collection<T>														types	= new TreeSet<T>();
+	M																	method;
+	String																score;
 
-	public SimpleAnnotation(EntityFactory< ? extends X, ? extends M, ? extends T, ? , ? > factory, M method) {
+	public SimpleAnnotation(EntityFactory< ? extends X, ? extends M, ? extends T, ? , ? , ? > factory, M method) {
 		super(factory);
 		this.factory = factory;
 		this.method = method;

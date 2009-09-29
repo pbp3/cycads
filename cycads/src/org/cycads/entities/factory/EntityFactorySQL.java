@@ -14,7 +14,6 @@ import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.sequence.SQL.OrganismSQL;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.EC;
-import org.cycads.entities.synonym.Function;
 import org.cycads.entities.synonym.KO;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.ECSQL;
@@ -25,7 +24,7 @@ import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
 
 public class EntityFactorySQL
-		implements EntityFactory<DbxrefSQL, AnnotationMethodSQL, TypeSQL, OrganismSQL, AnnotationSQL>
+		implements EntityFactory<DbxrefSQL, AnnotationMethodSQL, TypeSQL, OrganismSQL, FunctionSQL, AnnotationSQL>
 {
 	private Connection	con;
 
@@ -148,7 +147,7 @@ public class EntityFactorySQL
 	}
 
 	@Override
-	public Function getFunction(String name, String description) {
+	public FunctionSQL getFunction(String name, String description) {
 		try {
 			return new FunctionSQL(name, description, getConnection());
 		}

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.TreeSet;
 
+import org.cycads.entities.Function;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationFilter;
 import org.cycads.entities.annotation.AnnotationMethod;
@@ -17,7 +18,6 @@ import org.cycads.entities.annotation.SubseqFunctionAnnotation;
 import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.Dbxref;
-import org.cycads.entities.synonym.Function;
 import org.cycads.entities.synonym.SimpleHasSynonymsNoteble;
 
 public class SimpleSubsequence<S extends Sequence< ? , ? , ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
@@ -25,13 +25,13 @@ public class SimpleSubsequence<S extends Sequence< ? , ? , ? , ? , ? , ? >, X ex
 		implements Subsequence<S, SimpleSubseqAnnotation< ? , ? , ? , ? , ? >, Function, X, T, M>
 {
 
-	protected EntityFactory< ? extends X, ? extends M, ? extends T, ? , ? >	factory;
+	protected EntityFactory< ? extends X, ? extends M, ? extends T, ? , ? , ? >	factory;
 
-	S																		seq;
-	int																		start, end;
+	S																			seq;
+	int																			start, end;
 
-	public SimpleSubsequence(EntityFactory< ? extends X, ? extends M, ? extends T, ? , ? > factory, S seq, int start,
-			int end) {
+	public SimpleSubsequence(EntityFactory< ? extends X, ? extends M, ? extends T, ? , ? , ? > factory, S seq,
+			int start, int end) {
 		super(factory);
 		this.seq = seq;
 		this.start = start;

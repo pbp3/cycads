@@ -14,10 +14,10 @@ public class SimpleHasSynonymsNoteble<X extends Dbxref< ? , ? , ? , ? >> extends
 		implements HasSynonyms<X>
 {
 
-	protected EntityFactory< ? extends X, ? , ? , ? , ? >	factory;
-	private Hashtable<String, Collection<String>>			synonyms	= new Hashtable<String, Collection<String>>();
+	protected EntityFactory< ? extends X, ? , ? , ? , ? , ? >	factory;
+	private Hashtable<String, Collection<String>>				synonyms	= new Hashtable<String, Collection<String>>();
 
-	public SimpleHasSynonymsNoteble(EntityFactory< ? extends X, ? , ? , ? , ? > factory) {
+	public SimpleHasSynonymsNoteble(EntityFactory< ? extends X, ? , ? , ? , ? , ? > factory) {
 		super(factory);
 		this.factory = factory;
 	}

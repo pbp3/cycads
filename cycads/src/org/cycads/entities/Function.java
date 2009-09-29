@@ -1,7 +1,7 @@
 /*
  * Created on 25/02/2009
  */
-package org.cycads.entities.synonym;
+package org.cycads.entities;
 
 import java.util.Collection;
 
