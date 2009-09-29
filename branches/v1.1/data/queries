@@ -1,5 +1,0 @@
-SELECT s.*, X.*, T.*, count (s.subsequence_id) FROM subsequence s left join Intron using (subsequence_id) left join subseq_annotation using(subsequence_id) left join Annotation_synonym using (annotation_id) left join dbxref X using (dbxref_id) left join Annotation_type  using (annotation_id) left join term_type T using (type_id) where Intron.subsequence_id is NULL and T.type_id in (1) and X.dbname='AphidBase' group by by s.subsequence_id
-
-
-
-SELECT s.*, X.*, T.* FROM subsequence s left join Intron using (subsequence_id) left join subseq_annotation using(subsequence_id) left join Annotation_synonym using (annotation_id) left join dbxref X using (dbxref_id) left join Annotation_type  using (annotation_id) left join term_type T using (type_id) where Intron.subsequence_id is NULL and T.type_id in (1) and X.dbname='AphidBase' order by s.sequence_id  
