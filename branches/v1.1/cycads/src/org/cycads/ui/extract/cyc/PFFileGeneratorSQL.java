@@ -103,9 +103,12 @@ public class PFFileGeneratorSQL
 				seqs = organism.getSequences(synonym, seqVersion);
 			}
 
-			Collection<Type> types = new ArrayList<Type>(1);
-			types.add(factory.getAnnotationTypeCDS());
-			types.add(factory.getAnnotationType("TRNA"));
+			List<String> typesStr = PFFileConfig.getTypes();
+			Collection<Type> types = new ArrayList<Type>(typesStr.size());
+			for (String typeStr : typesStr) {
+				types.add(factory.getAnnotationType(typeStr));
+			}
+
 			PFFileStream pfFile = new PFFileStream(file, Config.pfGeneratorFileHeader(), sequenceLocation);
 			CycIdGenerator cycIdGenerator = new OrganismCycIdGenerator(organism);
 

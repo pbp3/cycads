@@ -12,7 +12,6 @@ import org.cycads.entities.annotation.SubseqAnnotation;
 import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.general.Config;
-import org.cycads.general.ParametersDefault;
 import org.cycads.parser.operation.AddDbxrefAnnotation;
 import org.cycads.parser.operation.AddFunctionAnnotation;
 import org.cycads.parser.operation.AddParentAnnotation;
@@ -137,6 +136,7 @@ public class GBKFileConfig
 
 	public static ArrayList<Pattern> getPatternsByType(String parameterName, String type) {
 		ArrayList<Pattern> patterns = getPatterns("gbk.file." + parameterName, null);
+		type = getConfigType(type);
 		patterns = getPatterns("gbk.file." + type + "." + parameterName, patterns);
 		return patterns;
 	}
@@ -151,6 +151,7 @@ public class GBKFileConfig
 
 	public static ArrayList<String> getStringsByType(String parameterName, String type) {
 		ArrayList<String> values = getStrings("gbk.file." + parameterName, null);
+		type = getConfigType(type);
 		values = getStrings("gbk.file." + type + "." + parameterName, values);
 		return values;
 	}
@@ -191,22 +192,32 @@ public class GBKFileConfig
 				int i = matches(type, changeTypePatterns);
 				if (i >= 0) {
 					newType = newValueTypes.get(i);
-					type = newType;
 				}
 				else {
 					newType = type;
 				}
-				if (isTypeValue(type, ParametersDefault.getGeneAnnotationTypeName())) {
-					newType = ParametersDefault.getGeneAnnotationTypeName();
-				}
-				else if (isTypeValue(type, ParametersDefault.getMRNAAnnotationTypeName())) {
-					newType = ParametersDefault.getMRNAAnnotationTypeName();
-				}
-				else if (isTypeValue(type, ParametersDefault.getCDSAnnotationTypeName())) {
-					newType = ParametersDefault.getCDSAnnotationTypeName();
-				}
 			}
 			typeHash.put(oldType, newType);
+		}
+		return newType;
+	}
+
+	static ArrayList<Pattern>					changeConfigTypePatterns	= getPatterns("gbk.file.changeConfigType");
+	static ArrayList<String>					newConfigValueTypes			= getStrings("gbk.file.changeConfigType.newValue");
+	private static Hashtable<String, String>	configTypeHash				= new Hashtable<String, String>();
+
+	public static String getConfigType(String type) {
+		String newType = configTypeHash.get(type);
+		if (newType == null) {
+			String oldType = type;
+			int i = matches(type, changeConfigTypePatterns);
+			if (i >= 0) {
+				newType = newConfigValueTypes.get(i);
+			}
+			else {
+				newType = type;
+			}
+			configTypeHash.put(oldType, newType);
 		}
 		return newType;
 	}
@@ -215,10 +226,10 @@ public class GBKFileConfig
 	// mrnaAnnotationType = factory.getAnnotationType(ParametersDefault.getMRNAAnnotationTypeName());
 	// geneAnnotationType = factory.getAnnotationType(ParametersDefault.getGeneAnnotationTypeName());
 
-	public static boolean isTypeValue(String input, String type) {
-		ArrayList<Pattern> patterns = getPatternsByType("typeValue", type);
-		return matches(input, patterns) >= 0;
-	}
+	//	public static boolean isTypeValue(String input, String type) {
+	//		ArrayList<Pattern> patterns = getPatternsByType("typeValue", type);
+	//		return matches(input, patterns) >= 0;
+	//	}
 
 	private static Hashtable<String, String>	annotationMethodNameHash	= new Hashtable<String, String>();
 
