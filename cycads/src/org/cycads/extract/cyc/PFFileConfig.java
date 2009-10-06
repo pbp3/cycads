@@ -304,4 +304,8 @@ public class PFFileConfig
 		return scoreSystemCollection;
 	}
 
+	public static List<String> getTypes() {
+		return getStrings("annotationType");
+	}
+
 }
