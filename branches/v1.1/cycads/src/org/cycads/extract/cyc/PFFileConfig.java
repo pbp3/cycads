@@ -119,7 +119,7 @@ public class PFFileConfig
 
 	public static String getProductType(SubseqAnnotation< ? , ? , ? , ? , ? > annot) {
 		for (Type type : annot.getTypes()) {
-			String typeStr = getProductType(type.getName()).toUpperCase();
+			String typeStr = getProductType(type.getName());
 			if (typeStr != null && typeStr.length() != 0) {
 				return typeStr;
 			}
