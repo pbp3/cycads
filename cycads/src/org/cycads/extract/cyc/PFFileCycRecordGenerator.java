@@ -147,7 +147,7 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 				cycDbLinks.addAll(createDBLink(strs[0], strs[1]));
 			}
 			else {
-				System.err.println("DBLInk error:" + dbLinkStr);
+				System.err.println("DBLink error:" + dbLinkStr);
 			}
 		}
 		return cycDbLinks;
