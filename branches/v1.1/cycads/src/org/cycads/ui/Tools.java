@@ -183,6 +183,15 @@ public class Tools
 		return new Integer(value);
 	}
 
+	public static Integer getIntegerOptional(String[] args, int pos, int valueDefault) {
+		if (args.length > pos) {
+			return new Integer(args[pos]);
+		}
+		else {
+			return valueDefault;
+		}
+	}
+
 	public static Double getDouble(String[] args, int pos, double valueDefault, String messageDefault) {
 		String value;
 		if (args.length > pos) {
