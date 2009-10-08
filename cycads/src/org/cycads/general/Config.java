@@ -382,6 +382,10 @@ public class Config
 		return getInt("dbxrefDbxrefAnnotationLoader.scoreColumnIndex");
 	}
 
+	public static int dbxrefDbxrefAnnotationLoaderMethodColumnIndex() {
+		return getInt("dbxrefDbxrefAnnotationLoader.methodColumnIndex");
+	}
+
 	public static String dbxrefDbxrefAnnotationLoaderSourceDelimiter() {
 		return getStringMandatory("dbxrefDbxrefAnnotationLoader.sourceDelimiter");
 	}
@@ -404,6 +408,10 @@ public class Config
 
 	public static String dbxrefDbxrefAnnotationLoaderTargetDbxrefsSeparator() {
 		return getStringMandatory("dbxrefDbxrefAnnotationLoader.targetDbxrefsSeparator");
+	}
+
+	public static Pattern dbxrefDbxrefAnnotationLoaderLineIgnorePattern() {
+		return Pattern.compile(getStringMandatory("dbxrefDbxrefAnnotationLoader.ignoreLine.regex"));
 	}
 
 }

@@ -9,9 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.factory.EntityFactorySQL;
-import org.cycads.entities.sequence.Organism;
 import org.cycads.general.Config;
 import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
@@ -48,50 +46,47 @@ public class DbxrefDbxrefAnnotationLoaderSQL
 				return;
 			}
 		}
-		Organism< ? , ? , ? , ? , ? , ? > organism = Tools.getOrganism(args, 1,
-			Config.dbxrefDbxrefAnnotationLoaderOrganismNumber(), Messages.generalChooseOrganismNumber(), factory);
-		if (organism == null) {
-			return;
-		}
-
-		String methodName = Tools.getString(args, 2, Config.dbxrefDbxrefAnnotationLoaderMethodName(),
+		String methodName = Tools.getString(args, 1, Config.dbxrefDbxrefAnnotationLoaderMethodName(),
 			Messages.generalChooseMethodName());
 		if (methodName == null) {
 			return;
 		}
-		AnnotationMethod method = factory.getAnnotationMethod(methodName);
+		factory.setMethodDefault(factory.getAnnotationMethod(methodName));
 
-		Integer dbxrefSourceColumnIndex = Tools.getInteger(args, 3,
+		Integer dbxrefSourceColumnIndex = Tools.getInteger(args, 2,
 			Config.dbxrefDbxrefAnnotationLoaderSourceColumnIndex(),
 			Messages.dbxrefDbxrefAnnotationLoaderChooseSourceColumnIndex());
 		if (dbxrefSourceColumnIndex == null) {
 			return;
 		}
 
-		String dbxrefSourceDBName = Tools.getString(args, 4, Config.dbxrefDbxrefAnnotationLoaderSourceDBName(),
+		String dbxrefSourceDBName = Tools.getString(args, 3, Config.dbxrefDbxrefAnnotationLoaderSourceDBName(),
 			Messages.dbxrefDbxrefAnnotationLoaderChooseSourceDBName());
 		if (dbxrefSourceDBName == null) {
 			return;
 		}
 
-		Integer dbxrefTargetColumnIndex = Tools.getInteger(args, 5,
+		Integer dbxrefTargetColumnIndex = Tools.getInteger(args, 4,
 			Config.dbxrefDbxrefAnnotationLoaderTargetColumnIndex(),
 			Messages.dbxrefDbxrefAnnotationLoaderChooseTargetColumnIndex());
 		if (dbxrefTargetColumnIndex == null) {
 			return;
 		}
 
-		String dbxrefTargetDBName = Tools.getString(args, 6, Config.dbxrefDbxrefAnnotationLoaderTargetDBName(),
+		String dbxrefTargetDBName = Tools.getString(args, 5, Config.dbxrefDbxrefAnnotationLoaderTargetDBName(),
 			Messages.dbxrefDbxrefAnnotationLoaderChooseTargetDBName());
 		if (dbxrefTargetDBName == null) {
 			return;
 		}
 
-		Integer scoreColumnIndex = Tools.getInteger(args, 7, Config.dbxrefDbxrefAnnotationLoaderScoreColumnIndex(),
+		Integer scoreColumnIndex = Tools.getInteger(args, 6, Config.dbxrefDbxrefAnnotationLoaderScoreColumnIndex(),
 			Messages.dbxrefDbxrefAnnotationLoaderChooseScoreColumnIndex());
 		if (scoreColumnIndex == null) {
 			return;
 		}
+
+		Integer methodColumnIndex = Tools.getIntegerOptional(args, 7,
+			Config.dbxrefDbxrefAnnotationLoaderMethodColumnIndex());
 
 		DbnameTransformer dbNameSource = new SimpleDbnameTransformer(dbxrefSourceDBName);
 		DbnameTransformer dbNameTarget = new SimpleDbnameTransformer(dbxrefTargetDBName);
@@ -109,18 +104,19 @@ public class DbxrefDbxrefAnnotationLoaderSQL
 			Config.dbxrefDbxrefAnnotationLoaderTargetDelimiter(), targetFactory);
 
 		RecordFactory<SimpleAnnotationRecord<Dbxrefs, Dbxrefs>> recordFactory = new SimpleAnnotationRecordFactory<Dbxrefs, Dbxrefs>(
-			dbxrefSourceColumnIndex, sourcesFactory, dbxrefTargetColumnIndex, targetsFactory, scoreColumnIndex);
+			dbxrefSourceColumnIndex, sourcesFactory, dbxrefTargetColumnIndex, targetsFactory, scoreColumnIndex,
+			methodColumnIndex, factory);
 
 		LineRecordFileReader<SimpleAnnotationRecord<Dbxrefs, Dbxrefs>> fileReader = new LineRecordFileReader<SimpleAnnotationRecord<Dbxrefs, Dbxrefs>>(
 			br, Config.dbxrefDbxrefAnnotationLoaderColumnSeparator(), Config.dbxrefDbxrefAnnotationLoaderLineComment(),
-			recordFactory);
+			Config.dbxrefDbxrefAnnotationLoaderLineIgnorePattern(), recordFactory);
 		Progress progress = new ProgressPrintInterval(System.out,
 			Messages.dbxrefDbxrefAnnotationLoaderStepShowInterval());
 		Progress errorCount = new ProgressCount();
 		progress.init(Messages.dbxrefDbxrefAnnotationLoaderInitMsg(file.getPath()));
 
 		try {
-			Loaders.loadDbxrefsDbxrefsAnnotation(fileReader, method, progress, errorCount);
+			Loaders.loadDbxrefsDbxrefsAnnotation(fileReader, progress, errorCount);
 		}
 		catch (IOException e) {
 			e.printStackTrace();

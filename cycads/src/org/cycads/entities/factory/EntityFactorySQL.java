@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Hashtable;
 
 import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
 import org.cycads.entities.annotation.SQL.AnnotationSQL;
@@ -54,10 +55,29 @@ public class EntityFactorySQL
 		}
 	}
 
+	private AnnotationMethodSQL						methodDefault;
+	private Hashtable<String, AnnotationMethodSQL>	methods	= new Hashtable<String, AnnotationMethodSQL>();
+
+	public AnnotationMethodSQL getMethodDefault() {
+		return methodDefault;
+	}
+
+	public void setMethodDefault(AnnotationMethodSQL methodDefault) {
+		this.methodDefault = methodDefault;
+	}
+
 	@Override
 	public AnnotationMethodSQL getAnnotationMethod(String name) {
+		if (name == null || (name = name.trim()).length() == 0) {
+			return getMethodDefault();
+		}
 		try {
-			return new AnnotationMethodSQL(name, getConnection());
+			AnnotationMethodSQL ret = methods.get(name);
+			if (ret == null) {
+				ret = new AnnotationMethodSQL(name, getConnection());
+				methods.put(name, ret);
+			}
+			return ret;
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -72,10 +92,10 @@ public class EntityFactorySQL
 			dbName = strs[0];
 			accession = strs[1];
 		}
-		if (dbName == null || dbName.length() == 0) {
+		if (dbName == null || (dbName = dbName.trim()).length() == 0) {
 			throw new RuntimeException(Messages.dbxrefWithoutDBNameException());
 		}
-		if (accession == null || accession.length() == 0) {
+		if (accession == null || (accession = accession.trim()).length() == 0) {
 			throw new RuntimeException(Messages.dbxrefWithoutAccessionException());
 		}
 		try {

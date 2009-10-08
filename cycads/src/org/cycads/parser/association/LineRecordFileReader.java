@@ -5,6 +5,7 @@ package org.cycads.parser.association;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.regex.Pattern;
 
 import org.cycads.parser.FileParserError;
 
@@ -15,13 +16,15 @@ public class LineRecordFileReader<R> implements RecordFileReader<R>
 	private String				columnSeparatorRegex;
 	private String				commentLineStarter;
 	private RecordFactory<R>	recordFactory;
+	private Pattern				removeLinePattern;
 
-	public LineRecordFileReader(BufferedReader br, String columnSeparator, String commentLineStarter,
-			RecordFactory<R> recordFactory) {
-		this.columnSeparatorRegex = columnSeparator;
-		this.commentLineStarter = commentLineStarter;
+	public LineRecordFileReader(BufferedReader br, String columnSeparatorRegex, String commentLineStarter,
+			Pattern removeLinePattern, RecordFactory<R> recordFactory) {
 		this.br = br;
+		this.columnSeparatorRegex = columnSeparatorRegex;
+		this.commentLineStarter = commentLineStarter;
 		this.recordFactory = recordFactory;
+		this.removeLinePattern = removeLinePattern;
 	}
 
 	@Override
@@ -29,7 +32,7 @@ public class LineRecordFileReader<R> implements RecordFileReader<R>
 		String line;
 		while ((line = br.readLine()) != null) {
 			line = line.trim();
-			if (line.length() > 0 && !line.startsWith(commentLineStarter)) {
+			if (line.length() > 0 && !line.startsWith(commentLineStarter) && !removeLinePattern.matcher(line).matches()) {
 				try {
 					return recordFactory.create(line.split(columnSeparatorRegex));
 				}

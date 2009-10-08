@@ -6,7 +6,6 @@ package org.cycads.ui.loader;
 import java.io.IOException;
 import java.util.List;
 
-import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.annotation.DbxrefAnnotable;
 import org.cycads.entities.annotation.DbxrefAnnotation;
 import org.cycads.entities.synonym.Dbxref;
@@ -22,12 +21,13 @@ public class Loaders
 {
 	public static void loadDbxrefTargetAnnotation(
 			RecordFileReader< ? extends AnnotationRecord< ? extends DbxrefAnnotable, ? extends Dbxref>> reader,
-			AnnotationMethod method, Progress progress, Progress progressError) throws IOException {
+			Progress progress, Progress progressError) throws IOException {
 
 		AnnotationRecord< ? extends DbxrefAnnotable, ? extends Dbxref> record;
 
 		while ((record = getNextValidRecord(reader, progressError)) != null) {
-			DbxrefAnnotation< ? , ? , ? , ? > annot = record.getSource().addDbxrefAnnotation(method, record.getTarget());
+			DbxrefAnnotation< ? , ? , ? , ? > annot = record.getSource().addDbxrefAnnotation(record.getMethod(),
+				record.getTarget());
 			String score = record.getScore();
 			if (annot != null) {
 				if (score != null) {
@@ -43,14 +43,15 @@ public class Loaders
 
 	public static void loadDbxrefsTargetAnnotation(
 			RecordFileReader< ? extends AnnotationRecord< ? extends DbxrefAnnotable, ? extends Dbxrefs>> reader,
-			AnnotationMethod method, Progress progress, Progress progressError) throws IOException {
+			Progress progress, Progress progressError) throws IOException {
 
 		AnnotationRecord< ? extends DbxrefAnnotable, ? extends Dbxrefs> record;
 
 		while ((record = getNextValidRecord(reader, progressError)) != null) {
 			List<Dbxref> dbxrefs = record.getTarget().getListDbxref();
 			for (Dbxref dbxref : dbxrefs) {
-				DbxrefAnnotation< ? , ? , ? , ? > annot = record.getSource().addDbxrefAnnotation(method, dbxref);
+				DbxrefAnnotation< ? , ? , ? , ? > annot = record.getSource().addDbxrefAnnotation(record.getMethod(),
+					dbxref);
 				String score = record.getScore();
 				if (annot != null) {
 					if (score != null) {
@@ -67,7 +68,7 @@ public class Loaders
 
 	public static void loadDbxrefsDbxrefsAnnotation(
 			RecordFileReader< ? extends AnnotationRecord< ? extends Dbxrefs, ? extends Dbxrefs>> reader,
-			AnnotationMethod method, Progress progress, Progress progressError) throws IOException {
+			Progress progress, Progress progressError) throws IOException {
 
 		AnnotationRecord< ? extends Dbxrefs, ? extends Dbxrefs> record;
 
@@ -76,7 +77,8 @@ public class Loaders
 			for (Dbxref dbxrefSource : dbxrefsSource) {
 				List<Dbxref> dbxrefsTarget = record.getTarget().getListDbxref();
 				for (Dbxref dbxrefTarget : dbxrefsTarget) {
-					DbxrefAnnotation< ? , ? , ? , ? > annot = dbxrefSource.addDbxrefAnnotation(method, dbxrefTarget);
+					DbxrefAnnotation< ? , ? , ? , ? > annot = dbxrefSource.addDbxrefAnnotation(record.getMethod(),
+						dbxrefTarget);
 					String score = record.getScore();
 					if (annot != null) {
 						if (score != null) {
