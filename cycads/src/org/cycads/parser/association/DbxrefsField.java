@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.cycads.entities.synonym.Dbxref;
 
-public class Dbxrefs<X extends Dbxref>
+public class DbxrefsField<X extends Dbxref>
 {
 	List<X>	dbxrefs	= new ArrayList<X>();
 

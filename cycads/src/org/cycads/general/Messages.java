@@ -85,7 +85,34 @@ public class Messages
 
 	public static String getExceptionFileParserLineMsg(int lineNumber, String line) {
 		Object[] a = {lineNumber, line};
-		return MessageFormat.format(getStringMandatory("Exception.fileParser.line"), a);
+		return MessageFormat.format(getStringMandatory("exception.fileParser.line"), a);
+	}
+
+	public static String copyException() {
+		return getString("operation.exception.copy");
+	}
+
+	public static String dbxrefWithoutDBNameException() {
+		return getString("dbxref.exception.withoutDBName");
+	}
+
+	public static String dbxrefWithoutAccessionException() {
+		return getString("dbxref.exception.withoutAccession");
+	}
+
+	public static String subsequenceNotExists(String value) {
+		Object[] a = {value};
+		return MessageFormat.format(getStringMandatory("subsequence.exception.doesntExist"), a);
+	}
+
+	public static String invalidTypeNameException(String value) {
+		Object[] a = {value};
+		return MessageFormat.format(getStringMandatory("exception.invalidTypeName"), a);
+	}
+
+	public static String invalidNoteException(String typeAndValue) {
+		Object[] a = {typeAndValue};
+		return MessageFormat.format(getStringMandatory("exception.invalidTypeAndValue"), a);
 	}
 
 	// KOLOader
@@ -315,23 +342,6 @@ public class Messages
 	public static String ecCDSFileGeneratorFinalMsg(int step) {
 		Object[] a = {step};
 		return MessageFormat.format(getStringMandatory("ecCDSFile.extract.final"), a);
-	}
-
-	public static String copyException() {
-		return getString("operation.exception.copy");
-	}
-
-	public static String dbxrefWithoutDBNameException() {
-		return getString("dbxref.exception.withoutDBNamee");
-	}
-
-	public static String dbxrefWithoutAccessionException() {
-		return getString("dbxref.exception.withoutAccession");
-	}
-
-	public static String subsequenceNotExists(String value) {
-		Object[] a = {value};
-		return MessageFormat.format(getStringMandatory("subsequence.exception.doesntExist"), a);
 	}
 
 	// general messages
