@@ -12,19 +12,19 @@ import org.cycads.entities.synonym.Dbxref;
 import org.cycads.general.Messages;
 import org.cycads.parser.FileParserError;
 
-public class SubsequenceFactory implements FieldFactory<Subsequence>
+public class SubsequenceFieldFactory implements FieldFactory<Subsequence>
 {
 	Organism		organism;
-	DbxrefFactory	dbxrefFactory;
+	DbxrefFieldFactory	dbxrefFieldFactory;
 
-	public SubsequenceFactory(Organism organism, DbxrefFactory dbxrefFactory) {
+	public SubsequenceFieldFactory(Organism organism, DbxrefFieldFactory dbxrefFieldFactory) {
 		this.organism = organism;
-		this.dbxrefFactory = dbxrefFactory;
+		this.dbxrefFieldFactory = dbxrefFieldFactory;
 	}
 
 	@Override
 	public Subsequence create(String value) throws FileParserError {
-		Dbxref dbxref = dbxrefFactory.create(value);
+		Dbxref dbxref = dbxrefFieldFactory.create(value);
 		Collection<Subsequence> subsequences = organism.getSubsequences(dbxref);
 		Subsequence ret;
 		if (!subsequences.isEmpty()) {

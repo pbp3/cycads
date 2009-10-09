@@ -13,15 +13,15 @@ import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.general.Config;
 import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
-import org.cycads.parser.association.DbnameTransformer;
-import org.cycads.parser.association.DbxrefFactory;
-import org.cycads.parser.association.Dbxrefs;
-import org.cycads.parser.association.DbxrefsFactory;
+import org.cycads.parser.association.TypeNameTransformer;
+import org.cycads.parser.association.DbxrefFieldFactory;
+import org.cycads.parser.association.DbxrefsField;
+import org.cycads.parser.association.DbxrefsFieldFactory;
 import org.cycads.parser.association.LineRecordFileReader;
 import org.cycads.parser.association.RecordFactory;
 import org.cycads.parser.association.SimpleAnnotationRecord;
 import org.cycads.parser.association.SimpleAnnotationRecordFactory;
-import org.cycads.parser.association.SimpleDbnameTransformer;
+import org.cycads.parser.association.InputNameOverwrite;
 import org.cycads.ui.Tools;
 import org.cycads.ui.progress.Progress;
 import org.cycads.ui.progress.ProgressCount;
@@ -88,26 +88,26 @@ public class DbxrefDbxrefAnnotationLoaderSQL
 		Integer methodColumnIndex = Tools.getIntegerOptional(args, 7,
 			Config.dbxrefDbxrefAnnotationLoaderMethodColumnIndex());
 
-		DbnameTransformer dbNameSource = new SimpleDbnameTransformer(dbxrefSourceDBName);
-		DbnameTransformer dbNameTarget = new SimpleDbnameTransformer(dbxrefTargetDBName);
+		TypeNameTransformer dbNameSource = new InputNameOverwrite(dbxrefSourceDBName);
+		TypeNameTransformer dbNameTarget = new InputNameOverwrite(dbxrefTargetDBName);
 
-		DbxrefFactory sourceFactory = new DbxrefFactory(ParametersDefault.getDbxrefToStringSeparator(), dbNameSource,
+		DbxrefFieldFactory sourceFactory = new DbxrefFieldFactory(ParametersDefault.getDbxrefToStringSeparator(), dbNameSource,
 			factory);
 
-		DbxrefFactory targetFactory = new DbxrefFactory(ParametersDefault.getDbxrefToStringSeparator(), dbNameTarget,
+		DbxrefFieldFactory targetFactory = new DbxrefFieldFactory(ParametersDefault.getDbxrefToStringSeparator(), dbNameTarget,
 			factory);
 
-		DbxrefsFactory sourcesFactory = new DbxrefsFactory(Config.dbxrefDbxrefAnnotationLoaderSourceDbxrefsSeparator(),
+		DbxrefsFieldFactory sourcesFactory = new DbxrefsFieldFactory(Config.dbxrefDbxrefAnnotationLoaderSourceDbxrefsSeparator(),
 			Config.dbxrefDbxrefAnnotationLoaderSourceDelimiter(), sourceFactory);
 
-		DbxrefsFactory targetsFactory = new DbxrefsFactory(Config.dbxrefDbxrefAnnotationLoaderTargetDbxrefsSeparator(),
+		DbxrefsFieldFactory targetsFactory = new DbxrefsFieldFactory(Config.dbxrefDbxrefAnnotationLoaderTargetDbxrefsSeparator(),
 			Config.dbxrefDbxrefAnnotationLoaderTargetDelimiter(), targetFactory);
 
-		RecordFactory<SimpleAnnotationRecord<Dbxrefs, Dbxrefs>> recordFactory = new SimpleAnnotationRecordFactory<Dbxrefs, Dbxrefs>(
+		RecordFactory<SimpleAnnotationRecord<DbxrefsField, DbxrefsField>> recordFactory = new SimpleAnnotationRecordFactory<DbxrefsField, DbxrefsField>(
 			dbxrefSourceColumnIndex, sourcesFactory, dbxrefTargetColumnIndex, targetsFactory, scoreColumnIndex,
 			methodColumnIndex, factory);
 
-		LineRecordFileReader<SimpleAnnotationRecord<Dbxrefs, Dbxrefs>> fileReader = new LineRecordFileReader<SimpleAnnotationRecord<Dbxrefs, Dbxrefs>>(
+		LineRecordFileReader<SimpleAnnotationRecord<DbxrefsField, DbxrefsField>> fileReader = new LineRecordFileReader<SimpleAnnotationRecord<DbxrefsField, DbxrefsField>>(
 			br, Config.dbxrefDbxrefAnnotationLoaderColumnSeparator(), Config.dbxrefDbxrefAnnotationLoaderLineComment(),
 			Config.dbxrefDbxrefAnnotationLoaderLineIgnorePattern(), recordFactory);
 		Progress progress = new ProgressPrintInterval(System.out,

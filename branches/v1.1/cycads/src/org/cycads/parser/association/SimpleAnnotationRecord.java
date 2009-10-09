@@ -33,4 +33,10 @@ public class SimpleAnnotationRecord<S, T> extends SimpleAssociationRecord<S, T> 
 		return methodFactory.getAnnotationMethod(getNote(indexMethod));
 	}
 
+	//	@Override
+	//	public Collection<Note> getNotes() {
+	//		// TODO Auto-generated method stub
+	//		return null;
+	//	}
+	//
 }

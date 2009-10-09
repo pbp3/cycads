@@ -8,20 +8,21 @@ import org.cycads.entities.synonym.Dbxref;
 import org.cycads.general.Messages;
 import org.cycads.parser.FileParserError;
 
-public class DbxrefFactory implements FieldFactory<Dbxref>
+public class DbxrefFieldFactory<X extends Dbxref> implements FieldFactory<X>
 {
-	private String				dbxrefSeparator;
-	private DbnameTransformer	dbNameTransformer;
-	private EntityDbxrefFactory	entityFactory;
+	private String					dbxrefSeparator;
+	private TypeNameTransformer		dbNameTransformer;
+	private EntityDbxrefFactory<X>	entityFactory;
 
-	public DbxrefFactory(String dbxrefSeparator, DbnameTransformer dbNameTransformer, EntityDbxrefFactory entityFactory) {
+	public DbxrefFieldFactory(String dbxrefSeparator, TypeNameTransformer dbNameTransformer,
+			EntityDbxrefFactory<X> entityFactory) {
 		this.dbxrefSeparator = dbxrefSeparator;
 		this.dbNameTransformer = dbNameTransformer;
 		this.entityFactory = entityFactory;
 	}
 
 	@Override
-	public Dbxref create(String value) throws FileParserError {
+	public X create(String value) throws FileParserError {
 		if (value == null || value.length() == 0) {
 			throw new FileParserError(Messages.dbxrefWithoutAccessionException());
 		}
@@ -37,7 +38,7 @@ public class DbxrefFactory implements FieldFactory<Dbxref>
 		else {
 			throw new FileParserError(Messages.dbxrefWithoutAccessionException());
 		}
-		dbName = dbNameTransformer.getDbname(dbName, accession);
+		dbName = dbNameTransformer.getTypeName(dbName, accession);
 		return entityFactory.getDbxref(dbName, accession);
 	}
 

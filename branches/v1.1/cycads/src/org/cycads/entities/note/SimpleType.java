@@ -1,11 +1,11 @@
 package org.cycads.entities.note;
 
-public class SimpleType implements Type {
+public class SimpleType implements Type
+{
 
-	String name, description;
-	
+	String	name, description;
+
 	public SimpleType(String name, String description) {
-		super();
 		this.name = name;
 		this.description = description;
 	}
@@ -34,6 +34,5 @@ public class SimpleType implements Type {
 	public int compareTo(Type o) {
 		return getName().compareTo(o.getName());
 	}
-	
 
 }
