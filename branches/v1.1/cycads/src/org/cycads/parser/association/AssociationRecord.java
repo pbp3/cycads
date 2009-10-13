@@ -3,13 +3,12 @@
  */
 package org.cycads.parser.association;
 
-
 public interface AssociationRecord<S, T>
 {
 	public S getSource();
 
 	public T getTarget();
 
-	public String getNote(int index);
+	//	public String getNote(int index);
 
 }

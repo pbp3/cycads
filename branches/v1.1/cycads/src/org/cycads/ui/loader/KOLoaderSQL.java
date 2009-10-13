@@ -11,7 +11,7 @@ import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.general.Config;
 import org.cycads.general.Messages;
-import org.cycads.parser.FileParserError;
+import org.cycads.parser.FileParserException;
 import org.cycads.parser.KOFileParser;
 import org.cycads.ui.Tools;
 import org.cycads.ui.progress.Progress;
@@ -38,7 +38,7 @@ public class KOLoaderSQL {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
-		catch (FileParserError e) {
+		catch (FileParserException e) {
 			e.printStackTrace();
 		}
 		finally {

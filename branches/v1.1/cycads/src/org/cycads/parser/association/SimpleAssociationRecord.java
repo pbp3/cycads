@@ -3,29 +3,15 @@
  */
 package org.cycads.parser.association;
 
-import org.cycads.parser.FileParserError;
 
 public class SimpleAssociationRecord<S, T> implements AssociationRecord<S, T>
 {
-	private String[]	values;
-	private S			source;
-	private T			target;
+	private S	source;
+	private T	target;
 
-	public SimpleAssociationRecord(String[] values, int indexSource, FieldFactory<S> fieldFactorySource,
-			int indexTarget, FieldFactory<T> fieldFactoryTarget) throws FileParserError {
-		this.values = values;
-		this.source = fieldFactorySource.create(getNote(indexSource));
-		this.target = fieldFactoryTarget.create(getNote(indexTarget));
-	}
-
-	@Override
-	public String getNote(int index) {
-		if (index >= 0 && index < values.length) {
-			return values[index];
-		}
-		else {
-			return null;
-		}
+	public SimpleAssociationRecord(S source, T target) {
+		this.source = source;
+		this.target = target;
 	}
 
 	@Override

@@ -3,23 +3,24 @@
  */
 package org.cycads.parser.association;
 
+import java.util.Collection;
+
 import org.cycads.entities.synonym.Dbxref;
-import org.cycads.parser.FileParserError;
+import org.cycads.parser.ParserException;
 
-public class DbxrefsFieldFactory<X extends Dbxref> implements FieldFactory<DbxrefsField<X>>
+public class DbxrefsFactory<X extends Dbxref> implements ObjectFactory<Collection<X>>
 {
-	private String					dbxrefsSeparator;
-	private String					delimiter;
-	private DbxrefFieldFactory<X>	dbxrefFieldFactory;
+	private String	dbxrefsSeparator;
+	private String	delimiter;
 
-	public DbxrefsFieldFactory(String dbxrefsSeparator, String delimiter, DbxrefFieldFactory<X> dbxrefFieldFactory) {
+	public DbxrefsFactory(String dbxrefsSeparator, String delimiter, IndependentDbxrefFactory<X> dbxrefFieldFactory) {
 		this.dbxrefsSeparator = dbxrefsSeparator;
 		this.delimiter = delimiter;
 		this.dbxrefFieldFactory = dbxrefFieldFactory;
 	}
 
 	@Override
-	public DbxrefsField<X> create(String value) throws FileParserError {
+	public Collection<X> create(String[] values) throws ParserException {
 		value = cleanTextDelimiter(value);
 		DbxrefsField<X> ret = new DbxrefsField<X>();
 		if (value != null && value.length() != 0) {
@@ -32,7 +33,7 @@ public class DbxrefsFieldFactory<X extends Dbxref> implements FieldFactory<Dbxre
 	}
 
 	private String cleanTextDelimiter(String text) {
-		if (text == null || text.length() == 0) {
+		if (text == null || text.length() == 0 || delimiter == null || delimiter.length() == 0) {
 			return text;
 		}
 		int start = 0, end = text.length();

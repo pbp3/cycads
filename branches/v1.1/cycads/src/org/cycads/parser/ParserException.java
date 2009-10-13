@@ -3,27 +3,27 @@
  */
 package org.cycads.parser;
 
-public class FileParserError extends Exception {
+public class ParserException extends Exception {
 
 	/**
 	 * @param message
 	 * @param cause
 	 */
-	public FileParserError(String message, Throwable cause) {
+	public ParserException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
 	/**
 	 * @param message
 	 */
-	public FileParserError(String message) {
+	public ParserException(String message) {
 		super(message);
 	}
 
 	/**
 	 * @param cause
 	 */
-	public FileParserError(Throwable cause) {
+	public ParserException(Throwable cause) {
 		super(cause);
 	}
 

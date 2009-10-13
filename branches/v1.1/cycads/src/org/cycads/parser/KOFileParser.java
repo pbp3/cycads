@@ -33,15 +33,15 @@ public class KOFileParser {
 		this.methodEC = methodEC;
 	}
 
-	public void parse(File f) throws IOException, FileParserError {
+	public void parse(File f) throws IOException, FileParserException {
 		parse(new BufferedReader(new FileReader(f)));
 	}
 
-	public void parse(String fileName) throws IOException, FileParserError {
+	public void parse(String fileName) throws IOException, FileParserException {
 		parse(new BufferedReader(new FileReader(fileName)));
 	}
 
-	public void parse(BufferedReader br) throws IOException, FileParserError {
+	public void parse(BufferedReader br) throws IOException, FileParserException {
 		String line;
 		String data;
 		String dbName = "";
@@ -115,7 +115,7 @@ public class KOFileParser {
 				}
 			}
 			catch (Exception e) {
-				throw new FileParserError(Messages.getExceptionFileParserLineMsg(lineNumber, line), e);
+				throw new FileParserException(Messages.getExceptionFileParserLineMsg(lineNumber, line), e);
 			}
 		}
 	}

@@ -7,7 +7,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.regex.Pattern;
 
-import org.cycads.parser.FileParserError;
+import org.cycads.parser.FileParserException;
+import org.cycads.parser.ParserException;
 
 public class LineRecordFileReader<R> implements RecordFileReader<R>
 {
@@ -15,29 +16,29 @@ public class LineRecordFileReader<R> implements RecordFileReader<R>
 	private BufferedReader		br;
 	private String				columnSeparatorRegex;
 	private String				commentLineStarter;
-	private RecordFactory<R>	recordFactory;
+	private ObjectFactory<R>	objectFactory;
 	private Pattern				removeLinePattern;
 
 	public LineRecordFileReader(BufferedReader br, String columnSeparatorRegex, String commentLineStarter,
-			Pattern removeLinePattern, RecordFactory<R> recordFactory) {
+			Pattern removeLinePattern, ObjectFactory<R> recordFactory) {
 		this.br = br;
 		this.columnSeparatorRegex = columnSeparatorRegex;
 		this.commentLineStarter = commentLineStarter;
-		this.recordFactory = recordFactory;
+		this.objectFactory = recordFactory;
 		this.removeLinePattern = removeLinePattern;
 	}
 
 	@Override
-	public R read() throws IOException, FileParserError {
+	public R read() throws IOException, FileParserException {
 		String line;
 		while ((line = br.readLine()) != null) {
 			line = line.trim();
 			if (line.length() > 0 && !line.startsWith(commentLineStarter) && !removeLinePattern.matcher(line).matches()) {
 				try {
-					return recordFactory.create(line.split(columnSeparatorRegex));
+					return objectFactory.create(line.split(columnSeparatorRegex));
 				}
-				catch (FileParserError e) {
-					throw new FileParserError("Line=" + line, e);
+				catch (ParserException e) {
+					throw new FileParserException("Line=" + line, e);
 				}
 			}
 		}

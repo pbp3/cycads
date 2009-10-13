@@ -21,19 +21,14 @@ public class SimpleNoteble implements Noteble
 	}
 
 	@Override
-	public Note addNote(String noteType, String value) {
+	public void addNote(String noteType, String value) {
 		Note note = new SimpleNote(getNoteType(noteType), value);
 		Collection<String> values = notes.get(noteType);
 		if (values == null) {
 			values = new TreeSet<String>();
 			notes.put(noteType, values);
 		}
-		if (values.add(value)) {
-			return note;
-		}
-		else {
-			return null;
-		}
+		values.add(value);
 	}
 
 	@Override

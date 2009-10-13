@@ -3,11 +3,11 @@
  */
 package org.cycads.parser.association;
 
-import org.cycads.parser.FileParserError;
+import org.cycads.parser.ParserException;
 
 public interface TypeNameTransformer
 {
 	public static final String	TYPE_NAME_GENERIC	= "*";
 
-	public String getTypeName(String typeName, String value) throws FileParserError;
+	public String getTypeName(String typeName, String value) throws ParserException;
 }
