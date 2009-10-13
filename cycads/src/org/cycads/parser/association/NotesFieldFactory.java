@@ -7,27 +7,27 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cycads.entities.note.Note;
-import org.cycads.parser.FileParserError;
+import org.cycads.parser.FileParserException;
 
 public class NotesFieldFactory implements FieldFactory<Collection<Note>>
 {
 	private String				notesSeparator;
 	private String				delimiter;
-	private NoteFieldFactory	noteFieldFactory;
+	private IndependentNoteFactory	independentNoteFactory;
 
-	public NotesFieldFactory(String notesSeparator, String delimiter, NoteFieldFactory noteFieldFactory) {
+	public NotesFieldFactory(String notesSeparator, String delimiter, IndependentNoteFactory independentNoteFactory) {
 		this.notesSeparator = notesSeparator;
 		this.delimiter = delimiter;
-		this.noteFieldFactory = noteFieldFactory;
+		this.independentNoteFactory = independentNoteFactory;
 	}
 
 	@Override
-	public Collection<Note> create(String value) throws FileParserError {
+	public Collection<Note> create(String value) throws FileParserException {
 		value = cleanTextDelimiter(value);
 		Collection<Note> ret = new ArrayList<Note>();
 		String[] notes = value.split(notesSeparator);
 		for (String note : notes) {
-			ret.add(noteFieldFactory.create(note));
+			ret.add(independentNoteFactory.create(note));
 		}
 		return ret;
 	}

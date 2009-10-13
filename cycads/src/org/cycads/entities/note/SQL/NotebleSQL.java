@@ -30,9 +30,9 @@ public abstract class NotebleSQL implements Noteble
 	public abstract String getIdFieldName();
 
 	@Override
-	public Note addNote(String noteType, String value) {
+	public void addNote(String noteType, String value) {
 		try {
-			return getNotesSQL().addNote(getNoteType(noteType).getId(), value);
+			getNotesSQL().addNote(getNoteType(noteType).getId(), value);
 		}
 		catch (SQLException e) {
 			e.printStackTrace();

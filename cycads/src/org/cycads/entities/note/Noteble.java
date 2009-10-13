@@ -21,7 +21,7 @@ public interface Noteble
 
 	public Note getNote(String noteType, String value);
 
-	public Note addNote(String noteType, String value);
+	public void addNote(String noteType, String value);
 
 	public Type getNoteType(String noteType);
 

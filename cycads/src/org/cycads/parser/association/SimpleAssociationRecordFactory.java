@@ -3,27 +3,21 @@
  */
 package org.cycads.parser.association;
 
-import org.cycads.parser.FileParserError;
+import org.cycads.parser.ParserException;
 
-public class SimpleAssociationRecordFactory<S, T> implements RecordFactory<SimpleAssociationRecord<S, T>>
+public class SimpleAssociationRecordFactory<S, T> implements ObjectFactory<SimpleAssociationRecord<S, T>>
 {
-	int				indexSource;
-	FieldFactory<S>	fieldFactorySource;
-	int				indexTarget;
-	FieldFactory<T>	fieldFactoryTarget;
+	ObjectFactory<S>	fieldFactorySource;
+	ObjectFactory<T>	fieldFactoryTarget;
 
-	public SimpleAssociationRecordFactory(int indexSource, FieldFactory<S> fieldFactorySource, int indexTarget,
-			FieldFactory<T> fieldFactoryTarget) {
-		this.indexSource = indexSource;
+	public SimpleAssociationRecordFactory(ObjectFactory<S> fieldFactorySource, ObjectFactory<T> fieldFactoryTarget) {
 		this.fieldFactorySource = fieldFactorySource;
-		this.indexTarget = indexTarget;
 		this.fieldFactoryTarget = fieldFactoryTarget;
 	}
 
 	@Override
-	public SimpleAssociationRecord<S, T> create(String[] values) throws FileParserError {
-		return new SimpleAssociationRecord<S, T>(values, indexSource, fieldFactorySource, indexTarget,
-			fieldFactoryTarget);
+	public SimpleAssociationRecord<S, T> create(String[] values) throws ParserException {
+		return new SimpleAssociationRecord<S, T>(fieldFactorySource.create(values), fieldFactoryTarget.create(values));
 	}
 
 }

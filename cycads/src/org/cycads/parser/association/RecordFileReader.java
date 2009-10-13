@@ -5,9 +5,9 @@ package org.cycads.parser.association;
 
 import java.io.IOException;
 
-import org.cycads.parser.FileParserError;
+import org.cycads.parser.FileParserException;
 
 public interface RecordFileReader<R>
 {
-	R read() throws IOException, FileParserError;
+	R read() throws IOException, FileParserException;
 }

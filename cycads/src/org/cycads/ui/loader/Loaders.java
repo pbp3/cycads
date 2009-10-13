@@ -11,7 +11,7 @@ import org.cycads.entities.annotation.DbxrefAnnotable;
 import org.cycads.entities.annotation.DbxrefAnnotation;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.general.ParametersDefault;
-import org.cycads.parser.FileParserError;
+import org.cycads.parser.FileParserException;
 import org.cycads.parser.association.AnnotationRecord;
 import org.cycads.parser.association.AssociationRecord;
 import org.cycads.parser.association.DbxrefsField;
@@ -104,7 +104,7 @@ public class Loaders
 				record = reader.read();
 				read = true;
 			}
-			catch (FileParserError e) {
+			catch (FileParserException e) {
 				if (ParametersDefault.isDebugging()) {
 					e.printStackTrace();
 				}

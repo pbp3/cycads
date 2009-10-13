@@ -14,11 +14,11 @@ import org.cycads.general.Config;
 import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
 import org.cycads.parser.association.TypeNameTransformer;
-import org.cycads.parser.association.DbxrefFieldFactory;
+import org.cycads.parser.association.IndependentDbxrefFactory;
 import org.cycads.parser.association.DbxrefsField;
-import org.cycads.parser.association.DbxrefsFieldFactory;
+import org.cycads.parser.association.DbxrefsFactory;
 import org.cycads.parser.association.LineRecordFileReader;
-import org.cycads.parser.association.RecordFactory;
+import org.cycads.parser.association.ObjectFactory;
 import org.cycads.parser.association.SimpleAnnotationRecord;
 import org.cycads.parser.association.SimpleAnnotationRecordFactory;
 import org.cycads.parser.association.InputNameOverwrite;
@@ -91,19 +91,19 @@ public class DbxrefDbxrefAnnotationLoaderSQL
 		TypeNameTransformer dbNameSource = new InputNameOverwrite(dbxrefSourceDBName);
 		TypeNameTransformer dbNameTarget = new InputNameOverwrite(dbxrefTargetDBName);
 
-		DbxrefFieldFactory sourceFactory = new DbxrefFieldFactory(ParametersDefault.getDbxrefToStringSeparator(), dbNameSource,
+		IndependentDbxrefFactory sourceFactory = new IndependentDbxrefFactory(ParametersDefault.getDbxrefToStringSeparator(), dbNameSource,
 			factory);
 
-		DbxrefFieldFactory targetFactory = new DbxrefFieldFactory(ParametersDefault.getDbxrefToStringSeparator(), dbNameTarget,
+		IndependentDbxrefFactory targetFactory = new IndependentDbxrefFactory(ParametersDefault.getDbxrefToStringSeparator(), dbNameTarget,
 			factory);
 
-		DbxrefsFieldFactory sourcesFactory = new DbxrefsFieldFactory(Config.dbxrefDbxrefAnnotationLoaderSourceDbxrefsSeparator(),
+		DbxrefsFactory sourcesFactory = new DbxrefsFactory(Config.dbxrefDbxrefAnnotationLoaderSourceDbxrefsSeparator(),
 			Config.dbxrefDbxrefAnnotationLoaderSourceDelimiter(), sourceFactory);
 
-		DbxrefsFieldFactory targetsFactory = new DbxrefsFieldFactory(Config.dbxrefDbxrefAnnotationLoaderTargetDbxrefsSeparator(),
+		DbxrefsFactory targetsFactory = new DbxrefsFactory(Config.dbxrefDbxrefAnnotationLoaderTargetDbxrefsSeparator(),
 			Config.dbxrefDbxrefAnnotationLoaderTargetDelimiter(), targetFactory);
 
-		RecordFactory<SimpleAnnotationRecord<DbxrefsField, DbxrefsField>> recordFactory = new SimpleAnnotationRecordFactory<DbxrefsField, DbxrefsField>(
+		ObjectFactory<SimpleAnnotationRecord<DbxrefsField, DbxrefsField>> recordFactory = new SimpleAnnotationRecordFactory<DbxrefsField, DbxrefsField>(
 			dbxrefSourceColumnIndex, sourcesFactory, dbxrefTargetColumnIndex, targetsFactory, scoreColumnIndex,
 			methodColumnIndex, factory);
 

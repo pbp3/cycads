@@ -3,40 +3,38 @@
  */
 package org.cycads.parser.association;
 
+import java.util.Collection;
+
 import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.factory.EntityMethodFactory;
-import org.cycads.parser.FileParserError;
+import org.cycads.entities.note.Note;
 
 public class SimpleAnnotationRecord<S, T> extends SimpleAssociationRecord<S, T> implements AnnotationRecord<S, T>
 {
 
-	private int					indexScore;
-	private int					indexMethod;
-	private EntityMethodFactory	methodFactory;
+	private String				score;
+	private AnnotationMethod	method;
+	private Collection<Note>	notes;
 
-	public SimpleAnnotationRecord(String[] values, int indexSource, FieldFactory<S> fieldFactorySource,
-			int indexTarget, FieldFactory<T> fieldFactoryTarget, int indexScore, int indexMethod,
-			EntityMethodFactory methodFactory) throws FileParserError {
-		super(values, indexSource, fieldFactorySource, indexTarget, fieldFactoryTarget);
-		this.indexScore = indexScore;
-		this.indexMethod = indexMethod;
-		this.methodFactory = methodFactory;
+	public SimpleAnnotationRecord(S source, T target, String score, AnnotationMethod method, Collection<Note> notes) {
+		super(source, target);
+		this.score = score;
+		this.method = method;
+		this.notes = notes;
 	}
 
 	@Override
 	public String getScore() {
-		return getNote(indexScore);
+		return score;
 	}
 
 	@Override
 	public AnnotationMethod getMethod() {
-		return methodFactory.getAnnotationMethod(getNote(indexMethod));
+		return method;
 	}
 
-	//	@Override
-	//	public Collection<Note> getNotes() {
-	//		// TODO Auto-generated method stub
-	//		return null;
-	//	}
-	//
+	@Override
+	public Collection<Note> getNotes() {
+		return notes;
+	}
+
 }

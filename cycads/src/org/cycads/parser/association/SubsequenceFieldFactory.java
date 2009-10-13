@@ -3,38 +3,39 @@
  */
 package org.cycads.parser.association;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cycads.entities.annotation.SubseqAnnotation;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
-import org.cycads.general.Messages;
-import org.cycads.parser.FileParserError;
+import org.cycads.parser.ParserException;
 
-public class SubsequenceFieldFactory implements FieldFactory<Subsequence>
+public class SubsequenceFieldFactory implements IndependentObjectFactory<Collection<Subsequence>>
 {
-	Organism		organism;
-	DbxrefFieldFactory	dbxrefFieldFactory;
+	Organism					organism;
+	IndependentDbxrefFactory	independentDbxrefFactory;
 
-	public SubsequenceFieldFactory(Organism organism, DbxrefFieldFactory dbxrefFieldFactory) {
+	public SubsequenceFieldFactory(Organism organism, IndependentDbxrefFactory independentDbxrefFactory) {
 		this.organism = organism;
-		this.dbxrefFieldFactory = dbxrefFieldFactory;
+		this.independentDbxrefFactory = independentDbxrefFactory;
 	}
 
+	//Search by synonym and annotation synonym
 	@Override
-	public Subsequence create(String value) throws FileParserError {
-		Dbxref dbxref = dbxrefFieldFactory.create(value);
-		Collection<Subsequence> subsequences = organism.getSubsequences(dbxref);
-		Subsequence ret;
-		if (!subsequences.isEmpty()) {
-			return subsequences.iterator().next();
+	public Collection<Subsequence> create(String value) throws ParserException {
+		Dbxref dbxref = independentDbxrefFactory.create(value);
+		Collection<Subsequence> ret = organism.getSubsequences(dbxref);
+		if (ret.isEmpty()) {
+			Collection<SubseqAnnotation> annots = organism.getDbxrefAnnotations(value);
+			ret = new ArrayList<Subsequence>();
+			for (SubseqAnnotation annot : annots) {
+				ret.add(annot.getSubsequence());
+			}
 		}
-		Collection<SubseqAnnotation> annots = organism.getDbxrefAnnotations(value);
-		for (SubseqAnnotation annot : annots) {
-			return ((SubseqAnnotation) annot).getSubsequence();
-		}
-		throw new FileParserError(Messages.subsequenceNotExists(value));
+		return ret;
+		//		throw new ParserException(Messages.subsequenceNotExists(value));
 	}
 
 }

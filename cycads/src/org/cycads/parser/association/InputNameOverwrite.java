@@ -4,7 +4,7 @@
 package org.cycads.parser.association;
 
 import org.cycads.general.Messages;
-import org.cycads.parser.FileParserError;
+import org.cycads.parser.ParserException;
 
 public class InputNameOverwrite implements TypeNameTransformer
 {
@@ -18,10 +18,10 @@ public class InputNameOverwrite implements TypeNameTransformer
 	}
 
 	@Override
-	public String getTypeName(String typeName, String value) throws FileParserError {
+	public String getTypeName(String typeName, String value) throws ParserException {
 		if (typeName == null || typeName.length() == 0) {
 			if (typeNameDefault == null || typeNameDefault.length() == 0) {
-				throw new FileParserError(Messages.invalidTypeNameException(typeName));
+				throw new ParserException(Messages.invalidTypeNameException(typeName));
 			}
 			return typeNameDefault;
 		}
