@@ -3,12 +3,12 @@
  */
 package org.cycads.parser.association;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
-import org.cycads.general.Messages;
 import org.cycads.parser.ParserException;
 
 public class SubsequencesEntityFactoryBySynonym implements ObjectFactory<Collection<Subsequence>>
@@ -26,7 +26,7 @@ public class SubsequencesEntityFactoryBySynonym implements ObjectFactory<Collect
 	public Collection<Subsequence> create(String[] values) throws ParserException {
 		Collection<Dbxref> dbxrefs = dbxrefsFactory.create(values);
 		if (dbxrefs == null || dbxrefs.isEmpty()) {
-			throw new ParserException(Messages.invalidDbxrefException(values));
+			return new ArrayList<Subsequence>();
 		}
 		Collection<Subsequence> ret = null;
 		for (Dbxref dbxref : dbxrefs) {
