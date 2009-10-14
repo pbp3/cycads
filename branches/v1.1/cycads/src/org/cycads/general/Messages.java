@@ -115,6 +115,11 @@ public class Messages
 		return MessageFormat.format(getStringMandatory("exception.invalidTypeAndValue"), a);
 	}
 
+	public static String invalidDbxrefSplitException(String value, String dbxrefSeparator) {
+		Object[] a = {value, dbxrefSeparator};
+		return MessageFormat.format(getStringMandatory("exception.invalidDbxrefSplit"), a);
+	}
+
 	// KOLOader
 
 	public static String koLoaderChooseFile() {
