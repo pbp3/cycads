@@ -3,6 +3,7 @@
  */
 package org.cycads.parser.association;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cycads.entities.annotation.Annotation;
@@ -24,6 +25,9 @@ public class AnnotationsEntityFactoryBySynonym implements ObjectFactory<Collecti
 	@Override
 	public Collection<Annotation> create(String[] values) throws ParserException {
 		Collection<Dbxref> dbxrefs = dbxrefsFactory.create(values);
+		if (dbxrefs == null || dbxrefs.isEmpty()) {
+			return new ArrayList<Annotation>();
+		}
 		Collection<Annotation> ret = null;
 		for (Dbxref dbxref : dbxrefs) {
 			if (ret == null) {

@@ -36,7 +36,7 @@ public class IndependentDbxrefFactory<X extends Dbxref> implements IndependentOb
 			accession = strs[1];
 		}
 		else {
-			throw new ParserException(Messages.dbxrefWithoutAccessionException());
+			throw new ParserException(Messages.invalidDbxrefSplitException(value, dbxrefSeparator));
 		}
 		dbName = dbNameTransformer.getTypeName(dbName, accession);
 		return entityFactory.getDbxref(dbName, accession);
