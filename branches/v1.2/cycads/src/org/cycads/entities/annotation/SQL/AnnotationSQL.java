@@ -18,14 +18,17 @@ import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 import org.cycads.general.ParametersDefault;
 
-public class AnnotationSQL extends HasSynonymsNotebleSQL
-		implements Annotation<AnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
+public class AnnotationSQL<SO extends AnnotationObjectSQL, TA extends AnnotationObjectSQL>
+		extends HasSynonymsNotebleSQL
+		implements Annotation<SO, TA, AnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
 {
 
 	public static String				ScoreNoteTypeName	= ParametersDefault.getScoreAnnotationNoteTypeName();
 
 	private int							id;
 	private int							methodId;
+
+	private String						score;
 
 	/* The types are not synchonized */
 	private Collection<TypeSQL>			types;
@@ -40,11 +43,15 @@ public class AnnotationSQL extends HasSynonymsNotebleSQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT annotation_method_id from Annotation WHERE annotation_id=?");
+			stmt = con.prepareStatement("SELECT annotation_method_id, score from Annotation WHERE annotation_id=?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
 				methodId = rs.getInt("annotation_method_id");
+				score = rs.getString("score");
+				sourceId=
+					targetId=
+						sourceTargetTypeId=
 			}
 			else {
 				throw new SQLException("Annotation does not exist:" + id);
