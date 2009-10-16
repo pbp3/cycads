@@ -11,333 +11,443 @@ public class Messages
 
 	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
 
-	private Messages()
-	{
+	private Messages() {
 	}
 
-	private static String getString(String key)
-	{
-		try
-		{
+	private static String getString(String key) {
+		try {
 			return RESOURCE_BUNDLE.getString(key);
 		}
-		catch (MissingResourceException e)
-		{
+		catch (MissingResourceException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	public static String splitUsage()
-	{
-		return getString("Split.usage");
+	private static String getStringOptional(String key) {
+		try {
+			return RESOURCE_BUNDLE.getString(key);
+		}
+		catch (MissingResourceException e) {
+			return null;
+		}
+	}
+
+	private static String getStringMandatory(String key) {
+		try {
+			return RESOURCE_BUNDLE.getString(key);
+		}
+		catch (MissingResourceException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static int getInt(String key) {
+		return Integer.parseInt(getString(key));
 	}
 
 	// Progress
 
-	public static String getProgressStartTimeMsg()
-	{
+	public static String getProgressStartTimeMsg() {
 		return getProgressStartTimeMsg(new Date());
 	}
 
-	public static String getProgressStartTimeMsg(Date date)
-	{
+	public static String getProgressStartTimeMsg(Date date) {
 		Object[] a = {date};
 		return MessageFormat.format(getString("Progress.startTime"), a);
 	}
 
-	public static String getProgressEndTimeMsg()
-	{
+	public static String getProgressEndTimeMsg() {
 		return getProgressEndTimeMsg(new Date());
 	}
 
-	public static String getProgressEndTimeMsg(Date date)
-	{
+	public static String getProgressEndTimeMsg(Date date) {
 		Object[] a = {date};
 		return MessageFormat.format(getString("Progress.endTime"), a);
 	}
 
-	public static String getProgressTotalTimeMsg(long time)
-	{
+	public static String getProgressTotalTimeMsg(long time) {
 		Object[] a = {time};
 		return MessageFormat.format(getString("Progress.totalTime"), a);
 	}
 
-	public static String getProgressSeparatorObjects()
-	{
+	public static String getProgressSeparatorObjects() {
 		return getString("Progress.separatorObject");
 	}
 
-	public static String getProgressTotalStepsMsg(int totalSteps)
-	{
+	public static String getProgressTotalStepsMsg(int totalSteps) {
 		Object[] a = {totalSteps};
 		return MessageFormat.format(getString("Progress.totalSteps"), a);
 	}
 
-	// LoadTaxonomy
+	// Exception
 
-	public static String taxonomyLoaderNodesFinalMsg()
-	{
-		return getString("TaxonomyLoader.nodesFinal");
+	public static String getExceptionFileParserLineMsg(int lineNumber, String line) {
+		Object[] a = {lineNumber, line};
+		return MessageFormat.format(getStringMandatory("exception.fileParser.line"), a);
 	}
 
-	public static String taxonomyLoaderNodesFinalMsg(int totalNodes)
-	{
-		Object[] a = {totalNodes};
-		return MessageFormat.format(taxonomyLoaderNodesFinalMsg(), a);
+	public static String copyException() {
+		return getString("operation.exception.copy");
 	}
 
-	public static String taxonomyLoaderNamesFinalMsg()
-	{
-		return getString("TaxonomyLoader.namesFinal");
+	public static String dbxrefWithoutDBNameException() {
+		return getString("dbxref.exception.withoutDBName");
 	}
 
-	public static String taxonomyLoaderNamesFinalMsg(int totalNames)
-	{
-		Object[] a = {totalNames};
-		return MessageFormat.format(taxonomyLoaderNamesFinalMsg(), a);
+	public static String dbxrefWithoutAccessionException() {
+		return getString("dbxref.exception.withoutAccession");
 	}
 
-	public static String taxonomyLoaderNodesInitMsg(String fileNodesName)
-	{
-		Object[] a = {fileNodesName};
-		return MessageFormat.format(getString("TaxonomyLoader.nodesInit"), a);
+	public static String subsequenceNotExists(String value) {
+		Object[] a = {value};
+		return MessageFormat.format(getStringMandatory("subsequence.exception.doesntExist"), a);
 	}
 
-	public static String taxonomyLoaderNamesInitMsg(String fileNamesName)
-	{
-		Object[] a = {fileNamesName};
-		return MessageFormat.format(getString("TaxonomyLoader.namesInit"), a);
+	public static String invalidTypeNameException(String value) {
+		Object[] a = {value};
+		return MessageFormat.format(getStringMandatory("exception.invalidTypeName"), a);
 	}
 
-	public static String taxonomyLoaderChooseNodesFile()
-	{
-		return getString("TaxonomyLoader.chooseNodesFile");
+	public static String invalidNoteException(String typeAndValue) {
+		Object[] a = {typeAndValue};
+		return MessageFormat.format(getStringMandatory("exception.invalidTypeAndValue"), a);
 	}
 
-	public static String taxonomyLoaderChooseNamesFile()
-	{
-		return getString("TaxonomyLoader.chooseNamesFile");
+	public static String invalidDbxrefSplitException(String value, String dbxrefSeparator) {
+		Object[] a = {value, dbxrefSeparator};
+		return MessageFormat.format(getStringMandatory("exception.invalidDbxrefSplit"), a);
 	}
 
-	// koToECLoader
+	// KOLOader
 
-	public static String koToECChooseFile()
-	{
-		return getString("KOToECLoader.chooseFile");
-	}
-
-	public static String koToECLoaderParsingError(String line)
-	{
-		Object[] a = {line};
-		return MessageFormat.format(getString("KOToECLoader.error.Parsing"), a);
-	}
-
-	public static String koToECLoaderFinalMsg()
-	{
-		return getString("KOToECLoader.final");
-	}
-
-	public static String koToECLoaderInitMsg(String fileKo2EcName)
-	{
-		Object[] a = {fileKo2EcName};
-		return MessageFormat.format(getString("KOToECLoader.init"), a);
-	}
-
-	// koToGOLoader
-
-	public static String koToGOChooseFile()
-	{
-		return getString("KOToGOLoader.chooseFile");
-	}
-
-	public static String koToGOLoaderParsingError(String line)
-	{
-		Object[] a = {line};
-		return MessageFormat.format(getString("KOToGOLoader.error.Parsing"), a);
-	}
-
-	public static String koToGOLoaderFinalMsg()
-	{
-		return getString("KOToGOLoader.final");
-	}
-
-	public static String koToGOLoaderInitMsg(String fileKo2GOName)
-	{
-		Object[] a = {fileKo2GOName};
-		return MessageFormat.format(getString("KOToGOLoader.init"), a);
-	}
-
-	// GBKLoader
-
-	public static String gBKChooseFile()
-	{
-		return getString("GBKLoader.chooseFile");
-	}
-
-	public static String gBKLoaderFinalMsg()
-	{
-		return getString("GBKLoader.final");
-	}
-
-	public static String gBKLoaderInitMsg(String fileGBKName)
-	{
-		Object[] a = {fileGBKName};
-		return MessageFormat.format(getString("GBKLoader.init"), a);
-	}
-
-	// CDSToKOLoader
-
-	public static String cdsToKOLoaderCDSNotFound(String cdsName)
-	{
-		Object[] a = {cdsName};
-		return MessageFormat.format(getString("CDSToKOLoader.error.CDSNotFound"), a);
-	}
-
-	public static String cdsToKOChooseFile()
-	{
-		return getString("CDSToKOLoader.chooseFile");
-	}
-
-	public static String cdsToKOLoaderFinalMsg()
-	{
-		return getString("CDSToKOLoader.final");
-	}
-
-	public static String cdsToKOLoaderInitMsg(String fileGBKName)
-	{
-		Object[] a = {fileGBKName};
-		return MessageFormat.format(getString("CDSToKOLoader.init"), a);
-	}
-
-	public static String cdsToKOChooseOrganism()
-	{
-		return getString("CDSToKOLoader.chooseOrganism");
-	}
-
-	public static String cdsToKOChooseMethod()
-	{
-		return getString("CDSToKOLoader.chooseMethod");
-	}
-
-	// KOLoader
-
-	public static String koLoaderChooseFile()
-	{
+	public static String koLoaderChooseFile() {
 		return getString("KOLoader.chooseFile");
 	}
 
-	public static String koLoaderFinalMsg()
-	{
-		return getString("KOLoader.final");
+	public static int koLoaderStepShowInterval() {
+		return getInt("KOLoader.stepShowInterval");
 	}
 
-	public static String koLoaderInitMsg(String fileKOName)
-	{
-		Object[] a = {fileKOName};
-		return MessageFormat.format(getString("KOLoader.init"), a);
+	public static String koLoaderFinalMsg(int step) {
+		Object[] a = {step};
+		return MessageFormat.format(getStringMandatory("KOLoader.final"), a);
+
 	}
 
-	public static String koLoaderExceptionKONotNull()
-	{
-		return getString("KOLoader.Exception.KONotNull");
+	public static String koLoaderInitMsg(String path) {
+		Object[] a = {path};
+		return MessageFormat.format(getStringMandatory("KOLoader.init"), a);
 	}
 
-	public static String koLoaderExceptionDBLinkSeparator()
-	{
-		return getString("KOLoader.Exception.DBLinkSeparator");
+	// GFF3 Loader
+
+	public static String gff3LoaderChooseFile() {
+		return getString("gff3Loader.chooseFile");
 	}
 
-	// PFFileGenerator
-
-	public static String pfFileGeneratorChoosePfFile()
-	{
-		return getString("PFFileGenerator.chooseFile");
+	public static String gff3ChooseOrganismNumber() {
+		return getString("gff3Loader.chooseOrganismNumber");
 	}
 
-	public static String pfFileGeneratorFinalMsg()
-	{
-		return getString("PFFileGenerator.final");
+	public static String gff3ChooseOrganismName() {
+		return getString("gff3Loader.chooseOrganismName");
 	}
 
-	public static String pfFileGeneratorInitMsg(String fileGBKName)
-	{
-		Object[] a = {fileGBKName};
-		return MessageFormat.format(getString("PFFileGenerator.init"), a);
+	public static String gff3LoaderChooseSeqDBName() {
+		return getString("gff3Loader.chooseSeqDBName");
 	}
 
-	public static String pfFileGeneratorChooseOrganism()
-	{
-		return getString("PFFileGenerator.chooseOrganism");
+	public static String gff3LoaderChooseSeqVersion() {
+		return getString("gff3Loader.chooseSeqVersion");
 	}
 
-	public static String pfFileGeneratorChooseVersion()
-	{
-		return getString("PFFileGenerator.chooseVersion");
+	public static int gff3LoaderStepShowInterval() {
+		return getInt("gff3Loader.stepShowInterval");
 	}
 
-	public static String pfFileGeneratorGenerateFastaFile()
-	{
-		return getString("PFFileGenerator.GenerateFastaFile");
+	public static String gff3LoaderInitMsg(String path) {
+		Object[] a = {path};
+		return MessageFormat.format(getStringMandatory("gff3Loader.init"), a);
 	}
 
-	// File headers
-
-	public static String fastaFileForPFFileHeader()
-	{
-		return getString("FastaFileForPFFile.Header");
+	public static String gff3LoaderFinalMsg(int step) {
+		Object[] a = {step};
+		return MessageFormat.format(getStringMandatory("gff3Loader.final"), a);
 	}
 
-	public static String bioCycIdsFileForPFFileHeader()
-	{
-		return getString("BioCycIdsFileForPFFile.Header");
+	// pf file generator
+
+	public static String pfGeneratorChooseOrganismNumber() {
+		return getString("pfFile.extract.chooseOrganismNumber");
 	}
 
-	public static String PFFileHeader()
-	{
-		return getString("PFFile.Header");
+	public static String pfGeneratorChooseFile() {
+		return getString("pfFile.extract.chooseFile");
 	}
 
-	public static String exceptionDBRecordDbRecordLinkBJSourceOrTargetNull()
-	{
-		return getString("Exception.DBRecordDbRecordLinkBJ.SourceOrTargetNull");
+	public static String pfGeneratorChooseSeqSynonym() {
+		return getString("pfFile.extract.chooseSeqSynonym");
 	}
 
-	public static String exceptionMethodNotImplemented()
-	{
-		return getString("Exception.MethodNotImplemented");
+	public static String pfGeneratorChooseSeqVersion() {
+		return getString("pfFile.extract.chooseSeqVersion");
 	}
 
-	public static String exceptionDBRecordBJSplitDBNameAccession(String dbNameAndAccession)
-	{
-		Object[] a = {dbNameAndAccession};
-		return MessageFormat.format(getString("Exception.DBRecordBJ.SplitDBNameAccession"), a);
+	public static int pfGeneratorStepShowInterval() {
+		return getInt("pfFile.extract.stepShowInterval");
 	}
 
-	public static String ExceptionDBRecordDbRecordLinkBJConstructorTerm()
-	{
-		return getString("Exception.DBRecordDbRecordLinkBJ.ConstructorTerm");
+	public static String pfGeneratorInitMsg(String path) {
+		Object[] a = {path};
+		return MessageFormat.format(getStringMandatory("pfFile.extract.init"), a);
 	}
 
-	public static String ExceptionInvalidDBRecordDBRecordLinkName(String termName)
-	{
-		Object[] a = {termName};
-		return MessageFormat.format(getString("Exception.DBRecordDBRecordBJ.InvalidTermName"), a);
+	public static String pfGeneratorFinalMsg(int step) {
+		Object[] a = {step};
+		return MessageFormat.format(getStringMandatory("pfFile.extract.final"), a);
 	}
 
-	public static String ExceptionAnnotationMethodBJConstructorTerm()
-	{
-		return getString("Exception.AnnotationMethodBJ.ConstructorTerm");
+	public static String pfGeneratorChooseEcThreshold() {
+		return getString("pfFile.extract.chooseEcThreshold");
 	}
 
-	public static String exceptionInvalidMethod()
-	{
-		return getString("Exception.InvalidMethod");
+	public static String pfGeneratorChooseGoThreshold() {
+		return getString("pfFile.extract.chooseGoThreshold");
 	}
 
-	public static String exceptionHandleDBLinkOtherSequence()
-	{
-		return getString("Exception.Sequence.DBLinkOtherSequence");
+	//	public static String pfGeneratorChooseKoThreshold() {
+	//		return getString("pfFile.extract.chooseKoThreshold");
+	//	}
+	//
+	public static String pfGeneratorChooseSequenceLocation() {
+		return getString("pfFile.extract.chooseSequenceLocation");
+	}
+
+	// CDS to KO loader
+
+	public static String cdsToKOLoaderChooseFile() {
+		return getString("cdsToKOLoader.chooseFile");
+	}
+
+	public static String cdsToKOLoaderChooseOrganismNumber() {
+		return getString("cdsToKOLoader.chooseOrganismNumber");
+	}
+
+	public static String cdsToKOLoaderChooseCDSDBName() {
+		return getString("cdsToKOLoader.chooseCDSDBName");
+	}
+
+	public static String cdsToKOLoaderChooseMethodName() {
+		return getString("cdsToKOLoader.chooseMethodName");
+	}
+
+	public static int cdsToKOLoaderStepShowInterval() {
+		return getInt("cdsToKOLoader.stepShowInterval");
+	}
+
+	public static String cdsToKOLoaderInitMsg(String path) {
+		Object[] a = {path};
+		return MessageFormat.format(getStringMandatory("cdsToKOLoader.init"), a);
+	}
+
+	public static String cdsToKOLoaderFinalMsg(int step, int errorCount) {
+		Object[] a = {step, errorCount};
+		return MessageFormat.format(getStringMandatory("cdsToKOLoader.final"), a);
+	}
+
+	// gbkLoader
+
+	public static String gbkLoaderChooseFile() {
+		return getString("gbkLoader.chooseFile");
+	}
+
+	public static int gbkLoaderStepShowInterval() {
+		return getInt("gbkLoader.stepShowInterval");
+	}
+
+	public static String gbkLoaderInitMsg(String path) {
+		Object[] a = {path};
+		return MessageFormat.format(getStringMandatory("gbkLoader.init"), a);
+	}
+
+	public static String gbkLoaderFinalMsg(int step) {
+		Object[] a = {step};
+		return MessageFormat.format(getStringMandatory("gbkLoader.final"), a);
+	}
+
+	public static String gbkLoaderChooseSeqDBName() {
+		return getStringMandatory("gbkLoader.chooseSeqDBName");
+	}
+
+	// synonymLoader
+
+	public static String synonymLoaderChooseFile() {
+		return getStringMandatory("synonymLoader.chooseFile");
+	}
+
+	public static String synonymLoaderChooseOrganismNumber() {
+		return getStringMandatory("synonymLoader.chooseOrganismNumber");
+	}
+
+	public static String synonymLoaderChooseAnnotColumnIndex() {
+		return getStringMandatory("synonymLoader.chooseAnnotColumnIndex");
+	}
+
+	public static String synonymLoaderChooseAnnotDBName() {
+		return getStringMandatory("synonymLoader.chooseAnnotDBName");
+	}
+
+	public static String synonymLoaderChooseDbxrefColumnIndex() {
+		return getStringMandatory("synonymLoader.chooseDbxrefColumnIndex");
+	}
+
+	public static String synonymLoaderChooseDbxrefDBName() {
+		return getStringMandatory("synonymLoader.chooseDbxrefDBName");
+	}
+
+	public static int synonymLoaderStepShowInterval() {
+		return getInt("synonymLoader.stepShowInterval");
+	}
+
+	public static String synonymLoaderInitMsg(String path) {
+		Object[] a = {path};
+		return MessageFormat.format(getStringMandatory("synonymLoader.init"), a);
+	}
+
+	public static String synonymLoaderFinalMsg(int step, int errorStep) {
+		Object[] a = {step, errorStep};
+		return MessageFormat.format(getStringMandatory("synonymLoader.final"), a);
+	}
+
+	//ecCDS file Generator
+
+	public static String ecCDSFileGeneratorChooseFile() {
+		return getString("ecCDSFile.extract.chooseFile");
+	}
+
+	public static String ecCDSFileGeneratorChooseOrganismNumber() {
+		return getString("ecCDSFile.extract.chooseOrganismNumber");
+	}
+
+	public static String ecCDSFileGeneratorChooseSeqVersion() {
+		return getString("ecCDSFile.extract.chooseSeqVersion");
+	}
+
+	public static int ecCDSFileGeneratorStepShowInterval() {
+		return getInt("ecCDSFile.extract.stepShowInterval");
+	}
+
+	public static String ecCDSFileGeneratorInitMsg(String path) {
+		Object[] a = {path};
+		return MessageFormat.format(getStringMandatory("ecCDSFile.extract.init"), a);
+	}
+
+	public static String ecCDSFileGeneratorFinalMsg(int step) {
+		Object[] a = {step};
+		return MessageFormat.format(getStringMandatory("ecCDSFile.extract.final"), a);
+	}
+
+	// general messages
+	public static String generalChooseFileToLoad() {
+		return getString("general.loader.chooseFile");
+	}
+
+	public static String generalChooseFileToExtract() {
+		return getString("general.extracter.chooseFile");
+	}
+
+	public static String generalChooseOrganismNumber() {
+		return getString("general.chooseOrganismNumber");
+	}
+
+	public static String generalChooseMethodName() {
+		return getStringMandatory("general.chooseMethodName");
+	}
+
+	//dbxrefDbxrefAnnotationLoader
+
+	public static String dbxrefDbxrefAnnotationLoaderChooseSourceColumnIndex() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.chooseSourceColumnIndex");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderChooseSourceDBName() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.chooseSourceDBName");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderChooseTargetColumnIndex() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.chooseTargetColumnIndex");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderChooseTargetDBName() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.chooseTargetDBName");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderChooseScoreColumnIndex() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.chooseScoreColumnIndex");
+	}
+
+	public static int dbxrefDbxrefAnnotationLoaderStepShowInterval() {
+		return getInt("dbxrefDbxrefAnnotationLoader.stepShowInterval");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderInitMsg(String file) {
+		Object[] a = {file};
+		return MessageFormat.format(getStringMandatory("dbxrefDbxrefAnnotationLoader.init"), a);
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderFinalMsg(int stepsOK, int stepsError) {
+		Object[] a = {stepsOK, stepsError};
+		return MessageFormat.format(getStringMandatory("dbxrefDbxrefAnnotationLoader.final"), a);
+	}
+
+	// subseqAnnotationLoader
+
+	public static String subseqAnnotationLoaderChooseFile() {
+		return getStringMandatory("subseqAnnotationLoader.chooseFile");
+	}
+
+	public static String subseqAnnotationLoaderChooseOrganismNumber() {
+		return getStringMandatory("subseqAnnotationLoader.chooseOrganismNumber");
+	}
+
+	public static String subseqAnnotationLoaderChooseMethodName() {
+		return getStringMandatory("subseqAnnotationLoader.chooseMethodName");
+	}
+
+	public static String subseqAnnotationLoaderChooseAnnotColumnIndex() {
+		return getStringMandatory("subseqAnnotationLoader.chooseAnnotColumnIndex");
+	}
+
+	public static String subseqAnnotationLoaderChooseAnnotDBName() {
+		return getStringMandatory("subseqAnnotationLoader.chooseAnnotDBName");
+	}
+
+	public static String subseqAnnotationLoaderChooseDbxrefColumnIndex() {
+		return getStringMandatory("subseqAnnotationLoader.chooseDbxrefColumnIndex");
+	}
+
+	public static String subseqAnnotationLoaderChooseDbxrefDBName() {
+		return getStringMandatory("subseqAnnotationLoader.chooseDbxrefDBName");
+	}
+
+	public static String subseqAnnotationLoaderChooseScoreColumnIndex() {
+		return getStringMandatory("subseqAnnotationLoader.chooseScoreColumnIndex");
+	}
+
+	public static int subseqAnnotationLoaderStepShowInterval() {
+		return getInt("subseqAnnotationLoader.stepShowInterval");
+	}
+
+	public static String subseqAnnotationLoaderInitMsg(String path) {
+		Object[] a = {path};
+		return MessageFormat.format(getStringMandatory("subseqAnnotationLoader.init"), a);
+	}
+
+	public static String subseqAnnotationLoaderFinalMsg(int step, int errorStep) {
+		Object[] a = {step, errorStep};
+		return MessageFormat.format(getStringMandatory("subseqAnnotationLoader.final"), a);
 	}
 
 }

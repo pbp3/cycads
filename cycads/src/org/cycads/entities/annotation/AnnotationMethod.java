@@ -3,16 +3,13 @@
  */
 package org.cycads.entities.annotation;
 
-import org.cycads.entities.note.Note;
-import org.cycads.entities.note.NotesContainer;
-import org.cycads.entities.note.NoteSource;
+import org.cycads.entities.note.Noteble;
 
-public interface AnnotationMethod extends NoteSource, NotesContainer<Note<AnnotationMethod>>
-{
+public interface AnnotationMethod extends Noteble, Comparable<AnnotationMethod> {
 	public String getName();
 
-	public int getWeight();
+	public double getWeight();
 
-	public Note<AnnotationMethod> addNote(String value, String type);
+	public void setWeight(double weight);
 
 }

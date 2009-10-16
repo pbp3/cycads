@@ -1,477 +1,277 @@
 package org.cycads.general;
 
-import java.io.File;
-import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.MissingResourceException;
-import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 
 public class ParametersDefault
 {
-	private static final String			BUNDLE_NAME		= "parametersDefault";						//$NON-NLS-1$
+	//	private static final String		BUNDLE_NAME		= "config";				//$NON-NLS-1$
+	//
+	//	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
 
-	private static final ResourceBundle	RESOURCE_BUNDLE	= ResourceBundle.getBundle(BUNDLE_NAME);
-
-	private ParametersDefault()
-	{
+	private ParametersDefault() {
 	}
 
-	private static String getString(String key)
-	{
-		try
-		{
-			return RESOURCE_BUNDLE.getString(key);
+	private static String getString(String key) {
+		try {
+			return Config.getString(key);
 		}
-		catch (MissingResourceException e)
-		{
+		catch (MissingResourceException e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
+	private static String getStringOptional(String key) {
+		try {
+			return Config.getString(key);
+		}
+		catch (MissingResourceException e) {
+			return null;
+		}
+	}
+
+	private static String getStringMandatory(String key) {
+		try {
+			return Config.getString(key);
+		}
+		catch (MissingResourceException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static int getInt(String key) {
+		return Integer.parseInt(getStringMandatory(key));
+	}
+
+	private static String transform(String key, List<Pattern> keyPatterns, List<String> values) {
+		for (int i = 0; i < keyPatterns.size(); i++) {
+			if (keyPatterns.get(i).matcher(key).matches()) {
+				if (values.size() > i) {
+					return values.get(i);
+				}
+				else {
+					return null;
+				}
+			}
+		}
+		return null;
+	}
+
+	private static String[] transforms(String key, List<Pattern> keyPatterns, List<String> values) {
+		ArrayList<String> rets = new ArrayList<String>();
+		for (int i = 0; i < keyPatterns.size(); i++) {
+			if (keyPatterns.get(i).matcher(key).matches()) {
+				if (values.size() > i) {
+					rets.add(values.get(i));
+				}
+			}
+		}
+		return rets.toArray(new String[0]);
+	}
+
+	private static List<Pattern> getPatterns(String tag) {
+		List<String> patternsStr = getStrings(tag);
+		List<Pattern> patterns = new ArrayList<Pattern>(patternsStr.size());
+		for (String str : patternsStr) {
+			patterns.add(Pattern.compile(str));
+		}
+		return patterns;
+	}
+
+	private static List<String> getStrings(String tag) {
+		ArrayList<String> values = new ArrayList<String>(4);
+		int i = 0;
+		String str;
+		while ((str = getStringOptional(tag + "." + i)) != null) {
+			values.add(str);
+			i++;
+		}
+		values.trimToSize();
+		return values;
+	}
+
 	// General
 
-	public static String methodDescription()
-	{
-		return getString("General.Method.Description");
+	public static int getNextCycId() {
+		return getInt("general.organism.nextCycId");
 	}
 
-	public static String getNameSpaceDefault()
-	{
-		return getString("General.nameSpaceDefault");
+	public static String getSubseqAnnotationTypeName() {
+		return getStringMandatory("general.type.subseqAnnotationTypeName");
 	}
 
-	public static String getMethodNameDefault()
-	{
-		return getString("MethodName.General");
+	public static String getDbxrefAnnotationTypeName() {
+		return getStringMandatory("general.type.dbxrefAnnotationTypeName");
 	}
 
-	public static String annotationNoteTypeScore()
-	{
-		return getString("Annotation.note.type.score");
+	public static String getFunctionAnnotationTypeName() {
+		return getStringMandatory("general.type.functionAnnotationTypeName");
 	}
 
-	// LoadTaxonomy
-
-	public static String taxonomyLoaderNodesFileName()
-	{
-		return getString("TaxonomyLoader.nodesFileName");
+	public static String getDbxrefSourceAnnotationTypeName() {
+		return getStringMandatory("general.type.dbxrefSourceAnnotationTypeName");
 	}
 
-	public static String taxonomyLoaderNamesFileName()
-	{
-		return getString("TaxonomyLoader.namesFileName");
+	public static String getScoreAnnotationNoteTypeName() {
+		return getStringMandatory("general.type.scoreAnnotationNoteTypeName");
 	}
 
-	public static int taxonomyLoaderStepShowNodeInterval()
-	{
-		return Integer.parseInt(getString("TaxonomyLoader.stepShowNodeInterval"));
+	public static String getCDSAnnotationTypeName() {
+		return getStringMandatory("general.type.cdsAnnotationTypeName");
 	}
 
-	public static int taxonomyLoaderStepShowNameInterval()
-	{
-		return Integer.parseInt(getString("TaxonomyLoader.stepShowNameInterval"));
+	public static String getMRNAAnnotationTypeName() {
+		return getStringMandatory("general.type.mrnaAnnotationTypeName");
 	}
 
-	public static int taxonomyLoaderStepCache()
-	{
-		return Integer.parseInt(getString("TaxonomyLoader.stepCache"));
+	public static String getGeneAnnotationTypeName() {
+		return getStringMandatory("general.type.geneAnnotationTypeName");
 	}
 
-	// KOToECLoader
-
-	public static String koToECLoaderSeparator()
-	{
-		return getString("KOToECLoader.separator");
+	public static String getDbxrefToStringSeparator() {
+		return getStringMandatory("general.dbxref.toStringSeparator");
 	}
 
-	public static String koToECLoaderComment()
-	{
-		return getString("KOToECLoader.comment");
-	}
-
-	public static String koToECLoaderDeleteExpression()
-	{
-		return getString("KOToECLoader.deleteExpression");
-	}
-
-	public static int koToECLoaderStepCache()
-	{
-		return Integer.parseInt(getString("KOToECLoader.stepCache"));
-	}
-
-	public static int koToECLoaderStepShowInterval()
-	{
-		return Integer.parseInt(getString("KOToECLoader.stepShowInterval"));
-	}
-
-	public static String koToECLoaderFileName()
-	{
-		return getString("KOToECLoader.fileName");
-	}
-
-	// KOToGOLoader
-
-	public static String koToGOLoaderSeparator()
-	{
-		return getString("KOToGOLoader.separator");
-	}
-
-	public static String koToGOLoaderComment()
-	{
-		return getString("KOToGOLoader.comment");
-	}
-
-	public static String koToGOLoaderDeleteExpression()
-	{
-		return getString("KOToGOLoader.deleteExpression");
-	}
-
-	public static int koToGOLoaderStepCache()
-	{
-		return Integer.parseInt(getString("KOToGOLoader.stepCache"));
-	}
-
-	public static int koToGOLoaderStepShowInterval()
-	{
-		return Integer.parseInt(getString("KOToGOLoader.stepShowInterval"));
-	}
-
-	public static String koToGOLoaderFileName()
-	{
-		return getString("KOToGOLoader.fileName");
-	}
-
-	// GBKLoader
-
-	public static int gBKLoaderStepCache()
-	{
-		return Integer.parseInt(getString("GBKLoader.stepCache"));
-	}
-
-	public static int gBKLoaderStepShowInterval()
-	{
-		return Integer.parseInt(getString("GBKLoader.stepShowInterval"));
-	}
-
-	public static String gBKLoaderFileName()
-	{
-		return getString("GBKLoader.fileName");
-	}
-
-	public static String cdsToECMethodType()
-	{
-		return getString("CDSToEC.methodType");
-	}
-
-	public static String gBKLoaderMethodCDSToECName()
-	{
-		return getString("GBKLoader.methodCDSToECName");
-	}
-
-	public static String gBKLoaderMethodCDSToECDescription(String methodName)
-	{
-		Object[] a = {methodName};
-		return MessageFormat.format(getString("GBKLoader.methodCDSToECDescription"), a);
-	}
-
-	// GBK file
-
-	public static String gbkECTagExpression()
-	{
-		return getString("GBK.file.ECTagExpression");
-	}
-
-	public static String gbkGeneTagExpression()
-	{
-		return getString("GBK.file.GeneTagExpression");
-	}
-
-	public static String gbkRNATagExpression()
-	{
-		return getString("GBK.file.RNATagExpression");
-	}
-
-	public static String gbkCDSTagExpression()
-	{
-		return getString("GBK.file.CDSTagExpression");
-	}
-
-	// CDSToKOLoader
-
-	public static String cdsToKOLoaderSeparator()
-	{
-		return getString("CDSToKOLoader.separator");
-	}
-
-	public static String cdsToKOLoaderComment()
-	{
-		return getString("CDSToKOLoader.comment");
-	}
-
-	public static String cdsToKOLoaderFileName()
-	{
-		return getString("CDSToKOLoader.fileName");
-	}
-
-	public static int cdsToKOLoaderStepCache()
-	{
-		return Integer.parseInt(getString("CDSToKOLoader.stepCache"));
-	}
-
-	public static int cdsToKOLoaderStepShowInterval()
-	{
-		return Integer.parseInt(getString("CDSToKOLoader.stepShowInterval"));
-	}
-
-	public static int cdsToKOLoaderOrganismNumber()
-	{
-		return Integer.parseInt(getString("CDSToKOLoader.organismNumber"));
-	}
-
-	public static String cdsToKOMethodType()
-	{
-		return getString("CDSToKO.methodType");
-	}
-
-	public static String cdsToKOLoaderMethodName()
-	{
-		return getString("CDSToKOLoader.methodName");
-	}
-
-	public static String cdsToKOMethodDescription(String methodName)
-	{
-		Object[] a = {methodName};
-		return MessageFormat.format(getString("CDSToKOLoader.methodDescription"), a);
-	}
-
-	public static int cdsToKOLoaderPosCDSName()
-	{
-		return Integer.parseInt(getString("CDSToKOLoader.PosCDSName"));
-	}
-
-	public static String cdsToKOLoaderSeparatorCDSName()
-	{
-		return getString("CDSToKOLoader.SeparatorCDSName");
-	}
-
-	// KOLoader
-
-	public static String koLoaderFileName()
-	{
-		return getString("KOLoader.fileName");
-	}
-
-	public static int koLoaderStepCache()
-	{
-		return Integer.parseInt(getString("KOLoader.stepCache"));
-	}
-
-	public static int koLoaderStepShowInterval()
-	{
-		return Integer.parseInt(getString("KOLoader.stepShowInterval"));
+	public static boolean isDebugging() {
+		return new Boolean(getStringMandatory("general.debug"));
 	}
 
 	// KOFile
 
-	public static String koFileEntryTag()
-	{
+	public static String koFileEntryTag() {
 		return getString("KOFile.entryTag");
 	}
 
-	public static String koFileDefinitionTag()
-	{
+	public static String koFileDefinitionTag() {
 		return getString("KOFile.definitionTag");
 	}
 
-	public static String koFileDBLinksTag()
-	{
+	public static String koFileDBLinksTag() {
 		return getString("KOFile.dbLinksTag");
 	}
 
-	public static String koFileECTag()
-	{
+	public static String koFileECTag() {
 		return getString("KOFile.ecTag");
 	}
 
-	public static int koFileDataPos()
-	{
-		return Integer.parseInt(getString("KOFile.dataPos"));
+	public static int koFileDataPos() {
+		return getInt("KOFile.dataPos");
 	}
 
-	public static String koFileEndRecordStr()
-	{
+	public static String koFileEndRecordStr() {
 		return getString("KOFile.endRecord");
 	}
 
-	public static String koFileCommentStr()
-	{
+	public static String koFileCommentStr() {
 		return getString("KOFile.comment");
 	}
 
-	public static String koFileECDeleteExpression()
-	{
+	public static String koFileECDeleteExpression() {
 		return getString("KOFile.EC.deleteExpression");
 	}
 
-	public static String koFileECSeparator()
-	{
-		return getString("KOFile.EC.SeparatorExpression");
+	public static String koFileECSeparator() {
+		return getString("KOFile.EC.separatorExpression");
 	}
 
-	public static String koFileDBLinkSubTagSeparator()
-	{
-		return getString("KOFile.DBLink.SubTagSeparator");
+	public static String koFileDBLinkSubTagSeparator() {
+		return getString("KOFile.DBLink.subTagSeparator");
 	}
 
-	public static String koFileDBLinkGOTag()
-	{
-		return getString("KOFile.DBLink.GOTag");
+	public static String koFileDBLinkAccessionSeparator() {
+		return getString("KOFile.DBLink.accessionSeparator");
 	}
 
-	public static String koFileDBLinkGOSeparator()
-	{
-		return getString("KOFile.DBLink.GOSeparator");
+	public static String koFileDBLinkDbName(String DBLinkName) {
+		String dbName = transform(DBLinkName, getKODBLinkPatterns(), getfKODBLinkNames());
+		if (dbName == null) {
+			return DBLinkName;
+		}
+		return dbName;
 	}
 
-	public static String koFileDBLinkCOGTag()
-	{
-		return getString("KOFile.DBLink.COGTag");
+	public static List<Pattern>	dbLinkPatterns;
+
+	private static List<Pattern> getKODBLinkPatterns() {
+		if (dbLinkPatterns == null) {
+			dbLinkPatterns = getPatterns("KOFile.DBLink.names.regex");
+		}
+		return dbLinkPatterns;
 	}
 
-	public static String koFileDBLinkCOGSeparator()
-	{
-		return getString("KOFile.DBLink.COGSeparator");
+	public static List<String>	dbLinkNames;
+
+	private static List<String> getfKODBLinkNames() {
+		if (dbLinkNames == null) {
+			dbLinkNames = getStrings("KOFile.DBLink.dbNames");
+		}
+		return dbLinkNames;
 	}
 
-	// PFFileGenerator
+	// PFFIle
 
-	public static String pfFileGeneratorPfFileName(int organismNumber)
-	{
-		Object[] a = {organismNumber};
-		return MessageFormat.format(getString("PFFileGenerator.fileName"), a);
+	public static String getPFFileCommentStart() {
+		return getStringMandatory("pf.file.comment.start");
 	}
 
-	public static int pfFileGeneratorStepCache()
-	{
-		return Integer.parseInt(getString("PFFileGenerator.stepCache"));
+	public static String getPFFileFunctionCommentSeparator() {
+		return getStringMandatory("pf.file.function.comment.separator");
 	}
 
-	public static int pfFileGeneratorStepShowInterval()
-	{
-		return Integer.parseInt(getString("PFFileGenerator.stepShowInterval"));
+	public static String getPFFileGeneCommentSeparator() {
+		return getStringMandatory("pf.file.gene.comment.separator");
 	}
 
-	public static int pfFileGeneratorOrganismNumber()
-	{
-		return Integer.parseInt(getString("PFFileGenerator.organismNumber"));
+	public static String getPFFileCycIdNoteType() {
+		return getStringMandatory("pf.file.id.noteType");
 	}
 
-	public static int pfFileGeneratorVersionNumber()
-	{
-		return Integer.parseInt(getString("PFFileGenerator.versionNumber"));
+	// CDS Fake
+
+	public static String getSeqVersionFake() {
+		return getStringMandatory("annot.fake.seqVersion");
 	}
 
-	public static String pfFileGeneratorFastaFileName(File file)
-	{
-		return file.getPath() + getString("PFFileGenerator.fastaFileExtension");
+	public static int getSubseqStartFake() {
+		return getInt("annot.fake.subseqStartPos");
 	}
 
-	public static int fastaFileForPFFileLineWidth()
-	{
-		return Integer.parseInt(getString("FastaFileForPFFile.LineWidth"));
+	public static int getSubseqEndFake() {
+		return getInt("annot.fake.subseqEndPos");
 	}
 
-	public static String pfFileGeneratorBioCycIdsFileName(File file)
-	{
-		return file.getPath() + getString("PFFileGenerator.BioCycIdsFileExtension");
+	public static String getAnnotationMethodFake() {
+		return getStringMandatory("annot.fake.annotationMethod");
 	}
 
-	public static String bioCycIdsSeparator()
-	{
-		return getString("BioCycIdsFileForPFFile.Separator");
+	public static String getAnnotationFakeType() {
+		return getStringMandatory("annot.fake.annotationType");
 	}
 
-	public static String bioCycIdFormat()
-	{
-		return getString("BioCycId.Format");
+	//annotatToDbxrefParser
+
+	public static String annotToDbxrefFileComment() {
+		return getStringMandatory("annotToDbxref.file.comment");
 	}
 
-	// Annotation
-	public static String DBRecordSeparator()
-	{
-		return getString("Annotation.DBLink.DBRecordSeparator");
+	public static String annotToDbxrefFileSeparator() {
+		return getStringMandatory("annotToDbxref.file.separator");
 	}
 
-	public static String DBRecordDBRecordSeparator()
-	{
-		return getString("Annotation.DBLink.DBRecordDBRecordSeparator");
+	public static String annotToDbxrefFileTextDelimiter() {
+		return getStringMandatory("annotToDbxref.file.textDelimiter");
 	}
 
-	public static String featureTypeCDS()
-	{
-		return getString("Feature.Type.CDS");
+	public static String annotToDbxrefFileDbxrefsSeparator() {
+		return getStringMandatory("annotToDbxref.file.dbxrefsSeparator");
 	}
 
-	public static String featureTypeMRNA()
-	{
-		return getString("Feature.Type.MRNA");
+	public static String annotToDbxrefFileAnnotsSeparator() {
+		return getStringMandatory("annotToDbxref.file.annotsSeparator");
 	}
 
-	public static String featureTypeGene()
-	{
-		return getString("Feature.Type.Gene");
-	}
-
-	// GFF3 loader
-
-	public static String gff3ExonTagExpression()
-	{
-		return getString("gff3.file.exonTagExpression");
-	}
-
-	public static String gff3GeneTagExpression()
-	{
-		return getString("gff3.file.geneTagExpression");
-	}
-
-	public static String gff3MRNATagExpression()
-	{
-		return getString("gff3.file.MRNATagExpression");
-	}
-
-	public static String gff3CDSTagExpression()
-	{
-		return getString("gff3.file.CDSTagExpression");
-	}
-
-	// public static String gff3NoteTypeName()
-	// {
-	// return getString("gff3.file.noteType.name");
-	// }
-	//
-	public static String gff3NoteIdExpression()
-	{
-		return getString("gff3.file.note.id.expression");
-	}
-
-	public static String gff3NoteParentExpression()
-	{
-		return getString("gff3.file.note.parent.expression");
-	}
-
-	public static String gff3NoteDBXRefExpression()
-	{
-		return getString("gff3.file.note.dbxref.expression");
-	}
-
-	public static String gff3NoteDBXRefSplit()
-	{
-		return getString("gff3.file.note.dbxref.split");
-	}
-
-	// public static String gff3NoteTypeProduct()
-	// {
-	// return getString("gff3.file.noteType.parent");
-	// }
-	//
 }
