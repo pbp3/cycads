@@ -9,21 +9,27 @@ import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.SimpleHasSynonymsNoteble;
 
-public class SimpleAnnotation<AParent extends Annotation< ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
-		extends SimpleHasSynonymsNoteble<X> implements Annotation<AParent, X, T, M>
+public class SimpleAnnotation<SO extends AnnotationObject< ? >, TA extends AnnotationObject< ? >, AParent extends Annotation< ? , ? , ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
+		extends SimpleHasSynonymsNoteble<X> implements Annotation<SO, TA, AParent, X, T, M>
 {
 
 	EntityFactory< ? extends X, ? extends M, ? extends T, ? , ? , ? >	factory;
+
+	SO																	source;
+	TA																	target;
 
 	Collection<AParent>													parents	= new ArrayList<AParent>();
 	Collection<T>														types	= new TreeSet<T>();
 	M																	method;
 	String																score;
 
-	public SimpleAnnotation(EntityFactory< ? extends X, ? extends M, ? extends T, ? , ? , ? > factory, M method) {
+	public SimpleAnnotation(SO source, TA target,
+			EntityFactory< ? extends X, ? extends M, ? extends T, ? , ? , ? > factory, M method) {
 		super(factory);
 		this.factory = factory;
 		this.method = method;
+		this.source = source;
+		this.target = target;
 	}
 
 	@Override
@@ -61,7 +67,7 @@ public class SimpleAnnotation<AParent extends Annotation< ? , ? , ? , ? >, X ext
 
 	@Override
 	public boolean hasType(String type) {
-		return types.contains(factory.getAnnotationMethod(type));
+		return types.contains(factory.getAnnotationType(type));
 	}
 
 	public String getScore() {
@@ -70,6 +76,16 @@ public class SimpleAnnotation<AParent extends Annotation< ? , ? , ? , ? >, X ext
 
 	public void setScore(String score) {
 		this.score = score;
+	}
+
+	@Override
+	public SO getSource() {
+		return source;
+	}
+
+	@Override
+	public TA getTarget() {
+		return target;
 	}
 
 	// @Override

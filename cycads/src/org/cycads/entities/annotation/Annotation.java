@@ -10,7 +10,7 @@ import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.HasSynonyms;
 
-public interface Annotation<AParent extends Annotation< ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
+public interface Annotation<Source, Target, AParent extends Annotation< ? , ? , ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
 		extends Noteble, HasSynonyms<X>
 {
 	public M getAnnotationMethod();
@@ -30,4 +30,8 @@ public interface Annotation<AParent extends Annotation< ? , ? , ? , ? >, X exten
 	public void setScore(String score);
 
 	public String getScore();
+
+	public Source getSource();
+
+	public Target getTarget();
 }
