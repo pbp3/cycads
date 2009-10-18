@@ -14,13 +14,15 @@ import org.cycads.entities.note.SQL.NotebleSQL;
 
 public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod
 {
-	public final static int		INVALID_ID	= -1;
+	private static Hashtable<String, AnnotationMethodSQL>	hashByString;
+
+	public final static int									INVALID_ID	= -1;
 	//	public final static int		WEIGHT_DEAFULT	= 1;
 
-	private int					id;
-	private double				weight;
-	private String				name;
-	private final Connection	con;
+	private int												id;
+	private double											weight;
+	private String											name;
+	private final Connection								con;
 
 	public AnnotationMethodSQL(int id, Connection con) throws SQLException {
 		this.id = id;
