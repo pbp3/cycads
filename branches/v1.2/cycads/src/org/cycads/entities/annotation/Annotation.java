@@ -10,18 +10,18 @@ import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.HasSynonyms;
 
-public interface Annotation<Source, Target, AParent extends Annotation< ? , ? , ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
-		extends Noteble, HasSynonyms<X>
+public interface Annotation<Source, Target, AParent extends Annotation< ? , ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, M extends AnnotationMethod>
+		extends Noteble, HasSynonyms<X>, AnnotationObject
 {
 	public M getAnnotationMethod();
 
-	public Collection<T> getTypes();
+	public Collection<Type> getTypes();
 
 	public boolean hasType(String type);
 
-	public T addType(String type);
+	public Type addType(String type);
 
-	public T addType(T type);
+	public Type addType(Type type);
 
 	public Collection<AParent> getParents();
 

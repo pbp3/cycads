@@ -7,11 +7,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import org.cycads.entities.annotation.SQL.AnnotationObjectSQL;
+import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.reaction.Compound;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
-public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound<DbxrefSQL>
+public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound<DbxrefSQL, TypeSQL>, AnnotationObjectSQL
 {
 	private Connection	con;
 	private int			id;
@@ -191,6 +193,15 @@ public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound<Dbxre
 		}
 		CompoundSQL o = (CompoundSQL) obj;
 		return (o.getId() == this.getId());
+	}
+
+	@Override
+	public TypeSQL getAnnotationObjectType() {
+		return getAnnotationObjectType(con);
+	}
+
+	public static TypeSQL getAnnotationObjectType(Connection con) {
+		return TypeSQL.getType(TypeSQL.COMPOUND, con);
 	}
 
 }

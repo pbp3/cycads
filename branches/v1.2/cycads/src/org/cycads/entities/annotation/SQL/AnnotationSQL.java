@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cycads.entities.annotation.Annotation;
+import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
@@ -20,19 +21,20 @@ import org.cycads.general.ParametersDefault;
 
 public class AnnotationSQL<SO extends AnnotationObjectSQL, TA extends AnnotationObjectSQL>
 		extends HasSynonymsNotebleSQL
-		implements Annotation<SO, TA, AnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
+		implements Annotation<SO, TA, AnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>, AnnotationObjectSQL
 {
 
 	public static String				ScoreNoteTypeName	= ParametersDefault.getScoreAnnotationNoteTypeName();
 
 	private int							id;
-	private int							methodId;
 
 	private String						score;
 
 	/* The types are not synchonized */
 	private Collection<TypeSQL>			types;
 	private AnnotationMethodSQL			method;
+	private SO							source;
+	private TA							target;
 	private Collection<AnnotationSQL>	parents;
 
 	private Connection					con;
@@ -43,15 +45,15 @@ public class AnnotationSQL<SO extends AnnotationObjectSQL, TA extends Annotation
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT annotation_method_id, score from Annotation WHERE annotation_id=?");
+			stmt = con.prepareStatement("SELECT source_id, target_id, source_target_type_id, annotation_method_id, score from Annotation WHERE annotation_id=?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
-				methodId = rs.getInt("annotation_method_id");
+				method = new AnnotationMethodSQL(rs.getInt("annotation_method_id"), con);
 				score = rs.getString("score");
-				sourceId=
-					targetId=
-						sourceTargetTypeId=
+				SourceTargetTypeSQL sourceTargetType = new SourceTargetTypeSQL(rs.getInt("source_target_type_id"), con);
+				source = (SO) EntityFactorySQL.createObject(rs.getInt("source_id"), sourceTargetType.sourceType, con);
+				target = (TA) EntityFactorySQL.createObject(rs.getInt("target_id"), sourceTargetType.targetType, con);
 			}
 			else {
 				throw new SQLException("Annotation does not exist:" + id);
@@ -77,8 +79,11 @@ public class AnnotationSQL<SO extends AnnotationObjectSQL, TA extends Annotation
 		}
 	}
 
-	public static int createAnnotationSQL(AnnotationMethodSQL method, Connection con) throws SQLException {
-		int id = 0;
+	public static <SO extends AnnotationObjectSQL, TA extends AnnotationObjectSQL> AnnotationSQL<SO, TA> createAnnotationSQL(
+			SO source, TA target, AnnotationMethodSQL method, String score, Connection con) throws SQLException {
+
+		SourceTargetTypeSQL sourceTargetType = new SourceTargetTypeSQL(source.getAnnotationObjectType(),
+			target.getAnnotationObjectType(), con);
 
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -89,12 +94,11 @@ public class AnnotationSQL<SO extends AnnotationObjectSQL, TA extends Annotation
 			stmt.executeUpdate();
 			rs = stmt.getGeneratedKeys();
 			if (rs.next()) {
-				id = rs.getInt(1);
+				int id = rs.getInt(1);
 			}
 			else {
 				throw new SQLException("Annotation insert didn't return the annotation id.");
 			}
-			return id;
 		}
 		finally {
 			if (rs != null) {

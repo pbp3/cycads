@@ -5,7 +5,9 @@ package org.cycads.entities;
 
 import java.util.Collection;
 
-public interface Function
+import org.cycads.entities.annotation.AnnotationObject;
+
+public interface Function extends AnnotationObject
 {
 	public String getName();
 

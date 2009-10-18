@@ -10,23 +10,29 @@ import java.sql.Statement;
 import java.util.Hashtable;
 
 import org.cycads.entities.note.Type;
-import org.cycads.general.ParametersDefault;
 
 public class TypeSQL implements Type
 {
-	public static final int						INVALID_ID					= -1;
+	public static final int						INVALID_ID		= -1;
 
-	public static Hashtable<String, TypeSQL>	typesHash					= new Hashtable<String, TypeSQL>();
-	private static TypeSQL						subseqAnnotationType		= null;
-	private static TypeSQL						dbxrefAnnotationType		= null;
-	private static TypeSQL						functionAnnotationType		= null;
-	private static TypeSQL						dbxrefSourceAnnotationType	= null;
+	public static Hashtable<String, TypeSQL>	typesHashByName	= new Hashtable<String, TypeSQL>();
+	public static Hashtable<Integer, TypeSQL>	typesHashById	= new Hashtable<Integer, TypeSQL>();
+	public static final String					ANNOTATION		= "Annotation";
+	public static final String					DBXREF			= "Dbxref";
+	public static final String					FUNCTION		= "Function";
+	public static final String					SUBSEQUENCE		= "Subsequence";
+	public static final String					SEQUENCE		= "Sequence";
+	public static final String					ORGANISM		= "Organism";
+	public static final String					REACTION		= "Reaction";
+	public static final String					PATHWAY			= "Pathway";
+	public static final String					COMPOUND		= "Compound";
+	public static final String					FEATURE			= "Feature";
 
 	private int									id;
 	private String								name, description;
 	private Connection							con;
 
-	public TypeSQL(int id, Connection con) throws SQLException {
+	private TypeSQL(int id, Connection con) throws SQLException {
 		this.id = id;
 		this.con = con;
 		Statement stmt = null;
@@ -62,7 +68,7 @@ public class TypeSQL implements Type
 		}
 	}
 
-	public TypeSQL(String name, String description, Connection con) throws SQLException {
+	private TypeSQL(String name, String description, Connection con) throws SQLException {
 		this.name = name;
 		this.description = description;
 		this.con = con;
@@ -148,11 +154,26 @@ public class TypeSQL implements Type
 		}
 	}
 
-	public static TypeSQL getType(String name, Connection con) throws SQLException {
-		TypeSQL type = typesHash.get(name);
+	public static TypeSQL getType(String name, Connection con) {
+		TypeSQL type = typesHashByName.get(name);
 		if (type == null) {
-			type = new TypeSQL(name, null, con);
-			typesHash.put(name, type);
+			try {
+				type = new TypeSQL(name, null, con);
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+				throw new RuntimeException("Can't create Type " + name);
+			}
+			typesHashByName.put(name, type);
+		}
+		return type;
+	}
+
+	public static TypeSQL getType(int id, Connection con) throws SQLException {
+		TypeSQL type = typesHashById.get(id);
+		if (type == null) {
+			type = new TypeSQL(id, con);
+			typesHashById.put(id, type);
 		}
 		return type;
 	}
@@ -173,34 +194,6 @@ public class TypeSQL implements Type
 
 	public Connection getConnection() {
 		return con;
-	}
-
-	public static TypeSQL getSubseqAnnotationType(Connection con) throws SQLException {
-		if (subseqAnnotationType == null) {
-			subseqAnnotationType = new TypeSQL(ParametersDefault.getSubseqAnnotationTypeName(), null, con);
-		}
-		return subseqAnnotationType;
-	}
-
-	public static TypeSQL getDbxrefAnnotationType(Connection con) throws SQLException {
-		if (dbxrefAnnotationType == null) {
-			dbxrefAnnotationType = new TypeSQL(ParametersDefault.getDbxrefAnnotationTypeName(), null, con);
-		}
-		return dbxrefAnnotationType;
-	}
-
-	public static TypeSQL getFunctionAnnotationType(Connection con) throws SQLException {
-		if (functionAnnotationType == null) {
-			functionAnnotationType = new TypeSQL(ParametersDefault.getFunctionAnnotationTypeName(), null, con);
-		}
-		return functionAnnotationType;
-	}
-
-	public static TypeSQL getDbxrefSourceAnnotationType(Connection con) throws SQLException {
-		if (dbxrefSourceAnnotationType == null) {
-			dbxrefSourceAnnotationType = new TypeSQL(ParametersDefault.getDbxrefSourceAnnotationTypeName(), null, con);
-		}
-		return dbxrefSourceAnnotationType;
 	}
 
 	@Override

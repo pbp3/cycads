@@ -10,8 +10,10 @@ import java.util.Collection;
 import java.util.Hashtable;
 
 import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
+import org.cycads.entities.annotation.SQL.AnnotationObjectSQL;
 import org.cycads.entities.annotation.SQL.AnnotationSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
+import org.cycads.entities.reaction.SQL.CompoundSQL;
 import org.cycads.entities.sequence.SQL.OrganismSQL;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.EC;
@@ -207,6 +209,16 @@ public class EntityFactorySQL
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
+	}
+
+	public static AnnotationObjectSQL createObject(int id, TypeSQL type, Connection con) throws SQLException {
+		if (type.equals(AnnotationSQL.getAnnotationObjectType(con))) {
+			return new AnnotationSQL<AnnotationObjectSQL, AnnotationObjectSQL>(id, con);
+		}
+		else if (type.equals(CompoundSQL.getAnnotationObjectType(con))) {
+			return new CompoundSQL(id, con);
+		}
+		return null;
 	}
 
 }
