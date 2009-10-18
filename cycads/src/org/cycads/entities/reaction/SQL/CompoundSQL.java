@@ -196,7 +196,7 @@ public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound<Dbxre
 	}
 
 	@Override
-	public TypeSQL getAnnotationObjectType() {
+	public TypeSQL getAssociationObjectType() {
 		return getAnnotationObjectType(con);
 	}
 

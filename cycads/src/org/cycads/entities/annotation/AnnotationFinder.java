@@ -8,26 +8,25 @@ import java.util.Collection;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.Dbxref;
 
-public interface AnnotationFinder<X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod, AOT extends AnnotationObjectType>
+public interface AnnotationFinder
 {
 	/* The arguments nulls are not considerated */
-	public <A extends Annotation< ? extends SO, ? extends TA, ? , ? extends X, ? extends T, ? extends M>, SO extends AnnotationObject<AOT>, TA extends AnnotationObject<AOT>> Collection< ? extends A> getAnnotations(
-			SO source, TA target, M method, Collection<T> types, X synonym);
+	public <SO extends AssociationObject, TA extends AssociationObject> Collection< ? extends Annotation< ? extends SO, ? extends TA>> getAnnotations(
+			SO source, TA target, AnnotationMethod method, Collection<Type> types, Dbxref synonym);
 
 	/* The arguments nulls are not considerated */
-	public <A extends Annotation< ? , ? extends TA, ? , ? extends X, ? extends T, ? extends M>, TA extends AnnotationObject<AOT>> Collection< ? extends A> getAnnotations(
-			AOT sourceType, TA target, M method, Collection<T> types, X synonym);
+	public <TA extends AssociationObject> Collection< ? extends Annotation< ? , ? extends TA>> getAnnotations(
+			Type sourceType, TA target, AnnotationMethod method, Collection<Type> types, Dbxref synonym);
 
 	/* The arguments nulls are not considerated */
-	public <A extends Annotation< ? extends SO, ? , ? , ? extends X, ? extends T, ? extends M>, SO extends AnnotationObject<AOT>> Collection< ? extends A> getAnnotations(
-			SO source, AOT targetType, M method, Collection<T> types, X synonym);
+	public <SO extends AssociationObject> Collection< ? extends Annotation< ? extends SO, ? >> getAnnotations(SO source,
+			Type targetType, AnnotationMethod method, Collection<Type> types, Dbxref synonym);
 
 	/* The arguments nulls are not considerated */
-	public <A extends Annotation< ? , ? , ? , ? extends X, ? extends T, ? extends M>> Collection< ? extends A> getAnnotations(
-			AOT sourceType, AOT targetType, M method, Collection<T> types, X synonym);
+	public Collection< ? extends Annotation< ? , ? >> getAnnotations(Type sourceType, Type targetType,
+			AnnotationMethod method, Collection<Type> types, Dbxref synonym);
 
-	public <A extends Annotation< ? , ? , ? , ? , ? , ? >> Collection< ? extends A> getAnnotations(
-			AnnotationFilter<A> filter);
+	public Collection< ? extends Annotation< ? , ? >> getAnnotations(AnnotationFilter filter);
 
 	//	public Collection< ? extends A> getDbxrefAnnotations(String dbxrefDbname);
 	//

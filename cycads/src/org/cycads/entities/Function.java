@@ -3,20 +3,16 @@
  */
 package org.cycads.entities;
 
-import java.util.Collection;
+import org.cycads.entities.annotation.AssociationObject;
+import org.cycads.entities.note.Noteble;
+import org.cycads.entities.synonym.HasSynonyms;
 
-import org.cycads.entities.annotation.AnnotationObject;
-
-public interface Function extends AnnotationObject
+public interface Function extends AssociationObject, HasSynonyms, Noteble
 {
+	public static final String	OBJECT_TYPE_NAME	= "Function";
+
 	public String getName();
 
 	public String getDescription();
-
-	public Collection<Function> getSynonyms();
-
-	public Function getSynonym(String name);
-
-	public Function addSynonym(String name, String description);
 
 }

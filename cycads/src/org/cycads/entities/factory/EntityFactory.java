@@ -12,9 +12,9 @@ import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.synonym.Dbxref;
 
-public interface EntityFactory<X extends Dbxref< ? , ? , ? , ? >, M extends AnnotationMethod, T extends Type, O extends Organism< ? , ? , ? , ? , ? , ? >, F extends Function, A extends Annotation< ? , ? , ? , ? >>
+public interface EntityFactory<X extends Dbxref, M extends AnnotationMethod, T extends Type, O extends Organism< ? , ? >, F extends Function, A extends Annotation< ? , ? >>
 		extends EntityDbxrefFactory<X>, EntityMethodFactory<M>, EntityTypeFactory<T>, EntityOrganismFactory<O>,
 		EntityFunctionFactory<F>
 {
-	public Collection<A> getAnnotations(Dbxref< ? , ? , ? , ? > dbxref);
+	public Collection<A> getAnnotations(X dbxref);
 }

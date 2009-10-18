@@ -5,15 +5,16 @@ package org.cycads.entities.sequence;
 
 import java.util.Collection;
 
-import org.cycads.entities.annotation.AnnotationFinder;
-import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.annotation.SubseqAnnotation;
-import org.cycads.entities.note.Type;
+import org.cycads.entities.annotation.AssociationObject;
+import org.cycads.entities.note.Noteble;
 import org.cycads.entities.synonym.Dbxref;
+import org.cycads.entities.synonym.HasSynonyms;
 
-public interface Organism<S extends Sequence< ? , ? , ? , ? , ? , ? >, SS extends Subsequence< ? , ? , ? , ? , ? , ? >, SA extends SubseqAnnotation< ? , ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
-		extends AnnotationFinder<SA, X, T, M>
+public interface Organism<S extends Sequence< ? , ? >, SS extends Subsequence< ? >>
+		extends Noteble, HasSynonyms, AssociationObject
 {
+	public static final String	OBJECT_TYPE_NAME	= "Organism";
+
 	public int getId();
 
 	public String getName();
@@ -26,11 +27,11 @@ public interface Organism<S extends Sequence< ? , ? , ? , ? , ? , ? >, SS extend
 
 	public Collection<S> getSequences(String version);
 
-	public Collection<S> getSequences(X synonym);
+	public Collection<S> getSequences(Dbxref synonym);
 
-	public Collection<S> getSequences(X synonym, String version);
+	public Collection<S> getSequences(Dbxref synonym, String version);
 
-	public Collection<SS> getSubsequences(X synonym);
+	public Collection<SS> getSubsequences(Dbxref synonym);
 
 	public int getNextCycId();
 

@@ -82,8 +82,8 @@ public class AnnotationSQL<SO extends AnnotationObjectSQL, TA extends Annotation
 	public static <SO extends AnnotationObjectSQL, TA extends AnnotationObjectSQL> AnnotationSQL<SO, TA> createAnnotationSQL(
 			SO source, TA target, AnnotationMethodSQL method, String score, Connection con) throws SQLException {
 
-		SourceTargetTypeSQL sourceTargetType = new SourceTargetTypeSQL(source.getAnnotationObjectType(),
-			target.getAnnotationObjectType(), con);
+		SourceTargetTypeSQL sourceTargetType = new SourceTargetTypeSQL(source.getAssociationObjectType(),
+			target.getAssociationObjectType(), con);
 
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -175,7 +175,7 @@ public class AnnotationSQL<SO extends AnnotationObjectSQL, TA extends Annotation
 	}
 
 	@Override
-	public boolean hasType(String typeStr) {
+	public boolean isType(String typeStr) {
 		for (TypeSQL type : getTypes()) {
 			if (type.getName().equals(typeStr)) {
 				return true;
@@ -200,7 +200,7 @@ public class AnnotationSQL<SO extends AnnotationObjectSQL, TA extends Annotation
 	public TypeSQL addType(TypeSQL type) {
 		PreparedStatement stmt = null;
 		try {
-			if (!hasType(type.getName())) {
+			if (!isType(type.getName())) {
 				stmt = con.prepareStatement("INSERT INTO Annotation_type (annotation_id, type_id) VALUES (?,?)");
 				stmt.setInt(1, getId());
 				stmt.setInt(2, type.getId());

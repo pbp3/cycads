@@ -3,12 +3,8 @@
  */
 package org.cycads.entities.synonym;
 
-import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.annotation.DbxrefDbxrefAnnotation;
-import org.cycads.entities.note.Type;
 
-public interface KO<A extends DbxrefDbxrefAnnotation< ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
-		extends Dbxref<A, X, T, M>
+public interface KO extends Dbxref
 {
 	public final static String	DBNAME	= "KO";
 
@@ -19,7 +15,5 @@ public interface KO<A extends DbxrefDbxrefAnnotation< ? , ? , ? , ? >, X extends
 	public String getName();
 
 	public void setName(String name);
-
-	public A addEcAnnotation(M method, String ecNumber);
 
 }

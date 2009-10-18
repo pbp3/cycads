@@ -5,8 +5,8 @@ package org.cycads.entities.annotation;
 
 import org.cycads.entities.note.Type;
 
-public interface AnnotationObject
+public interface AssociationObject
 {
-	public Type getAnnotationObjectType();
+	public Type getAssociationObjectType();
 
 }

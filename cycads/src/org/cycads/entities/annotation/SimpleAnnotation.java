@@ -4,70 +4,67 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.TreeSet;
 
-import org.cycads.entities.factory.EntityFactory;
+import org.cycads.entities.factory.EntityDbxrefFactory;
+import org.cycads.entities.factory.EntityTypeFactory;
 import org.cycads.entities.note.Type;
-import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.SimpleHasSynonymsNoteble;
 
-public class SimpleAnnotation<SO extends AnnotationObject< ? >, TA extends AnnotationObject< ? >, AParent extends Annotation< ? , ? , ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
-		extends SimpleHasSynonymsNoteble<X> implements Annotation<SO, TA, AParent, X, T, M>
+public class SimpleAnnotation<SO extends AssociationObject, TA extends AssociationObject>
+		extends SimpleHasSynonymsNoteble implements Annotation<SO, TA>
 {
 
-	EntityFactory< ? extends X, ? extends M, ? extends T, ? , ? , ? >	factory;
+	SO								source;
+	TA								target;
 
-	SO																	source;
-	TA																	target;
+	Collection<Annotation< ? , ? >>	parents	= new ArrayList<Annotation< ? , ? >>();
+	Collection<Type>				types	= new TreeSet<Type>();
+	AnnotationMethod				method;
+	String							score;
 
-	Collection<AParent>													parents	= new ArrayList<AParent>();
-	Collection<T>														types	= new TreeSet<T>();
-	M																	method;
-	String																score;
-
-	public SimpleAnnotation(SO source, TA target,
-			EntityFactory< ? extends X, ? extends M, ? extends T, ? , ? , ? > factory, M method) {
-		super(factory);
-		this.factory = factory;
+	public SimpleAnnotation(SO source, TA target, AnnotationMethod method, EntityTypeFactory< ? > typeFactory,
+			EntityDbxrefFactory< ? > dbxrefFactory) {
+		super(typeFactory, dbxrefFactory);
 		this.method = method;
 		this.source = source;
 		this.target = target;
 	}
 
 	@Override
-	public void addParent(AParent parent) {
+	public void addParent(Annotation< ? , ? > parent) {
 		parents.add(parent);
 	}
 
 	@Override
-	public T addType(String type) {
-		T t = factory.getAnnotationType(type);
+	public Type addType(String type) {
+		Type t = typeFactory.getAnnotationType(type);
 		types.add(t);
 		return t;
 	}
 
 	@Override
-	public T addType(T type) {
+	public Type addType(Type type) {
 		types.add(type);
 		return type;
 	}
 
 	@Override
-	public M getAnnotationMethod() {
+	public AnnotationMethod getAnnotationMethod() {
 		return method;
 	}
 
 	@Override
-	public Collection<AParent> getParents() {
+	public Collection<Annotation< ? , ? >> getParents() {
 		return parents;
 	}
 
 	@Override
-	public Collection<T> getTypes() {
+	public Collection<Type> getTypes() {
 		return types;
 	}
 
 	@Override
-	public boolean hasType(String type) {
-		return types.contains(factory.getAnnotationType(type));
+	public boolean isType(String type) {
+		return types.contains(typeFactory.getAnnotationType(type));
 	}
 
 	public String getScore() {
@@ -86,6 +83,11 @@ public class SimpleAnnotation<SO extends AnnotationObject< ? >, TA extends Annot
 	@Override
 	public TA getTarget() {
 		return target;
+	}
+
+	@Override
+	public Type getAssociationObjectType() {
+		return typeFactory.getNoteType(OBJECT_TYPE_NAME);
 	}
 
 	// @Override
