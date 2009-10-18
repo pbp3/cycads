@@ -7,30 +7,30 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.Map.Entry;
 
-import org.cycads.entities.factory.EntityFactory;
+import org.cycads.entities.factory.EntityDbxrefFactory;
+import org.cycads.entities.factory.EntityTypeFactory;
 import org.cycads.entities.note.SimpleNoteble;
 
-public class SimpleHasSynonymsNoteble<X extends Dbxref< ? , ? , ? , ? >> extends SimpleNoteble
-		implements HasSynonyms<X>
+public class SimpleHasSynonymsNoteble extends SimpleNoteble implements HasSynonyms
 {
 
-	protected EntityFactory< ? extends X, ? , ? , ? , ? , ? >	factory;
-	private Hashtable<String, Collection<String>>				synonyms	= new Hashtable<String, Collection<String>>();
+	protected EntityDbxrefFactory< ? >				dbxrefFactory;
+	private Hashtable<String, Collection<String>>	synonyms	= new Hashtable<String, Collection<String>>();
 
-	public SimpleHasSynonymsNoteble(EntityFactory< ? extends X, ? , ? , ? , ? , ? > factory) {
-		super(factory);
-		this.factory = factory;
+	public SimpleHasSynonymsNoteble(EntityTypeFactory< ? > typeFactory, EntityDbxrefFactory< ? > factory) {
+		super(typeFactory);
+		this.dbxrefFactory = factory;
 	}
 
 	@Override
-	public X addSynonym(String dbName, String accession) {
+	public Dbxref addSynonym(String dbName, String accession) {
 		Collection<String> accessions = synonyms.get(dbName);
 		if (accessions == null) {
 			accessions = new TreeSet<String>();
 			synonyms.put(dbName, accessions);
 		}
 		if (accessions.add(accession)) {
-			return factory.getDbxref(dbName, accession);
+			return dbxrefFactory.getDbxref(dbName, accession);
 		}
 		else {
 			return null;
@@ -38,7 +38,7 @@ public class SimpleHasSynonymsNoteble<X extends Dbxref< ? , ? , ? , ? >> extends
 	}
 
 	@Override
-	public void addSynonym(X dbxref) {
+	public void addSynonym(Dbxref dbxref) {
 		String dbName = dbxref.getDbName();
 		String accession = dbxref.getAccession();
 		Collection<String> accessions = synonyms.get(dbName);
@@ -50,39 +50,39 @@ public class SimpleHasSynonymsNoteble<X extends Dbxref< ? , ? , ? , ? >> extends
 	}
 
 	@Override
-	public X getSynonym(String dbName, String accession) {
+	public Dbxref getSynonym(String dbName, String accession) {
 		Collection<String> values = synonyms.get(dbName);
 		if (values == null || !values.contains(accession)) {
 			return null;
 		}
-		return factory.getDbxref(dbName, accession);
+		return dbxrefFactory.getDbxref(dbName, accession);
 	}
 
 	@Override
-	public Collection< ? extends X> getSynonyms() {
-		Collection<X> ret = new ArrayList<X>();
+	public Collection<Dbxref> getSynonyms() {
+		Collection<Dbxref> ret = new ArrayList<Dbxref>();
 		Set<Entry<String, Collection<String>>> entries = synonyms.entrySet();
 		for (Entry<String, Collection<String>> entry : entries) {
 			String dbName = entry.getKey();
 			for (String accession : entry.getValue()) {
-				ret.add(factory.getDbxref(dbName, accession));
+				ret.add(dbxrefFactory.getDbxref(dbName, accession));
 			}
 		}
 		return ret;
 	}
 
 	@Override
-	public Collection< ? extends X> getSynonyms(String dbName) {
-		Collection<X> ret = new ArrayList<X>();
+	public Collection<Dbxref> getSynonyms(String dbName) {
+		Collection<Dbxref> ret = new ArrayList<Dbxref>();
 		Collection<String> accessions = synonyms.get(dbName);
 		for (String accession : accessions) {
-			ret.add(factory.getDbxref(dbName, accession));
+			ret.add(dbxrefFactory.getDbxref(dbName, accession));
 		}
 		return ret;
 	}
 
 	@Override
-	public boolean isSynonym(X dbxref) {
+	public boolean isSynonym(Dbxref dbxref) {
 		return isSynonym(dbxref.getDbName(), dbxref.getAccession());
 	}
 

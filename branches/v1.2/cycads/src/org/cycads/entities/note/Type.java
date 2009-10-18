@@ -3,9 +3,7 @@
  */
 package org.cycads.entities.note;
 
-import org.cycads.entities.annotation.AnnotationObjectType;
-
-public interface Type extends Comparable<Type>, AnnotationObjectType
+public interface Type extends Comparable<Type>
 {
 	public String getName();
 

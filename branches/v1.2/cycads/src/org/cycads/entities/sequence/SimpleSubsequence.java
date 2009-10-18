@@ -5,47 +5,29 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-import org.cycads.entities.Function;
-import org.cycads.entities.annotation.Annotation;
-import org.cycads.entities.annotation.AnnotationFilter;
-import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.annotation.SimpleSubseqAnnotation;
-import org.cycads.entities.annotation.SimpleSubseqDbxrefAnnotation;
-import org.cycads.entities.annotation.SimpleSubseqFunctionAnnotation;
-import org.cycads.entities.annotation.SubseqAnnotation;
-import org.cycads.entities.annotation.SubseqDbxrefAnnotation;
-import org.cycads.entities.annotation.SubseqFunctionAnnotation;
-import org.cycads.entities.factory.EntityFactory;
+import org.cycads.entities.factory.EntityDbxrefFactory;
+import org.cycads.entities.factory.EntityTypeFactory;
 import org.cycads.entities.note.Type;
-import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.SimpleHasSynonymsNoteble;
 
-public class SimpleSubsequence<S extends Sequence< ? , ? , ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, T extends Type, M extends AnnotationMethod>
-		extends SimpleHasSynonymsNoteble<X>
-		implements Subsequence<S, SimpleSubseqAnnotation< ? , ? , ? , ? , ? >, Function, X, T, M>
+public class SimpleSubsequence<S extends Sequence< ? , ? >> extends SimpleHasSynonymsNoteble implements Subsequence<S>
 {
 
-	protected EntityFactory< ? extends X, ? extends M, ? extends T, ? , ? , ? >	factory;
+	S	seq;
+	int	start, end;
 
-	S																			seq;
-	int																			start, end;
-
-	public SimpleSubsequence(EntityFactory< ? extends X, ? extends M, ? extends T, ? , ? , ? > factory, S seq,
-			int start, int end) {
-		super(factory);
+	public SimpleSubsequence(S seq, int start, int end, EntityTypeFactory< ? > typeFactory,
+			EntityDbxrefFactory< ? > dbxrefFactory) {
+		super(typeFactory, dbxrefFactory);
 		this.seq = seq;
 		this.start = start;
 		this.end = end;
-		this.factory = factory;
 	}
 
-	Collection<Intron>												introns			= new TreeSet<Intron>();
-	ArrayList<SimpleSubseqDbxrefAnnotation< ? , ? , ? , ? , ? >>	dbxrefAnnots	= new ArrayList<SimpleSubseqDbxrefAnnotation< ? , ? , ? , ? , ? >>();
-	ArrayList<SimpleSubseqFunctionAnnotation< ? , ? , ? , ? , ? >>	functionAnnots	= new ArrayList<SimpleSubseqFunctionAnnotation< ? , ? , ? , ? , ? >>();
-	ArrayList<SimpleSubseqAnnotation< ? , ? , ? , ? , ? >>			allAnnots		= new ArrayList<SimpleSubseqAnnotation< ? , ? , ? , ? , ? >>();
+	Collection<Intron>	introns	= new TreeSet<Intron>();
 
 	@Override
-	public boolean contains(Subsequence< ? , ? , ? , ? , ? , ? > subseq) {
+	public boolean contains(Subsequence< ? > subseq) {
 		if (subseq.getMinPosition() < this.getMinPosition() || subseq.getMaxPosition() > this.getMaxPosition()) {
 			return false;
 		}
@@ -126,146 +108,6 @@ public class SimpleSubsequence<S extends Sequence< ? , ? , ? , ? , ? , ? >, X ex
 		return getEnd() >= getStart();
 	}
 
-	@Override
-	public SubseqDbxrefAnnotation< ? , ? , ? , ? , ? > addDbxrefAnnotation(M method, X dbxref) {
-		SubseqDbxrefAnnotation< ? , ? , ? , ? , ? > annot;
-		Collection< ? extends SubseqDbxrefAnnotation< ? , ? , ? , ? , ? >> annots = getDbxrefAnnotations(method, dbxref);
-		if (annots.isEmpty()) {
-			annot = createDbxrefAnnotation(method, dbxref);
-		}
-		else {
-			annot = annots.iterator().next();
-		}
-		return annot;
-	}
-
-	@Override
-	public SubseqFunctionAnnotation< ? , ? , ? , ? , ? > addFunctionAnnotation(M method, Function function) {
-		SimpleSubseqFunctionAnnotation< ? , ? , ? , ? , ? > annot;
-		Collection< ? extends SimpleSubseqFunctionAnnotation< ? , ? , ? , ? , ? >> annots = getFunctionAnnotations(
-			method, function);
-		if (annots.isEmpty()) {
-			annot = createFunctionAnnotation(method, function);
-		}
-		else {
-			annot = annots.iterator().next();
-		}
-		functionAnnots.add(annot);
-		return annot;
-	}
-
-	@Override
-	public SubseqAnnotation< ? , ? , ? , ? , ? > addAnnotation(T type, M method) {
-		Collection<T> types = new ArrayList<T>();
-		types.add(type);
-		SubseqAnnotation< ? , ? , ? , ? , ? > annot;
-		Collection< ? extends SubseqAnnotation< ? , ? , ? , ? , ? >> annots = getAnnotations(method, types, null);
-		if (annots.isEmpty()) {
-			annot = createAnnotation(type, method);
-		}
-		else {
-			annot = annots.iterator().next();
-		}
-		return annot;
-	}
-
-	@Override
-	public SubseqAnnotation< ? , ? , ? , ? , ? > createAnnotation(T type, M method) {
-		SimpleSubseqAnnotation< ? , ? , ? , ? , ? > annot = new SimpleSubseqAnnotation<Annotation< ? , ? , ? , ? >, SimpleSubsequence<S, X, T, M>, X, T, M>(
-			factory, this, method);
-		allAnnots.add(annot);
-		return annot;
-	}
-
-	@Override
-	public SubseqDbxrefAnnotation< ? , ? , ? , ? , ? > createDbxrefAnnotation(M method, X dbxref) {
-		SimpleSubseqDbxrefAnnotation< ? , ? , ? , ? , ? > annot = new SimpleSubseqDbxrefAnnotation<Annotation< ? , ? , ? , ? >, SimpleSubsequence<S, X, T, M>, X, T, M>(
-			factory, this, dbxref, method);
-		dbxrefAnnots.add(annot);
-		allAnnots.add(annot);
-		return annot;
-	}
-
-	@Override
-	public SimpleSubseqFunctionAnnotation< ? , ? , ? , ? , ? > createFunctionAnnotation(M method, Function function) {
-		SimpleSubseqFunctionAnnotation< ? , ? , ? , ? , ? > annot = new SimpleSubseqFunctionAnnotation<Annotation< ? , ? , ? , ? >, SimpleSubsequence<S, X, T, M>, X, T, M>(
-			factory, function, this, method);
-		functionAnnots.add(annot);
-		allAnnots.add(annot);
-		return annot;
-	}
-
-	@Override
-	public Collection< ? extends SimpleSubseqFunctionAnnotation< ? , ? , ? , ? , ? >> getFunctionAnnotations(M method,
-			Function function) {
-		Collection<SimpleSubseqFunctionAnnotation< ? , ? , ? , ? , ? >> ret = new ArrayList<SimpleSubseqFunctionAnnotation< ? , ? , ? , ? , ? >>();
-		for (SimpleSubseqFunctionAnnotation< ? , ? , ? , ? , ? > annot : functionAnnots) {
-			if ((function == null || function.equals(annot.getFunction()))
-				&& (method == null || method.equals(annot.getAnnotationMethod()))) {
-				ret.add(annot);
-			}
-		}
-		return ret;
-	}
-
-	@Override
-	public Collection< ? extends SimpleSubseqAnnotation< ? , ? , ? , ? , ? >> getAnnotations(M method,
-			Collection<T> types, X synonym) {
-		Collection<SimpleSubseqDbxrefAnnotation< ? , ? , ? , ? , ? >> ret = new ArrayList<SimpleSubseqDbxrefAnnotation< ? , ? , ? , ? , ? >>();
-		for (SimpleSubseqDbxrefAnnotation< ? , ? , ? , ? , ? > annot : dbxrefAnnots) {
-			if ((synonym == null || annot.isSynonym(synonym.getDbName(), synonym.getAccession()))
-				&& (method == null || method.equals(annot.getAnnotationMethod()))) {
-				boolean isType = true;
-				if (types != null && !types.isEmpty()) {
-					for (T type : types) {
-						isType = isType && annot.hasType(type.getName());
-					}
-				}
-				if (isType) {
-					ret.add(annot);
-				}
-			}
-		}
-		return ret;
-	}
-
-	@Override
-	public Collection< ? extends SimpleSubseqAnnotation< ? , ? , ? , ? , ? >> getAnnotations(
-			AnnotationFilter<SimpleSubseqAnnotation< ? , ? , ? , ? , ? >> filter) {
-		Collection<SimpleSubseqAnnotation< ? , ? , ? , ? , ? >> ret = new ArrayList<SimpleSubseqAnnotation< ? , ? , ? , ? , ? >>();
-		for (SimpleSubseqAnnotation< ? , ? , ? , ? , ? > annot : allAnnots) {
-			if (filter.accept(annot)) {
-				ret.add(annot);
-			}
-		}
-		return ret;
-	}
-
-	@Override
-	public Collection< ? extends SimpleSubseqDbxrefAnnotation< ? , ? , ? , ? , ? >> getDbxrefAnnotations(M method,
-			X dbxref) {
-		Collection<SimpleSubseqDbxrefAnnotation< ? , ? , ? , ? , ? >> ret = new ArrayList<SimpleSubseqDbxrefAnnotation< ? , ? , ? , ? , ? >>();
-		for (SimpleSubseqDbxrefAnnotation< ? , ? , ? , ? , ? > annot : dbxrefAnnots) {
-			if ((dbxref == null || dbxref.equals(annot.getDbxref()))
-				&& (method == null || method.equals(annot.getAnnotationMethod()))) {
-				ret.add(annot);
-			}
-		}
-		return ret;
-	}
-
-	@Override
-	public Collection< ? extends SimpleSubseqDbxrefAnnotation< ? , ? , ? , ? , ? >> getDbxrefAnnotations(
-			String dbxrefDbname) {
-		Collection<SimpleSubseqDbxrefAnnotation< ? , ? , ? , ? , ? >> ret = new ArrayList<SimpleSubseqDbxrefAnnotation< ? , ? , ? , ? , ? >>();
-		for (SimpleSubseqDbxrefAnnotation< ? , ? , ? , ? , ? > annot : dbxrefAnnots) {
-			if ((dbxrefDbname == null || dbxrefDbname.equals(annot.getDbxref().getDbName()))) {
-				ret.add(annot);
-			}
-		}
-		return ret;
-	}
-
 	public boolean addIntron(Intron intron) {
 		return introns.add(intron);
 	}
@@ -303,6 +145,11 @@ public class SimpleSubsequence<S extends Sequence< ? , ? , ? , ? , ? , ? >, X ex
 			addIntron(intron);
 		}
 		return true;
+	}
+
+	@Override
+	public Type getAssociationObjectType() {
+		return typeFactory.getNoteType(OBJECT_TYPE_NAME);
 	}
 
 }

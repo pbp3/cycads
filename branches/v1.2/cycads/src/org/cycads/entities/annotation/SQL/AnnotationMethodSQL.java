@@ -8,15 +8,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Hashtable;
 
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.note.SQL.NotebleSQL;
 
 public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod
 {
-	private static Hashtable<String, AnnotationMethodSQL>	hashByString;
+	private static Hashtable<String, AnnotationMethodSQL>	hashByString	= new Hastable<String, AnnotationMethodSQL>();
 
-	public final static int									INVALID_ID	= -1;
+	public final static int									INVALID_ID		= -1;
 	//	public final static int		WEIGHT_DEAFULT	= 1;
 
 	private int												id;

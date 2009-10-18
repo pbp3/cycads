@@ -7,17 +7,16 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.Map.Entry;
 
-import org.cycads.entities.factory.EntityFactory;
+import org.cycads.entities.factory.EntityTypeFactory;
 
 public class SimpleNoteble implements Noteble
 {
-	protected EntityFactory< ? , ? , ? , ? , ? , ? >	factory;
+	protected EntityTypeFactory< ? >				typeFactory;
 
-	private Hashtable<String, Collection<String>>		notes	= new Hashtable<String, Collection<String>>();
+	private Hashtable<String, Collection<String>>	notes	= new Hashtable<String, Collection<String>>();
 
-	public SimpleNoteble(EntityFactory< ? , ? , ? , ? , ? , ? > factory) {
-		super();
-		this.factory = factory;
+	public SimpleNoteble(EntityTypeFactory< ? > factory) {
+		this.typeFactory = factory;
 	}
 
 	@Override
@@ -42,7 +41,7 @@ public class SimpleNoteble implements Noteble
 
 	@Override
 	public Type getNoteType(String noteType) {
-		return factory.getNoteType(noteType);
+		return typeFactory.getNoteType(noteType);
 	}
 
 	@Override

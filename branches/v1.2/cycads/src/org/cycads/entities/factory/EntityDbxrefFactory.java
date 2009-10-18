@@ -7,12 +7,12 @@ import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.EC;
 import org.cycads.entities.synonym.KO;
 
-public interface EntityDbxrefFactory<X extends Dbxref< ? , ? , ? , ? >>
+public interface EntityDbxrefFactory<X extends Dbxref>
 {
 	public X getDbxref(String dbName, String accession);
 
-	public KO< ? , ? , ? , ? > getKO(String ko);
+	public KO getKO(String ko);
 
-	public EC< ? , ? , ? , ? > getEC(String ecNumber);
+	public EC getEC(String ecNumber);
 
 }

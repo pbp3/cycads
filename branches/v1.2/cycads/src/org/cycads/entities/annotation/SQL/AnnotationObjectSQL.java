@@ -3,9 +3,9 @@
  */
 package org.cycads.entities.annotation.SQL;
 
-import org.cycads.entities.annotation.AnnotationObject;
+import org.cycads.entities.annotation.AssociationObject;
 
-public interface AnnotationObjectSQL extends AnnotationObject
+public interface AnnotationObjectSQL extends AssociationObject
 {
 	public int getId();
 

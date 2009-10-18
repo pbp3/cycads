@@ -5,33 +5,18 @@ package org.cycads.entities.annotation;
 
 import java.util.Collection;
 
-import org.cycads.entities.note.Noteble;
-import org.cycads.entities.note.Type;
-import org.cycads.entities.synonym.Dbxref;
-import org.cycads.entities.synonym.HasSynonyms;
-
-public interface Annotation<Source, Target, AParent extends Annotation< ? , ? , ? , ? , ? >, X extends Dbxref< ? , ? , ? , ? >, M extends AnnotationMethod>
-		extends Noteble, HasSynonyms<X>, AnnotationObject
+public interface Annotation<SO, TA> extends Association<SO, TA>, AssociationObject
 {
-	public M getAnnotationMethod();
+	public static final String	OBJECT_TYPE_NAME	= "Annotation";
 
-	public Collection<Type> getTypes();
+	public AnnotationMethod getAnnotationMethod();
 
-	public boolean hasType(String type);
+	public Collection<Annotation< ? , ? >> getParents();
 
-	public Type addType(String type);
-
-	public Type addType(Type type);
-
-	public Collection<AParent> getParents();
-
-	public void addParent(AParent parent);
+	public void addParent(Annotation< ? , ? > parent);
 
 	public void setScore(String score);
 
 	public String getScore();
 
-	public Source getSource();
-
-	public Target getTarget();
 }
