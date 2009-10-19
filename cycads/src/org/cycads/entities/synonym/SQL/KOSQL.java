@@ -8,11 +8,10 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
-import org.cycads.entities.annotation.SQL.DbxrefDbxrefAnnotationSQL;
-import org.cycads.entities.note.SQL.TypeSQL;
+import org.cycads.entities.annotation.SQL.AnnotationSQL;
 import org.cycads.entities.synonym.KO;
 
-public class KOSQL extends DbxrefSQL implements KO<DbxrefDbxrefAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
+public class KOSQL extends DbxrefSQL implements KO
 {
 
 	public KOSQL(int id, Connection con) throws SQLException {
@@ -47,14 +46,13 @@ public class KOSQL extends DbxrefSQL implements KO<DbxrefDbxrefAnnotationSQL, Db
 		setNoteValue("Name", name);
 	}
 
-	@Override
-	public DbxrefDbxrefAnnotationSQL addEcAnnotation(AnnotationMethodSQL method, String ecNumber) {
+	public AnnotationSQL< ? extends KOSQL, ? extends ECSQL> addEcAnnotation(AnnotationMethodSQL method, String ecNumber) {
 		try {
 			ECSQL ec = new ECSQL(ecNumber, getConnection());
-			Collection< ? extends DbxrefDbxrefAnnotationSQL> annots = this.getDbxrefAnnotations(method, ec);
+			Collection< ? extends AnnotationSQL< ? extends KOSQL, ? extends ECSQL>> annots = AnnotationSQL.getAnnotations(
+				this, ec, null, null, method, getConnection());
 			if (annots.isEmpty()) {
-				return new DbxrefDbxrefAnnotationSQL(DbxrefDbxrefAnnotationSQL.createDbxrefDbxrefAnnotationSQL(method,
-					this, ec, getConnection()), getConnection());
+				return AnnotationSQL.createAnnotationSQL(this, ec, null, method, null, getConnection());
 			}
 			else {
 				return annots.iterator().next();

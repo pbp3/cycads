@@ -211,6 +211,10 @@ public class EntityFactorySQL
 		}
 	}
 
+	public static EntitySQL createObject(int id, int typeId, Connection con) throws SQLException {
+		return createObject(id, TypeSQL.getType(typeId, con), con);
+	}
+
 	public static EntitySQL createObject(int id, TypeSQL type, Connection con) throws SQLException {
 		if (type.equals(AnnotationSQL.getObjectType(con))) {
 			return new AnnotationSQL<EntitySQL, EntitySQL>(id, con);
