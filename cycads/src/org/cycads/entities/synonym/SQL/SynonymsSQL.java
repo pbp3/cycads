@@ -4,31 +4,40 @@
 package org.cycads.entities.synonym.SQL;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class SynonymsSQL {
-	private String		tableName, idFieldName;
-	private int			idSynonymSource;
+import org.cycads.entities.note.Type;
+import org.cycads.entities.note.SQL.TypeSQL;
+
+public class SynonymsSQL
+{
+	private int			sourceId;
+	private int			sourceTypeId;
 	private Connection	con;
 
-	public SynonymsSQL(int idSynonymSource, String tableName, String idFieldName, Connection con) {
-		this.idSynonymSource = idSynonymSource;
-		this.tableName = tableName;
-		this.idFieldName = idFieldName;
+	public SynonymsSQL(int sourceId, Type sourceType, Connection con) {
+		this.sourceId = sourceId;
 		this.con = con;
+		if (sourceType instanceof TypeSQL) {
+			this.sourceTypeId = ((TypeSQL) sourceType).getId();
+		}
+		else {
+			this.sourceTypeId = TypeSQL.getType(sourceType.getName(), con).getId();
+		}
 	}
 
 	public Collection<DbxrefSQL> getSynonyms() throws SQLException {
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT dbxref_id from " + tableName + " where " + idFieldName + "="
-				+ idSynonymSource);
+			stmt = con.prepareStatement("SELECT dbxref_id from Synonym where source_id=? and source_type_id=?");
+			stmt.setInt(1, sourceId);
+			stmt.setInt(2, sourceTypeId);
+			rs = stmt.executeQuery();
 			ArrayList<DbxrefSQL> dbxrefs = new ArrayList<DbxrefSQL>();
 			while (rs.next()) {
 				dbxrefs.add(new DbxrefSQL(rs.getInt("dbxref_id"), con));
@@ -56,12 +65,15 @@ public class SynonymsSQL {
 	}
 
 	public Collection<DbxrefSQL> getSynonyms(String dbName) throws SQLException {
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT X.dbxref_id from " + tableName + " S ,dbxref X where S." + idFieldName + "="
-				+ idSynonymSource + " AND S.dbxref_id=X.dbxref_id AND X.dbname='" + dbName + "'");
+			stmt = con.prepareStatement("SELECT X.dbxref_id from Synonym S ,dbxref X where S.source_id=? and S.source_type_id=?"
+				+ " AND S.dbxref_id=X.dbxref_id AND X.dbname=?");
+			stmt.setInt(1, sourceId);
+			stmt.setInt(2, sourceTypeId);
+			stmt.setString(3, dbName);
+			rs = stmt.executeQuery();
 			ArrayList<DbxrefSQL> dbxrefs = new ArrayList<DbxrefSQL>();
 			while (rs.next()) {
 				dbxrefs.add(new DbxrefSQL(rs.getInt("dbxref_id"), con));
@@ -89,13 +101,16 @@ public class SynonymsSQL {
 	}
 
 	public DbxrefSQL getSynonym(String dbName, String accession) throws SQLException {
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT X.dbxref_id from " + tableName + " S ,dbxref X where S." + idFieldName + "="
-				+ idSynonymSource + " AND S.dbxref_id=X.dbxref_id AND X.dbname='" + dbName + "' AND X.accession='"
-				+ accession + "'");
+			stmt = con.prepareStatement("SELECT X.dbxref_id from Synonym S ,dbxref X where S.source_id=? and S.source_type_id=?"
+				+ " AND S.dbxref_id=X.dbxref_id AND X.dbname=? AND X.accession=?");
+			stmt.setInt(1, sourceId);
+			stmt.setInt(2, sourceTypeId);
+			stmt.setString(3, dbName);
+			stmt.setString(4, accession);
+			rs = stmt.executeQuery();
 			DbxrefSQL dbxref = null;
 			if (rs.next()) {
 				dbxref = new DbxrefSQL(rs.getInt("dbxref_id"), con);
@@ -127,11 +142,13 @@ public class SynonymsSQL {
 			return null;
 		}
 		DbxrefSQL dbxref = new DbxrefSQL(dbName, accession, con);
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		try {
-			stmt = con.createStatement();
-			stmt.executeUpdate("INSERT INTO " + tableName + " (" + idFieldName + ", dbxref_id) VALUES("
-				+ idSynonymSource + "," + dbxref.getId() + ")");
+			stmt = con.prepareStatement("INSERT INTO Synonym (source_id, source_type_id, dbxref_id) VALUES(?,?,?)");
+			stmt.setInt(1, sourceId);
+			stmt.setInt(2, sourceTypeId);
+			stmt.setInt(3, dbxref.getId());
+			stmt.executeUpdate();
 			return dbxref;
 		}
 		finally {
@@ -148,14 +165,13 @@ public class SynonymsSQL {
 
 	public void addSynonym(DbxrefSQL dbxref) throws SQLException {
 		if (!isSynonym(dbxref)) {
-			// throw new SQLException("Synonym already exists: (" + idSynonymSource + "," + dbxref.getDbName() + ","
-			// + dbxref.getAccession() + ")");
-			// }
-			Statement stmt = null;
+			PreparedStatement stmt = null;
 			try {
-				stmt = con.createStatement();
-				stmt.executeUpdate("INSERT INTO " + tableName + " (" + idFieldName + ", dbxref_id) VALUES("
-					+ idSynonymSource + "," + dbxref.getId() + ")");
+				stmt = con.prepareStatement("INSERT INTO Synonym (source_id, source_type_id, dbxref_id) VALUES(?,?,?)");
+				stmt.setInt(1, sourceId);
+				stmt.setInt(2, sourceTypeId);
+				stmt.setInt(3, dbxref.getId());
+				stmt.executeUpdate();
 			}
 			finally {
 				if (stmt != null) {
@@ -171,14 +187,15 @@ public class SynonymsSQL {
 	}
 
 	public boolean isSynonym(DbxrefSQL dbxref) throws SQLException {
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT * from " + tableName + " where " + idFieldName + "=" + idSynonymSource
-				+ " AND dbxref_id=" + dbxref.getId());
-			boolean ret = (rs.next());
-			return ret;
+			stmt = con.prepareStatement("SELECT * from Synonym where source_id=? AND source_type_id=? AND dbxref_id=?");
+			stmt.setInt(1, sourceId);
+			stmt.setInt(2, sourceTypeId);
+			stmt.setInt(3, dbxref.getId());
+			rs = stmt.executeQuery();
+			return rs.next();
 		}
 		finally {
 			if (rs != null) {

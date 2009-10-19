@@ -148,7 +148,7 @@ public class SimpleSubsequence<S extends Sequence< ? , ? >> extends SimpleHasSyn
 	}
 
 	@Override
-	public Type getAssociationObjectType() {
+	public Type getEntityType() {
 		return typeFactory.getNoteType(OBJECT_TYPE_NAME);
 	}
 

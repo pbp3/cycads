@@ -9,4 +9,6 @@ public interface Type extends Comparable<Type>
 
 	public String getDescription();
 
+	public void setDescription(String description);
+
 }

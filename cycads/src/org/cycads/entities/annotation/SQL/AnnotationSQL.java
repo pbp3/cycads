@@ -7,53 +7,33 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cycads.entities.annotation.Annotation;
-import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.note.SQL.TypeSQL;
-import org.cycads.entities.synonym.Dbxref;
-import org.cycads.entities.synonym.SQL.DbxrefSQL;
-import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
-import org.cycads.general.ParametersDefault;
 
-public class AnnotationSQL<SO extends AnnotationObjectSQL, TA extends AnnotationObjectSQL>
-		extends HasSynonymsNotebleSQL
-		implements Annotation<SO, TA, AnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>, AnnotationObjectSQL
+public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends AssociationSQL<SO, TA>
+		implements Annotation<SO, TA>, EntitySQL
 {
-
-	public static String				ScoreNoteTypeName	= ParametersDefault.getScoreAnnotationNoteTypeName();
-
-	private int							id;
+	public final static String			PARENT_TYPE_NAME	= "Parent";
 
 	private String						score;
 
-	/* The types are not synchonized */
-	private Collection<TypeSQL>			types;
 	private AnnotationMethodSQL			method;
-	private SO							source;
-	private TA							target;
 	private Collection<AnnotationSQL>	parents;
 
-	private Connection					con;
-
 	public AnnotationSQL(int id, Connection con) throws SQLException {
-		this.id = id;
-		this.con = con;
+		super(id, con);
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT source_id, target_id, source_target_type_id, annotation_method_id, score from Annotation WHERE annotation_id=?");
+			stmt = con.prepareStatement("SELECT annotation_method_id, score from Annotation WHERE annotation_id=?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
-				method = new AnnotationMethodSQL(rs.getInt("annotation_method_id"), con);
+				method = AnnotationMethodSQL.getMethod(rs.getInt("annotation_method_id"), con);
 				score = rs.getString("score");
-				SourceTargetTypeSQL sourceTargetType = new SourceTargetTypeSQL(rs.getInt("source_target_type_id"), con);
-				source = (SO) EntityFactorySQL.createObject(rs.getInt("source_id"), sourceTargetType.sourceType, con);
-				target = (TA) EntityFactorySQL.createObject(rs.getInt("target_id"), sourceTargetType.targetType, con);
 			}
 			else {
 				throw new SQLException("Annotation does not exist:" + id);
@@ -79,26 +59,19 @@ public class AnnotationSQL<SO extends AnnotationObjectSQL, TA extends Annotation
 		}
 	}
 
-	public static <SO extends AnnotationObjectSQL, TA extends AnnotationObjectSQL> AnnotationSQL<SO, TA> createAnnotationSQL(
-			SO source, TA target, AnnotationMethodSQL method, String score, Connection con) throws SQLException {
+	public static <SO extends EntitySQL, TA extends EntitySQL> AnnotationSQL<SO, TA> createAnnotationSQL(SO source,
+			TA target, AnnotationMethodSQL method, String score, Connection con) throws SQLException {
 
-		SourceTargetTypeSQL sourceTargetType = new SourceTargetTypeSQL(source.getAssociationObjectType(),
-			target.getAssociationObjectType(), con);
-
+		AssociationSQL<SO, TA> association = AssociationSQL.createAssociationSQL(source, target, con);
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("INSERT INTO Annotation (annotation_method_id) VALUES (?)",
-				Statement.RETURN_GENERATED_KEYS);
-			stmt.setInt(1, method.getId());
+			stmt = con.prepareStatement("INSERT INTO Annotation (annotation_id, annotation_method_id, score) VALUES (?)");
+			stmt.setInt(1, association.getId());
+			stmt.setInt(2, method.getId());
+			stmt.setString(3, score);
 			stmt.executeUpdate();
-			rs = stmt.getGeneratedKeys();
-			if (rs.next()) {
-				int id = rs.getInt(1);
-			}
-			else {
-				throw new SQLException("Annotation insert didn't return the annotation id.");
-			}
+			return new AnnotationSQL<SO, TA>(association.getId(), con);
 		}
 		finally {
 			if (rs != null) {
@@ -122,98 +95,26 @@ public class AnnotationSQL<SO extends AnnotationObjectSQL, TA extends Annotation
 
 	@Override
 	public AnnotationMethodSQL getAnnotationMethod() {
-		if (method == null) {
-			try {
-				method = new AnnotationMethodSQL(getMethodId(), getConnection());
-			}
-			catch (SQLException e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
-			}
-		}
 		return method;
 	}
 
 	@Override
-	public Collection<TypeSQL> getTypes() {
-		if (types == null) {
-			PreparedStatement stmt = null;
-			ResultSet rs = null;
-			types = new ArrayList<TypeSQL>();
-			try {
-				stmt = con.prepareStatement("SELECT type_id from Annotation_type WHERE annotation_id=?");
-				stmt.setInt(1, getId());
-				rs = stmt.executeQuery();
-				while (rs.next()) {
-					types.add(new TypeSQL(rs.getInt("type_id"), getConnection()));
-				}
-			}
-			catch (SQLException e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
-			}
-			finally {
-				if (rs != null) {
-					try {
-						rs.close();
-					}
-					catch (SQLException ex) {
-						// ignore
-					}
-				}
-				if (stmt != null) {
-					try {
-						stmt.close();
-					}
-					catch (SQLException ex) {
-						// ignore
-					}
-				}
-			}
-		}
-		return types;
+	public String getScore() {
+		return score;
 	}
 
 	@Override
-	public boolean isType(String typeStr) {
-		for (TypeSQL type : getTypes()) {
-			if (type.getName().equals(typeStr)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	public TypeSQL addType(String typeStr) {
-		try {
-			TypeSQL type = new TypeSQL(typeStr, null, getConnection());
-			return addType(type);
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-	}
-
-	@Override
-	public TypeSQL addType(TypeSQL type) {
+	public void setScore(String score) {
+		this.score = score;
 		PreparedStatement stmt = null;
 		try {
-			if (!isType(type.getName())) {
-				stmt = con.prepareStatement("INSERT INTO Annotation_type (annotation_id, type_id) VALUES (?,?)");
-				stmt.setInt(1, getId());
-				stmt.setInt(2, type.getId());
-				stmt.executeUpdate();
-			}
-			if (types != null) {
-				types.add(type);
-			}
-			return type;
+			stmt = getConnection().prepareStatement("UPDATE Annotation SET score=? WHERE annotation_id=?");
+			stmt.setString(1, score);
+			stmt.setInt(2, getId());
+			stmt.executeUpdate();
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
+			throw new RuntimeException("Can't set score value of the Annotation:" + getId());
 		}
 		finally {
 			if (stmt != null) {
@@ -228,61 +129,19 @@ public class AnnotationSQL<SO extends AnnotationObjectSQL, TA extends Annotation
 	}
 
 	@Override
-	public int getId() {
-		return id;
-	}
-
-	public int getMethodId() {
-		return methodId;
-	}
-
-	@Override
-	public String getSynonymTableName() {
-		return "Annotation_synonym";
-	}
-
-	@Override
-	public Connection getConnection() {
-		return con;
-	}
-
-	@Override
-	public String getIdFieldName() {
-		return "annotation_id";
-	}
-
-	@Override
-	public String getNoteTableName() {
-		return "Annotation_note";
-	}
-
-	@Override
-	public void addParent(AnnotationSQL parent) {
-		if (!isParent(parent)) {
-			PreparedStatement stmt = null;
+	public void addParent(Annotation parent) {
+		if (!(parent instanceof AnnotationSQL)) {
+			throw new RuntimeException("Parent is not a SQL entity.");
+		}
+		AnnotationSQL parentSQL = (AnnotationSQL) parent;
+		if (!isParent(parentSQL)) {
 			try {
-				stmt = con.prepareStatement("INSERT INTO annotation_parent (annotation_id, annotation_parent_id) VALUES (?,?)");
-				stmt.setInt(1, getId());
-				stmt.setInt(2, parent.getId());
-				stmt.executeUpdate();
-				if (parents != null) {
-					parents.add(parent);
-				}
+				AssociationSQL.createAssociationSQL(this, parentSQL, getConnection());
 			}
 			catch (SQLException e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
+				throw new RuntimeException("Can not create the parent association.", e);
 			}
-			finally {
-				if (stmt != null) {
-					try {
-						stmt.close();
-					}
-					catch (SQLException ex) {
-						// ignore
-					}
-				}
-			}
+			parents.add(parentSQL);
 		}
 	}
 
@@ -335,53 +194,61 @@ public class AnnotationSQL<SO extends AnnotationObjectSQL, TA extends Annotation
 		return false;
 	}
 
-	@Override
-	public String getScore() {
-		return getNoteValue(ScoreNoteTypeName);
-	}
+	//	public static Collection<AnnotationSQL> getAnnotations(Dbxref dbxref, Connection con) throws SQLException {
+	//		int dbxrefId;
+	//		PreparedStatement stmt = null;
+	//		ResultSet rs = null;
+	//		try {
+	//			if (dbxref instanceof DbxrefSQL) {
+	//				dbxrefId = ((DbxrefSQL) dbxref).getId();
+	//			}
+	//			else {
+	//				dbxrefId = DbxrefSQL.getId(dbxref.getDbName(), dbxref.getAccession(), con);
+	//			}
+	//			stmt = con.prepareStatement("SELECT annotation_id from Annotation_synonym WHERE dbxref_id=?");
+	//			stmt.setInt(1, dbxrefId);
+	//			rs = stmt.executeQuery();
+	//			ArrayList<AnnotationSQL> ret = new ArrayList<AnnotationSQL>();
+	//			while (rs.next()) {
+	//				ret.add(new AnnotationSQL(rs.getInt("annotation_id"), con));
+	//			}
+	//			return ret;
+	//		}
+	//		finally {
+	//			if (rs != null) {
+	//				try {
+	//					rs.close();
+	//				}
+	//				catch (SQLException ex) {
+	//					// ignore
+	//				}
+	//			}
+	//			if (stmt != null) {
+	//				try {
+	//					stmt.close();
+	//				}
+	//				catch (SQLException ex) {
+	//					// ignore
+	//				}
+	//			}
+	//		}
+	//	}
 
 	@Override
-	public void setScore(String score) {
-		setNoteValue(ScoreNoteTypeName, score);
+	public TypeSQL getEntityType() {
+		return getObjectType(getConnection());
 	}
 
-	public static Collection<AnnotationSQL> getAnnotations(Dbxref dbxref, Connection con) throws SQLException {
-		int dbxrefId;
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		try {
-			if (dbxref instanceof DbxrefSQL) {
-				dbxrefId = ((DbxrefSQL) dbxref).getId();
-			}
-			else {
-				dbxrefId = DbxrefSQL.getId(dbxref.getDbName(), dbxref.getAccession(), con);
-			}
-			stmt = con.prepareStatement("SELECT annotation_id from Annotation_synonym WHERE dbxref_id=?");
-			stmt.setInt(1, dbxrefId);
-			rs = stmt.executeQuery();
-			ArrayList<AnnotationSQL> ret = new ArrayList<AnnotationSQL>();
-			while (rs.next()) {
-				ret.add(new AnnotationSQL(rs.getInt("annotation_id"), con));
-			}
-			return ret;
-		}
-		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-			if (stmt != null) {
-				try {
-					stmt.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-		}
+	public static TypeSQL getObjectType(Connection con) {
+		return TypeSQL.getType(OBJECT_TYPE_NAME, con);
 	}
+
+	public TypeSQL getParentType() {
+		return getParentType(getConnection());
+	}
+
+	public static TypeSQL getParentType(Connection con) {
+		return TypeSQL.getType(PARENT_TYPE_NAME, con);
+	}
+
 }

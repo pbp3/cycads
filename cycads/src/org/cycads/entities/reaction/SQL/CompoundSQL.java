@@ -7,13 +7,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import org.cycads.entities.annotation.SQL.AnnotationObjectSQL;
+import org.cycads.entities.annotation.SQL.EntitySQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.reaction.Compound;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
-public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound<DbxrefSQL, TypeSQL>, AnnotationObjectSQL
+public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound, EntitySQL
 {
 	private Connection	con;
 	private int			id;
@@ -157,11 +157,6 @@ public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound<Dbxre
 	}
 
 	@Override
-	public String getSynonymTableName() {
-		return "compound_synonym";
-	}
-
-	@Override
 	public Connection getConnection() {
 		return con;
 	}
@@ -169,16 +164,6 @@ public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound<Dbxre
 	@Override
 	public int getId() {
 		return id;
-	}
-
-	@Override
-	public String getIdFieldName() {
-		return "compound_id";
-	}
-
-	@Override
-	public String getNoteTableName() {
-		return "compound_note";
 	}
 
 	@Override
@@ -196,12 +181,12 @@ public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound<Dbxre
 	}
 
 	@Override
-	public TypeSQL getAssociationObjectType() {
-		return getAnnotationObjectType(con);
+	public TypeSQL getEntityType() {
+		return getObjectType(con);
 	}
 
-	public static TypeSQL getAnnotationObjectType(Connection con) {
-		return TypeSQL.getType(TypeSQL.COMPOUND, con);
+	public static TypeSQL getObjectType(Connection con) {
+		return TypeSQL.getType(OBJECT_TYPE_NAME, con);
 	}
 
 }

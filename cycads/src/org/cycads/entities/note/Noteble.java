@@ -5,7 +5,9 @@ package org.cycads.entities.note;
 
 import java.util.Collection;
 
-public interface Noteble
+import org.cycads.entities.EntityObject;
+
+public interface Noteble extends EntityObject
 {
 	public Collection<Note> getNotes();
 

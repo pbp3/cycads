@@ -5,11 +5,13 @@ package org.cycads.entities.synonym;
 
 import java.util.Collection;
 
-public interface HasSynonyms
-{
-	public Collection<Dbxref> getSynonyms();
+import org.cycads.entities.EntityObject;
 
-	public Collection<Dbxref> getSynonyms(String dbName);
+public interface HasSynonyms extends EntityObject
+{
+	public Collection< ? extends Dbxref> getSynonyms();
+
+	public Collection< ? extends Dbxref> getSynonyms(String dbName);
 
 	public Dbxref getSynonym(String dbName, String accession);
 

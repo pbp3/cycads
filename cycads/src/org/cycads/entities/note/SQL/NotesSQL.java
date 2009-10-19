@@ -16,27 +16,32 @@ import org.cycads.entities.note.Type;
 
 public class NotesSQL
 {
-	private String		tableName, idFieldName;
-	private int			idNoteSource;
+	private int			sourceId;
+	private int			sourceTypeId;
 	private Connection	con;
 
-	public NotesSQL(int idNoteSource, String tableName, String idFieldName, Connection con) {
-		this.idNoteSource = idNoteSource;
-		this.tableName = tableName;
-		this.idFieldName = idFieldName;
+	public NotesSQL(int sourceId, Type sourceType, Connection con) {
+		this.sourceId = sourceId;
 		this.con = con;
+		if (sourceType instanceof TypeSQL) {
+			this.sourceTypeId = ((TypeSQL) sourceType).getId();
+		}
+		else {
+			this.sourceTypeId = TypeSQL.getType(sourceType.getName(), con).getId();
+		}
 	}
 
 	public Collection<Note> getNotes() throws SQLException {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT type_id, value from " + tableName + " where " + idFieldName + "=?");
-			stmt.setInt(1, idNoteSource);
+			stmt = con.prepareStatement("SELECT note_type_id, value from Note where source_id=? and source_type_id=?");
+			stmt.setInt(1, sourceId);
+			stmt.setInt(2, sourceTypeId);
 			rs = stmt.executeQuery();
 			ArrayList<Note> notes = new ArrayList<Note>();
 			while (rs.next()) {
-				notes.add(new SimpleNote(getNoteType(rs.getInt("type_id")), rs.getString("value")));
+				notes.add(new SimpleNote(getNoteType(rs.getInt("note_type_id")), rs.getString("value")));
 			}
 			return notes;
 		}
@@ -60,17 +65,18 @@ public class NotesSQL
 		}
 	}
 
-	public Collection<Note> getNotes(int idNoteType) throws SQLException {
+	public Collection<Note> getNotes(int noteTypeId) throws SQLException {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT value from " + tableName + " where " + idFieldName + "=? and type_id=?");
-			stmt.setInt(1, idNoteSource);
-			stmt.setInt(2, idNoteType);
+			stmt = con.prepareStatement("SELECT value from Note where source_id=? and source_type_id=? and note_type_id=?");
+			stmt.setInt(1, sourceId);
+			stmt.setInt(2, sourceTypeId);
+			stmt.setInt(3, noteTypeId);
 			rs = stmt.executeQuery();
 			ArrayList<Note> notes = new ArrayList<Note>();
 			while (rs.next()) {
-				notes.add(new SimpleNote(getNoteType(idNoteType), rs.getString("value")));
+				notes.add(new SimpleNote(getNoteType(noteTypeId), rs.getString("value")));
 			}
 			return notes;
 		}
@@ -94,13 +100,14 @@ public class NotesSQL
 		}
 	}
 
-	public Collection<String> getNotesValues(int idNoteType) throws SQLException {
+	public Collection<String> getNotesValues(int noteTypeId) throws SQLException {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT value from " + tableName + " where " + idFieldName + "=? and type_id=?");
-			stmt.setInt(1, idNoteSource);
-			stmt.setInt(2, idNoteType);
+			stmt = con.prepareStatement("SELECT value from Note where source_id=? and source_type_id=? and note_type_id=?");
+			stmt.setInt(1, sourceId);
+			stmt.setInt(2, sourceTypeId);
+			stmt.setInt(3, noteTypeId);
 			rs = stmt.executeQuery();
 			ArrayList<String> values = new ArrayList<String>();
 			while (rs.next()) {
@@ -128,13 +135,14 @@ public class NotesSQL
 		}
 	}
 
-	public String getNoteValue(int idNoteType) throws SQLException {
+	public String getNoteValue(int noteTypeId) throws SQLException {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT value from " + tableName + " where " + idFieldName + "=? and type_id=?");
-			stmt.setInt(1, idNoteSource);
-			stmt.setInt(2, idNoteType);
+			stmt = con.prepareStatement("SELECT value from Note where source_id=? and source_type_id=? and note_type_id=?");
+			stmt.setInt(1, sourceId);
+			stmt.setInt(2, sourceTypeId);
+			stmt.setInt(3, noteTypeId);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
 				return rs.getString("value");
@@ -161,18 +169,18 @@ public class NotesSQL
 		}
 	}
 
-	public void setNoteValue(int idNoteType, String value) throws SQLException {
-		if (getNoteValue(idNoteType) == null) {
-			addNote(idNoteType, value);
+	public void setNoteValue(int noteTypeId, String value) throws SQLException {
+		if (getNoteValue(noteTypeId) == null) {
+			addNote(noteTypeId, value);
 		}
 		else {
 			PreparedStatement stmt = null;
 			try {
-				stmt = con.prepareStatement("UPDATE " + tableName + " SET value=? WHERE " + idFieldName
-					+ "=? and type_id=?");
+				stmt = con.prepareStatement("UPDATE Note SET value=? WHERE source_id=? and source_type_id=? and note_type_id=?");
 				stmt.setString(1, value);
-				stmt.setInt(2, idNoteSource);
-				stmt.setInt(3, idNoteType);
+				stmt.setInt(2, sourceId);
+				stmt.setInt(3, sourceTypeId);
+				stmt.setInt(4, noteTypeId);
 				stmt.executeUpdate();
 			}
 			finally {
@@ -188,19 +196,19 @@ public class NotesSQL
 		}
 	}
 
-	public Note getNote(int idNoteType, String value) throws SQLException {
+	public Note getNote(int noteTypeId, String value) throws SQLException {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT * from " + tableName + " where " + idFieldName
-				+ "=? and type_id=? and value=?");
-			stmt.setInt(1, idNoteSource);
-			stmt.setInt(2, idNoteType);
-			stmt.setString(3, value);
+			stmt = con.prepareStatement("SELECT * from Note where source_id=? and source_type_id=? and note_type_id=? and value=?");
+			stmt.setInt(1, sourceId);
+			stmt.setInt(2, sourceTypeId);
+			stmt.setInt(3, noteTypeId);
+			stmt.setString(4, value);
 			rs = stmt.executeQuery();
 			SimpleNote note = null;
 			if (rs.next()) {
-				note = new SimpleNote(getNoteType(idNoteType), value);
+				note = new SimpleNote(getNoteType(noteTypeId), value);
 			}
 			return note;
 		}
@@ -224,19 +232,19 @@ public class NotesSQL
 		}
 	}
 
-	public Note addNote(int idNoteType, String value) throws SQLException {
-		if (getNote(idNoteType, value) != null) {
+	public Note addNote(int noteTypeId, String value) throws SQLException {
+		if (getNote(noteTypeId, value) != null) {
 			return null;
 		}
 		PreparedStatement stmt = null;
 		try {
-			stmt = con.prepareStatement("INSERT INTO " + tableName + " (" + idFieldName
-				+ ", type_id, value) VALUES(?,?,?)");
-			stmt.setInt(1, idNoteSource);
-			stmt.setInt(2, idNoteType);
-			stmt.setString(3, value);
+			stmt = con.prepareStatement("INSERT INTO Note (source_id, source_type_id, note_type_id, value) VALUES(?,?,?,?)");
+			stmt.setInt(1, sourceId);
+			stmt.setInt(2, sourceTypeId);
+			stmt.setInt(3, noteTypeId);
+			stmt.setString(4, value);
 			stmt.executeUpdate();
-			return getNote(idNoteType, value);
+			return getNote(noteTypeId, value);
 		}
 		finally {
 			if (stmt != null) {
@@ -250,8 +258,8 @@ public class NotesSQL
 		}
 	}
 
-	public Type getNoteType(int idNoteType) throws SQLException {
-		return new TypeSQL(idNoteType, con);
+	public Type getNoteType(int noteTypeId) throws SQLException {
+		return TypeSQL.getType(noteTypeId, con);
 	}
 
 }
