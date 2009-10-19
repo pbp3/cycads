@@ -3,31 +3,25 @@
  */
 package org.cycads.entities.note.SQL;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
 
+import org.cycads.entities.annotation.SQL.EntitySQL;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.Noteble;
 
-public abstract class NotebleSQL implements Noteble
+public abstract class NotebleSQL implements Noteble, EntitySQL
 {
 	protected NotesSQL	notes	= null;
 
 	public NotesSQL getNotesSQL() {
 		if (notes == null) {
-			notes = new NotesSQL(getId(), getNoteTableName(), getIdFieldName(), getConnection());
+			notes = new NotesSQL(getId(), getEntityType(), getConnection());
 		}
 		return notes;
 	}
 
-	public abstract int getId();
-
-	public abstract Connection getConnection();
-
-	public abstract String getNoteTableName();
-
-	public abstract String getIdFieldName();
+	//	public abstract String getIdFieldName();
 
 	@Override
 	public void addNote(String noteType, String value) {
@@ -108,13 +102,7 @@ public abstract class NotebleSQL implements Noteble
 
 	@Override
 	public TypeSQL getNoteType(String noteType) {
-		try {
-			return TypeSQL.getType(noteType, getConnection());
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+		return TypeSQL.getType(noteType, getConnection());
 	}
 
 }

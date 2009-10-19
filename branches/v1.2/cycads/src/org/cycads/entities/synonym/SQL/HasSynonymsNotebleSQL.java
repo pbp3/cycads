@@ -7,20 +7,19 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 import org.cycads.entities.note.SQL.NotebleSQL;
+import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.HasSynonyms;
 
-public abstract class HasSynonymsNotebleSQL extends NotebleSQL implements HasSynonyms<DbxrefSQL>
+public abstract class HasSynonymsNotebleSQL extends NotebleSQL implements HasSynonyms
 {
 	protected SynonymsSQL	synonymsSQL	= null;
 
 	public SynonymsSQL getSynonymsSQL() {
 		if (synonymsSQL == null) {
-			synonymsSQL = new SynonymsSQL(getId(), getSynonymTableName(), getIdFieldName(), getConnection());
+			synonymsSQL = new SynonymsSQL(getId(), getEntityType(), getConnection());
 		}
 		return synonymsSQL;
 	}
-
-	public abstract String getSynonymTableName();
 
 	@Override
 	public Collection<DbxrefSQL> getSynonyms() {
@@ -67,23 +66,33 @@ public abstract class HasSynonymsNotebleSQL extends NotebleSQL implements HasSyn
 	}
 
 	@Override
-	public void addSynonym(DbxrefSQL dbxref) {
-		try {
-			getSynonymsSQL().addSynonym(dbxref);
+	public void addSynonym(Dbxref dbxref) {
+		if (dbxref instanceof DbxrefSQL) {
+			try {
+				getSynonymsSQL().addSynonym((DbxrefSQL) dbxref);
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
 		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
+		else {
+			addSynonym(dbxref.getDbName(), dbxref.getAccession());
 		}
 	}
 
-	public boolean isSynonym(DbxrefSQL dbxref) {
-		try {
-			return getSynonymsSQL().isSynonym(dbxref);
+	public boolean isSynonym(Dbxref dbxref) {
+		if (dbxref instanceof DbxrefSQL) {
+			try {
+				return getSynonymsSQL().isSynonym((DbxrefSQL) dbxref);
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
 		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
+		else {
+			return isSynonym(dbxref.getDbName(), dbxref.getAccession());
 		}
 	}
 

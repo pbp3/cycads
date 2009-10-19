@@ -12,12 +12,14 @@ import java.util.Hashtable;
 
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.note.SQL.NotebleSQL;
+import org.cycads.entities.note.SQL.TypeSQL;
 
-public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod
+public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod, EntitySQL
 {
-	private static Hashtable<String, AnnotationMethodSQL>	hashByString	= new Hastable<String, AnnotationMethodSQL>();
+	private static Hashtable<String, AnnotationMethodSQL>	hashByName	= new Hashtable<String, AnnotationMethodSQL>();
+	private static Hashtable<Integer, AnnotationMethodSQL>	hashById	= new Hashtable<Integer, AnnotationMethodSQL>();
 
-	public final static int									INVALID_ID		= -1;
+	public final static int									INVALID_ID	= -1;
 	//	public final static int		WEIGHT_DEAFULT	= 1;
 
 	private int												id;
@@ -25,15 +27,15 @@ public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod
 	private String											name;
 	private final Connection								con;
 
-	public AnnotationMethodSQL(int id, Connection con) throws SQLException {
+	private AnnotationMethodSQL(int id, Connection con) throws SQLException {
 		this.id = id;
 		this.con = con;
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.createStatement();
-
-			rs = stmt.executeQuery("SELECT name from annotation_method WHERE annotation_method_id=" + id);
+			stmt = con.prepareStatement("SELECT name from Method WHERE method_id=?");
+			stmt.setInt(1, id);
+			rs = stmt.executeQuery();
 			if (rs.next()) {
 				name = rs.getString("name");
 			}
@@ -62,7 +64,7 @@ public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod
 		}
 	}
 
-	public AnnotationMethodSQL(String name, Connection con) throws SQLException {
+	private AnnotationMethodSQL(String name, Connection con) throws SQLException {
 		this.name = name;
 		this.con = con;
 		this.id = getId(name, con);
@@ -70,8 +72,7 @@ public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod
 			PreparedStatement stmt = null;
 			ResultSet rs = null;
 			try {
-				stmt = con.prepareStatement("INSERT INTO annotation_method (name) VALUES (?)",
-					Statement.RETURN_GENERATED_KEYS);
+				stmt = con.prepareStatement("INSERT INTO Method (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
 				stmt.setString(1, name);
 				stmt.executeUpdate();
 				rs = stmt.getGeneratedKeys();
@@ -99,11 +100,11 @@ public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT annotation_method_id from annotation_method WHERE name=?");
+			stmt = con.prepareStatement("SELECT method_id from Method WHERE name=?");
 			rs = stmt.executeQuery();
 			int id = INVALID_ID;
 			if (rs.next()) {
-				id = rs.getInt("annotation_method_id");
+				id = rs.getInt("method_id");
 			}
 			return id;
 		}
@@ -127,19 +128,40 @@ public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod
 		}
 	}
 
+	public static AnnotationMethodSQL getMethod(String name, Connection con) throws SQLException {
+		AnnotationMethodSQL ret = hashByName.get(name);
+		if (ret == null) {
+			ret = new AnnotationMethodSQL(name, con);
+			hashByName.put(name, ret);
+		}
+		return ret;
+	}
+
+	public static AnnotationMethodSQL getMethod(int id, Connection con) throws SQLException {
+		AnnotationMethodSQL ret = hashById.get(id);
+		if (ret == null) {
+			ret = new AnnotationMethodSQL(id, con);
+			hashById.put(id, ret);
+		}
+		return ret;
+	}
+
 	@Override
 	public int getId() {
 		return id;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}
 
+	@Override
 	public double getWeight() {
 		return weight;
 	}
 
+	@Override
 	public void setWeight(double weight) {
 		this.weight = weight;
 	}
@@ -149,15 +171,10 @@ public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod
 		return con;
 	}
 
-	@Override
-	public String getIdFieldName() {
-		return "annotation_method_id";
-	}
-
-	@Override
-	public String getNoteTableName() {
-		return "annotation_method_note";
-	}
+	//	@Override
+	//	public String getIdFieldName() {
+	//		return "method_id";
+	//	}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -173,6 +190,11 @@ public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod
 	@Override
 	public int compareTo(AnnotationMethod o) {
 		return getName().compareTo(o.getName());
+	}
+
+	@Override
+	public TypeSQL getEntityType() {
+		return TypeSQL.getType(OBJECT_TYPE_NAME, con);
 	}
 
 }

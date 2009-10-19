@@ -12,8 +12,9 @@ import java.util.Collection;
 import java.util.HashSet;
 
 import org.cycads.entities.Function;
+import org.cycads.entities.note.SQL.TypeSQL;
 
-public class FunctionSQL implements Function, Comparable<Function>
+public class FunctionSQL extends TypeSQL implements Function, Comparable<Function>
 {
 	public final static int	INVALID_ID	= -1;
 	private int				id;

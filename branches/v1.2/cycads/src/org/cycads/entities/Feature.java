@@ -3,9 +3,8 @@
  */
 package org.cycads.entities;
 
-import org.cycads.entities.annotation.AssociationObject;
 
-public interface Feature extends AssociationObject
+public interface Feature extends EntityObject
 {
 	public static final String	OBJECT_TYPE_NAME	= "Feature";
 

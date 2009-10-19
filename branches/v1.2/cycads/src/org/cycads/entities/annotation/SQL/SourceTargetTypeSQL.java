@@ -72,8 +72,8 @@ public class SourceTargetTypeSQL
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
-				sourceType = new TypeSQL(rs.getInt("source_type_id"), con);
-				targetType = new TypeSQL(rs.getInt("target_type_id"), con);
+				sourceType = TypeSQL.getType(rs.getInt("source_type_id"), con);
+				targetType = TypeSQL.getType(rs.getInt("target_type_id"), con);
 			}
 			else {
 				throw new SQLException("SourceTargetTypeSQL does not exist:" + id);
@@ -97,6 +97,18 @@ public class SourceTargetTypeSQL
 				}
 			}
 		}
+	}
+
+	public TypeSQL getSourceType() {
+		return sourceType;
+	}
+
+	public TypeSQL getTargetType() {
+		return targetType;
+	}
+
+	public int getId() {
+		return id;
 	}
 
 }

@@ -10,8 +10,8 @@ import java.util.Collection;
 import java.util.Hashtable;
 
 import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
-import org.cycads.entities.annotation.SQL.AnnotationObjectSQL;
 import org.cycads.entities.annotation.SQL.AnnotationSQL;
+import org.cycads.entities.annotation.SQL.EntitySQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.reaction.SQL.CompoundSQL;
 import org.cycads.entities.sequence.SQL.OrganismSQL;
@@ -76,7 +76,7 @@ public class EntityFactorySQL
 		try {
 			AnnotationMethodSQL ret = methods.get(name);
 			if (ret == null) {
-				ret = new AnnotationMethodSQL(name, getConnection());
+				ret = AnnotationMethodSQL.getMethod(name, getConnection());
 				methods.put(name, ret);
 			}
 			return ret;
@@ -158,7 +158,7 @@ public class EntityFactorySQL
 	}
 
 	@Override
-	public KO< ? , ? , ? , ? > getKO(String ko) {
+	public KO getKO(String ko) {
 		try {
 			return new KOSQL(ko, getConnection());
 		}
@@ -190,7 +190,7 @@ public class EntityFactorySQL
 	}
 
 	@Override
-	public EC< ? , ? , ? , ? > getEC(String ecNumber) {
+	public EC getEC(String ecNumber) {
 		try {
 			return new ECSQL(ecNumber, getConnection());
 		}
@@ -201,7 +201,7 @@ public class EntityFactorySQL
 	}
 
 	@Override
-	public Collection<AnnotationSQL> getAnnotations(Dbxref< ? , ? , ? , ? > dbxref) {
+	public Collection<AnnotationSQL> getAnnotations(Dbxref dbxref) {
 		try {
 			return AnnotationSQL.getAnnotations(dbxref, getConnection());
 		}
@@ -211,11 +211,11 @@ public class EntityFactorySQL
 		}
 	}
 
-	public static AnnotationObjectSQL createObject(int id, TypeSQL type, Connection con) throws SQLException {
-		if (type.equals(AnnotationSQL.getAnnotationObjectType(con))) {
-			return new AnnotationSQL<AnnotationObjectSQL, AnnotationObjectSQL>(id, con);
+	public static EntitySQL createObject(int id, TypeSQL type, Connection con) throws SQLException {
+		if (type.equals(AnnotationSQL.getObjectType(con))) {
+			return new AnnotationSQL<EntitySQL, EntitySQL>(id, con);
 		}
-		else if (type.equals(CompoundSQL.getAnnotationObjectType(con))) {
+		else if (type.equals(CompoundSQL.getObjectType(con))) {
 			return new CompoundSQL(id, con);
 		}
 		return null;

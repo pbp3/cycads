@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.TreeSet;
 
+import org.cycads.entities.EntityObject;
 import org.cycads.entities.factory.EntityDbxrefFactory;
 import org.cycads.entities.factory.EntityTypeFactory;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.SimpleHasSynonymsNoteble;
 
-public class SimpleAnnotation<SO extends AssociationObject, TA extends AssociationObject>
+public class SimpleAnnotation<SO extends EntityObject, TA extends EntityObject>
 		extends SimpleHasSynonymsNoteble implements Annotation<SO, TA>
 {
 
@@ -86,7 +87,7 @@ public class SimpleAnnotation<SO extends AssociationObject, TA extends Associati
 	}
 
 	@Override
-	public Type getAssociationObjectType() {
+	public Type getEntityType() {
 		return typeFactory.getNoteType(OBJECT_TYPE_NAME);
 	}
 

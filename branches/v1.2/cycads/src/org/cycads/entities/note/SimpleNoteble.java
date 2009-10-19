@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 
 import org.cycads.entities.factory.EntityTypeFactory;
 
-public class SimpleNoteble implements Noteble
+public abstract class SimpleNoteble implements Noteble
 {
 	protected EntityTypeFactory< ? >				typeFactory;
 

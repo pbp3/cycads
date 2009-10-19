@@ -8,18 +8,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collection;
 
-import org.cycads.entities.annotation.AnnotationFilter;
-import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
-import org.cycads.entities.annotation.SQL.DbxrefDbxrefAnnotationSQL;
+import org.cycads.entities.note.Type;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.general.ParametersDefault;
 
-public class DbxrefSQL extends HasSynonymsNotebleSQL
-		implements Dbxref<DbxrefDbxrefAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
+public class DbxrefSQL extends HasSynonymsNotebleSQL implements Dbxref
 {
 	public final static int		INVALID_ID	= -1;
 	private String				dbName;
@@ -149,31 +144,8 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL
 	}
 
 	@Override
-	public SynonymsSQL getSynonymsSQL() {
-		if (synonymsSQL == null) {
-			synonymsSQL = new SynonymsSQL(getId(), getSynonymTableName(), "dbxref_id1", getConnection());
-		}
-		return synonymsSQL;
-	}
-
-	@Override
-	public String getSynonymTableName() {
-		return "dbxref_synonym";
-	}
-
-	@Override
 	public Connection getConnection() {
 		return con;
-	}
-
-	@Override
-	public String getIdFieldName() {
-		return "dbxref_id";
-	}
-
-	@Override
-	public String getNoteTableName() {
-		return "dbxref_note";
 	}
 
 	@Override
@@ -190,85 +162,25 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL
 	}
 
 	@Override
-	public void addSynonym(DbxrefSQL dbxref) {
-		super.addSynonym(dbxref);
-		try {
-			dbxref.getSynonymsSQL().addSynonym(this);
+	public void addSynonym(Dbxref dbxref) {
+		if (dbxref instanceof DbxrefSQL) {
+			super.addSynonym(dbxref);
+			try {
+				((DbxrefSQL) dbxref).getSynonymsSQL().addSynonym(this);
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+				throw new RuntimeException(e);
+			}
 		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
+		else {
+			addSynonym(dbxref.getDbName(), dbxref.getAccession());
 		}
 	}
 
 	@Override
 	public String toString() {
 		return getDbName() + ParametersDefault.getDbxrefToStringSeparator() + getAccession();
-	}
-
-	@Override
-	public DbxrefDbxrefAnnotationSQL createDbxrefAnnotation(AnnotationMethodSQL method, DbxrefSQL dbxref) {
-		try {
-			return new DbxrefDbxrefAnnotationSQL(DbxrefDbxrefAnnotationSQL.createDbxrefDbxrefAnnotationSQL(method,
-				this, dbxref, getConnection()), getConnection());
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-	}
-
-	@Override
-	public DbxrefDbxrefAnnotationSQL addDbxrefAnnotation(AnnotationMethodSQL method, DbxrefSQL dbxref) {
-		Collection< ? extends DbxrefDbxrefAnnotationSQL> annots = getDbxrefAnnotations(method, dbxref);
-		if (annots.isEmpty()) {
-			return createDbxrefAnnotation(method, dbxref);
-		}
-		else {
-			return annots.iterator().next();
-		}
-	}
-
-	@Override
-	public Collection< ? extends DbxrefDbxrefAnnotationSQL> getAnnotations(AnnotationMethodSQL method,
-			Collection<TypeSQL> types, DbxrefSQL synonym) {
-		String extraWhere = " XXA.dbxref_source=" + getId();
-		String extraFrom = "";
-		return DbxrefDbxrefAnnotationSQL.getAnnotations(method, types, synonym, null, extraFrom, extraWhere,
-			getConnection());
-	}
-
-	@Override
-	public Collection< ? extends DbxrefDbxrefAnnotationSQL> getAnnotations(
-			AnnotationFilter<DbxrefDbxrefAnnotationSQL> filter) {
-		String extraWhere = " XXA.dbxref_source=" + getId();
-		String extraFrom = "";
-		Collection<DbxrefDbxrefAnnotationSQL> annots = DbxrefDbxrefAnnotationSQL.getAnnotations(null, null, null, null,
-			extraFrom, extraWhere, getConnection());
-		Collection<DbxrefDbxrefAnnotationSQL> ret = new ArrayList<DbxrefDbxrefAnnotationSQL>();
-		for (DbxrefDbxrefAnnotationSQL annot : annots) {
-			if (filter.accept(annot)) {
-				ret.add(annot);
-			}
-		}
-		return ret;
-	}
-
-	@Override
-	public Collection< ? extends DbxrefDbxrefAnnotationSQL> getDbxrefAnnotations(AnnotationMethodSQL method,
-			DbxrefSQL dbxref) {
-		String extraWhere = " XXA.dbxref_source=" + getId();
-		String extraFrom = "";
-		return DbxrefDbxrefAnnotationSQL.getAnnotations(method, null, null, dbxref, extraFrom, extraWhere,
-			getConnection());
-	}
-
-	@Override
-	public Collection< ? extends DbxrefDbxrefAnnotationSQL> getDbxrefAnnotations(String dbxrefDbname) {
-		String extraWhere = " XXA.dbxref_source=" + getId() + " AND XXA.dbxref_target=X.dbxref_id AND X.dbname='"
-			+ dbxrefDbname + "'";
-		String extraFrom = ", dbxref X";
-		return DbxrefDbxrefAnnotationSQL.getAnnotations(null, null, null, null, extraFrom, extraWhere, getConnection());
 	}
 
 	@Override
@@ -283,4 +195,8 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL
 		return false;
 	}
 
+	@Override
+	public Type getEntityType() {
+		return TypeSQL.getType(OBJECT_TYPE_NAME, con);
+	}
 }

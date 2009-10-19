@@ -11,7 +11,7 @@ import org.cycads.entities.factory.EntityDbxrefFactory;
 import org.cycads.entities.factory.EntityTypeFactory;
 import org.cycads.entities.note.SimpleNoteble;
 
-public class SimpleHasSynonymsNoteble extends SimpleNoteble implements HasSynonyms
+public abstract class SimpleHasSynonymsNoteble extends SimpleNoteble implements HasSynonyms
 {
 
 	protected EntityDbxrefFactory< ? >				dbxrefFactory;
