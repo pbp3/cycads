@@ -8,7 +8,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cycads.entities.note.Type;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.reaction.Reaction;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
@@ -320,7 +319,11 @@ public class ReactionSQL extends HasSynonymsNotebleSQL implements Reaction<Compo
 	}
 
 	@Override
-	public Type getEntityType() {
+	public TypeSQL getEntityType() {
+		return getObjectType(con);
+	}
+
+	public static TypeSQL getObjectType(Connection con) {
 		return TypeSQL.getType(TypeSQL.REACTION, con);
 	}
 

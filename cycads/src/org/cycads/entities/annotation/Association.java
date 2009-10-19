@@ -12,8 +12,6 @@ import org.cycads.entities.synonym.HasSynonyms;
 
 public interface Association<SO, TA> extends Noteble, HasSynonyms, EntityObject
 {
-	public static final String	OBJECT_TYPE_NAME	= "Association";
-
 	public Collection< ? extends Type> getTypes();
 
 	public boolean isType(String type);

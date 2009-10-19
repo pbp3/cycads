@@ -11,8 +11,6 @@ import org.cycads.entities.synonym.HasSynonyms;
 
 public interface Pathway<R extends Reaction< ? , ? , ? >> extends Noteble, HasSynonyms, EntityObject
 {
-	public static final String	OBJECT_TYPE_NAME	= "Pathway";
-
 	public Collection<R> getReactions();
 
 }

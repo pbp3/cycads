@@ -32,6 +32,7 @@ public class TypeSQL extends HasSynonymsNotebleSQL implements Type
 	public static final String					FEATURE			= "Feature";
 	public static final String					TERM_TYPE		= "Term_type";
 	public static final String					METHOD			= "Method";
+	public static final String					DATABASE		= "External_DB";
 
 	private int									id;
 	private String								name, description;
@@ -249,7 +250,7 @@ public class TypeSQL extends HasSynonymsNotebleSQL implements Type
 	}
 
 	public static TypeSQL getEntityType(Connection con) {
-		return TypeSQL.getType(TERM_TYPE, con);
+		return TypeSQL.getType(TypeSQL.TERM_TYPE, con);
 	}
 
 }
