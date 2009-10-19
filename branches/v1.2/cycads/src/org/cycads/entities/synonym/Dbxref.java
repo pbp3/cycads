@@ -15,4 +15,6 @@ public interface Dbxref extends Noteble, HasSynonyms, EntityObject, CycDBLink
 
 	public String getAccession();
 
+	public Database getDatabase();
+
 }

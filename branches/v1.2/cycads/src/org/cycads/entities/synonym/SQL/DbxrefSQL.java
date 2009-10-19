@@ -17,7 +17,7 @@ import org.cycads.general.ParametersDefault;
 public class DbxrefSQL extends HasSynonymsNotebleSQL implements Dbxref
 {
 	public final static int		INVALID_ID	= -1;
-	private String				dbName;
+	private DatabaseSQL			database;
 	private String				accession;
 	private int					id;
 	private final Connection	con;
@@ -28,11 +28,11 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL implements Dbxref
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT dbname, accession from dbxref WHERE dbxref_id=?");
+			stmt = con.prepareStatement("SELECT external_db_id, accession from dbxref WHERE dbxref_id=?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
-				dbName = rs.getString("dbname");
+				database = DatabaseSQL.getDB(rs.getInt("external_db_id"), con);
 				accession = rs.getString("accession");
 			}
 			else {
@@ -60,17 +60,17 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL implements Dbxref
 	}
 
 	public DbxrefSQL(String dbName, String accession, Connection con) throws SQLException {
-		this.dbName = dbName;
+		this.database = DatabaseSQL.getDB(dbName, con);
 		this.accession = accession;
 		this.con = con;
-		this.id = getId(dbName, accession, con);
+		this.id = getId(getDatabase(), accession, con);
 		if (this.id == INVALID_ID) {
 			PreparedStatement stmt = null;
 			ResultSet rs = null;
 			try {
-				stmt = con.prepareStatement("INSERT INTO dbxref (dbname, accession) VALUES (?,?)",
+				stmt = con.prepareStatement("INSERT INTO dbxref (external_db_id, accession) VALUES (?,?)",
 					Statement.RETURN_GENERATED_KEYS);
-				stmt.setString(1, dbName);
+				stmt.setInt(1, database.getId());
 				stmt.setString(2, accession);
 				stmt.executeUpdate();
 				rs = stmt.getGeneratedKeys();
@@ -94,12 +94,12 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL implements Dbxref
 		}
 	}
 
-	public static int getId(String dbName, String accession, Connection con) throws SQLException {
+	public static int getId(DatabaseSQL database, String accession, Connection con) throws SQLException {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT dbxref_id from dbxref WHERE dbname=? AND accession=?");
-			stmt.setString(1, dbName);
+			stmt = con.prepareStatement("SELECT dbxref_id from dbxref WHERE external_db_id=? AND accession=?");
+			stmt.setInt(1, database.getId());
 			stmt.setString(2, accession);
 			rs = stmt.executeQuery();
 			int id = INVALID_ID;
@@ -139,8 +139,13 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL implements Dbxref
 	}
 
 	@Override
+	public DatabaseSQL getDatabase() {
+		return database;
+	}
+
+	@Override
 	public String getDbName() {
-		return dbName;
+		return getDatabase().getName();
 	}
 
 	@Override
@@ -199,4 +204,5 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL implements Dbxref
 	public Type getEntityType() {
 		return TypeSQL.getType(OBJECT_TYPE_NAME, con);
 	}
+
 }

@@ -101,19 +101,17 @@ public class SynonymsSQL
 	}
 
 	public DbxrefSQL getSynonym(String dbName, String accession) throws SQLException {
+		DbxrefSQL dbxref = new DbxrefSQL(dbName, accession, con);
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT X.dbxref_id from Synonym S ,dbxref X where S.source_id=? and S.source_type_id=?"
-				+ " AND S.dbxref_id=X.dbxref_id AND X.dbname=? AND X.accession=?");
+			stmt = con.prepareStatement("SELECT * from Synonym where source_id=? and source_type_id=? AND dbxref_id=?");
 			stmt.setInt(1, sourceId);
 			stmt.setInt(2, sourceTypeId);
-			stmt.setString(3, dbName);
-			stmt.setString(4, accession);
+			stmt.setInt(3, dbxref.getId());
 			rs = stmt.executeQuery();
-			DbxrefSQL dbxref = null;
-			if (rs.next()) {
-				dbxref = new DbxrefSQL(rs.getInt("dbxref_id"), con);
+			if (!rs.next()) {
+				return null;
 			}
 			return dbxref;
 		}

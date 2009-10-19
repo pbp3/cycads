@@ -5,7 +5,7 @@ package org.cycads.entities.reaction.SQL;
 
 import org.cycads.entities.reaction.CompoundReaction;
 
-public class CompoundReactionSQL implements CompoundReaction<ReactionSQL, CompoundSQL>
+public class CompoundReactionSQL implements CompoundReaction<CompoundSQL, ReactionSQL>
 {
 
 	private ReactionSQL	reaction;
@@ -13,7 +13,7 @@ public class CompoundReactionSQL implements CompoundReaction<ReactionSQL, Compou
 	private boolean		sideA;
 	private int			quantity;
 
-	protected CompoundReactionSQL(ReactionSQL reaction, CompoundSQL compound, boolean sideA, int quantity) {
+	protected CompoundReactionSQL(CompoundSQL compound, ReactionSQL reaction, boolean sideA, int quantity) {
 		this.compound = compound;
 		this.reaction = reaction;
 		this.quantity = quantity;

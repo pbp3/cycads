@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import org.cycads.entities.annotation.SQL.EntitySQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.reaction.Compound;
-import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
 public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound, EntitySQL
@@ -76,48 +75,6 @@ public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound, Enti
 		}
 		this.id = createNewCompound(smallMolecule, con);
 		addSynonym(dbName, accession);
-	}
-
-	public static ArrayList<CompoundSQL> getCompounds(String dbName, String accession, Connection con)
-			throws SQLException {
-		return getCompounds(new DbxrefSQL(dbName, accession, con), con);
-	}
-
-	public static ArrayList<CompoundSQL> getCompounds(DbxrefSQL synonym, Connection con) {
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		ArrayList<CompoundSQL> result = new ArrayList<CompoundSQL>();
-		try {
-			stmt = con.prepareStatement("SELECT compound_id from compound_synonym WHERE dbxref_id=?");
-			stmt.setInt(1, synonym.getId());
-			rs = stmt.executeQuery();
-			while (rs.next()) {
-				result.add(new CompoundSQL(rs.getInt("compound_id"), con));
-			}
-			return result;
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-			if (stmt != null) {
-				try {
-					stmt.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-		}
 	}
 
 	private int createNewCompound(boolean smallMolecule, Connection con) throws SQLException {
@@ -186,7 +143,7 @@ public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound, Enti
 	}
 
 	public static TypeSQL getObjectType(Connection con) {
-		return TypeSQL.getType(OBJECT_TYPE_NAME, con);
+		return TypeSQL.getType(TypeSQL.COMPOUND, con);
 	}
 
 }

@@ -4,6 +4,7 @@
 package org.cycads.entities.sequence.SQL;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -11,18 +12,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.TreeSet;
 
-import org.cycads.entities.annotation.AnnotationFilter;
-import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
-import org.cycads.entities.annotation.SQL.SubseqAnnotationSQL;
-import org.cycads.entities.annotation.SQL.SubseqDbxrefAnnotationSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.sequence.Intron;
 import org.cycads.entities.sequence.Sequence;
-import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
-public class SequenceSQL extends HasSynonymsNotebleSQL implements
-		Sequence<OrganismSQL, SubsequenceSQL, SubseqAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL> {
+public class SequenceSQL extends HasSynonymsNotebleSQL implements Sequence<OrganismSQL, SubsequenceSQL>
+{
 	public static final int		INVALID_LENGTH	= -1;
 
 	private final int			id;
@@ -36,19 +32,22 @@ public class SequenceSQL extends HasSynonymsNotebleSQL implements
 	public SequenceSQL(int id, Connection con) throws SQLException {
 		this.id = id;
 		this.con = con;
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT NCBI_TAXON_ID, version from sequence WHERE sequence_id=" + id);
+			stmt = con.prepareStatement("SELECT ncbi_taxon_id, version from sequence WHERE sequence_id=?");
+			stmt.setInt(1, id);
+			rs = stmt.executeQuery();
 			if (rs.next()) {
-				organismId = rs.getInt("NCBI_TAXON_ID");
+				organismId = rs.getInt("ncbi_taxon_id");
 				version = rs.getString("version");
 			}
 			else {
 				throw new SQLException("Sequence does not exist:" + id);
 			}
-			rs = stmt.executeQuery("SELECT length from biosequence WHERE sequence_id=" + id);
+			stmt = con.prepareStatement("SELECT length from biosequence WHERE sequence_id=?");
+			stmt.setInt(1, id);
+			rs = stmt.executeQuery();
 			if (rs.next()) {
 				length = rs.getInt("length");
 			}
@@ -78,21 +77,6 @@ public class SequenceSQL extends HasSynonymsNotebleSQL implements
 	}
 
 	@Override
-	public String getSynonymTableName() {
-		return "sequence_synonym";
-	}
-
-	@Override
-	public String getIdFieldName() {
-		return "sequence_id";
-	}
-
-	@Override
-	public String getNoteTableName() {
-		return "sequence_note";
-	}
-
-	@Override
 	public Connection getConnection() {
 		return con;
 	}
@@ -119,11 +103,12 @@ public class SequenceSQL extends HasSynonymsNotebleSQL implements
 	@Override
 	public String getSequenceString() {
 		if (seqStr == null) {
-			Statement stmt = null;
+			PreparedStatement stmt = null;
 			ResultSet rs = null;
 			try {
-				stmt = con.createStatement();
-				rs = stmt.executeQuery("SELECT seq from biosequence WHERE sequence_id=" + id);
+				stmt = con.prepareStatement("SELECT seq from biosequence WHERE sequence_id=?");
+				stmt.setInt(1, id);
+				rs = stmt.executeQuery();
 				if (rs.next()) {
 					seqStr = rs.getString("seq");
 				}
@@ -169,18 +154,24 @@ public class SequenceSQL extends HasSynonymsNotebleSQL implements
 
 	@Override
 	public void setSequenceString(String seqStr) {
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT length from biosequence WHERE sequence_id=" + id);
+			stmt = con.prepareStatement("SELECT length from biosequence WHERE sequence_id=?");
+			stmt.setInt(1, getId());
+			rs = stmt.executeQuery();
 			if (!rs.next()) {
-				stmt.executeUpdate("INSERT INTO biosequence (sequence_id, length, seq) VALUES (" + getId() + ","
-					+ seqStr.length() + ",'" + seqStr + "')");
+				stmt = con.prepareStatement("INSERT INTO biosequence (sequence_id, length, seq) VALUES (?,?,?)");
+				stmt.setInt(1, getId());
+				stmt.setInt(2, seqStr.length());
+				stmt.setString(3, seqStr);
 			}
 			else {
-				stmt.executeUpdate("UPDATE biosequence SET seq='" + seqStr + "' WHERE sequence_id=" + getId());
+				stmt = con.prepareStatement("UPDATE biosequence SET seq=? WHERE sequence_id=?");
+				stmt.setString(1, seqStr);
+				stmt.setInt(2, getId());
 			}
+			stmt.executeUpdate();
 			this.seqStr = seqStr;
 			this.length = seqStr.length();
 		}
@@ -212,14 +203,17 @@ public class SequenceSQL extends HasSynonymsNotebleSQL implements
 	public SubsequenceSQL createSubsequence(int start, int end, Collection<Intron> introns) {
 		int id = 0;
 
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		String query = "";
 		try {
-			stmt = con.createStatement();
-			query = "INSERT INTO subsequence (sequence_id, start_position, end_position) VALUES (" + getId() + ","
-				+ start + "," + end + ")";
-			stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+			stmt = con.prepareStatement(
+				"INSERT INTO subsequence (sequence_id, start_position, end_position) VALUES (?,?,?)",
+				Statement.RETURN_GENERATED_KEYS);
+			stmt.setInt(1, getId());
+			stmt.setInt(2, start);
+			stmt.setInt(3, end);
+			stmt.executeUpdate();
 			rs = stmt.getGeneratedKeys();
 			if (rs.next()) {
 				id = rs.getInt(1);
@@ -236,6 +230,7 @@ public class SequenceSQL extends HasSynonymsNotebleSQL implements
 					minStart = maxEnd;
 					maxEnd = aux;
 				}
+				stmt = con.prepareStatement("INSERT INTO Intron (subsequence_id, start_position, end_position) VALUES (?,?,?)");
 				for (Intron intron : introns) {
 					if (intron.getStart() < minStart) {
 						intronStart = minStart;
@@ -250,8 +245,10 @@ public class SequenceSQL extends HasSynonymsNotebleSQL implements
 						intronEnd = intron.getEnd();
 					}
 					if (intronStart <= intronEnd) {
-						stmt.executeUpdate("INSERT INTO Intron (subsequence_id, start_position, end_position) VALUES ("
-							+ id + "," + intronStart + "," + intronEnd + ")");
+						stmt.setInt(1, getId());
+						stmt.setInt(2, intronStart);
+						stmt.setInt(3, intronEnd);
+						stmt.executeUpdate();
 					}
 				}
 			}
@@ -283,12 +280,14 @@ public class SequenceSQL extends HasSynonymsNotebleSQL implements
 
 	@Override
 	public SubsequenceSQL getSubsequence(int start, int end, Collection<Intron> introns) {
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT subsequence_id from subsequence where sequence_id=" + getId()
-				+ " AND start_position=" + start + " AND end_position=" + end);
+			stmt = con.prepareStatement("SELECT subsequence_id from subsequence where sequence_id=? AND start_position=? AND end_position=?");
+			stmt.setInt(1, getId());
+			stmt.setInt(2, start);
+			stmt.setInt(3, end);
+			rs = stmt.executeQuery();
 			ArrayList<SubsequenceSQL> sseqs = new ArrayList<SubsequenceSQL>();
 			while (rs.next()) {
 				sseqs.add(new SubsequenceSQL(rs.getInt("subsequence_id"), getConnection()));
@@ -340,12 +339,13 @@ public class SequenceSQL extends HasSynonymsNotebleSQL implements
 
 	@Override
 	public Collection<SubsequenceSQL> getSubsequences(int start) {
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT subsequence_id from subsequence where sequence_id=" + getId()
-				+ " AND start_position=" + start);
+			stmt = con.prepareStatement("SELECT subsequence_id from subsequence where sequence_id=? AND start_position=?");
+			stmt.setInt(1, getId());
+			stmt.setInt(2, start);
+			rs = stmt.executeQuery();
 			ArrayList<SubsequenceSQL> sseqs = new ArrayList<SubsequenceSQL>();
 			while (rs.next()) {
 				sseqs.add(new SubsequenceSQL(rs.getInt("subsequence_id"), getConnection()));
@@ -377,79 +377,8 @@ public class SequenceSQL extends HasSynonymsNotebleSQL implements
 	}
 
 	@Override
-	public Collection<SubsequenceSQL> getSubsequences(DbxrefSQL synonym) {
-		Statement stmt = null;
-		ResultSet rs = null;
-		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT SS.subsequence_id from ssubsequence SS, subsequence_synonym SSS where SS.sequence_id="
-				+ getId() + " AND SS.subsequence_id=SSS.subsequence_id AND SSS.dbxref_id=" + synonym.getId());
-			ArrayList<SubsequenceSQL> sseqs = new ArrayList<SubsequenceSQL>();
-			while (rs.next()) {
-				sseqs.add(new SubsequenceSQL(rs.getInt("subsequence_id"), getConnection()));
-			}
-			return sseqs;
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-			if (stmt != null) {
-				try {
-					stmt.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-		}
-	}
-
-	@Override
-	public Collection<SubseqAnnotationSQL> getAnnotations(AnnotationFilter<SubseqAnnotationSQL> filter) {
-		String extraFrom = ", subsequence SS";
-		String extraWhere = " SS.sequence_id=" + getId() + " AND SS.subsequence_id=SSA.subsequence_id";
-		Collection<SubseqAnnotationSQL> annots = SubseqAnnotationSQL.getAnnotations(null, null, null, extraFrom,
-			extraWhere, getConnection());
-		Collection<SubseqAnnotationSQL> ret = new ArrayList<SubseqAnnotationSQL>();
-		for (SubseqAnnotationSQL annot : annots) {
-			if (filter.accept(annot)) {
-				ret.add(annot);
-			}
-		}
-		return ret;
-	}
-
-	@Override
-	public Collection<SubseqDbxrefAnnotationSQL> getDbxrefAnnotations(AnnotationMethodSQL method, DbxrefSQL dbxref) {
-		String extraFrom = ", subsequence SS";
-		String extraWhere = " SS.sequence_id=" + getId() + " AND SS.subsequence_id=SSA.subsequence_id";
-		return SubseqDbxrefAnnotationSQL.getAnnotations(method, null, null, dbxref, extraFrom, extraWhere,
-			getConnection());
-	}
-
-	@Override
-	public Collection<SubseqDbxrefAnnotationSQL> getDbxrefAnnotations(String dbxrefDbanme) {
-		String extraFrom = ", subsequence SS";
-		String extraWhere = " SS.sequence_id=" + getId() + " AND SS.subsequence_id=SSA.subsequence_id";
-		return SubseqDbxrefAnnotationSQL.getDbxrefAnnotations(dbxrefDbanme, extraFrom, extraWhere, getConnection());
-	}
-
-	@Override
-	public Collection<SubseqAnnotationSQL> getAnnotations(AnnotationMethodSQL method, Collection<TypeSQL> types,
-			DbxrefSQL synonym) {
-		String extraFrom = ", subsequence SS";
-		String extraWhere = " SS.sequence_id=" + getId() + " AND SS.subsequence_id=SSA.subsequence_id";
-		return SubseqAnnotationSQL.getAnnotations(method, types, synonym, extraFrom, extraWhere, getConnection());
+	public TypeSQL getEntityType() {
+		return TypeSQL.getType(TypeSQL.SEQUENCE, getConnection());
 	}
 
 }

@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Hashtable;
 
+import org.cycads.entities.SQL.FunctionSQL;
 import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
 import org.cycads.entities.annotation.SQL.AnnotationSQL;
 import org.cycads.entities.annotation.SQL.EntitySQL;
@@ -20,7 +21,6 @@ import org.cycads.entities.synonym.EC;
 import org.cycads.entities.synonym.KO;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.ECSQL;
-import org.cycads.entities.synonym.SQL.FunctionSQL;
 import org.cycads.entities.synonym.SQL.KOSQL;
 import org.cycads.general.Config;
 import org.cycads.general.Messages;

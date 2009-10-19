@@ -8,13 +8,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.cycads.entities.note.Type;
+import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.reaction.Reaction;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.ECSQL;
 import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
-public class ReactionSQL extends HasSynonymsNotebleSQL
-		implements Reaction<DbxrefSQL, ECSQL, CompoundReactionSQL, CompoundSQL>
+public class ReactionSQL extends HasSynonymsNotebleSQL implements Reaction<CompoundSQL, ECSQL, CompoundReactionSQL>
 {
 	private Connection	con;
 	private int			id;
@@ -164,11 +165,6 @@ public class ReactionSQL extends HasSynonymsNotebleSQL
 	}
 
 	@Override
-	public String getSynonymTableName() {
-		return "reaction_synonym";
-	}
-
-	@Override
 	public Connection getConnection() {
 		return con;
 	}
@@ -176,16 +172,6 @@ public class ReactionSQL extends HasSynonymsNotebleSQL
 	@Override
 	public int getId() {
 		return id;
-	}
-
-	@Override
-	public String getIdFieldName() {
-		return "reaction_id";
-	}
-
-	@Override
-	public String getNoteTableName() {
-		return "reaction_note";
 	}
 
 	@Override
@@ -203,12 +189,12 @@ public class ReactionSQL extends HasSynonymsNotebleSQL
 					}
 				}
 				else {
-					return new CompoundReactionSQL(this, compound, true, quantity);
+					return new CompoundReactionSQL(compound, this, true, quantity);
 				}
 			}
 		}
 		addCompound(compound, true, quantity);
-		return new CompoundReactionSQL(this, compound, true, quantity);
+		return new CompoundReactionSQL(compound, this, true, quantity);
 	}
 
 	@Override
@@ -226,12 +212,12 @@ public class ReactionSQL extends HasSynonymsNotebleSQL
 					}
 				}
 				else {
-					return new CompoundReactionSQL(this, compound, false, quantity);
+					return new CompoundReactionSQL(compound, this, false, quantity);
 				}
 			}
 		}
 		addCompound(compound, false, quantity);
-		return new CompoundReactionSQL(this, compound, false, quantity);
+		return new CompoundReactionSQL(compound, this, false, quantity);
 	}
 
 	private void addCompound(CompoundSQL compound, boolean sideA, int quantity) {
@@ -270,7 +256,7 @@ public class ReactionSQL extends HasSynonymsNotebleSQL
 			stmt.setInt(1, getId());
 			rs = stmt.executeQuery();
 			while (rs.next()) {
-				result.add(new CompoundReactionSQL(this, new CompoundSQL(rs.getInt("compound_id"), getConnection()),
+				result.add(new CompoundReactionSQL(new CompoundSQL(rs.getInt("compound_id"), getConnection()), this,
 					rs.getBoolean("side_a"), rs.getInt("quantity")));
 			}
 		}
@@ -331,6 +317,11 @@ public class ReactionSQL extends HasSynonymsNotebleSQL
 	@Override
 	public boolean isReversible() {
 		return reversible;
+	}
+
+	@Override
+	public Type getEntityType() {
+		return TypeSQL.getType(TypeSQL.REACTION, con);
 	}
 
 }

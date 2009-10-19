@@ -3,7 +3,7 @@
  */
 package org.cycads.entities.reaction;
 
-public interface CompoundReaction<C extends Compound, R extends Reaction< ? , ? >>
+public interface CompoundReaction<C extends Compound, R extends Reaction< ? , ? , ? >>
 
 {
 	public C getCompound();
