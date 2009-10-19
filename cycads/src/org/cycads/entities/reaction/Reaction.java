@@ -7,13 +7,14 @@ import java.util.Collection;
 
 import org.cycads.entities.EntityObject;
 import org.cycads.entities.note.Noteble;
+import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.synonym.EC;
 import org.cycads.entities.synonym.HasSynonyms;
 
-public interface Reaction<E extends EC, CR extends CompoundReaction< ? , ? >>
+public interface Reaction<C extends Compound, E extends EC, CR extends CompoundReaction< ? , ? >>
 		extends Noteble, HasSynonyms, EntityObject
 {
-	public static final String	OBJECT_TYPE_NAME	= "Reaction";
+	public static final String	OBJECT_TYPE_NAME	= TypeSQL.REACTION;
 
 	public E getEC();
 
@@ -25,8 +26,8 @@ public interface Reaction<E extends EC, CR extends CompoundReaction< ? , ? >>
 
 	public Collection<CR> getCompoundsSideB();
 
-	public CR addCompoundSideA(Compound compound, int quantity);
+	public CR addCompoundSideA(C compound, int quantity);
 
-	public CR addCompoundSideB(Compound compound, int quantity);
+	public CR addCompoundSideB(C compound, int quantity);
 
 }

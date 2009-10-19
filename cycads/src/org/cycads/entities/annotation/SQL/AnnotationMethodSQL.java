@@ -7,41 +7,51 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Hashtable;
 
 import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.note.SQL.NotebleSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 
-public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod, EntitySQL
+public class AnnotationMethodSQL extends TypeSQL implements AnnotationMethod, EntitySQL
 {
 	private static Hashtable<String, AnnotationMethodSQL>	hashByName	= new Hashtable<String, AnnotationMethodSQL>();
 	private static Hashtable<Integer, AnnotationMethodSQL>	hashById	= new Hashtable<Integer, AnnotationMethodSQL>();
 
-	public final static int									INVALID_ID	= -1;
-	//	public final static int		WEIGHT_DEAFULT	= 1;
-
-	private int												id;
 	private double											weight;
-	private String											name;
-	private final Connection								con;
 
 	private AnnotationMethodSQL(int id, Connection con) throws SQLException {
-		this.id = id;
-		this.con = con;
+		super(id, con);
+		if (!isMethod(this, con)) {
+			makeMethod(this, con);
+		}
+	}
+
+	private AnnotationMethodSQL(String name, Connection con) throws SQLException {
+		super(name, con);
+		if (!isMethod(this, con)) {
+			makeMethod(this, con);
+		}
+	}
+
+	public static boolean isMethod(String typeName, Connection con) {
+		return isMethod(TypeSQL.getType(typeName, con), con);
+	}
+
+	public static boolean isMethod(int typeId, Connection con) throws SQLException {
+		return isMethod(TypeSQL.getType(typeId, con), con);
+	}
+
+	public static boolean isMethod(TypeSQL type, Connection con) {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT name from Method WHERE method_id=?");
-			stmt.setInt(1, id);
+			stmt = con.prepareStatement("SELECT * from Method WHERE method_id=?");
+			stmt.setInt(1, type.getId());
 			rs = stmt.executeQuery();
-			if (rs.next()) {
-				name = rs.getString("name");
-			}
-			else {
-				throw new SQLException("Method does not exist:" + id);
-			}
+			return rs.next();
+		}
+		catch (SQLException e) {
+			throw new RuntimeException(e);
 		}
 		finally {
 			if (rs != null) {
@@ -52,7 +62,6 @@ public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod,
 					// ignore
 				}
 			}
-
 			if (stmt != null) {
 				try {
 					stmt.close();
@@ -64,24 +73,16 @@ public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod,
 		}
 	}
 
-	private AnnotationMethodSQL(String name, Connection con) throws SQLException {
-		this.name = name;
-		this.con = con;
-		this.id = getId(name, con);
-		if (this.id == INVALID_ID) {
+	public static void makeMethod(TypeSQL type, Connection con) {
+		if (!isMethod(type, con)) {
 			PreparedStatement stmt = null;
-			ResultSet rs = null;
 			try {
-				stmt = con.prepareStatement("INSERT INTO Method (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
-				stmt.setString(1, name);
+				stmt = con.prepareStatement("INSERT INTO Method (method_id) VALUES (?)");
+				stmt.setInt(1, type.getId());
 				stmt.executeUpdate();
-				rs = stmt.getGeneratedKeys();
-				if (rs.next()) {
-					id = rs.getInt(1);
-				}
-				else {
-					throw new SQLException("Error creating method:" + name);
-				}
+			}
+			catch (SQLException e) {
+				throw new RuntimeException(e);
 			}
 			finally {
 				if (stmt != null) {
@@ -91,38 +92,6 @@ public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod,
 					catch (SQLException ex) {
 						// ignore
 					}
-				}
-			}
-		}
-	}
-
-	public static int getId(String name, Connection con) throws SQLException {
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		try {
-			stmt = con.prepareStatement("SELECT method_id from Method WHERE name=?");
-			rs = stmt.executeQuery();
-			int id = INVALID_ID;
-			if (rs.next()) {
-				id = rs.getInt("method_id");
-			}
-			return id;
-		}
-		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-			if (stmt != null) {
-				try {
-					stmt.close();
-				}
-				catch (SQLException ex) {
-					// ignore
 				}
 			}
 		}
@@ -147,16 +116,6 @@ public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod,
 	}
 
 	@Override
-	public int getId() {
-		return id;
-	}
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
 	public double getWeight() {
 		return weight;
 	}
@@ -165,16 +124,6 @@ public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod,
 	public void setWeight(double weight) {
 		this.weight = weight;
 	}
-
-	@Override
-	public Connection getConnection() {
-		return con;
-	}
-
-	//	@Override
-	//	public String getIdFieldName() {
-	//		return "method_id";
-	//	}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -188,13 +137,8 @@ public class AnnotationMethodSQL extends NotebleSQL implements AnnotationMethod,
 	}
 
 	@Override
-	public int compareTo(AnnotationMethod o) {
-		return getName().compareTo(o.getName());
-	}
-
-	@Override
 	public TypeSQL getEntityType() {
-		return TypeSQL.getType(OBJECT_TYPE_NAME, con);
+		return TypeSQL.getType(TypeSQL.METHOD, getConnection());
 	}
 
 }

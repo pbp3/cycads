@@ -11,17 +11,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cycads.entities.annotation.AnnotationFilter;
-import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
-import org.cycads.entities.annotation.SQL.SubseqAnnotationSQL;
-import org.cycads.entities.annotation.SQL.SubseqDbxrefAnnotationSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.sequence.Organism;
-import org.cycads.entities.synonym.SQL.DbxrefSQL;
+import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 import org.cycads.general.ParametersDefault;
 
-public class OrganismSQL
-		implements Organism<SequenceSQL, SubsequenceSQL, SubseqAnnotationSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
+public class OrganismSQL extends HasSynonymsNotebleSQL implements Organism<SequenceSQL, SubsequenceSQL>
 {
 	private final int			id;
 	private String				name;
@@ -30,11 +25,12 @@ public class OrganismSQL
 	public OrganismSQL(int id, Connection con) throws SQLException {
 		this.id = id;
 		this.con = con;
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT name from Organism WHERE NCBI_TAXON_ID=" + id);
+			stmt = con.prepareStatement("SELECT name from Organism WHERE ncbi_taxon_id=?");
+			stmt.setInt(1, id);
+			rs = stmt.executeQuery();
 			if (rs.next()) {
 				name = rs.getString("name");
 			}
@@ -65,7 +61,7 @@ public class OrganismSQL
 	public static OrganismSQL createOrganism(int id, String name, Connection con) throws SQLException {
 		PreparedStatement stmt = null;
 		try {
-			stmt = con.prepareStatement("INSERT INTO Organism (NCBI_TAXON_ID, name, Next_Cyc_Id) VALUES (?,?,?)");
+			stmt = con.prepareStatement("INSERT INTO Organism (ncbi_taxon_id, name, next_cyc_id) VALUES (?,?,?)");
 			stmt.setInt(1, id);
 			stmt.setString(2, name);
 			stmt.setInt(3, ParametersDefault.getNextCycId());
@@ -103,17 +99,17 @@ public class OrganismSQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT Next_Cyc_Id from Organism WHERE NCBI_TAXON_ID=?");
+			stmt = con.prepareStatement("SELECT next_cyc_id from Organism WHERE ncbi_taxon_id=?");
 			stmt.setInt(1, getId());
 			rs = stmt.executeQuery();
 			int nextCycId;
 			if (rs.next()) {
-				nextCycId = rs.getInt("Next_Cyc_Id");
+				nextCycId = rs.getInt("next_cyc_id");
 			}
 			else {
 				throw new SQLException("Organism does not exist:" + id);
 			}
-			stmt = con.prepareStatement("UPDATE Organism SET Next_Cyc_Id=? WHERE NCBI_TAXON_ID=?");
+			stmt = con.prepareStatement("UPDATE Organism SET Next_Cyc_Id=? WHERE ncbi_taxon_id=?");
 			stmt.setInt(1, nextCycId + 1);
 			stmt.setInt(2, getId());
 			stmt.executeUpdate();
@@ -149,10 +145,12 @@ public class OrganismSQL
 			name = "";
 		}
 		if (!name.equals(getName())) {
-			Statement stmt = null;
+			PreparedStatement stmt = null;
 			try {
-				stmt = con.createStatement();
-				stmt.executeUpdate("UPDATE Organism SET name='" + name + "' WHERE NCBI_TAXON_ID=" + getId());
+				stmt = con.prepareStatement("UPDATE Organism SET name=? WHERE ncbi_taxon_id=?");
+				stmt.setString(1, name);
+				stmt.setInt(2, id);
+				stmt.executeUpdate();
 				this.name = name;
 			}
 			catch (SQLException e) {
@@ -179,7 +177,7 @@ public class OrganismSQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("INSERT INTO sequence (NCBI_TAXON_ID, version) VALUES (?,?)",
+			stmt = con.prepareStatement("INSERT INTO sequence (ncbi_taxon_id, version) VALUES (?,?)",
 				Statement.RETURN_GENERATED_KEYS);
 			stmt.setInt(1, getId());
 			stmt.setString(2, version);
@@ -219,127 +217,11 @@ public class OrganismSQL
 
 	@Override
 	public Collection<SequenceSQL> getSequences() {
-		Statement stmt = null;
-		ResultSet rs = null;
-		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT sequence_id from sequence where NCBI_TAXON_ID=" + getId());
-			ArrayList<SequenceSQL> seqs = new ArrayList<SequenceSQL>();
-			while (rs.next()) {
-				seqs.add(new SequenceSQL(rs.getInt("sequence_id"), getConnection()));
-			}
-			return seqs;
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-			if (stmt != null) {
-				try {
-					stmt.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-		}
-	}
-
-	@Override
-	public Collection<SequenceSQL> getSequences(String version) {
-		Statement stmt = null;
-		ResultSet rs = null;
-		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT sequence_id from sequence where NCBI_TAXON_ID=" + getId() + " AND version='"
-				+ version + "'");
-			ArrayList<SequenceSQL> seqs = new ArrayList<SequenceSQL>();
-			while (rs.next()) {
-				seqs.add(new SequenceSQL(rs.getInt("sequence_id"), getConnection()));
-			}
-			return seqs;
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-			if (stmt != null) {
-				try {
-					stmt.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-		}
-	}
-
-	@Override
-	public Collection<SequenceSQL> getSequences(DbxrefSQL synonym) {
-		Statement stmt = null;
-		ResultSet rs = null;
-		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT S.sequence_id from sequence S, sequence_synonym SS where S.NCBI_TAXON_ID="
-				+ getId() + " AND S.sequence_id=SS.sequence_id AND SS.dbxref_id=" + synonym.getId());
-			ArrayList<SequenceSQL> seqs = new ArrayList<SequenceSQL>();
-			while (rs.next()) {
-				seqs.add(new SequenceSQL(rs.getInt("sequence_id"), getConnection()));
-			}
-			return seqs;
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-			if (stmt != null) {
-				try {
-					stmt.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-		}
-	}
-
-	@Override
-	public Collection<SequenceSQL> getSequences(DbxrefSQL synonym, String version) {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT S.sequence_id from sequence S, sequence_synonym SS where S.NCBI_TAXON_ID=?"
-				+ " AND S.version=? AND S.sequence_id=SS.sequence_id AND SS.dbxref_id=?");
+			stmt = con.prepareStatement("SELECT sequence_id from sequence where ncbi_taxon_id=?");
 			stmt.setInt(1, getId());
-			stmt.setString(2, version);
-			stmt.setInt(3, synonym.getId());
 			rs = stmt.executeQuery();
 			ArrayList<SequenceSQL> seqs = new ArrayList<SequenceSQL>();
 			while (rs.next()) {
@@ -372,20 +254,19 @@ public class OrganismSQL
 	}
 
 	@Override
-	public Collection<SubsequenceSQL> getSubsequences(DbxrefSQL synonym) {
-		Statement stmt = null;
+	public Collection<SequenceSQL> getSequences(String version) {
+		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT SS.subsequence_id from subsequence SS, subsequence_synonym SSS, sequence S"
-				+ " WHERE S.NCBI_TAXON_ID=" + getId()
-				+ " AND S.sequence_id=SS.sequence_id AND SS.subsequence_id=SSS.subsequence_id AND SSS.dbxref_id="
-				+ synonym.getId());
-			ArrayList<SubsequenceSQL> sseqs = new ArrayList<SubsequenceSQL>();
+			stmt = con.prepareStatement("SELECT sequence_id from sequence where ncbi_taxon_id=? AND version=?");
+			stmt.setInt(1, getId());
+			stmt.setString(2, version);
+			rs = stmt.executeQuery();
+			ArrayList<SequenceSQL> seqs = new ArrayList<SequenceSQL>();
 			while (rs.next()) {
-				sseqs.add(new SubsequenceSQL(rs.getInt("subsequence_id"), getConnection()));
+				seqs.add(new SequenceSQL(rs.getInt("sequence_id"), getConnection()));
 			}
-			return sseqs;
+			return seqs;
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -412,45 +293,8 @@ public class OrganismSQL
 	}
 
 	@Override
-	public Collection<SubseqAnnotationSQL> getAnnotations(AnnotationFilter<SubseqAnnotationSQL> filter) {
-		String extraFrom = ", subsequence SS, sequence S";
-		String extraWhere = " S.NCBI_TAXON_ID=" + getId()
-			+ " AND S.sequence_id=SS.sequence_id AND SS.subsequence_id=SSA.subsequence_id";
-		Collection<SubseqAnnotationSQL> annots = SubseqAnnotationSQL.getAnnotations(null, null, null, extraFrom,
-			extraWhere, getConnection());
-		Collection<SubseqAnnotationSQL> ret = new ArrayList<SubseqAnnotationSQL>();
-		for (SubseqAnnotationSQL annot : annots) {
-			if (filter.accept(annot)) {
-				ret.add(annot);
-			}
-		}
-		return ret;
-	}
-
-	@Override
-	public Collection<SubseqDbxrefAnnotationSQL> getDbxrefAnnotations(AnnotationMethodSQL method, DbxrefSQL dbxref) {
-		String extraFrom = ", subsequence SS, sequence S";
-		String extraWhere = " S.NCBI_TAXON_ID=" + getId()
-			+ " AND S.sequence_id=SS.sequence_id AND SS.subsequence_id=SSA.subsequence_id";
-		return SubseqDbxrefAnnotationSQL.getAnnotations(method, null, null, dbxref, extraFrom, extraWhere,
-			getConnection());
-	}
-
-	@Override
-	public Collection<SubseqDbxrefAnnotationSQL> getDbxrefAnnotations(String dbxrefDbanme) {
-		String extraFrom = ", subsequence SS, sequence S";
-		String extraWhere = " S.NCBI_TAXON_ID=" + getId()
-			+ " AND S.sequence_id=SS.sequence_id AND SS.subsequence_id=SSA.subsequence_id";
-		return SubseqDbxrefAnnotationSQL.getDbxrefAnnotations(dbxrefDbanme, extraFrom, extraWhere, getConnection());
-	}
-
-	@Override
-	public Collection<SubseqAnnotationSQL> getAnnotations(AnnotationMethodSQL method, Collection<TypeSQL> types,
-			DbxrefSQL synonym) {
-		String extraFrom = ", subsequence SS, sequence S";
-		String extraWhere = " S.NCBI_TAXON_ID=" + getId()
-			+ " AND S.sequence_id=SS.sequence_id AND SS.subsequence_id=SSA.subsequence_id";
-		return SubseqAnnotationSQL.getAnnotations(method, types, synonym, extraFrom, extraWhere, getConnection());
+	public TypeSQL getEntityType() {
+		return TypeSQL.getType(TypeSQL.ORGANISM, getConnection());
 	}
 
 }

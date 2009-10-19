@@ -11,8 +11,9 @@ import java.sql.Statement;
 import java.util.Hashtable;
 
 import org.cycads.entities.note.Type;
+import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
-public class TypeSQL implements Type
+public class TypeSQL extends HasSynonymsNotebleSQL implements Type
 {
 	public static final int						INVALID_ID		= -1;
 
@@ -29,19 +30,22 @@ public class TypeSQL implements Type
 	public static final String					PATHWAY			= "Pathway";
 	public static final String					COMPOUND		= "Compound";
 	public static final String					FEATURE			= "Feature";
+	public static final String					TERM_TYPE		= "Term_type";
+	public static final String					METHOD			= "Method";
 
 	private int									id;
 	private String								name, description;
 	private Connection							con;
 
-	private TypeSQL(int id, Connection con) throws SQLException {
+	protected TypeSQL(int id, Connection con) throws SQLException {
 		this.id = id;
 		this.con = con;
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT name, description from term_type WHERE type_id=" + id);
+			stmt = con.prepareStatement("SELECT name, description from Term_type WHERE type_id=?");
+			stmt.setInt(1, id);
+			rs = stmt.executeQuery();
 			if (rs.next()) {
 				name = rs.getString("name");
 				description = rs.getString("description");
@@ -70,37 +74,29 @@ public class TypeSQL implements Type
 		}
 	}
 
-	private TypeSQL(String name, String description, Connection con) throws SQLException {
+	protected TypeSQL(String name, Connection con) throws SQLException {
 		this.name = name;
-		this.description = description;
 		this.con = con;
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT type_id, description from term_type WHERE name='" + name + "'");
+			stmt = con.prepareStatement("SELECT type_id, description from Term_type WHERE name=?");
+			stmt.setString(1, name);
+			rs = stmt.executeQuery();
 			if (rs.next()) {
 				id = rs.getInt("type_id");
-				String descriptionDB = rs.getString("description");
-				if (description == null) {
-					this.description = descriptionDB;
-				}
-				else if (!description.equals(descriptionDB)) {
-					throw new SQLException("Description from DB  (" + descriptionDB
-						+ ") different of description supplied:" + description);
-				}
+				description = rs.getString("description");
 			}
 			else {
-				if (description == null) {
-					stmt.executeUpdate("INSERT INTO term_type (name) VALUES ('" + name + "')");
+				stmt = con.prepareStatement("INSERT INTO Term_type (name) VALUES (?)", Statement.RETURN_GENERATED_KEYS);
+				stmt.setString(1, name);
+				stmt.executeUpdate();
+				rs = stmt.getGeneratedKeys();
+				if (rs.next()) {
+					id = rs.getInt(1);
 				}
 				else {
-					stmt.executeUpdate("INSERT INTO term_type (name, description) VALUES ('" + name + "','"
-						+ description + "')");
-				}
-				id = getId(name, con);
-				if (id == INVALID_ID) {
-					throw new SQLException("Error creating type:" + name + ", " + description);
+					throw new SQLException("Error creating type:" + name);
 				}
 			}
 		}
@@ -125,11 +121,12 @@ public class TypeSQL implements Type
 	}
 
 	public static int getId(String name, Connection con) throws SQLException {
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT type_id from term_type WHERE name='" + name + "'");
+			stmt = con.prepareStatement("SELECT type_id from Term_type WHERE name=?");
+			stmt.setString(1, name);
+			rs = stmt.executeQuery();
 			int id = INVALID_ID;
 			if (rs.next()) {
 				id = rs.getInt("type_id");
@@ -160,7 +157,7 @@ public class TypeSQL implements Type
 		TypeSQL type = typesHashByName.get(name);
 		if (type == null) {
 			try {
-				type = new TypeSQL(name, null, con);
+				type = new TypeSQL(name, con);
 			}
 			catch (SQLException e) {
 				throw new RuntimeException("Can not create the type:" + name, e);
@@ -244,6 +241,15 @@ public class TypeSQL implements Type
 				}
 			}
 		}
+	}
+
+	@Override
+	public TypeSQL getEntityType() {
+		return getEntityType(getConnection());
+	}
+
+	public static TypeSQL getEntityType(Connection con) {
+		return TypeSQL.getType(TERM_TYPE, con);
 	}
 
 }

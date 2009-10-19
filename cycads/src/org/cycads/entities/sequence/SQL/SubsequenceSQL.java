@@ -4,30 +4,20 @@
 package org.cycads.entities.sequence.SQL;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-import org.cycads.entities.annotation.AnnotationFilter;
-import org.cycads.entities.annotation.SubseqAnnotation;
-import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
-import org.cycads.entities.annotation.SQL.SubseqAnnotationSQL;
-import org.cycads.entities.annotation.SQL.SubseqDbxrefAnnotationSQL;
-import org.cycads.entities.annotation.SQL.SubseqFunctionAnnotationSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.sequence.Intron;
 import org.cycads.entities.sequence.SimpleIntron;
 import org.cycads.entities.sequence.Subsequence;
-import org.cycads.entities.synonym.SQL.DbxrefSQL;
-import org.cycads.entities.synonym.SQL.FunctionSQL;
 import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
-public class SubsequenceSQL extends HasSynonymsNotebleSQL
-		implements Subsequence<SequenceSQL, SubseqAnnotationSQL, FunctionSQL, DbxrefSQL, TypeSQL, AnnotationMethodSQL>
+public class SubsequenceSQL extends HasSynonymsNotebleSQL implements Subsequence<SequenceSQL>
 {
 	private final int			id;
 	private final Connection	con;
@@ -39,12 +29,12 @@ public class SubsequenceSQL extends HasSynonymsNotebleSQL
 	public SubsequenceSQL(int id, Connection con) throws SQLException {
 		this.id = id;
 		this.con = con;
-		Statement stmt = null;
+		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.createStatement();
-			rs = stmt.executeQuery("SELECT sequence_id, start_position, end_position from subsequence WHERE subsequence_id="
-				+ id);
+			stmt = con.prepareStatement("SELECT sequence_id, start_position, end_position from subsequence WHERE subsequence_id=?");
+			stmt.setInt(1, id);
+			rs = stmt.executeQuery();
 			if (rs.next()) {
 				sequenceId = rs.getInt("sequence_id");
 				start = rs.getInt("start_position");
@@ -72,21 +62,6 @@ public class SubsequenceSQL extends HasSynonymsNotebleSQL
 				}
 			}
 		}
-	}
-
-	@Override
-	public String getSynonymTableName() {
-		return "subsequence_synonym";
-	}
-
-	@Override
-	public String getIdFieldName() {
-		return "subsequence_id";
-	}
-
-	@Override
-	public String getNoteTableName() {
-		return "subsequence_note";
 	}
 
 	@Override
@@ -139,7 +114,7 @@ public class SubsequenceSQL extends HasSynonymsNotebleSQL
 	}
 
 	@Override
-	public boolean contains(Subsequence< ? , ? , ? , ? , ? , ? > subseq) {
+	public boolean contains(Subsequence< ? > subseq) {
 		if (subseq.getMinPosition() < this.getMinPosition() || subseq.getMaxPosition() > this.getMaxPosition()) {
 			return false;
 		}
@@ -188,12 +163,12 @@ public class SubsequenceSQL extends HasSynonymsNotebleSQL
 	@Override
 	public Collection<Intron> getIntrons() {
 		if (introns == null) {
-			Statement stmt = null;
+			PreparedStatement stmt = null;
 			ResultSet rs = null;
 			try {
-				stmt = con.createStatement();
-				rs = stmt.executeQuery("SELECT start_position, end_position from Intron where subsequence_id="
-					+ getId());
+				stmt = con.prepareStatement("SELECT start_position, end_position from Intron where subsequence_id=?");
+				stmt.setInt(1, id);
+				rs = stmt.executeQuery();
 				introns = new TreeSet<Intron>();
 				while (rs.next()) {
 					introns.add(new SimpleIntron(rs.getInt("start_position"), rs.getInt("end_position")));
@@ -226,124 +201,8 @@ public class SubsequenceSQL extends HasSynonymsNotebleSQL
 	}
 
 	@Override
-	public SubseqAnnotation< ? , ? , ? , ? , ? > addAnnotation(TypeSQL type, AnnotationMethodSQL method) {
-		Collection<TypeSQL> types = new ArrayList<TypeSQL>();
-		types.add(type);
-		Collection< ? extends SubseqAnnotation< ? , ? , ? , ? , ? >> annots = getAnnotations(method, types, null);
-		if (annots.isEmpty()) {
-			return createAnnotation(type, method);
-		}
-		else {
-			return annots.iterator().next();
-		}
-	}
-
-	@Override
-	public SubseqDbxrefAnnotationSQL addDbxrefAnnotation(AnnotationMethodSQL method, DbxrefSQL dbxref) {
-		Collection< ? extends SubseqDbxrefAnnotationSQL> annots = getDbxrefAnnotations(method, dbxref);
-		if (annots.isEmpty()) {
-			return createDbxrefAnnotation(method, dbxref);
-		}
-		else {
-			return annots.iterator().next();
-		}
-	}
-
-	@Override
-	public SubseqFunctionAnnotationSQL addFunctionAnnotation(AnnotationMethodSQL method, FunctionSQL function) {
-		Collection<SubseqFunctionAnnotationSQL> annots = getFunctionAnnotations(method, function);
-		if (annots.isEmpty()) {
-			return createFunctionAnnotation(method, function);
-		}
-		else {
-			return annots.iterator().next();
-		}
-	}
-
-	@Override
-	public SubseqFunctionAnnotationSQL createFunctionAnnotation(AnnotationMethodSQL method, FunctionSQL function) {
-		try {
-			int id = SubseqFunctionAnnotationSQL.createSubseqFunctionAnnotationSQL(method, this, function,
-				getConnection());
-			return new SubseqFunctionAnnotationSQL(id, getConnection());
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-	}
-
-	@Override
-	public SubseqDbxrefAnnotationSQL createDbxrefAnnotation(AnnotationMethodSQL method, DbxrefSQL dbxref) {
-		try {
-			int id = SubseqDbxrefAnnotationSQL.createSubseqDbxrefAnnotationSQL(method, this, dbxref, getConnection());
-			return new SubseqDbxrefAnnotationSQL(id, getConnection());
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-	}
-
-	@Override
-	public SubseqAnnotation< ? , ? , ? , ? , ? > createAnnotation(TypeSQL type, AnnotationMethodSQL method) {
-		try {
-			int id = SubseqAnnotationSQL.createSubseqAnnotationSQL(method, this, getConnection());
-			SubseqAnnotationSQL annot = new SubseqAnnotationSQL(id, getConnection());
-			annot.addType(type);
-			return annot;
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-	}
-
-	@Override
-	public Collection<SubseqAnnotationSQL> getAnnotations(AnnotationFilter<SubseqAnnotationSQL> filter) {
-		String extraWhere = " SSA.subsequence_id=" + getId();
-		String extraFrom = "";
-		Collection<SubseqAnnotationSQL> annots = SubseqAnnotationSQL.getAnnotations(null, null, null, extraFrom,
-			extraWhere, getConnection());
-		Collection<SubseqAnnotationSQL> ret = new ArrayList<SubseqAnnotationSQL>();
-		for (SubseqAnnotationSQL annot : annots) {
-			if (filter.accept(annot)) {
-				ret.add(annot);
-			}
-		}
-		return ret;
-	}
-
-	@Override
-	public Collection<SubseqDbxrefAnnotationSQL> getDbxrefAnnotations(AnnotationMethodSQL method, DbxrefSQL dbxref) {
-		String extraWhere = " SSA.subsequence_id=" + getId();
-		String extraFrom = "";
-		return SubseqDbxrefAnnotationSQL.getAnnotations(method, null, null, dbxref, extraFrom, extraWhere,
-			getConnection());
-	}
-
-	@Override
-	public Collection<SubseqDbxrefAnnotationSQL> getDbxrefAnnotations(String dbxrefDbanme) {
-		String extraWhere = " SSA.subsequence_id=" + getId();
-		String extraFrom = "";
-		return SubseqDbxrefAnnotationSQL.getDbxrefAnnotations(dbxrefDbanme, extraFrom, extraWhere, getConnection());
-	}
-
-	@Override
-	public Collection<SubseqAnnotationSQL> getAnnotations(AnnotationMethodSQL method, Collection<TypeSQL> types,
-			DbxrefSQL synonym) {
-		String extraWhere = " SSA.subsequence_id=" + getId();
-		String extraFrom = "";
-		return SubseqAnnotationSQL.getAnnotations(method, types, synonym, extraFrom, extraWhere, getConnection());
-	}
-
-	@Override
-	public Collection<SubseqFunctionAnnotationSQL> getFunctionAnnotations(AnnotationMethodSQL method,
-			FunctionSQL function) {
-		String extraWhere = " SSA.subsequence_id=" + getId();
-		String extraFrom = "";
-		return SubseqFunctionAnnotationSQL.getAnnotations(method, null, null, function, extraFrom, extraWhere,
-			getConnection());
+	public TypeSQL getEntityType() {
+		return TypeSQL.getType(TypeSQL.SUBSEQUENCE, getConnection());
 	}
 
 }
