@@ -294,7 +294,11 @@ public class OrganismSQL extends HasSynonymsNotebleSQL implements Organism<Seque
 
 	@Override
 	public TypeSQL getEntityType() {
-		return TypeSQL.getType(TypeSQL.ORGANISM, getConnection());
+		return getObjectType(con);
+	}
+
+	public static TypeSQL getObjectType(Connection con) {
+		return TypeSQL.getType(TypeSQL.ORGANISM, con);
 	}
 
 }

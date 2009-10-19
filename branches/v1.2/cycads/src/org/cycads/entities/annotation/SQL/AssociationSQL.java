@@ -277,15 +277,6 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 	//		}
 	//	}
 
-	@Override
-	public TypeSQL getEntityType() {
-		return getObjectType(con);
-	}
-
-	public static TypeSQL getObjectType(Connection con) {
-		return TypeSQL.getType(OBJECT_TYPE_NAME, con);
-	}
-
 	public static <SO extends EntitySQL, TA extends EntitySQL> Collection< ? extends AssociationSQL< ? extends SO, ? extends TA>> getAssociations(
 			SO source, TA target, TypeSQL type, Dbxref synonym, Connection con) {
 		PreparedStatement stmt = null;
@@ -323,6 +314,15 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 			}
 		}
 		return ret;
+	}
+
+	@Override
+	public TypeSQL getEntityType() {
+		return getObjectType(con);
+	}
+
+	public static TypeSQL getObjectType(Connection con) {
+		return TypeSQL.getType(TypeSQL.ASSOCIATION, con);
 	}
 
 }

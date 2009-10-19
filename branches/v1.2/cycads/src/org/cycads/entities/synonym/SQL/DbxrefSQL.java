@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.cycads.entities.note.Type;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.general.ParametersDefault;
@@ -201,8 +200,12 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL implements Dbxref
 	}
 
 	@Override
-	public Type getEntityType() {
-		return TypeSQL.getType(OBJECT_TYPE_NAME, con);
+	public TypeSQL getEntityType() {
+		return getObjectType(getConnection());
+	}
+
+	public static TypeSQL getObjectType(Connection con) {
+		return TypeSQL.getType(TypeSQL.DBXREF, con);
 	}
 
 }

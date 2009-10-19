@@ -114,4 +114,13 @@ public class DatabaseSQL extends TypeSQL implements Database
 		return ret;
 	}
 
+	@Override
+	public TypeSQL getEntityType() {
+		return getObjectType(getConnection());
+	}
+
+	public static TypeSQL getObjectType(Connection con) {
+		return TypeSQL.getType(TypeSQL.DATABASE, con);
+	}
+
 }

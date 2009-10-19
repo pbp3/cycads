@@ -218,7 +218,7 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 	}
 
 	public static TypeSQL getObjectType(Connection con) {
-		return TypeSQL.getType(Annotation.OBJECT_TYPE_NAME, con);
+		return TypeSQL.getType(TypeSQL.ANNOTATION, con);
 	}
 
 	public TypeSQL getParentType() {

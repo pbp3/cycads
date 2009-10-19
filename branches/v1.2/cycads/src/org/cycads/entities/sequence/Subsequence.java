@@ -11,8 +11,6 @@ import org.cycads.entities.synonym.HasSynonyms;
 
 public interface Subsequence<S extends Sequence< ? , ? >> extends Noteble, HasSynonyms, EntityObject
 {
-	public static final String	OBJECT_TYPE_NAME	= "Subsequence";
-
 	public Collection<Intron> getIntrons();
 
 	//	public boolean addIntron(Intron intron);
