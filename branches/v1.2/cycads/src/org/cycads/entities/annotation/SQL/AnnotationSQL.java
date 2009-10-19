@@ -7,21 +7,22 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
 
+import org.cycads.entities.EntityObject;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.note.SQL.TypeSQL;
+import org.cycads.entities.synonym.Dbxref;
 
 public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends AssociationSQL<SO, TA>
 		implements Annotation<SO, TA>, EntitySQL
 {
-	public final static String			PARENT_TYPE_NAME	= "Parent";
+	public final static String		PARENT_TYPE_NAME	= "Parent";
 
-	private String						score;
+	private String					score;
 
-	private AnnotationMethodSQL			method;
-	private Collection<AnnotationSQL>	parents;
+	private AnnotationMethodSQL		method;
+	private Collection<EntitySQL>	parents;
 
 	public AnnotationSQL(int id, Connection con) throws SQLException {
 		super(id, con);
@@ -60,9 +61,9 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 	}
 
 	public static <SO extends EntitySQL, TA extends EntitySQL> AnnotationSQL<SO, TA> createAnnotationSQL(SO source,
-			TA target, AnnotationMethodSQL method, String score, Connection con) throws SQLException {
-
-		AssociationSQL<SO, TA> association = AssociationSQL.createAssociationSQL(source, target, con);
+			TA target, TypeSQL type, AnnotationMethodSQL method, String score, Connection con) throws SQLException {
+		AssociationSQL<SO, TA> association = AssociationSQL.createAssociationSQL(source, target, type, con);
+		association.addType(getObjectType(con));
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -129,14 +130,15 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 	}
 
 	@Override
-	public void addParent(Annotation parent) {
-		if (!(parent instanceof AnnotationSQL)) {
+	public void addParent(EntityObject parent) {
+		if (!(parent instanceof EntitySQL)) {
 			throw new RuntimeException("Parent is not a SQL entity.");
 		}
-		AnnotationSQL parentSQL = (AnnotationSQL) parent;
+		EntitySQL parentSQL = (EntitySQL) parent;
 		if (!isParent(parentSQL)) {
 			try {
-				AssociationSQL.createAssociationSQL(this, parentSQL, getConnection());
+				AssociationSQL< ? , ? > parentAssociation = AssociationSQL.createAssociationSQL(this, parentSQL,
+					getParentType(), getConnection());
 			}
 			catch (SQLException e) {
 				throw new RuntimeException("Can not create the parent association.", e);
@@ -146,52 +148,28 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 	}
 
 	@Override
-	public Collection<AnnotationSQL> getParents() {
+	public Collection<EntitySQL> getParents() {
 		if (parents == null) {
-			PreparedStatement stmt = null;
-			ResultSet rs = null;
-			parents = new ArrayList<AnnotationSQL>();
-			try {
-				stmt = con.prepareStatement("SELECT annotation_parent_id from annotation_parent WHERE annotation_id=?");
-				stmt.setInt(1, getId());
-				rs = stmt.executeQuery();
-				while (rs.next()) {
-					parents.add(new SubseqAnnotationSQL(rs.getInt("annotation_parent_id"), getConnection()));
-				}
-			}
-			catch (SQLException e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
-			}
-			finally {
-				if (rs != null) {
-					try {
-						rs.close();
-					}
-					catch (SQLException ex) {
-						// ignore
-					}
-				}
-				if (stmt != null) {
-					try {
-						stmt.close();
-					}
-					catch (SQLException ex) {
-						// ignore
-					}
-				}
+			Collection< ? extends AssociationSQL< ? , ? >> associations = AssociationSQL.getAssociations(this, null,
+				getParentType(), null, getConnection());
+			for (AssociationSQL< ? , ? > association : associations) {
+				parents.add(association.getTarget());
 			}
 		}
 		return parents;
 	}
 
-	public boolean isParent(AnnotationSQL parent) {
-		for (AnnotationSQL parent1 : getParents()) {
-			if (parent.getId() == parent1.getId()) {
+	public boolean isParent(EntitySQL parent) {
+		for (EntitySQL parent1 : getParents()) {
+			if (parent.getId() == parent1.getId() && parent.getEntityType().equals(parent1.getEntityType())) {
 				return true;
 			}
 		}
 		return false;
+	}
+
+	public static <SO extends EntitySQL, TA extends EntitySQL> Collection< ? extends AnnotationSQL< ? extends SO, ? extends TA>> getAnnotations(
+			SO source, TA target, TypeSQL type, Dbxref synonym, AnnotationMethodSQL method, Connection con) {
 	}
 
 	//	public static Collection<AnnotationSQL> getAnnotations(Dbxref dbxref, Connection con) throws SQLException {
@@ -240,7 +218,7 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 	}
 
 	public static TypeSQL getObjectType(Connection con) {
-		return TypeSQL.getType(OBJECT_TYPE_NAME, con);
+		return TypeSQL.getType(Annotation.OBJECT_TYPE_NAME, con);
 	}
 
 	public TypeSQL getParentType() {

@@ -18,16 +18,17 @@ public class TypeSQL implements Type
 
 	public static Hashtable<String, TypeSQL>	typesHashByName	= new Hashtable<String, TypeSQL>();
 	public static Hashtable<Integer, TypeSQL>	typesHashById	= new Hashtable<Integer, TypeSQL>();
-	//	public static final String					ANNOTATION		= "Annotation";
-	//	public static final String					DBXREF			= "Dbxref";
-	//	public static final String					FUNCTION		= "Function";
-	//	public static final String					SUBSEQUENCE		= "Subsequence";
-	//	public static final String					SEQUENCE		= "Sequence";
-	//	public static final String					ORGANISM		= "Organism";
-	//	public static final String					REACTION		= "Reaction";
-	//	public static final String					PATHWAY			= "Pathway";
-	//	public static final String					COMPOUND		= "Compound";
-	//	public static final String					FEATURE			= "Feature";
+	public static final String					ANNOTATION		= "Annotation";
+	public static final String					ASSOCIATION		= "Association";
+	public static final String					DBXREF			= "Dbxref";
+	public static final String					FUNCTION		= "Function";
+	public static final String					SUBSEQUENCE		= "Subsequence";
+	public static final String					SEQUENCE		= "Sequence";
+	public static final String					ORGANISM		= "Organism";
+	public static final String					REACTION		= "Reaction";
+	public static final String					PATHWAY			= "Pathway";
+	public static final String					COMPOUND		= "Compound";
+	public static final String					FEATURE			= "Feature";
 
 	private int									id;
 	private String								name, description;

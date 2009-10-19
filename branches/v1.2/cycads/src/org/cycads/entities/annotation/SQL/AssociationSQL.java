@@ -15,6 +15,7 @@ import org.cycads.entities.annotation.Association;
 import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.note.SQL.TypeSQL;
+import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
 public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends HasSynonymsNotebleSQL
@@ -71,7 +72,7 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 	}
 
 	public static <SO extends EntitySQL, TA extends EntitySQL> AssociationSQL<SO, TA> createAssociationSQL(SO source,
-			TA target, Connection con) throws SQLException {
+			TA target, TypeSQL type, Connection con) throws SQLException {
 
 		SourceTargetTypeSQL sourceTargetType = new SourceTargetTypeSQL(TypeSQL.getType(source.getEntityType(), con),
 			TypeSQL.getType(target.getEntityType(), con), con);
@@ -88,7 +89,11 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 			stmt.executeUpdate();
 			rs = stmt.getGeneratedKeys();
 			if (rs.next()) {
-				return new AssociationSQL(rs.getInt(1), con);
+				AssociationSQL<SO, TA> ret = new AssociationSQL<SO, TA>(rs.getInt(1), con);
+				if (type != null) {
+					ret.addType(type);
+				}
+				return ret;
 			}
 			else {
 				throw new SQLException("Association insert didn't return the association id.");
@@ -279,6 +284,45 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 
 	public static TypeSQL getObjectType(Connection con) {
 		return TypeSQL.getType(OBJECT_TYPE_NAME, con);
+	}
+
+	public static <SO extends EntitySQL, TA extends EntitySQL> Collection< ? extends AssociationSQL< ? extends SO, ? extends TA>> getAssociations(
+			SO source, TA target, TypeSQL type, Dbxref synonym, Connection con) {
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		Collection<AssociationSQL< ? extends SO, ? extends TA>> ret = new ArrayList<AssociationSQL< ? extends SO, ? extends TA>>();
+		try {
+			stmt = con.prepareStatement("SELECT target_id, target_type_id from Association WHERE annotation_id=?");
+			stmt.setInt(1, getId());
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				parents.add(EntityFactorySQL.createObject(rs.getInt("target_id"), rs.getInt("target_type_id"),
+					getConnection()));
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
+		return ret;
 	}
 
 }

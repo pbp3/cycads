@@ -35,4 +35,9 @@ public class SimpleType implements Type
 		return getName().compareTo(o.getName());
 	}
 
+	@Override
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
 }

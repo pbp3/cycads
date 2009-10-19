@@ -13,9 +13,9 @@ public interface Annotation<SO, TA> extends Association<SO, TA>, EntityObject
 
 	public AnnotationMethod getAnnotationMethod();
 
-	public Collection<Annotation< ? , ? >> getParents();
+	public Collection< ? extends EntityObject> getParents();
 
-	public void addParent(Annotation< ? , ? > parent);
+	public void addParent(EntityObject parent);
 
 	public void setScore(String score);
 

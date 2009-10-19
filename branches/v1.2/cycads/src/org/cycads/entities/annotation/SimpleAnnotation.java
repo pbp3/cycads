@@ -10,17 +10,17 @@ import org.cycads.entities.factory.EntityTypeFactory;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.SimpleHasSynonymsNoteble;
 
-public class SimpleAnnotation<SO extends EntityObject, TA extends EntityObject>
-		extends SimpleHasSynonymsNoteble implements Annotation<SO, TA>
+public class SimpleAnnotation<SO extends EntityObject, TA extends EntityObject> extends SimpleHasSynonymsNoteble
+		implements Annotation<SO, TA>
 {
 
-	SO								source;
-	TA								target;
+	SO							source;
+	TA							target;
 
-	Collection<Annotation< ? , ? >>	parents	= new ArrayList<Annotation< ? , ? >>();
-	Collection<Type>				types	= new TreeSet<Type>();
-	AnnotationMethod				method;
-	String							score;
+	Collection<EntityObject>	parents	= new ArrayList<EntityObject>();
+	Collection<Type>			types	= new TreeSet<Type>();
+	AnnotationMethod			method;
+	String						score;
 
 	public SimpleAnnotation(SO source, TA target, AnnotationMethod method, EntityTypeFactory< ? > typeFactory,
 			EntityDbxrefFactory< ? > dbxrefFactory) {
@@ -31,7 +31,7 @@ public class SimpleAnnotation<SO extends EntityObject, TA extends EntityObject>
 	}
 
 	@Override
-	public void addParent(Annotation< ? , ? > parent) {
+	public void addParent(EntityObject parent) {
 		parents.add(parent);
 	}
 
@@ -54,7 +54,7 @@ public class SimpleAnnotation<SO extends EntityObject, TA extends EntityObject>
 	}
 
 	@Override
-	public Collection<Annotation< ? , ? >> getParents() {
+	public Collection<EntityObject> getParents() {
 		return parents;
 	}
 
@@ -65,7 +65,12 @@ public class SimpleAnnotation<SO extends EntityObject, TA extends EntityObject>
 
 	@Override
 	public boolean isType(String type) {
-		return types.contains(typeFactory.getAnnotationType(type));
+		return isType(typeFactory.getAnnotationType(type));
+	}
+
+	@Override
+	public boolean isType(Type type) {
+		return types.contains(type);
 	}
 
 	public String getScore() {
