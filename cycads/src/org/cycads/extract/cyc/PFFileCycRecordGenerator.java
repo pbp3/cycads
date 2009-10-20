@@ -5,8 +5,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.cycads.entities.Feature;
 import org.cycads.entities.annotation.Annotation;
-import org.cycads.entities.annotation.SubseqAnnotation;
+import org.cycads.entities.sequence.Subsequence;
 import org.cycads.general.ParametersDefault;
 
 public class PFFileCycRecordGenerator implements CycRecordGenerator
@@ -35,14 +36,15 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 	}
 
 	@Override
-	public SimpleCycRecord generate(SubseqAnnotation< ? , ? , ? , ? , ? > annot) {
+	public SimpleCycRecord generate(Annotation< ? extends Subsequence, ? extends Feature> annot) {
 		String id = getID(annot);
-		String prodtype = PFFileConfig.getProductType(annot);
+		String prodtype = PFFileConfig.getProductType(annot.getTarget().getName());
 		SimpleCycRecord record = new SimpleCycRecord(prodtype, id);
 		try {
-			record.setStartBase(annot.getSubsequence().getStart());
-			record.setEndBase(annot.getSubsequence().getEnd());
-			record.setIntrons(getIntrons(annot));
+			Subsequence subseq = annot.getSource();
+			record.setStartBase(subseq.getStart());
+			record.setEndBase(subseq.getEnd());
+			record.setIntrons(getIntrons(subseq));
 			String name = locInterpreter.getFirstString(annot, PFFileConfig.getPFFileNamesLocs());
 			record.setName(name);
 			record.setFunctions(getFunctions(annot, record));
@@ -104,7 +106,7 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 		return record;
 	}
 
-	private Collection<CycFunction> getFunctions(SubseqAnnotation< ? , ? , ? , ? , ? > annot, CycRecord record)
+	private Collection<CycFunction> getFunctions(Annotation< ? extends Subsequence, ? > annot, CycRecord record)
 			throws RecordErrorException {
 		String functionName = locInterpreter.getFirstString(annot, PFFileConfig.getPFFileFunctionsLocs());
 		if (functionName == null || functionName.length() == 0) {
@@ -131,12 +133,12 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 		return ret;
 	}
 
-	private Collection<CycIntron> getIntrons(SubseqAnnotation annot) {
-		Collection<CycIntron> introns = annot.getSubsequence().getIntrons();
+	private Collection<CycIntron> getIntrons(Subsequence subseq) {
+		Collection<CycIntron> introns = subseq.getIntrons();
 		return introns;
 	}
 
-	private Collection<CycDBLink> getDblinks(SubseqAnnotation annot) {
+	private Collection<CycDBLink> getDblinks(Annotation< ? extends Subsequence, ? > annot) {
 		Collection<CycDBLink> cycDbLinks = new ArrayList<CycDBLink>();
 
 		Collection<String> dbLinksStr = locInterpreter.getStrings(annot, PFFileConfig.getPFFileDblinkLocs());
@@ -181,7 +183,7 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 		return cycDbLinks;
 	}
 
-	private String getID(Annotation annot) {
+	private String getID(Annotation< ? , ? > annot) {
 		String id = annot.getNoteValue(ParametersDefault.getPFFileCycIdNoteType());
 		if (id == null || id.length() == 0) {
 			id = cycIdGenerator.getNewID();

@@ -10,8 +10,6 @@ import java.util.MissingResourceException;
 import java.util.regex.Pattern;
 
 import org.cycads.entities.annotation.Annotation;
-import org.cycads.entities.annotation.SubseqAnnotation;
-import org.cycads.entities.note.Type;
 import org.cycads.general.Config;
 
 /*
@@ -117,15 +115,15 @@ public class PFFileConfig
 		return getStringMandatory("pf.file.productType." + type);
 	}
 
-	public static String getProductType(SubseqAnnotation< ? , ? , ? , ? , ? > annot) {
-		for (Type type : annot.getTypes()) {
-			String typeStr = getProductType(type.getName());
-			if (typeStr != null && typeStr.length() != 0) {
-				return typeStr;
-			}
-		}
-		return null;
-	}
+	//	public static String getProductType(SubseqAnnotation< ? , ? , ? , ? , ? > annot) {
+	//		for (Type type : annot.getTypes()) {
+	//			String typeStr = getProductType(type.getName());
+	//			if (typeStr != null && typeStr.length() != 0) {
+	//				return typeStr;
+	//			}
+	//		}
+	//		return null;
+	//	}
 
 	public static List<String> getPFFileNamesLocs() {
 		return getStrings("name.loc");

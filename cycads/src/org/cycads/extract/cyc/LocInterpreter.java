@@ -6,17 +6,18 @@ package org.cycads.extract.cyc;
 import java.util.Collection;
 import java.util.List;
 
-import org.cycads.entities.annotation.SubseqAnnotation;
+import org.cycads.entities.annotation.Annotation;
+import org.cycads.entities.sequence.Subsequence;
 
 public interface LocInterpreter
 {
-	public List<CycValueRet> getCycValues(SubseqAnnotation annot, List<String> locs);
+	public List<CycValueRet> getCycValues(Annotation< ? extends Subsequence, ? > annot, List<String> locs);
 
-	public String getFirstString(SubseqAnnotation annot, List<String> locs);
+	public String getFirstString(Annotation< ? extends Subsequence, ? > annot, List<String> locs);
 
-	public Collection<String> getStrings(SubseqAnnotation annot, List<String> locs);
+	public Collection<String> getStrings(Annotation< ? extends Subsequence, ? > annot, List<String> locs);
 
-	public Collection<CycDbxrefAnnotationPaths> getCycDbxrefPathAnnots(SubseqAnnotation< ? , ? , ? , ? , ? > annot,
+	public Collection<CycDbxrefAnnotationPaths> getCycDbxrefPathAnnots(Annotation< ? extends Subsequence, ? > annot,
 			List<String> locs, ScoreSystemCollection scoreSystems);
 
 }
