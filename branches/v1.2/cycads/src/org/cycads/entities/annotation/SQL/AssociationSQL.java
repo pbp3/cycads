@@ -72,6 +72,13 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 
 	public static <SO extends EntitySQL, TA extends EntitySQL> AssociationSQL<SO, TA> createAssociationSQL(SO source,
 			TA target, TypeSQL type, Connection con) throws SQLException {
+		ArrayList<TypeSQL> types = new ArrayList<TypeSQL>(1);
+		types.add(type);
+		return createAssociationSQL(source, target, types, con);
+	}
+
+	public static <SO extends EntitySQL, TA extends EntitySQL> AssociationSQL<SO, TA> createAssociationSQL(SO source,
+			TA target, Collection<TypeSQL> types, Connection con) throws SQLException {
 
 		SourceTargetTypeSQL sourceTargetType = new SourceTargetTypeSQL(TypeSQL.getType(source.getEntityType(), con),
 			TypeSQL.getType(target.getEntityType(), con), con);
@@ -89,8 +96,10 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 			rs = stmt.getGeneratedKeys();
 			if (rs.next()) {
 				AssociationSQL<SO, TA> ret = new AssociationSQL<SO, TA>(rs.getInt(1), con);
-				if (type != null) {
-					ret.addType(type);
+				if (types != null) {
+					for (TypeSQL type : types) {
+						ret.addType(type);
+					}
 				}
 				return ret;
 			}

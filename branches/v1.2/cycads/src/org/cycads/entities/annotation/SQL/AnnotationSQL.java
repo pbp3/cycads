@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cycads.entities.EntityObject;
@@ -62,12 +63,20 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 
 	public static <SO extends EntitySQL, TA extends EntitySQL> AnnotationSQL<SO, TA> createAnnotationSQL(SO source,
 			TA target, TypeSQL type, AnnotationMethodSQL method, String score, Connection con) throws SQLException {
-		AssociationSQL<SO, TA> association = AssociationSQL.createAssociationSQL(source, target, type, con);
+		ArrayList<TypeSQL> types = new ArrayList<TypeSQL>(1);
+		types.add(type);
+		return createAnnotationSQL(source, target, types, method, score, con);
+	}
+
+	public static <SO extends EntitySQL, TA extends EntitySQL> AnnotationSQL<SO, TA> createAnnotationSQL(SO source,
+			TA target, Collection<TypeSQL> types, AnnotationMethodSQL method, String score, Connection con)
+			throws SQLException {
+		AssociationSQL<SO, TA> association = AssociationSQL.createAssociationSQL(source, target, types, con);
 		association.addType(getEntityType(con));
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("INSERT INTO Annotation (annotation_id, annotation_method_id, score) VALUES (?)");
+			stmt = con.prepareStatement("INSERT INTO Annotation (annotation_id, annotation_method_id, score) VALUES (?,?,?)");
 			stmt.setInt(1, association.getId());
 			stmt.setInt(2, method.getId());
 			stmt.setString(3, score);
