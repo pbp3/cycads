@@ -7,6 +7,6 @@ import org.cycads.entities.Function;
 
 public interface EntityFunctionFactory<F extends Function>
 {
-	public F getFunction(String name, String description);
+	public F getFunction(String name);
 
 }

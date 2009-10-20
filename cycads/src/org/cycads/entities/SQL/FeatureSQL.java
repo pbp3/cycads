@@ -105,7 +105,7 @@ public class FeatureSQL extends TypeSQL implements Feature
 		return ret;
 	}
 
-	public static FeatureSQL Feature(int id, Connection con) throws SQLException {
+	public static FeatureSQL getFeature(int id, Connection con) throws SQLException {
 		FeatureSQL ret = hashById.get(id);
 		if (ret == null) {
 			ret = new FeatureSQL(id, con);
@@ -116,10 +116,10 @@ public class FeatureSQL extends TypeSQL implements Feature
 
 	@Override
 	public TypeSQL getEntityType() {
-		return getObjectType(getConnection());
+		return getEntityType(getConnection());
 	}
 
-	public static TypeSQL getObjectType(Connection con) {
+	public static TypeSQL getEntityType(Connection con) {
 		return TypeSQL.getType(TypeSQL.FEATURE, con);
 	}
 

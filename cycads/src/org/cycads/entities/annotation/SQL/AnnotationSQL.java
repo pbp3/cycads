@@ -11,8 +11,8 @@ import java.util.Collection;
 
 import org.cycads.entities.EntityObject;
 import org.cycads.entities.annotation.Annotation;
+import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.note.SQL.TypeSQL;
-import org.cycads.entities.synonym.Dbxref;
 
 public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends AssociationSQL<SO, TA>
 		implements Annotation<SO, TA>, EntitySQL
@@ -63,7 +63,7 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 	public static <SO extends EntitySQL, TA extends EntitySQL> AnnotationSQL<SO, TA> createAnnotationSQL(SO source,
 			TA target, TypeSQL type, AnnotationMethodSQL method, String score, Connection con) throws SQLException {
 		AssociationSQL<SO, TA> association = AssociationSQL.createAssociationSQL(source, target, type, con);
-		association.addType(getObjectType(con));
+		association.addType(getEntityType(con));
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -150,7 +150,7 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 	@Override
 	public Collection<EntitySQL> getParents() {
 		if (parents == null) {
-			Collection< ? extends AssociationSQL< ? , ? >> associations = AssociationSQL.getAssociations(this, null,
+			Collection< ? extends AssociationSQL< ? , ? >> associations = EntityFactorySQL.getAssociations(this, null,
 				getParentType(), null, getConnection());
 			for (AssociationSQL< ? , ? > association : associations) {
 				parents.add(association.getTarget());
@@ -166,10 +166,6 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 			}
 		}
 		return false;
-	}
-
-	public static <SO extends EntitySQL, TA extends EntitySQL> Collection< ? extends AnnotationSQL< ? extends SO, ? extends TA>> getAnnotations(
-			SO source, TA target, TypeSQL type, Dbxref synonym, AnnotationMethodSQL method, Connection con) {
 	}
 
 	//	public static Collection<AnnotationSQL> getAnnotations(Dbxref dbxref, Connection con) throws SQLException {
@@ -214,10 +210,10 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 
 	@Override
 	public TypeSQL getEntityType() {
-		return getObjectType(getConnection());
+		return getEntityType(getConnection());
 	}
 
-	public static TypeSQL getObjectType(Connection con) {
+	public static TypeSQL getEntityType(Connection con) {
 		return TypeSQL.getType(TypeSQL.ANNOTATION, con);
 	}
 

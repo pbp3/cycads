@@ -13,20 +13,18 @@ public interface AssociationFinder
 {
 	/* The arguments nulls are not considerated */
 	public <SO extends EntityObject, TA extends EntityObject> Collection< ? extends Association< ? extends SO, ? extends TA>> getAssociations(
-			SO source, TA target, Collection<Type> types, Dbxref synonym);
+			SO source, TA target, Collection<Type> types, Dbxref synonym, AssociationFilter filter);
 
 	/* The arguments nulls are not considerated */
 	public <TA extends EntityObject> Collection< ? extends Association< ? , ? extends TA>> getAssociations(
-			Type sourceType, TA target, Collection<Type> types, Dbxref synonym);
+			Type sourceType, TA target, Collection<Type> types, Dbxref synonym, AssociationFilter filter);
 
 	/* The arguments nulls are not considerated */
-	public <SO extends EntityObject> Collection< ? extends Association< ? extends SO, ? >> getAssociations(
-			SO source, Type targetType, Collection<Type> types, Dbxref synonym);
+	public <SO extends EntityObject> Collection< ? extends Association< ? extends SO, ? >> getAssociations(SO source,
+			Type targetType, Collection<Type> types, Dbxref synonym, AssociationFilter filter);
 
 	/* The arguments nulls are not considerated */
 	public Collection< ? extends Association< ? , ? >> getAssociations(Type sourceType, Type targetType,
-			Collection<Type> types, Dbxref synonym);
-
-	public Collection< ? extends Association< ? , ? >> getAssociations(AnnotationFilter filter);
+			Collection<Type> types, Dbxref synonym, AssociationFilter filter);
 
 }

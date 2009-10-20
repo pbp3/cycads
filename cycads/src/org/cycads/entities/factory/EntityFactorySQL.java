@@ -5,20 +5,35 @@ package org.cycads.entities.factory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Hashtable;
 
+import org.cycads.entities.EntityObject;
+import org.cycads.entities.SQL.FeatureSQL;
 import org.cycads.entities.SQL.FunctionSQL;
+import org.cycads.entities.annotation.Annotation;
+import org.cycads.entities.annotation.AnnotationFilter;
+import org.cycads.entities.annotation.AnnotationMethod;
+import org.cycads.entities.annotation.Association;
+import org.cycads.entities.annotation.AssociationFilter;
 import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
 import org.cycads.entities.annotation.SQL.AnnotationSQL;
+import org.cycads.entities.annotation.SQL.AssociationSQL;
 import org.cycads.entities.annotation.SQL.EntitySQL;
+import org.cycads.entities.note.Type;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.reaction.SQL.CompoundSQL;
+import org.cycads.entities.reaction.SQL.ReactionSQL;
 import org.cycads.entities.sequence.SQL.OrganismSQL;
+import org.cycads.entities.sequence.SQL.SequenceSQL;
+import org.cycads.entities.sequence.SQL.SubsequenceSQL;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.EC;
 import org.cycads.entities.synonym.KO;
+import org.cycads.entities.synonym.SQL.DatabaseSQL;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.ECSQL;
 import org.cycads.entities.synonym.SQL.KOSQL;
@@ -57,8 +72,7 @@ public class EntityFactorySQL
 		}
 	}
 
-	private AnnotationMethodSQL						methodDefault;
-	private Hashtable<String, AnnotationMethodSQL>	methods	= new Hashtable<String, AnnotationMethodSQL>();
+	private AnnotationMethodSQL	methodDefault;
 
 	public AnnotationMethodSQL getMethodDefault() {
 		return methodDefault;
@@ -74,15 +88,9 @@ public class EntityFactorySQL
 			return getMethodDefault();
 		}
 		try {
-			AnnotationMethodSQL ret = methods.get(name);
-			if (ret == null) {
-				ret = AnnotationMethodSQL.getMethod(name, getConnection());
-				methods.put(name, ret);
-			}
-			return ret;
+			return AnnotationMethodSQL.getMethod(name, getConnection());
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 	}
@@ -111,25 +119,8 @@ public class EntityFactorySQL
 	}
 
 	@Override
-	public TypeSQL getNoteType(String name) {
-		try {
-			return TypeSQL.getType(name, getConnection());
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-	}
-
-	@Override
-	public TypeSQL getAnnotationType(String name) {
-		try {
-			return TypeSQL.getType(name, getConnection());
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
+	public TypeSQL getType(String name) {
+		return TypeSQL.getType(name, getConnection());
 	}
 
 	@Override
@@ -148,7 +139,6 @@ public class EntityFactorySQL
 			return OrganismSQL.createOrganism(orgId, name, getConnection());
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 	}
@@ -169,27 +159,6 @@ public class EntityFactorySQL
 	}
 
 	@Override
-	public FunctionSQL getFunction(String name, String description) {
-		try {
-			return new FunctionSQL(name, description, getConnection());
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-	}
-
-	@Override
-	public TypeSQL getAnnotationTypeCDS() {
-		return getAnnotationType(ParametersDefault.getCDSAnnotationTypeName());
-	}
-
-	@Override
-	public TypeSQL getAnnotationTypeGene() {
-		return getAnnotationType(ParametersDefault.getGeneAnnotationTypeName());
-	}
-
-	@Override
 	public EC getEC(String ecNumber) {
 		try {
 			return new ECSQL(ecNumber, getConnection());
@@ -201,9 +170,9 @@ public class EntityFactorySQL
 	}
 
 	@Override
-	public Collection<AnnotationSQL> getAnnotations(Dbxref dbxref) {
+	public FunctionSQL getFunction(String name) {
 		try {
-			return AnnotationSQL.getAnnotations(dbxref, getConnection());
+			return FunctionSQL.getFunction(name, con);
 		}
 		catch (SQLException e) {
 			e.printStackTrace();
@@ -211,17 +180,158 @@ public class EntityFactorySQL
 		}
 	}
 
+	@Override
+	public TypeSQL getAnnotationTypeCDS() {
+		return getType(ParametersDefault.getCDSAnnotationTypeName());
+	}
+
+	@Override
+	public TypeSQL getAnnotationTypeGene() {
+		return getType(ParametersDefault.getGeneAnnotationTypeName());
+	}
+
 	public static EntitySQL createObject(int id, int typeId, Connection con) throws SQLException {
 		return createObject(id, TypeSQL.getType(typeId, con), con);
 	}
 
 	public static EntitySQL createObject(int id, TypeSQL type, Connection con) throws SQLException {
-		if (type.equals(AnnotationSQL.getObjectType(con))) {
+		if (type.equals(AnnotationSQL.getEntityType(con))) {
 			return new AnnotationSQL<EntitySQL, EntitySQL>(id, con);
 		}
-		else if (type.equals(CompoundSQL.getObjectType(con))) {
+		else if (type.equals(AssociationSQL.getEntityType(con))) {
+			return new AssociationSQL<EntitySQL, EntitySQL>(id, con);
+		}
+		else if (type.equals(DbxrefSQL.getEntityType(con))) {
+			return new DbxrefSQL(id, con);
+		}
+		else if (type.equals(FunctionSQL.getEntityType(con))) {
+			return FunctionSQL.getFunction(id, con);
+		}
+		else if (type.equals(SubsequenceSQL.getEntityType(con))) {
+			return new SubsequenceSQL(id, con);
+		}
+		else if (type.equals(SequenceSQL.getEntityType(con))) {
+			return new SequenceSQL(id, con);
+		}
+		else if (type.equals(OrganismSQL.getEntityType(con))) {
+			return new OrganismSQL(id, con);
+		}
+		else if (type.equals(ReactionSQL.getEntityType(con))) {
+			return new ReactionSQL(id, con);
+		}
+		//		else if (type.equals(PathwaySQL.getEntityType(con))) {
+		//			return new PathwaySQL(id, con);
+		//		}
+		else if (type.equals(CompoundSQL.getEntityType(con))) {
 			return new CompoundSQL(id, con);
 		}
+		else if (type.equals(FeatureSQL.getEntityType(con))) {
+			return FeatureSQL.getFeature(id, con);
+		}
+		else if (type.equals(TypeSQL.getEntityType(con))) {
+			return TypeSQL.getType(id, con);
+		}
+		else if (type.equals(AnnotationMethodSQL.getEntityType(con))) {
+			return AnnotationMethodSQL.getMethod(id, con);
+		}
+		else if (type.equals(DatabaseSQL.getEntityType(con))) {
+			return DatabaseSQL.getDB(id, con);
+		}
+		return null;
+	}
+
+	public static <SO extends EntitySQL, TA extends EntitySQL> Collection< ? extends AssociationSQL< ? extends SO, ? extends TA>> getAssociations(
+			SO source, TA target, TypeSQL type, DbxrefSQL synonym, Connection con) {
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		Collection<AssociationSQL< ? extends SO, ? extends TA>> ret = new ArrayList<AssociationSQL< ? extends SO, ? extends TA>>();
+		try {
+			stmt = con.prepareStatement("SELECT association_id from Association WHERE ");
+			stmt.setInt(1, getId());
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+			}
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
+		return ret;
+	}
+
+	@Override
+	public <SO extends EntityObject, TA extends EntityObject> Collection< ? extends Annotation< ? extends SO, ? extends TA>> getAnnotations(
+			SO source, TA target, AnnotationMethod method, Collection<Type> types, Dbxref synonym,
+			AnnotationFilter filter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <TA extends EntityObject> Collection< ? extends Annotation< ? , ? extends TA>> getAnnotations(
+			Type sourceType, TA target, AnnotationMethod method, Collection<Type> types, Dbxref synonym,
+			AnnotationFilter filter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <SO extends EntityObject> Collection< ? extends Annotation< ? extends SO, ? >> getAnnotations(SO source,
+			Type targetType, AnnotationMethod method, Collection<Type> types, Dbxref synonym, AnnotationFilter filter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection< ? extends Annotation< ? , ? >> getAnnotations(Type sourceType, Type targetType,
+			AnnotationMethod method, Collection<Type> types, Dbxref synonym, AnnotationFilter filter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <SO extends EntityObject, TA extends EntityObject> Collection< ? extends Association< ? extends SO, ? extends TA>> getAssociations(
+			SO source, TA target, Collection<Type> types, Dbxref synonym, AssociationFilter filter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <TA extends EntityObject> Collection< ? extends Association< ? , ? extends TA>> getAssociations(
+			Type sourceType, TA target, Collection<Type> types, Dbxref synonym, AssociationFilter filter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public <SO extends EntityObject> Collection< ? extends Association< ? extends SO, ? >> getAssociations(SO source,
+			Type targetType, Collection<Type> types, Dbxref synonym, AssociationFilter filter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection< ? extends Association< ? , ? >> getAssociations(Type sourceType, Type targetType,
+			Collection<Type> types, Dbxref synonym, AssociationFilter filter) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

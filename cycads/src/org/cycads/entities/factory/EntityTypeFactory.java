@@ -7,9 +7,7 @@ import org.cycads.entities.note.Type;
 
 public interface EntityTypeFactory<T extends Type>
 {
-	public T getNoteType(String name);
-
-	public T getAnnotationType(String name);
+	public T getType(String name);
 
 	public T getAnnotationTypeCDS();
 

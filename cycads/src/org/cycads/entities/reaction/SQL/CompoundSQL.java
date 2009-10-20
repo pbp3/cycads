@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import org.cycads.entities.annotation.SQL.EntitySQL;
+import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.reaction.Compound;
 import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
@@ -63,7 +64,8 @@ public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound, Enti
 	public CompoundSQL(boolean smallMolecule, String dbName, String accession, Connection con) throws SQLException {
 		this.smallMolecule = smallMolecule;
 		this.con = con;
-		ArrayList<CompoundSQL> comps = getCompounds(dbName, accession, con);
+		ArrayList<CompoundSQL> comps = EntityFactorySQL.getAssociations(source, target, type, synonym, con).getCompounds(
+			dbName, accession, con);
 		if (comps.size() > 0) {
 			for (CompoundSQL comp : comps) {
 				if (comp.isSmallMolecule() == smallMolecule) {
@@ -139,10 +141,10 @@ public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound, Enti
 
 	@Override
 	public TypeSQL getEntityType() {
-		return getObjectType(con);
+		return getEntityType(con);
 	}
 
-	public static TypeSQL getObjectType(Connection con) {
+	public static TypeSQL getEntityType(Connection con) {
 		return TypeSQL.getType(TypeSQL.COMPOUND, con);
 	}
 

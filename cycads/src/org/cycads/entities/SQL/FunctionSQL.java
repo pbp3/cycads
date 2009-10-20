@@ -116,10 +116,10 @@ public class FunctionSQL extends TypeSQL implements Function
 
 	@Override
 	public TypeSQL getEntityType() {
-		return getObjectType(getConnection());
+		return getEntityType(getConnection());
 	}
 
-	public static TypeSQL getObjectType(Connection con) {
+	public static TypeSQL getEntityType(Connection con) {
 		return TypeSQL.getType(TypeSQL.FUNCTION, con);
 	}
 
