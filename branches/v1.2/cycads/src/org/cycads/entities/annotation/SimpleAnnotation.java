@@ -36,8 +36,8 @@ public class SimpleAnnotation<SO extends EntityObject, TA extends EntityObject> 
 	}
 
 	@Override
-	public Type addType(String type) {
-		Type t = typeFactory.getAnnotationType(type);
+	public Type addType(String typeName) {
+		Type t = typeFactory.getType(typeName);
 		types.add(t);
 		return t;
 	}
@@ -64,8 +64,8 @@ public class SimpleAnnotation<SO extends EntityObject, TA extends EntityObject> 
 	}
 
 	@Override
-	public boolean isType(String type) {
-		return isType(typeFactory.getAnnotationType(type));
+	public boolean isType(String typeName) {
+		return isType(typeFactory.getType(typeName));
 	}
 
 	@Override
@@ -93,7 +93,7 @@ public class SimpleAnnotation<SO extends EntityObject, TA extends EntityObject> 
 
 	@Override
 	public Type getEntityType() {
-		return typeFactory.getNoteType(OBJECT_TYPE_NAME);
+		return typeFactory.getType("SimpleAnnotation");
 	}
 
 	// @Override

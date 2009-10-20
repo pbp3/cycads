@@ -15,7 +15,6 @@ import org.cycads.entities.annotation.Association;
 import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.note.SQL.TypeSQL;
-import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
 public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends HasSynonymsNotebleSQL
@@ -277,51 +276,12 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 	//		}
 	//	}
 
-	public static <SO extends EntitySQL, TA extends EntitySQL> Collection< ? extends AssociationSQL< ? extends SO, ? extends TA>> getAssociations(
-			SO source, TA target, TypeSQL type, Dbxref synonym, Connection con) {
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		Collection<AssociationSQL< ? extends SO, ? extends TA>> ret = new ArrayList<AssociationSQL< ? extends SO, ? extends TA>>();
-		try {
-			stmt = con.prepareStatement("SELECT target_id, target_type_id from Association WHERE annotation_id=?");
-			stmt.setInt(1, getId());
-			rs = stmt.executeQuery();
-			while (rs.next()) {
-				parents.add(EntityFactorySQL.createObject(rs.getInt("target_id"), rs.getInt("target_type_id"),
-					getConnection()));
-			}
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-			if (stmt != null) {
-				try {
-					stmt.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-		}
-		return ret;
-	}
-
 	@Override
 	public TypeSQL getEntityType() {
-		return getObjectType(con);
+		return getEntityType(con);
 	}
 
-	public static TypeSQL getObjectType(Connection con) {
+	public static TypeSQL getEntityType(Connection con) {
 		return TypeSQL.getType(TypeSQL.ASSOCIATION, con);
 	}
 

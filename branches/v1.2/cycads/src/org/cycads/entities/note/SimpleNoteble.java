@@ -41,7 +41,7 @@ public abstract class SimpleNoteble implements Noteble
 
 	@Override
 	public Type getNoteType(String noteType) {
-		return typeFactory.getNoteType(noteType);
+		return typeFactory.getType(noteType);
 	}
 
 	@Override

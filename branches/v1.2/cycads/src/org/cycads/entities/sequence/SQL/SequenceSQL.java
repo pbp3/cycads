@@ -378,10 +378,10 @@ public class SequenceSQL extends HasSynonymsNotebleSQL implements Sequence<Organ
 
 	@Override
 	public TypeSQL getEntityType() {
-		return getObjectType(con);
+		return getEntityType(con);
 	}
 
-	public static TypeSQL getObjectType(Connection con) {
+	public static TypeSQL getEntityType(Connection con) {
 		return TypeSQL.getType(TypeSQL.SEQUENCE, con);
 	}
 
