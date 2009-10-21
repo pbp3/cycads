@@ -92,6 +92,7 @@ CREATE  TABLE IF NOT EXISTS `Cycads`.`Dbxref` (
   PRIMARY KEY (`dbxref_id`) ,
   UNIQUE INDEX `dbxref_db` (`accession` ASC) ,
   INDEX `fk_Dbxref_Dbname1` (`external_db_id` ASC) ,
+  UNIQUE INDEX `external_db_accession` (`accession` ASC, `external_db_id` ASC) ,
   CONSTRAINT `fk_Dbxref_Dbname1`
     FOREIGN KEY (`external_db_id` )
     REFERENCES `Cycads`.`External_DB` (`external_db_id` )
@@ -111,6 +112,7 @@ CREATE  TABLE IF NOT EXISTS `Cycads`.`Subsequence` (
   `end_position` INT(10) UNSIGNED NOT NULL ,
   PRIMARY KEY (`subsequence_id`) ,
   INDEX `location_start` (`start_position` ASC, `end_position` ASC) ,
+  UNIQUE INDEX `sequence_start_end` (`sequence_id` ASC, `start_position` ASC, `end_position` ASC) ,
   CONSTRAINT `fk_9aa85839-ba9d-11de-b920-0014a45de702`
     FOREIGN KEY (`sequence_id` )
     REFERENCES `Cycads`.`Sequence` (`sequence_id` )
@@ -184,10 +186,14 @@ ROW_FORMAT = DEFAULT;
 -- Table `Cycads`.`Method`
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `Cycads`.`Method` (
-  `method_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT ,
-  `name` VARCHAR(255) NOT NULL ,
+  `method_id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT ,
   PRIMARY KEY (`method_id`) ,
-  UNIQUE INDEX `annotation_method_index1821` (`name` ASC) )
+  INDEX `fk_Method_term_type1` (`method_id` ASC) ,
+  CONSTRAINT `fk_Method_term_type1`
+    FOREIGN KEY (`method_id` )
+    REFERENCES `Cycads`.`Term_type` (`type_id` )
+    ON DELETE CASCADE
+    ON UPDATE CASCADE)
 PACK_KEYS = 0
 ROW_FORMAT = DEFAULT;
 
