@@ -245,7 +245,7 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 	}
 
 	public static TypeSQL getEntityType(Connection con) {
-		return TypeSQL.getType(TypeSQL.ASSOCIATION, con);
+		return TypeSQL.getType(Association.ENTITY_TYPE_NAME, con);
 	}
 
 	public static <SO extends EntitySQL, TA extends EntitySQL> Collection<AssociationSQL< ? extends SO, ? extends TA>> getAssociations(

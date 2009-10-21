@@ -9,5 +9,7 @@ import org.cycads.entities.synonym.HasSynonyms;
 
 public interface Compound extends Noteble, HasSynonyms, EntityObject
 {
+	public static final String	ENTITY_TYPE_NAME	= "Compound";
+
 	public boolean isSmallMolecule();
 }

@@ -12,6 +12,8 @@ import org.cycads.entities.synonym.HasSynonyms;
 public interface Organism<S extends Sequence< ? , ? >, SS extends Subsequence< ? >>
 		extends Noteble, HasSynonyms, EntityObject
 {
+	public static final String	ENTITY_TYPE_NAME	= "Organism";
+
 	public int getId();
 
 	public String getName();

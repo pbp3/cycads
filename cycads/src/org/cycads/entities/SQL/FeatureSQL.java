@@ -120,7 +120,7 @@ public class FeatureSQL extends TypeSQL implements Feature
 	}
 
 	public static TypeSQL getEntityType(Connection con) {
-		return TypeSQL.getType(TypeSQL.FEATURE, con);
+		return TypeSQL.getType(Feature.ENTITY_TYPE_NAME, con);
 	}
 
 }

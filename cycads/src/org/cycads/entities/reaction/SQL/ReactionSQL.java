@@ -324,7 +324,7 @@ public class ReactionSQL extends HasSynonymsNotebleSQL implements Reaction<Compo
 	}
 
 	public static TypeSQL getEntityType(Connection con) {
-		return TypeSQL.getType(TypeSQL.REACTION, con);
+		return TypeSQL.getType(Reaction.ENTITY_TYPE_NAME, con);
 	}
 
 }

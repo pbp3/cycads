@@ -8,7 +8,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Collection;
 
-import org.cycads.entities.EntityFinder;
 import org.cycads.entities.SQL.FeatureSQL;
 import org.cycads.entities.SQL.FunctionSQL;
 import org.cycads.entities.annotation.Annotation;
@@ -40,8 +39,7 @@ import org.cycads.general.ParametersDefault;
 
 public class EntityFactorySQL
 		implements
-		EntityFactory<DbxrefSQL, AnnotationMethodSQL, TypeSQL, OrganismSQL, FunctionSQL, EntitySQL, AnnotationSQL>,
-		EntityFinder<EntitySQL>
+		EntityFactory<DbxrefSQL, AnnotationMethodSQL, TypeSQL, OrganismSQL, FunctionSQL, EntitySQL, AnnotationSQL, FeatureSQL>
 {
 	private Connection	con;
 
@@ -167,9 +165,20 @@ public class EntityFactorySQL
 	}
 
 	@Override
+	public FeatureSQL getFeature(String name) {
+		try {
+			return FeatureSQL.getFeature(name, getConnection());
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
 	public FunctionSQL getFunction(String name) {
 		try {
-			return FunctionSQL.getFunction(name, con);
+			return FunctionSQL.getFunction(name, getConnection());
 		}
 		catch (SQLException e) {
 			e.printStackTrace();

@@ -7,6 +7,8 @@ import org.cycads.entities.note.Noteble;
 
 public interface AnnotationMethod extends Noteble
 {
+	public static final String	ENTITY_TYPE_NAME	= "AnnotationMethod";
+
 	public String getName();
 
 	public double getWeight();

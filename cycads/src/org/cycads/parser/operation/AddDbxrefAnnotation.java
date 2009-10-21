@@ -7,13 +7,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
+import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.annotation.DbxrefAnnotable;
-import org.cycads.entities.annotation.DbxrefAnnotation;
 import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.synonym.Dbxref;
 
-public class AddDbxrefAnnotation<S extends DbxrefAnnotable> extends SimpleRelationshipOperation<S, DbxrefAnnotation>
+public class AddDbxrefAnnotation<S extends Annotation< ? , Dbxref>>
+		extends SimpleRelationshipOperation<S, Annotation< ? , Dbxref>>
 {
 
 	private EntityFactory		factory;
@@ -29,9 +29,9 @@ public class AddDbxrefAnnotation<S extends DbxrefAnnotable> extends SimpleRelati
 	}
 
 	@Override
-	protected Collection<DbxrefAnnotation> execute(S source, Note note) {
+	protected Collection<Annotation< ? , Dbxref>> execute(S source, Note note) {
 		Dbxref dbxref = factory.getDbxref(dbxrefDBName, note.getValue());
-		Collection<DbxrefAnnotation> ret = new ArrayList<DbxrefAnnotation>();
+		Collection<Annotation< ? , Dbxref>> ret = new ArrayList<Annotation< ? , Dbxref>>();
 		ret.add(source.addDbxrefAnnotation(method, dbxref));
 		return ret;
 	}

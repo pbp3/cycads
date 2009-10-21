@@ -8,6 +8,8 @@ import org.cycads.entities.synonym.HasSynonyms;
 
 public interface Feature extends EntityObject, HasSynonyms, Noteble
 {
+	public static final String	ENTITY_TYPE_NAME	= "Feature";
+
 	public String getName();
 
 	public String getDescription();

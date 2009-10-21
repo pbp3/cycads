@@ -27,14 +27,16 @@ import org.biojavax.SimpleRichAnnotation;
 import org.biojavax.bio.seq.RichFeature;
 import org.biojavax.bio.seq.RichSequence;
 import org.biojavax.bio.seq.RichSequenceIterator;
-import org.cycads.entities.annotation.SubseqAnnotation;
+import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.factory.EntityFactory;
+import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Intron;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Sequence;
 import org.cycads.entities.sequence.SimpleIntron;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
+import org.cycads.general.ParametersDefault;
 import org.cycads.parser.operation.NoteBiojava;
 import org.cycads.parser.operation.NoteOperation;
 import org.cycads.parser.operation.RelationshipOperation;
@@ -99,7 +101,9 @@ public class GBKFileParser
 			organism = factory.createOrganism(richSeq.getTaxon().getNCBITaxID(), richSeq.getTaxon().getDisplayName());
 		}
 		Dbxref seqSynonym = factory.getDbxref(seqDBName, richSeq.getAccession());
-		Collection<Sequence> sequences = organism.getSequences(seqSynonym);
+		Collection<Sequence> sequences = factory.getEntitiesBySynonym(factory.getType(Sequence.ENTITY_TYPE_NAME),
+			seqSynonym);
+
 		if (sequences != null && !sequences.isEmpty()) {
 			sequence = sequences.iterator().next();
 		}
@@ -118,9 +122,9 @@ public class GBKFileParser
 	public void handleFeature(RichFeature feature, Sequence sequence) {
 		String type = feature.getType();
 		Subsequence subseq = getSubsequence(feature, sequence);
-		Annotation<Subsequence, Feature> annot = factory.createAnnotation
-		SubseqAnnotation annot = subseq.addAnnotation(factory.getAnnotationType(type),
-			factory.getAnnotationMethod(GBKFileConfig.getAnnotationMethodName(type)));
+		Type annotationType = factory.getType(ParametersDefault.getFeatureAnnotationType(type));
+		Annotation<Subsequence, Feature> annot = factory.createAnnotation(subseq, factory.getFeature(type),
+			factory.getAnnotationMethod(GBKFileConfig.getAnnotationMethodName(type)), null, annotationType);
 
 		for (Object o : feature.getRankedCrossRefs()) {
 			RankedCrossRef rankedCrossRef = (RankedCrossRef) o;
@@ -131,7 +135,7 @@ public class GBKFileParser
 		int noteRank = annots.getNoteSet().size();
 		ArrayList<Note> notes = new ArrayList<Note>(annots.getNoteSet());
 		List<NoteOperation> noteOperations = GBKFileConfig.getNoteOperations(type);
-		List<RelationshipOperation<SubseqAnnotation, ? >> annotationOperations = GBKFileConfig.getSubseqAnnotationOperations(
+		List<RelationshipOperation<Annotation<Subsequence, ? >, ? >> annotationOperations = GBKFileConfig.getSubseqAnnotationOperations(
 			type, factory, sequence);
 		List<RelationshipOperation<Subsequence, ? >> subseqOperations = GBKFileConfig.getSubseqOperations(type, factory);
 
@@ -168,7 +172,7 @@ public class GBKFileParser
 
 				boolean noteUsed = false;
 				Collection< ? > retOps;
-				for (RelationshipOperation<SubseqAnnotation, ? > operation : annotationOperations) {
+				for (RelationshipOperation<Annotation<Subsequence, ? >, ? > operation : annotationOperations) {
 					retOps = operation.relate(annot, noteForOperation);
 					if (retOps != null && !retOps.isEmpty()) {
 						noteUsed = true;

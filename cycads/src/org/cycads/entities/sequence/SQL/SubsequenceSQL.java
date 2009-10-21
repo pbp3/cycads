@@ -206,7 +206,7 @@ public class SubsequenceSQL extends HasSynonymsNotebleSQL implements Subsequence
 	}
 
 	public static TypeSQL getEntityType(Connection con) {
-		return TypeSQL.getType(TypeSQL.SUBSEQUENCE, con);
+		return TypeSQL.getType(Subsequence.ENTITY_TYPE_NAME, con);
 	}
 
 }
