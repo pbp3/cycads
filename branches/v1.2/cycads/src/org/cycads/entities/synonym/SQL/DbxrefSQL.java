@@ -221,7 +221,7 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL implements Dbxref
 	}
 
 	public static TypeSQL getEntityType(Connection con) {
-		return TypeSQL.getType(TypeSQL.DBXREF, con);
+		return TypeSQL.getType(Dbxref.OBJECT_TYPE_NAME, con);
 	}
 
 }

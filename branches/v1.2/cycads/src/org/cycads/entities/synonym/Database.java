@@ -8,7 +8,7 @@ import org.cycads.entities.note.Noteble;
 
 public interface Database extends EntityObject, HasSynonyms, Noteble
 {
-	public static final String	OBJECT_TYPE_NAME	= "Database";
+	public static final String	OBJECT_TYPE_NAME	= "External_DB";
 
 	public String getName();
 

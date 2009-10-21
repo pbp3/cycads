@@ -145,7 +145,7 @@ public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound, Enti
 	}
 
 	public static TypeSQL getEntityType(Connection con) {
-		return TypeSQL.getType(TypeSQL.COMPOUND, con);
+		return TypeSQL.getType(Compound.ENTITY_TYPE_NAME, con);
 	}
 
 }

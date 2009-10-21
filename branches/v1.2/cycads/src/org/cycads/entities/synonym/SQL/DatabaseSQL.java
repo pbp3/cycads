@@ -120,7 +120,7 @@ public class DatabaseSQL extends TypeSQL implements Database
 	}
 
 	public static TypeSQL getEntityType(Connection con) {
-		return TypeSQL.getType(TypeSQL.DATABASE, con);
+		return TypeSQL.getType(Database.OBJECT_TYPE_NAME, con);
 	}
 
 }

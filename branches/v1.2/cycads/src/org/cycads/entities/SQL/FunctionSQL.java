@@ -120,7 +120,7 @@ public class FunctionSQL extends TypeSQL implements Function
 	}
 
 	public static TypeSQL getEntityType(Connection con) {
-		return TypeSQL.getType(TypeSQL.FUNCTION, con);
+		return TypeSQL.getType(Function.ENTITY_TYPE_NAME, con);
 	}
 
 }

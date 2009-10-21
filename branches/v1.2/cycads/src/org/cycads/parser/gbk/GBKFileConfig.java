@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.regex.Pattern;
 
+import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationFinder;
-import org.cycads.entities.annotation.SubseqAnnotation;
 import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.general.Config;
@@ -360,16 +360,16 @@ public class GBKFileConfig
 		return new RemoveNote(Pattern.compile(tagName), Pattern.compile(tagValue));
 	}
 
-	static Hashtable<String, ArrayList<RelationshipOperation<SubseqAnnotation, ? >>>	annotationOperationsHash	= new Hashtable<String, ArrayList<RelationshipOperation<SubseqAnnotation, ? >>>();
+	static Hashtable<String, ArrayList<RelationshipOperation<Annotation<Subsequence, ? >, ? >>>	annotationOperationsHash	= new Hashtable<String, ArrayList<RelationshipOperation<Annotation<Subsequence, ? >, ? >>>();
 
-	public static List<RelationshipOperation<SubseqAnnotation, ? >> getSubseqAnnotationOperations(String type,
-			EntityFactory factory, AnnotationFinder sequence) {
-		ArrayList<RelationshipOperation<SubseqAnnotation, ? >> ret = annotationOperationsHash.get(type);
+	public static List<RelationshipOperation<Annotation<Subsequence, ? >, ? >> getSubseqAnnotationOperations(
+			String type, EntityFactory factory, AnnotationFinder sequence) {
+		ArrayList<RelationshipOperation<Annotation<Subsequence, ? >, ? >> ret = annotationOperationsHash.get(type);
 		if (ret == null) {
-			ret = new ArrayList<RelationshipOperation<SubseqAnnotation, ? >>();
-			ArrayList<AddSynonym<SubseqAnnotation>> addSynonyms = getFeatureSynonymOperations(type, factory);
-			ArrayList<AddParentAnnotation<SubseqAnnotation>> addParents = getFeatureParentOperations(type, factory,
-				sequence);
+			ret = new ArrayList<RelationshipOperation<Annotation<Subsequence, ? >, ? >>();
+			ArrayList<AddSynonym<Annotation<Subsequence, ? >>> addSynonyms = getFeatureSynonymOperations(type, factory);
+			ArrayList<AddParentAnnotation<Annotation<Subsequence, ? >>> addParents = getFeatureParentOperations(type,
+				factory, sequence);
 			ret.addAll(addSynonyms);
 			ret.addAll(addParents);
 			annotationOperationsHash.put(type, ret);
@@ -377,30 +377,31 @@ public class GBKFileConfig
 		return ret;
 	}
 
-	private static ArrayList<AddSynonym<SubseqAnnotation>> getFeatureSynonymOperations(String type,
+	private static ArrayList<AddSynonym<Annotation<Subsequence, ? >>> getFeatureSynonymOperations(String type,
 			EntityFactory factory) {
-		ArrayList<AddSynonym<SubseqAnnotation>> ret = new ArrayList<AddSynonym<SubseqAnnotation>>();
+		ArrayList<AddSynonym<Annotation<Subsequence, ? >>> ret = new ArrayList<AddSynonym<Annotation<Subsequence, ? >>>();
 		List<Pattern> tagNames = getPatternsByType("featureSynonym.tagName", type);
 		List<Pattern> tagValues = getPatternsByType("featureSynonym.tagValue", type);
 		List<String> dbNames = getStringsByType("featureSynonym.dbName", type);
 
 		for (int i = 0; i < tagNames.size(); i++) {
-			ret.add(new AddSynonym<SubseqAnnotation>(tagNames.get(i), tagValues.get(i), dbNames.get(i), factory));
+			ret.add(new AddSynonym<Annotation<Subsequence, ? >>(tagNames.get(i), tagValues.get(i), dbNames.get(i),
+				factory));
 		}
 
 		return ret;
 	}
 
-	private static ArrayList<AddParentAnnotation<SubseqAnnotation>> getFeatureParentOperations(String type,
+	private static ArrayList<AddParentAnnotation<Annotation<Subsequence, ? >>> getFeatureParentOperations(String type,
 			EntityFactory factory, AnnotationFinder sequence) {
-		ArrayList<AddParentAnnotation<SubseqAnnotation>> ret = new ArrayList<AddParentAnnotation<SubseqAnnotation>>();
+		ArrayList<AddParentAnnotation<Annotation<Subsequence, ? >>> ret = new ArrayList<AddParentAnnotation<Annotation<Subsequence, ? >>>();
 		List<Pattern> tagNames = getPatternsByType("featureParent.tagName", type);
 		List<Pattern> tagValues = getPatternsByType("featureParent.tagValue", type);
 		List<String> dbNames = getStringsByType("featureParent.dbName", type);
 
 		for (int i = 0; i < tagNames.size(); i++) {
-			ret.add(new AddParentAnnotation<SubseqAnnotation>(tagNames.get(i), tagValues.get(i), dbNames.get(i),
-				factory, sequence));
+			ret.add(new AddParentAnnotation<Annotation<Subsequence, ? >>(tagNames.get(i), tagValues.get(i),
+				dbNames.get(i), factory, sequence));
 		}
 
 		return ret;

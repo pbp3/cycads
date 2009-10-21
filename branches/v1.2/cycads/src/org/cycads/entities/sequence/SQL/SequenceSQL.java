@@ -382,7 +382,7 @@ public class SequenceSQL extends HasSynonymsNotebleSQL implements Sequence<Organ
 	}
 
 	public static TypeSQL getEntityType(Connection con) {
-		return TypeSQL.getType(TypeSQL.SEQUENCE, con);
+		return TypeSQL.getType(Sequence.ENTITY_TYPE_NAME, con);
 	}
 
 }

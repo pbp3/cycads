@@ -13,6 +13,8 @@ import org.cycads.entities.synonym.HasSynonyms;
 public interface Reaction<C extends Compound, E extends EC, CR extends CompoundReaction< ? , ? >>
 		extends Noteble, HasSynonyms, EntityObject
 {
+	public static final String	ENTITY_TYPE_NAME	= "Reaction";
+
 	public E getEC();
 
 	public boolean isReversible();

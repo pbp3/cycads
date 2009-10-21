@@ -154,7 +154,7 @@ public class AnnotationMethodSQL extends TypeSQL implements AnnotationMethod, En
 	}
 
 	public static TypeSQL getEntityType(Connection con) {
-		return TypeSQL.getType(TypeSQL.METHOD, con);
+		return TypeSQL.getType(AnnotationMethod.ENTITY_TYPE_NAME, con);
 	}
 
 }
