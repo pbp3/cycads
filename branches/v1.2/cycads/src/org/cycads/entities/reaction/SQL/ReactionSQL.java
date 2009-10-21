@@ -86,7 +86,7 @@ public class ReactionSQL extends HasSynonymsNotebleSQL implements Reaction<Compo
 
 	public static ArrayList<ReactionSQL> getReactions(String dbName, String accession, Connection con)
 			throws SQLException {
-		return getReactions(new DbxrefSQL(dbName, accession, con), con);
+		return getReactions(DbxrefSQL.getDbxref(dbName, accession, con), con);
 	}
 
 	public static ArrayList<ReactionSQL> getReactions(DbxrefSQL synonym, Connection con) {

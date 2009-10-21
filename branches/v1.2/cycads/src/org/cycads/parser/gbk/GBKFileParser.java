@@ -118,7 +118,7 @@ public class GBKFileParser
 	public void handleFeature(RichFeature feature, Sequence sequence) {
 		String type = feature.getType();
 		Subsequence subseq = getSubsequence(feature, sequence);
-		Annotation<Subsequence, Feature> annot = factory.
+		Annotation<Subsequence, Feature> annot = factory.createAnnotation
 		SubseqAnnotation annot = subseq.addAnnotation(factory.getAnnotationType(type),
 			factory.getAnnotationMethod(GBKFileConfig.getAnnotationMethodName(type)));
 

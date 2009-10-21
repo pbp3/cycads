@@ -5,13 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
+import java.util.Collection;
 
 import org.cycads.entities.annotation.SQL.EntitySQL;
-import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.reaction.Compound;
 import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
+import org.cycads.entities.synonym.SQL.SynonymsSQL;
 
 public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound, EntitySQL
 {
@@ -64,10 +64,10 @@ public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound, Enti
 	public CompoundSQL(boolean smallMolecule, String dbName, String accession, Connection con) throws SQLException {
 		this.smallMolecule = smallMolecule;
 		this.con = con;
-		ArrayList<CompoundSQL> comps = EntityFactorySQL.getAssociations(source, target, type, synonym, con).getCompounds(
-			dbName, accession, con);
+		Collection<EntitySQL> comps = SynonymsSQL.getEntities(getEntityType(), dbName, accession, con);
 		if (comps.size() > 0) {
-			for (CompoundSQL comp : comps) {
+			for (EntitySQL entity : comps) {
+				CompoundSQL comp = (CompoundSQL) entity;
 				if (comp.isSmallMolecule() == smallMolecule) {
 					this.id = comp.getId();
 					return;

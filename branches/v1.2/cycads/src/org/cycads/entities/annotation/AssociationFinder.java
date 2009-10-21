@@ -7,24 +7,23 @@ import java.util.Collection;
 
 import org.cycads.entities.EntityObject;
 import org.cycads.entities.note.Type;
-import org.cycads.entities.synonym.Dbxref;
 
-public interface AssociationFinder
+public interface AssociationFinder<E extends EntityObject>
 {
 	/* The arguments nulls are not considerated */
-	public <SO extends EntityObject, TA extends EntityObject> Collection< ? extends Association< ? extends SO, ? extends TA>> getAssociations(
-			SO source, TA target, Collection<Type> types, Dbxref synonym, AssociationFilter filter);
+	public <SO extends E, TA extends E> Collection< ? extends Association< ? extends SO, ? extends TA>> getAssociations(
+			SO source, TA target, AssociationFilter filter, Type... types);
 
 	/* The arguments nulls are not considerated */
-	public <TA extends EntityObject> Collection< ? extends Association< ? , ? extends TA>> getAssociations(
-			Type sourceType, TA target, Collection<Type> types, Dbxref synonym, AssociationFilter filter);
+	public <TA extends E> Collection< ? extends Association< ? , ? extends TA>> getAssociations(Type sourceType,
+			TA target, AssociationFilter filter, Type... types);
 
 	/* The arguments nulls are not considerated */
-	public <SO extends EntityObject> Collection< ? extends Association< ? extends SO, ? >> getAssociations(SO source,
-			Type targetType, Collection<Type> types, Dbxref synonym, AssociationFilter filter);
+	public <SO extends E> Collection< ? extends Association< ? extends SO, ? >> getAssociations(SO source,
+			Type targetType, AssociationFilter filter, Type... types);
 
 	/* The arguments nulls are not considerated */
 	public Collection< ? extends Association< ? , ? >> getAssociations(Type sourceType, Type targetType,
-			Collection<Type> types, Dbxref synonym, AssociationFilter filter);
+			AssociationFilter filter, Type... types);
 
 }

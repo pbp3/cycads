@@ -115,6 +115,18 @@ public class AnnotationMethodSQL extends TypeSQL implements AnnotationMethod, En
 		return ret;
 	}
 
+	public static AnnotationMethodSQL getMethod(AnnotationMethod method, Connection con) throws SQLException {
+		if (method == null) {
+			return null;
+		}
+		if (method instanceof AnnotationMethodSQL) {
+			return (AnnotationMethodSQL) method;
+		}
+		else {
+			return getMethod(method.getName(), con);
+		}
+	}
+
 	@Override
 	public double getWeight() {
 		return weight;

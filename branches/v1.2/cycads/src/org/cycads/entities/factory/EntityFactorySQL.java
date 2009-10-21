@@ -5,13 +5,10 @@ package org.cycads.entities.factory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cycads.entities.EntityObject;
+import org.cycads.entities.EntityFinder;
 import org.cycads.entities.SQL.FeatureSQL;
 import org.cycads.entities.SQL.FunctionSQL;
 import org.cycads.entities.annotation.Annotation;
@@ -37,12 +34,14 @@ import org.cycads.entities.synonym.SQL.DatabaseSQL;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.ECSQL;
 import org.cycads.entities.synonym.SQL.KOSQL;
+import org.cycads.entities.synonym.SQL.SynonymsSQL;
 import org.cycads.general.Config;
-import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
 
 public class EntityFactorySQL
-		implements EntityFactory<DbxrefSQL, AnnotationMethodSQL, TypeSQL, OrganismSQL, FunctionSQL, AnnotationSQL>
+		implements
+		EntityFactory<DbxrefSQL, AnnotationMethodSQL, TypeSQL, OrganismSQL, FunctionSQL, EntitySQL, AnnotationSQL>,
+		EntityFinder<EntitySQL>
 {
 	private Connection	con;
 
@@ -97,24 +96,22 @@ public class EntityFactorySQL
 
 	@Override
 	public DbxrefSQL getDbxref(String dbName, String accession) {
-		String[] strs = accession.split(ParametersDefault.getDbxrefToStringSeparator());
-		if (strs.length == 2) {
-			dbName = strs[0];
-			accession = strs[1];
-		}
-		if (dbName == null || (dbName = dbName.trim()).length() == 0) {
-			throw new RuntimeException(Messages.dbxrefWithoutDBNameException());
-		}
-		if (accession == null || (accession = accession.trim()).length() == 0) {
-			throw new RuntimeException(Messages.dbxrefWithoutAccessionException());
-		}
 		try {
-			return new DbxrefSQL(dbName, accession, getConnection());
+			return DbxrefSQL.getDbxref(dbName, accession, getConnection());
 		}
 		catch (SQLException e) {
 
 			e.printStackTrace();
 			throw new RuntimeException(e.getMessage() + " with dbName=" + dbName + " and accession=" + accession, e);
+		}
+	}
+
+	public DbxrefSQL getDbxref(Dbxref dbxref) {
+		if (dbxref instanceof DbxrefSQL) {
+			return (DbxrefSQL) dbxref;
+		}
+		else {
+			return getDbxref(dbxref.getDbName(), dbxref.getAccession());
 		}
 	}
 
@@ -240,99 +237,173 @@ public class EntityFactorySQL
 		return null;
 	}
 
-	public static <SO extends EntitySQL, TA extends EntitySQL> Collection< ? extends AssociationSQL< ? extends SO, ? extends TA>> getAssociations(
-			SO source, TA target, TypeSQL type, DbxrefSQL synonym, Connection con) {
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		Collection<AssociationSQL< ? extends SO, ? extends TA>> ret = new ArrayList<AssociationSQL< ? extends SO, ? extends TA>>();
+	@Override
+	public <SO extends EntitySQL, TA extends EntitySQL> AssociationSQL<SO, TA> createAssociation(SO source, TA target,
+			Type... types) {
 		try {
-			stmt = con.prepareStatement("SELECT association_id from Association WHERE ");
-			stmt.setInt(1, getId());
-			rs = stmt.executeQuery();
-			while (rs.next()) {
-			}
+			return AssociationSQL.createAssociationSQL(source, target, getConnection(), TypeSQL.getTypes(
+				getConnection(), types));
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-			if (stmt != null) {
-				try {
-					stmt.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
+	}
+
+	@Override
+	public <SO extends EntitySQL, TA extends EntitySQL> AnnotationSQL<SO, TA> createAnnotation(SO source, TA target,
+			AnnotationMethod method, String score, Type... types) {
+		try {
+			return AnnotationSQL.createAnnotationSQL(source, target, AnnotationMethodSQL.getMethod(method,
+				getConnection()), score, getConnection(), TypeSQL.getTypes(getConnection(), types));
 		}
-		return ret;
+		catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	//	public static <SO extends EntitySQL, TA extends EntitySQL> Collection< ? extends AssociationSQL< ? extends SO, ? extends TA>> getAssociations(
+	//			SO source, TA target, TypeSQL type, DbxrefSQL synonym, Connection con) {
+	//		PreparedStatement stmt = null;
+	//		ResultSet rs = null;
+	//		Collection<AssociationSQL< ? extends SO, ? extends TA>> ret = new ArrayList<AssociationSQL< ? extends SO, ? extends TA>>();
+	//		try {
+	//			stmt = con.prepareStatement("SELECT association_id from Association WHERE ");
+	//			stmt.setInt(1, getId());
+	//			rs = stmt.executeQuery();
+	//			while (rs.next()) {
+	//			}
+	//		}
+	//		catch (SQLException e) {
+	//			e.printStackTrace();
+	//			throw new RuntimeException(e);
+	//		}
+	//		finally {
+	//			if (rs != null) {
+	//				try {
+	//					rs.close();
+	//				}
+	//				catch (SQLException ex) {
+	//					// ignore
+	//				}
+	//			}
+	//			if (stmt != null) {
+	//				try {
+	//					stmt.close();
+	//				}
+	//				catch (SQLException ex) {
+	//					// ignore
+	//				}
+	//			}
+	//		}
+	//		return ret;
+	//	}
+	//
+	@Override
+	public <SO extends EntitySQL, TA extends EntitySQL> Collection< ? extends Annotation< ? extends SO, ? extends TA>> getAnnotations(
+			SO source, TA target, AnnotationMethod method, AnnotationFilter filter, Type... types) {
+		try {
+			return AnnotationSQL.getAnnotations(source, target, method, filter, getConnection(), types);
+		}
+		catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
-	public <SO extends EntityObject, TA extends EntityObject> Collection< ? extends Annotation< ? extends SO, ? extends TA>> getAnnotations(
-			SO source, TA target, AnnotationMethod method, Collection<Type> types, Dbxref synonym,
-			AnnotationFilter filter) {
-		// TODO Auto-generated method stub
-		return null;
+	public <TA extends EntitySQL> Collection< ? extends Annotation< ? , ? extends TA>> getAnnotations(Type sourceType,
+			TA target, AnnotationMethod method, AnnotationFilter filter, Type... types) {
+		try {
+			return AnnotationSQL.getAnnotations(sourceType, target, method, filter, getConnection(), types);
+		}
+		catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
-	public <TA extends EntityObject> Collection< ? extends Annotation< ? , ? extends TA>> getAnnotations(
-			Type sourceType, TA target, AnnotationMethod method, Collection<Type> types, Dbxref synonym,
-			AnnotationFilter filter) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public <SO extends EntityObject> Collection< ? extends Annotation< ? extends SO, ? >> getAnnotations(SO source,
-			Type targetType, AnnotationMethod method, Collection<Type> types, Dbxref synonym, AnnotationFilter filter) {
-		// TODO Auto-generated method stub
-		return null;
+	public <SO extends EntitySQL> Collection< ? extends Annotation< ? extends SO, ? >> getAnnotations(SO source,
+			Type targetType, AnnotationMethod method, AnnotationFilter filter, Type... types) {
+		try {
+			return AnnotationSQL.getAnnotations(source, targetType, method, filter, getConnection(), types);
+		}
+		catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
 	public Collection< ? extends Annotation< ? , ? >> getAnnotations(Type sourceType, Type targetType,
-			AnnotationMethod method, Collection<Type> types, Dbxref synonym, AnnotationFilter filter) {
-		// TODO Auto-generated method stub
-		return null;
+			AnnotationMethod method, AnnotationFilter filter, Type... types) {
+		try {
+			return AnnotationSQL.getAnnotations(sourceType, targetType, method, filter, getConnection(), types);
+		}
+		catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
-	public <SO extends EntityObject, TA extends EntityObject> Collection< ? extends Association< ? extends SO, ? extends TA>> getAssociations(
-			SO source, TA target, Collection<Type> types, Dbxref synonym, AssociationFilter filter) {
-		// TODO Auto-generated method stub
-		return null;
+	public <SO extends EntitySQL, TA extends EntitySQL> Collection< ? extends Association< ? extends SO, ? extends TA>> getAssociations(
+			SO source, TA target, AssociationFilter filter, Type... types) {
+		try {
+			return AssociationSQL.getAssociations(source, target, filter, getConnection(), types);
+		}
+		catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
-	public <TA extends EntityObject> Collection< ? extends Association< ? , ? extends TA>> getAssociations(
-			Type sourceType, TA target, Collection<Type> types, Dbxref synonym, AssociationFilter filter) {
-		// TODO Auto-generated method stub
-		return null;
+	public <TA extends EntitySQL> Collection< ? extends Association< ? , ? extends TA>> getAssociations(
+			Type sourceType, TA target, AssociationFilter filter, Type... types) {
+		try {
+			return AssociationSQL.getAssociations(sourceType, target, filter, getConnection(), types);
+		}
+		catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
-	public <SO extends EntityObject> Collection< ? extends Association< ? extends SO, ? >> getAssociations(SO source,
-			Type targetType, Collection<Type> types, Dbxref synonym, AssociationFilter filter) {
-		// TODO Auto-generated method stub
-		return null;
+	public <SO extends EntitySQL> Collection< ? extends Association< ? extends SO, ? >> getAssociations(SO source,
+			Type targetType, AssociationFilter filter, Type... types) {
+		try {
+			return AssociationSQL.getAssociations(source, targetType, filter, getConnection(), types);
+		}
+		catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
 	public Collection< ? extends Association< ? , ? >> getAssociations(Type sourceType, Type targetType,
-			Collection<Type> types, Dbxref synonym, AssociationFilter filter) {
-		// TODO Auto-generated method stub
-		return null;
+			AssociationFilter filter, Type... types) {
+		try {
+			return AssociationSQL.getAssociations(sourceType, targetType, filter, getConnection(), types);
+		}
+		catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public Collection<EntitySQL> getEntitiesBySynonym(Type type, String dbName, String accession) {
+		try {
+			return SynonymsSQL.getEntities(type, getDbxref(dbName, accession), getConnection());
+		}
+		catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public Collection<EntitySQL> getEntitiesBySynonym(Type type, Dbxref synonym) {
+		try {
+			return SynonymsSQL.getEntities(type, getDbxref(synonym), getConnection());
+		}
+		catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 }

@@ -11,6 +11,7 @@ import java.sql.Statement;
 
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.synonym.Dbxref;
+import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
 
 public class DbxrefSQL extends HasSynonymsNotebleSQL implements Dbxref
@@ -58,7 +59,7 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL implements Dbxref
 		}
 	}
 
-	public DbxrefSQL(String dbName, String accession, Connection con) throws SQLException {
+	protected DbxrefSQL(String dbName, String accession, Connection con) throws SQLException {
 		this.database = DatabaseSQL.getDB(dbName, con);
 		this.accession = accession;
 		this.con = con;
@@ -125,6 +126,21 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL implements Dbxref
 				}
 			}
 		}
+	}
+
+	public static DbxrefSQL getDbxref(String dbName, String accession, Connection con) throws SQLException {
+		String[] strs = accession.split(ParametersDefault.getDbxrefToStringSeparator());
+		if (strs.length == 2) {
+			dbName = strs[0];
+			accession = strs[1];
+		}
+		if (dbName == null || (dbName = dbName.trim()).length() == 0) {
+			throw new RuntimeException(Messages.dbxrefWithoutDBNameException());
+		}
+		if (accession == null || (accession = accession.trim()).length() == 0) {
+			throw new RuntimeException(Messages.dbxrefWithoutAccessionException());
+		}
+		return new DbxrefSQL(dbName, accession, con);
 	}
 
 	@Override
