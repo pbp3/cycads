@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cycads.entities.annotation.Association;
+import org.cycads.entities.annotation.AssociationFilter;
 import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.note.SQL.TypeSQL;
@@ -71,14 +72,7 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 	}
 
 	public static <SO extends EntitySQL, TA extends EntitySQL> AssociationSQL<SO, TA> createAssociationSQL(SO source,
-			TA target, TypeSQL type, Connection con) throws SQLException {
-		ArrayList<TypeSQL> types = new ArrayList<TypeSQL>(1);
-		types.add(type);
-		return createAssociationSQL(source, target, types, con);
-	}
-
-	public static <SO extends EntitySQL, TA extends EntitySQL> AssociationSQL<SO, TA> createAssociationSQL(SO source,
-			TA target, Collection<TypeSQL> types, Connection con) throws SQLException {
+			TA target, Connection con, TypeSQL... types) throws SQLException {
 
 		SourceTargetTypeSQL sourceTargetType = new SourceTargetTypeSQL(TypeSQL.getType(source.getEntityType(), con),
 			TypeSQL.getType(target.getEntityType(), con), con);
@@ -245,46 +239,6 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 		return con;
 	}
 
-	//	public static Collection<AssociationSQL> getAnnotations(Dbxref dbxref, Connection con) throws SQLException {
-	//		int dbxrefId;
-	//		PreparedStatement stmt = null;
-	//		ResultSet rs = null;
-	//		try {
-	//			if (dbxref instanceof DbxrefSQL) {
-	//				dbxrefId = ((DbxrefSQL) dbxref).getId();
-	//			}
-	//			else {
-	//				dbxrefId = DbxrefSQL.getId(dbxref.getDbName(), dbxref.getAccession(), con);
-	//			}
-	//			stmt = con.prepareStatement("SELECT annotation_id from Annotation_synonym WHERE dbxref_id=?");
-	//			stmt.setInt(1, dbxrefId);
-	//			rs = stmt.executeQuery();
-	//			ArrayList<AssociationSQL> ret = new ArrayList<AssociationSQL>();
-	//			while (rs.next()) {
-	//				ret.add(new AssociationSQL(rs.getInt("annotation_id"), con));
-	//			}
-	//			return ret;
-	//		}
-	//		finally {
-	//			if (rs != null) {
-	//				try {
-	//					rs.close();
-	//				}
-	//				catch (SQLException ex) {
-	//					// ignore
-	//				}
-	//			}
-	//			if (stmt != null) {
-	//				try {
-	//					stmt.close();
-	//				}
-	//				catch (SQLException ex) {
-	//					// ignore
-	//				}
-	//			}
-	//		}
-	//	}
-
 	@Override
 	public TypeSQL getEntityType() {
 		return getEntityType(con);
@@ -292,6 +246,49 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 
 	public static TypeSQL getEntityType(Connection con) {
 		return TypeSQL.getType(TypeSQL.ASSOCIATION, con);
+	}
+
+	public static <SO extends EntitySQL, TA extends EntitySQL> Collection<AssociationSQL< ? extends SO, ? extends TA>> getAssociations(
+			SO source, TA target, AssociationFilter filter, Connection con, Type... types) throws SQLException {
+		StringBuffer query = new StringBuffer(
+			"SELECT association_id FROM Association A, Source_target_type S, Association_type T WHERE ");
+		query.append("A.association_id=T.association_id=T AND A.source_target_type_id=S.source_target_type_id");
+		if (source != null) {
+			query.append(" AND source_id=" + source.getId());
+			query.append(" AND source_type_id=" + source.getEntityType().getId());
+		}
+		if (target != null) {
+			query.append(" AND target_id=" + target.getId());
+		}
+		if (types != null) {
+			query.append("AND type_id IN (");
+			for (Type type : types) {
+				TypeSQL typeSQL = TypeSQL.getType(type, con);
+				query.append(typeSQL.getId() + ",");
+			}
+			query.replace(start, end, ")");
+		}
+		query.append("WHERE 1");
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static <TA extends EntitySQL> Collection<AssociationSQL< ? , ? extends TA>> getAssociations(Type sourceType,
+			TA target, AssociationFilter filter, Connection con, Type... types) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static <SO extends EntitySQL> Collection<AssociationSQL< ? extends SO, ? >> getAssociations(SO source,
+			Type targetType, AssociationFilter filter, Connection con, Type... types) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public static Collection<AssociationSQL< ? , ? >> getAssociations(Type sourceType, Type targetType,
+			AssociationFilter filter, Connection con, Type... types) throws SQLException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

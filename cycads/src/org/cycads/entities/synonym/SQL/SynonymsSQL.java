@@ -10,6 +10,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.cycads.entities.annotation.SQL.EntitySQL;
+import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.note.SQL.TypeSQL;
 
@@ -219,4 +221,43 @@ public class SynonymsSQL
 		return (getSynonym(dbName, accession) != null);
 	}
 
+	public static Collection<EntitySQL> getEntities(Type type, String dbName, String accession, Connection con)
+			throws SQLException {
+		return getEntities(type, DbxrefSQL.getDbxref(dbName, accession, con), con);
+	}
+
+	public static Collection<EntitySQL> getEntities(Type type, DbxrefSQL dbxref, Connection con) throws SQLException {
+		TypeSQL typeSQL = TypeSQL.getType(type, con);
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = con.prepareStatement("SELECT source_id from Synonym where source_type_id=? AND dbxref_id=?");
+			stmt.setInt(1, typeSQL.getId());
+			stmt.setInt(2, dbxref.getId());
+			rs = stmt.executeQuery();
+			Collection<EntitySQL> ret = new ArrayList<EntitySQL>();
+			while (rs.next()) {
+				ret.add(EntityFactorySQL.createObject(rs.getInt("source_id"), typeSQL, con));
+			}
+			return ret;
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
+	}
 }

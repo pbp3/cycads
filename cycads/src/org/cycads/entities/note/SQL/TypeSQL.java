@@ -8,6 +8,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 
 import org.cycads.entities.note.Type;
@@ -178,12 +180,38 @@ public class TypeSQL extends HasSynonymsNotebleSQL implements Type
 	}
 
 	public static TypeSQL getType(Type type, Connection con) {
+		if (type == null) {
+			return null;
+		}
 		if (type instanceof TypeSQL) {
 			return (TypeSQL) type;
 		}
 		else {
 			return getType(type.getName(), con);
 		}
+	}
+
+	public static Collection<TypeSQL> getTypesSQL(Collection<Type> types, Connection con) {
+		if (types == null) {
+			return null;
+		}
+		Collection<TypeSQL> ret = new ArrayList<TypeSQL>(types.size());
+		for (Type type : types) {
+			ret.add(TypeSQL.getType(type, con));
+		}
+		return ret;
+	}
+
+	public static TypeSQL[] getTypes(Connection con, Type... types) {
+		if (types == null) {
+			return null;
+		}
+		TypeSQL[] ret = new TypeSQL[types.length];
+		int i = 0;
+		for (Type type : types) {
+			ret[i++] = TypeSQL.getType(type, con);
+		}
+		return ret;
 	}
 
 	@Override
