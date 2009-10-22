@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cycads.entities.annotation.SQL.EntitySQL;
+import org.cycads.entities.SQL.EntitySQL;
 import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.note.SQL.TypeSQL;

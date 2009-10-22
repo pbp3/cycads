@@ -6,7 +6,7 @@ package org.cycads.entities.note.SQL;
 import java.sql.SQLException;
 import java.util.Collection;
 
-import org.cycads.entities.annotation.SQL.EntitySQL;
+import org.cycads.entities.SQL.EntitySQL;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.Noteble;
 

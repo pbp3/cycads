@@ -10,8 +10,8 @@ import org.cycads.entities.synonym.Dbxref;
 
 public interface EntityFinder<E extends EntityObject>
 {
-	public Collection<E> getEntitiesBySynonym(Type type, String dbName, String accession);
+	public Collection<E> getEntitiesBySynonym(Type type, String dbName, String accession, EntityFilter<E> filter);
 
-	public Collection<E> getEntitiesBySynonym(Type type, Dbxref synonym);
+	public Collection<E> getEntitiesBySynonym(Type type, Dbxref synonym, EntityFilter<E> filter);
 
 }

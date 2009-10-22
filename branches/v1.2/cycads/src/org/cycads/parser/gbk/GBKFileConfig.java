@@ -363,13 +363,13 @@ public class GBKFileConfig
 	static Hashtable<String, ArrayList<RelationshipOperation<Annotation<Subsequence, ? >, ? >>>	annotationOperationsHash	= new Hashtable<String, ArrayList<RelationshipOperation<Annotation<Subsequence, ? >, ? >>>();
 
 	public static List<RelationshipOperation<Annotation<Subsequence, ? >, ? >> getSubseqAnnotationOperations(
-			String type, EntityFactory factory, AnnotationFinder sequence) {
+			String type, EntityFactory factory, AnnotationFinder annotFinder) {
 		ArrayList<RelationshipOperation<Annotation<Subsequence, ? >, ? >> ret = annotationOperationsHash.get(type);
 		if (ret == null) {
 			ret = new ArrayList<RelationshipOperation<Annotation<Subsequence, ? >, ? >>();
 			ArrayList<AddSynonym<Annotation<Subsequence, ? >>> addSynonyms = getFeatureSynonymOperations(type, factory);
 			ArrayList<AddParentAnnotation<Annotation<Subsequence, ? >>> addParents = getFeatureParentOperations(type,
-				factory, sequence);
+				factory, annotFinder);
 			ret.addAll(addSynonyms);
 			ret.addAll(addParents);
 			annotationOperationsHash.put(type, ret);

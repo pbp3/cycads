@@ -8,18 +8,18 @@ import java.util.regex.Pattern;
 
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationFinder;
-import org.cycads.entities.factory.EntityFactory;
+import org.cycads.entities.factory.EntityDbxrefFactory;
 import org.cycads.entities.synonym.Dbxref;
 
-public class AddParentAnnotation<A extends Annotation> extends SimpleRelationshipOperation<A, Annotation>
+public class AddParentAnnotation<SOURCE extends Annotation> extends SimpleRelationshipOperation<SOURCE, Annotation>
 {
 
-	private EntityFactory		factory;
+	private EntityDbxrefFactory	factory;
 	private String				parentDBName;
 	private AnnotationFinder	annotationFinder;
 
-	public AddParentAnnotation(Pattern tagNameRegex, Pattern tagValueRegex, String parentDBName, EntityFactory factory,
-			AnnotationFinder annotationFinder) {
+	public AddParentAnnotation(Pattern tagNameRegex, Pattern tagValueRegex, String parentDBName,
+			EntityDbxrefFactory factory, AnnotationFinder annotationFinder) {
 		super(tagNameRegex, tagValueRegex);
 		this.parentDBName = parentDBName;
 		this.factory = factory;
@@ -27,7 +27,7 @@ public class AddParentAnnotation<A extends Annotation> extends SimpleRelationshi
 	}
 
 	@Override
-	protected Collection<Annotation> execute(A source, Note note) {
+	protected Collection<Annotation> execute(SOURCE source, Note note) {
 		Dbxref parentSynonym = factory.getDbxref(parentDBName, note.getValue());
 		Collection<Annotation> parents = annotationFinder.getAnnotations(null, null, parentSynonym);
 		for (Annotation parent : parents) {
@@ -36,11 +36,11 @@ public class AddParentAnnotation<A extends Annotation> extends SimpleRelationshi
 		return parents;
 	}
 
-	public EntityFactory getFactory() {
+	public EntityDbxrefFactory getFactory() {
 		return factory;
 	}
 
-	public void setFactory(EntityFactory factory) {
+	public void setFactory(EntityDbxrefFactory factory) {
 		this.factory = factory;
 	}
 

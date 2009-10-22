@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Hashtable;
 
+import org.cycads.entities.SQL.EntitySQL;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.note.SQL.TypeSQL;
 
