@@ -7,11 +7,13 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.regex.Pattern;
 
+import org.cycads.entities.Feature;
 import org.cycads.entities.annotation.Annotation;
-import org.cycads.entities.annotation.AnnotationFinder;
 import org.cycads.entities.factory.EntityFactory;
+import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.general.Config;
+import org.cycads.general.ParametersDefault;
 import org.cycads.parser.operation.AddDbxrefAnnotation;
 import org.cycads.parser.operation.AddFunctionAnnotation;
 import org.cycads.parser.operation.AddParentAnnotation;
@@ -360,16 +362,17 @@ public class GBKFileConfig
 		return new RemoveNote(Pattern.compile(tagName), Pattern.compile(tagValue));
 	}
 
-	static Hashtable<String, ArrayList<RelationshipOperation<Annotation<Subsequence, ? >, ? >>>	annotationOperationsHash	= new Hashtable<String, ArrayList<RelationshipOperation<Annotation<Subsequence, ? >, ? >>>();
+	static Hashtable<String, ArrayList<RelationshipOperation<Annotation<Subsequence, Feature>, ? >>>	annotationOperationsHash	= new Hashtable<String, ArrayList<RelationshipOperation<Annotation<Subsequence, Feature>, ? >>>();
 
-	public static List<RelationshipOperation<Annotation<Subsequence, ? >, ? >> getSubseqAnnotationOperations(
-			String type, EntityFactory factory, AnnotationFinder annotFinder) {
-		ArrayList<RelationshipOperation<Annotation<Subsequence, ? >, ? >> ret = annotationOperationsHash.get(type);
+	public static List<RelationshipOperation<Annotation<Subsequence, Feature>, ? >> getSubseqAnnotationOperations(
+			String type, EntityFactory factory) {
+		ArrayList<RelationshipOperation<Annotation<Subsequence, Feature>, ? >> ret = annotationOperationsHash.get(type);
 		if (ret == null) {
-			ret = new ArrayList<RelationshipOperation<Annotation<Subsequence, ? >, ? >>();
-			ArrayList<AddSynonym<Annotation<Subsequence, ? >>> addSynonyms = getFeatureSynonymOperations(type, factory);
-			ArrayList<AddParentAnnotation<Annotation<Subsequence, ? >>> addParents = getFeatureParentOperations(type,
-				factory, annotFinder);
+			ret = new ArrayList<RelationshipOperation<Annotation<Subsequence, Feature>, ? >>();
+			ArrayList<AddSynonym<Annotation<Subsequence, Feature>>> addSynonyms = getFeatureSynonymOperations(type,
+				factory);
+			ArrayList<AddParentAnnotation<Annotation<Subsequence, Feature>>> addParents = getFeatureParentOperations(
+				type, factory);
 			ret.addAll(addSynonyms);
 			ret.addAll(addParents);
 			annotationOperationsHash.put(type, ret);
@@ -377,31 +380,31 @@ public class GBKFileConfig
 		return ret;
 	}
 
-	private static ArrayList<AddSynonym<Annotation<Subsequence, ? >>> getFeatureSynonymOperations(String type,
+	private static ArrayList<AddSynonym<Annotation<Subsequence, Feature>>> getFeatureSynonymOperations(String type,
 			EntityFactory factory) {
-		ArrayList<AddSynonym<Annotation<Subsequence, ? >>> ret = new ArrayList<AddSynonym<Annotation<Subsequence, ? >>>();
+		ArrayList<AddSynonym<Annotation<Subsequence, Feature>>> ret = new ArrayList<AddSynonym<Annotation<Subsequence, Feature>>>();
 		List<Pattern> tagNames = getPatternsByType("featureSynonym.tagName", type);
 		List<Pattern> tagValues = getPatternsByType("featureSynonym.tagValue", type);
 		List<String> dbNames = getStringsByType("featureSynonym.dbName", type);
 
 		for (int i = 0; i < tagNames.size(); i++) {
-			ret.add(new AddSynonym<Annotation<Subsequence, ? >>(tagNames.get(i), tagValues.get(i), dbNames.get(i),
+			ret.add(new AddSynonym<Annotation<Subsequence, Feature>>(tagNames.get(i), tagValues.get(i), dbNames.get(i),
 				factory));
 		}
 
 		return ret;
 	}
 
-	private static ArrayList<AddParentAnnotation<Annotation<Subsequence, ? >>> getFeatureParentOperations(String type,
-			EntityFactory factory, AnnotationFinder sequence) {
-		ArrayList<AddParentAnnotation<Annotation<Subsequence, ? >>> ret = new ArrayList<AddParentAnnotation<Annotation<Subsequence, ? >>>();
+	private static ArrayList<AddParentAnnotation<Annotation<Subsequence, Feature>>> getFeatureParentOperations(
+			String type, EntityFactory factory) {
+		ArrayList<AddParentAnnotation<Annotation<Subsequence, Feature>>> ret = new ArrayList<AddParentAnnotation<Annotation<Subsequence, Feature>>>();
 		List<Pattern> tagNames = getPatternsByType("featureParent.tagName", type);
 		List<Pattern> tagValues = getPatternsByType("featureParent.tagValue", type);
 		List<String> dbNames = getStringsByType("featureParent.dbName", type);
 
 		for (int i = 0; i < tagNames.size(); i++) {
-			ret.add(new AddParentAnnotation<Annotation<Subsequence, ? >>(tagNames.get(i), tagValues.get(i),
-				dbNames.get(i), factory, sequence));
+			ret.add(new AddParentAnnotation<Annotation<Subsequence, Feature>>(tagNames.get(i), tagValues.get(i),
+				dbNames.get(i), factory, factory));
 		}
 
 		return ret;
@@ -445,10 +448,12 @@ public class GBKFileConfig
 		List<Pattern> tagValues = getPatternsByType("subseqDbxRefAnnotation.tagValue", type);
 		List<String> dbNames = getStringsByType("subseqDbxRefAnnotation.dbName", type);
 		List<String> methods = getStringsByType("subseqDbxRefAnnotation.methodName", type);
+		Collection<Type> annotationTypes = new ArrayList<Type>(1);
+		annotationTypes.add(factory.getType(ParametersDefault.getFunctionalAnnotationTypeName()));
 
 		for (int i = 0; i < tagNames.size(); i++) {
 			ret.add(new AddDbxrefAnnotation<Subsequence>(tagNames.get(i), tagValues.get(i), dbNames.get(i),
-				methods.get(i), factory));
+				factory.getAnnotationMethod(methods.get(i)), factory, annotationTypes));
 		}
 
 		return ret;
@@ -460,9 +465,12 @@ public class GBKFileConfig
 		List<Pattern> tagNames = getPatternsByType("subseqFunctionAnnotation.tagName", type);
 		List<Pattern> tagValues = getPatternsByType("subseqFunctionAnnotation.tagValue", type);
 		List<String> methods = getStringsByType("subseqFunctionAnnotation.methodName", type);
+		Collection<Type> annotationTypes = new ArrayList<Type>(1);
+		annotationTypes.add(factory.getType(ParametersDefault.getFunctionalAnnotationTypeName()));
 
 		for (int i = 0; i < tagNames.size(); i++) {
-			ret.add(new AddFunctionAnnotation<Subsequence>(tagNames.get(i), tagValues.get(i), methods.get(i), factory));
+			ret.add(new AddFunctionAnnotation<Subsequence>(tagNames.get(i), tagValues.get(i),
+				factory.getAnnotationMethod(methods.get(i)), factory, annotationTypes));
 		}
 
 		return ret;

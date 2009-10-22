@@ -653,7 +653,7 @@ public class SimpleEntitySQL implements EntitySQL
 			Collection<Type> associationTypes) {
 		try {
 			return (Collection< ? extends Association< ? , TA>>) AssociationSQL.getAssociations(this,
-				(EntitySQL) target, associationTypes, null, getConnection());
+				(EntitySQL) target, associationTypes, getConnection());
 		}
 		catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -677,7 +677,7 @@ public class SimpleEntitySQL implements EntitySQL
 			AnnotationMethod method, Collection<Type> annotationTypes) {
 		try {
 			return (Collection< ? extends Annotation< ? , TA>>) AnnotationSQL.getAnnotations(this, (EntitySQL) target,
-				method, annotationTypes, null, getConnection());
+				method, annotationTypes, getConnection());
 		}
 		catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -691,7 +691,7 @@ public class SimpleEntitySQL implements EntitySQL
 		}
 		EntitySQL o1 = (EntitySQL) obj;
 
-		return this.getId() == o1.getId();
+		return (this.getId() == o1.getId()) && (this.getTypeId() == o1.getTypeId());
 	}
 
 }

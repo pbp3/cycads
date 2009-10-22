@@ -5,6 +5,11 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.TreeSet;
 
+import org.cycads.entities.EntityObject;
+import org.cycads.entities.annotation.Annotation;
+import org.cycads.entities.annotation.AnnotationMethod;
+import org.cycads.entities.annotation.Association;
+import org.cycads.entities.annotation.SimpleAnnotation;
 import org.cycads.entities.factory.EntityDbxrefFactory;
 import org.cycads.entities.factory.EntityTypeFactory;
 import org.cycads.entities.note.Type;
@@ -150,6 +155,30 @@ public class SimpleSubsequence<S extends Sequence< ? , ? >> extends SimpleHasSyn
 	@Override
 	public Type getEntityType() {
 		return typeFactory.getType("SimpleSubsequence");
+	}
+
+	@Override
+	public <TA extends EntityObject> Association< ? , TA> addAssociation(TA target, Collection<Type> associationTypes) {
+		throw new RuntimeException("Method not implemented");
+	}
+
+	@Override
+	public <TA extends EntityObject> Collection< ? extends Association< ? , TA>> getAssociations(TA target,
+			Collection<Type> associationTypes) {
+		throw new RuntimeException("Method not implemented");
+	}
+
+	@Override
+	public <TA extends EntityObject> Annotation< ? , TA> addAnnotation(TA target, AnnotationMethod method,
+			String score, Collection<Type> annotationTypes) {
+		return new SimpleAnnotation<SimpleSubsequence<S>, TA>(this, target, method, score, typeFactory, dbxrefFactory);
+	}
+
+	@Override
+	public <TA extends EntityObject> Collection< ? extends Annotation< ? , TA>> getAnnotations(TA target,
+			AnnotationMethod method, Collection<Type> annotationTypes) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

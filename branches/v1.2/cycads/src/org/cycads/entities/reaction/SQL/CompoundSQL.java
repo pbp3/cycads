@@ -11,13 +11,12 @@ import org.cycads.entities.SQL.EntitySQL;
 import org.cycads.entities.SQL.SimpleEntitySQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.reaction.Compound;
-import org.cycads.entities.synonym.SQL.SynonymsSQL;
 
 public class CompoundSQL extends SimpleEntitySQL implements Compound
 {
-	private Connection	con;
-	private int			id;
-	private boolean		smallMolecule;
+	private final Connection	con;
+	private int					id;
+	private boolean				smallMolecule;
 
 	public CompoundSQL(int id, Connection con) throws SQLException {
 		this.id = id;
@@ -64,7 +63,7 @@ public class CompoundSQL extends SimpleEntitySQL implements Compound
 	public CompoundSQL(boolean smallMolecule, String dbName, String accession, Connection con) throws SQLException {
 		this.smallMolecule = smallMolecule;
 		this.con = con;
-		Collection<EntitySQL> comps = SynonymsSQL.getEntities(getEntityType(), dbName, accession, con);
+		Collection<EntitySQL> comps = SimpleEntitySQL.getEntities(getEntityType(), dbName, accession, con);
 		if (comps.size() > 0) {
 			for (EntitySQL entity : comps) {
 				CompoundSQL comp = (CompoundSQL) entity;

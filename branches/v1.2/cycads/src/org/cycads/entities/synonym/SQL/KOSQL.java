@@ -9,7 +9,9 @@ import java.util.Collection;
 
 import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
 import org.cycads.entities.annotation.SQL.AnnotationSQL;
+import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.synonym.KO;
+import org.cycads.general.ParametersDefault;
 
 public class KOSQL extends DbxrefSQL implements KO
 {
@@ -50,9 +52,11 @@ public class KOSQL extends DbxrefSQL implements KO
 		try {
 			ECSQL ec = new ECSQL(ecNumber, getConnection());
 			Collection< ? extends AnnotationSQL< ? extends KOSQL, ? extends ECSQL>> annots = AnnotationSQL.getAnnotations(
-				this, ec, method, null, getConnection(), null);
+				this, ec, method, null, getConnection());
 			if (annots.isEmpty()) {
-				return AnnotationSQL.createAnnotationSQL(this, ec, method, null, getConnection(), null);
+				return AnnotationSQL.createAnnotationSQL(this, ec, TypeSQL.getTypes(
+					ParametersDefault.getFunctionalAnnotationTypeName(), getConnection()), method, null,
+					getConnection());
 			}
 			else {
 				return annots.iterator().next();

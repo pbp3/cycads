@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -101,8 +102,7 @@ public class GBKFileParser
 			organism = factory.createOrganism(richSeq.getTaxon().getNCBITaxID(), richSeq.getTaxon().getDisplayName());
 		}
 		Dbxref seqSynonym = factory.getDbxref(seqDBName, richSeq.getAccession());
-		Collection<Sequence> sequences = factory.getEntitiesBySynonym(factory.getType(Sequence.ENTITY_TYPE_NAME),
-			seqSynonym);
+		Collection<Sequence> sequences = factory.getEntitiesBySynonym(seqSynonym, Sequence.ENTITY_TYPE_NAME);
 
 		sequence = getSequence(sequences, organism);
 		if (sequence == null) {
@@ -131,9 +131,10 @@ public class GBKFileParser
 	public void handleFeature(RichFeature feature, Sequence sequence) {
 		String type = feature.getType();
 		Subsequence subseq = getSubsequence(feature, sequence);
-		Type annotationType = factory.getType(ParametersDefault.getFeatureAnnotationType(type));
-		Annotation<Subsequence, Feature> annot = factory.createAnnotation(subseq, factory.getFeature(type),
-			factory.getAnnotationMethod(GBKFileConfig.getAnnotationMethodName(type)), null, annotationType);
+		Collection<Type> annotationType = Arrays.asList(factory.getType(ParametersDefault.getFunctionalAnnotationTypeName()));
+		Annotation<Subsequence, org.cycads.entities.Feature> annot = factory.createAnnotation(subseq,
+			factory.getFeature(type), annotationType,
+			factory.getAnnotationMethod(GBKFileConfig.getAnnotationMethodName(type)), null);
 
 		for (Object o : feature.getRankedCrossRefs()) {
 			RankedCrossRef rankedCrossRef = (RankedCrossRef) o;
@@ -144,8 +145,8 @@ public class GBKFileParser
 		int noteRank = annots.getNoteSet().size();
 		ArrayList<Note> notes = new ArrayList<Note>(annots.getNoteSet());
 		List<NoteOperation> noteOperations = GBKFileConfig.getNoteOperations(type);
-		List<RelationshipOperation<Annotation<Subsequence, Feature>, ? >> annotationOperations = GBKFileConfig.getSubseqAnnotationOperations(
-			type, factory, sequence);
+		List<RelationshipOperation<Annotation<Subsequence, org.cycads.entities.Feature>, ? >> annotationOperations = GBKFileConfig.getSubseqAnnotationOperations(
+			type, factory);
 		List<RelationshipOperation<Subsequence, ? >> subseqOperations = GBKFileConfig.getSubseqOperations(type, factory);
 
 		Collection<org.cycads.parser.operation.Note> newNotes = new ArrayList<org.cycads.parser.operation.Note>();
@@ -181,7 +182,7 @@ public class GBKFileParser
 
 				boolean noteUsed = false;
 				Collection< ? > retOps;
-				for (RelationshipOperation<Annotation<Subsequence, Feature>, ? > operation : annotationOperations) {
+				for (RelationshipOperation<Annotation<Subsequence, org.cycads.entities.Feature>, ? > operation : annotationOperations) {
 					retOps = operation.relate(annot, noteForOperation);
 					if (retOps != null && !retOps.isEmpty()) {
 						noteUsed = true;

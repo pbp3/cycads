@@ -140,8 +140,8 @@ public class ParametersDefault
 		return new Boolean(getStringMandatory("general.debug"));
 	}
 
-	public static String getFeatureAnnotationType(String type) {
-		return getStringMandatory("general.FeatureAnnotationTypeName");
+	public static String getFunctionalAnnotationTypeName() {
+		return getStringMandatory("general.functionalAnnotationTypeName");
 	}
 
 	// KOFile
