@@ -38,7 +38,7 @@ public abstract class SimpleHasSynonymsNoteble extends SimpleNoteble implements 
 	}
 
 	@Override
-	public void addSynonym(Dbxref dbxref) {
+	public Dbxref addSynonym(Dbxref dbxref) {
 		String dbName = dbxref.getDbName();
 		String accession = dbxref.getAccession();
 		Collection<String> accessions = synonyms.get(dbName);
@@ -47,6 +47,7 @@ public abstract class SimpleHasSynonymsNoteble extends SimpleNoteble implements 
 			synonyms.put(dbName, accessions);
 		}
 		accessions.add(accession);
+		return dbxref;
 	}
 
 	@Override
