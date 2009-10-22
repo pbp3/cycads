@@ -11,12 +11,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.cycads.entities.SQL.SimpleEntitySQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.sequence.Organism;
-import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 import org.cycads.general.ParametersDefault;
 
-public class OrganismSQL extends HasSynonymsNotebleSQL implements Organism<SequenceSQL, SubsequenceSQL>
+public class OrganismSQL extends SimpleEntitySQL implements Organism<SequenceSQL, SubsequenceSQL>
 {
 	private final int			id;
 	private String				name;

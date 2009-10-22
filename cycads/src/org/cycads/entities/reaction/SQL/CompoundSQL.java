@@ -8,12 +8,12 @@ import java.sql.Statement;
 import java.util.Collection;
 
 import org.cycads.entities.SQL.EntitySQL;
+import org.cycads.entities.SQL.SimpleEntitySQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.reaction.Compound;
-import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 import org.cycads.entities.synonym.SQL.SynonymsSQL;
 
-public class CompoundSQL extends HasSynonymsNotebleSQL implements Compound, EntitySQL
+public class CompoundSQL extends SimpleEntitySQL implements Compound
 {
 	private Connection	con;
 	private int			id;

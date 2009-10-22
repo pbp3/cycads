@@ -247,7 +247,7 @@ public class EntityFactorySQL
 
 	@Override
 	public <SO extends EntitySQL, TA extends EntitySQL> AssociationSQL<SO, TA> createAssociation(SO source, TA target,
-			Type... types) {
+			Collection<Type> types) {
 		try {
 			return AssociationSQL.createAssociationSQL(source, target, getConnection(), TypeSQL.getTypes(
 				getConnection(), types));
@@ -259,7 +259,7 @@ public class EntityFactorySQL
 
 	@Override
 	public <SO extends EntitySQL, TA extends EntitySQL> AnnotationSQL<SO, TA> createAnnotation(SO source, TA target,
-			AnnotationMethod method, String score, Type... types) {
+			AnnotationMethod method, String score, Collection<Type> types) {
 		try {
 			return AnnotationSQL.createAnnotationSQL(source, target, AnnotationMethodSQL.getMethod(method,
 				getConnection()), score, getConnection(), TypeSQL.getTypes(getConnection(), types));
@@ -308,7 +308,7 @@ public class EntityFactorySQL
 	//
 	@Override
 	public <SO extends EntitySQL, TA extends EntitySQL> Collection< ? extends Annotation< ? extends SO, ? extends TA>> getAnnotations(
-			SO source, TA target, AnnotationMethod method, EntityFilter filter, Type... types) {
+			SO source, TA target, AnnotationMethod method, Collection<Type> types, EntityFilter filter) {
 		try {
 			return AnnotationSQL.getAnnotations(source, target, method, filter, getConnection(), types);
 		}
@@ -319,7 +319,7 @@ public class EntityFactorySQL
 
 	@Override
 	public <TA extends EntitySQL> Collection< ? extends Annotation< ? , ? extends TA>> getAnnotations(Type sourceType,
-			TA target, AnnotationMethod method, EntityFilter filter, Type... types) {
+			TA target, AnnotationMethod method, EntityFilter filter, Collection<Type> types) {
 		try {
 			return AnnotationSQL.getAnnotations(sourceType, target, method, filter, getConnection(), types);
 		}
@@ -330,7 +330,7 @@ public class EntityFactorySQL
 
 	@Override
 	public <SO extends EntitySQL> Collection< ? extends Annotation< ? extends SO, ? >> getAnnotations(SO source,
-			Type targetType, AnnotationMethod method, EntityFilter filter, Type... types) {
+			Type targetType, AnnotationMethod method, EntityFilter filter, Collection<Type> types) {
 		try {
 			return AnnotationSQL.getAnnotations(source, targetType, method, filter, getConnection(), types);
 		}
@@ -341,7 +341,7 @@ public class EntityFactorySQL
 
 	@Override
 	public Collection< ? extends Annotation< ? , ? >> getAnnotations(Type sourceType, Type targetType,
-			AnnotationMethod method, EntityFilter filter, Type... types) {
+			AnnotationMethod method, EntityFilter filter, Collection<Type> types) {
 		try {
 			return AnnotationSQL.getAnnotations(sourceType, targetType, method, filter, getConnection(), types);
 		}
@@ -352,7 +352,7 @@ public class EntityFactorySQL
 
 	@Override
 	public <SO extends EntitySQL, TA extends EntitySQL> Collection< ? extends Association< ? extends SO, ? extends TA>> getAssociations(
-			SO source, TA target, EntityFilter filter, Type... types) {
+			SO source, TA target, EntityFilter filter, Collection<Type> types) {
 		try {
 			return AssociationSQL.getAssociations(source, target, filter, getConnection(), types);
 		}
@@ -363,7 +363,7 @@ public class EntityFactorySQL
 
 	@Override
 	public <TA extends EntitySQL> Collection< ? extends Association< ? , ? extends TA>> getAssociations(
-			Type sourceType, TA target, EntityFilter filter, Type... types) {
+			Type sourceType, TA target, EntityFilter filter, Collection<Type> types) {
 		try {
 			return AssociationSQL.getAssociations(sourceType, target, filter, getConnection(), types);
 		}
@@ -374,7 +374,7 @@ public class EntityFactorySQL
 
 	@Override
 	public <SO extends EntitySQL> Collection< ? extends Association< ? extends SO, ? >> getAssociations(SO source,
-			Type targetType, EntityFilter filter, Type... types) {
+			Type targetType, EntityFilter filter, Collection<Type> types) {
 		try {
 			return AssociationSQL.getAssociations(source, targetType, filter, getConnection(), types);
 		}
@@ -385,7 +385,7 @@ public class EntityFactorySQL
 
 	@Override
 	public Collection< ? extends Association< ? , ? >> getAssociations(Type sourceType, Type targetType,
-			EntityFilter filter, Type... types) {
+			EntityFilter filter, Collection<Type> types) {
 		try {
 			return AssociationSQL.getAssociations(sourceType, targetType, filter, getConnection(), types);
 		}

@@ -9,12 +9,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.cycads.entities.SQL.SimpleEntitySQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
 
-public class DbxrefSQL extends HasSynonymsNotebleSQL implements Dbxref
+public class DbxrefSQL extends SimpleEntitySQL implements Dbxref
 {
 	public final static int		INVALID_ID	= -1;
 	private DatabaseSQL			database;
@@ -170,32 +171,27 @@ public class DbxrefSQL extends HasSynonymsNotebleSQL implements Dbxref
 
 	@Override
 	public DbxrefSQL addSynonym(String dbName, String accession) {
-		DbxrefSQL dbxref = super.addSynonym(dbName, accession);
 		try {
-			dbxref.getSynonymsSQL().addSynonym(this);
-			return dbxref;
+			return addSynonym(DbxrefSQL.getDbxref(dbName, accession, getConnection()));
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 	}
 
 	@Override
-	public void addSynonym(Dbxref dbxref) {
+	public DbxrefSQL addSynonym(Dbxref dbxref) {
+		DbxrefSQL ret;
 		if (dbxref instanceof DbxrefSQL) {
-			super.addSynonym(dbxref);
-			try {
-				((DbxrefSQL) dbxref).getSynonymsSQL().addSynonym(this);
-			}
-			catch (SQLException e) {
-				e.printStackTrace();
-				throw new RuntimeException(e);
+			ret = super.addSynonym(dbxref);
+			if (ret != null) {
+				ret.addSynonym(this);
 			}
 		}
 		else {
-			addSynonym(dbxref.getDbName(), dbxref.getAccession());
+			ret = addSynonym(dbxref.getDbName(), dbxref.getAccession());
 		}
+		return ret;
 	}
 
 	@Override

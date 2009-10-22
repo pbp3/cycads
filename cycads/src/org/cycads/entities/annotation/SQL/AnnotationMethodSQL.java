@@ -9,11 +9,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Hashtable;
 
-import org.cycads.entities.SQL.EntitySQL;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.note.SQL.TypeSQL;
 
-public class AnnotationMethodSQL extends TypeSQL implements AnnotationMethod, EntitySQL
+public class AnnotationMethodSQL extends TypeSQL implements AnnotationMethod
 {
 	private static Hashtable<String, AnnotationMethodSQL>	hashByName	= new Hashtable<String, AnnotationMethodSQL>();
 	private static Hashtable<Integer, AnnotationMethodSQL>	hashById	= new Hashtable<Integer, AnnotationMethodSQL>();
