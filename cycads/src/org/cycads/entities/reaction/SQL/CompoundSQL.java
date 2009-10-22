@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
 
-import org.cycads.entities.annotation.SQL.EntitySQL;
+import org.cycads.entities.SQL.EntitySQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.reaction.Compound;
 import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;

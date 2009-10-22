@@ -11,8 +11,9 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.cycads.entities.EntityFilter;
+import org.cycads.entities.SQL.EntitySQL;
 import org.cycads.entities.annotation.Association;
-import org.cycads.entities.annotation.AssociationFilter;
 import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.note.SQL.TypeSQL;
@@ -22,14 +23,14 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 		implements Association<SO, TA>, EntitySQL
 {
 
-	private int					id;
+	private final int			id;
 
 	/* The types are not synchonized */
 	private Collection<TypeSQL>	types;
 	private SO					source;
 	private TA					target;
 
-	private Connection			con;
+	private final Connection	con;
 
 	public AssociationSQL(int id, Connection con) throws SQLException {
 		this.id = id;
@@ -249,7 +250,7 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 	}
 
 	public static <SO extends EntitySQL, TA extends EntitySQL> Collection<AssociationSQL< ? extends SO, ? extends TA>> getAssociations(
-			SO source, TA target, AssociationFilter filter, Connection con, Type... types) throws SQLException {
+			SO source, TA target, EntityFilter filter, Connection con, Type... types) throws SQLException {
 		StringBuffer query = new StringBuffer(
 			"SELECT association_id FROM Association A, Source_target_type S, Association_type T WHERE ");
 		query.append("A.association_id=T.association_id=T AND A.source_target_type_id=S.source_target_type_id");
@@ -282,7 +283,9 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 			while (rs.next()) {
 				retObject = (AssociationSQL< ? extends SO, ? extends TA>) EntityFactorySQL.createObject(
 					rs.getInt("association_id"), getEntityType(con), con);
-				ret.add(retObject);
+				if (filter == null || filter.accept(retObject)) {
+					ret.add(retObject);
+				}
 			}
 		}
 		finally {
@@ -307,7 +310,7 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 	}
 
 	public static <TA extends EntitySQL> Collection<AssociationSQL< ? , ? extends TA>> getAssociations(Type sourceType,
-			TA target, AssociationFilter filter, Connection con, Type... types) throws SQLException {
+			TA target, EntityFilter filter, Connection con, Type... types) throws SQLException {
 		StringBuffer query = new StringBuffer(
 			"SELECT association_id FROM Association A, Source_target_type S, Association_type T WHERE ");
 		query.append("A.association_id=T.association_id=T AND A.source_target_type_id=S.source_target_type_id");
@@ -339,7 +342,9 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 			while (rs.next()) {
 				retObject = (AssociationSQL< ? , ? extends TA>) EntityFactorySQL.createObject(
 					rs.getInt("association_id"), getEntityType(con), con);
-				ret.add(retObject);
+				if (filter == null || filter.accept(retObject)) {
+					ret.add(retObject);
+				}
 			}
 		}
 		finally {
@@ -364,7 +369,7 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 	}
 
 	public static <SO extends EntitySQL> Collection<AssociationSQL< ? extends SO, ? >> getAssociations(SO source,
-			Type targetType, AssociationFilter filter, Connection con, Type... types) throws SQLException {
+			Type targetType, EntityFilter filter, Connection con, Type... types) throws SQLException {
 		StringBuffer query = new StringBuffer(
 			"SELECT association_id FROM Association A, Source_target_type S, Association_type T WHERE ");
 		query.append("A.association_id=T.association_id=T AND A.source_target_type_id=S.source_target_type_id");
@@ -396,7 +401,9 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 			while (rs.next()) {
 				retObject = (AssociationSQL< ? extends SO, ? >) EntityFactorySQL.createObject(
 					rs.getInt("association_id"), getEntityType(con), con);
-				ret.add(retObject);
+				if (filter == null || filter.accept(retObject)) {
+					ret.add(retObject);
+				}
 			}
 		}
 		finally {
@@ -421,7 +428,7 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 	}
 
 	public static Collection<AssociationSQL< ? , ? >> getAssociations(Type sourceType, Type targetType,
-			AssociationFilter filter, Connection con, Type... types) throws SQLException {
+			EntityFilter filter, Connection con, Type... types) throws SQLException {
 		StringBuffer query = new StringBuffer(
 			"SELECT association_id FROM Association A, Source_target_type S, Association_type T WHERE ");
 		query.append("A.association_id=T.association_id=T AND A.source_target_type_id=S.source_target_type_id");
@@ -452,7 +459,9 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 			while (rs.next()) {
 				retObject = (AssociationSQL< ? , ? >) EntityFactorySQL.createObject(rs.getInt("association_id"),
 					getEntityType(con), con);
-				ret.add(retObject);
+				if (filter == null || filter.accept(retObject)) {
+					ret.add(retObject);
+				}
 			}
 		}
 		finally {

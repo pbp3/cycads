@@ -1,7 +1,7 @@
 /*
  * Created on 16/10/2009
  */
-package org.cycads.entities.annotation.SQL;
+package org.cycads.entities.SQL;
 
 import java.sql.Connection;
 

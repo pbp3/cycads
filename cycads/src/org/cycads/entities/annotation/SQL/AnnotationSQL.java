@@ -9,9 +9,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 
+import org.cycads.entities.EntityFilter;
 import org.cycads.entities.EntityObject;
+import org.cycads.entities.SQL.EntitySQL;
 import org.cycads.entities.annotation.Annotation;
-import org.cycads.entities.annotation.AnnotationFilter;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.note.SQL.TypeSQL;
@@ -233,28 +234,27 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 	//	}
 
 	public static <SO extends EntitySQL, TA extends EntitySQL> Collection<AnnotationSQL< ? extends SO, ? extends TA>> getAnnotations(
-			SO source, TA target, AnnotationMethod method, AnnotationFilter filter, Connection con, Type... types)
+			SO source, TA target, AnnotationMethod method, EntityFilter filter, Connection con, Type... types)
 			throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public static <TA extends EntitySQL> Collection<AnnotationSQL< ? , ? extends TA>> getAnnotations(Type sourceType,
-			TA target, AnnotationMethod method, AnnotationFilter filter, Connection con, Type... types)
-			throws SQLException {
+			TA target, AnnotationMethod method, EntityFilter filter, Connection con, Type... types) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public static <SO extends EntitySQL> Collection<AnnotationSQL< ? extends SO, ? >> getAnnotations(SO source,
-			Type targetType, AnnotationMethod method, AnnotationFilter filter, Connection con, Type... types)
+			Type targetType, AnnotationMethod method, EntityFilter filter, Connection con, Type... types)
 			throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public static Collection<AnnotationSQL< ? , ? >> getAnnotations(Type sourceType, Type targetType,
-			AnnotationMethod method, AnnotationFilter filter, Connection con, Type... types) throws SQLException {
+			AnnotationMethod method, EntityFilter filter, Connection con, Type... types) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}

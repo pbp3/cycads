@@ -301,4 +301,13 @@ public class OrganismSQL extends HasSynonymsNotebleSQL implements Organism<Seque
 		return TypeSQL.getType(Organism.ENTITY_TYPE_NAME, con);
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Organism)) {
+			return false;
+		}
+		Organism organism = (Organism) obj;
+		return this.getId() == organism.getId();
+	}
+
 }

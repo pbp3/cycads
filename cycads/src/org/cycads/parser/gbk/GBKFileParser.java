@@ -45,9 +45,9 @@ import org.cycads.ui.progress.Progress;
 public class GBKFileParser
 {
 
-	private EntityFactory	factory;
-	private String			seqDBName;
-	private Progress		progress;
+	private final EntityFactory	factory;
+	private final String		seqDBName;
+	private final Progress		progress;
 
 	public GBKFileParser(EntityFactory factory, String seqDBName, Progress progress) {
 		this.factory = factory;
@@ -104,10 +104,8 @@ public class GBKFileParser
 		Collection<Sequence> sequences = factory.getEntitiesBySynonym(factory.getType(Sequence.ENTITY_TYPE_NAME),
 			seqSynonym);
 
-		if (sequences != null && !sequences.isEmpty()) {
-			sequence = sequences.iterator().next();
-		}
-		else {
+		sequence = getSequence(sequences, organism);
+		if (sequence == null) {
 			sequence = organism.createNewSequence("" + richSeq.getVersion());
 			sequence.addSynonym(seqSynonym);
 			sequence.setSequenceString(richSeq.seqString());
@@ -117,6 +115,17 @@ public class GBKFileParser
 			sequence.addNote(GBKFileConfig.getSeqCommentNoteType(), comment.getComment());
 		}
 		return sequence;
+	}
+
+	private Sequence getSequence(Collection<Sequence> sequences, Organism organism) {
+		if (sequences != null && !sequences.isEmpty()) {
+			for (Sequence seq : sequences) {
+				if (seq.getOrganism().equals(organism)) {
+					return seq;
+				}
+			}
+		}
+		return null;
 	}
 
 	public void handleFeature(RichFeature feature, Sequence sequence) {
@@ -135,7 +144,7 @@ public class GBKFileParser
 		int noteRank = annots.getNoteSet().size();
 		ArrayList<Note> notes = new ArrayList<Note>(annots.getNoteSet());
 		List<NoteOperation> noteOperations = GBKFileConfig.getNoteOperations(type);
-		List<RelationshipOperation<Annotation<Subsequence, ? >, ? >> annotationOperations = GBKFileConfig.getSubseqAnnotationOperations(
+		List<RelationshipOperation<Annotation<Subsequence, Feature>, ? >> annotationOperations = GBKFileConfig.getSubseqAnnotationOperations(
 			type, factory, sequence);
 		List<RelationshipOperation<Subsequence, ? >> subseqOperations = GBKFileConfig.getSubseqOperations(type, factory);
 
@@ -172,7 +181,7 @@ public class GBKFileParser
 
 				boolean noteUsed = false;
 				Collection< ? > retOps;
-				for (RelationshipOperation<Annotation<Subsequence, ? >, ? > operation : annotationOperations) {
+				for (RelationshipOperation<Annotation<Subsequence, Feature>, ? > operation : annotationOperations) {
 					retOps = operation.relate(annot, noteForOperation);
 					if (retOps != null && !retOps.isEmpty()) {
 						noteUsed = true;
