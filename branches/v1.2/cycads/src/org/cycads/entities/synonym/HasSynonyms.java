@@ -5,9 +5,7 @@ package org.cycads.entities.synonym;
 
 import java.util.Collection;
 
-import org.cycads.entities.EntityObject;
-
-public interface HasSynonyms extends EntityObject
+public interface HasSynonyms
 {
 	public Collection< ? extends Dbxref> getSynonyms();
 
@@ -20,7 +18,7 @@ public interface HasSynonyms extends EntityObject
 	 */
 	public Dbxref addSynonym(String dbName, String accession);
 
-	public void addSynonym(Dbxref dbxref);
+	public Dbxref addSynonym(Dbxref dbxref);
 
 	public boolean isSynonym(Dbxref dbxref);
 

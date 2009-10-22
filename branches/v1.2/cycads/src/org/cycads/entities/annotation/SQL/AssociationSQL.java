@@ -13,14 +13,14 @@ import java.util.Collection;
 
 import org.cycads.entities.EntityFilter;
 import org.cycads.entities.SQL.EntitySQL;
+import org.cycads.entities.SQL.SimpleEntitySQL;
 import org.cycads.entities.annotation.Association;
 import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.note.SQL.TypeSQL;
-import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
-public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends HasSynonymsNotebleSQL
-		implements Association<SO, TA>, EntitySQL
+public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends SimpleEntitySQL
+		implements Association<SO, TA>
 {
 
 	private final int			id;
@@ -73,7 +73,7 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 	}
 
 	public static <SO extends EntitySQL, TA extends EntitySQL> AssociationSQL<SO, TA> createAssociationSQL(SO source,
-			TA target, Connection con, TypeSQL... types) throws SQLException {
+			TA target, Collection<Type> types, Connection con) throws SQLException {
 
 		SourceTargetTypeSQL sourceTargetType = new SourceTargetTypeSQL(TypeSQL.getType(source.getEntityType(), con),
 			TypeSQL.getType(target.getEntityType(), con), con);
@@ -92,7 +92,7 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 			if (rs.next()) {
 				AssociationSQL<SO, TA> ret = new AssociationSQL<SO, TA>(rs.getInt(1), con);
 				if (types != null) {
-					for (TypeSQL type : types) {
+					for (Type type : types) {
 						ret.addType(type);
 					}
 				}
@@ -250,10 +250,10 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 	}
 
 	public static <SO extends EntitySQL, TA extends EntitySQL> Collection<AssociationSQL< ? extends SO, ? extends TA>> getAssociations(
-			SO source, TA target, EntityFilter filter, Connection con, Type... types) throws SQLException {
+			SO source, TA target, Collection<Type> types, EntityFilter filter, Connection con) throws SQLException {
 		StringBuffer query = new StringBuffer(
 			"SELECT association_id FROM Association A, Source_target_type S, Association_type T WHERE ");
-		query.append("A.association_id=T.association_id=T AND A.source_target_type_id=S.source_target_type_id");
+		query.append("A.association_id=T.association_id AND A.source_target_type_id=S.source_target_type_id");
 		TypeSQL typeSQL;
 		if (source != null) {
 			query.append(" AND source_id=" + source.getId());
@@ -310,10 +310,10 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 	}
 
 	public static <TA extends EntitySQL> Collection<AssociationSQL< ? , ? extends TA>> getAssociations(Type sourceType,
-			TA target, EntityFilter filter, Connection con, Type... types) throws SQLException {
+			TA target, Collection<Type> types, EntityFilter filter, Connection con) throws SQLException {
 		StringBuffer query = new StringBuffer(
 			"SELECT association_id FROM Association A, Source_target_type S, Association_type T WHERE ");
-		query.append("A.association_id=T.association_id=T AND A.source_target_type_id=S.source_target_type_id");
+		query.append("A.association_id=T.association_id AND A.source_target_type_id=S.source_target_type_id");
 		TypeSQL typeSQL;
 		if (sourceType != null) {
 			typeSQL = TypeSQL.getType(sourceType, con);
@@ -372,7 +372,7 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 			Type targetType, EntityFilter filter, Connection con, Type... types) throws SQLException {
 		StringBuffer query = new StringBuffer(
 			"SELECT association_id FROM Association A, Source_target_type S, Association_type T WHERE ");
-		query.append("A.association_id=T.association_id=T AND A.source_target_type_id=S.source_target_type_id");
+		query.append("A.association_id=T.association_id AND A.source_target_type_id=S.source_target_type_id");
 		TypeSQL typeSQL;
 		if (source != null) {
 			query.append(" AND source_id=" + source.getId());
@@ -431,7 +431,7 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 			EntityFilter filter, Connection con, Type... types) throws SQLException {
 		StringBuffer query = new StringBuffer(
 			"SELECT association_id FROM Association A, Source_target_type S, Association_type T WHERE ");
-		query.append("A.association_id=T.association_id=T AND A.source_target_type_id=S.source_target_type_id");
+		query.append("A.association_id=T.association_id AND A.source_target_type_id=S.source_target_type_id");
 		TypeSQL typeSQL;
 		if (sourceType != null) {
 			typeSQL = TypeSQL.getType(sourceType, con);

@@ -8,13 +8,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.cycads.entities.SQL.SimpleEntitySQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.reaction.Reaction;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.ECSQL;
-import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
-public class ReactionSQL extends HasSynonymsNotebleSQL implements Reaction<CompoundSQL, ECSQL, CompoundReactionSQL>
+public class ReactionSQL extends SimpleEntitySQL implements Reaction<CompoundSQL, ECSQL, CompoundReactionSQL>
 {
 	private Connection	con;
 	private int			id;

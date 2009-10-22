@@ -11,13 +11,13 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.TreeSet;
 
+import org.cycads.entities.SQL.SimpleEntitySQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.sequence.Intron;
 import org.cycads.entities.sequence.SimpleIntron;
 import org.cycads.entities.sequence.Subsequence;
-import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
-public class SubsequenceSQL extends HasSynonymsNotebleSQL implements Subsequence<SequenceSQL>
+public class SubsequenceSQL extends SimpleEntitySQL implements Subsequence<SequenceSQL>
 {
 	private final int			id;
 	private final Connection	con;

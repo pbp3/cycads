@@ -12,12 +12,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.TreeSet;
 
+import org.cycads.entities.SQL.SimpleEntitySQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.sequence.Intron;
 import org.cycads.entities.sequence.Sequence;
-import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
-public class SequenceSQL extends HasSynonymsNotebleSQL implements Sequence<OrganismSQL, SubsequenceSQL>
+public class SequenceSQL extends SimpleEntitySQL implements Sequence<OrganismSQL, SubsequenceSQL>
 {
 	public static final int		INVALID_LENGTH	= -1;
 

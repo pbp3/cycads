@@ -227,6 +227,9 @@ public class SynonymsSQL
 	}
 
 	public static Collection<EntitySQL> getEntities(Type type, DbxrefSQL dbxref, Connection con) throws SQLException {
+		if (type == null) {
+			return getEntities(dbxref, con);
+		}
 		TypeSQL typeSQL = TypeSQL.getType(type, con);
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -260,4 +263,44 @@ public class SynonymsSQL
 			}
 		}
 	}
+
+	public static Collection<EntitySQL> getEntities(String dbName, String accession, Connection con)
+			throws SQLException {
+		return getEntities(DbxrefSQL.getDbxref(dbName, accession, con), con);
+	}
+
+	public static Collection<EntitySQL> getEntities(DbxrefSQL dbxref, Connection con) throws SQLException {
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = con.prepareStatement("SELECT source_id, source_type_id from Synonym where dbxref_id=?");
+			stmt.setInt(1, dbxref.getId());
+			rs = stmt.executeQuery();
+			Collection<EntitySQL> ret = new ArrayList<EntitySQL>();
+			while (rs.next()) {
+				ret.add(EntityFactorySQL.createObject(rs.getInt("source_id"), TypeSQL.getType(
+					rs.getInt("source_type_id"), con), con));
+			}
+			return ret;
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
+	}
+
 }

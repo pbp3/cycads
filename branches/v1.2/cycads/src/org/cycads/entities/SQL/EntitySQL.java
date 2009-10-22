@@ -13,4 +13,6 @@ public interface EntitySQL extends EntityObject
 
 	public Connection getConnection();
 
+	public int getTypeId();
+
 }

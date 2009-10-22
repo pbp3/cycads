@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 
+import org.cycads.entities.SQL.SimpleEntitySQL;
 import org.cycads.entities.note.Type;
-import org.cycads.entities.synonym.SQL.HasSynonymsNotebleSQL;
 
-public class TypeSQL extends HasSynonymsNotebleSQL implements Type
+public class TypeSQL extends SimpleEntitySQL implements Type
 {
 	public static final int						INVALID_ID		= -1;
 
@@ -188,14 +188,13 @@ public class TypeSQL extends HasSynonymsNotebleSQL implements Type
 		return ret;
 	}
 
-	public static TypeSQL[] getTypes(Connection con, Type... types) {
+	public static Collection<Type> getTypes(Collection<Type> types, Connection con) {
 		if (types == null) {
 			return null;
 		}
-		TypeSQL[] ret = new TypeSQL[types.length];
-		int i = 0;
+		Collection<Type> ret = new ArrayList<Type>(types.size());
 		for (Type type : types) {
-			ret[i++] = TypeSQL.getType(type, con);
+			ret.add(TypeSQL.getType(type, con));
 		}
 		return ret;
 	}
@@ -208,14 +207,6 @@ public class TypeSQL extends HasSynonymsNotebleSQL implements Type
 	@Override
 	public String getName() {
 		return name;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public Connection getConnection() {
-		return con;
 	}
 
 	@Override
