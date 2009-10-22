@@ -22,12 +22,13 @@ public class SimpleAnnotation<SO extends EntityObject, TA extends EntityObject> 
 	AnnotationMethod			method;
 	String						score;
 
-	public SimpleAnnotation(SO source, TA target, AnnotationMethod method, EntityTypeFactory< ? > typeFactory,
-			EntityDbxrefFactory< ? > dbxrefFactory) {
+	public SimpleAnnotation(SO source, TA target, AnnotationMethod method, String score,
+			EntityTypeFactory< ? > typeFactory, EntityDbxrefFactory< ? > dbxrefFactory) {
 		super(typeFactory, dbxrefFactory);
 		this.method = method;
 		this.source = source;
 		this.target = target;
+		this.score = score;
 	}
 
 	@Override
@@ -96,6 +97,28 @@ public class SimpleAnnotation<SO extends EntityObject, TA extends EntityObject> 
 		return typeFactory.getType("SimpleAnnotation");
 	}
 
+	@Override
+	public <TA extends EntityObject> Association< ? , TA> addAssociation(TA target, Collection<Type> associationTypes) {
+		throw new RuntimeException("Method not implemented");
+	}
+
+	@Override
+	public <TA extends EntityObject> Collection< ? extends Association< ? , TA>> getAssociations(TA target,
+			Collection<Type> associationTypes) {
+		throw new RuntimeException("Method not implemented");
+	}
+
+	@Override
+	public <TA extends EntityObject> Annotation< ? , TA> addAnnotation(TA target, AnnotationMethod method,
+			String score, Collection<Type> annotationTypes) {
+		throw new RuntimeException("Method not implemented");
+	}
+
+	@Override
+	public <TA extends EntityObject> Collection< ? extends Annotation< ? , TA>> getAnnotations(TA target,
+			AnnotationMethod method, Collection<Type> annotationTypes) {
+		throw new RuntimeException("Method not implemented");
+	}
 	// @Override
 	// public int compareTo(Annotation<?, ?, ?, ?> annot) {
 	// return this.getAnnotationMethod().compareTo(annot.getAnnotationMethod());

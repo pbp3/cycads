@@ -24,7 +24,7 @@ public class TypeSQL extends SimpleEntitySQL implements Type
 
 	private int									id;
 	private String								name, description;
-	private Connection							con;
+	private final Connection					con;
 
 	protected TypeSQL(int id, Connection con) throws SQLException {
 		this.id = id;
@@ -196,6 +196,24 @@ public class TypeSQL extends SimpleEntitySQL implements Type
 		for (Type type : types) {
 			ret.add(TypeSQL.getType(type, con));
 		}
+		return ret;
+	}
+
+	public static Collection<Type> getTypes(Type type, Connection con) {
+		if (type == null) {
+			return null;
+		}
+		Collection<Type> ret = new ArrayList<Type>(1);
+		ret.add(TypeSQL.getType(type, con));
+		return ret;
+	}
+
+	public static Collection<Type> getTypes(String type, Connection con) {
+		if (type == null) {
+			return null;
+		}
+		Collection<Type> ret = new ArrayList<Type>(1);
+		ret.add(TypeSQL.getType(type, con));
 		return ret;
 	}
 

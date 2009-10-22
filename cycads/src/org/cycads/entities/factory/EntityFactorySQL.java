@@ -8,10 +8,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Collection;
 
-import org.cycads.entities.EntityFilter;
 import org.cycads.entities.SQL.EntitySQL;
 import org.cycads.entities.SQL.FeatureSQL;
 import org.cycads.entities.SQL.FunctionSQL;
+import org.cycads.entities.SQL.SimpleEntitySQL;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.annotation.Association;
@@ -32,7 +32,6 @@ import org.cycads.entities.synonym.SQL.DatabaseSQL;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.ECSQL;
 import org.cycads.entities.synonym.SQL.KOSQL;
-import org.cycads.entities.synonym.SQL.SynonymsSQL;
 import org.cycads.general.Config;
 import org.cycads.general.ParametersDefault;
 
@@ -249,8 +248,7 @@ public class EntityFactorySQL
 	public <SO extends EntitySQL, TA extends EntitySQL> AssociationSQL<SO, TA> createAssociation(SO source, TA target,
 			Collection<Type> types) {
 		try {
-			return AssociationSQL.createAssociationSQL(source, target, getConnection(), TypeSQL.getTypes(
-				getConnection(), types));
+			return AssociationSQL.createAssociationSQL(source, target, types, getConnection());
 		}
 		catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -259,10 +257,9 @@ public class EntityFactorySQL
 
 	@Override
 	public <SO extends EntitySQL, TA extends EntitySQL> AnnotationSQL<SO, TA> createAnnotation(SO source, TA target,
-			AnnotationMethod method, String score, Collection<Type> types) {
+			Collection<Type> types, AnnotationMethod method, String score) {
 		try {
-			return AnnotationSQL.createAnnotationSQL(source, target, AnnotationMethodSQL.getMethod(method,
-				getConnection()), score, getConnection(), TypeSQL.getTypes(getConnection(), types));
+			return AnnotationSQL.createAnnotationSQL(source, target, types, method, score, getConnection());
 		}
 		catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -307,10 +304,10 @@ public class EntityFactorySQL
 	//	}
 	//
 	@Override
-	public <SO extends EntitySQL, TA extends EntitySQL> Collection< ? extends Annotation< ? extends SO, ? extends TA>> getAnnotations(
-			SO source, TA target, AnnotationMethod method, Collection<Type> types, EntityFilter filter) {
+	public <SO extends EntitySQL, TA extends EntitySQL> Collection< ? extends AnnotationSQL<SO, TA>> getAnnotations(
+			SO source, TA target, AnnotationMethod method, Collection<Type> types) {
 		try {
-			return AnnotationSQL.getAnnotations(source, target, method, filter, getConnection(), types);
+			return AnnotationSQL.getAnnotations(source, target, method, types, getConnection());
 		}
 		catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -318,10 +315,10 @@ public class EntityFactorySQL
 	}
 
 	@Override
-	public <TA extends EntitySQL> Collection< ? extends Annotation< ? , ? extends TA>> getAnnotations(Type sourceType,
-			TA target, AnnotationMethod method, EntityFilter filter, Collection<Type> types) {
+	public <TA extends EntitySQL> Collection< ? extends Annotation< ? , TA>> getAnnotations(Type sourceType, TA target,
+			AnnotationMethod method, Collection<Type> types) {
 		try {
-			return AnnotationSQL.getAnnotations(sourceType, target, method, filter, getConnection(), types);
+			return AnnotationSQL.getAnnotations(sourceType, target, method, types, getConnection());
 		}
 		catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -329,10 +326,10 @@ public class EntityFactorySQL
 	}
 
 	@Override
-	public <SO extends EntitySQL> Collection< ? extends Annotation< ? extends SO, ? >> getAnnotations(SO source,
-			Type targetType, AnnotationMethod method, EntityFilter filter, Collection<Type> types) {
+	public <SO extends EntitySQL> Collection< ? extends Annotation<SO, ? >> getAnnotations(SO source, Type targetType,
+			AnnotationMethod method, Collection<Type> types) {
 		try {
-			return AnnotationSQL.getAnnotations(source, targetType, method, filter, getConnection(), types);
+			return AnnotationSQL.getAnnotations(source, targetType, method, types, getConnection());
 		}
 		catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -341,9 +338,9 @@ public class EntityFactorySQL
 
 	@Override
 	public Collection< ? extends Annotation< ? , ? >> getAnnotations(Type sourceType, Type targetType,
-			AnnotationMethod method, EntityFilter filter, Collection<Type> types) {
+			AnnotationMethod method, Collection<Type> types) {
 		try {
-			return AnnotationSQL.getAnnotations(sourceType, targetType, method, filter, getConnection(), types);
+			return AnnotationSQL.getAnnotations(sourceType, targetType, method, types, getConnection());
 		}
 		catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -351,10 +348,10 @@ public class EntityFactorySQL
 	}
 
 	@Override
-	public <SO extends EntitySQL, TA extends EntitySQL> Collection< ? extends Association< ? extends SO, ? extends TA>> getAssociations(
-			SO source, TA target, EntityFilter filter, Collection<Type> types) {
+	public <SO extends EntitySQL, TA extends EntitySQL> Collection< ? extends Association<SO, TA>> getAssociations(
+			SO source, TA target, Collection<Type> types) {
 		try {
-			return AssociationSQL.getAssociations(source, target, filter, getConnection(), types);
+			return AssociationSQL.getAssociations(source, target, types, getConnection());
 		}
 		catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -362,10 +359,10 @@ public class EntityFactorySQL
 	}
 
 	@Override
-	public <TA extends EntitySQL> Collection< ? extends Association< ? , ? extends TA>> getAssociations(
-			Type sourceType, TA target, EntityFilter filter, Collection<Type> types) {
+	public <TA extends EntitySQL> Collection< ? extends Association< ? , TA>> getAssociations(Type sourceType,
+			TA target, Collection<Type> types) {
 		try {
-			return AssociationSQL.getAssociations(sourceType, target, filter, getConnection(), types);
+			return AssociationSQL.getAssociations(sourceType, target, types, getConnection());
 		}
 		catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -373,10 +370,10 @@ public class EntityFactorySQL
 	}
 
 	@Override
-	public <SO extends EntitySQL> Collection< ? extends Association< ? extends SO, ? >> getAssociations(SO source,
-			Type targetType, EntityFilter filter, Collection<Type> types) {
+	public <SO extends EntitySQL> Collection< ? extends Association<SO, ? >> getAssociations(SO source,
+			Type targetType, Collection<Type> types) {
 		try {
-			return AssociationSQL.getAssociations(source, targetType, filter, getConnection(), types);
+			return AssociationSQL.getAssociations(source, targetType, types, getConnection());
 		}
 		catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -385,9 +382,9 @@ public class EntityFactorySQL
 
 	@Override
 	public Collection< ? extends Association< ? , ? >> getAssociations(Type sourceType, Type targetType,
-			EntityFilter filter, Collection<Type> types) {
+			Collection<Type> types) {
 		try {
-			return AssociationSQL.getAssociations(sourceType, targetType, filter, getConnection(), types);
+			return AssociationSQL.getAssociations(sourceType, targetType, types, getConnection());
 		}
 		catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -395,9 +392,10 @@ public class EntityFactorySQL
 	}
 
 	@Override
-	public Collection<EntitySQL> getEntitiesBySynonym(Type type, String dbName, String accession) {
+	public Collection< ? extends EntitySQL> getEntitiesBySynonym(String dbName, String accession, String type) {
 		try {
-			return SynonymsSQL.getEntities(type, getDbxref(dbName, accession), getConnection());
+			return SimpleEntitySQL.getEntities(TypeSQL.getType(type, getConnection()), dbName, accession,
+				getConnection());
 		}
 		catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -405,9 +403,10 @@ public class EntityFactorySQL
 	}
 
 	@Override
-	public Collection<EntitySQL> getEntitiesBySynonym(Type type, Dbxref synonym) {
+	public Collection< ? extends EntitySQL> getEntitiesBySynonym(Dbxref synonym, String type) {
 		try {
-			return SynonymsSQL.getEntities(type, getDbxref(synonym), getConnection());
+			return SimpleEntitySQL.getEntities(TypeSQL.getType(type, getConnection()), getDbxref(synonym),
+				getConnection());
 		}
 		catch (SQLException e) {
 			throw new RuntimeException(e);

@@ -7,9 +7,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collection;
 
-import org.cycads.entities.EntityFilter;
 import org.cycads.entities.EntityObject;
 import org.cycads.entities.SQL.EntitySQL;
 import org.cycads.entities.annotation.Annotation;
@@ -67,6 +67,21 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 			TA target, Collection<Type> types, AnnotationMethod method, String score, Connection con)
 			throws SQLException {
 		AnnotationMethodSQL methodSQL = AnnotationMethodSQL.getMethod(method, con);
+
+		//annotation with the same source, target, method and score already exists? 
+		Collection< ? extends AnnotationSQL<SO, TA>> annots = getAnnotations(source, target, methodSQL, types, con);
+		for (AnnotationSQL<SO, TA> annot : annots) {
+			String annotScore = annot.getScore();
+			if (annotScore == null) {
+				if (score == null) {
+					return null;
+				}
+			}
+			else if (annotScore.equals(score)) {
+				return null;
+			}
+		}
+
 		AssociationSQL<SO, TA> association = AssociationSQL.createAssociationSQL(source, target, types, con);
 		association.addType(getEntityType(con));
 		PreparedStatement stmt = null;
@@ -143,7 +158,7 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 		if (!isParent(parentSQL)) {
 			try {
 				AssociationSQL< ? , ? > parentAssociation = AssociationSQL.createAssociationSQL(this, parentSQL,
-					getParentType(), getConnection());
+					Arrays.asList(getParentType()), getConnection());
 			}
 			catch (SQLException e) {
 				throw new RuntimeException("Can not create the parent association.", e);
@@ -155,9 +170,10 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 	@Override
 	public Collection<EntitySQL> getParents() {
 		if (parents == null) {
-			Collection<AssociationSQL< ? extends AnnotationSQL<SO, TA>, ? >> associations;
+			Collection<AssociationSQL<AnnotationSQL<SO, TA>, ? >> associations;
 			try {
-				associations = AssociationSQL.getAssociations(this, (Type) null, null, getParentType(), getConnection());
+				associations = AssociationSQL.getAssociations(this, (Type) null, Arrays.asList(getParentType()),
+					getConnection());
 			}
 			catch (SQLException e) {
 				throw new RuntimeException(e);
@@ -235,29 +251,26 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 	//		}
 	//	}
 
-	public static <SO extends EntitySQL, TA extends EntitySQL> Collection<AnnotationSQL< ? extends SO, ? extends TA>> getAnnotations(
-			SO source, TA target, AnnotationMethod method, Collection<Type> types, EntityFilter filter, Connection con)
-			throws SQLException {
+	public static <SO extends EntitySQL, TA extends EntitySQL> Collection<AnnotationSQL<SO, TA>> getAnnotations(
+			SO source, TA target, AnnotationMethod method, Collection<Type> types, Connection con) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static <TA extends EntitySQL> Collection<AnnotationSQL< ? , ? extends TA>> getAnnotations(Type sourceType,
-			TA target, AnnotationMethod method, Collection<Type> types, EntityFilter filter, Connection con)
-			throws SQLException {
+	public static <TA extends EntitySQL> Collection<AnnotationSQL< ? , TA>> getAnnotations(Type sourceType, TA target,
+			AnnotationMethod method, Collection<Type> types, Connection con) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public static <SO extends EntitySQL> Collection<AnnotationSQL< ? extends SO, ? >> getAnnotations(SO source,
-			Type targetType, AnnotationMethod method, Collection<Type> types, EntityFilter filter, Connection con)
-			throws SQLException {
+	public static <SO extends EntitySQL> Collection<AnnotationSQL<SO, ? >> getAnnotations(SO source, Type targetType,
+			AnnotationMethod method, Collection<Type> types, Connection con) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public static Collection<AnnotationSQL< ? , ? >> getAnnotations(Type sourceType, Type targetType,
-			AnnotationMethod method, Collection<Type> types, EntityFilter filter, Connection con) throws SQLException {
+			AnnotationMethod method, Collection<Type> types, Connection con) throws SQLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
