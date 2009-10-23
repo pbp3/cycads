@@ -20,7 +20,7 @@ import org.cycads.parser.association.LineRecordFileReader;
 import org.cycads.parser.association.SimpleAnnotation;
 import org.cycads.parser.association.InputNameOverwrite;
 import org.cycads.parser.association.factory.ObjectFactory;
-import org.cycads.parser.association.factory.SimpleAnnotationRecordFactory;
+import org.cycads.parser.association.factory.AnnotationRecordFactory;
 import org.cycads.parser.association.factory.independent.IndependentDbxrefFactory;
 import org.cycads.ui.Tools;
 import org.cycads.ui.progress.Progress;
@@ -103,7 +103,7 @@ public class DbxrefDbxrefAnnotationLoaderSQL
 		DbxrefsFactory targetsFactory = new DbxrefsFactory(Config.dbxrefDbxrefAnnotationLoaderTargetDbxrefsSeparator(),
 			Config.dbxrefDbxrefAnnotationLoaderTargetDelimiter(), targetFactory);
 
-		ObjectFactory<SimpleAnnotation<DbxrefsField, DbxrefsField>> recordFactory = new SimpleAnnotationRecordFactory<DbxrefsField, DbxrefsField>(
+		ObjectFactory<SimpleAnnotation<DbxrefsField, DbxrefsField>> recordFactory = new AnnotationRecordFactory<DbxrefsField, DbxrefsField>(
 			dbxrefSourceColumnIndex, sourcesFactory, dbxrefTargetColumnIndex, targetsFactory, scoreColumnIndex,
 			methodColumnIndex, factory);
 

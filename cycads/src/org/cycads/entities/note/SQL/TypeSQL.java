@@ -22,13 +22,11 @@ public class TypeSQL extends SimpleEntitySQL implements Type
 	public static Hashtable<String, TypeSQL>	typesHashByName	= new Hashtable<String, TypeSQL>();
 	public static Hashtable<Integer, TypeSQL>	typesHashById	= new Hashtable<Integer, TypeSQL>();
 
-	private int									id;
 	private String								name, description;
-	private final Connection					con;
 
 	protected TypeSQL(int id, Connection con) throws SQLException {
-		this.id = id;
-		this.con = con;
+		super(id, con);
+
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -64,8 +62,8 @@ public class TypeSQL extends SimpleEntitySQL implements Type
 	}
 
 	protected TypeSQL(String name, Connection con) throws SQLException {
+		super(0, con);
 		this.name = name;
-		this.con = con;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -268,12 +266,12 @@ public class TypeSQL extends SimpleEntitySQL implements Type
 	}
 
 	@Override
-	public TypeSQL getEntityType() {
-		return getEntityType(getConnection());
+	public String getEntityTypeName() {
+		return Type.ENTITY_TYPE_NAME;
 	}
 
 	public static TypeSQL getEntityType(Connection con) {
-		return TypeSQL.getType(ENTITY_TYPE_NAME, con);
+		return TypeSQL.getType(Type.ENTITY_TYPE_NAME, con);
 	}
 
 }

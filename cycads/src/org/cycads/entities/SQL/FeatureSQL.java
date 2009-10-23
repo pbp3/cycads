@@ -115,8 +115,8 @@ public class FeatureSQL extends TypeSQL implements Feature
 	}
 
 	@Override
-	public TypeSQL getEntityType() {
-		return getEntityType(getConnection());
+	public String getEntityTypeName() {
+		return Feature.ENTITY_TYPE_NAME;
 	}
 
 	public static TypeSQL getEntityType(Connection con) {

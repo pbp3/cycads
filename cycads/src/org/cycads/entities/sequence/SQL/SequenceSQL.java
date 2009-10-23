@@ -19,19 +19,16 @@ import org.cycads.entities.sequence.Sequence;
 
 public class SequenceSQL extends SimpleEntitySQL implements Sequence<OrganismSQL, SubsequenceSQL>
 {
-	public static final int		INVALID_LENGTH	= -1;
+	public static final int	INVALID_LENGTH	= -1;
 
-	private final int			id;
-	private String				seqStr;
-	private final Connection	con;
-	private int					length			= INVALID_LENGTH;
-	private int					organismId;
-	private OrganismSQL			organism;
-	private String				version;
+	private String			seqStr;
+	private int				length			= INVALID_LENGTH;
+	private int				organismId;
+	private OrganismSQL		organism;
+	private String			version;
 
 	public SequenceSQL(int id, Connection con) throws SQLException {
-		this.id = id;
-		this.con = con;
+		super(id, con);
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -77,16 +74,6 @@ public class SequenceSQL extends SimpleEntitySQL implements Sequence<OrganismSQL
 	}
 
 	@Override
-	public Connection getConnection() {
-		return con;
-	}
-
-	@Override
-	public int getId() {
-		return id;
-	}
-
-	@Override
 	public OrganismSQL getOrganism() {
 		if (organism == null) {
 			try {
@@ -106,7 +93,7 @@ public class SequenceSQL extends SimpleEntitySQL implements Sequence<OrganismSQL
 			PreparedStatement stmt = null;
 			ResultSet rs = null;
 			try {
-				stmt = con.prepareStatement("SELECT seq from biosequence WHERE sequence_id=?");
+				stmt = getConnection().prepareStatement("SELECT seq from biosequence WHERE sequence_id=?");
 				stmt.setInt(1, id);
 				rs = stmt.executeQuery();
 				if (rs.next()) {
@@ -157,17 +144,18 @@ public class SequenceSQL extends SimpleEntitySQL implements Sequence<OrganismSQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT length from biosequence WHERE sequence_id=?");
+			stmt = getConnection().prepareStatement("SELECT length from biosequence WHERE sequence_id=?");
 			stmt.setInt(1, getId());
 			rs = stmt.executeQuery();
 			if (!rs.next()) {
-				stmt = con.prepareStatement("INSERT INTO biosequence (sequence_id, length, seq) VALUES (?,?,?)");
+				stmt = getConnection().prepareStatement(
+					"INSERT INTO biosequence (sequence_id, length, seq) VALUES (?,?,?)");
 				stmt.setInt(1, getId());
 				stmt.setInt(2, seqStr.length());
 				stmt.setString(3, seqStr);
 			}
 			else {
-				stmt = con.prepareStatement("UPDATE biosequence SET seq=? WHERE sequence_id=?");
+				stmt = getConnection().prepareStatement("UPDATE biosequence SET seq=? WHERE sequence_id=?");
 				stmt.setString(1, seqStr);
 				stmt.setInt(2, getId());
 			}
@@ -207,7 +195,7 @@ public class SequenceSQL extends SimpleEntitySQL implements Sequence<OrganismSQL
 		ResultSet rs = null;
 		String query = "";
 		try {
-			stmt = con.prepareStatement(
+			stmt = getConnection().prepareStatement(
 				"INSERT INTO subsequence (sequence_id, start_position, end_position) VALUES (?,?,?)",
 				Statement.RETURN_GENERATED_KEYS);
 			stmt.setInt(1, getId());
@@ -230,7 +218,8 @@ public class SequenceSQL extends SimpleEntitySQL implements Sequence<OrganismSQL
 					minStart = maxEnd;
 					maxEnd = aux;
 				}
-				stmt = con.prepareStatement("INSERT INTO Intron (subsequence_id, start_position, end_position) VALUES (?,?,?)");
+				stmt = getConnection().prepareStatement(
+					"INSERT INTO Intron (subsequence_id, start_position, end_position) VALUES (?,?,?)");
 				for (Intron intron : introns) {
 					if (intron.getStart() < minStart) {
 						intronStart = minStart;
@@ -283,7 +272,8 @@ public class SequenceSQL extends SimpleEntitySQL implements Sequence<OrganismSQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT subsequence_id from subsequence where sequence_id=? AND start_position=? AND end_position=?");
+			stmt = getConnection().prepareStatement(
+				"SELECT subsequence_id from subsequence where sequence_id=? AND start_position=? AND end_position=?");
 			stmt.setInt(1, getId());
 			stmt.setInt(2, start);
 			stmt.setInt(3, end);
@@ -342,7 +332,8 @@ public class SequenceSQL extends SimpleEntitySQL implements Sequence<OrganismSQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT subsequence_id from subsequence where sequence_id=? AND start_position=?");
+			stmt = getConnection().prepareStatement(
+				"SELECT subsequence_id from subsequence where sequence_id=? AND start_position=?");
 			stmt.setInt(1, getId());
 			stmt.setInt(2, start);
 			rs = stmt.executeQuery();
@@ -377,8 +368,8 @@ public class SequenceSQL extends SimpleEntitySQL implements Sequence<OrganismSQL
 	}
 
 	@Override
-	public TypeSQL getEntityType() {
-		return getEntityType(con);
+	public String getEntityTypeName() {
+		return Sequence.ENTITY_TYPE_NAME;
 	}
 
 	public static TypeSQL getEntityType(Connection con) {

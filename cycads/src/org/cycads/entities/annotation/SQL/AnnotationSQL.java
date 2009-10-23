@@ -197,8 +197,8 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 	}
 
 	@Override
-	public TypeSQL getEntityType() {
-		return getEntityType(getConnection());
+	public String getEntityTypeName() {
+		return Annotation.ENTITY_TYPE_NAME;
 	}
 
 	public static TypeSQL getEntityType(Connection con) {

@@ -17,15 +17,12 @@ import org.cycads.general.ParametersDefault;
 
 public class DbxrefSQL extends SimpleEntitySQL implements Dbxref
 {
-	public final static int		INVALID_ID	= -1;
-	private DatabaseSQL			database;
-	private String				accession;
-	private int					id;
-	private final Connection	con;
+	public final static int	INVALID_ID	= -1;
+	private DatabaseSQL		database;
+	private String			accession;
 
 	public DbxrefSQL(int id, Connection con) throws SQLException {
-		this.id = id;
-		this.con = con;
+		super(id, con);
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -61,9 +58,9 @@ public class DbxrefSQL extends SimpleEntitySQL implements Dbxref
 	}
 
 	protected DbxrefSQL(String dbName, String accession, Connection con) throws SQLException {
+		super(0, con);
 		this.database = DatabaseSQL.getDB(dbName, con);
 		this.accession = accession;
-		this.con = con;
 		this.id = getId(getDatabase(), accession, con);
 		if (this.id == INVALID_ID) {
 			PreparedStatement stmt = null;
@@ -145,11 +142,6 @@ public class DbxrefSQL extends SimpleEntitySQL implements Dbxref
 	}
 
 	@Override
-	public int getId() {
-		return id;
-	}
-
-	@Override
 	public String getAccession() {
 		return accession;
 	}
@@ -162,11 +154,6 @@ public class DbxrefSQL extends SimpleEntitySQL implements Dbxref
 	@Override
 	public String getDbName() {
 		return getDatabase().getName();
-	}
-
-	@Override
-	public Connection getConnection() {
-		return con;
 	}
 
 	@Override
@@ -212,8 +199,8 @@ public class DbxrefSQL extends SimpleEntitySQL implements Dbxref
 	}
 
 	@Override
-	public TypeSQL getEntityType() {
-		return getEntityType(getConnection());
+	public String getEntityTypeName() {
+		return Dbxref.OBJECT_TYPE_NAME;
 	}
 
 	public static TypeSQL getEntityType(Connection con) {

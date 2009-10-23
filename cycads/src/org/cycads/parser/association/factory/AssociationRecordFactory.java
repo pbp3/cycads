@@ -14,7 +14,7 @@ import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.parser.ParserException;
 
-public class SimpleAssociationRecordFactory<S extends EntityObject, T extends EntityObject>
+public class AssociationRecordFactory<S extends EntityObject, T extends EntityObject>
 		implements ObjectFactory<Collection<Association<S, T>>>
 {
 	private EntityAnnotationFactory<EntityObject>	associationFactory;
@@ -24,7 +24,7 @@ public class SimpleAssociationRecordFactory<S extends EntityObject, T extends En
 	private ObjectFactory<Collection<Type>>			typesFactory;
 	private ObjectFactory<Collection<Dbxref>>		synonymsFactory;
 
-	public SimpleAssociationRecordFactory(EntityAnnotationFactory<EntityObject> associationFactory,
+	public AssociationRecordFactory(EntityAnnotationFactory<EntityObject> associationFactory,
 			ObjectFactory<Collection<S>> sourcesFactory, ObjectFactory<Collection<T>> targetsFactory,
 			ObjectFactory<Collection<Type>> typesFactory, ObjectFactory<Collection<Note>> notesFactory,
 			ObjectFactory<Collection<Dbxref>> synonymsFactory) {

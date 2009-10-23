@@ -31,7 +31,12 @@ public class SimpleDatabase extends SimpleEntityObject implements Database
 
 	@Override
 	public Type getEntityType() {
-		return typeFactory.getType("Simple Database");
+		return typeFactory.getType("SimpleDatabase");
+	}
+
+	@Override
+	public String getEntityTypeName() {
+		return "SimpleDatabase";
 	}
 
 }

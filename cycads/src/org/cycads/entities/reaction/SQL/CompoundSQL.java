@@ -14,13 +14,10 @@ import org.cycads.entities.reaction.Compound;
 
 public class CompoundSQL extends SimpleEntitySQL implements Compound
 {
-	private final Connection	con;
-	private int					id;
-	private boolean				smallMolecule;
+	private boolean	smallMolecule;
 
 	public CompoundSQL(int id, Connection con) throws SQLException {
-		this.id = id;
-		this.con = con;
+		super(id, con);
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -55,14 +52,14 @@ public class CompoundSQL extends SimpleEntitySQL implements Compound
 	}
 
 	protected CompoundSQL(boolean smallMolecule, Connection con) throws SQLException {
+		super(0, con);
 		this.smallMolecule = smallMolecule;
-		this.con = con;
 		this.id = createNewCompound(smallMolecule, con);
 	}
 
 	public CompoundSQL(boolean smallMolecule, String dbName, String accession, Connection con) throws SQLException {
+		super(0, con);
 		this.smallMolecule = smallMolecule;
-		this.con = con;
 		Collection<EntitySQL> comps = SimpleEntitySQL.getEntities(getEntityType(), dbName, accession, con);
 		if (comps.size() > 0) {
 			for (EntitySQL entity : comps) {
@@ -115,16 +112,6 @@ public class CompoundSQL extends SimpleEntitySQL implements Compound
 	}
 
 	@Override
-	public Connection getConnection() {
-		return con;
-	}
-
-	@Override
-	public int getId() {
-		return id;
-	}
-
-	@Override
 	public boolean isSmallMolecule() {
 		return smallMolecule;
 	}
@@ -139,8 +126,8 @@ public class CompoundSQL extends SimpleEntitySQL implements Compound
 	}
 
 	@Override
-	public TypeSQL getEntityType() {
-		return getEntityType(con);
+	public String getEntityTypeName() {
+		return Compound.ENTITY_TYPE_NAME;
 	}
 
 	public static TypeSQL getEntityType(Connection con) {

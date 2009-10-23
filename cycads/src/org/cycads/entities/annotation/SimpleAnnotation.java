@@ -55,4 +55,9 @@ public class SimpleAnnotation<SO extends EntityObject, TA extends EntityObject> 
 		return typeFactory.getType("SimpleAnnotation");
 	}
 
+	@Override
+	public String getEntityTypeName() {
+		return "SimpleAnnotation";
+	}
+
 }

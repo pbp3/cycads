@@ -16,14 +16,11 @@ import org.cycads.entities.synonym.SQL.ECSQL;
 
 public class ReactionSQL extends SimpleEntitySQL implements Reaction<CompoundSQL, ECSQL, CompoundReactionSQL>
 {
-	private Connection	con;
-	private int			id;
-	private ECSQL		ec;
-	private boolean		reversible;
+	private ECSQL	ec;
+	private boolean	reversible;
 
 	public ReactionSQL(int id, Connection con) throws SQLException {
-		this.id = id;
-		this.con = con;
+		super(id, con);
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -59,17 +56,17 @@ public class ReactionSQL extends SimpleEntitySQL implements Reaction<CompoundSQL
 	}
 
 	protected ReactionSQL(ECSQL ec, boolean reversible, Connection con) throws SQLException {
+		super(0, con);
 		this.reversible = reversible;
 		this.ec = ec;
-		this.con = con;
 		this.id = createNewReaction(ec, reversible, con);
 	}
 
 	public ReactionSQL(ECSQL ec, boolean reversible, String dbName, String accession, Connection con)
 			throws SQLException {
+		super(0, con);
 		this.reversible = reversible;
 		this.ec = ec;
-		this.con = con;
 		ArrayList<ReactionSQL> reactions = getReactions(dbName, accession, con);
 		if (reactions.size() > 0) {
 			for (ReactionSQL reaction : reactions) {
@@ -164,16 +161,6 @@ public class ReactionSQL extends SimpleEntitySQL implements Reaction<CompoundSQL
 	}
 
 	@Override
-	public Connection getConnection() {
-		return con;
-	}
-
-	@Override
-	public int getId() {
-		return id;
-	}
-
-	@Override
 	public CompoundReactionSQL addCompoundSideA(CompoundSQL compound, int quantity) {
 		Collection<CompoundReactionSQL> comps = getCompounds();
 		for (CompoundReactionSQL compR : comps) {
@@ -222,7 +209,8 @@ public class ReactionSQL extends SimpleEntitySQL implements Reaction<CompoundSQL
 	private void addCompound(CompoundSQL compound, boolean sideA, int quantity) {
 		PreparedStatement stmt = null;
 		try {
-			stmt = con.prepareStatement("INSERT INTO reaction_has_compound (reaction_id, compound_id, side_a, quantity) VALUES (?,?,?,?)");
+			stmt = getConnection().prepareStatement(
+				"INSERT INTO reaction_has_compound (reaction_id, compound_id, side_a, quantity) VALUES (?,?,?,?)");
 			stmt.setInt(1, getId());
 			stmt.setInt(2, compound.getId());
 			stmt.setBoolean(3, sideA);
@@ -251,7 +239,8 @@ public class ReactionSQL extends SimpleEntitySQL implements Reaction<CompoundSQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT compound_id, side_a, quantity from reaction_has_compound WHERE reaction_id=?");
+			stmt = getConnection().prepareStatement(
+				"SELECT compound_id, side_a, quantity from reaction_has_compound WHERE reaction_id=?");
 			stmt.setInt(1, getId());
 			rs = stmt.executeQuery();
 			while (rs.next()) {
@@ -319,8 +308,8 @@ public class ReactionSQL extends SimpleEntitySQL implements Reaction<CompoundSQL
 	}
 
 	@Override
-	public TypeSQL getEntityType() {
-		return getEntityType(con);
+	public String getEntityTypeName() {
+		return Reaction.ENTITY_TYPE_NAME;
 	}
 
 	public static TypeSQL getEntityType(Connection con) {

@@ -18,13 +18,10 @@ import org.cycads.general.ParametersDefault;
 
 public class OrganismSQL extends SimpleEntitySQL implements Organism<SequenceSQL, SubsequenceSQL>
 {
-	private final int			id;
-	private String				name;
-	private final Connection	con;
+	private String	name;
 
 	public OrganismSQL(int id, Connection con) throws SQLException {
-		this.id = id;
-		this.con = con;
+		super(id, con);
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -81,17 +78,8 @@ public class OrganismSQL extends SimpleEntitySQL implements Organism<SequenceSQL
 	}
 
 	@Override
-	public int getId() {
-		return id;
-	}
-
-	@Override
 	public String getName() {
 		return name;
-	}
-
-	public Connection getConnection() {
-		return con;
 	}
 
 	@Override
@@ -99,7 +87,7 @@ public class OrganismSQL extends SimpleEntitySQL implements Organism<SequenceSQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT next_cyc_id from Organism WHERE ncbi_taxon_id=?");
+			stmt = getConnection().prepareStatement("SELECT next_cyc_id from Organism WHERE ncbi_taxon_id=?");
 			stmt.setInt(1, getId());
 			rs = stmt.executeQuery();
 			int nextCycId;
@@ -109,7 +97,7 @@ public class OrganismSQL extends SimpleEntitySQL implements Organism<SequenceSQL
 			else {
 				throw new SQLException("Organism does not exist:" + id);
 			}
-			stmt = con.prepareStatement("UPDATE Organism SET Next_Cyc_Id=? WHERE ncbi_taxon_id=?");
+			stmt = getConnection().prepareStatement("UPDATE Organism SET Next_Cyc_Id=? WHERE ncbi_taxon_id=?");
 			stmt.setInt(1, nextCycId + 1);
 			stmt.setInt(2, getId());
 			stmt.executeUpdate();
@@ -147,7 +135,7 @@ public class OrganismSQL extends SimpleEntitySQL implements Organism<SequenceSQL
 		if (!name.equals(getName())) {
 			PreparedStatement stmt = null;
 			try {
-				stmt = con.prepareStatement("UPDATE Organism SET name=? WHERE ncbi_taxon_id=?");
+				stmt = getConnection().prepareStatement("UPDATE Organism SET name=? WHERE ncbi_taxon_id=?");
 				stmt.setString(1, name);
 				stmt.setInt(2, id);
 				stmt.executeUpdate();
@@ -177,7 +165,7 @@ public class OrganismSQL extends SimpleEntitySQL implements Organism<SequenceSQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("INSERT INTO sequence (ncbi_taxon_id, version) VALUES (?,?)",
+			stmt = getConnection().prepareStatement("INSERT INTO sequence (ncbi_taxon_id, version) VALUES (?,?)",
 				Statement.RETURN_GENERATED_KEYS);
 			stmt.setInt(1, getId());
 			stmt.setString(2, version);
@@ -220,7 +208,7 @@ public class OrganismSQL extends SimpleEntitySQL implements Organism<SequenceSQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT sequence_id from sequence where ncbi_taxon_id=?");
+			stmt = getConnection().prepareStatement("SELECT sequence_id from sequence where ncbi_taxon_id=?");
 			stmt.setInt(1, getId());
 			rs = stmt.executeQuery();
 			ArrayList<SequenceSQL> seqs = new ArrayList<SequenceSQL>();
@@ -258,7 +246,8 @@ public class OrganismSQL extends SimpleEntitySQL implements Organism<SequenceSQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT sequence_id from sequence where ncbi_taxon_id=? AND version=?");
+			stmt = getConnection().prepareStatement(
+				"SELECT sequence_id from sequence where ncbi_taxon_id=? AND version=?");
 			stmt.setInt(1, getId());
 			stmt.setString(2, version);
 			rs = stmt.executeQuery();
@@ -293,8 +282,8 @@ public class OrganismSQL extends SimpleEntitySQL implements Organism<SequenceSQL
 	}
 
 	@Override
-	public TypeSQL getEntityType() {
-		return getEntityType(con);
+	public String getEntityTypeName() {
+		return Organism.ENTITY_TYPE_NAME;
 	}
 
 	public static TypeSQL getEntityType(Connection con) {
