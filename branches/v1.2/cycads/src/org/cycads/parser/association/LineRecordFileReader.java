@@ -35,7 +35,7 @@ public class LineRecordFileReader<R> implements RecordFileReader<R>
 			line = line.trim();
 			if (line.length() > 0 && !line.startsWith(commentLineStarter) && !removeLinePattern.matcher(line).matches()) {
 				try {
-					return objectFactory.create(line.split(columnSeparatorRegex));
+					return objectFactory.create(Tools.split(line, columnSeparatorRegex));
 				}
 				catch (ParserException e) {
 					throw new FileParserException("Line=" + line, e);

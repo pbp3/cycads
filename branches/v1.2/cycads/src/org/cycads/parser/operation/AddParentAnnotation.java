@@ -6,8 +6,8 @@ package org.cycads.parser.operation;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
-import org.cycads.entities.EntityFinder;
 import org.cycads.entities.annotation.Annotation;
+import org.cycads.entities.annotation.AnnotationFinder;
 import org.cycads.entities.factory.EntityDbxrefFactory;
 import org.cycads.entities.synonym.Dbxref;
 
@@ -16,20 +16,20 @@ public class AddParentAnnotation<SOURCE extends Annotation> extends SimpleRelati
 
 	private EntityDbxrefFactory	factory;
 	private String				parentDBName;
-	private EntityFinder		entityFinder;
+	private AnnotationFinder	annotationFinder;
 
 	public AddParentAnnotation(Pattern tagNameRegex, Pattern tagValueRegex, String parentDBName,
-			EntityDbxrefFactory factory, EntityFinder entityFinder) {
+			EntityDbxrefFactory factory, AnnotationFinder annotationFinder) {
 		super(tagNameRegex, tagValueRegex);
 		this.parentDBName = parentDBName;
 		this.factory = factory;
-		this.entityFinder = entityFinder;
+		this.annotationFinder = annotationFinder;
 	}
 
 	@Override
 	protected Collection<Annotation> execute(SOURCE source, Note note) {
 		Dbxref parentSynonym = factory.getDbxref(parentDBName, note.getValue());
-		Collection<Annotation> parents = entityFinder.getEntitiesBySynonym(parentSynonym, Annotation.ENTITY_TYPE_NAME);
+		Collection<Annotation> parents = annotationFinder.getAnnotationsBySynonym(parentSynonym);
 		for (Annotation parent : parents) {
 			source.addParent(parent);
 		}
@@ -52,12 +52,12 @@ public class AddParentAnnotation<SOURCE extends Annotation> extends SimpleRelati
 		this.parentDBName = parentDBName;
 	}
 
-	public EntityFinder getAnnotationFinder() {
-		return entityFinder;
+	public AnnotationFinder getAnnotationFinder() {
+		return annotationFinder;
 	}
 
-	public void setAnnotationFinder(EntityFinder entityFinder) {
-		this.entityFinder = entityFinder;
+	public void setAnnotationFinder(AnnotationFinder entityFinder) {
+		this.annotationFinder = entityFinder;
 	}
 
 }

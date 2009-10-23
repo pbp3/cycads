@@ -19,7 +19,7 @@ import org.cycads.parser.association.DbxrefsField;
 import org.cycads.parser.association.DbxrefsFactory;
 import org.cycads.parser.association.LineRecordFileReader;
 import org.cycads.parser.association.ObjectFactory;
-import org.cycads.parser.association.SimpleAnnotationRecord;
+import org.cycads.parser.association.SimpleAnnotation;
 import org.cycads.parser.association.SimpleAnnotationRecordFactory;
 import org.cycads.parser.association.InputNameOverwrite;
 import org.cycads.ui.Tools;
@@ -103,11 +103,11 @@ public class DbxrefDbxrefAnnotationLoaderSQL
 		DbxrefsFactory targetsFactory = new DbxrefsFactory(Config.dbxrefDbxrefAnnotationLoaderTargetDbxrefsSeparator(),
 			Config.dbxrefDbxrefAnnotationLoaderTargetDelimiter(), targetFactory);
 
-		ObjectFactory<SimpleAnnotationRecord<DbxrefsField, DbxrefsField>> recordFactory = new SimpleAnnotationRecordFactory<DbxrefsField, DbxrefsField>(
+		ObjectFactory<SimpleAnnotation<DbxrefsField, DbxrefsField>> recordFactory = new SimpleAnnotationRecordFactory<DbxrefsField, DbxrefsField>(
 			dbxrefSourceColumnIndex, sourcesFactory, dbxrefTargetColumnIndex, targetsFactory, scoreColumnIndex,
 			methodColumnIndex, factory);
 
-		LineRecordFileReader<SimpleAnnotationRecord<DbxrefsField, DbxrefsField>> fileReader = new LineRecordFileReader<SimpleAnnotationRecord<DbxrefsField, DbxrefsField>>(
+		LineRecordFileReader<SimpleAnnotation<DbxrefsField, DbxrefsField>> fileReader = new LineRecordFileReader<SimpleAnnotation<DbxrefsField, DbxrefsField>>(
 			br, Config.dbxrefDbxrefAnnotationLoaderColumnSeparator(), Config.dbxrefDbxrefAnnotationLoaderLineComment(),
 			Config.dbxrefDbxrefAnnotationLoaderLineIgnorePattern(), recordFactory);
 		Progress progress = new ProgressPrintInterval(System.out,

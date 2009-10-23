@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -14,6 +15,7 @@ import org.cycads.entities.EntityObject;
 import org.cycads.entities.SQL.EntitySQL;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
+import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.note.SQL.TypeSQL;
 
@@ -211,68 +213,260 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 		return TypeSQL.getType(PARENT_TYPE_NAME, con);
 	}
 
-	//	public static Collection<AnnotationSQL> getAnnotations(Dbxref dbxref, Connection con) throws SQLException {
-	//		int dbxrefId;
-	//		PreparedStatement stmt = null;
-	//		ResultSet rs = null;
-	//		try {
-	//			if (dbxref instanceof DbxrefSQL) {
-	//				dbxrefId = ((DbxrefSQL) dbxref).getId();
-	//			}
-	//			else {
-	//				dbxrefId = DbxrefSQL.getId(dbxref.getDbName(), dbxref.getAccession(), con);
-	//			}
-	//			stmt = con.prepareStatement("SELECT annotation_id from Annotation_synonym WHERE dbxref_id=?");
-	//			stmt.setInt(1, dbxrefId);
-	//			rs = stmt.executeQuery();
-	//			ArrayList<AnnotationSQL> ret = new ArrayList<AnnotationSQL>();
-	//			while (rs.next()) {
-	//				ret.add(new AnnotationSQL(rs.getInt("annotation_id"), con));
-	//			}
-	//			return ret;
-	//		}
-	//		finally {
-	//			if (rs != null) {
-	//				try {
-	//					rs.close();
-	//				}
-	//				catch (SQLException ex) {
-	//					// ignore
-	//				}
-	//			}
-	//			if (stmt != null) {
-	//				try {
-	//					stmt.close();
-	//				}
-	//				catch (SQLException ex) {
-	//					// ignore
-	//				}
-	//			}
-	//		}
-	//	}
-
 	public static <SO extends EntitySQL, TA extends EntitySQL> Collection<AnnotationSQL<SO, TA>> getAnnotations(
 			SO source, TA target, AnnotationMethod method, Collection<Type> types, Connection con) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuffer query = new StringBuffer(
+			"SELECT annotation_id FROM Annotation AN, Association AS, Method M, Source_target_type S, Association_type T WHERE");
+		query.append(" AN.annotation_id = AS.association_id AND AN.annotation_method_id = M.method_id");
+		query.append(" AND AS.association_id=T.association_id AND AS.source_target_type_id=S.source_target_type_id");
+		TypeSQL typeSQL;
+
+		if (source != null) {
+			query.append(" AND source_id=" + source.getId());
+			typeSQL = TypeSQL.getType(source.getEntityType(), con);
+			query.append(" AND source_type_id=" + typeSQL.getId());
+		}
+		if (target != null) {
+			query.append(" AND target_id=" + target.getId());
+			typeSQL = TypeSQL.getType(target.getEntityType(), con);
+			query.append(" AND target_type_id=" + typeSQL.getId());
+		}
+
+		if (method != null) {
+			query.append(" AND method_id=" + AnnotationMethodSQL.getMethod(method, con).getId());
+		}
+
+		if (types != null) {
+			query.append(" AND type_id IN (");
+			for (Type type : types) {
+				typeSQL = TypeSQL.getType(type, con);
+				query.append(typeSQL.getId() + ",");
+			}
+			query.replace(query.length() - 1, query.length(), ")");
+		}
+
+		Collection<AnnotationSQL<SO, TA>> ret = new ArrayList<AnnotationSQL<SO, TA>>();
+
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = con.prepareStatement(query.toString());
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				ret.add((AnnotationSQL<SO, TA>) EntityFactorySQL.createObject(rs.getInt("annotation_id"),
+					getEntityType(con), con));
+			}
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
+		return ret;
 	}
 
 	public static <TA extends EntitySQL> Collection<AnnotationSQL< ? , TA>> getAnnotations(Type sourceType, TA target,
 			AnnotationMethod method, Collection<Type> types, Connection con) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuffer query = new StringBuffer(
+			"SELECT annotation_id FROM Annotation AN, Association AS, Method M, Source_target_type S, Association_type T WHERE");
+		query.append(" AN.annotation_id = AS.association_id AND AN.annotation_method_id = M.method_id");
+		query.append(" AND AS.association_id=T.association_id AND AS.source_target_type_id=S.source_target_type_id");
+		TypeSQL typeSQL;
+
+		if (sourceType != null) {
+			typeSQL = TypeSQL.getType(sourceType, con);
+			query.append(" AND source_type_id=" + typeSQL.getId());
+		}
+		if (target != null) {
+			query.append(" AND target_id=" + target.getId());
+			typeSQL = TypeSQL.getType(target.getEntityType(), con);
+			query.append(" AND target_type_id=" + typeSQL.getId());
+		}
+
+		if (method != null) {
+			query.append(" AND method_id=" + AnnotationMethodSQL.getMethod(method, con).getId());
+		}
+
+		if (types != null) {
+			query.append(" AND type_id IN (");
+			for (Type type : types) {
+				typeSQL = TypeSQL.getType(type, con);
+				query.append(typeSQL.getId() + ",");
+			}
+			query.replace(query.length() - 1, query.length(), ")");
+		}
+
+		Collection<AnnotationSQL< ? , TA>> ret = new ArrayList<AnnotationSQL< ? , TA>>();
+
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = con.prepareStatement(query.toString());
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				ret.add((AnnotationSQL< ? , TA>) EntityFactorySQL.createObject(rs.getInt("annotation_id"),
+					getEntityType(con), con));
+			}
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
+		return ret;
 	}
 
 	public static <SO extends EntitySQL> Collection<AnnotationSQL<SO, ? >> getAnnotations(SO source, Type targetType,
 			AnnotationMethod method, Collection<Type> types, Connection con) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuffer query = new StringBuffer(
+			"SELECT annotation_id FROM Annotation AN, Association AS, Method M, Source_target_type S, Association_type T WHERE");
+		query.append(" AN.annotation_id = AS.association_id AND AN.annotation_method_id = M.method_id");
+		query.append(" AND AS.association_id=T.association_id AND AS.source_target_type_id=S.source_target_type_id");
+		TypeSQL typeSQL;
+
+		if (source != null) {
+			query.append(" AND source_id=" + source.getId());
+			typeSQL = TypeSQL.getType(source.getEntityType(), con);
+			query.append(" AND source_type_id=" + typeSQL.getId());
+		}
+		if (targetType != null) {
+			typeSQL = TypeSQL.getType(targetType, con);
+			query.append(" AND target_type_id=" + typeSQL.getId());
+		}
+
+		if (method != null) {
+			query.append(" AND method_id=" + AnnotationMethodSQL.getMethod(method, con).getId());
+		}
+
+		if (types != null) {
+			query.append(" AND type_id IN (");
+			for (Type type : types) {
+				typeSQL = TypeSQL.getType(type, con);
+				query.append(typeSQL.getId() + ",");
+			}
+			query.replace(query.length() - 1, query.length(), ")");
+		}
+
+		Collection<AnnotationSQL<SO, ? >> ret = new ArrayList<AnnotationSQL<SO, ? >>();
+
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = con.prepareStatement(query.toString());
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				ret.add((AnnotationSQL<SO, ? >) EntityFactorySQL.createObject(rs.getInt("annotation_id"),
+					getEntityType(con), con));
+			}
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
+		return ret;
 	}
 
 	public static Collection<AnnotationSQL< ? , ? >> getAnnotations(Type sourceType, Type targetType,
 			AnnotationMethod method, Collection<Type> types, Connection con) throws SQLException {
-		// TODO Auto-generated method stub
-		return null;
+		StringBuffer query = new StringBuffer(
+			"SELECT annotation_id FROM Annotation AN, Association AS, Method M, Source_target_type S, Association_type T WHERE");
+		query.append(" AN.annotation_id = AS.association_id AND AN.annotation_method_id = M.method_id");
+		query.append(" AND AS.association_id=T.association_id AND AS.source_target_type_id=S.source_target_type_id");
+		TypeSQL typeSQL;
+
+		if (sourceType != null) {
+			typeSQL = TypeSQL.getType(sourceType, con);
+			query.append(" AND source_type_id=" + typeSQL.getId());
+		}
+		if (targetType != null) {
+			typeSQL = TypeSQL.getType(targetType, con);
+			query.append(" AND target_type_id=" + typeSQL.getId());
+		}
+
+		if (method != null) {
+			query.append(" AND method_id=" + AnnotationMethodSQL.getMethod(method, con).getId());
+		}
+
+		if (types != null) {
+			query.append(" AND type_id IN (");
+			for (Type type : types) {
+				typeSQL = TypeSQL.getType(type, con);
+				query.append(typeSQL.getId() + ",");
+			}
+			query.replace(query.length() - 1, query.length(), ")");
+		}
+
+		Collection<AnnotationSQL< ? , ? >> ret = new ArrayList<AnnotationSQL< ? , ? >>();
+
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = con.prepareStatement(query.toString());
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				ret.add((AnnotationSQL< ? , ? >) EntityFactorySQL.createObject(rs.getInt("annotation_id"),
+					getEntityType(con), con));
+			}
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
+		return ret;
 	}
 
 }

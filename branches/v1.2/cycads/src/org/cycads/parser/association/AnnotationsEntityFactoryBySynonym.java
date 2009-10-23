@@ -31,10 +31,10 @@ public class AnnotationsEntityFactoryBySynonym implements ObjectFactory<Collecti
 		Collection<Annotation> ret = null;
 		for (Dbxref dbxref : dbxrefs) {
 			if (ret == null) {
-				ret = annotationFinder.getAnnotations(null, null, dbxref);
+				ret = annotationFinder.getAnnotationsBySynonym(dbxref);
 			}
 			else {
-				ret.addAll(annotationFinder.getAnnotations(null, null, dbxref));
+				ret.addAll(annotationFinder.getAnnotationsBySynonym(dbxref));
 			}
 		}
 		return ret;
