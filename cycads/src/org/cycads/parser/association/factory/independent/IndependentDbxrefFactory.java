@@ -1,12 +1,14 @@
 /*
  * Created on 25/09/2009
  */
-package org.cycads.parser.association;
+package org.cycads.parser.association.factory.independent;
 
 import org.cycads.entities.factory.EntityDbxrefFactory;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.general.Messages;
 import org.cycads.parser.ParserException;
+import org.cycads.parser.association.Tools;
+import org.cycads.parser.association.TypeNameTransformer;
 
 public class IndependentDbxrefFactory<X extends Dbxref> implements IndependentObjectFactory<X>
 {

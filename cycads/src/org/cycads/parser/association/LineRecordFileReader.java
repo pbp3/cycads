@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import org.cycads.parser.FileParserException;
 import org.cycads.parser.ParserException;
+import org.cycads.parser.association.factory.ObjectFactory;
 
 public class LineRecordFileReader<R> implements RecordFileReader<R>
 {

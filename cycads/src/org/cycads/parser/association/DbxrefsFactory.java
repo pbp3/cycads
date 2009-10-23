@@ -7,6 +7,8 @@ import java.util.Collection;
 
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.parser.ParserException;
+import org.cycads.parser.association.factory.ObjectFactory;
+import org.cycads.parser.association.factory.independent.IndependentDbxrefFactory;
 
 public class DbxrefsFactory<X extends Dbxref> implements ObjectFactory<Collection<X>>
 {
