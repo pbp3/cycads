@@ -180,6 +180,17 @@ public abstract class SimpleEntityObject implements EntityObject
 	}
 
 	@Override
+	public void addNote(Type noteType, String value) {
+		Note note = new SimpleNote(noteType, value);
+		Collection<String> values = notes.get(noteType);
+		if (values == null) {
+			values = new TreeSet<String>();
+			notes.put(noteType.getName(), values);
+		}
+		values.add(value);
+	}
+
+	@Override
 	public Note getNote(String noteType, String value) {
 		Collection<String> values = notes.get(noteType);
 		if (values == null || !values.contains(value)) {

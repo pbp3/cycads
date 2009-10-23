@@ -75,6 +75,11 @@ public class SimpleEntitySQL implements EntitySQL
 	}
 
 	@Override
+	public void addNote(Type noteType, String value) {
+		addNote(getNoteType(noteType).getId(), value);
+	}
+
+	@Override
 	public Note getNote(String noteType, String value) {
 		return getNote(getNoteType(noteType).getId(), value);
 	}
@@ -322,6 +327,10 @@ public class SimpleEntitySQL implements EntitySQL
 
 	@Override
 	public TypeSQL getNoteType(String noteType) {
+		return TypeSQL.getType(noteType, getConnection());
+	}
+
+	public TypeSQL getNoteType(Type noteType) {
 		return TypeSQL.getType(noteType, getConnection());
 	}
 
