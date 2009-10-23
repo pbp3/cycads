@@ -3,7 +3,6 @@
  */
 package org.cycads.parser.association.factory;
 
-import org.cycads.parser.association.ObjectFactory;
 
 public class NullFactory implements ObjectFactory
 {

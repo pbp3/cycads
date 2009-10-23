@@ -1,13 +1,15 @@
 /*
  * Created on 25/09/2009
  */
-package org.cycads.parser.association;
+package org.cycads.parser.association.factory.independent;
 
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.SimpleNote;
 import org.cycads.entities.note.SimpleType;
 import org.cycads.general.Messages;
 import org.cycads.parser.ParserException;
+import org.cycads.parser.association.Tools;
+import org.cycads.parser.association.TypeNameTransformer;
 
 public class IndependentNoteFactory implements IndependentObjectFactory<Note>
 {
