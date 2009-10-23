@@ -32,7 +32,7 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT source_id, target_id, source_target_type_id from Association WHERE asociation_id=?");
+			stmt = con.prepareStatement("SELECT source_id, target_id, source_target_type_id from Association WHERE association_id=?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
@@ -76,7 +76,7 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 		ResultSet rs = null;
 		try {
 			stmt = con.prepareStatement(
-				"INSERT INTO Asociation (source_id, target_id, source_target_type_id) VALUES (?,?,?)",
+				"INSERT INTO Association (source_id, target_id, source_target_type_id) VALUES (?,?,?)",
 				Statement.RETURN_GENERATED_KEYS);
 			stmt.setInt(1, source.getId());
 			stmt.setInt(2, target.getId());
@@ -237,7 +237,7 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 	public static <SO extends EntitySQL, TA extends EntitySQL> Collection<AssociationSQL<SO, TA>> getAssociations(
 			SO source, TA target, Collection< ? extends Type> types, Connection con) throws SQLException {
 		StringBuffer query = new StringBuffer(
-			"SELECT association_id FROM Association A, Source_target_type S, Association_type T WHERE ");
+			"SELECT A.association_id FROM Association A, Source_target_type S, Association_type T WHERE ");
 		query.append("A.association_id=T.association_id AND A.source_target_type_id=S.source_target_type_id");
 		TypeSQL typeSQL;
 		if (source != null) {
@@ -293,7 +293,7 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 	public static <TA extends EntitySQL> Collection<AssociationSQL< ? , TA>> getAssociations(Type sourceType,
 			TA target, Collection< ? extends Type> types, Connection con) throws SQLException {
 		StringBuffer query = new StringBuffer(
-			"SELECT association_id FROM Association A, Source_target_type S, Association_type T WHERE ");
+			"SELECT A.association_id FROM Association A, Source_target_type S, Association_type T WHERE ");
 		query.append("A.association_id=T.association_id AND A.source_target_type_id=S.source_target_type_id");
 		TypeSQL typeSQL;
 		if (sourceType != null) {
@@ -348,7 +348,7 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 	public static <SO extends EntitySQL> Collection<AssociationSQL<SO, ? >> getAssociations(SO source, Type targetType,
 			Collection< ? extends Type> types, Connection con) throws SQLException {
 		StringBuffer query = new StringBuffer(
-			"SELECT association_id FROM Association A, Source_target_type S, Association_type T WHERE ");
+			"SELECT A.association_id FROM Association A, Source_target_type S, Association_type T WHERE ");
 		query.append("A.association_id=T.association_id AND A.source_target_type_id=S.source_target_type_id");
 		TypeSQL typeSQL;
 		if (source != null) {
@@ -403,7 +403,7 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 	public static Collection<AssociationSQL< ? , ? >> getAssociations(Type sourceType, Type targetType,
 			Collection< ? extends Type> types, Connection con) throws SQLException {
 		StringBuffer query = new StringBuffer(
-			"SELECT association_id FROM Association A, Source_target_type S, Association_type T WHERE ");
+			"SELECT A.association_id FROM Association A, Source_target_type S, Association_type T WHERE ");
 		query.append("A.association_id=T.association_id AND A.source_target_type_id=S.source_target_type_id");
 		TypeSQL typeSQL;
 		if (sourceType != null) {
