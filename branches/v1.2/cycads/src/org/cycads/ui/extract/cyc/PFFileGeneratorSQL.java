@@ -9,11 +9,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.cycads.entities.annotation.SubseqAnnotation;
+import org.cycads.entities.Feature;
+import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Sequence;
+import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.extract.cyc.CycIdGenerator;
 import org.cycads.extract.cyc.CycRecord;
@@ -94,9 +96,9 @@ public class PFFileGeneratorSQL
 		Progress progress = new ProgressPrintInterval(System.out, Messages.pfGeneratorStepShowInterval());
 		try {
 			progress.init(Messages.pfGeneratorInitMsg(file.getPath()));
-			Collection<Sequence< ? , ? , ? , ? , ? , ? >> seqs;
+			Collection<Sequence< ? , ? >> seqs;
 			if (seqDbname == null) {
-				seqs = organism.getSequences(seqVersion);
+				seqs = organism.getSequences(seqVersion---);
 			}
 			else {
 				Dbxref synonym = factory.getDbxref(seqDbname, seqAccession);
@@ -120,7 +122,7 @@ public class PFFileGeneratorSQL
 				new SimpleLocInterpreter(locAndScores, locAndScores), ecThreshold, ecScoreSystemCollection,
 				goThreshold, goScoreSystemCollection);
 			for (Sequence seq : seqs) {
-				Collection<SubseqAnnotation< ? , ? , ? , ? , ? >> cdss = seq.getAnnotations(null, types, null);
+				Collection<Annotation< Subsequence , Feature >> cdss = seq.getAnnotations(null, types, null);
 				for (SubseqAnnotation< ? , ? , ? , ? , ? > cds : cdss) {
 					CycRecord record = cycRecordGenerator.generate(cds);
 					if (record != null) {

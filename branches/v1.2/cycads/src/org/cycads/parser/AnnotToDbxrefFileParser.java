@@ -35,7 +35,7 @@ public class AnnotToDbxrefFileParser
 	private final String			dbxrefDBName;
 	private final int				scoreColumnIndex;
 	private final int				annotColumnIndex;
-	private final boolean			isSynonym;
+	private final boolean			isSynonym;asociation
 
 	public AnnotToDbxrefFileParser(EntityFactory factory, Progress progress, AnnotationMethod method,
 			Organism organism, int annotColumnIndex, String annotDBName, int dbxrefColumnIndex, String dbxrefDBName,
