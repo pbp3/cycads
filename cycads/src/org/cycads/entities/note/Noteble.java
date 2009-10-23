@@ -23,6 +23,8 @@ public interface Noteble
 
 	public void addNote(String noteType, String value);
 
+	public void addNote(Type noteType, String value);
+
 	public Type getNoteType(String noteType);
 
 }
