@@ -82,7 +82,7 @@ CREATE  TABLE IF NOT EXISTS `Dbxref` (
   `accession` VARCHAR(128) NOT NULL ,
   `external_db_id` INT(11) NOT NULL ,
   PRIMARY KEY (`dbxref_id`) ,
-  UNIQUE INDEX `dbxref_db` (`accession` ASC) ,
+  INDEX `dbxref_db` (`accession` ASC) ,
   INDEX `fk_Dbxref_Dbname1` (`external_db_id` ASC) ,
   UNIQUE INDEX `external_db_accession` (`accession` ASC, `external_db_id` ASC) ,
   CONSTRAINT `fk_Dbxref_Dbname1`
@@ -103,7 +103,7 @@ CREATE  TABLE IF NOT EXISTS `Subsequence` (
   `end_position` INT(11) NOT NULL ,
   PRIMARY KEY (`subsequence_id`) ,
   INDEX `location_start` (`start_position` ASC, `end_position` ASC) ,
-  UNIQUE INDEX `sequence_start_end` (`sequence_id` ASC, `start_position` ASC, `end_position` ASC) ,
+  INDEX `sequence_start_end` (`sequence_id` ASC, `start_position` ASC, `end_position` ASC) ,
   CONSTRAINT `fk_9aa85839-ba9d-11de-b920-0014a45de702`
     FOREIGN KEY (`sequence_id` )
     REFERENCES `Sequence` (`sequence_id` )
@@ -303,7 +303,7 @@ ENGINE = InnoDB;
 CREATE  TABLE IF NOT EXISTS `Annotation` (
   `annotation_id` INT(11) NOT NULL ,
   `annotation_method_id` INT(11) NOT NULL ,
-  `score` VARCHAR(45) NOT NULL ,
+  `score` VARCHAR(45),
   PRIMARY KEY (`annotation_id`) ,
   INDEX `fk_Annotation_Association1` (`annotation_id` ASC) ,
   INDEX `fk_Annotation_annotation_method1` (`annotation_method_id` ASC) ,
