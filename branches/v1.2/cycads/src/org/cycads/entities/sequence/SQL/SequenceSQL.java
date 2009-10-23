@@ -42,7 +42,7 @@ public class SequenceSQL extends SimpleEntitySQL implements Sequence<OrganismSQL
 			else {
 				throw new SQLException("Sequence does not exist:" + id);
 			}
-			stmt = con.prepareStatement("SELECT length from biosequence WHERE sequence_id=?");
+			stmt = con.prepareStatement("SELECT length from Biosequence WHERE biosequence_id=?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
@@ -93,7 +93,7 @@ public class SequenceSQL extends SimpleEntitySQL implements Sequence<OrganismSQL
 			PreparedStatement stmt = null;
 			ResultSet rs = null;
 			try {
-				stmt = getConnection().prepareStatement("SELECT seq from biosequence WHERE sequence_id=?");
+				stmt = getConnection().prepareStatement("SELECT seq from Biosequence WHERE biosequence_id=?");
 				stmt.setInt(1, id);
 				rs = stmt.executeQuery();
 				if (rs.next()) {
@@ -144,18 +144,18 @@ public class SequenceSQL extends SimpleEntitySQL implements Sequence<OrganismSQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = getConnection().prepareStatement("SELECT length from biosequence WHERE sequence_id=?");
+			stmt = getConnection().prepareStatement("SELECT length from Biosequence WHERE biosequence_id=?");
 			stmt.setInt(1, getId());
 			rs = stmt.executeQuery();
 			if (!rs.next()) {
 				stmt = getConnection().prepareStatement(
-					"INSERT INTO biosequence (sequence_id, length, seq) VALUES (?,?,?)");
+					"INSERT INTO Biosequence (biosequence_id, length, seq) VALUES (?,?,?)");
 				stmt.setInt(1, getId());
 				stmt.setInt(2, seqStr.length());
 				stmt.setString(3, seqStr);
 			}
 			else {
-				stmt = getConnection().prepareStatement("UPDATE biosequence SET seq=? WHERE sequence_id=?");
+				stmt = getConnection().prepareStatement("UPDATE Biosequence SET seq=? WHERE biosequence_id=?");
 				stmt.setString(1, seqStr);
 				stmt.setInt(2, getId());
 			}
@@ -234,7 +234,7 @@ public class SequenceSQL extends SimpleEntitySQL implements Sequence<OrganismSQL
 						intronEnd = intron.getEnd();
 					}
 					if (intronStart <= intronEnd) {
-						stmt.setInt(1, getId());
+						stmt.setInt(1, id);
 						stmt.setInt(2, intronStart);
 						stmt.setInt(3, intronEnd);
 						stmt.executeUpdate();
