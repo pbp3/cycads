@@ -266,43 +266,6 @@ public class EntityFactorySQL
 		}
 	}
 
-	//	public static <SO extends EntitySQL, TA extends EntitySQL> Collection< ? extends AssociationSQL< ? extends SO, ? extends TA>> getAssociations(
-	//			SO source, TA target, TypeSQL type, DbxrefSQL synonym, Connection con) {
-	//		PreparedStatement stmt = null;
-	//		ResultSet rs = null;
-	//		Collection<AssociationSQL< ? extends SO, ? extends TA>> ret = new ArrayList<AssociationSQL< ? extends SO, ? extends TA>>();
-	//		try {
-	//			stmt = con.prepareStatement("SELECT association_id from Association WHERE ");
-	//			stmt.setInt(1, getId());
-	//			rs = stmt.executeQuery();
-	//			while (rs.next()) {
-	//			}
-	//		}
-	//		catch (SQLException e) {
-	//			e.printStackTrace();
-	//			throw new RuntimeException(e);
-	//		}
-	//		finally {
-	//			if (rs != null) {
-	//				try {
-	//					rs.close();
-	//				}
-	//				catch (SQLException ex) {
-	//					// ignore
-	//				}
-	//			}
-	//			if (stmt != null) {
-	//				try {
-	//					stmt.close();
-	//				}
-	//				catch (SQLException ex) {
-	//					// ignore
-	//				}
-	//			}
-	//		}
-	//		return ret;
-	//	}
-	//
 	@Override
 	public <SO extends EntitySQL, TA extends EntitySQL> Collection< ? extends AnnotationSQL<SO, TA>> getAnnotations(
 			SO source, TA target, AnnotationMethod method, Collection<Type> types) {
@@ -411,6 +374,16 @@ public class EntityFactorySQL
 		catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	@Override
+	public Collection<AnnotationSQL< ? , ? >> getAnnotationsBySynonym(String dbName, String accession) {
+		return (Collection<AnnotationSQL< ? , ? >>) getEntitiesBySynonym(dbName, accession, Annotation.ENTITY_TYPE_NAME);
+	}
+
+	@Override
+	public Collection<AnnotationSQL< ? , ? >> getAnnotationsBySynonym(Dbxref synonym) {
+		return (Collection<AnnotationSQL< ? , ? >>) getEntitiesBySynonym(synonym, Annotation.ENTITY_TYPE_NAME);
 	}
 
 }

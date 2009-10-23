@@ -24,7 +24,7 @@ public class DbxrefsFactory<X extends Dbxref> implements ObjectFactory<Collectio
 		value = cleanTextDelimiter(value);
 		DbxrefsField<X> ret = new DbxrefsField<X>();
 		if (value != null && value.length() != 0) {
-			String[] dbxrefs = value.split(dbxrefsSeparator);
+			String[] dbxrefs = Tools.split(value, dbxrefsSeparator);
 			for (String dbxref : dbxrefs) {
 				ret.add(dbxrefFieldFactory.create(dbxref));
 			}

@@ -35,7 +35,7 @@ public class SimpleObjectsFactory<R> implements ObjectFactory<Collection<R>>
 			ret.add(factory.create(value));
 		}
 		else {
-			String[] strs = value.split(objectsSeparator);
+			String[] strs = Tools.split(value, objectsSeparator);
 			ret = new ArrayList<R>(strs.length);
 			for (String str : strs) {
 				ret.add(factory.create(Tools.cleanTextDelimiter(str, objectDelimiter)));
