@@ -24,12 +24,16 @@ import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 
-public class SimpleEntitySQL implements EntitySQL
+public abstract class SimpleEntitySQL implements EntitySQL
 {
 
-	int			id;
-	TypeSQL		type;
-	Connection	con;
+	protected int		id;
+	private Connection	con;
+
+	public SimpleEntitySQL(int id, Connection con) {
+		this.id = id;
+		this.con = con;
+	}
 
 	public Collection<Note> getNotes() {
 		PreparedStatement stmt = null;
@@ -638,13 +642,16 @@ public class SimpleEntitySQL implements EntitySQL
 
 	@Override
 	public int getTypeId() {
-		return type.getId();
+		return getEntityType().getId();
 	}
 
 	@Override
 	public TypeSQL getEntityType() {
-		return type;
+		return TypeSQL.getType(getEntityTypeName(), con);
 	}
+
+	@Override
+	public abstract String getEntityTypeName();
 
 	@Override
 	public <TA extends EntityObject> Association< ? , TA> addAssociation(TA target, Collection<Type> associationTypes) {

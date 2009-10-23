@@ -153,4 +153,9 @@ public class SimpleSubsequence<S extends Sequence< ? , ? >> extends SimpleEntity
 		return typeFactory.getType("SimpleSubsequence");
 	}
 
+	@Override
+	public String getEntityTypeName() {
+		return "SimpleSubsequence";
+	}
+
 }

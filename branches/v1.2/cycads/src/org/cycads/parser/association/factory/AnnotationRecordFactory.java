@@ -15,7 +15,7 @@ import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.parser.ParserException;
 
-public class SimpleAnnotationRecordFactory<S extends EntityObject, T extends EntityObject>
+public class AnnotationRecordFactory<S extends EntityObject, T extends EntityObject>
 		implements ObjectFactory<Collection<Annotation<S, T>>>
 {
 	private EntityAnnotationFactory<EntityObject>	annotationFactory;
@@ -28,7 +28,7 @@ public class SimpleAnnotationRecordFactory<S extends EntityObject, T extends Ent
 	private ObjectFactory<Collection<Dbxref>>		synonymsFactory;
 	private ObjectFactory<Collection<Annotation>>	parentsFactory;
 
-	public SimpleAnnotationRecordFactory(EntityAnnotationFactory<EntityObject> annotationFactory,
+	public AnnotationRecordFactory(EntityAnnotationFactory<EntityObject> annotationFactory,
 			ObjectFactory<Collection<S>> sourcesFactory, ObjectFactory<Collection<T>> targetsFactory,
 			ObjectFactory<String> scoreFactory, ObjectFactory<AnnotationMethod> methodFactory,
 			ObjectFactory<Collection<Type>> typesFactory, ObjectFactory<Collection<Note>> notesFactory,

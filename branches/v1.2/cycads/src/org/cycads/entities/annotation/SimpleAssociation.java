@@ -66,7 +66,12 @@ public class SimpleAssociation<SO extends EntityObject, TA extends EntityObject>
 
 	@Override
 	public Type getEntityType() {
-		return typeFactory.getType("SimpleAnnotation");
+		return typeFactory.getType("SimpleAssociation");
+	}
+
+	@Override
+	public String getEntityTypeName() {
+		return "SimpleAssociation";
 	}
 
 }

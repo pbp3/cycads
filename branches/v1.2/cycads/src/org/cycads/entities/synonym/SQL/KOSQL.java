@@ -48,6 +48,7 @@ public class KOSQL extends DbxrefSQL implements KO
 		setNoteValue("Name", name);
 	}
 
+	@Override
 	public AnnotationSQL< ? extends KOSQL, ? extends ECSQL> addEcAnnotation(AnnotationMethodSQL method, String ecNumber) {
 		try {
 			ECSQL ec = new ECSQL(ecNumber, getConnection());

@@ -1,14 +1,13 @@
 /*
  * Created on 25/09/2009
  */
-package org.cycads.parser.association.factory;
+package org.cycads.parser.association.factory.independent;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cycads.parser.ParserException;
 import org.cycads.parser.association.Tools;
-import org.cycads.parser.association.factory.independent.IndependentObjectFactory;
 
 public class CollectionFieldFactory<R> implements IndependentObjectFactory<Collection<R>>
 {

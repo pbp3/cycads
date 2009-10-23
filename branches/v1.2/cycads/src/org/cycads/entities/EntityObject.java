@@ -13,4 +13,6 @@ public interface EntityObject extends Noteble, HasSynonyms, Associable, Annotabl
 {
 	public Type getEntityType();
 
+	String getEntityTypeName();
+
 }

@@ -22,18 +22,13 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 		implements Association<SO, TA>
 {
 
-	private final int			id;
-
 	/* The types are not synchonized */
 	private Collection<TypeSQL>	types;
 	private SO					source;
 	private TA					target;
 
-	private final Connection	con;
-
 	public AssociationSQL(int id, Connection con) throws SQLException {
-		this.id = id;
-		this.con = con;
+		super(id, con);
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -138,7 +133,7 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 			ResultSet rs = null;
 			types = new ArrayList<TypeSQL>();
 			try {
-				stmt = con.prepareStatement("SELECT type_id from Association_type WHERE association_id=?");
+				stmt = getConnection().prepareStatement("SELECT type_id from Association_type WHERE association_id=?");
 				stmt.setInt(1, getId());
 				rs = stmt.executeQuery();
 				while (rs.next()) {
@@ -183,7 +178,7 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 
 	@Override
 	public boolean isType(Type type) {
-		TypeSQL typeSQL = TypeSQL.getType(type, con);
+		TypeSQL typeSQL = TypeSQL.getType(type, getConnection());
 		for (TypeSQL type1 : getTypes()) {
 			if (type1.equals(typeSQL)) {
 				return true;
@@ -200,13 +195,14 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 
 	@Override
 	public TypeSQL addType(Type type) {
-		TypeSQL typeSQL = TypeSQL.getType(type, con);
+		TypeSQL typeSQL = TypeSQL.getType(type, getConnection());
 		if (isType(typeSQL)) {
 			return typeSQL;
 		}
 		PreparedStatement stmt = null;
 		try {
-			stmt = con.prepareStatement("INSERT INTO Association_type (association_id, type_id) VALUES (?,?)");
+			stmt = getConnection().prepareStatement(
+				"INSERT INTO Association_type (association_id, type_id) VALUES (?,?)");
 			stmt.setInt(1, getId());
 			stmt.setInt(2, typeSQL.getId());
 			stmt.executeUpdate();
@@ -230,18 +226,8 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 	}
 
 	@Override
-	public int getId() {
-		return id;
-	}
-
-	@Override
-	public Connection getConnection() {
-		return con;
-	}
-
-	@Override
-	public TypeSQL getEntityType() {
-		return getEntityType(con);
+	public String getEntityTypeName() {
+		return Association.ENTITY_TYPE_NAME;
 	}
 
 	public static TypeSQL getEntityType(Connection con) {

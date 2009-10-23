@@ -16,7 +16,8 @@ import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
 import org.cycads.ui.progress.Progress;
 
-public class KOFileParser {
+public class KOFileParser
+{
 
 	public static final String	EC_TAG	= ParametersDefault.koFileECTag();
 	EntityFactory				factory;

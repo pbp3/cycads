@@ -19,16 +19,13 @@ import org.cycads.entities.sequence.Subsequence;
 
 public class SubsequenceSQL extends SimpleEntitySQL implements Subsequence<SequenceSQL>
 {
-	private final int			id;
-	private final Connection	con;
 	private int					start, end;
 	private int					sequenceId;
 	private SequenceSQL			sequence;
 	private Collection<Intron>	introns;
 
 	public SubsequenceSQL(int id, Connection con) throws SQLException {
-		this.id = id;
-		this.con = con;
+		super(id, con);
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
@@ -62,16 +59,6 @@ public class SubsequenceSQL extends SimpleEntitySQL implements Subsequence<Seque
 				}
 			}
 		}
-	}
-
-	@Override
-	public Connection getConnection() {
-		return con;
-	}
-
-	@Override
-	public int getId() {
-		return id;
 	}
 
 	@Override
@@ -166,7 +153,8 @@ public class SubsequenceSQL extends SimpleEntitySQL implements Subsequence<Seque
 			PreparedStatement stmt = null;
 			ResultSet rs = null;
 			try {
-				stmt = con.prepareStatement("SELECT start_position, end_position from Intron where subsequence_id=?");
+				stmt = getConnection().prepareStatement(
+					"SELECT start_position, end_position from Intron where subsequence_id=?");
 				stmt.setInt(1, id);
 				rs = stmt.executeQuery();
 				introns = new TreeSet<Intron>();
@@ -201,8 +189,8 @@ public class SubsequenceSQL extends SimpleEntitySQL implements Subsequence<Seque
 	}
 
 	@Override
-	public TypeSQL getEntityType() {
-		return getEntityType(con);
+	public String getEntityTypeName() {
+		return Subsequence.ENTITY_TYPE_NAME;
 	}
 
 	public static TypeSQL getEntityType(Connection con) {

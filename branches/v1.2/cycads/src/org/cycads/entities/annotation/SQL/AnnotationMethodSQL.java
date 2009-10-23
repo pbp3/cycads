@@ -149,8 +149,8 @@ public class AnnotationMethodSQL extends TypeSQL implements AnnotationMethod
 	}
 
 	@Override
-	public TypeSQL getEntityType() {
-		return getEntityType(getConnection());
+	public String getEntityTypeName() {
+		return AnnotationMethod.ENTITY_TYPE_NAME;
 	}
 
 	public static TypeSQL getEntityType(Connection con) {

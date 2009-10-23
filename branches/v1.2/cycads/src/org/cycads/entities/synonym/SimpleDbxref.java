@@ -39,7 +39,12 @@ public class SimpleDbxref extends SimpleEntityObject implements Dbxref
 
 	@Override
 	public Type getEntityType() {
-		return typeFactory.getType("Simple Dbxref");
+		return typeFactory.getType("SimpleDbxref");
+	}
+
+	@Override
+	public String getEntityTypeName() {
+		return "SimpleDbxref";
 	}
 
 }
