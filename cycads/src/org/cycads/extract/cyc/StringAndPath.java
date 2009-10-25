@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.cycads.entities.annotation.Annotation;
 
-public interface CycValueRet
+public interface StringAndPath
 {
 	public String getValue();
 
