@@ -11,7 +11,7 @@ import org.cycads.entities.sequence.Subsequence;
 
 public interface LocInterpreter
 {
-	public List<CycValueRet> getCycValues(Annotation< ? extends Subsequence, ? > annot, List<String> locs);
+	public List<StringAndPath> getCycValues(Annotation< ? extends Subsequence, ? > annot, List<String> locs);
 
 	public String getFirstString(Annotation< ? extends Subsequence, ? > annot, List<String> locs);
 

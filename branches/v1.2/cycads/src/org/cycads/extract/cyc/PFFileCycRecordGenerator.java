@@ -82,9 +82,9 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 				record.addComment(PFFileConfig.getAnnotationComment(go));
 			}
 
-			Collection<CycValueRet> cycValueRets = locInterpreter.getCycValues(annot,
+			Collection<StringAndPath> cycValueRets = locInterpreter.getCycValues(annot,
 				PFFileConfig.getPFFileGeneCommentAnnotationsLocs());
-			for (CycValueRet cycValueRet : cycValueRets) {
+			for (StringAndPath cycValueRet : cycValueRets) {
 				if (cycValueRet instanceof CycDbxrefAnnotationPathsRet) {
 					CycDbxrefAnnotationPaths cycDbxrefAnnotationPaths = ((CycDbxrefAnnotationPathsRet) cycValueRet).getCycDbxrefAnnotationPaths();
 					List<Annotation> initialAnnots = cycValueRet.getAnnotations();

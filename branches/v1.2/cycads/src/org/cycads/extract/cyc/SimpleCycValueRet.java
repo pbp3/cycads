@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.cycads.entities.annotation.Annotation;
 
-public class SimpleCycValueRet implements CycValueRet
+public class SimpleCycValueRet implements StringAndPath
 {
 	String				value;
 	List<Annotation>	annotations	= new ArrayList<Annotation>(3);
