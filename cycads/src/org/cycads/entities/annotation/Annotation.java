@@ -7,7 +7,7 @@ import java.util.Collection;
 
 import org.cycads.entities.EntityObject;
 
-public interface Annotation<SO, TA> extends Association<SO, TA>, EntityObject
+public interface Annotation<SO extends EntityObject, TA extends EntityObject> extends Association<SO, TA>
 {
 	public static final String	ENTITY_TYPE_NAME	= "Annotation";
 

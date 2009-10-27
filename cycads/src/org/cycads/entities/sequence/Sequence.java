@@ -32,6 +32,8 @@ public interface Sequence<O extends Organism< ? , ? >, SS extends Subsequence< ?
 
 	public Collection<SS> getSubsequences(int start);
 
+	public Collection<SS> getSubsequences();
+
 	//	public Collection<SS> getSubsequences(Dbxref synonym);
 	//
 }

@@ -268,6 +268,44 @@ public class SequenceSQL extends SimpleEntitySQL implements Sequence<OrganismSQL
 	}
 
 	@Override
+	public Collection<SubsequenceSQL> getSubsequences() {
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = getConnection().prepareStatement("SELECT subsequence_id from subsequence where sequence_id=?");
+			stmt.setInt(1, getId());
+			rs = stmt.executeQuery();
+			ArrayList<SubsequenceSQL> sseqs = new ArrayList<SubsequenceSQL>();
+			while (rs.next()) {
+				sseqs.add(new SubsequenceSQL(rs.getInt("subsequence_id"), getConnection()));
+			}
+			return sseqs;
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
+	}
+
+	@Override
 	public SubsequenceSQL getSubsequence(int start, int end, Collection<Intron> introns) {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;

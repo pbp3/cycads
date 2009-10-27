@@ -63,7 +63,7 @@ public class CDSToKOFileParser {
 
 	private void addAnnotation(String cdsName, String koName) {
 		Dbxref cdsSynonym = factory.getDbxref(cdsDBName, cdsName);
-		Collection<SubseqAnnotation> annots = organism.getAnnotations(null, null, cdsSynonym);
+		Collection<SubseqAnnotation> annots = organism.getAnnotationsByType(null, null, cdsSynonym);
 		KO ko = factory.getKO(koName);
 		if (annots != null && !annots.isEmpty()) {
 			for (SubseqAnnotation annot : annots) {

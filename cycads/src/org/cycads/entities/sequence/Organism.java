@@ -7,6 +7,7 @@ import java.util.Collection;
 
 import org.cycads.entities.EntityObject;
 import org.cycads.entities.note.Noteble;
+import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.HasSynonyms;
 
 public interface Organism<S extends Sequence< ? , ? >, SS extends Subsequence< ? >>
@@ -28,7 +29,8 @@ public interface Organism<S extends Sequence< ? , ? >, SS extends Subsequence< ?
 
 	//	public Collection<S> getSequences(Dbxref synonym);
 	//
-	//	public Collection<S> getSequences(Dbxref synonym, String version);
+	public Collection<S> getSequencesBySynonym(Dbxref synonym, String version);
+
 	//
 	//	public Collection<SS> getSubsequences(Dbxref synonym);
 	//

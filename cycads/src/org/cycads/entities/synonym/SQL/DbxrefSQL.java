@@ -126,6 +126,15 @@ public class DbxrefSQL extends SimpleEntitySQL implements Dbxref
 		}
 	}
 
+	public static DbxrefSQL getDbxref(Dbxref dbxref, Connection con) throws SQLException {
+		if (dbxref instanceof DbxrefSQL) {
+			return (DbxrefSQL) dbxref;
+		}
+		else {
+			return getDbxref(dbxref.getDbName(), dbxref.getAccession(), con);
+		}
+	}
+
 	public static DbxrefSQL getDbxref(String dbName, String accession, Connection con) throws SQLException {
 		String[] strs = accession.split(ParametersDefault.getDbxrefToStringSeparator());
 		if (strs.length == 2) {

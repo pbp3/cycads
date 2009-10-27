@@ -27,8 +27,8 @@ import org.cycads.entities.synonym.SQL.DbxrefSQL;
 public abstract class SimpleEntitySQL implements EntitySQL
 {
 
-	protected int		id;
-	private Connection	con;
+	protected int				id;
+	private final Connection	con;
 
 	public SimpleEntitySQL(int id, Connection con) {
 		this.id = id;
@@ -694,6 +694,57 @@ public abstract class SimpleEntitySQL implements EntitySQL
 		try {
 			return (Collection< ? extends Annotation< ? , TA>>) AnnotationSQL.getAnnotations(this, (EntitySQL) target,
 				method, annotationTypes, getConnection());
+		}
+		catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public Collection< ? extends Annotation< ? , ? >> getAnnotationsByType(Type targetType, AnnotationMethod method,
+			Collection<Type> annotationTypes) {
+		try {
+			return (Collection< ? extends Annotation< ? , ? >>) AnnotationSQL.getAnnotations(this, targetType, method,
+				annotationTypes, getConnection());
+		}
+		catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public Collection< ? extends AnnotationSQL< ? , ? >> getAnnotationsBySynonym(Dbxref synonym) {
+		try {
+			Collection<AnnotationSQL< ? , ? >> ret = new ArrayList<AnnotationSQL< ? , ? >>();
+			Collection< ? extends AnnotationSQL< ? , ? >> annots;
+			annots = (Collection< ? extends AnnotationSQL< ? , ? >>) SimpleEntitySQL.getEntities(TypeSQL.getType(
+				Annotation.ENTITY_TYPE_NAME, getConnection()), DbxrefSQL.getDbxref(synonym, getConnection()),
+				getConnection());
+			for (AnnotationSQL< ? , ? > annot : annots) {
+				if (annot.getSource().equals(this)) {
+					ret.add(annot);
+				}
+			}
+			return ret;
+		}
+		catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public Collection< ? extends Annotation< ? , ? >> getAnnotationsBySynonym(String dbName, String accession) {
+		try {
+			Collection<AnnotationSQL< ? , ? >> ret = new ArrayList<AnnotationSQL< ? , ? >>();
+			Collection< ? extends AnnotationSQL< ? , ? >> annots;
+			annots = (Collection< ? extends AnnotationSQL< ? , ? >>) SimpleEntitySQL.getEntities(TypeSQL.getType(
+				Annotation.ENTITY_TYPE_NAME, getConnection()), dbName, accession, getConnection());
+			for (AnnotationSQL< ? , ? > annot : annots) {
+				if (annot.getSource().equals(this)) {
+					ret.add(annot);
+				}
+			}
+			return ret;
 		}
 		catch (SQLException e) {
 			throw new RuntimeException(e);
