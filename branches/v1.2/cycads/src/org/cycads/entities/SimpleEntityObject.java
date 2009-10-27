@@ -24,14 +24,14 @@ import org.cycads.entities.synonym.Dbxref;
 public abstract class SimpleEntityObject implements EntityObject
 {
 
-	protected EntityDbxrefFactory< ? >				dbxrefFactory;
-	private Hashtable<String, Collection<String>>	synonyms		= new Hashtable<String, Collection<String>>();
-	protected EntityTypeFactory< ? >				typeFactory;
-	private Hashtable<String, Collection<String>>	notes			= new Hashtable<String, Collection<String>>();
+	protected EntityDbxrefFactory< ? >					dbxrefFactory;
+	private final Hashtable<String, Collection<String>>	synonyms		= new Hashtable<String, Collection<String>>();
+	protected EntityTypeFactory< ? >					typeFactory;
+	private final Hashtable<String, Collection<String>>	notes			= new Hashtable<String, Collection<String>>();
 
-	protected EntityAnnotationFactory				annotationFactory;
-	private Collection<Association< ? , ? >>		associations	= new ArrayList<Association< ? , ? >>();
-	private Collection<Annotation< ? , ? >>			annotations		= new ArrayList<Annotation< ? , ? >>();
+	protected EntityAnnotationFactory					annotationFactory;
+	private final Collection<Association< ? , ? >>		associations	= new ArrayList<Association< ? , ? >>();
+	private final Collection<Annotation< ? , ? >>		annotations		= new ArrayList<Annotation< ? , ? >>();
 
 	public SimpleEntityObject(EntityTypeFactory< ? > typeFactory, EntityDbxrefFactory< ? > dbxrefFactory,
 			EntityAnnotationFactory annotationFactory) {
@@ -96,6 +96,39 @@ public abstract class SimpleEntityObject implements EntityObject
 			}
 		}
 		return ret;
+	}
+
+	public Collection< ? extends Annotation< ? , ? >> getAnnotationsByType(Type targetType, AnnotationMethod method,
+			Collection<Type> annotationTypes) {
+		Collection<Annotation< ? , ? >> ret = new ArrayList<Annotation< ? , ? >>();
+		for (Annotation< ? , ? > annotation : annotations) {
+			boolean isTypes = true;
+			if (annotationTypes != null) {
+				for (Type type : annotationTypes) {
+					if (!annotation.getTypes().contains(type)) {
+						isTypes = false;
+						break;
+					}
+				}
+			}
+			if (isTypes && (targetType == null || annotation.getTarget().getEntityType().equals(targetType))
+				&& (method == null || method.equals(annotation.getAnnotationMethod()))) {
+				ret.add((Annotation< ? , ? >) annotation);
+			}
+		}
+		return ret;
+	}
+
+	@Override
+	public Collection< ? extends Annotation< ? , ? >> getAnnotationsBySynonym(Dbxref synonym) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection< ? extends Annotation< ? , ? >> getAnnotationsBySynonym(String dbName, String accession) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override

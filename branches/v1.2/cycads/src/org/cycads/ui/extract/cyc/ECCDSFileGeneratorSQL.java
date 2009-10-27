@@ -84,7 +84,7 @@ public class ECCDSFileGeneratorSQL
 		CycRecordGenerator cycRecordGenerator = new PFFileCycRecordGenerator(cycIdGenerator, locInterpreter, 0,
 			ecScoreSystemCollection, 0, goScoreSystemCollection);
 		for (Sequence seq : seqs) {
-			Collection<SubseqAnnotation< ? , ? , ? , ? , ? >> cdss = seq.getAnnotations(null, types, null);
+			Collection<SubseqAnnotation< ? , ? , ? , ? , ? >> cdss = seq.getAnnotationsByType(null, types, null);
 			for (SubseqAnnotation< ? , ? , ? , ? , ? > cds : cdss) {
 				CycRecord record = cycRecordGenerator.generate(cds);
 				if (record != null) {

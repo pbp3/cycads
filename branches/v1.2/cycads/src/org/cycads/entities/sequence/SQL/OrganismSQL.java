@@ -11,9 +11,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.cycads.entities.SQL.EntitySQL;
 import org.cycads.entities.SQL.SimpleEntitySQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.sequence.Organism;
+import org.cycads.entities.synonym.Dbxref;
+import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.general.ParametersDefault;
 
 public class OrganismSQL extends SimpleEntitySQL implements Organism<SequenceSQL, SubsequenceSQL>
@@ -218,7 +221,6 @@ public class OrganismSQL extends SimpleEntitySQL implements Organism<SequenceSQL
 			return seqs;
 		}
 		catch (SQLException e) {
-			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 		finally {
@@ -278,6 +280,27 @@ public class OrganismSQL extends SimpleEntitySQL implements Organism<SequenceSQL
 					// ignore
 				}
 			}
+		}
+	}
+
+	@Override
+	public Collection<SequenceSQL> getSequencesBySynonym(Dbxref synonym, String version) {
+		Collection<SequenceSQL> ret = new ArrayList<SequenceSQL>();
+		DbxrefSQL dbxrefSQL;
+		try {
+			dbxrefSQL = DbxrefSQL.getDbxref(synonym, getConnection());
+			Collection<EntitySQL> seqs = getEntities(SequenceSQL.getEntityType(getConnection()), dbxrefSQL,
+				getConnection());
+			for (EntitySQL entity : seqs) {
+				SequenceSQL seq = (SequenceSQL) entity;
+				if (seq.getVersion().equals(version)) {
+					ret.add(seq);
+				}
+			}
+			return ret;
+		}
+		catch (SQLException e) {
+			throw new RuntimeException(e);
 		}
 	}
 

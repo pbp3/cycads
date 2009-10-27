@@ -12,7 +12,6 @@ import java.util.List;
 import org.cycads.entities.Feature;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.factory.EntityFactorySQL;
-import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Sequence;
 import org.cycads.entities.sequence.Subsequence;
@@ -98,17 +97,17 @@ public class PFFileGeneratorSQL
 			progress.init(Messages.pfGeneratorInitMsg(file.getPath()));
 			Collection<Sequence< ? , ? >> seqs;
 			if (seqDbname == null) {
-				seqs = organism.getSequences(seqVersion---);
+				seqs = organism.getSequences(seqVersion);
 			}
 			else {
 				Dbxref synonym = factory.getDbxref(seqDbname, seqAccession);
-				seqs = organism.getSequences(synonym, seqVersion);
+				seqs = organism.getSequencesBySynonym(synonym, seqVersion);
 			}
 
 			List<String> typesStr = PFFileConfig.getTypes();
-			Collection<Type> types = new ArrayList<Type>(typesStr.size());
+			Collection<Feature> features = new ArrayList<Feature>(typesStr.size());
 			for (String typeStr : typesStr) {
-				types.add(factory.getAnnotationType(typeStr));
+				features.add(factory.getFeature(typeStr));
 			}
 
 			PFFileStream pfFile = new PFFileStream(file, Config.pfGeneratorFileHeader(), sequenceLocation);
@@ -121,13 +120,19 @@ public class PFFileGeneratorSQL
 			CycRecordGenerator cycRecordGenerator = new PFFileCycRecordGenerator(cycIdGenerator,
 				new SimpleLocInterpreter(locAndScores, locAndScores), ecThreshold, ecScoreSystemCollection,
 				goThreshold, goScoreSystemCollection);
-			for (Sequence seq : seqs) {
-				Collection<Annotation< Subsequence , Feature >> cdss = seq.getAnnotations(null, types, null);
-				for (SubseqAnnotation< ? , ? , ? , ? , ? > cds : cdss) {
-					CycRecord record = cycRecordGenerator.generate(cds);
-					if (record != null) {
-						pfFile.print(record);
-						progress.completeStep();
+			for (Feature feature : features) {
+				for (Sequence seq : seqs) {
+					Collection<Subsequence> subseqs = seq.getSubsequences();
+					for (Subsequence subseq : subseqs) {
+						Collection<Annotation<Subsequence, Feature>> cdss = (Collection<Annotation<Subsequence, Feature>>) subseq.getAnnotations(
+							feature, null, null);
+						for (Annotation<Subsequence, Feature> cds : cdss) {
+							CycRecord record = cycRecordGenerator.generate(cds);
+							if (record != null) {
+								pfFile.print(record);
+								progress.completeStep();
+							}
+						}
 					}
 				}
 			}

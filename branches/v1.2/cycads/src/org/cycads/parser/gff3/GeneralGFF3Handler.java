@@ -154,7 +154,7 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 
 			Collection<Type> types = new ArrayList<Type>();
 			types.add(mrnaAnnotationType);
-			Collection<SubseqAnnotation> mrnasPersisted = subseqPersisted.getAnnotations(mrna.getAnnotationMethod(),
+			Collection<SubseqAnnotation> mrnasPersisted = subseqPersisted.getAnnotationsByType(mrna.getAnnotationMethod(),
 				types, null);
 			SubseqAnnotation mrnaPersisted = null;
 			if (mrnasPersisted != null && !mrnasPersisted.isEmpty()) {
@@ -282,7 +282,7 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 		for (Note note : notes) {
 			ArrayList<Dbxref> parentDbxrefs = getParentDbxrefs(note, record.getType(), record.getSource());
 			for (Dbxref parentDbxref : parentDbxrefs) {
-				Collection<SubseqAnnotation> annotsParent = organism.getAnnotations(null, mrnaTypeCollection,
+				Collection<SubseqAnnotation> annotsParent = organism.getAnnotationsByType(null, mrnaTypeCollection,
 					parentDbxref);
 				if (!annotsParent.isEmpty()) {
 					intronsParent = annotsParent.iterator().next().getSubsequence().getIntrons();
@@ -342,7 +342,7 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 		ArrayList<String> dbNames = GFF3FileConfig.getParentDbNames(type, source);
 		for (int i = 0; i < patterns.size(); i++) {
 			if (patterns.get(i).matcher(noteType).matches()) {
-				Collection<Annotation> parents = organism.getAnnotations(null, null, factory.getDbxref(dbNames.get(i),
+				Collection<Annotation> parents = organism.getAnnotationsByType(null, null, factory.getDbxref(dbNames.get(i),
 					note.getValue()));
 				for (Annotation parent : parents) {
 					annot.addParent(parent);
