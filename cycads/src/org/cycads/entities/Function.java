@@ -8,7 +8,7 @@ import org.cycads.entities.synonym.HasSynonyms;
 
 public interface Function extends EntityObject, HasSynonyms, Noteble
 {
-	public static final String	ENTITY_TYPE_NAME	= "Feature";
+	public static final String	ENTITY_TYPE_NAME	= "Function";
 
 	public String getName();
 

@@ -12,8 +12,6 @@ import java.util.regex.Pattern;
 import org.cycads.entities.Function;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.annotation.SubseqAnnotation;
-import org.cycads.entities.annotation.SubseqFunctionAnnotation;
 import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.Type;
@@ -29,19 +27,19 @@ import org.cycads.ui.progress.Progress;
 
 public class GeneralGFF3Handler implements GFF3DocumentHandler
 {
-	private EntityFactory							factory;
-	private Organism								organism;
-	private String									seqDBName;
-	private String									seqVersion;
-	private Progress								progress;
+	private final EntityFactory					factory;
+	private final Organism						organism;
+	private final String						seqDBName;
+	private final String						seqVersion;
+	private final Progress						progress;
 
-	private Type									cdsAnnotationType;
-	private Type									mrnaAnnotationType;
-	private Type									geneAnnotationType;
+	private final Type							cdsAnnotationType;
+	private final Type							mrnaAnnotationType;
+	private final Type							geneAnnotationType;
 
-	Hashtable<String, ArrayList<SubseqAnnotation>>	mrnasHash;
-	ArrayList<GFF3Record>							cdss;
-	ArrayList<SubseqAnnotation>						mrnas;
+	Hashtable<String, ArrayList<Annotation>>	mrnasHash;
+	ArrayList<GFF3Record>						cdss;
+	ArrayList<Annotation>						mrnas;
 
 	public GeneralGFF3Handler(EntityFactory factory, Organism organism, String seqDBName, String seqVersion,
 			Progress progress) {
@@ -154,8 +152,8 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 
 			Collection<Type> types = new ArrayList<Type>();
 			types.add(mrnaAnnotationType);
-			Collection<SubseqAnnotation> mrnasPersisted = subseqPersisted.getAnnotationsByType(mrna.getAnnotationMethod(),
-				types, null);
+			Collection<SubseqAnnotation> mrnasPersisted = subseqPersisted.getAnnotationsByType(
+				mrna.getAnnotationMethod(), types, null);
 			SubseqAnnotation mrnaPersisted = null;
 			if (mrnasPersisted != null && !mrnasPersisted.isEmpty()) {
 				mrnaPersisted = mrnasPersisted.iterator().next();
@@ -342,8 +340,8 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 		ArrayList<String> dbNames = GFF3FileConfig.getParentDbNames(type, source);
 		for (int i = 0; i < patterns.size(); i++) {
 			if (patterns.get(i).matcher(noteType).matches()) {
-				Collection<Annotation> parents = organism.getAnnotationsByType(null, null, factory.getDbxref(dbNames.get(i),
-					note.getValue()));
+				Collection<Annotation> parents = organism.getAnnotationsByType(null, null, factory.getDbxref(
+					dbNames.get(i), note.getValue()));
 				for (Annotation parent : parents) {
 					annot.addParent(parent);
 				}

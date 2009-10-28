@@ -19,7 +19,7 @@ import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.general.ParametersDefault;
 
-public class OrganismSQL extends SimpleEntitySQL implements Organism<SequenceSQL, SubsequenceSQL>
+public class OrganismSQL extends SimpleEntitySQL implements Organism<SequenceSQL>
 {
 	private String	name;
 

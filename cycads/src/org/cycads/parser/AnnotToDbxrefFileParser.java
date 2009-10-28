@@ -12,8 +12,8 @@ import java.util.Collection;
 
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.annotation.SubseqAnnotation;
 import org.cycads.entities.factory.EntityFactory;
+import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Sequence;
 import org.cycads.entities.sequence.Subsequence;
@@ -28,27 +28,21 @@ public class AnnotToDbxrefFileParser
 	private final EntityFactory		factory;
 	private final Progress			progress;
 	private final Progress			progressError;
-	private final AnnotationMethod	method;
+	private AnnotationMethod		method;
 	private final Organism			organism;
 	private final String			annotDBName;
 	private final int				dbxrefColumnIndex;
 	private final String			dbxrefDBName;
-	private final int				scoreColumnIndex;
+	private int						scoreColumnIndex;
 	private final int				annotColumnIndex;
-	private final boolean			isSynonym;asociation
+	private boolean					isSynonym;
+	private final Collection<Type>	annotTypesFake;
 
 	public AnnotToDbxrefFileParser(EntityFactory factory, Progress progress, AnnotationMethod method,
 			Organism organism, int annotColumnIndex, String annotDBName, int dbxrefColumnIndex, String dbxrefDBName,
 			int scoreColumnIndex, Progress progressError) {
-		this.factory = factory;
-		this.progress = progress;
-		this.progressError = progressError;
+		this(factory, progress, organism, annotColumnIndex, annotDBName, dbxrefColumnIndex, dbxrefDBName, progressError);
 		this.method = method;
-		this.organism = organism;
-		this.annotColumnIndex = annotColumnIndex;
-		this.annotDBName = annotDBName;
-		this.dbxrefColumnIndex = dbxrefColumnIndex;
-		this.dbxrefDBName = dbxrefDBName;
 		this.scoreColumnIndex = scoreColumnIndex;
 		this.isSynonym = false;
 	}
@@ -66,6 +60,8 @@ public class AnnotToDbxrefFileParser
 		this.dbxrefDBName = dbxrefDBName;
 		this.scoreColumnIndex = -1;
 		this.isSynonym = true;
+		annotTypesFake = new ArrayList<Type>(1);
+		annotTypesFake.add(factory.getType(ParametersDefault.getAnnotationFakeType()));
 	}
 
 	public void parse(File f) throws IOException {
@@ -89,7 +85,7 @@ public class AnnotToDbxrefFileParser
 						annotSynStr = annotSynStr.trim();
 						if (annotSynStr.length() > 0) {
 							Dbxref annotSynonym = factory.getDbxref(annotDBName, annotSynStr);
-							Collection<SubseqAnnotation> annots = organism.getAnnotations(null, null, annotSynonym);
+							Collection<Annotation> annots = organism.getAnnotations(null, null, annotSynonym);
 							if (annots == null || annots.isEmpty()) {
 								SubseqAnnotation annot = createFakeAnnot(annotSynonym);
 								if (annots == null) {
@@ -125,7 +121,7 @@ public class AnnotToDbxrefFileParser
 		return text.substring(start, end);
 	}
 
-	private void addDbxref(Collection<SubseqAnnotation> annots, String dbxrefsNames, String score) {
+	private void addDbxref(Collection<Annotation> annots, String dbxrefsNames, String score) {
 		String[] dbxrefNames = dbxrefsNames.split(ParametersDefault.annotToDbxrefFileDbxrefsSeparator());
 		for (String dbxrefName : dbxrefNames) {
 			Dbxref dbxref;
@@ -138,9 +134,9 @@ public class AnnotToDbxrefFileParser
 				dbxref = factory.getDbxref(dbxrefDBName, dbxrefName);
 			}
 			progress.completeStep();
-			for (SubseqAnnotation annot : annots) {
+			for (Annotation<Subsequence, ? > annot : annots) {
 				if (!isSynonym) {
-					Annotation ret = annot.getSubsequence().addDbxrefAnnotation(method, dbxref);
+					Annotation ret = ((Subsequence) annot.getSource()).addDbxrefAnnotation(method, dbxref);
 					if (ret != null && score != null) {
 						ret.setScore(score);
 					}
@@ -152,15 +148,15 @@ public class AnnotToDbxrefFileParser
 		}
 	}
 
-	private SubseqAnnotation createFakeAnnot(Dbxref annotSynonym) {
+	private Annotation createFakeAnnot(Dbxref annotSynonym) {
 		System.out.println("Annotation not found: " + annotSynonym.toString());
 		progressError.completeStep();
 		Sequence seq = organism.createNewSequence(ParametersDefault.getSeqVersionFake());
 		Subsequence subseq = seq.createSubsequence(ParametersDefault.getSubseqStartFake(),
 			ParametersDefault.getSubseqEndFake(), null);
 		AnnotationMethod methodFake = factory.getAnnotationMethod(ParametersDefault.getAnnotationMethodFake());
-		SubseqAnnotation annot = subseq.addAnnotation(
-			factory.getAnnotationType(ParametersDefault.getAnnotationFakeType()), methodFake);
+		Annotation annot = subseq.addAnnotation(factory.getFeature(ParametersDefault.getAnnotationFakeFeature()),
+			methodFake, null, annotTypesFake);
 		annot.addSynonym(annotSynonym);
 		return annot;
 	}
