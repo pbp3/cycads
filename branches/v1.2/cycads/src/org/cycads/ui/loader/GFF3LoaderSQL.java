@@ -25,7 +25,7 @@ public class GFF3LoaderSQL
 		if (file == null) {
 			return;
 		}
-		Organism< ? , ? , ? , ? , ? , ? > organism = Tools.getOrCreateOrganism(args, 1, Config.gff3LoaderOrganismNumber(),
+		Organism< ? , ? > organism = Tools.getOrCreateOrganism(args, 1, Config.gff3LoaderOrganismNumber(),
 			Messages.gff3ChooseOrganismNumber(), Config.gff3LoaderOrganismName(), Messages.gff3ChooseOrganismName(),
 			factory);
 		if (organism == null) {

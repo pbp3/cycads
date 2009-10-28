@@ -26,9 +26,8 @@ public class SubseqAnnotationLoaderSQL
 		if (file == null) {
 			return;
 		}
-		Organism< ? , ? , ? , ? , ? , ? > organism = Tools.getOrganism(args, 1,
-			Config.subseqAnnotationLoaderOrganismNumber(), Messages.subseqAnnotationLoaderChooseOrganismNumber(),
-			factory);
+		Organism< ? , ? > organism = Tools.getOrganism(args, 1, Config.subseqAnnotationLoaderOrganismNumber(),
+			Messages.subseqAnnotationLoaderChooseOrganismNumber(), factory);
 		if (organism == null) {
 			return;
 		}

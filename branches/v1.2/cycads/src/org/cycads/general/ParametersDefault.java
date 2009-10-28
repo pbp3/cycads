@@ -256,6 +256,10 @@ public class ParametersDefault
 		return getStringMandatory("annot.fake.annotationType");
 	}
 
+	public static String getAnnotationFakeFeature() {
+		return getStringMandatory("annot.fake.annotationFeature");
+	}
+
 	//annotatToDbxrefParser
 
 	public static String annotToDbxrefFileComment() {
