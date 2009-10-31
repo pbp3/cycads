@@ -282,4 +282,8 @@ public class ParametersDefault
 		return getStringMandatory("annotToDbxref.file.annotsSeparator");
 	}
 
+	public static String annotToDbxrefRemoveLineRegex() {
+		return getStringMandatory("annotToDbxref.file.removeLineRegex");
+	}
+
 }

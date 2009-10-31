@@ -15,20 +15,20 @@ import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.parser.ParserException;
 
-public class AnnotationRecordFactory<S extends EntityObject, T extends EntityObject>
+public class AnnotationsRecordFactory<S extends EntityObject, T extends EntityObject>
 		implements ObjectFactory<Collection<Annotation<S, T>>>
 {
-	private EntityAnnotationFactory<EntityObject>	annotationFactory;
-	private ObjectFactory<Collection<S>>			sourcesFactory;
-	private ObjectFactory<Collection<T>>			targetsFactory;
-	private ObjectFactory<String>					scoreFactory;
-	private ObjectFactory<AnnotationMethod>			methodFactory;
-	private ObjectFactory<Collection<Note>>			notesFactory;
-	private ObjectFactory<Collection<Type>>			typesFactory;
-	private ObjectFactory<Collection<Dbxref>>		synonymsFactory;
-	private ObjectFactory<Collection<Annotation>>	parentsFactory;
+	private final EntityAnnotationFactory<EntityObject>	annotationFactory;
+	private final ObjectFactory<Collection<S>>			sourcesFactory;
+	private final ObjectFactory<Collection<T>>			targetsFactory;
+	private final ObjectFactory<String>					scoreFactory;
+	private final ObjectFactory<AnnotationMethod>		methodFactory;
+	private final ObjectFactory<Collection<Note>>		notesFactory;
+	private final ObjectFactory<Collection<Type>>		typesFactory;
+	private final ObjectFactory<Collection<Dbxref>>		synonymsFactory;
+	private final ObjectFactory<Collection<Annotation>>	parentsFactory;
 
-	public AnnotationRecordFactory(EntityAnnotationFactory<EntityObject> annotationFactory,
+	public AnnotationsRecordFactory(EntityAnnotationFactory<EntityObject> annotationFactory,
 			ObjectFactory<Collection<S>> sourcesFactory, ObjectFactory<Collection<T>> targetsFactory,
 			ObjectFactory<String> scoreFactory, ObjectFactory<AnnotationMethod> methodFactory,
 			ObjectFactory<Collection<Type>> typesFactory, ObjectFactory<Collection<Note>> notesFactory,

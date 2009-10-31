@@ -7,14 +7,9 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
-import org.cycads.entities.annotation.DbxrefAnnotable;
-import org.cycads.entities.annotation.DbxrefAnnotation;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.general.ParametersDefault;
 import org.cycads.parser.FileParserException;
-import org.cycads.parser.association.AnnotationRecord;
-import org.cycads.parser.association.AssociationRecord;
-import org.cycads.parser.association.DbxrefsField;
 import org.cycads.parser.association.RecordFileReader;
 import org.cycads.ui.progress.Progress;
 
@@ -95,8 +90,7 @@ public class Loaders
 		}
 	}
 
-	public static <R extends AssociationRecord< ? , ? >> R getNextValidRecord(RecordFileReader<R> reader,
-			Progress progressError) throws IOException {
+	public static <R> R getNextValidRecord(RecordFileReader<R> reader, Progress progressError) throws IOException {
 		R record = null;
 		boolean read = false;
 		while (!read) {
@@ -109,7 +103,6 @@ public class Loaders
 					e.printStackTrace();
 				}
 				progressError.completeStep();
-				//create fakeannotation????
 			}
 		}
 		return record;
