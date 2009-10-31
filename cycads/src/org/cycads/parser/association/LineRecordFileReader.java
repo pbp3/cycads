@@ -11,14 +11,13 @@ import org.cycads.parser.FileParserException;
 import org.cycads.parser.ParserException;
 import org.cycads.parser.association.factory.ObjectFactory;
 
-public class LineRecordFileReader<R> implements RecordFileReader<R>
+public class LineRecordFileReader<R> extends AbstractRecordFileReader<R> implements RecordFileReader<R>
 {
-
-	private BufferedReader		br;
-	private String				columnSeparatorRegex;
-	private String				commentLineStarter;
-	private ObjectFactory<R>	objectFactory;
-	private Pattern				removeLinePattern;
+	private final BufferedReader	br;
+	private final String			columnSeparatorRegex;
+	private final String			commentLineStarter;
+	private final ObjectFactory<R>	objectFactory;
+	private final Pattern			removeLinePattern;
 
 	public LineRecordFileReader(BufferedReader br, String columnSeparatorRegex, String commentLineStarter,
 			Pattern removeLinePattern, ObjectFactory<R> recordFactory) {
@@ -45,4 +44,5 @@ public class LineRecordFileReader<R> implements RecordFileReader<R>
 		}
 		return null;
 	}
+
 }

@@ -19,9 +19,10 @@ import org.cycads.entities.sequence.Sequence;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.general.ParametersDefault;
+import org.cycads.parser.association.LineRecordFileReader;
 import org.cycads.ui.progress.Progress;
 
-public class AnnotToDbxrefFileParser
+public class SubseqOfAnnotToDbxrefParser
 {
 
 	private static final String		DBNAME_GENERIC	= "*";
@@ -38,17 +39,19 @@ public class AnnotToDbxrefFileParser
 	private boolean					isSynonym;
 	private final Collection<Type>	annotTypesFake;
 
-	public AnnotToDbxrefFileParser(EntityFactory factory, Progress progress, AnnotationMethod method,
+	public SubseqOfAnnotToDbxrefParser(EntityFactory factory, Progress progress, AnnotationMethod method,
 			Organism organism, int annotColumnIndex, String annotDBName, int dbxrefColumnIndex, String dbxrefDBName,
-			int scoreColumnIndex, Progress progressError) {
-		this(factory, progress, organism, annotColumnIndex, annotDBName, dbxrefColumnIndex, dbxrefDBName, progressError);
+			int scoreColumnIndex, boolean createFake, Progress progressError) {
+		this(factory, progress, organism, annotColumnIndex, annotDBName, dbxrefColumnIndex, dbxrefDBName, createFake,
+			progressError);
 		this.method = method;
 		this.scoreColumnIndex = scoreColumnIndex;
 		this.isSynonym = false;
 	}
 
-	public AnnotToDbxrefFileParser(EntityFactory factory, Progress progress, Organism organism, int annotColumnIndex,
-			String annotDBName, int dbxrefColumnIndex, String dbxrefDBName, Progress progressError) {
+	public SubseqOfAnnotToDbxrefParser(EntityFactory factory, Progress progress, Organism organism,
+			int annotColumnIndex, String annotDBName, int dbxrefColumnIndex, String dbxrefDBName, boolean createFake,
+			Progress progressError) {
 		this.factory = factory;
 		this.progress = progress;
 		this.progressError = progressError;
@@ -60,8 +63,8 @@ public class AnnotToDbxrefFileParser
 		this.dbxrefDBName = dbxrefDBName;
 		this.scoreColumnIndex = -1;
 		this.isSynonym = true;
-		annotTypesFake = new ArrayList<Type>(1);
-		annotTypesFake.add(factory.getType(ParametersDefault.getAnnotationFakeType()));
+		this.annotTypesFake = new ArrayList<Type>(1);
+		this.annotTypesFake.add(factory.getType(ParametersDefault.getAnnotationFakeType()));
 	}
 
 	public void parse(File f) throws IOException {
@@ -73,6 +76,8 @@ public class AnnotToDbxrefFileParser
 	}
 
 	public void parse(BufferedReader br) throws IOException {
+		if ()
+		LineRecordFileReader fileReader = new LineRecordFileReader<R>();
 		String line;
 		while ((line = br.readLine()) != null) {
 			line = line.trim();

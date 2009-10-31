@@ -10,7 +10,7 @@ import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.general.Config;
 import org.cycads.general.Messages;
-import org.cycads.parser.AnnotToDbxrefFileParser;
+import org.cycads.parser.SubseqOfAnnotToDbxrefParser;
 import org.cycads.ui.Tools;
 import org.cycads.ui.progress.Progress;
 import org.cycads.ui.progress.ProgressCount;
@@ -24,7 +24,7 @@ public class SynonymLoaderSQL
 		if (file == null) {
 			return;
 		}
-		Organism< ? , ? , ? , ? , ? , ? > organism = Tools.getOrganism(args, 1, Config.synonymLoaderOrganismNumber(),
+		Organism< ? > organism = Tools.getOrganism(args, 1, Config.synonymLoaderOrganismNumber(),
 			Messages.synonymLoaderChooseOrganismNumber(), factory);
 		if (organism == null) {
 			return;
@@ -58,8 +58,8 @@ public class SynonymLoaderSQL
 		Progress errorCount = new ProgressCount();
 		try {
 			progress.init(Messages.synonymLoaderInitMsg(file.getPath()));
-			(new AnnotToDbxrefFileParser(factory, progress, organism, annotColumnIndex, annotDBName, dbxrefColumnIndex,
-				dbxrefDBName, errorCount)).parse(file);
+			(new SubseqOfAnnotToDbxrefParser(factory, progress, organism, annotColumnIndex, annotDBName, dbxrefColumnIndex,
+				dbxrefDBName, false, errorCount)).parse(file);
 			progress.finish(Messages.synonymLoaderFinalMsg(progress.getStep(), errorCount.getStep()));
 		}
 		catch (IOException e) {
