@@ -31,6 +31,9 @@ public class SimpleObjectsFactory<R> implements ObjectFactory<Collection<R>>
 	@Override
 	public Collection<R> create(String[] values) throws ParserException {
 		Collection<R> ret;
+		if (index < 0 || index >= values.length) {
+			return null;
+		}
 		String value = Tools.cleanTextDelimiter(values[index], delimiter);
 		if (objectsSeparator == null || objectsSeparator.length() == 0) {
 			ret = new ArrayList<R>(1);

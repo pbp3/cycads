@@ -3,17 +3,16 @@
  */
 package org.cycads.parser.association.factory;
 
-
-public class ConstantFactory implements ObjectFactory<String>
+public class ConstantFactory<R> implements ObjectFactory<R>
 {
-	String	value;
+	R	value;
 
-	public ConstantFactory(String value) {
+	public ConstantFactory(R value) {
 		this.value = value;
 	}
 
 	@Override
-	public String create(String[] values) {
+	public R create(String[] values) {
 		return value;
 	}
 

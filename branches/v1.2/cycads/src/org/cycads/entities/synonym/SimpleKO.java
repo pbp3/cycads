@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.cycads.entities.annotation.Annotation;
-import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
+import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.factory.EntityAnnotationFactory;
 import org.cycads.entities.factory.EntityDbxrefFactory;
 import org.cycads.entities.factory.EntityTypeFactory;
@@ -52,7 +52,7 @@ public class SimpleKO extends SimpleDbxref implements KO
 	}
 
 	@Override
-	public Annotation< ? extends KO, ? extends EC> addEcAnnotation(AnnotationMethodSQL method, String ecNumber) {
+	public Annotation< ? extends KO, ? extends EC> addEcAnnotation(AnnotationMethod method, String ecNumber) {
 		SimpleEC ec = new SimpleEC(ecNumber, typeFactory, dbxrefFactory, annotationFactory);
 		Collection< ? extends Annotation< ? extends KO, ? extends EC>> annots = (Collection<Annotation< ? extends KO, ? extends EC>>) getAnnotations(
 			ec, method, null);

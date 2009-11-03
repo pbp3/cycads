@@ -293,7 +293,7 @@ public class OrganismSQL extends SimpleEntitySQL implements Organism<SequenceSQL
 				getConnection());
 			for (EntitySQL entity : seqs) {
 				SequenceSQL seq = (SequenceSQL) entity;
-				if (seq.getVersion().equals(version)) {
+				if (version == null || version.length() == 0 || seq.getVersion().equals(version)) {
 					ret.add(seq);
 				}
 			}

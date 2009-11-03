@@ -6,12 +6,9 @@ package org.cycads.entities.annotation;
 import java.util.Collection;
 
 import org.cycads.entities.EntityObject;
-import org.cycads.entities.note.Noteble;
 import org.cycads.entities.note.Type;
-import org.cycads.entities.synonym.HasSynonyms;
 
-public interface Association<SO extends EntityObject, TA extends EntityObject>
-		extends Noteble, HasSynonyms, EntityObject
+public interface Association<SO extends EntityObject, TA extends EntityObject> extends EntityObject
 {
 	public static final String	ENTITY_TYPE_NAME	= "Association";
 

@@ -22,6 +22,9 @@ public class SimpleObjectFactory<R> implements ObjectFactory<R>
 
 	@Override
 	public R create(String[] values) throws ParserException {
+		if (index < 0 || index >= values.length) {
+			return null;
+		}
 		return factory.create(Tools.cleanTextDelimiter(values[index], delimiter));
 	}
 

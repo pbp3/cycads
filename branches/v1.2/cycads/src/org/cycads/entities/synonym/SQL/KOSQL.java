@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
 
+import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
 import org.cycads.entities.annotation.SQL.AnnotationSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
@@ -49,14 +50,15 @@ public class KOSQL extends DbxrefSQL implements KO
 	}
 
 	@Override
-	public AnnotationSQL< ? extends KOSQL, ? extends ECSQL> addEcAnnotation(AnnotationMethodSQL method, String ecNumber) {
+	public AnnotationSQL< ? extends KOSQL, ? extends ECSQL> addEcAnnotation(AnnotationMethod method, String ecNumber) {
 		try {
+			AnnotationMethodSQL methodSQL = AnnotationMethodSQL.getMethod(method, getConnection());
 			ECSQL ec = new ECSQL(ecNumber, getConnection());
 			Collection< ? extends AnnotationSQL< ? extends KOSQL, ? extends ECSQL>> annots = AnnotationSQL.getAnnotations(
-				this, ec, method, null, getConnection());
+				this, ec, methodSQL, null, getConnection());
 			if (annots.isEmpty()) {
 				return AnnotationSQL.createAnnotationSQL(this, ec, TypeSQL.getTypes(
-					ParametersDefault.getFunctionalAnnotationTypeName(), getConnection()), method, null,
+					ParametersDefault.getFunctionalAnnotationTypeName(), getConnection()), methodSQL, null,
 					getConnection());
 			}
 			else {

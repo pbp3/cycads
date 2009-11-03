@@ -12,5 +12,5 @@ public interface RecordFileReader<R>
 {
 	public R read() throws IOException, FileParserException;
 
-	public void readAll(Progress progressOK, Progress progressError) throws IOException, FileParserException;
+	public void readAll(Progress progressOK, Progress progressError) throws IOException;
 }

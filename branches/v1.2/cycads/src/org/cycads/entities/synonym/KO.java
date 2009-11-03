@@ -4,7 +4,7 @@
 package org.cycads.entities.synonym;
 
 import org.cycads.entities.annotation.Annotation;
-import org.cycads.entities.annotation.SQL.AnnotationMethodSQL;
+import org.cycads.entities.annotation.AnnotationMethod;
 
 public interface KO extends Dbxref
 {
@@ -18,6 +18,6 @@ public interface KO extends Dbxref
 
 	public void setName(String name);
 
-	public Annotation< ? extends KO, ? extends EC> addEcAnnotation(AnnotationMethodSQL method, String ecNumber);
+	public Annotation< ? extends KO, ? extends EC> addEcAnnotation(AnnotationMethod method, String ecNumber);
 
 }

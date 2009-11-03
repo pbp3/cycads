@@ -4,29 +4,7 @@
 package org.cycads.parser.gff3;
 
 import java.io.PrintStream;
-import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Hashtable;
-import java.util.regex.Pattern;
-
-import org.cycads.entities.Function;
-import org.cycads.entities.annotation.Annotation;
-import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.entities.annotation.SubseqAnnotation;
-import org.cycads.entities.annotation.SubseqFunctionAnnotation;
-import org.cycads.entities.factory.EntityFactory;
-import org.cycads.entities.note.Note;
-import org.cycads.entities.note.Type;
-import org.cycads.entities.sequence.Intron;
-import org.cycads.entities.sequence.Organism;
-import org.cycads.entities.sequence.Sequence;
-import org.cycads.entities.sequence.SimpleIntron;
-import org.cycads.entities.sequence.SimpleSubsequence;
-import org.cycads.entities.sequence.Subsequence;
-import org.cycads.entities.synonym.Dbxref;
-import org.cycads.general.ParametersDefault;
-import org.cycads.ui.progress.Progress;
 
 public class FirstSequencesGFF3Handler implements GFF3DocumentHandler
 {
