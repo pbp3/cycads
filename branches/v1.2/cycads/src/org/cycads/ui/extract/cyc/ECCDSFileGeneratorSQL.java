@@ -7,15 +7,15 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.cycads.entities.annotation.SubseqAnnotation;
+import org.cycads.entities.Feature;
+import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.factory.EntityFactorySQL;
-import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Sequence;
+import org.cycads.entities.sequence.Subsequence;
 import org.cycads.extract.cyc.CycDBLink;
 import org.cycads.extract.cyc.CycDbxrefAnnotationPaths;
 import org.cycads.extract.cyc.CycIdGenerator;
@@ -71,9 +71,7 @@ public class ECCDSFileGeneratorSQL
 
 		Progress progress = new ProgressPrintInterval(System.out, Messages.ecCDSFileGeneratorStepShowInterval());
 		progress.init(Messages.ecCDSFileGeneratorInitMsg(file.getPath()));
-		Collection<Sequence< ? , ? , ? , ? , ? , ? >> seqs = organism.getSequences(seqVersion);
-		Collection<Type> types = new ArrayList<Type>(1);
-		types.add(factory.getAnnotationTypeCDS());
+		Collection<Sequence< ? , ? >> seqs = organism.getSequences(seqVersion);
 		CycIdGenerator cycIdGenerator = new OrganismCycIdGenerator(organism);
 
 		LocAndScores locAndScores = new LocAndScores();
@@ -84,8 +82,8 @@ public class ECCDSFileGeneratorSQL
 		CycRecordGenerator cycRecordGenerator = new PFFileCycRecordGenerator(cycIdGenerator, locInterpreter, 0,
 			ecScoreSystemCollection, 0, goScoreSystemCollection);
 		for (Sequence seq : seqs) {
-			Collection<SubseqAnnotation< ? , ? , ? , ? , ? >> cdss = seq.getAnnotationsByType(null, types, null);
-			for (SubseqAnnotation< ? , ? , ? , ? , ? > cds : cdss) {
+			Collection<Annotation<Subsequence, Feature>> cdss = seq.getAnnotationsByType(null, types, null);
+			for (Annotation<Subsequence, Feature> cds : cdss) {
 				CycRecord record = cycRecordGenerator.generate(cds);
 				if (record != null) {
 					Collection<CycDbxrefAnnotationPaths> ecs = locInterpreter.getCycDbxrefPathAnnots(cds,
