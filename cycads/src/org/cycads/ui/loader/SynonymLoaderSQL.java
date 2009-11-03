@@ -10,7 +10,7 @@ import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.general.Config;
 import org.cycads.general.Messages;
-import org.cycads.parser.SubseqOfAnnotToDbxrefParser;
+import org.cycads.parser.association.factory.SubseqOfAnnotToDbxrefParser;
 import org.cycads.ui.Tools;
 import org.cycads.ui.progress.Progress;
 import org.cycads.ui.progress.ProgressCount;

@@ -12,9 +12,9 @@ import org.cycads.parser.association.TypeNameTransformer;
 
 public class IndependentDbxrefFactory<X extends Dbxref> implements IndependentObjectFactory<X>
 {
-	private String					dbxrefSeparator;
-	private TypeNameTransformer		dbNameTransformer;
-	private EntityDbxrefFactory<X>	entityFactory;
+	private final String					dbxrefSeparator;
+	private final TypeNameTransformer		dbNameTransformer;
+	private final EntityDbxrefFactory<X>	entityFactory;
 
 	public IndependentDbxrefFactory(String dbxrefSeparator, TypeNameTransformer dbNameTransformer,
 			EntityDbxrefFactory<X> entityFactory) {

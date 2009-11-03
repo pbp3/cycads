@@ -121,14 +121,18 @@ public abstract class SimpleEntityObject implements EntityObject
 
 	@Override
 	public Collection< ? extends Annotation< ? , ? >> getAnnotationsBySynonym(Dbxref synonym) {
-		// TODO Auto-generated method stub
-		return null;
+		return getAnnotationsBySynonym(synonym.getDbName(), synonym.getAccession());
 	}
 
 	@Override
 	public Collection< ? extends Annotation< ? , ? >> getAnnotationsBySynonym(String dbName, String accession) {
-		// TODO Auto-generated method stub
-		return null;
+		Collection<Annotation< ? , ? >> ret = new ArrayList<Annotation< ? , ? >>();
+		for (Annotation< ? , ? > annotation : annotations) {
+			if (annotation.isSynonym(dbName, accession)) {
+				ret.add((Annotation< ? , ? >) annotation);
+			}
+		}
+		return ret;
 	}
 
 	@Override
