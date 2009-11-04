@@ -38,6 +38,7 @@ import org.cycads.parser.association.factory.SimpleObjectFactory;
 import org.cycads.parser.association.factory.SimpleObjectsFactory;
 import org.cycads.parser.association.factory.SubseqsFactory;
 import org.cycads.parser.association.factory.independent.IndependentDbxrefFactory;
+import org.cycads.parser.association.factory.independent.IndependentMethodFactory;
 import org.cycads.parser.association.factory.independent.IndependentStringFactory;
 import org.cycads.ui.Tools;
 import org.cycads.ui.progress.Progress;
@@ -49,7 +50,7 @@ public class SubseqDbxrefAnnotationLoaderSQL
 	public static void main(String[] args) {
 		EntityFactorySQL factory = new EntityFactorySQL();
 		File file = Tools.getFileToOpen(args, 0, Config.subseqDbxrefAnnotationLoaderFileName(),
-			Messages.subseqDbxrefAnnotationLoaderChooseFile());
+			Messages.generalChooseFileToLoad());
 		if (file == null) {
 			return;
 		}
@@ -63,17 +64,18 @@ public class SubseqDbxrefAnnotationLoaderSQL
 		}
 
 		Organism< ? > organism = Tools.getOrganism(args, 1, Config.subseqDbxrefAnnotationLoaderOrganismNumber(),
-			Messages.subseqDbxrefAnnotationLoaderChooseOrganismNumber(), factory);
+			Messages.generalChooseOrganismNumber(), factory);
 		if (organism == null) {
 			return;
 		}
 
 		String methodName = Tools.getString(args, 2, Config.subseqDbxrefAnnotationLoaderMethodName(),
-			Messages.subseqDbxrefAnnotationLoaderChooseMethodName());
+			Messages.generalChooseMethodName());
 		if (methodName == null) {
 			return;
 		}
-		AnnotationMethod method = factory.getAnnotationMethod(methodName);
+		//		AnnotationMethod method = factory.getAnnotationMethod(methodName);
+		factory.setMethodDefault(factory.getAnnotationMethod(methodName));
 
 		Integer annotColumnIndex = Tools.getInteger(args, 3, Config.subseqDbxrefAnnotationLoaderAnnotColumnIndex(),
 			Messages.subseqDbxrefAnnotationLoaderChooseAnnotColumnIndex());
@@ -105,6 +107,9 @@ public class SubseqDbxrefAnnotationLoaderSQL
 			return;
 		}
 
+		Integer methodColumnIndex = Tools.getIntegerOptional(args, 8,
+			Config.subseqDbxrefAnnotationLoaderMethodColumnIndex());
+
 		Pattern removeLinePattern = Pattern.compile(ParametersDefault.subseqDbxrefAnnotationLoaderRemoveLineRegex());
 
 		ObjectFactory<Collection<Annotation>> parentsFactory = null;
@@ -113,7 +118,14 @@ public class SubseqDbxrefAnnotationLoaderSQL
 		String scoreDelimiter = ParametersDefault.subseqDbxrefAnnotationLoaderTextDelimiter();
 		ObjectFactory<String> scoreFactory = new SimpleObjectFactory<String>(scoreColumnIndex, scoreDelimiter,
 			new IndependentStringFactory());
-		ObjectFactory<AnnotationMethod> methodFactory = new ConstantFactory<AnnotationMethod>(method);
+
+		String methodDelimiter = ParametersDefault.subseqDbxrefAnnotationLoaderTextDelimiter();
+
+		ObjectFactory<AnnotationMethod> methodFactory = new SimpleObjectFactory<AnnotationMethod>(methodColumnIndex,
+			methodDelimiter, new IndependentMethodFactory<AnnotationMethod>((EntityMethodFactory) factory));
+
+		=====get types from config
+		
 		Collection<Type> associationTypes = new ArrayList<Type>(1);
 		associationTypes.add(factory.getType(ParametersDefault.getFunctionalAnnotationTypeName()));
 		ObjectFactory<Collection<Type>> typesFactory = new ConstantFactory<Collection<Type>>(associationTypes);

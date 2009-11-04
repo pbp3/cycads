@@ -233,35 +233,39 @@ public class Config
 	// subseqAnnotationLoader
 
 	public static String subseqDbxrefAnnotationLoaderFileName() {
-		return getStringOptional("subseqAnnotation.loader.fileName");
+		return getStringOptional("subseqDbxrefAnnotationLoader.fileName");
 	}
 
 	public static int subseqDbxrefAnnotationLoaderOrganismNumber() {
-		return getInt("subseqAnnotation.loader.organismNumber");
+		return getInt("subseqDbxrefAnnotationLoader.organismNumber");
 	}
 
 	public static String subseqDbxrefAnnotationLoaderMethodName() {
-		return getStringOptional("subseqAnnotation.loader.methodName");
+		return getStringOptional("subseqDbxrefAnnotationLoader.methodName");
 	}
 
 	public static int subseqDbxrefAnnotationLoaderAnnotColumnIndex() {
-		return getInt("subseqAnnotation.loader.annotColumnIndex");
+		return getInt("subseqDbxrefAnnotationLoader.annotColumnIndex");
 	}
 
 	public static String subseqDbxrefAnnotationLoaderAnnotDBName() {
-		return getStringOptional("subseqAnnotation.loader.annotDBName");
+		return getStringOptional("subseqDbxrefAnnotationLoader.annotDBName");
 	}
 
 	public static int subseqDbxrefAnnotationLoaderDbxrefColumnIndex() {
-		return getInt("subseqAnnotation.loader.dbxrefColumnIndex");
+		return getInt("subseqDbxrefAnnotationLoader.dbxrefColumnIndex");
 	}
 
 	public static String subseqDbxrefAnnotationLoaderDbxrefDBName() {
-		return getStringOptional("subseqAnnotation.loader.dbxrefDBName");
+		return getStringOptional("subseqDbxrefAnnotationLoader.dbxrefDBName");
 	}
 
 	public static int subseqDbxrefAnnotationLoaderScoreColumnIndex() {
-		return getInt("subseqAnnotation.loader.scoreColumnIndex");
+		return getInt("subseqDbxrefAnnotationLoader.scoreColumnIndex");
+	}
+
+	public static int subseqDbxrefAnnotationLoaderMethodColumnIndex() {
+		return getInt("subseqDbxrefAnnotationLoader.methodColumnIndex");
 	}
 
 	// synonymLoader
