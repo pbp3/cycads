@@ -404,18 +404,6 @@ public class Messages
 
 	// subseqAnnotationLoader
 
-	public static String subseqDbxrefAnnotationLoaderChooseFile() {
-		return getStringMandatory("subseqAnnotationLoader.chooseFile");
-	}
-
-	public static String subseqDbxrefAnnotationLoaderChooseOrganismNumber() {
-		return getStringMandatory("subseqAnnotationLoader.chooseOrganismNumber");
-	}
-
-	public static String subseqDbxrefAnnotationLoaderChooseMethodName() {
-		return getStringMandatory("subseqAnnotationLoader.chooseMethodName");
-	}
-
 	public static String subseqDbxrefAnnotationLoaderChooseAnnotColumnIndex() {
 		return getStringMandatory("subseqAnnotationLoader.chooseAnnotColumnIndex");
 	}

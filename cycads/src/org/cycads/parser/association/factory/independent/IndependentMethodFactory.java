@@ -16,9 +16,6 @@ public class IndependentMethodFactory<M extends AnnotationMethod> implements Ind
 
 	@Override
 	public M create(String value) {
-		if (value == null) {
-			return null;
-		}
 		return entityFactory.getAnnotationMethod(value);
 	}
 

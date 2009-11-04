@@ -14,10 +14,7 @@ import org.cycads.general.Config;
 import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
 import org.cycads.parser.association.TypeNameTransformer;
-import org.cycads.parser.association.DbxrefsField;
-import org.cycads.parser.association.DbxrefsFactory;
 import org.cycads.parser.association.LineRecordFileReader;
-import org.cycads.parser.association.SimpleAnnotation;
 import org.cycads.parser.association.InputNameOverwrite;
 import org.cycads.parser.association.factory.ObjectFactory;
 import org.cycads.parser.association.factory.AnnotationsRecordFactory;
@@ -91,11 +88,11 @@ public class DbxrefDbxrefAnnotationLoaderSQL
 		TypeNameTransformer dbNameSource = new InputNameOverwrite(dbxrefSourceDBName);
 		TypeNameTransformer dbNameTarget = new InputNameOverwrite(dbxrefTargetDBName);
 
-		IndependentDbxrefFactory sourceFactory = new IndependentDbxrefFactory(ParametersDefault.getDbxrefToStringSeparator(), dbNameSource,
-			factory);
+		IndependentDbxrefFactory sourceFactory = new IndependentDbxrefFactory(
+			ParametersDefault.getDbxrefToStringSeparator(), dbNameSource, factory);
 
-		IndependentDbxrefFactory targetFactory = new IndependentDbxrefFactory(ParametersDefault.getDbxrefToStringSeparator(), dbNameTarget,
-			factory);
+		IndependentDbxrefFactory targetFactory = new IndependentDbxrefFactory(
+			ParametersDefault.getDbxrefToStringSeparator(), dbNameTarget, factory);
 
 		DbxrefsFactory sourcesFactory = new DbxrefsFactory(Config.dbxrefDbxrefAnnotationLoaderSourceDbxrefsSeparator(),
 			Config.dbxrefDbxrefAnnotationLoaderSourceDelimiter(), sourceFactory);
