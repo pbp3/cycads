@@ -34,7 +34,7 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT annotation_method_id, score from Annotation WHERE annotation_id=?");
+			stmt = con.prepareStatement("SELECT annotation_method_id, score FROM Annotation WHERE annotation_id=?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
@@ -191,11 +191,11 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 	public boolean isParent(EntitySQL parent) {
 		Collection<EntitySQL> parents = getParents();
 		if (parents != null) {
-		for (EntitySQL parent1 : getParents()) {
-			if (parent.getId() == parent1.getId() && parent.getEntityType().equals(parent1.getEntityType())) {
-				return true;
+			for (EntitySQL parent1 : getParents()) {
+				if (parent.getId() == parent1.getId() && parent.getEntityType().equals(parent1.getEntityType())) {
+					return true;
+				}
 			}
-		}
 		}
 		return false;
 	}

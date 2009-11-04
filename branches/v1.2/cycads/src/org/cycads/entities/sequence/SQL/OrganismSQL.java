@@ -28,7 +28,7 @@ public class OrganismSQL extends SimpleEntitySQL implements Organism<SequenceSQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT name from Organism WHERE ncbi_taxon_id=?");
+			stmt = con.prepareStatement("SELECT name FROM Organism WHERE ncbi_taxon_id=?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
@@ -90,7 +90,7 @@ public class OrganismSQL extends SimpleEntitySQL implements Organism<SequenceSQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = getConnection().prepareStatement("SELECT next_cyc_id from Organism WHERE ncbi_taxon_id=?");
+			stmt = getConnection().prepareStatement("SELECT next_cyc_id FROM Organism WHERE ncbi_taxon_id=?");
 			stmt.setInt(1, getId());
 			rs = stmt.executeQuery();
 			int nextCycId;
@@ -168,7 +168,7 @@ public class OrganismSQL extends SimpleEntitySQL implements Organism<SequenceSQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = getConnection().prepareStatement("INSERT INTO sequence (ncbi_taxon_id, version) VALUES (?,?)",
+			stmt = getConnection().prepareStatement("INSERT INTO Sequence (ncbi_taxon_id, version) VALUES (?,?)",
 				Statement.RETURN_GENERATED_KEYS);
 			stmt.setInt(1, getId());
 			stmt.setString(2, version);
@@ -211,7 +211,7 @@ public class OrganismSQL extends SimpleEntitySQL implements Organism<SequenceSQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = getConnection().prepareStatement("SELECT sequence_id from sequence where ncbi_taxon_id=?");
+			stmt = getConnection().prepareStatement("SELECT sequence_id FROM Sequence where ncbi_taxon_id=?");
 			stmt.setInt(1, getId());
 			rs = stmt.executeQuery();
 			ArrayList<SequenceSQL> seqs = new ArrayList<SequenceSQL>();
@@ -249,7 +249,7 @@ public class OrganismSQL extends SimpleEntitySQL implements Organism<SequenceSQL
 		ResultSet rs = null;
 		try {
 			stmt = getConnection().prepareStatement(
-				"SELECT sequence_id from sequence where ncbi_taxon_id=? AND version=?");
+				"SELECT sequence_id FROM Sequence where ncbi_taxon_id=? AND version=?");
 			stmt.setInt(1, getId());
 			stmt.setString(2, version);
 			rs = stmt.executeQuery();

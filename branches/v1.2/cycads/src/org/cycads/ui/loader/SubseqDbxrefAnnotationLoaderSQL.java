@@ -44,12 +44,12 @@ import org.cycads.ui.progress.Progress;
 import org.cycads.ui.progress.ProgressCount;
 import org.cycads.ui.progress.ProgressPrintInterval;
 
-public class SubseqAnnotationLoaderSQL
+public class SubseqDbxrefAnnotationLoaderSQL
 {
 	public static void main(String[] args) {
 		EntityFactorySQL factory = new EntityFactorySQL();
-		File file = Tools.getFileToOpen(args, 0, Config.subseqAnnotationLoaderFileName(),
-			Messages.subseqAnnotationLoaderChooseFile());
+		File file = Tools.getFileToOpen(args, 0, Config.subseqDbxrefAnnotationLoaderFileName(),
+			Messages.subseqDbxrefAnnotationLoaderChooseFile());
 		if (file == null) {
 			return;
 		}
@@ -62,55 +62,55 @@ public class SubseqAnnotationLoaderSQL
 			return;
 		}
 
-		Organism< ? > organism = Tools.getOrganism(args, 1, Config.subseqAnnotationLoaderOrganismNumber(),
-			Messages.subseqAnnotationLoaderChooseOrganismNumber(), factory);
+		Organism< ? > organism = Tools.getOrganism(args, 1, Config.subseqDbxrefAnnotationLoaderOrganismNumber(),
+			Messages.subseqDbxrefAnnotationLoaderChooseOrganismNumber(), factory);
 		if (organism == null) {
 			return;
 		}
 
-		String methodName = Tools.getString(args, 2, Config.subseqAnnotationLoaderMethodName(),
-			Messages.subseqAnnotationLoaderChooseMethodName());
+		String methodName = Tools.getString(args, 2, Config.subseqDbxrefAnnotationLoaderMethodName(),
+			Messages.subseqDbxrefAnnotationLoaderChooseMethodName());
 		if (methodName == null) {
 			return;
 		}
 		AnnotationMethod method = factory.getAnnotationMethod(methodName);
 
-		Integer annotColumnIndex = Tools.getInteger(args, 3, Config.subseqAnnotationLoaderAnnotColumnIndex(),
-			Messages.subseqAnnotationLoaderChooseAnnotColumnIndex());
+		Integer annotColumnIndex = Tools.getInteger(args, 3, Config.subseqDbxrefAnnotationLoaderAnnotColumnIndex(),
+			Messages.subseqDbxrefAnnotationLoaderChooseAnnotColumnIndex());
 		if (annotColumnIndex == null) {
 			return;
 		}
 
-		String annotDBName = Tools.getString(args, 4, Config.subseqAnnotationLoaderAnnotDBName(),
-			Messages.subseqAnnotationLoaderChooseAnnotDBName());
+		String annotDBName = Tools.getString(args, 4, Config.subseqDbxrefAnnotationLoaderAnnotDBName(),
+			Messages.subseqDbxrefAnnotationLoaderChooseAnnotDBName());
 		if (annotDBName == null) {
 			return;
 		}
 
-		Integer dbxrefColumnIndex = Tools.getInteger(args, 5, Config.subseqAnnotationLoaderDbxrefColumnIndex(),
-			Messages.subseqAnnotationLoaderChooseDbxrefColumnIndex());
+		Integer dbxrefColumnIndex = Tools.getInteger(args, 5, Config.subseqDbxrefAnnotationLoaderDbxrefColumnIndex(),
+			Messages.subseqDbxrefAnnotationLoaderChooseDbxrefColumnIndex());
 		if (dbxrefColumnIndex == null) {
 			return;
 		}
 
-		String dbxrefDBName = Tools.getString(args, 6, Config.subseqAnnotationLoaderDbxrefDBName(),
-			Messages.subseqAnnotationLoaderChooseDbxrefDBName());
+		String dbxrefDBName = Tools.getString(args, 6, Config.subseqDbxrefAnnotationLoaderDbxrefDBName(),
+			Messages.subseqDbxrefAnnotationLoaderChooseDbxrefDBName());
 		if (dbxrefDBName == null) {
 			return;
 		}
 
-		Integer scoreColumnIndex = Tools.getInteger(args, 7, Config.subseqAnnotationLoaderScoreColumnIndex(),
-			Messages.subseqAnnotationLoaderChooseScoreColumnIndex());
+		Integer scoreColumnIndex = Tools.getInteger(args, 7, Config.subseqDbxrefAnnotationLoaderScoreColumnIndex(),
+			Messages.subseqDbxrefAnnotationLoaderChooseScoreColumnIndex());
 		if (scoreColumnIndex == null) {
 			return;
 		}
 
-		Pattern removeLinePattern = Pattern.compile(ParametersDefault.annotToDbxrefRemoveLineRegex());
+		Pattern removeLinePattern = Pattern.compile(ParametersDefault.subseqDbxrefAnnotationLoaderRemoveLineRegex());
 
 		ObjectFactory<Collection<Annotation>> parentsFactory = null;
 		ObjectFactory<Collection<Dbxref>> synonymsFactory = null;
 		ObjectFactory<Collection<Note>> notesFactory = null;
-		String scoreDelimiter = ParametersDefault.annotToDbxrefFileTextDelimiter();
+		String scoreDelimiter = ParametersDefault.subseqDbxrefAnnotationLoaderTextDelimiter();
 		ObjectFactory<String> scoreFactory = new SimpleObjectFactory<String>(scoreColumnIndex, scoreDelimiter,
 			new IndependentStringFactory());
 		ObjectFactory<AnnotationMethod> methodFactory = new ConstantFactory<AnnotationMethod>(method);
@@ -118,9 +118,9 @@ public class SubseqAnnotationLoaderSQL
 		associationTypes.add(factory.getType(ParametersDefault.getFunctionalAnnotationTypeName()));
 		ObjectFactory<Collection<Type>> typesFactory = new ConstantFactory<Collection<Type>>(associationTypes);
 
-		String dbxrefsAnnotDelimiter = ParametersDefault.annotToDbxrefFileTextDelimiter();
-		String dbxrefAnnotDelimiter = ParametersDefault.annotToDbxrefFileTextDelimiter();
-		String dbxrefsAnnotSeparator = ParametersDefault.annotToDbxrefFileAnnotsSeparator();
+		String dbxrefsAnnotDelimiter = ParametersDefault.subseqDbxrefAnnotationLoaderTextDelimiter();
+		String dbxrefAnnotDelimiter = ParametersDefault.subseqDbxrefAnnotationLoaderTextDelimiter();
+		String dbxrefsAnnotSeparator = ParametersDefault.subseqDbxrefAnnotationLoaderDbxrefsAnnotSeparator();
 
 		ObjectFactory<Collection<Subsequence>> sourcesFactory = new SubseqsFactory(new SimpleObjectsFactory<Dbxref>(
 			annotColumnIndex, dbxrefsAnnotDelimiter, dbxrefsAnnotSeparator, dbxrefAnnotDelimiter,
@@ -128,17 +128,17 @@ public class SubseqAnnotationLoaderSQL
 				new InputNameOverwrite(annotDBName), (EntityDbxrefFactory) factory)), (EntityFinder) factory, organism,
 			(EntityMethodFactory) factory, (EntityFeatureFactory) factory, (EntityTypeFactory) factory);
 
-		String dbxrefsDelimiter = ParametersDefault.annotToDbxrefFileTextDelimiter();
-		String dbxrefDelimiter = ParametersDefault.annotToDbxrefFileTextDelimiter();
-		String dbxrefsSeparator = ParametersDefault.annotToDbxrefFileDbxrefsSeparator();
+		String dbxrefsDelimiter = ParametersDefault.subseqDbxrefAnnotationLoaderTextDelimiter();
+		String dbxrefDelimiter = ParametersDefault.subseqDbxrefAnnotationLoaderTextDelimiter();
+		String dbxrefsSeparator = ParametersDefault.subseqDbxrefAnnotationLoaderDbxrefsSeparator();
 
 		ObjectFactory<Collection<Dbxref>> targetsFactory = new SimpleObjectsFactory<Dbxref>(dbxrefColumnIndex,
 			dbxrefsDelimiter, dbxrefsSeparator, dbxrefDelimiter, new IndependentDbxrefFactory<Dbxref>(
 				ParametersDefault.getDbxrefToStringSeparator(), new InputNameOverwrite(dbxrefDBName),
 				(EntityDbxrefFactory) factory));
 
-		String columnSeparator = ParametersDefault.annotToDbxrefFileSeparator();
-		String lineComment = ParametersDefault.annotToDbxrefFileComment();
+		String columnSeparator = ParametersDefault.subseqDbxrefAnnotationLoaderColumnSeparator();
+		String lineComment = ParametersDefault.subseqDbxrefAnnotationLoaderLineComment();
 
 		ObjectFactory<Collection<Annotation<Subsequence, Dbxref>>> objectFactory = new AnnotationsRecordFactory<Subsequence, Dbxref>(
 			(EntityAnnotationFactory) factory, sourcesFactory, targetsFactory, scoreFactory, methodFactory,
@@ -146,13 +146,14 @@ public class SubseqAnnotationLoaderSQL
 		LineRecordFileReader<Collection<Annotation<Subsequence, Dbxref>>> recordFileReader = new LineRecordFileReader<Collection<Annotation<Subsequence, Dbxref>>>(
 			br, columnSeparator, lineComment, removeLinePattern, objectFactory);
 
-		Progress progress = new ProgressPrintInterval(System.out, Messages.subseqAnnotationLoaderStepShowInterval());
+		Progress progress = new ProgressPrintInterval(System.out,
+			Messages.subseqDbxrefAnnotationLoaderStepShowInterval());
 		Progress errorCount = new ProgressCount();
 
 		try {
-			progress.init(Messages.subseqAnnotationLoaderInitMsg(file.getPath()));
+			progress.init(Messages.subseqDbxrefAnnotationLoaderInitMsg(file.getPath()));
 			recordFileReader.readAll(progress, errorCount);
-			progress.finish(Messages.subseqAnnotationLoaderFinalMsg(progress.getStep(), errorCount.getStep()));
+			progress.finish(Messages.subseqDbxrefAnnotationLoaderFinalMsg(progress.getStep(), errorCount.getStep()));
 		}
 		catch (IOException e) {
 			e.printStackTrace();

@@ -26,7 +26,7 @@ public class DbxrefSQL extends SimpleEntitySQL implements Dbxref
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT external_db_id, accession from dbxref WHERE dbxref_id=?");
+			stmt = con.prepareStatement("SELECT external_db_id, accession FROM Dbxref WHERE dbxref_id=?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
@@ -66,7 +66,7 @@ public class DbxrefSQL extends SimpleEntitySQL implements Dbxref
 			PreparedStatement stmt = null;
 			ResultSet rs = null;
 			try {
-				stmt = con.prepareStatement("INSERT INTO dbxref (external_db_id, accession) VALUES (?,?)",
+				stmt = con.prepareStatement("INSERT INTO Dbxref (external_db_id, accession) VALUES (?,?)",
 					Statement.RETURN_GENERATED_KEYS);
 				stmt.setInt(1, database.getId());
 				stmt.setString(2, accession);
@@ -96,7 +96,7 @@ public class DbxrefSQL extends SimpleEntitySQL implements Dbxref
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT dbxref_id from dbxref WHERE external_db_id=? AND accession=?");
+			stmt = con.prepareStatement("SELECT dbxref_id FROM Dbxref WHERE external_db_id=? AND accession=?");
 			stmt.setInt(1, database.getId());
 			stmt.setString(2, accession);
 			rs = stmt.executeQuery();

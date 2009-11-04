@@ -21,7 +21,7 @@ public class CompoundSQL extends SimpleEntitySQL implements Compound
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT small_molecule from compound WHERE compound_id=?");
+			stmt = con.prepareStatement("SELECT small_molecule FROM Compound WHERE compound_id=?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
@@ -79,7 +79,7 @@ public class CompoundSQL extends SimpleEntitySQL implements Compound
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("INSERT INTO compound (small_molecule) VALUES (?)",
+			stmt = con.prepareStatement("INSERT INTO Compound (small_molecule) VALUES (?)",
 				Statement.RETURN_GENERATED_KEYS);
 			stmt.setBoolean(1, smallMolecule);
 			stmt.executeUpdate();
