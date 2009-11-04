@@ -20,7 +20,7 @@ public class SourceTargetTypeSQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT source_target_type_id from source_target_type WHERE source_type_id=? AND target_type_id=?");
+			stmt = con.prepareStatement("SELECT source_target_type_id FROM Source_target_type WHERE source_type_id=? AND target_type_id=?");
 			stmt.setInt(1, sourceType.getId());
 			stmt.setInt(2, targetType.getId());
 			rs = stmt.executeQuery();
@@ -29,7 +29,7 @@ public class SourceTargetTypeSQL
 			}
 			else {
 				stmt = con.prepareStatement(
-					"INSERT INTO source_target_type (source_type_id, target_type_id) VALUES (?,?)",
+					"INSERT INTO Source_target_type (source_type_id, target_type_id) VALUES (?,?)",
 					Statement.RETURN_GENERATED_KEYS);
 				stmt.setInt(1, sourceType.getId());
 				stmt.setInt(2, targetType.getId());
@@ -68,7 +68,7 @@ public class SourceTargetTypeSQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT source_type_id, target_type_id from source_target_type WHERE source_target_type_id=?");
+			stmt = con.prepareStatement("SELECT source_type_id, target_type_id FROM Source_target_type WHERE source_target_type_id=?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 			if (rs.next()) {

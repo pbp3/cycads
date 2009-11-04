@@ -232,35 +232,35 @@ public class Config
 
 	// subseqAnnotationLoader
 
-	public static String subseqAnnotationLoaderFileName() {
+	public static String subseqDbxrefAnnotationLoaderFileName() {
 		return getStringOptional("subseqAnnotation.loader.fileName");
 	}
 
-	public static int subseqAnnotationLoaderOrganismNumber() {
+	public static int subseqDbxrefAnnotationLoaderOrganismNumber() {
 		return getInt("subseqAnnotation.loader.organismNumber");
 	}
 
-	public static String subseqAnnotationLoaderMethodName() {
+	public static String subseqDbxrefAnnotationLoaderMethodName() {
 		return getStringOptional("subseqAnnotation.loader.methodName");
 	}
 
-	public static int subseqAnnotationLoaderAnnotColumnIndex() {
+	public static int subseqDbxrefAnnotationLoaderAnnotColumnIndex() {
 		return getInt("subseqAnnotation.loader.annotColumnIndex");
 	}
 
-	public static String subseqAnnotationLoaderAnnotDBName() {
+	public static String subseqDbxrefAnnotationLoaderAnnotDBName() {
 		return getStringOptional("subseqAnnotation.loader.annotDBName");
 	}
 
-	public static int subseqAnnotationLoaderDbxrefColumnIndex() {
+	public static int subseqDbxrefAnnotationLoaderDbxrefColumnIndex() {
 		return getInt("subseqAnnotation.loader.dbxrefColumnIndex");
 	}
 
-	public static String subseqAnnotationLoaderDbxrefDBName() {
+	public static String subseqDbxrefAnnotationLoaderDbxrefDBName() {
 		return getStringOptional("subseqAnnotation.loader.dbxrefDBName");
 	}
 
-	public static int subseqAnnotationLoaderScoreColumnIndex() {
+	public static int subseqDbxrefAnnotationLoaderScoreColumnIndex() {
 		return getInt("subseqAnnotation.loader.scoreColumnIndex");
 	}
 

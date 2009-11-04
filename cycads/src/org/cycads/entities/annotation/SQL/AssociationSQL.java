@@ -32,7 +32,7 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT source_id, target_id, source_target_type_id from Association WHERE association_id=?");
+			stmt = con.prepareStatement("SELECT source_id, target_id, source_target_type_id FROM Association WHERE association_id=?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
@@ -133,7 +133,7 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 			ResultSet rs = null;
 			types = new ArrayList<TypeSQL>();
 			try {
-				stmt = getConnection().prepareStatement("SELECT type_id from Association_type WHERE association_id=?");
+				stmt = getConnection().prepareStatement("SELECT type_id FROM Association_type WHERE association_id=?");
 				stmt.setInt(1, getId());
 				rs = stmt.executeQuery();
 				while (rs.next()) {

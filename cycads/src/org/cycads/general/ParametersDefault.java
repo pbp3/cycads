@@ -262,27 +262,27 @@ public class ParametersDefault
 
 	//annotatToDbxrefParser
 
-	public static String annotToDbxrefFileComment() {
+	public static String subseqDbxrefAnnotationLoaderLineComment() {
 		return getStringMandatory("annotToDbxref.file.comment");
 	}
 
-	public static String annotToDbxrefFileSeparator() {
+	public static String subseqDbxrefAnnotationLoaderColumnSeparator() {
 		return getStringMandatory("annotToDbxref.file.separator");
 	}
 
-	public static String annotToDbxrefFileTextDelimiter() {
+	public static String subseqDbxrefAnnotationLoaderTextDelimiter() {
 		return getStringMandatory("annotToDbxref.file.textDelimiter");
 	}
 
-	public static String annotToDbxrefFileDbxrefsSeparator() {
+	public static String subseqDbxrefAnnotationLoaderDbxrefsSeparator() {
 		return getStringMandatory("annotToDbxref.file.dbxrefsSeparator");
 	}
 
-	public static String annotToDbxrefFileAnnotsSeparator() {
+	public static String subseqDbxrefAnnotationLoaderDbxrefsAnnotSeparator() {
 		return getStringMandatory("annotToDbxref.file.annotsSeparator");
 	}
 
-	public static String annotToDbxrefRemoveLineRegex() {
+	public static String subseqDbxrefAnnotationLoaderRemoveLineRegex() {
 		return getStringMandatory("annotToDbxref.file.removeLineRegex");
 	}
 

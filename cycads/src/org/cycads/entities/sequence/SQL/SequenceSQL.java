@@ -32,7 +32,7 @@ public class SequenceSQL extends SimpleEntitySQL implements Sequence<OrganismSQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT ncbi_taxon_id, version from sequence WHERE sequence_id=?");
+			stmt = con.prepareStatement("SELECT ncbi_taxon_id, version FROM Sequence WHERE sequence_id=?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
@@ -42,7 +42,7 @@ public class SequenceSQL extends SimpleEntitySQL implements Sequence<OrganismSQL
 			else {
 				throw new SQLException("Sequence does not exist:" + id);
 			}
-			stmt = con.prepareStatement("SELECT length from Biosequence WHERE biosequence_id=?");
+			stmt = con.prepareStatement("SELECT length FROM Biosequence WHERE biosequence_id=?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
@@ -93,7 +93,7 @@ public class SequenceSQL extends SimpleEntitySQL implements Sequence<OrganismSQL
 			PreparedStatement stmt = null;
 			ResultSet rs = null;
 			try {
-				stmt = getConnection().prepareStatement("SELECT seq from Biosequence WHERE biosequence_id=?");
+				stmt = getConnection().prepareStatement("SELECT seq FROM Biosequence WHERE biosequence_id=?");
 				stmt.setInt(1, id);
 				rs = stmt.executeQuery();
 				if (rs.next()) {
@@ -144,7 +144,7 @@ public class SequenceSQL extends SimpleEntitySQL implements Sequence<OrganismSQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = getConnection().prepareStatement("SELECT length from Biosequence WHERE biosequence_id=?");
+			stmt = getConnection().prepareStatement("SELECT length FROM Biosequence WHERE biosequence_id=?");
 			stmt.setInt(1, getId());
 			rs = stmt.executeQuery();
 			if (!rs.next()) {
@@ -196,7 +196,7 @@ public class SequenceSQL extends SimpleEntitySQL implements Sequence<OrganismSQL
 		String query = "";
 		try {
 			stmt = getConnection().prepareStatement(
-				"INSERT INTO subsequence (sequence_id, start_position, end_position) VALUES (?,?,?)",
+				"INSERT INTO Subsequence (sequence_id, start_position, end_position) VALUES (?,?,?)",
 				Statement.RETURN_GENERATED_KEYS);
 			stmt.setInt(1, getId());
 			stmt.setInt(2, start);
@@ -272,7 +272,7 @@ public class SequenceSQL extends SimpleEntitySQL implements Sequence<OrganismSQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = getConnection().prepareStatement("SELECT subsequence_id from subsequence where sequence_id=?");
+			stmt = getConnection().prepareStatement("SELECT subsequence_id FROM Subsequence where sequence_id=?");
 			stmt.setInt(1, getId());
 			rs = stmt.executeQuery();
 			ArrayList<SubsequenceSQL> sseqs = new ArrayList<SubsequenceSQL>();
@@ -311,7 +311,7 @@ public class SequenceSQL extends SimpleEntitySQL implements Sequence<OrganismSQL
 		ResultSet rs = null;
 		try {
 			stmt = getConnection().prepareStatement(
-				"SELECT subsequence_id from subsequence where sequence_id=? AND start_position=? AND end_position=?");
+				"SELECT subsequence_id FROM Subsequence where sequence_id=? AND start_position=? AND end_position=?");
 			stmt.setInt(1, getId());
 			stmt.setInt(2, start);
 			stmt.setInt(3, end);
@@ -371,7 +371,7 @@ public class SequenceSQL extends SimpleEntitySQL implements Sequence<OrganismSQL
 		ResultSet rs = null;
 		try {
 			stmt = getConnection().prepareStatement(
-				"SELECT subsequence_id from subsequence where sequence_id=? AND start_position=?");
+				"SELECT subsequence_id FROM Subsequence where sequence_id=? AND start_position=?");
 			stmt.setInt(1, getId());
 			stmt.setInt(2, start);
 			rs = stmt.executeQuery();

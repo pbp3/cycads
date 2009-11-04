@@ -30,7 +30,7 @@ public class TypeSQL extends SimpleEntitySQL implements Type
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT name, description from Term_type WHERE type_id=?");
+			stmt = con.prepareStatement("SELECT name, description FROM Term_type WHERE type_id=?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
@@ -67,7 +67,7 @@ public class TypeSQL extends SimpleEntitySQL implements Type
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT type_id, description from Term_type WHERE name=?");
+			stmt = con.prepareStatement("SELECT type_id, description FROM Term_type WHERE name=?");
 			stmt.setString(1, name);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
@@ -111,7 +111,7 @@ public class TypeSQL extends SimpleEntitySQL implements Type
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT type_id from Term_type WHERE name=?");
+			stmt = con.prepareStatement("SELECT type_id FROM Term_type WHERE name=?");
 			stmt.setString(1, name);
 			rs = stmt.executeQuery();
 			int id = INVALID_ID;

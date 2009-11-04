@@ -11,7 +11,6 @@ import java.util.Collection;
 import org.cycads.entities.SQL.SimpleEntitySQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.reaction.Reaction;
-import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.ECSQL;
 
 public class ReactionSQL extends SimpleEntitySQL implements Reaction<CompoundSQL, ECSQL, CompoundReactionSQL>
@@ -24,7 +23,7 @@ public class ReactionSQL extends SimpleEntitySQL implements Reaction<CompoundSQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT ec,reversible from reaction WHERE reaction_id=?");
+			stmt = con.prepareStatement("SELECT ec,reversible FROM Reaction WHERE reaction_id=?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
@@ -62,72 +61,72 @@ public class ReactionSQL extends SimpleEntitySQL implements Reaction<CompoundSQL
 		this.id = createNewReaction(ec, reversible, con);
 	}
 
-	public ReactionSQL(ECSQL ec, boolean reversible, String dbName, String accession, Connection con)
-			throws SQLException {
-		super(0, con);
-		this.reversible = reversible;
-		this.ec = ec;
-		ArrayList<ReactionSQL> reactions = getReactions(dbName, accession, con);
-		if (reactions.size() > 0) {
-			for (ReactionSQL reaction : reactions) {
-				if (reaction.isReversible() == reversible && reaction.getEC().equals(ec)) {
-					this.id = reaction.getId();
-					return;
-				}
-			}
-			throw new SQLException("Reaction already exists with different fields.");
-		}
-		this.id = createNewReaction(ec, reversible, con);
-		addSynonym(dbName, accession);
-	}
+	//	public ReactionSQL(ECSQL ec, boolean reversible, String dbName, String accession, Connection con)
+	//			throws SQLException {
+	//		super(0, con);
+	//		this.reversible = reversible;
+	//		this.ec = ec;
+	//		ArrayList<ReactionSQL> reactions = getReactions(dbName, accession, con);
+	//		if (reactions.size() > 0) {
+	//			for (ReactionSQL reaction : reactions) {
+	//				if (reaction.isReversible() == reversible && reaction.getEC().equals(ec)) {
+	//					this.id = reaction.getId();
+	//					return;
+	//				}
+	//			}
+	//			throw new SQLException("Reaction already exists with different fields.");
+	//		}
+	//		this.id = createNewReaction(ec, reversible, con);
+	//		addSynonym(dbName, accession);
+	//	}
 
-	public static ArrayList<ReactionSQL> getReactions(String dbName, String accession, Connection con)
-			throws SQLException {
-		return getReactions(DbxrefSQL.getDbxref(dbName, accession, con), con);
-	}
-
-	public static ArrayList<ReactionSQL> getReactions(DbxrefSQL synonym, Connection con) {
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		ArrayList<ReactionSQL> result = new ArrayList<ReactionSQL>();
-		try {
-			stmt = con.prepareStatement("SELECT reaction_id from reaction_synonym WHERE dbxref_id=?");
-			stmt.setInt(1, synonym.getId());
-			rs = stmt.executeQuery();
-			while (rs.next()) {
-				result.add(new ReactionSQL(rs.getInt("reaction_id"), con));
-			}
-			return result;
-		}
-		catch (SQLException e) {
-			e.printStackTrace();
-			throw new RuntimeException(e);
-		}
-		finally {
-			if (rs != null) {
-				try {
-					rs.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-			if (stmt != null) {
-				try {
-					stmt.close();
-				}
-				catch (SQLException ex) {
-					// ignore
-				}
-			}
-		}
-	}
-
+	//	public static ArrayList<ReactionSQL> getReactions(String dbName, String accession, Connection con)
+	//			throws SQLException {
+	//		return getReactions(DbxrefSQL.getDbxref(dbName, accession, con), con);
+	//	}
+	//
+	//	public static ArrayList<ReactionSQL> getReactions(DbxrefSQL synonym, Connection con) {
+	//		PreparedStatement stmt = null;
+	//		ResultSet rs = null;
+	//		ArrayList<ReactionSQL> result = new ArrayList<ReactionSQL>();
+	//		try {
+	//			stmt = con.prepareStatement("SELECT reaction_id FROM Reaction_synonym WHERE dbxref_id=?");
+	//			stmt.setInt(1, synonym.getId());
+	//			rs = stmt.executeQuery();
+	//			while (rs.next()) {
+	//				result.add(new ReactionSQL(rs.getInt("reaction_id"), con));
+	//			}
+	//			return result;
+	//		}
+	//		catch (SQLException e) {
+	//			e.printStackTrace();
+	//			throw new RuntimeException(e);
+	//		}
+	//		finally {
+	//			if (rs != null) {
+	//				try {
+	//					rs.close();
+	//				}
+	//				catch (SQLException ex) {
+	//					// ignore
+	//				}
+	//			}
+	//			if (stmt != null) {
+	//				try {
+	//					stmt.close();
+	//				}
+	//				catch (SQLException ex) {
+	//					// ignore
+	//				}
+	//			}
+	//		}
+	//	}
+	//
 	private int createNewReaction(ECSQL ec, boolean reversible, Connection con) throws SQLException {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("INSERT INTO reaction (ec, reversible) VALUES (?, ?)",
+			stmt = con.prepareStatement("INSERT INTO Reaction (ec, reversible) VALUES (?, ?)",
 				Statement.RETURN_GENERATED_KEYS);
 			stmt.setInt(1, ec.getId());
 			stmt.setBoolean(2, reversible);
@@ -210,7 +209,7 @@ public class ReactionSQL extends SimpleEntitySQL implements Reaction<CompoundSQL
 		PreparedStatement stmt = null;
 		try {
 			stmt = getConnection().prepareStatement(
-				"INSERT INTO reaction_has_compound (reaction_id, compound_id, side_a, quantity) VALUES (?,?,?,?)");
+				"INSERT INTO Reaction_has_compound (reaction_id, compound_id, side_a, quantity) VALUES (?,?,?,?)");
 			stmt.setInt(1, getId());
 			stmt.setInt(2, compound.getId());
 			stmt.setBoolean(3, sideA);
@@ -240,7 +239,7 @@ public class ReactionSQL extends SimpleEntitySQL implements Reaction<CompoundSQL
 		ResultSet rs = null;
 		try {
 			stmt = getConnection().prepareStatement(
-				"SELECT compound_id, side_a, quantity from reaction_has_compound WHERE reaction_id=?");
+				"SELECT compound_id, side_a, quantity FROM Reaction_has_compound WHERE reaction_id=?");
 			stmt.setInt(1, getId());
 			rs = stmt.executeQuery();
 			while (rs.next()) {

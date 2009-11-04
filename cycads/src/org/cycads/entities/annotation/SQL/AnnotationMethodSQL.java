@@ -45,7 +45,7 @@ public class AnnotationMethodSQL extends TypeSQL implements AnnotationMethod
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT * from Method WHERE method_id=?");
+			stmt = con.prepareStatement("SELECT * FROM Method WHERE method_id=?");
 			stmt.setInt(1, type.getId());
 			rs = stmt.executeQuery();
 			return rs.next();

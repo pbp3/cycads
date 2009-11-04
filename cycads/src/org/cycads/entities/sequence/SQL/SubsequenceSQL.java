@@ -29,7 +29,7 @@ public class SubsequenceSQL extends SimpleEntitySQL implements Subsequence<Seque
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT sequence_id, start_position, end_position from subsequence WHERE subsequence_id=?");
+			stmt = con.prepareStatement("SELECT sequence_id, start_position, end_position FROM Subsequence WHERE subsequence_id=?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
@@ -154,7 +154,7 @@ public class SubsequenceSQL extends SimpleEntitySQL implements Subsequence<Seque
 			ResultSet rs = null;
 			try {
 				stmt = getConnection().prepareStatement(
-					"SELECT start_position, end_position from Intron where subsequence_id=?");
+					"SELECT start_position, end_position FROM Intron where subsequence_id=?");
 				stmt.setInt(1, id);
 				rs = stmt.executeQuery();
 				introns = new TreeSet<Intron>();
