@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.MissingResourceException;
 import java.util.Properties;
@@ -117,6 +118,9 @@ public class Config
 		ArrayList<String> values = new ArrayList<String>(4);
 		int i = 0;
 		String str;
+		if ((str = getStringOptional(tag)) != null) {
+			values.add(str);
+		}
 		while ((str = getStringOptional(tag + "." + i)) != null) {
 			values.add(str);
 			i++;
@@ -230,7 +234,7 @@ public class Config
 		return getStringOptional("cdsToKO.loader.cdsDBName");
 	}
 
-	// subseqAnnotationLoader
+	// subseqDbxrefAnnotationLoader
 
 	public static String subseqDbxrefAnnotationLoaderFileName() {
 		return getStringOptional("subseqDbxrefAnnotationLoader.fileName");
@@ -266,6 +270,144 @@ public class Config
 
 	public static int subseqDbxrefAnnotationLoaderMethodColumnIndex() {
 		return getInt("subseqDbxrefAnnotationLoader.methodColumnIndex");
+	}
+
+	public static Collection<String> subseqDbxrefAnnotationLoaderAssocTypeNames() {
+		Collection<String> ret = getStrings("subseqDbxrefAnnotationLoader.assocTypeName");
+		ArrayList<String> empty = new ArrayList<String>(1);
+		empty.add("");
+		ret.removeAll(empty);
+		return ret;
+	}
+
+	public static String subseqDbxrefAnnotationLoaderSourcesDelimiter() {
+		return getStringMandatory("subseqDbxrefAnnotationLoader.file.sourcesDelimiter");
+	}
+
+	public static String subseqDbxrefAnnotationLoaderTargetsDelimiter() {
+		return getStringMandatory("subseqDbxrefAnnotationLoader.file.targetsDelimiter");
+	}
+
+	public static String subseqDbxrefAnnotationLoaderSourceColumnDelimiter() {
+		return getStringMandatory("subseqDbxrefAnnotationLoader.file.sourceColumnDelimiter");
+	}
+
+	public static String subseqDbxrefAnnotationLoaderTargetColumnDelimiter() {
+		return getStringMandatory("subseqDbxrefAnnotationLoader.file.targetColumnDelimiter");
+	}
+
+	public static String subseqDbxrefAnnotationLoaderScoreDelimiter() {
+		return getStringMandatory("subseqDbxrefAnnotationLoader.file.scoreDelimiter");
+	}
+
+	public static String subseqDbxrefAnnotationLoaderMethodDelimiter() {
+		return getStringMandatory("subseqDbxrefAnnotationLoader.file.methodDelimiter");
+	}
+
+	public static String subseqDbxrefAnnotationLoaderLineComment() {
+		return getStringMandatory("subseqDbxrefAnnotationLoader.file.lineComment");
+	}
+
+	public static String subseqDbxrefAnnotationLoaderColumnSeparator() {
+		return getStringMandatory("subseqDbxrefAnnotationLoader.file.columnSeparator");
+	}
+
+	public static String subseqDbxrefAnnotationLoaderSourcesSeparator() {
+		return getStringMandatory("subseqDbxrefAnnotationLoader.file.sourcesSeparator");
+	}
+
+	public static String subseqDbxrefAnnotationLoaderTargetsSeparator() {
+		return getStringMandatory("subseqDbxrefAnnotationLoader.file.targetsSeparator");
+	}
+
+	public static Pattern subseqDbxrefAnnotationLoaderRemoveLineRegex() {
+		return Pattern.compile(getStringMandatory("subseqDbxrefAnnotationLoader.file.removeLineRegex"));
+	}
+
+	//dbxrefDbxrefAnnotationLoader
+
+	public static String dbxrefDbxrefAnnotationLoaderFileName() {
+		return getStringOptional("dbxrefDbxrefAnnotationLoader.fileName");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderMethodName() {
+		return getStringOptional("dbxrefDbxrefAnnotationLoader.methodName");
+	}
+
+	public static int dbxrefDbxrefAnnotationLoaderSourceColumnIndex() {
+		return getInt("dbxrefDbxrefAnnotationLoader.sourceColumnIndex");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderSourceDBName() {
+		return getStringOptional("dbxrefDbxrefAnnotationLoader.sourceDBName");
+	}
+
+	public static int dbxrefDbxrefAnnotationLoaderTargetColumnIndex() {
+		return getInt("dbxrefDbxrefAnnotationLoader.targetColumnIndex");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderTargetDBName() {
+		return getStringOptional("dbxrefDbxrefAnnotationLoader.targetDBName");
+	}
+
+	public static int dbxrefDbxrefAnnotationLoaderScoreColumnIndex() {
+		return getInt("dbxrefDbxrefAnnotationLoader.scoreColumnIndex");
+	}
+
+	public static int dbxrefDbxrefAnnotationLoaderMethodColumnIndex() {
+		return getInt("dbxrefDbxrefAnnotationLoader.methodColumnIndex");
+	}
+
+	public static Collection<String> dbxrefDbxrefAnnotationLoaderAssocTypeNames() {
+		Collection<String> ret = getStrings("dbxrefDbxrefAnnotationLoader.assocTypeName");
+		ArrayList<String> empty = new ArrayList<String>(1);
+		empty.add("");
+		ret.removeAll(empty);
+		return ret;
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderSourcesDelimiter() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.file.sourcesDelimiter");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderTargetsDelimiter() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.file.targetsDelimiter");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderSourceColumnDelimiter() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.file.sourceColumnDelimiter");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderTargetColumnDelimiter() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.file.targetColumnDelimiter");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderScoreDelimiter() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.file.scoreDelimiter");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderMethodDelimiter() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.file.methodDelimiter");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderLineComment() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.file.lineComment");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderColumnSeparator() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.file.columnSeparator");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderSourcesSeparator() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.file.sourcesSeparator");
+	}
+
+	public static String dbxrefDbxrefAnnotationLoaderTargetsSeparator() {
+		return getStringMandatory("dbxrefDbxrefAnnotationLoader.file.targetsSeparator");
+	}
+
+	public static Pattern dbxrefDbxrefAnnotationLoaderRemoveLineRegex() {
+		return Pattern.compile(getStringMandatory("dbxrefDbxrefAnnotationLoader.file.removeLineRegex"));
 	}
 
 	// synonymLoader
@@ -350,72 +492,6 @@ public class Config
 
 	public static String ecCDSFileGeneratorSeqVersion() {
 		return getStringMandatory("ecCDS.file.seqVersion");
-	}
-
-	//dbxrefDbxrefAnnotationLoader
-
-	public static String dbxrefDbxrefAnnotationLoaderFileName() {
-		return getStringOptional("dbxrefDbxrefAnnotationLoader.fileName");
-	}
-
-	public static int dbxrefDbxrefAnnotationLoaderOrganismNumber() {
-		return getInt("dbxrefDbxrefAnnotationLoader.organismNumber");
-	}
-
-	public static String dbxrefDbxrefAnnotationLoaderMethodName() {
-		return getStringOptional("dbxrefDbxrefAnnotationLoader.methodName");
-	}
-
-	public static int dbxrefDbxrefAnnotationLoaderSourceColumnIndex() {
-		return getInt("dbxrefDbxrefAnnotationLoader.sourceColumnIndex");
-	}
-
-	public static String dbxrefDbxrefAnnotationLoaderSourceDBName() {
-		return getStringOptional("dbxrefDbxrefAnnotationLoader.sourceDBName");
-	}
-
-	public static int dbxrefDbxrefAnnotationLoaderTargetColumnIndex() {
-		return getInt("dbxrefDbxrefAnnotationLoader.targetColumnIndex");
-	}
-
-	public static String dbxrefDbxrefAnnotationLoaderTargetDBName() {
-		return getStringOptional("dbxrefDbxrefAnnotationLoader.targetDBName");
-	}
-
-	public static int dbxrefDbxrefAnnotationLoaderScoreColumnIndex() {
-		return getInt("dbxrefDbxrefAnnotationLoader.scoreColumnIndex");
-	}
-
-	public static int dbxrefDbxrefAnnotationLoaderMethodColumnIndex() {
-		return getInt("dbxrefDbxrefAnnotationLoader.methodColumnIndex");
-	}
-
-	public static String dbxrefDbxrefAnnotationLoaderSourceDelimiter() {
-		return getStringMandatory("dbxrefDbxrefAnnotationLoader.sourceDelimiter");
-	}
-
-	public static String dbxrefDbxrefAnnotationLoaderTargetDelimiter() {
-		return getStringMandatory("dbxrefDbxrefAnnotationLoader.targetDelimiter");
-	}
-
-	public static String dbxrefDbxrefAnnotationLoaderLineComment() {
-		return getStringMandatory("dbxrefDbxrefAnnotationLoader.lineComment");
-	}
-
-	public static String dbxrefDbxrefAnnotationLoaderColumnSeparator() {
-		return getStringMandatory("dbxrefDbxrefAnnotationLoader.columnSeparator");
-	}
-
-	public static String dbxrefDbxrefAnnotationLoaderSourceDbxrefsSeparator() {
-		return getStringMandatory("dbxrefDbxrefAnnotationLoader.sourceDbxrefsSeparator");
-	}
-
-	public static String dbxrefDbxrefAnnotationLoaderTargetDbxrefsSeparator() {
-		return getStringMandatory("dbxrefDbxrefAnnotationLoader.targetDbxrefsSeparator");
-	}
-
-	public static Pattern dbxrefDbxrefAnnotationLoaderLineIgnorePattern() {
-		return Pattern.compile(getStringMandatory("dbxrefDbxrefAnnotationLoader.ignoreLine.regex"));
 	}
 
 }

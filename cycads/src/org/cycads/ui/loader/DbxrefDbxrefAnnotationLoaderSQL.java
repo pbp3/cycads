@@ -8,17 +8,32 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.regex.Pattern;
 
+import org.cycads.entities.annotation.Annotation;
+import org.cycads.entities.annotation.AnnotationMethod;
+import org.cycads.entities.factory.EntityAnnotationFactory;
 import org.cycads.entities.factory.EntityFactorySQL;
+import org.cycads.entities.factory.EntityMethodFactory;
+import org.cycads.entities.note.Note;
+import org.cycads.entities.note.Type;
+import org.cycads.entities.synonym.Dbxref;
 import org.cycads.general.Config;
 import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
-import org.cycads.parser.association.TypeNameTransformer;
-import org.cycads.parser.association.LineRecordFileReader;
 import org.cycads.parser.association.InputNameOverwrite;
-import org.cycads.parser.association.factory.ObjectFactory;
+import org.cycads.parser.association.LineRecordFileReader;
+import org.cycads.parser.association.TypeNameTransformer;
 import org.cycads.parser.association.factory.AnnotationsRecordFactory;
+import org.cycads.parser.association.factory.ConstantFactory;
+import org.cycads.parser.association.factory.ObjectFactory;
+import org.cycads.parser.association.factory.SimpleObjectFactory;
+import org.cycads.parser.association.factory.SimpleObjectsFactory;
 import org.cycads.parser.association.factory.independent.IndependentDbxrefFactory;
+import org.cycads.parser.association.factory.independent.IndependentMethodFactory;
+import org.cycads.parser.association.factory.independent.IndependentStringFactory;
 import org.cycads.ui.Tools;
 import org.cycads.ui.progress.Progress;
 import org.cycads.ui.progress.ProgressCount;
@@ -85,6 +100,28 @@ public class DbxrefDbxrefAnnotationLoaderSQL
 		Integer methodColumnIndex = Tools.getIntegerOptional(args, 7,
 			Config.dbxrefDbxrefAnnotationLoaderMethodColumnIndex());
 
+		ObjectFactory<Collection<Annotation>> parentsFactory = null;
+		ObjectFactory<Collection<Dbxref>> synonymsFactory = null;
+		ObjectFactory<Collection<Note>> notesFactory = null;
+		String scoreDelimiter = Config.dbxrefDbxrefAnnotationLoaderScoreDelimiter();
+		ObjectFactory<String> scoreFactory = new SimpleObjectFactory<String>(scoreColumnIndex, scoreDelimiter,
+			new IndependentStringFactory());
+
+		String methodDelimiter = Config.dbxrefDbxrefAnnotationLoaderMethodDelimiter();
+		ObjectFactory<AnnotationMethod> methodFactory = new SimpleObjectFactory<AnnotationMethod>(methodColumnIndex,
+			methodDelimiter, new IndependentMethodFactory<AnnotationMethod>((EntityMethodFactory) factory));
+
+		Collection<String> associationTypeNames = Config.dbxrefDbxrefAnnotationLoaderAssocTypeNames();
+		if (associationTypeNames == null || associationTypeNames.size() == 0) {
+			associationTypeNames = new ArrayList<String>(1);
+			associationTypeNames.add(ParametersDefault.getFunctionalAnnotationTypeName());
+		}
+		Collection<Type> associationTypes = new ArrayList<Type>(associationTypeNames.size());
+		for (String associationTypeName : associationTypeNames) {
+			associationTypes.add(factory.getType(associationTypeName));
+		}
+		ObjectFactory<Collection<Type>> typesFactory = new ConstantFactory<Collection<Type>>(associationTypes);
+
 		TypeNameTransformer dbNameSource = new InputNameOverwrite(dbxrefSourceDBName);
 		TypeNameTransformer dbNameTarget = new InputNameOverwrite(dbxrefTargetDBName);
 
@@ -94,26 +131,37 @@ public class DbxrefDbxrefAnnotationLoaderSQL
 		IndependentDbxrefFactory targetFactory = new IndependentDbxrefFactory(
 			ParametersDefault.getDbxrefToStringSeparator(), dbNameTarget, factory);
 
-		DbxrefsFactory sourcesFactory = new DbxrefsFactory(Config.dbxrefDbxrefAnnotationLoaderSourceDbxrefsSeparator(),
-			Config.dbxrefDbxrefAnnotationLoaderSourceDelimiter(), sourceFactory);
+		String columnDelimiter = Config.dbxrefDbxrefAnnotationLoaderSourceColumnDelimiter();
+		String objectsDelimiter = Config.dbxrefDbxrefAnnotationLoaderSourcesDelimiter();
+		String objectsSeparator = Config.dbxrefDbxrefAnnotationLoaderSourcesSeparator();
 
-		DbxrefsFactory targetsFactory = new DbxrefsFactory(Config.dbxrefDbxrefAnnotationLoaderTargetDbxrefsSeparator(),
-			Config.dbxrefDbxrefAnnotationLoaderTargetDelimiter(), targetFactory);
+		ObjectFactory<Collection<Dbxref>> sourcesFactory = new SimpleObjectsFactory<Dbxref>(dbxrefSourceColumnIndex,
+			columnDelimiter, objectsSeparator, objectsDelimiter, sourceFactory);
 
-		ObjectFactory<SimpleAnnotation<DbxrefsField, DbxrefsField>> recordFactory = new AnnotationsRecordFactory<DbxrefsField, DbxrefsField>(
-			dbxrefSourceColumnIndex, sourcesFactory, dbxrefTargetColumnIndex, targetsFactory, scoreColumnIndex,
-			methodColumnIndex, factory);
+		columnDelimiter = Config.dbxrefDbxrefAnnotationLoaderTargetColumnDelimiter();
+		objectsDelimiter = Config.dbxrefDbxrefAnnotationLoaderTargetsDelimiter();
+		objectsSeparator = Config.dbxrefDbxrefAnnotationLoaderTargetsSeparator();
 
-		LineRecordFileReader<SimpleAnnotation<DbxrefsField, DbxrefsField>> fileReader = new LineRecordFileReader<SimpleAnnotation<DbxrefsField, DbxrefsField>>(
-			br, Config.dbxrefDbxrefAnnotationLoaderColumnSeparator(), Config.dbxrefDbxrefAnnotationLoaderLineComment(),
-			Config.dbxrefDbxrefAnnotationLoaderLineIgnorePattern(), recordFactory);
+		ObjectFactory<Collection<Dbxref>> targetsFactory = new SimpleObjectsFactory<Dbxref>(dbxrefTargetColumnIndex,
+			columnDelimiter, objectsSeparator, objectsDelimiter, targetFactory);
+
+		String columnSeparator = Config.dbxrefDbxrefAnnotationLoaderColumnSeparator();
+		String lineComment = Config.dbxrefDbxrefAnnotationLoaderLineComment();
+		Pattern removeLinePattern = Config.dbxrefDbxrefAnnotationLoaderRemoveLineRegex();
+
+		ObjectFactory<Collection<Annotation<Dbxref, Dbxref>>> objectFactory = new AnnotationsRecordFactory<Dbxref, Dbxref>(
+			(EntityAnnotationFactory) factory, sourcesFactory, targetsFactory, scoreFactory, methodFactory,
+			typesFactory, notesFactory, synonymsFactory, parentsFactory);
+		LineRecordFileReader<Collection<Annotation<Dbxref, Dbxref>>> recordFileReader = new LineRecordFileReader<Collection<Annotation<Dbxref, Dbxref>>>(
+			br, columnSeparator, lineComment, removeLinePattern, objectFactory);
+
 		Progress progress = new ProgressPrintInterval(System.out,
 			Messages.dbxrefDbxrefAnnotationLoaderStepShowInterval());
 		Progress errorCount = new ProgressCount();
 		progress.init(Messages.dbxrefDbxrefAnnotationLoaderInitMsg(file.getPath()));
 
 		try {
-			Loaders.loadDbxrefsDbxrefsAnnotation(fileReader, progress, errorCount);
+			recordFileReader.readAll(progress, errorCount);
 		}
 		catch (IOException e) {
 			e.printStackTrace();

@@ -13,16 +13,16 @@ import org.cycads.parser.association.factory.independent.IndependentObjectFactor
 public class SimpleObjectsFactory<R> implements ObjectFactory<Collection<R>>
 {
 
-	int							index;
-	String						delimiter;
-	String						objectsSeparator;
-	String						objectDelimiter;
-	IndependentObjectFactory<R>	factory;
+	private int							index;
+	private String						columnDelimiter;
+	private String						objectsSeparator;
+	private String						objectDelimiter;
+	private IndependentObjectFactory<R>	factory;
 
-	public SimpleObjectsFactory(int index, String delimiter, String objectsSeparator, String objectDelimiter,
+	public SimpleObjectsFactory(int index, String columnDelimiter, String objectsSeparator, String objectDelimiter,
 			IndependentObjectFactory<R> factory) {
 		this.index = index;
-		this.delimiter = delimiter;
+		this.columnDelimiter = columnDelimiter;
 		this.objectsSeparator = objectsSeparator;
 		this.objectDelimiter = objectDelimiter;
 		this.factory = factory;
@@ -34,7 +34,7 @@ public class SimpleObjectsFactory<R> implements ObjectFactory<Collection<R>>
 		if (index < 0 || index >= values.length) {
 			return null;
 		}
-		String value = Tools.cleanTextDelimiter(values[index], delimiter);
+		String value = Tools.cleanTextDelimiter(values[index], columnDelimiter);
 		if (objectsSeparator == null || objectsSeparator.length() == 0) {
 			ret = new ArrayList<R>(1);
 			ret.add(factory.create(value));
