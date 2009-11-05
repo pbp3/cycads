@@ -19,14 +19,14 @@ import org.cycads.parser.association.Tools;
 
 public class ExistedAnnotationsFactoryBySynonym implements ObjectFactory<Collection<Annotation>>
 {
-	AnnotationFinder					annotationFinder;
-	ObjectFactory<Collection<Dbxref>>	dbxrefsFactory;
-	boolean								createFake;
+	private AnnotationFinder					annotationFinder;
+	private ObjectFactory<Collection<Dbxref>>	dbxrefsFactory;
+	boolean										createFake;
 	//the attributes below will be used in the fake creation
-	private Organism					organism;
-	private EntityMethodFactory			methodFactory;
-	private EntityFeatureFactory		featureFactory;
-	private EntityTypeFactory			typeFactory;
+	private Organism							organism;
+	private EntityMethodFactory					methodFactory;
+	private EntityFeatureFactory				featureFactory;
+	private EntityTypeFactory					typeFactory;
 
 	public ExistedAnnotationsFactoryBySynonym(AnnotationFinder annotationFinder,
 			ObjectFactory<Collection<Dbxref>> dbxrefsFactory) {

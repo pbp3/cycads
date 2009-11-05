@@ -30,7 +30,7 @@ import org.cycads.ui.progress.Progress;
 import org.cycads.ui.progress.ProgressCount;
 import org.cycads.ui.progress.ProgressPrintInterval;
 
-public class EntitySynonymLoaderSQL
+public class SynonymLoaderSQL
 {
 	public static void main(String[] args) {
 		EntityFactorySQL factory = new EntityFactorySQL();

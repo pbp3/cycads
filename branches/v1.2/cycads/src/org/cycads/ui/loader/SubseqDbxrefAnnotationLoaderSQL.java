@@ -78,25 +78,25 @@ public class SubseqDbxrefAnnotationLoaderSQL
 		factory.setMethodDefault(factory.getAnnotationMethod(methodName));
 
 		Integer annotColumnIndex = Tools.getInteger(args, 3, Config.subseqDbxrefAnnotationLoaderAnnotColumnIndex(),
-			Messages.subseqDbxrefAnnotationLoaderChooseAnnotColumnIndex());
+			Messages.subseqDbxrefAnnotationLoaderChooseSourceColumnIndex());
 		if (annotColumnIndex == null) {
 			return;
 		}
 
 		String annotDBName = Tools.getString(args, 4, Config.subseqDbxrefAnnotationLoaderAnnotDBName(),
-			Messages.subseqDbxrefAnnotationLoaderChooseAnnotDBName());
+			Messages.subseqDbxrefAnnotationLoaderChooseSourceDBName());
 		if (annotDBName == null) {
 			return;
 		}
 
 		Integer dbxrefColumnIndex = Tools.getInteger(args, 5, Config.subseqDbxrefAnnotationLoaderDbxrefColumnIndex(),
-			Messages.subseqDbxrefAnnotationLoaderChooseDbxrefColumnIndex());
+			Messages.subseqDbxrefAnnotationLoaderChooseTargetColumnIndex());
 		if (dbxrefColumnIndex == null) {
 			return;
 		}
 
 		String dbxrefDBName = Tools.getString(args, 6, Config.subseqDbxrefAnnotationLoaderDbxrefDBName(),
-			Messages.subseqDbxrefAnnotationLoaderChooseDbxrefDBName());
+			Messages.subseqDbxrefAnnotationLoaderChooseTargetDBName());
 		if (dbxrefDBName == null) {
 			return;
 		}
