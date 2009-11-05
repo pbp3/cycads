@@ -260,30 +260,4 @@ public class ParametersDefault
 		return getStringMandatory("annot.fake.annotationFeature");
 	}
 
-	//annotatToDbxrefParser
-
-	public static String subseqDbxrefAnnotationLoaderLineComment() {
-		return getStringMandatory("annotToDbxref.file.comment");
-	}
-
-	public static String subseqDbxrefAnnotationLoaderColumnSeparator() {
-		return getStringMandatory("annotToDbxref.file.separator");
-	}
-
-	public static String subseqDbxrefAnnotationLoaderTextDelimiter() {
-		return getStringMandatory("annotToDbxref.file.textDelimiter");
-	}
-
-	public static String subseqDbxrefAnnotationLoaderDbxrefsSeparator() {
-		return getStringMandatory("annotToDbxref.file.dbxrefsSeparator");
-	}
-
-	public static String subseqDbxrefAnnotationLoaderDbxrefsAnnotSeparator() {
-		return getStringMandatory("annotToDbxref.file.annotsSeparator");
-	}
-
-	public static String subseqDbxrefAnnotationLoaderRemoveLineRegex() {
-		return getStringMandatory("annotToDbxref.file.removeLineRegex");
-	}
-
 }
