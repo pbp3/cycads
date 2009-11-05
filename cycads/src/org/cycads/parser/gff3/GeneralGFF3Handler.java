@@ -264,11 +264,14 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 
 	private ArrayList<Dbxref> getParentDbxrefs(Note note, String type, String source) {
 		ArrayList<Dbxref> ret = new ArrayList<Dbxref>(1);
-		ArrayList<Pattern> patterns = GFF3FileConfig.getParentAccessionTagPatterns(type, source);
-		ArrayList<String> dbNames = GFF3FileConfig.getParentDbNames(type, source);
-		for (int i = 0; i < patterns.size(); i++) {
-			if (patterns.get(i).matcher(note.getType().getName()).matches()) {
-				ret.add(factory.getDbxref(dbNames.get(i), note.getValue()));
+		String accession = note.getValue();
+		if (accession != null && accession.length() > 0) {
+			ArrayList<Pattern> patterns = GFF3FileConfig.getParentAccessionTagPatterns(type, source);
+			ArrayList<String> dbNames = GFF3FileConfig.getParentDbNames(type, source);
+			for (int i = 0; i < patterns.size(); i++) {
+				if (patterns.get(i).matcher(note.getType().getName()).matches()) {
+					ret.add(factory.getDbxref(dbNames.get(i), note.getValue()));
+				}
 			}
 		}
 		return ret;
