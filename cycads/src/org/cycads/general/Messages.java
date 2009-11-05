@@ -225,37 +225,37 @@ public class Messages
 		return getString("pfFile.extract.chooseSequenceLocation");
 	}
 
-	// CDS to KO loader
-
-	public static String cdsToKOLoaderChooseFile() {
-		return getString("cdsToKOLoader.chooseFile");
-	}
-
-	public static String cdsToKOLoaderChooseOrganismNumber() {
-		return getString("cdsToKOLoader.chooseOrganismNumber");
-	}
-
-	public static String cdsToKOLoaderChooseCDSDBName() {
-		return getString("cdsToKOLoader.chooseCDSDBName");
-	}
-
-	public static String cdsToKOLoaderChooseMethodName() {
-		return getString("cdsToKOLoader.chooseMethodName");
-	}
-
-	public static int cdsToKOLoaderStepShowInterval() {
-		return getInt("cdsToKOLoader.stepShowInterval");
-	}
-
-	public static String cdsToKOLoaderInitMsg(String path) {
-		Object[] a = {path};
-		return MessageFormat.format(getStringMandatory("cdsToKOLoader.init"), a);
-	}
-
-	public static String cdsToKOLoaderFinalMsg(int step, int errorCount) {
-		Object[] a = {step, errorCount};
-		return MessageFormat.format(getStringMandatory("cdsToKOLoader.final"), a);
-	}
+	//	// CDS to KO loader
+	//
+	//	public static String cdsToKOLoaderChooseFile() {
+	//		return getString("cdsToKOLoader.chooseFile");
+	//	}
+	//
+	//	public static String cdsToKOLoaderChooseOrganismNumber() {
+	//		return getString("cdsToKOLoader.chooseOrganismNumber");
+	//	}
+	//
+	//	public static String cdsToKOLoaderChooseCDSDBName() {
+	//		return getString("cdsToKOLoader.chooseCDSDBName");
+	//	}
+	//
+	//	public static String cdsToKOLoaderChooseMethodName() {
+	//		return getString("cdsToKOLoader.chooseMethodName");
+	//	}
+	//
+	//	public static int cdsToKOLoaderStepShowInterval() {
+	//		return getInt("cdsToKOLoader.stepShowInterval");
+	//	}
+	//
+	//	public static String cdsToKOLoaderInitMsg(String path) {
+	//		Object[] a = {path};
+	//		return MessageFormat.format(getStringMandatory("cdsToKOLoader.init"), a);
+	//	}
+	//
+	//	public static String cdsToKOLoaderFinalMsg(int step, int errorCount) {
+	//		Object[] a = {step, errorCount};
+	//		return MessageFormat.format(getStringMandatory("cdsToKOLoader.final"), a);
+	//	}
 
 	// gbkLoader
 
@@ -283,28 +283,20 @@ public class Messages
 
 	// synonymLoader
 
-	public static String synonymLoaderChooseFile() {
-		return getStringMandatory("synonymLoader.chooseFile");
+	public static String synonymLoaderChooseSourceColumnIndex() {
+		return getStringMandatory("synonymLoader.chooseSourceColumnIndex");
 	}
 
-	public static String synonymLoaderChooseOrganismNumber() {
-		return getStringMandatory("synonymLoader.chooseOrganismNumber");
+	public static String synonymLoaderChooseSourceDBName() {
+		return getStringMandatory("synonymLoader.chooseSourceDBName");
 	}
 
-	public static String synonymLoaderChooseAnnotColumnIndex() {
-		return getStringMandatory("synonymLoader.chooseAnnotColumnIndex");
+	public static String synonymLoaderChooseSynonymColumnIndex() {
+		return getStringMandatory("synonymLoader.chooseSynonymColumnIndex");
 	}
 
-	public static String synonymLoaderChooseAnnotDBName() {
-		return getStringMandatory("synonymLoader.chooseAnnotDBName");
-	}
-
-	public static String synonymLoaderChooseDbxrefColumnIndex() {
-		return getStringMandatory("synonymLoader.chooseDbxrefColumnIndex");
-	}
-
-	public static String synonymLoaderChooseDbxrefDBName() {
-		return getStringMandatory("synonymLoader.chooseDbxrefDBName");
+	public static String synonymLoaderChooseSynonymDBName() {
+		return getStringMandatory("synonymLoader.chooseSynonymDBName");
 	}
 
 	public static int synonymLoaderStepShowInterval() {
@@ -321,33 +313,65 @@ public class Messages
 		return MessageFormat.format(getStringMandatory("synonymLoader.final"), a);
 	}
 
-	//ecCDS file Generator
+	// dbxrefSynonymLoader
 
-	public static String ecCDSFileGeneratorChooseFile() {
-		return getString("ecCDSFile.extract.chooseFile");
+	public static String dbxrefSynonymLoaderChooseSourceColumnIndex() {
+		return getStringMandatory("dbxrefSynonymLoader.chooseSourceColumnIndex");
 	}
 
-	public static String ecCDSFileGeneratorChooseOrganismNumber() {
-		return getString("ecCDSFile.extract.chooseOrganismNumber");
+	public static String dbxrefSynonymLoaderChooseSourceDBName() {
+		return getStringMandatory("dbxrefSynonymLoader.chooseSourceDBName");
 	}
 
-	public static String ecCDSFileGeneratorChooseSeqVersion() {
-		return getString("ecCDSFile.extract.chooseSeqVersion");
+	public static String dbxrefSynonymLoaderChooseSynonymColumnIndex() {
+		return getStringMandatory("dbxrefSynonymLoader.chooseSynonymColumnIndex");
 	}
 
-	public static int ecCDSFileGeneratorStepShowInterval() {
-		return getInt("ecCDSFile.extract.stepShowInterval");
+	public static String dbxrefSynonymLoaderChooseSynonymDBName() {
+		return getStringMandatory("dbxrefSynonymLoader.chooseSynonymDBName");
 	}
 
-	public static String ecCDSFileGeneratorInitMsg(String path) {
+	public static int dbxrefSynonymLoaderStepShowInterval() {
+		return getInt("dbxrefSynonymLoader.stepShowInterval");
+	}
+
+	public static String dbxrefSynonymLoaderInitMsg(String path) {
 		Object[] a = {path};
-		return MessageFormat.format(getStringMandatory("ecCDSFile.extract.init"), a);
+		return MessageFormat.format(getStringMandatory("dbxrefSynonymLoader.init"), a);
 	}
 
-	public static String ecCDSFileGeneratorFinalMsg(int step) {
-		Object[] a = {step};
-		return MessageFormat.format(getStringMandatory("ecCDSFile.extract.final"), a);
+	public static String dbxrefSynonymLoaderFinalMsg(int step, int errorStep) {
+		Object[] a = {step, errorStep};
+		return MessageFormat.format(getStringMandatory("dbxrefSynonymLoader.final"), a);
 	}
+
+	//	//ecCDS file Generator
+	//
+	//	public static String ecCDSFileGeneratorChooseFile() {
+	//		return getString("ecCDSFile.extract.chooseFile");
+	//	}
+	//
+	//	public static String ecCDSFileGeneratorChooseOrganismNumber() {
+	//		return getString("ecCDSFile.extract.chooseOrganismNumber");
+	//	}
+	//
+	//	public static String ecCDSFileGeneratorChooseSeqVersion() {
+	//		return getString("ecCDSFile.extract.chooseSeqVersion");
+	//	}
+	//
+	//	public static int ecCDSFileGeneratorStepShowInterval() {
+	//		return getInt("ecCDSFile.extract.stepShowInterval");
+	//	}
+	//
+	//	public static String ecCDSFileGeneratorInitMsg(String path) {
+	//		Object[] a = {path};
+	//		return MessageFormat.format(getStringMandatory("ecCDSFile.extract.init"), a);
+	//	}
+	//
+	//	public static String ecCDSFileGeneratorFinalMsg(int step) {
+	//		Object[] a = {step};
+	//		return MessageFormat.format(getStringMandatory("ecCDSFile.extract.final"), a);
+	//	}
 
 	// general messages
 	public static String generalChooseFileToLoad() {
@@ -404,38 +428,38 @@ public class Messages
 
 	// subseqAnnotationLoader
 
-	public static String subseqDbxrefAnnotationLoaderChooseAnnotColumnIndex() {
-		return getStringMandatory("subseqAnnotationLoader.chooseAnnotColumnIndex");
+	public static String subseqDbxrefAnnotationLoaderChooseSourceColumnIndex() {
+		return getStringMandatory("subseqDbxrefAnnotationLoader.chooseSourceColumnIndex");
 	}
 
-	public static String subseqDbxrefAnnotationLoaderChooseAnnotDBName() {
-		return getStringMandatory("subseqAnnotationLoader.chooseAnnotDBName");
+	public static String subseqDbxrefAnnotationLoaderChooseSourceDBName() {
+		return getStringMandatory("subseqDbxrefAnnotationLoader.chooseSourceDBName");
 	}
 
-	public static String subseqDbxrefAnnotationLoaderChooseDbxrefColumnIndex() {
-		return getStringMandatory("subseqAnnotationLoader.chooseDbxrefColumnIndex");
+	public static String subseqDbxrefAnnotationLoaderChooseTargetColumnIndex() {
+		return getStringMandatory("subseqDbxrefAnnotationLoader.chooseTargetColumnIndex");
 	}
 
-	public static String subseqDbxrefAnnotationLoaderChooseDbxrefDBName() {
-		return getStringMandatory("subseqAnnotationLoader.chooseDbxrefDBName");
+	public static String subseqDbxrefAnnotationLoaderChooseTargetDBName() {
+		return getStringMandatory("subseqDbxrefAnnotationLoader.chooseTargetDBName");
 	}
 
 	public static String subseqDbxrefAnnotationLoaderChooseScoreColumnIndex() {
-		return getStringMandatory("subseqAnnotationLoader.chooseScoreColumnIndex");
+		return getStringMandatory("subseqDbxrefAnnotationLoader.chooseScoreColumnIndex");
 	}
 
 	public static int subseqDbxrefAnnotationLoaderStepShowInterval() {
-		return getInt("subseqAnnotationLoader.stepShowInterval");
+		return getInt("subseqDbxrefAnnotationLoader.stepShowInterval");
 	}
 
 	public static String subseqDbxrefAnnotationLoaderInitMsg(String path) {
 		Object[] a = {path};
-		return MessageFormat.format(getStringMandatory("subseqAnnotationLoader.init"), a);
+		return MessageFormat.format(getStringMandatory("subseqDbxrefAnnotationLoader.init"), a);
 	}
 
 	public static String subseqDbxrefAnnotationLoaderFinalMsg(int step, int errorStep) {
 		Object[] a = {step, errorStep};
-		return MessageFormat.format(getStringMandatory("subseqAnnotationLoader.final"), a);
+		return MessageFormat.format(getStringMandatory("subseqDbxrefAnnotationLoader.final"), a);
 	}
 
 }

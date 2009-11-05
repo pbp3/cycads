@@ -10,9 +10,6 @@ import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-import org.cycads.entities.annotation.Annotation;
-import org.cycads.extract.cyc.CycDbxrefAnnotationPaths;
-
 public class Config
 {
 	private static final String		BUNDLE_NAME		= "config.properties";	//$NON-NLS-1$
@@ -208,32 +205,32 @@ public class Config
 		return getStringOptional("pf.file.extract.fileHeader");
 	}
 
-	// CDS to KO Loader
-
-	public static String cdsToKOFileComment() {
-		return getStringMandatory("cdsToKO.file.comment");
-	}
-
-	public static String cdsToKOFileSeparator() {
-		return getStringMandatory("cdsToKO.file.separator");
-	}
-
-	public static String cdsToKOLoaderFileName() {
-		return getStringOptional("cdsToKO.loader.fileName");
-	}
-
-	public static int cdsToKOLoaderOrganismNumber() {
-		return getInt("cdsToKO.loader.organismNumber");
-	}
-
-	public static String cdsToKOMethodName() {
-		return getStringOptional("cdsToKO.loader.methodName");
-	}
-
-	public static String cdsToKOCDSDBName() {
-		return getStringOptional("cdsToKO.loader.cdsDBName");
-	}
-
+	//	// CDS to KO Loader
+	//
+	//	public static String cdsToKOFileComment() {
+	//		return getStringMandatory("cdsToKO.file.comment");
+	//	}
+	//
+	//	public static String cdsToKOFileSeparator() {
+	//		return getStringMandatory("cdsToKO.file.separator");
+	//	}
+	//
+	//	public static String cdsToKOLoaderFileName() {
+	//		return getStringOptional("cdsToKO.loader.fileName");
+	//	}
+	//
+	//	public static int cdsToKOLoaderOrganismNumber() {
+	//		return getInt("cdsToKO.loader.organismNumber");
+	//	}
+	//
+	//	public static String cdsToKOMethodName() {
+	//		return getStringOptional("cdsToKO.loader.methodName");
+	//	}
+	//
+	//	public static String cdsToKOCDSDBName() {
+	//		return getStringOptional("cdsToKO.loader.cdsDBName");
+	//	}
+	//
 	// subseqDbxrefAnnotationLoader
 
 	public static String subseqDbxrefAnnotationLoaderFileName() {
@@ -413,85 +410,183 @@ public class Config
 	// synonymLoader
 
 	public static String synonymLoaderFileName() {
-		return getStringOptional("synonym.loader.fileName");
+		return getStringOptional("synonymLoader.fileName");
 	}
 
 	public static int synonymLoaderOrganismNumber() {
-		return getInt("synonym.loader.organismNumber");
+		return getInt("synonymLoader.organismNumber");
 	}
 
-	public static int synonymLoaderAnnotColumnIndex() {
-		return getInt("synonym.loader.annotColumnIndex");
+	public static int synonymLoaderSourceColumnIndex() {
+		return getInt("synonymLoader.annotColumnIndex");
 	}
 
-	public static String synonymLoaderAnnotDBName() {
-		return getStringOptional("synonym.loader.annotDBName");
+	public static String synonymLoaderSourceDBName() {
+		return getStringOptional("synonymLoader.annotDBName");
 	}
 
-	public static int synonymLoaderDbxrefColumnIndex() {
-		return getInt("synonym.loader.dbxrefColumnIndex");
+	public static int synonymLoaderSynonymColumnIndex() {
+		return getInt("synonymLoader.dbxrefColumnIndex");
 	}
 
-	public static String synonymLoaderDbxrefDBName() {
-		return getStringOptional("synonym.loader.dbxrefDBName");
+	public static String synonymLoaderSynonymDBName() {
+		return getStringOptional("synonymLoader.dbxrefDBName");
 	}
 
-	//ecCDSFileGenerator
-
-	public static String ecCDSFileGeneratorMethods(CycDbxrefAnnotationPaths ec) {
-		StringBuffer buf = new StringBuffer();
-		List<List<Annotation>> paths = ec.getAnnotationPaths();
-		if (!paths.isEmpty()) {
-			List<Annotation> path = paths.get(0);
-			buf.append(path.get(0).getAnnotationMethod().getName());
-			String methodSeparator = getStringMandatory("ecCDS.file.methodSeparator");
-			for (int i = 1; i < path.size(); i++) {
-				buf.append(methodSeparator);
-				buf.append(path.get(i).getAnnotationMethod().getName());
-			}
-			String pathSeparator = getStringMandatory("ecCDS.file.pathSeparator");
-			for (int i = 1; i < paths.size(); i++) {
-				buf.append(pathSeparator);
-				path = paths.get(i);
-				buf.append(path.get(0).getAnnotationMethod().getName());
-				for (int j = 1; j < path.size(); j++) {
-					buf.append(methodSeparator);
-					buf.append(path.get(j).getAnnotationMethod().getName());
-				}
-			}
-		}
-		else {
-			return ecCDSFileGeneratorAtributeNotPresentStr();
-		}
-		return buf.toString();
+	public static String synonymLoaderSourcesDelimiter() {
+		return getStringMandatory("synonymLoader.file.sourcesDelimiter");
 	}
 
-	public static String ecCDSFileGeneratorAtributeNotPresentStr() {
-		return getStringMandatory("ecCDS.file.atributeNotPresentStr");
+	public static String synonymLoaderSynonymsDelimiter() {
+		return getStringMandatory("synonymLoader.file.synonymsDelimiter");
 	}
 
-	public static char ecCDSFileGeneratorColumnSeparator() {
-		return getStringMandatory("ecCDS.file.columnSeparator").charAt(0);
+	public static String synonymLoaderSourceColumnDelimiter() {
+		return getStringMandatory("synonymLoader.file.sourceColumnDelimiter");
 	}
 
-	public static char ecCDSFileGeneratorDBLinkSeparator() {
-		return getStringMandatory("ecCDS.file.dBLinkSeparator").charAt(0);
+	public static String synonymLoaderSynonymColumnDelimiter() {
+		return getStringMandatory("synonymLoader.file.synonymColumnDelimiter");
 	}
 
-	public static List<String> ecCDSFileGeneratorDBNames() {
-		return getStrings("ecCDS.file.dBName");
+	public static String synonymLoaderLineComment() {
+		return getStringMandatory("synonymLoader.file.lineComment");
 	}
 
-	public static String ecCDSFileGeneratorFileName() {
-		return getStringMandatory("ecCDS.file.fileName");
+	public static String synonymLoaderColumnSeparator() {
+		return getStringMandatory("synonymLoader.file.columnSeparator");
 	}
 
-	public static int ecCDSFileGeneratorOrganismNumber() {
-		return getInt("ecCDS.file.organismNumber");
+	public static String synonymLoaderSourcesSeparator() {
+		return getStringMandatory("synonymLoader.file.sourcesSeparator");
 	}
 
-	public static String ecCDSFileGeneratorSeqVersion() {
-		return getStringMandatory("ecCDS.file.seqVersion");
+	public static String synonymLoaderSynonymsSeparator() {
+		return getStringMandatory("synonymLoader.file.synonymsSeparator");
 	}
 
+	public static Pattern synonymLoaderRemoveLineRegex() {
+		return Pattern.compile(getStringMandatory("synonymLoader.file.removeLineRegex"));
+	}
+
+	// dbxrefSynonymLoader
+
+	public static String dbxrefSynonymLoaderFileName() {
+		return getStringOptional("dbxrefSynonymLoader.fileName");
+	}
+
+	public static int dbxrefSynonymLoaderOrganismNumber() {
+		return getInt("dbxrefSynonymLoader.organismNumber");
+	}
+
+	public static int dbxrefSynonymLoaderSourceColumnIndex() {
+		return getInt("dbxrefSynonymLoader.annotColumnIndex");
+	}
+
+	public static String dbxrefSynonymLoaderSourceDBName() {
+		return getStringOptional("dbxrefSynonymLoader.annotDBName");
+	}
+
+	public static int dbxrefSynonymLoaderSynonymColumnIndex() {
+		return getInt("dbxrefSynonymLoader.dbxrefColumnIndex");
+	}
+
+	public static String dbxrefSynonymLoaderSynonymDBName() {
+		return getStringOptional("dbxrefSynonymLoader.dbxrefDBName");
+	}
+
+	public static String dbxrefSynonymLoaderSourcesDelimiter() {
+		return getStringMandatory("dbxrefSynonymLoader.file.sourcesDelimiter");
+	}
+
+	public static String dbxrefSynonymLoaderSynonymsDelimiter() {
+		return getStringMandatory("dbxrefSynonymLoader.file.synonymsDelimiter");
+	}
+
+	public static String dbxrefSynonymLoaderSourceColumnDelimiter() {
+		return getStringMandatory("dbxrefSynonymLoader.file.sourceColumnDelimiter");
+	}
+
+	public static String dbxrefSynonymLoaderSynonymColumnDelimiter() {
+		return getStringMandatory("dbxrefSynonymLoader.file.synonymColumnDelimiter");
+	}
+
+	public static String dbxrefSynonymLoaderLineComment() {
+		return getStringMandatory("dbxrefSynonymLoader.file.lineComment");
+	}
+
+	public static String dbxrefSynonymLoaderColumnSeparator() {
+		return getStringMandatory("dbxrefSynonymLoader.file.columnSeparator");
+	}
+
+	public static String dbxrefSynonymLoaderSourcesSeparator() {
+		return getStringMandatory("dbxrefSynonymLoader.file.sourcesSeparator");
+	}
+
+	public static String dbxrefSynonymLoaderSynonymsSeparator() {
+		return getStringMandatory("dbxrefSynonymLoader.file.synonymsSeparator");
+	}
+
+	public static Pattern dbxrefSynonymLoaderRemoveLineRegex() {
+		return Pattern.compile(getStringMandatory("dbxrefSynonymLoader.file.removeLineRegex"));
+	}
+
+	//	//ecCDSFileGenerator
+	//
+	//	public static String ecCDSFileGeneratorMethods(CycDbxrefAnnotationPaths ec) {
+	//		StringBuffer buf = new StringBuffer();
+	//		List<List<Annotation>> paths = ec.getAnnotationPaths();
+	//		if (!paths.isEmpty()) {
+	//			List<Annotation> path = paths.get(0);
+	//			buf.append(path.get(0).getAnnotationMethod().getName());
+	//			String methodSeparator = getStringMandatory("ecCDS.file.methodSeparator");
+	//			for (int i = 1; i < path.size(); i++) {
+	//				buf.append(methodSeparator);
+	//				buf.append(path.get(i).getAnnotationMethod().getName());
+	//			}
+	//			String pathSeparator = getStringMandatory("ecCDS.file.pathSeparator");
+	//			for (int i = 1; i < paths.size(); i++) {
+	//				buf.append(pathSeparator);
+	//				path = paths.get(i);
+	//				buf.append(path.get(0).getAnnotationMethod().getName());
+	//				for (int j = 1; j < path.size(); j++) {
+	//					buf.append(methodSeparator);
+	//					buf.append(path.get(j).getAnnotationMethod().getName());
+	//				}
+	//			}
+	//		}
+	//		else {
+	//			return ecCDSFileGeneratorAtributeNotPresentStr();
+	//		}
+	//		return buf.toString();
+	//	}
+	//
+	//	public static String ecCDSFileGeneratorAtributeNotPresentStr() {
+	//		return getStringMandatory("ecCDS.file.atributeNotPresentStr");
+	//	}
+	//
+	//	public static char ecCDSFileGeneratorColumnSeparator() {
+	//		return getStringMandatory("ecCDS.file.columnSeparator").charAt(0);
+	//	}
+	//
+	//	public static char ecCDSFileGeneratorDBLinkSeparator() {
+	//		return getStringMandatory("ecCDS.file.dBLinkSeparator").charAt(0);
+	//	}
+	//
+	//	public static List<String> ecCDSFileGeneratorDBNames() {
+	//		return getStrings("ecCDS.file.dBName");
+	//	}
+	//
+	//	public static String ecCDSFileGeneratorFileName() {
+	//		return getStringMandatory("ecCDS.file.fileName");
+	//	}
+	//
+	//	public static int ecCDSFileGeneratorOrganismNumber() {
+	//		return getInt("ecCDS.file.organismNumber");
+	//	}
+	//
+	//	public static String ecCDSFileGeneratorSeqVersion() {
+	//		return getStringMandatory("ecCDS.file.seqVersion");
+	//	}
+	//
 }
