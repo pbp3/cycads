@@ -40,7 +40,7 @@ public class KOSQL extends DbxrefSQL implements KO
 
 	@Override
 	public void setDefinition(String definition) {
-		definition.replaceAll("\'", "");
+		//		definition.replaceAll("\'", "");
 		setNoteValue("Definition", definition);
 	}
 

@@ -8,9 +8,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.factory.EntityFactory;
+import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.KO;
 import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
@@ -20,11 +23,12 @@ public class KOFileParser
 {
 
 	public static final String	EC_TAG	= ParametersDefault.koFileECTag();
-	EntityFactory				factory;
-	Progress					progress;
-	KO							ko;
-	AnnotationMethod			methodDBLink, methodEC;
-	String						definition;
+	private EntityFactory		factory;
+	private Progress			progress;
+	private KO					ko;
+	private AnnotationMethod	methodDBLink, methodEC;
+	private String				definition;
+	private Collection<Type>	dbLinkAnnotationTypes;
 
 	public KOFileParser(EntityFactory factory, Progress progress, AnnotationMethod methodDBLink,
 			AnnotationMethod methodEC) {
@@ -32,6 +36,8 @@ public class KOFileParser
 		this.progress = progress;
 		this.methodDBLink = methodDBLink;
 		this.methodEC = methodEC;
+		this.dbLinkAnnotationTypes = new ArrayList<Type>(1);
+		this.dbLinkAnnotationTypes.add(factory.getType(ParametersDefault.getFunctionalAnnotationTypeName()));
 	}
 
 	public void parse(File f) throws IOException, FileParserException {
@@ -138,7 +144,7 @@ public class KOFileParser
 	}
 
 	protected void newDBLink(String dbName, String accession) {
-		ko.addAnnotation(factory.getDbxref(dbName, accession), methodDBLink, null, null);
+		ko.addAnnotation(factory.getDbxref(dbName, accession), methodDBLink, null, dbLinkAnnotationTypes);
 	}
 
 	protected void newDefinition(String def) {
