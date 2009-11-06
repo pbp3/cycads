@@ -1,10 +1,8 @@
-#SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
-#SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
-#SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL';
 
-DROP SCHEMA IF EXISTS `cycads` ;
-CREATE SCHEMA `cycads`;
-USE `cycads` ;
+
 -- -----------------------------------------------------
 -- Table `Organism`
 -- -----------------------------------------------------
@@ -13,7 +11,10 @@ CREATE  TABLE IF NOT EXISTS `Organism` (
   `name` TEXT NULL ,
   `Next_Cyc_Id` INT(11) NOT NULL DEFAULT 1 ,
   PRIMARY KEY (`ncbi_taxon_id`) )
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
+
 
 -- -----------------------------------------------------
 -- Table `Sequence`
@@ -29,7 +30,10 @@ CREATE  TABLE IF NOT EXISTS `Sequence` (
     REFERENCES `Organism` (`ncbi_taxon_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
+
 
 -- -----------------------------------------------------
 -- Table `Biosequence`
@@ -45,7 +49,10 @@ CREATE  TABLE IF NOT EXISTS `Biosequence` (
     REFERENCES `Sequence` (`sequence_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
+
 
 -- -----------------------------------------------------
 -- Table `Term_type`
@@ -57,7 +64,10 @@ CREATE  TABLE IF NOT EXISTS `Term_type` (
   PRIMARY KEY (`type_id`) ,
   UNIQUE INDEX `name` (`name` ASC) ,
   INDEX `term_type_index1775` (`name` ASC) )
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
+
 
 -- -----------------------------------------------------
 -- Table `External_DB`
@@ -90,7 +100,9 @@ CREATE  TABLE IF NOT EXISTS `Dbxref` (
     REFERENCES `External_DB` (`external_db_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
@@ -109,7 +121,9 @@ CREATE  TABLE IF NOT EXISTS `Subsequence` (
     REFERENCES `Sequence` (`sequence_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
@@ -125,7 +139,9 @@ CREATE  TABLE IF NOT EXISTS `Intron` (
     REFERENCES `Subsequence` (`subsequence_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
@@ -160,14 +176,19 @@ CREATE  TABLE IF NOT EXISTS `Association` (
   `target_id` INT(11) NOT NULL ,
   `source_target_type_id` INT(11) NOT NULL ,
   PRIMARY KEY (`association_id`) ,
-  INDEX `Unique` (`association_id` ASC, `source_id` ASC, `target_id` ASC) ,
+  INDEX `i_association_source_target` (`association_id` ASC, `source_id` ASC, `target_id` ASC) ,
   INDEX `fk_Annotation_source_target_type1` (`source_target_type_id` ASC) ,
+  INDEX `i_source_sourcetargettype` (`source_id` ASC, `source_target_type_id` ASC) ,
+  INDEX `i_target_targettype` (`target_id` ASC, `source_target_type_id` ASC) ,
+  INDEX `i_source_target_type` (`source_id` ASC, `target_id` ASC, `source_target_type_id` ASC) ,
   CONSTRAINT `fk_Annotation_source_target_type1`
     FOREIGN KEY (`source_target_type_id` )
     REFERENCES `Source_target_type` (`source_target_type_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
@@ -182,7 +203,9 @@ CREATE  TABLE IF NOT EXISTS `Method` (
     REFERENCES `Term_type` (`type_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
@@ -197,7 +220,9 @@ CREATE  TABLE IF NOT EXISTS `Biofunction` (
     REFERENCES `Term_type` (`type_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
@@ -217,7 +242,9 @@ CREATE  TABLE IF NOT EXISTS `Association_type` (
     REFERENCES `Term_type` (`type_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
@@ -226,7 +253,9 @@ ENGINE = InnoDB;
 CREATE  TABLE IF NOT EXISTS `Pathway` (
   `pathway_id` INT(11) NOT NULL AUTO_INCREMENT ,
   PRIMARY KEY (`pathway_id`) )
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
@@ -242,7 +271,9 @@ CREATE  TABLE IF NOT EXISTS `Reaction` (
     REFERENCES `Dbxref` (`dbxref_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
@@ -252,7 +283,9 @@ CREATE  TABLE IF NOT EXISTS `Compound` (
   `compound_id` INT(11) NOT NULL AUTO_INCREMENT ,
   `small_molecule` TINYINT(1) NOT NULL ,
   PRIMARY KEY (`compound_id`) )
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
@@ -294,7 +327,9 @@ CREATE  TABLE IF NOT EXISTS `Reaction_has_compound` (
     REFERENCES `Compound` (`compound_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
@@ -303,7 +338,7 @@ ENGINE = InnoDB;
 CREATE  TABLE IF NOT EXISTS `Annotation` (
   `annotation_id` INT(11) NOT NULL ,
   `annotation_method_id` INT(11) NOT NULL ,
-  `score` VARCHAR(45),
+  `score` VARCHAR(45) NULL ,
   PRIMARY KEY (`annotation_id`) ,
   INDEX `fk_Annotation_Association1` (`annotation_id` ASC) ,
   INDEX `fk_Annotation_annotation_method1` (`annotation_method_id` ASC) ,
@@ -353,6 +388,7 @@ CREATE  TABLE IF NOT EXISTS `Note` (
   `value` TEXT NOT NULL ,
   INDEX `fk_Note_term_type1` (`source_type_id` ASC) ,
   INDEX `fk_Note_term_type2` (`note_type_id` ASC) ,
+  INDEX `i_key_Source_id` (`source_id` ASC, `source_type_id` ASC, `note_type_id` ASC) ,
   CONSTRAINT `fk_Note_term_type1`
     FOREIGN KEY (`source_type_id` )
     REFERENCES `Term_type` (`type_id` )
@@ -393,6 +429,6 @@ END
 DELIMITER ;
 
 
-#SET SQL_MODE=@OLD_SQL_MODE;
-#SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-#SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
