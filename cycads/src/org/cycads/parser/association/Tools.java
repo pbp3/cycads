@@ -3,7 +3,6 @@
  */
 package org.cycads.parser.association;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -19,8 +18,6 @@ import org.cycads.entities.sequence.Sequence;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.general.ParametersDefault;
-import org.cycads.parser.FileParserException;
-import org.cycads.ui.progress.Progress;
 
 public class Tools
 {
@@ -48,24 +45,6 @@ public class Tools
 		else {
 			return value.split(separator);
 		}
-	}
-
-	public static <R> R getNextValidRecord(RecordFileReader<R> reader, Progress progressError) throws IOException {
-		R record = null;
-		boolean read = false;
-		while (!read) {
-			try {
-				record = reader.read();
-				read = true;
-			}
-			catch (FileParserException e) {
-				if (ParametersDefault.isDebugging()) {
-					e.printStackTrace();
-				}
-				progressError.completeStep();
-			}
-		}
-		return record;
 	}
 
 	public static Annotation<Subsequence, Feature> createFakeSubseqAnnot(Dbxref annotSynonym, Organism organism,

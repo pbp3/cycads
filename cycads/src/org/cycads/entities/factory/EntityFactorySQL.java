@@ -356,6 +356,14 @@ public class EntityFactorySQL
 
 	@Override
 	public Collection< ? extends EntitySQL> getEntitiesBySynonym(String dbName, String accession, String type) {
+		if (type == null) {
+			try {
+				return SimpleEntitySQL.getEntities(dbName, accession, getConnection());
+			}
+			catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		}
 		try {
 			return SimpleEntitySQL.getEntities(TypeSQL.getType(type, getConnection()), dbName, accession,
 				getConnection());
@@ -367,6 +375,14 @@ public class EntityFactorySQL
 
 	@Override
 	public Collection< ? extends EntitySQL> getEntitiesBySynonym(Dbxref synonym, String type) {
+		if (type == null) {
+			try {
+				return SimpleEntitySQL.getEntities(getDbxref(synonym), getConnection());
+			}
+			catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		}
 		try {
 			return SimpleEntitySQL.getEntities(TypeSQL.getType(type, getConnection()), getDbxref(synonym),
 				getConnection());

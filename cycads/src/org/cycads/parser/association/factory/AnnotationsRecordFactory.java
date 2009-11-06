@@ -48,12 +48,31 @@ public class AnnotationsRecordFactory<S extends EntityObject, T extends EntityOb
 	public Collection<Annotation<S, T>> create(String[] values) throws ParserException {
 		Collection<S> sources = sourcesFactory.create(values);
 		Collection<T> targets = targetsFactory.create(values);
-		String score = scoreFactory.create(values);
 		AnnotationMethod method = methodFactory.create(values);
-		Collection<Note> notes = notesFactory.create(values);
-		Collection<Type> types = typesFactory.create(values);
-		Collection<Dbxref> synonyms = synonymsFactory.create(values);
-		Collection<Annotation> parents = parentsFactory.create(values);
+		String score = null;
+		if (scoreFactory != null) {
+			score = scoreFactory.create(values);
+		}
+		Collection<Note> notes = null;
+		if (notesFactory != null) {
+			notes = notesFactory.create(values);
+		}
+		Collection<Type> types = null;
+		if (typesFactory != null) {
+			types = typesFactory.create(values);
+		}
+		Collection<Dbxref> synonyms = null;
+		if (synonymsFactory != null) {
+			synonyms = synonymsFactory.create(values);
+		}
+		Collection<Annotation> parents = null;
+		if (parentsFactory != null) {
+			parents = parentsFactory.create(values);
+		}
+
+		if (sources == null || targets == null) {
+			return null;
+		}
 
 		Collection<Annotation<S, T>> ret = new ArrayList<Annotation<S, T>>(sources.size() * targets.size());
 		for (S source : sources) {

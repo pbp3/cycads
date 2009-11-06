@@ -40,9 +40,22 @@ public class AssociationsRecordFactory<S extends EntityObject, T extends EntityO
 	public Collection<Association<S, T>> create(String[] values) throws ParserException {
 		Collection<S> sources = sourcesFactory.create(values);
 		Collection<T> targets = targetsFactory.create(values);
-		Collection<Note> notes = notesFactory.create(values);
-		Collection<Type> types = typesFactory.create(values);
-		Collection<Dbxref> synonyms = synonymsFactory.create(values);
+		Collection<Note> notes = null;
+		if (notesFactory != null) {
+			notes = notesFactory.create(values);
+		}
+		Collection<Type> types = null;
+		if (typesFactory != null) {
+			types = typesFactory.create(values);
+		}
+		Collection<Dbxref> synonyms = null;
+		if (synonymsFactory != null) {
+			synonyms = synonymsFactory.create(values);
+		}
+
+		if (sources == null || targets == null) {
+			return null;
+		}
 
 		Collection<Association<S, T>> ret = new ArrayList<Association<S, T>>(sources.size() * targets.size());
 		for (S source : sources) {
