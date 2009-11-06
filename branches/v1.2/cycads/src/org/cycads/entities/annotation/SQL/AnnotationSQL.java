@@ -220,8 +220,8 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 	public static <SO extends EntitySQL, TA extends EntitySQL> Collection<AnnotationSQL<SO, TA>> getAnnotations(
 			SO source, TA target, AnnotationMethod method, Collection<Type> types, Connection con) throws SQLException {
 		StringBuffer query = new StringBuffer(
-			"SELECT annotation_id FROM Annotation AN, Association ASSO, Method M, Source_target_type S, Association_type T WHERE");
-		query.append(" AN.annotation_id = ASSO.association_id AND AN.annotation_method_id = M.method_id");
+			"SELECT distinct(annotation_id) FROM Annotation AN, Association ASSO, Method M, Source_target_type S, Association_type T");
+		query.append(" WHERE AN.annotation_id = ASSO.association_id");
 		query.append(" AND ASSO.association_id=T.association_id AND ASSO.source_target_type_id=S.source_target_type_id");
 		TypeSQL typeSQL;
 
@@ -237,7 +237,7 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 		}
 
 		if (method != null) {
-			query.append(" AND method_id=" + AnnotationMethodSQL.getMethod(method, con).getId());
+			query.append(" AND annotation_method_id=" + AnnotationMethodSQL.getMethod(method, con).getId());
 		}
 
 		if (types != null) {
@@ -285,8 +285,8 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 	public static <TA extends EntitySQL> Collection<AnnotationSQL< ? , TA>> getAnnotations(Type sourceType, TA target,
 			AnnotationMethod method, Collection<Type> types, Connection con) throws SQLException {
 		StringBuffer query = new StringBuffer(
-			"SELECT annotation_id FROM Annotation AN, Association ASSO, Method M, Source_target_type S, Association_type T WHERE");
-		query.append(" AN.annotation_id = ASSO.association_id AND AN.annotation_method_id = M.method_id");
+			"SELECT distinct(annotation_id) FROM Annotation AN, Association ASSO, Method M, Source_target_type S, Association_type T");
+		query.append(" WHERE AN.annotation_id = ASSO.association_id");
 		query.append(" AND ASSO.association_id=T.association_id AND ASSO.source_target_type_id=S.source_target_type_id");
 		TypeSQL typeSQL;
 
@@ -301,7 +301,7 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 		}
 
 		if (method != null) {
-			query.append(" AND method_id=" + AnnotationMethodSQL.getMethod(method, con).getId());
+			query.append(" AND annotation_method_id=" + AnnotationMethodSQL.getMethod(method, con).getId());
 		}
 
 		if (types != null) {
@@ -349,8 +349,8 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 	public static <SO extends EntitySQL> Collection<AnnotationSQL<SO, ? >> getAnnotations(SO source, Type targetType,
 			AnnotationMethod method, Collection<Type> types, Connection con) throws SQLException {
 		StringBuffer query = new StringBuffer(
-			"SELECT annotation_id FROM Annotation AN, Association ASSO, Method M, Source_target_type S, Association_type T WHERE");
-		query.append(" AN.annotation_id = ASSO.association_id AND AN.annotation_method_id = M.method_id");
+			"SELECT distinct(annotation_id) FROM Annotation AN, Association ASSO, Method M, Source_target_type S, Association_type T");
+		query.append(" WHERE AN.annotation_id = ASSO.association_id");
 		query.append(" AND ASSO.association_id=T.association_id AND ASSO.source_target_type_id=S.source_target_type_id");
 		TypeSQL typeSQL;
 
@@ -365,7 +365,7 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 		}
 
 		if (method != null) {
-			query.append(" AND method_id=" + AnnotationMethodSQL.getMethod(method, con).getId());
+			query.append(" AND annotation_method_id=" + AnnotationMethodSQL.getMethod(method, con).getId());
 		}
 
 		if (types != null) {
@@ -413,8 +413,8 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 	public static Collection<AnnotationSQL< ? , ? >> getAnnotations(Type sourceType, Type targetType,
 			AnnotationMethod method, Collection<Type> types, Connection con) throws SQLException {
 		StringBuffer query = new StringBuffer(
-			"SELECT annotation_id FROM Annotation AN, Association ASSO, Method M, Source_target_type S, Association_type T WHERE");
-		query.append(" AN.annotation_id = ASSO.association_id AND AN.annotation_method_id = M.method_id");
+			"SELECT distinct(annotation_id) FROM Annotation AN, Association ASSO, Method M, Source_target_type S, Association_type T");
+		query.append(" WHERE AN.annotation_id = ASSO.association_id");
 		query.append(" AND ASSO.association_id=T.association_id AND ASSO.source_target_type_id=S.source_target_type_id");
 		TypeSQL typeSQL;
 
@@ -428,7 +428,7 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 		}
 
 		if (method != null) {
-			query.append(" AND method_id=" + AnnotationMethodSQL.getMethod(method, con).getId());
+			query.append(" AND annotation_method_id=" + AnnotationMethodSQL.getMethod(method, con).getId());
 		}
 
 		if (types != null) {
