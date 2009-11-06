@@ -3,12 +3,11 @@
  */
 package org.cycads.parser.association.factory;
 
-
-public class NullFactory implements ObjectFactory
+public class NullFactory<R> implements ObjectFactory<R>
 {
 
 	@Override
-	public Object create(String[] values) {
+	public R create(String[] values) {
 		return null;
 	}
 

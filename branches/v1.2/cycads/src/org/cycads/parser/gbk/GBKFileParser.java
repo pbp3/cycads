@@ -123,11 +123,13 @@ public class GBKFileParser
 			}
 			sequence.addSynonym(seqAccession);
 		}
+		//add dblinks as synonyms
 		Dbxref syn;
 		for (RankedCrossRef seqSyn : (Set<RankedCrossRef>) richSeq.getRankedCrossRefs()) {
 			syn = factory.getDbxref(seqSyn.getCrossRef().getDbname(), seqSyn.getCrossRef().getAccession());
 			sequence.addSynonym(syn);
 		}
+		//add description and notes
 		sequence.addNote(GBKFileConfig.getSeqDescriptionNoteType(), richSeq.getDescription());
 		for (Comment comment : (Set<Comment>) richSeq.getComments()) {
 			sequence.addNote(GBKFileConfig.getSeqCommentNoteType(), comment.getComment());
