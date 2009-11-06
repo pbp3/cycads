@@ -237,8 +237,11 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 	public static <SO extends EntitySQL, TA extends EntitySQL> Collection<AssociationSQL<SO, TA>> getAssociations(
 			SO source, TA target, Collection< ? extends Type> types, Connection con) throws SQLException {
 		StringBuffer query = new StringBuffer(
-			"SELECT distinct(A.association_id) FROM Association A, Source_target_type S, Association_type T WHERE ");
-		query.append("A.association_id=T.association_id AND A.source_target_type_id=S.source_target_type_id");
+			"SELECT distinct(A.association_id) FROM Association A, Source_target_type S");
+		if (types != null && types.size() > 0) {
+			query.append(", Association_type T");
+		}
+		query.append(" WHERE A.source_target_type_id=S.source_target_type_id");
 		TypeSQL typeSQL;
 		if (source != null) {
 			query.append(" AND source_id=" + source.getId());
@@ -250,13 +253,20 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 			typeSQL = TypeSQL.getType(target.getEntityType(), con);
 			query.append(" AND target_type_id=" + typeSQL.getId());
 		}
-		if (types != null) {
-			query.append(" AND type_id IN (");
-			for (Type type : types) {
-				typeSQL = TypeSQL.getType(type, con);
-				query.append(typeSQL.getId() + ",");
+		if (types != null && types.size() > 0) {
+			query.append(" AND A.association_id=T.association_id");
+			if (types.size() == 1) {
+				typeSQL = TypeSQL.getType(types.iterator().next(), con);
+				query.append(" AND type_id=" + typeSQL.getId());
 			}
-			query.replace(query.length() - 1, query.length(), ")");
+			else {
+				query.append(" AND type_id IN (");
+				for (Type type : types) {
+					typeSQL = TypeSQL.getType(type, con);
+					query.append(typeSQL.getId() + ",");
+				}
+				query.replace(query.length() - 1, query.length(), ")");
+			}
 		}
 		Collection<AssociationSQL<SO, TA>> ret = new ArrayList<AssociationSQL<SO, TA>>();
 		PreparedStatement stmt = null;
@@ -293,8 +303,11 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 	public static <TA extends EntitySQL> Collection<AssociationSQL< ? , TA>> getAssociations(Type sourceType,
 			TA target, Collection< ? extends Type> types, Connection con) throws SQLException {
 		StringBuffer query = new StringBuffer(
-			"SELECT distinct(A.association_id) FROM Association A, Source_target_type S, Association_type T WHERE ");
-		query.append("A.association_id=T.association_id AND A.source_target_type_id=S.source_target_type_id");
+			"SELECT distinct(A.association_id) FROM Association A, Source_target_type S");
+		if (types != null && types.size() > 0) {
+			query.append(", Association_type T");
+		}
+		query.append(" WHERE A.source_target_type_id=S.source_target_type_id");
 		TypeSQL typeSQL;
 		if (sourceType != null) {
 			typeSQL = TypeSQL.getType(sourceType, con);
@@ -305,13 +318,20 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 			typeSQL = TypeSQL.getType(target.getEntityType(), con);
 			query.append(" AND target_type_id=" + typeSQL.getId());
 		}
-		if (types != null) {
-			query.append(" AND type_id IN (");
-			for (Type type : types) {
-				typeSQL = TypeSQL.getType(type, con);
-				query.append(typeSQL.getId() + ",");
+		if (types != null && types.size() > 0) {
+			query.append(" AND A.association_id=T.association_id");
+			if (types.size() == 1) {
+				typeSQL = TypeSQL.getType(types.iterator().next(), con);
+				query.append(" AND type_id=" + typeSQL.getId());
 			}
-			query.replace(query.length() - 1, query.length(), ")");
+			else {
+				query.append(" AND type_id IN (");
+				for (Type type : types) {
+					typeSQL = TypeSQL.getType(type, con);
+					query.append(typeSQL.getId() + ",");
+				}
+				query.replace(query.length() - 1, query.length(), ")");
+			}
 		}
 		Collection<AssociationSQL< ? , TA>> ret = new ArrayList<AssociationSQL< ? , TA>>();
 		PreparedStatement stmt = null;
@@ -348,8 +368,11 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 	public static <SO extends EntitySQL> Collection<AssociationSQL<SO, ? >> getAssociations(SO source, Type targetType,
 			Collection< ? extends Type> types, Connection con) throws SQLException {
 		StringBuffer query = new StringBuffer(
-			"SELECT distinct(A.association_id) FROM Association A, Source_target_type S, Association_type T WHERE ");
-		query.append("A.association_id=T.association_id AND A.source_target_type_id=S.source_target_type_id");
+			"SELECT distinct(A.association_id) FROM Association A, Source_target_type S");
+		if (types != null && types.size() > 0) {
+			query.append(", Association_type T");
+		}
+		query.append(" WHERE A.source_target_type_id=S.source_target_type_id");
 		TypeSQL typeSQL;
 		if (source != null) {
 			query.append(" AND source_id=" + source.getId());
@@ -360,13 +383,20 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 			typeSQL = TypeSQL.getType(targetType, con);
 			query.append(" AND target_type_id=" + typeSQL.getId());
 		}
-		if (types != null) {
-			query.append(" AND type_id IN (");
-			for (Type type : types) {
-				typeSQL = TypeSQL.getType(type, con);
-				query.append(typeSQL.getId() + ",");
+		if (types != null && types.size() > 0) {
+			query.append(" AND A.association_id=T.association_id");
+			if (types.size() == 1) {
+				typeSQL = TypeSQL.getType(types.iterator().next(), con);
+				query.append(" AND type_id=" + typeSQL.getId());
 			}
-			query.replace(query.length() - 1, query.length(), ")");
+			else {
+				query.append(" AND type_id IN (");
+				for (Type type : types) {
+					typeSQL = TypeSQL.getType(type, con);
+					query.append(typeSQL.getId() + ",");
+				}
+				query.replace(query.length() - 1, query.length(), ")");
+			}
 		}
 		Collection<AssociationSQL<SO, ? >> ret = new ArrayList<AssociationSQL<SO, ? >>();
 		PreparedStatement stmt = null;
@@ -403,8 +433,11 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 	public static Collection<AssociationSQL< ? , ? >> getAssociations(Type sourceType, Type targetType,
 			Collection< ? extends Type> types, Connection con) throws SQLException {
 		StringBuffer query = new StringBuffer(
-			"SELECT distinct(A.association_id) FROM Association A, Source_target_type S, Association_type T WHERE ");
-		query.append("A.association_id=T.association_id AND A.source_target_type_id=S.source_target_type_id");
+			"SELECT distinct(A.association_id) FROM Association A, Source_target_type S");
+		if (types != null && types.size() > 0) {
+			query.append(", Association_type T");
+		}
+		query.append(" WHERE A.source_target_type_id=S.source_target_type_id");
 		TypeSQL typeSQL;
 		if (sourceType != null) {
 			typeSQL = TypeSQL.getType(sourceType, con);
@@ -414,13 +447,20 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 			typeSQL = TypeSQL.getType(targetType, con);
 			query.append(" AND target_type_id=" + typeSQL.getId());
 		}
-		if (types != null) {
-			query.append(" AND type_id IN (");
-			for (Type type : types) {
-				typeSQL = TypeSQL.getType(type, con);
-				query.append(typeSQL.getId() + ",");
+		if (types != null && types.size() > 0) {
+			query.append(" AND A.association_id=T.association_id");
+			if (types.size() == 1) {
+				typeSQL = TypeSQL.getType(types.iterator().next(), con);
+				query.append(" AND type_id=" + typeSQL.getId());
 			}
-			query.replace(query.length() - 1, query.length(), ")");
+			else {
+				query.append(" AND type_id IN (");
+				for (Type type : types) {
+					typeSQL = TypeSQL.getType(type, con);
+					query.append(typeSQL.getId() + ",");
+				}
+				query.replace(query.length() - 1, query.length(), ")");
+			}
 		}
 		Collection<AssociationSQL< ? , ? >> ret = new ArrayList<AssociationSQL< ? , ? >>();
 		PreparedStatement stmt = null;
