@@ -66,9 +66,10 @@ public class CleanColumn
 					if (strs.length > column) {
 						strs[column] = strs[column].replaceAll(regexClean, "");
 						for (int i = 0; i < strs.length - 1; i++) {
-							out.print(strs[i] + separator);
+							out.print(strs[i]);
+							out.print('\t');
 						}
-						out.print(strs[strs.length - 1]);
+						out.println(strs[strs.length - 1]);
 					}
 					else {
 						throw new RuntimeException(line);
