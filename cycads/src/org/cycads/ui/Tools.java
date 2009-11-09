@@ -232,4 +232,16 @@ public class Tools
 		return (JOptionPane.showConfirmDialog(null, messageDefault, messageDefault, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION);
 	}
 
+	public static String[] split(String value, String separator) {
+		if (value == null) {
+			return null;
+		}
+		if (separator == null || separator.length() == 0) {
+			return new String[] {value};
+		}
+		else {
+			return value.split(separator);
+		}
+	}
+
 }
