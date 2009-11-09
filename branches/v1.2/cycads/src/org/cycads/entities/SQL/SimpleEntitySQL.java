@@ -383,8 +383,8 @@ public abstract class SimpleEntitySQL implements EntitySQL
 		ResultSet rs = null;
 		try {
 			stmt = getConnection().prepareStatement(
-				"SELECT X.dbxref_id from Synonym S ,dbxref X where S.source_id=? and S.source_type_id=?"
-					+ " AND S.dbxref_id=X.dbxref_id AND X.dbname=?");
+				"SELECT X.dbxref_id from Synonym S ,Dbxref X, Term_type T WHERE S.source_id=? and S.source_type_id=?"
+					+ " AND S.dbxref_id=X.dbxref_id AND X.external_db_id=T.type_id AND T.name=?");
 			stmt.setInt(1, getId());
 			stmt.setInt(2, getTypeId());
 			stmt.setString(3, dbName);
