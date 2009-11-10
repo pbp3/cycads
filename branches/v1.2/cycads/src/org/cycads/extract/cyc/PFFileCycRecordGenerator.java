@@ -75,9 +75,11 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 				if (go.getScore() >= goThreshold) {
 					record.addGO(go.getAccession());
 				}
-				Collection<CycDBLink> dbLinks = createDBLink(go.getDbName(), go.getAccession());
-				for (CycDBLink dbLink : dbLinks) {
-					record.addDBLink(dbLink);
+				else {
+					Collection<CycDBLink> dbLinks = createDBLink(go.getDbName(), go.getAccession());
+					for (CycDBLink dbLink : dbLinks) {
+						record.addDBLink(dbLink);
+					}
 				}
 				record.addComment(PFFileConfig.getAnnotationComment(go));
 			}
