@@ -427,20 +427,12 @@ public class SimpleLocInterpreter implements LocInterpreter
 		}
 		Collection<Annotation< ? , ? extends Dbxref>> dbxrefAnnots = (Collection<Annotation< ? , ? extends Dbxref>>) entityObject.getAnnotationsByType(
 			entityObject.getNoteType(Dbxref.OBJECT_TYPE_NAME), null, null);
-		if (isRegexFilter) {
+		if (!subLoc.equals("*")) {
 			Collection<Annotation< ? , ? extends Dbxref>> dbxrefAnnots1 = new ArrayList<Annotation< ? , ? extends Dbxref>>(
 				dbxrefAnnots);
 			for (Annotation< ? , ? extends Dbxref> dbxrefAnnotation : dbxrefAnnots1) {
-				if (!dbxrefAnnotation.getTarget().getDbName().matches(subLoc)) {
-					dbxrefAnnots.remove(dbxrefAnnotation);
-				}
-			}
-		}
-		else {
-			Collection<Annotation< ? , ? extends Dbxref>> dbxrefAnnots1 = new ArrayList<Annotation< ? , ? extends Dbxref>>(
-				dbxrefAnnots);
-			for (Annotation< ? , ? extends Dbxref> dbxrefAnnotation : dbxrefAnnots1) {
-				if (!dbxrefAnnotation.getTarget().getDbName().equals(subLoc)) {
+				if ((isRegexFilter && !dbxrefAnnotation.getTarget().getDbName().matches(subLoc))
+					|| (isStringFilter && !dbxrefAnnotation.getTarget().getDbName().equals(subLoc))) {
 					dbxrefAnnots.remove(dbxrefAnnotation);
 				}
 			}
