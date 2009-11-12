@@ -284,7 +284,7 @@ public class OrganismSQL extends SimpleEntitySQL implements Organism<SequenceSQL
 	}
 
 	@Override
-	public Collection<SequenceSQL> getSequencesBySynonym(Dbxref synonym, String version) {
+	public Collection<SequenceSQL> getSequences(Dbxref synonym) {
 		Collection<SequenceSQL> ret = new ArrayList<SequenceSQL>();
 		DbxrefSQL dbxrefSQL;
 		try {
@@ -292,10 +292,7 @@ public class OrganismSQL extends SimpleEntitySQL implements Organism<SequenceSQL
 			Collection<EntitySQL> seqs = getEntities(SequenceSQL.getEntityType(getConnection()), dbxrefSQL,
 				getConnection());
 			for (EntitySQL entity : seqs) {
-				SequenceSQL seq = (SequenceSQL) entity;
-				if (version == null || version.length() == 0 || seq.getVersion().equals(version)) {
-					ret.add(seq);
-				}
+				ret.add((SequenceSQL) entity);
 			}
 			return ret;
 		}

@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import org.cycads.entities.annotation.Annotation;
@@ -108,8 +109,11 @@ public class DbxrefDbxrefAnnotationLoaderSQL
 			new IndependentStringFactory());
 
 		String methodDelimiter = Config.dbxrefDbxrefAnnotationLoaderMethodDelimiter();
+		List<Pattern> methodPatterns = Config.dbxrefDbxrefAnnotationLoaderMethodPatterns();
+		List<String> methodNames = Config.dbxrefDbxrefAnnotationLoaderMethodNames();
 		ObjectFactory<AnnotationMethod> methodFactory = new SimpleObjectFactory<AnnotationMethod>(methodColumnIndex,
-			methodDelimiter, new IndependentMethodFactory<AnnotationMethod>((EntityMethodFactory) factory));
+			methodDelimiter, new IndependentMethodFactory<AnnotationMethod>((EntityMethodFactory) factory,
+				methodPatterns, methodNames));
 
 		Collection<String> associationTypeNames = Config.dbxrefDbxrefAnnotationLoaderAssocTypeNames();
 		if (associationTypeNames == null || associationTypeNames.size() == 0) {

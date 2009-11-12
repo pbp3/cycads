@@ -26,7 +26,7 @@ public interface Organism<S extends Sequence< ? , ? >> extends EntityObject
 
 	//	public Collection<S> getSequences(Dbxref synonym);
 	//
-	public Collection<S> getSequencesBySynonym(Dbxref synonym, String version);
+	public Collection<S> getSequences(Dbxref synonym);
 
 	//
 	//	public Collection<SS> getSubsequences(Dbxref synonym);
