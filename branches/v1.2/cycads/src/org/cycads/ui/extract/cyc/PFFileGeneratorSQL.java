@@ -15,7 +15,6 @@ import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Sequence;
 import org.cycads.entities.sequence.Subsequence;
-import org.cycads.entities.synonym.Dbxref;
 import org.cycads.extract.cyc.CycIdGenerator;
 import org.cycads.extract.cyc.CycRecord;
 import org.cycads.extract.cyc.CycRecordGenerator;
@@ -87,11 +86,6 @@ public class PFFileGeneratorSQL
 			return;
 		}
 
-		//		Double koThreshold = Tools.getDouble(args, 6, Messages.pfGeneratorChooseKoThreshold(), Config.pfKoThreshold());
-		//		if (koThreshold == null) {
-		//			return;
-		//		}
-
 		Progress progress = new ProgressPrintInterval(System.out, Messages.pfGeneratorStepShowInterval());
 		try {
 			progress.init(Messages.pfGeneratorInitMsg(file.getPath()));
@@ -100,8 +94,7 @@ public class PFFileGeneratorSQL
 				seqs = organism.getSequences(seqVersion);
 			}
 			else {
-				Dbxref synonym = factory.getDbxref(seqDbname, seqAccession);
-				seqs = organism.getSequencesBySynonym(synonym, seqVersion);
+				seqs = organism.getSequences(factory.getDbxref(seqDbname, seqAccession));
 			}
 
 			List<String> typesStr = PFFileConfig.getTypes();

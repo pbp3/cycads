@@ -102,26 +102,27 @@ public class GBKFileParser
 			organism = factory.createOrganism(richSeq.getTaxon().getNCBITaxID(), richSeq.getTaxon().getDisplayName());
 		}
 		//try to find by accession
-		Dbxref seqAccession = factory.getDbxref(seqDBName, richSeq.getAccession());
-		Collection<Sequence> sequences = factory.getEntitiesBySynonym(seqAccession, Sequence.ENTITY_TYPE_NAME);
-		sequence = getSequence(sequences, organism);
+		Dbxref seqSynonym = factory.getDbxref(seqDBName, richSeq.getAccession());
+		sequence = getSequence(organism.getSequences(seqSynonym));
 		if (sequence == null) {
 			Set<RankedCrossRef> seqSyns = richSeq.getRankedCrossRefs();
-			sequences = new ArrayList<Sequence>();
 			Dbxref syn;
 			//try to find by dblinks
 			for (RankedCrossRef seqSyn : seqSyns) {
 				syn = factory.getDbxref(seqSyn.getCrossRef().getDbname(), seqSyn.getCrossRef().getAccession());
-				sequence = getSequence(factory.getEntitiesBySynonym(syn, Sequence.ENTITY_TYPE_NAME), organism);
+				sequence = getSequence(organism.getSequences(syn));
 				if (sequence != null) {
 					break;
 				}
 			}
 			if (sequence == null) {
 				sequence = organism.createNewSequence("" + richSeq.getVersion());
-				sequence.setSequenceString(richSeq.seqString());
 			}
-			sequence.addSynonym(seqAccession);
+			sequence.addSynonym(seqSynonym);
+		}
+		//add the real sequence of symbols
+		if (sequence.getLength() == 0) {
+			sequence.setSequenceString(richSeq.seqString());
 		}
 		//add dblinks as synonyms
 		Dbxref syn;
@@ -137,13 +138,9 @@ public class GBKFileParser
 		return sequence;
 	}
 
-	private Sequence getSequence(Collection<Sequence> sequences, Organism organism) {
+	private Sequence getSequence(Collection<Sequence> sequences) {
 		if (sequences != null && !sequences.isEmpty()) {
-			for (Sequence seq : sequences) {
-				if (seq.getOrganism().equals(organism)) {
-					return seq;
-				}
-			}
+			return sequences.iterator().next();
 		}
 		return null;
 	}

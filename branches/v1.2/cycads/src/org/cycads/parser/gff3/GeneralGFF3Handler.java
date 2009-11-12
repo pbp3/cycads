@@ -320,7 +320,7 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 	private Sequence getSequence(String sequenceID) {
 		if (!sequenceID.equals(lastSeqAccession)) {
 			Dbxref seqSynonym = factory.getDbxref(seqDBName, sequenceID);
-			Collection<Sequence> seqs = organism.getSequencesBySynonym(seqSynonym, seqVersion);
+			Collection<Sequence> seqs = organism.getSequences(seqSynonym);
 			if (seqs.isEmpty()) {
 				lastSequence = organism.createNewSequence(seqVersion);
 				lastSequence.addSynonym(seqSynonym);

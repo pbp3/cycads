@@ -76,7 +76,7 @@ public class Config
 		return Double.parseDouble(getStringMandatory(key));
 	}
 
-	private static String transform(String key, List<Pattern> keyPatterns, List<String> values) {
+	public static String transform(String key, List<Pattern> keyPatterns, List<String> values) {
 		for (int i = 0; i < keyPatterns.size(); i++) {
 			if (keyPatterns.get(i).matcher(key).matches()) {
 				if (values.size() > i) {
@@ -321,6 +321,14 @@ public class Config
 		return Pattern.compile(getStringMandatory("subseqDbxrefAnnotationLoader.file.removeLineRegex"));
 	}
 
+	public static List<Pattern> subseqDbxrefAnnotationLoaderMethodPatterns() {
+		return getPatterns("subseqDbxrefAnnotationLoader.file.method.regex");
+	}
+
+	public static List<String> subseqDbxrefAnnotationLoaderMethodNames() {
+		return getStrings("subseqDbxrefAnnotationLoader.file.methodName");
+	}
+
 	//dbxrefDbxrefAnnotationLoader
 
 	public static String dbxrefDbxrefAnnotationLoaderFileName() {
@@ -405,6 +413,14 @@ public class Config
 
 	public static Pattern dbxrefDbxrefAnnotationLoaderRemoveLineRegex() {
 		return Pattern.compile(getStringMandatory("dbxrefDbxrefAnnotationLoader.file.removeLineRegex"));
+	}
+
+	public static List<Pattern> dbxrefDbxrefAnnotationLoaderMethodPatterns() {
+		return getPatterns("dbxrefDbxrefAnnotationLoader.file.method.regex");
+	}
+
+	public static List<String> dbxrefDbxrefAnnotationLoaderMethodNames() {
+		return getStrings("dbxrefDbxrefAnnotationLoader.file.methodName");
 	}
 
 	// synonymLoader
