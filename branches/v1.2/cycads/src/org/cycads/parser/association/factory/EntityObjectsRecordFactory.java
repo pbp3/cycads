@@ -36,8 +36,14 @@ public class EntityObjectsRecordFactory implements ObjectFactory<Collection<Enti
 		if (dbxrefs == null || dbxrefs.isEmpty()) {
 			return new ArrayList<EntityObject>();
 		}
-		Collection<Note> notes = notesFactory.create(values);
-		Collection<Dbxref> synonyms = synonymsFactory.create(values);
+		Collection<Note> notes = null;
+		if (notesFactory != null) {
+			notes = notesFactory.create(values);
+		}
+		Collection<Dbxref> synonyms = null;
+		if (synonymsFactory != null) {
+			synonyms = synonymsFactory.create(values);
+		}
 
 		Collection<EntityObject> ret = new ArrayList<EntityObject>();
 		Collection<EntityObject> retPartial;

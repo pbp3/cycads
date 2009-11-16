@@ -426,6 +426,42 @@ public class Messages
 		return MessageFormat.format(getStringMandatory("dbxrefDbxrefAnnotationLoader.final"), a);
 	}
 
+	//entityDbxrefAnnotationLoader
+
+	public static String entityDbxrefAnnotationLoaderChooseSourceColumnIndex() {
+		return getStringMandatory("entityDbxrefAnnotationLoader.chooseSourceColumnIndex");
+	}
+
+	public static String entityDbxrefAnnotationLoaderChooseSourceDBName() {
+		return getStringMandatory("entityDbxrefAnnotationLoader.chooseSourceDBName");
+	}
+
+	public static String entityDbxrefAnnotationLoaderChooseTargetColumnIndex() {
+		return getStringMandatory("entityDbxrefAnnotationLoader.chooseTargetColumnIndex");
+	}
+
+	public static String entityDbxrefAnnotationLoaderChooseTargetDBName() {
+		return getStringMandatory("entityDbxrefAnnotationLoader.chooseTargetDBName");
+	}
+
+	public static String entityDbxrefAnnotationLoaderChooseScoreColumnIndex() {
+		return getStringMandatory("entityDbxrefAnnotationLoader.chooseScoreColumnIndex");
+	}
+
+	public static int entityDbxrefAnnotationLoaderStepShowInterval() {
+		return getInt("entityDbxrefAnnotationLoader.stepShowInterval");
+	}
+
+	public static String entityDbxrefAnnotationLoaderInitMsg(String file) {
+		Object[] a = {file};
+		return MessageFormat.format(getStringMandatory("entityDbxrefAnnotationLoader.init"), a);
+	}
+
+	public static String entityDbxrefAnnotationLoaderFinalMsg(int stepsOK, int stepsError) {
+		Object[] a = {stepsOK, stepsError};
+		return MessageFormat.format(getStringMandatory("entityDbxrefAnnotationLoader.final"), a);
+	}
+
 	// subseqAnnotationLoader
 
 	public static String subseqDbxrefAnnotationLoaderChooseSourceColumnIndex() {
