@@ -423,6 +423,100 @@ public class Config
 		return getStrings("dbxrefDbxrefAnnotationLoader.file.methodName");
 	}
 
+	//entityDbxrefAnnotationLoader
+
+	public static String entityDbxrefAnnotationLoaderFileName() {
+		return getStringOptional("entityDbxrefAnnotationLoader.fileName");
+	}
+
+	public static String entityDbxrefAnnotationLoaderMethodName() {
+		return getStringOptional("entityDbxrefAnnotationLoader.methodName");
+	}
+
+	public static int entityDbxrefAnnotationLoaderSourceColumnIndex() {
+		return getInt("entityDbxrefAnnotationLoader.sourceColumnIndex");
+	}
+
+	public static String entityDbxrefAnnotationLoaderSourceDBName() {
+		return getStringOptional("entityDbxrefAnnotationLoader.sourceDBName");
+	}
+
+	public static int entityDbxrefAnnotationLoaderTargetColumnIndex() {
+		return getInt("entityDbxrefAnnotationLoader.targetColumnIndex");
+	}
+
+	public static String entityDbxrefAnnotationLoaderTargetDBName() {
+		return getStringOptional("entityDbxrefAnnotationLoader.targetDBName");
+	}
+
+	public static int entityDbxrefAnnotationLoaderScoreColumnIndex() {
+		return getInt("entityDbxrefAnnotationLoader.scoreColumnIndex");
+	}
+
+	public static int entityDbxrefAnnotationLoaderMethodColumnIndex() {
+		return getInt("entityDbxrefAnnotationLoader.methodColumnIndex");
+	}
+
+	public static Collection<String> entityDbxrefAnnotationLoaderAssocTypeNames() {
+		Collection<String> ret = getStrings("entityDbxrefAnnotationLoader.assocTypeName");
+		ArrayList<String> empty = new ArrayList<String>(1);
+		empty.add("");
+		ret.removeAll(empty);
+		return ret;
+	}
+
+	public static String entityDbxrefAnnotationLoaderSourcesDelimiter() {
+		return getStringMandatory("entityDbxrefAnnotationLoader.file.sourcesDelimiter");
+	}
+
+	public static String entityDbxrefAnnotationLoaderTargetsDelimiter() {
+		return getStringMandatory("entityDbxrefAnnotationLoader.file.targetsDelimiter");
+	}
+
+	public static String entityDbxrefAnnotationLoaderSourceColumnDelimiter() {
+		return getStringMandatory("entityDbxrefAnnotationLoader.file.sourceColumnDelimiter");
+	}
+
+	public static String entityDbxrefAnnotationLoaderTargetColumnDelimiter() {
+		return getStringMandatory("entityDbxrefAnnotationLoader.file.targetColumnDelimiter");
+	}
+
+	public static String entityDbxrefAnnotationLoaderScoreDelimiter() {
+		return getStringMandatory("entityDbxrefAnnotationLoader.file.scoreDelimiter");
+	}
+
+	public static String entityDbxrefAnnotationLoaderMethodDelimiter() {
+		return getStringMandatory("entityDbxrefAnnotationLoader.file.methodDelimiter");
+	}
+
+	public static String entityDbxrefAnnotationLoaderLineComment() {
+		return getStringMandatory("entityDbxrefAnnotationLoader.file.lineComment");
+	}
+
+	public static String entityDbxrefAnnotationLoaderColumnSeparator() {
+		return getStringMandatory("entityDbxrefAnnotationLoader.file.columnSeparator");
+	}
+
+	public static String entityDbxrefAnnotationLoaderSourcesSeparator() {
+		return getStringMandatory("entityDbxrefAnnotationLoader.file.sourcesSeparator");
+	}
+
+	public static String entityDbxrefAnnotationLoaderTargetsSeparator() {
+		return getStringMandatory("entityDbxrefAnnotationLoader.file.targetsSeparator");
+	}
+
+	public static Pattern entityDbxrefAnnotationLoaderRemoveLineRegex() {
+		return Pattern.compile(getStringMandatory("entityDbxrefAnnotationLoader.file.removeLineRegex"));
+	}
+
+	public static List<Pattern> entityDbxrefAnnotationLoaderMethodPatterns() {
+		return getPatterns("entityDbxrefAnnotationLoader.file.method.regex");
+	}
+
+	public static List<String> entityDbxrefAnnotationLoaderMethodNames() {
+		return getStrings("entityDbxrefAnnotationLoader.file.methodName");
+	}
+
 	// synonymLoader
 
 	public static String synonymLoaderFileName() {
