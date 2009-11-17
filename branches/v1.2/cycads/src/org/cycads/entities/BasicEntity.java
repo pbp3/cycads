@@ -9,7 +9,7 @@ import org.cycads.entities.note.Noteble;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.HasSynonyms;
 
-public interface EntityObject extends Noteble, HasSynonyms, Associable, Annotable
+public interface BasicEntity extends Noteble, HasSynonyms, Associable, Annotable
 {
 	public Type getEntityType();
 

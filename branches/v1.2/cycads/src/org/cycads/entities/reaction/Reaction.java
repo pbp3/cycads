@@ -5,13 +5,13 @@ package org.cycads.entities.reaction;
 
 import java.util.Collection;
 
-import org.cycads.entities.EntityObject;
+import org.cycads.entities.BasicEntity;
 import org.cycads.entities.note.Noteble;
 import org.cycads.entities.synonym.EC;
 import org.cycads.entities.synonym.HasSynonyms;
 
 public interface Reaction<C extends Compound, E extends EC, CR extends CompoundReaction< ? , ? >>
-		extends Noteble, HasSynonyms, EntityObject
+		extends Noteble, HasSynonyms, BasicEntity
 {
 	public static final String	ENTITY_TYPE_NAME	= "Reaction";
 

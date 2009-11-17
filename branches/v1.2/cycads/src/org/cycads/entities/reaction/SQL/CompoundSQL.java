@@ -7,12 +7,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Collection;
 
-import org.cycads.entities.SQL.EntitySQL;
-import org.cycads.entities.SQL.SimpleEntitySQL;
+import org.cycads.entities.SQL.BasicEntitySQL;
+import org.cycads.entities.SQL.BasicEntityAbstractSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.reaction.Compound;
 
-public class CompoundSQL extends SimpleEntitySQL implements Compound
+public class CompoundSQL extends BasicEntityAbstractSQL implements Compound
 {
 	private boolean	smallMolecule;
 
@@ -60,9 +60,9 @@ public class CompoundSQL extends SimpleEntitySQL implements Compound
 	public CompoundSQL(boolean smallMolecule, String dbName, String accession, Connection con) throws SQLException {
 		super(0, con);
 		this.smallMolecule = smallMolecule;
-		Collection<EntitySQL> comps = SimpleEntitySQL.getEntities(getEntityType(), dbName, accession, con);
+		Collection<BasicEntitySQL> comps = BasicEntityAbstractSQL.getEntities(getEntityType(), dbName, accession, con);
 		if (comps.size() > 0) {
-			for (EntitySQL entity : comps) {
+			for (BasicEntitySQL entity : comps) {
 				CompoundSQL comp = (CompoundSQL) entity;
 				if (comp.isSmallMolecule() == smallMolecule) {
 					this.id = comp.getId();

@@ -5,7 +5,7 @@ package org.cycads.entities.factory;
 
 import java.util.Collection;
 
-import org.cycads.entities.EntityObject;
+import org.cycads.entities.BasicEntity;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.annotation.Association;
@@ -25,7 +25,7 @@ public class SimpleAnnotationFactory implements EntityAnnotationFactory
 	}
 
 	@Override
-	public Annotation createAnnotation(EntityObject source, EntityObject target, Collection types,
+	public Annotation createAnnotation(BasicEntity source, BasicEntity target, Collection types,
 			AnnotationMethod method, String score) {
 		Annotation ret = new SimpleAnnotation(source, target, method, score, typeFactory, dbxrefFactory, this);
 		for (Type type : (Collection<Type>) types) {
@@ -35,7 +35,7 @@ public class SimpleAnnotationFactory implements EntityAnnotationFactory
 	}
 
 	@Override
-	public Association createAssociation(EntityObject source, EntityObject target, Collection types) {
+	public Association createAssociation(BasicEntity source, BasicEntity target, Collection types) {
 		Association ret = new SimpleAssociation(source, target, typeFactory, dbxrefFactory, this);
 		for (Type type : (Collection<Type>) types) {
 			ret.addType(type);

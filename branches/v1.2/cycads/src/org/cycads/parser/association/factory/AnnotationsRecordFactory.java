@@ -6,7 +6,7 @@ package org.cycads.parser.association.factory;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cycads.entities.EntityObject;
+import org.cycads.entities.BasicEntity;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.factory.EntityAnnotationFactory;
@@ -15,10 +15,10 @@ import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.parser.ParserException;
 
-public class AnnotationsRecordFactory<S extends EntityObject, T extends EntityObject>
+public class AnnotationsRecordFactory<S extends BasicEntity, T extends BasicEntity>
 		implements ObjectFactory<Collection<Annotation<S, T>>>
 {
-	private final EntityAnnotationFactory<EntityObject>	annotationFactory;
+	private final EntityAnnotationFactory<BasicEntity>	annotationFactory;
 	private final ObjectFactory<Collection<S>>			sourcesFactory;
 	private final ObjectFactory<Collection<T>>			targetsFactory;
 	private final ObjectFactory<String>					scoreFactory;
@@ -28,7 +28,7 @@ public class AnnotationsRecordFactory<S extends EntityObject, T extends EntityOb
 	private final ObjectFactory<Collection<Dbxref>>		synonymsFactory;
 	private final ObjectFactory<Collection<Annotation>>	parentsFactory;
 
-	public AnnotationsRecordFactory(EntityAnnotationFactory<EntityObject> annotationFactory,
+	public AnnotationsRecordFactory(EntityAnnotationFactory<BasicEntity> annotationFactory,
 			ObjectFactory<Collection<S>> sourcesFactory, ObjectFactory<Collection<T>> targetsFactory,
 			ObjectFactory<String> scoreFactory, ObjectFactory<AnnotationMethod> methodFactory,
 			ObjectFactory<Collection<Type>> typesFactory, ObjectFactory<Collection<Note>> notesFactory,

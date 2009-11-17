@@ -9,13 +9,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.cycads.entities.SQL.SimpleEntitySQL;
+import org.cycads.entities.SQL.BasicEntityAbstractSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.general.Messages;
 import org.cycads.general.ParametersDefault;
 
-public class DbxrefSQL extends SimpleEntitySQL implements Dbxref
+public class DbxrefSQL extends BasicEntityAbstractSQL implements Dbxref
 {
 	public final static int	INVALID_ID	= -1;
 	private DatabaseSQL		database;

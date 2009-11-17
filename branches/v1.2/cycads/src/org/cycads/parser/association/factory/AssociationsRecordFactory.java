@@ -6,7 +6,7 @@ package org.cycads.parser.association.factory;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cycads.entities.EntityObject;
+import org.cycads.entities.BasicEntity;
 import org.cycads.entities.annotation.Association;
 import org.cycads.entities.factory.EntityAnnotationFactory;
 import org.cycads.entities.note.Note;
@@ -14,17 +14,17 @@ import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.parser.ParserException;
 
-public class AssociationsRecordFactory<S extends EntityObject, T extends EntityObject>
+public class AssociationsRecordFactory<S extends BasicEntity, T extends BasicEntity>
 		implements ObjectFactory<Collection<Association<S, T>>>
 {
-	private EntityAnnotationFactory<EntityObject>	associationFactory;
+	private EntityAnnotationFactory<BasicEntity>	associationFactory;
 	private ObjectFactory<Collection<S>>			sourcesFactory;
 	private ObjectFactory<Collection<T>>			targetsFactory;
 	private ObjectFactory<Collection<Note>>			notesFactory;
 	private ObjectFactory<Collection<Type>>			typesFactory;
 	private ObjectFactory<Collection<Dbxref>>		synonymsFactory;
 
-	public AssociationsRecordFactory(EntityAnnotationFactory<EntityObject> associationFactory,
+	public AssociationsRecordFactory(EntityAnnotationFactory<BasicEntity> associationFactory,
 			ObjectFactory<Collection<S>> sourcesFactory, ObjectFactory<Collection<T>> targetsFactory,
 			ObjectFactory<Collection<Type>> typesFactory, ObjectFactory<Collection<Note>> notesFactory,
 			ObjectFactory<Collection<Dbxref>> synonymsFactory) {

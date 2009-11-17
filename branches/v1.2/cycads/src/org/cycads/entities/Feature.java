@@ -3,7 +3,7 @@
  */
 package org.cycads.entities;
 
-public interface Feature extends EntityObject
+public interface Feature extends BasicEntity
 {
 	public static final String	ENTITY_TYPE_NAME	= "Feature";
 

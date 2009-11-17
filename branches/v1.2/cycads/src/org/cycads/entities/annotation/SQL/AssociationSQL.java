@@ -11,14 +11,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cycads.entities.SQL.EntitySQL;
-import org.cycads.entities.SQL.SimpleEntitySQL;
+import org.cycads.entities.SQL.BasicEntitySQL;
+import org.cycads.entities.SQL.BasicEntityAbstractSQL;
 import org.cycads.entities.annotation.Association;
 import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.note.SQL.TypeSQL;
 
-public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends SimpleEntitySQL
+public class AssociationSQL<SO extends BasicEntitySQL, TA extends BasicEntitySQL> extends BasicEntityAbstractSQL
 		implements Association<SO, TA>
 {
 
@@ -66,7 +66,7 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 		}
 	}
 
-	public static <SO extends EntitySQL, TA extends EntitySQL> AssociationSQL<SO, TA> createAssociationSQL(SO source,
+	public static <SO extends BasicEntitySQL, TA extends BasicEntitySQL> AssociationSQL<SO, TA> createAssociationSQL(SO source,
 			TA target, Collection< ? extends Type> types, Connection con) throws SQLException {
 
 		SourceTargetTypeSQL sourceTargetType = new SourceTargetTypeSQL(TypeSQL.getType(source.getEntityType(), con),
@@ -234,7 +234,7 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 		return TypeSQL.getType(Association.ENTITY_TYPE_NAME, con);
 	}
 
-	public static <SO extends EntitySQL, TA extends EntitySQL> Collection<AssociationSQL<SO, TA>> getAssociations(
+	public static <SO extends BasicEntitySQL, TA extends BasicEntitySQL> Collection<AssociationSQL<SO, TA>> getAssociations(
 			SO source, TA target, Collection< ? extends Type> types, Connection con) throws SQLException {
 		StringBuffer query = new StringBuffer(
 			"SELECT distinct(A.association_id) FROM Association A, Source_target_type S");
@@ -300,7 +300,7 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 		return ret;
 	}
 
-	public static <TA extends EntitySQL> Collection<AssociationSQL< ? , TA>> getAssociations(Type sourceType,
+	public static <TA extends BasicEntitySQL> Collection<AssociationSQL< ? , TA>> getAssociations(Type sourceType,
 			TA target, Collection< ? extends Type> types, Connection con) throws SQLException {
 		StringBuffer query = new StringBuffer(
 			"SELECT distinct(A.association_id) FROM Association A, Source_target_type S");
@@ -365,7 +365,7 @@ public class AssociationSQL<SO extends EntitySQL, TA extends EntitySQL> extends 
 		return ret;
 	}
 
-	public static <SO extends EntitySQL> Collection<AssociationSQL<SO, ? >> getAssociations(SO source, Type targetType,
+	public static <SO extends BasicEntitySQL> Collection<AssociationSQL<SO, ? >> getAssociations(SO source, Type targetType,
 			Collection< ? extends Type> types, Connection con) throws SQLException {
 		StringBuffer query = new StringBuffer(
 			"SELECT distinct(A.association_id) FROM Association A, Source_target_type S");

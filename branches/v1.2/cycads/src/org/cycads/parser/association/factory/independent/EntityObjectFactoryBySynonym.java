@@ -6,11 +6,11 @@ package org.cycads.parser.association.factory.independent;
 import java.util.Collection;
 
 import org.cycads.entities.EntityFinder;
-import org.cycads.entities.EntityObject;
+import org.cycads.entities.BasicEntity;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.parser.ParserException;
 
-public class EntityObjectFactoryBySynonym<E extends EntityObject>
+public class EntityObjectFactoryBySynonym<E extends BasicEntity>
 		implements IndependentObjectFactory<Collection< ? extends E>>
 {
 	IndependentDbxrefFactory<Dbxref>	dbxrefFactory;

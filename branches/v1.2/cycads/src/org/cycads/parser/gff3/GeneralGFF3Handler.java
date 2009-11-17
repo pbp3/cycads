@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.regex.Pattern;
 
-import org.cycads.entities.EntityObject;
+import org.cycads.entities.BasicEntity;
 import org.cycads.entities.Feature;
 import org.cycads.entities.Function;
 import org.cycads.entities.annotation.Annotation;
@@ -368,7 +368,7 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 				for (Note note : annot.getNotes()) {
 					annotPersisted.addNote(note.getType(), note.getValue());
 				}
-				for (EntityObject parent : annot.getParents()) {
+				for (BasicEntity parent : annot.getParents()) {
 					annotPersisted.addParent(parent);
 				}
 				for (Dbxref synonym : annot.getSynonyms()) {

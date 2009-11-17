@@ -5,10 +5,10 @@ package org.cycads.entities.annotation;
 
 import java.util.Collection;
 
-import org.cycads.entities.EntityObject;
+import org.cycads.entities.BasicEntity;
 import org.cycads.entities.note.Type;
 
-public interface Association<SO extends EntityObject, TA extends EntityObject> extends EntityObject
+public interface Association<SO extends BasicEntity, TA extends BasicEntity> extends BasicEntity
 {
 	public static final String	ENTITY_TYPE_NAME	= "Association";
 

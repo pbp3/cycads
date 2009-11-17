@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 
-import org.cycads.entities.SQL.SimpleEntitySQL;
+import org.cycads.entities.SQL.BasicEntityAbstractSQL;
 import org.cycads.entities.note.Type;
 
-public class TypeSQL extends SimpleEntitySQL implements Type
+public class TypeSQL extends BasicEntityAbstractSQL implements Type
 {
 	public static final int						INVALID_ID		= -1;
 

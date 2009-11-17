@@ -7,14 +7,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
-import org.cycads.entities.EntityObject;
+import org.cycads.entities.BasicEntity;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.factory.EntityDbxrefFactory;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.Dbxref;
 
-public class AddDbxrefAnnotation<S extends EntityObject>
+public class AddDbxrefAnnotation<S extends BasicEntity>
 		extends SimpleRelationshipOperation<S, Annotation< ? , Dbxref>>
 {
 

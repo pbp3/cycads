@@ -13,7 +13,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.cycads.entities.EntityObject;
+import org.cycads.entities.BasicEntity;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.factory.EntityAnnotationFactory;
@@ -144,7 +144,7 @@ public class EntityDbxrefAnnotationLoaderSQL
 		ObjectFactory<Collection<Dbxref>> synSourcesFactory = new SimpleObjectsFactory<Dbxref>(dbxrefSourceColumnIndex,
 			columnDelimiter, objectsSeparator, objectsDelimiter, sourceFactory);
 
-		ObjectFactory<Collection<EntityObject>> sourcesFactory = new EntityObjectsRecordFactory(factory,
+		ObjectFactory<Collection<BasicEntity>> sourcesFactory = new EntityObjectsRecordFactory(factory,
 			synSourcesFactory, null, null, null);
 
 		columnDelimiter = Config.entityDbxrefAnnotationLoaderTargetColumnDelimiter();
@@ -158,10 +158,10 @@ public class EntityDbxrefAnnotationLoaderSQL
 		String lineComment = Config.entityDbxrefAnnotationLoaderLineComment();
 		Pattern removeLinePattern = Config.entityDbxrefAnnotationLoaderRemoveLineRegex();
 
-		ObjectFactory<Collection<Annotation<EntityObject, Dbxref>>> objectFactory = new AnnotationsRecordFactory<EntityObject, Dbxref>(
+		ObjectFactory<Collection<Annotation<BasicEntity, Dbxref>>> objectFactory = new AnnotationsRecordFactory<BasicEntity, Dbxref>(
 			(EntityAnnotationFactory) factory, sourcesFactory, targetsFactory, scoreFactory, methodFactory,
 			typesFactory, notesFactory, synonymsFactory, parentsFactory);
-		LineRecordFileReader<Collection<Annotation<EntityObject, Dbxref>>> recordFileReader = new LineRecordFileReader<Collection<Annotation<EntityObject, Dbxref>>>(
+		LineRecordFileReader<Collection<Annotation<BasicEntity, Dbxref>>> recordFileReader = new LineRecordFileReader<Collection<Annotation<BasicEntity, Dbxref>>>(
 			br, columnSeparator, lineComment, removeLinePattern, objectFactory);
 
 		Progress progress = new ProgressPrintInterval(System.out,

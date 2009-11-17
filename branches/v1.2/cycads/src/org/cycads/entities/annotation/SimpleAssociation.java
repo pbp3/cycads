@@ -3,14 +3,14 @@ package org.cycads.entities.annotation;
 import java.util.Collection;
 import java.util.TreeSet;
 
-import org.cycads.entities.EntityObject;
-import org.cycads.entities.SimpleEntityObject;
+import org.cycads.entities.BasicEntity;
+import org.cycads.entities.BasicEntityAbstract;
 import org.cycads.entities.factory.EntityAnnotationFactory;
 import org.cycads.entities.factory.EntityDbxrefFactory;
 import org.cycads.entities.factory.EntityTypeFactory;
 import org.cycads.entities.note.Type;
 
-public class SimpleAssociation<SO extends EntityObject, TA extends EntityObject> extends SimpleEntityObject
+public class SimpleAssociation<SO extends BasicEntity, TA extends BasicEntity> extends BasicEntityAbstract
 		implements Association<SO, TA>
 {
 

@@ -5,10 +5,10 @@ package org.cycads.entities.annotation;
 
 import java.util.Collection;
 
-import org.cycads.entities.EntityObject;
+import org.cycads.entities.BasicEntity;
 import org.cycads.entities.note.Type;
 
-public interface AssociationFinder<E extends EntityObject>
+public interface AssociationFinder<E extends BasicEntity>
 {
 	/* The arguments nulls are not considerated */
 	public <SO extends E, TA extends E> Collection< ? extends Association< ? extends SO, ? extends TA>> getAssociations(

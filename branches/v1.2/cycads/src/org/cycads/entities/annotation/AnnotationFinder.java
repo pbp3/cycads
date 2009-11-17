@@ -5,11 +5,11 @@ package org.cycads.entities.annotation;
 
 import java.util.Collection;
 
-import org.cycads.entities.EntityObject;
+import org.cycads.entities.BasicEntity;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.Dbxref;
 
-public interface AnnotationFinder<E extends EntityObject>
+public interface AnnotationFinder<E extends BasicEntity>
 {
 	/* The arguments nulls are not considerated */
 	public <SO extends E, TA extends E> Collection< ? extends Annotation< ? extends SO, ? extends TA>> getAnnotations(

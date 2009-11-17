@@ -5,13 +5,13 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-import org.cycads.entities.SimpleEntityObject;
+import org.cycads.entities.BasicEntityAbstract;
 import org.cycads.entities.factory.EntityAnnotationFactory;
 import org.cycads.entities.factory.EntityDbxrefFactory;
 import org.cycads.entities.factory.EntityTypeFactory;
 import org.cycads.entities.note.Type;
 
-public class SimpleSubsequence<S extends Sequence< ? , ? >> extends SimpleEntityObject implements Subsequence<S>
+public class SimpleSubsequence<S extends Sequence< ? , ? >> extends BasicEntityAbstract implements Subsequence<S>
 {
 
 	S	seq;

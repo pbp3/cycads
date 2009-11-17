@@ -11,15 +11,15 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cycads.entities.SQL.EntitySQL;
-import org.cycads.entities.SQL.SimpleEntitySQL;
+import org.cycads.entities.SQL.BasicEntitySQL;
+import org.cycads.entities.SQL.BasicEntityAbstractSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.general.ParametersDefault;
 
-public class OrganismSQL extends SimpleEntitySQL implements Organism<SequenceSQL>
+public class OrganismSQL extends BasicEntityAbstractSQL implements Organism<SequenceSQL>
 {
 	private String	name;
 
@@ -289,9 +289,9 @@ public class OrganismSQL extends SimpleEntitySQL implements Organism<SequenceSQL
 		DbxrefSQL dbxrefSQL;
 		try {
 			dbxrefSQL = DbxrefSQL.getDbxref(synonym, getConnection());
-			Collection<EntitySQL> seqs = getEntities(SequenceSQL.getEntityType(getConnection()), dbxrefSQL,
+			Collection<BasicEntitySQL> seqs = getEntities(SequenceSQL.getEntityType(getConnection()), dbxrefSQL,
 				getConnection());
-			for (EntitySQL entity : seqs) {
+			for (BasicEntitySQL entity : seqs) {
 				ret.add((SequenceSQL) entity);
 			}
 			return ret;

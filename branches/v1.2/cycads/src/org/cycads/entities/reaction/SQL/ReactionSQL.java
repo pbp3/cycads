@@ -8,12 +8,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cycads.entities.SQL.SimpleEntitySQL;
+import org.cycads.entities.SQL.BasicEntityAbstractSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.reaction.Reaction;
 import org.cycads.entities.synonym.SQL.ECSQL;
 
-public class ReactionSQL extends SimpleEntitySQL implements Reaction<CompoundSQL, ECSQL, CompoundReactionSQL>
+public class ReactionSQL extends BasicEntityAbstractSQL implements Reaction<CompoundSQL, ECSQL, CompoundReactionSQL>
 {
 	private ECSQL	ec;
 	private boolean	reversible;
