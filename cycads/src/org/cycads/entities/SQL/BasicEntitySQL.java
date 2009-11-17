@@ -5,9 +5,9 @@ package org.cycads.entities.SQL;
 
 import java.sql.Connection;
 
-import org.cycads.entities.EntityObject;
+import org.cycads.entities.BasicEntity;
 
-public interface EntitySQL extends EntityObject
+public interface BasicEntitySQL extends BasicEntity
 {
 	public int getId();
 

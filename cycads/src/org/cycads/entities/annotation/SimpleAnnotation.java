@@ -3,19 +3,19 @@ package org.cycads.entities.annotation;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cycads.entities.EntityObject;
+import org.cycads.entities.BasicEntity;
 import org.cycads.entities.factory.EntityAnnotationFactory;
 import org.cycads.entities.factory.EntityDbxrefFactory;
 import org.cycads.entities.factory.EntityTypeFactory;
 import org.cycads.entities.note.Type;
 
-public class SimpleAnnotation<SO extends EntityObject, TA extends EntityObject> extends SimpleAssociation<SO, TA>
+public class SimpleAnnotation<SO extends BasicEntity, TA extends BasicEntity> extends SimpleAssociation<SO, TA>
 		implements Annotation<SO, TA>
 {
 
 	AnnotationMethod			method;
 	String						score;
-	Collection<EntityObject>	parents	= new ArrayList<EntityObject>();
+	Collection<BasicEntity>	parents	= new ArrayList<BasicEntity>();
 
 	public SimpleAnnotation(SO source, TA target, AnnotationMethod method, String score,
 			EntityTypeFactory< ? > typeFactory, EntityDbxrefFactory< ? > dbxrefFactory,
@@ -26,7 +26,7 @@ public class SimpleAnnotation<SO extends EntityObject, TA extends EntityObject> 
 	}
 
 	@Override
-	public void addParent(EntityObject parent) {
+	public void addParent(BasicEntity parent) {
 		parents.add(parent);
 	}
 
@@ -36,7 +36,7 @@ public class SimpleAnnotation<SO extends EntityObject, TA extends EntityObject> 
 	}
 
 	@Override
-	public Collection<EntityObject> getParents() {
+	public Collection<BasicEntity> getParents() {
 		return parents;
 	}
 

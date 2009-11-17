@@ -5,10 +5,10 @@ package org.cycads.entities.sequence;
 
 import java.util.Collection;
 
-import org.cycads.entities.EntityObject;
+import org.cycads.entities.BasicEntity;
 import org.cycads.entities.synonym.Dbxref;
 
-public interface Organism<S extends Sequence< ? , ? >> extends EntityObject
+public interface Organism<S extends Sequence< ? , ? >> extends BasicEntity
 {
 	public static final String	ENTITY_TYPE_NAME	= "Organism";
 

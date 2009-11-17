@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
 
-import org.cycads.entities.EntityObject;
+import org.cycads.entities.BasicEntity;
 import org.cycads.entities.Function;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
@@ -404,7 +404,7 @@ public class SimpleLocInterpreter implements LocInterpreter
 		throw new RuntimeException("Error in the location expression:" + subLoc + "." + loc);
 	}
 
-	private List<StringAndPath> getCycValuesByDbxrefAnnotations(EntityObject entityObject, String loc,
+	private List<StringAndPath> getCycValuesByDbxrefAnnotations(BasicEntity basicEntity, String loc,
 			List<StringAndPath> ret, ArrayList<Annotation> annotList, int nextPosAnnotList) {
 		String subLoc = "*";
 		boolean isRegexFilter = loc.startsWith(LOC_FILTER_REGEX_CHAR + "");
@@ -425,8 +425,8 @@ public class SimpleLocInterpreter implements LocInterpreter
 				loc = "";
 			}
 		}
-		Collection<Annotation< ? , ? extends Dbxref>> dbxrefAnnots = (Collection<Annotation< ? , ? extends Dbxref>>) entityObject.getAnnotationsByType(
-			entityObject.getNoteType(Dbxref.OBJECT_TYPE_NAME), null, null);
+		Collection<Annotation< ? , ? extends Dbxref>> dbxrefAnnots = (Collection<Annotation< ? , ? extends Dbxref>>) basicEntity.getAnnotationsByType(
+			basicEntity.getNoteType(Dbxref.OBJECT_TYPE_NAME), null, null);
 		if (!subLoc.equals("*")) {
 			Collection<Annotation< ? , ? extends Dbxref>> dbxrefAnnots1 = new ArrayList<Annotation< ? , ? extends Dbxref>>(
 				dbxrefAnnots);

@@ -7,7 +7,7 @@ import java.util.Collection;
 
 import org.cycads.entities.synonym.Dbxref;
 
-public interface EntityFinder<E extends EntityObject>
+public interface EntityFinder<E extends BasicEntity>
 {
 	public Collection< ? extends E> getEntitiesBySynonym(String dbName, String accession, String objectType);
 

@@ -21,7 +21,7 @@ import org.cycads.entities.note.SimpleNote;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.Dbxref;
 
-public abstract class SimpleEntityObject implements EntityObject
+public abstract class BasicEntityAbstract implements BasicEntity
 {
 
 	protected EntityDbxrefFactory< ? >					dbxrefFactory;
@@ -33,7 +33,7 @@ public abstract class SimpleEntityObject implements EntityObject
 	private final Collection<Association< ? , ? >>		associations	= new ArrayList<Association< ? , ? >>();
 	private final Collection<Annotation< ? , ? >>		annotations		= new ArrayList<Annotation< ? , ? >>();
 
-	public SimpleEntityObject(EntityTypeFactory< ? > typeFactory, EntityDbxrefFactory< ? > dbxrefFactory,
+	public BasicEntityAbstract(EntityTypeFactory< ? > typeFactory, EntityDbxrefFactory< ? > dbxrefFactory,
 			EntityAnnotationFactory annotationFactory) {
 		this.annotationFactory = annotationFactory;
 		this.dbxrefFactory = dbxrefFactory;
@@ -41,14 +41,14 @@ public abstract class SimpleEntityObject implements EntityObject
 	}
 
 	@Override
-	public <TA extends EntityObject> Association< ? , TA> addAssociation(TA target, Collection<Type> associationTypes) {
+	public <TA extends BasicEntity> Association< ? , TA> addAssociation(TA target, Collection<Type> associationTypes) {
 		Association< ? , TA> ret = annotationFactory.createAssociation(this, target, associationTypes);
 		associations.add(ret);
 		return ret;
 	}
 
 	@Override
-	public <TA extends EntityObject> Collection<Association< ? , TA>> getAssociations(TA target,
+	public <TA extends BasicEntity> Collection<Association< ? , TA>> getAssociations(TA target,
 			Collection<Type> associationTypes) {
 		Collection<Association< ? , TA>> ret = new ArrayList<Association< ? , TA>>();
 		for (Association< ? , ? > association : associations) {
@@ -69,7 +69,7 @@ public abstract class SimpleEntityObject implements EntityObject
 	}
 
 	@Override
-	public <TA extends EntityObject> Annotation< ? , TA> addAnnotation(TA target, AnnotationMethod method,
+	public <TA extends BasicEntity> Annotation< ? , TA> addAnnotation(TA target, AnnotationMethod method,
 			String score, Collection<Type> annotationTypes) {
 		Annotation< ? , TA> ret = annotationFactory.createAnnotation(this, target, annotationTypes, method, score);
 		annotations.add(ret);
@@ -77,7 +77,7 @@ public abstract class SimpleEntityObject implements EntityObject
 	}
 
 	@Override
-	public <TA extends EntityObject> Collection< ? extends Annotation< ? , TA>> getAnnotations(TA target,
+	public <TA extends BasicEntity> Collection< ? extends Annotation< ? , TA>> getAnnotations(TA target,
 			AnnotationMethod method, Collection<Type> annotationTypes) {
 		Collection<Annotation< ? , TA>> ret = new ArrayList<Annotation< ? , TA>>();
 		for (Annotation< ? , ? > annotation : annotations) {

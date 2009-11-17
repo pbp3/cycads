@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cycads.entities.EntityObject;
+import org.cycads.entities.BasicEntity;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.annotation.Association;
@@ -24,13 +24,13 @@ import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 
-public abstract class SimpleEntitySQL implements EntitySQL
+public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 {
 
 	protected int				id;
 	private final Connection	con;
 
-	public SimpleEntitySQL(int id, Connection con) {
+	public BasicEntityAbstractSQL(int id, Connection con) {
 		this.id = id;
 		this.con = con;
 	}
@@ -548,12 +548,12 @@ public abstract class SimpleEntitySQL implements EntitySQL
 		return (getSynonym(dbName, accession) != null);
 	}
 
-	public static Collection<EntitySQL> getEntities(Type type, String dbName, String accession, Connection con)
+	public static Collection<BasicEntitySQL> getEntities(Type type, String dbName, String accession, Connection con)
 			throws SQLException {
 		return getEntities(type, DbxrefSQL.getDbxref(dbName, accession, con), con);
 	}
 
-	public static Collection<EntitySQL> getEntities(Type type, DbxrefSQL dbxref, Connection con) throws SQLException {
+	public static Collection<BasicEntitySQL> getEntities(Type type, DbxrefSQL dbxref, Connection con) throws SQLException {
 		if (type == null) {
 			return getEntities(dbxref, con);
 		}
@@ -565,7 +565,7 @@ public abstract class SimpleEntitySQL implements EntitySQL
 			stmt.setInt(1, typeSQL.getId());
 			stmt.setInt(2, dbxref.getId());
 			rs = stmt.executeQuery();
-			Collection<EntitySQL> ret = new ArrayList<EntitySQL>();
+			Collection<BasicEntitySQL> ret = new ArrayList<BasicEntitySQL>();
 			while (rs.next()) {
 				ret.add(EntityFactorySQL.createObject(rs.getInt("source_id"), typeSQL, con));
 			}
@@ -591,19 +591,19 @@ public abstract class SimpleEntitySQL implements EntitySQL
 		}
 	}
 
-	public static Collection<EntitySQL> getEntities(String dbName, String accession, Connection con)
+	public static Collection<BasicEntitySQL> getEntities(String dbName, String accession, Connection con)
 			throws SQLException {
 		return getEntities(DbxrefSQL.getDbxref(dbName, accession, con), con);
 	}
 
-	public static Collection<EntitySQL> getEntities(DbxrefSQL dbxref, Connection con) throws SQLException {
+	public static Collection<BasicEntitySQL> getEntities(DbxrefSQL dbxref, Connection con) throws SQLException {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
 			stmt = con.prepareStatement("SELECT source_id, source_type_id from Synonym where dbxref_id=?");
 			stmt.setInt(1, dbxref.getId());
 			rs = stmt.executeQuery();
-			Collection<EntitySQL> ret = new ArrayList<EntitySQL>();
+			Collection<BasicEntitySQL> ret = new ArrayList<BasicEntitySQL>();
 			while (rs.next()) {
 				ret.add(EntityFactorySQL.createObject(rs.getInt("source_id"), TypeSQL.getType(
 					rs.getInt("source_type_id"), con), con));
@@ -654,9 +654,9 @@ public abstract class SimpleEntitySQL implements EntitySQL
 	public abstract String getEntityTypeName();
 
 	@Override
-	public <TA extends EntityObject> Association< ? , TA> addAssociation(TA target, Collection<Type> associationTypes) {
+	public <TA extends BasicEntity> Association< ? , TA> addAssociation(TA target, Collection<Type> associationTypes) {
 		try {
-			return (Association< ? , TA>) AssociationSQL.createAssociationSQL(this, (EntitySQL) target,
+			return (Association< ? , TA>) AssociationSQL.createAssociationSQL(this, (BasicEntitySQL) target,
 				associationTypes, getConnection());
 		}
 		catch (SQLException e) {
@@ -665,11 +665,11 @@ public abstract class SimpleEntitySQL implements EntitySQL
 	}
 
 	@Override
-	public <TA extends EntityObject> Collection< ? extends Association< ? , TA>> getAssociations(TA target,
+	public <TA extends BasicEntity> Collection< ? extends Association< ? , TA>> getAssociations(TA target,
 			Collection<Type> associationTypes) {
 		try {
 			return (Collection< ? extends Association< ? , TA>>) AssociationSQL.getAssociations(this,
-				(EntitySQL) target, associationTypes, getConnection());
+				(BasicEntitySQL) target, associationTypes, getConnection());
 		}
 		catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -677,10 +677,10 @@ public abstract class SimpleEntitySQL implements EntitySQL
 	}
 
 	@Override
-	public <TA extends EntityObject> Annotation< ? , TA> addAnnotation(TA target, AnnotationMethod method,
+	public <TA extends BasicEntity> Annotation< ? , TA> addAnnotation(TA target, AnnotationMethod method,
 			String score, Collection<Type> annotationTypes) {
 		try {
-			return (Annotation< ? , TA>) AnnotationSQL.createAnnotationSQL(this, (EntitySQL) target, annotationTypes,
+			return (Annotation< ? , TA>) AnnotationSQL.createAnnotationSQL(this, (BasicEntitySQL) target, annotationTypes,
 				method, score, getConnection());
 		}
 		catch (SQLException e) {
@@ -689,10 +689,10 @@ public abstract class SimpleEntitySQL implements EntitySQL
 	}
 
 	@Override
-	public <TA extends EntityObject> Collection< ? extends Annotation< ? , TA>> getAnnotations(TA target,
+	public <TA extends BasicEntity> Collection< ? extends Annotation< ? , TA>> getAnnotations(TA target,
 			AnnotationMethod method, Collection<Type> annotationTypes) {
 		try {
-			return (Collection< ? extends Annotation< ? , TA>>) AnnotationSQL.getAnnotations(this, (EntitySQL) target,
+			return (Collection< ? extends Annotation< ? , TA>>) AnnotationSQL.getAnnotations(this, (BasicEntitySQL) target,
 				method, annotationTypes, getConnection());
 		}
 		catch (SQLException e) {
@@ -717,7 +717,7 @@ public abstract class SimpleEntitySQL implements EntitySQL
 		try {
 			Collection<AnnotationSQL< ? , ? >> ret = new ArrayList<AnnotationSQL< ? , ? >>();
 			Collection< ? extends AnnotationSQL< ? , ? >> annots;
-			annots = (Collection< ? extends AnnotationSQL< ? , ? >>) SimpleEntitySQL.getEntities(TypeSQL.getType(
+			annots = (Collection< ? extends AnnotationSQL< ? , ? >>) BasicEntityAbstractSQL.getEntities(TypeSQL.getType(
 				Annotation.ENTITY_TYPE_NAME, getConnection()), DbxrefSQL.getDbxref(synonym, getConnection()),
 				getConnection());
 			for (AnnotationSQL< ? , ? > annot : annots) {
@@ -737,7 +737,7 @@ public abstract class SimpleEntitySQL implements EntitySQL
 		try {
 			Collection<AnnotationSQL< ? , ? >> ret = new ArrayList<AnnotationSQL< ? , ? >>();
 			Collection< ? extends AnnotationSQL< ? , ? >> annots;
-			annots = (Collection< ? extends AnnotationSQL< ? , ? >>) SimpleEntitySQL.getEntities(TypeSQL.getType(
+			annots = (Collection< ? extends AnnotationSQL< ? , ? >>) BasicEntityAbstractSQL.getEntities(TypeSQL.getType(
 				Annotation.ENTITY_TYPE_NAME, getConnection()), dbName, accession, getConnection());
 			for (AnnotationSQL< ? , ? > annot : annots) {
 				if (annot.getSource().equals(this)) {
@@ -753,10 +753,10 @@ public abstract class SimpleEntitySQL implements EntitySQL
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof EntitySQL)) {
+		if (!(obj instanceof BasicEntitySQL)) {
 			return false;
 		}
-		EntitySQL o1 = (EntitySQL) obj;
+		BasicEntitySQL o1 = (BasicEntitySQL) obj;
 
 		return (this.getId() == o1.getId()) && (this.getTypeId() == o1.getTypeId());
 	}

@@ -3,9 +3,9 @@
  */
 package org.cycads.entities.annotation;
 
-import org.cycads.entities.note.Noteble;
+import org.cycads.entities.BasicEntity;
 
-public interface AnnotationMethod extends Noteble
+public interface AnnotationMethod extends BasicEntity
 {
 	public static final String	ENTITY_TYPE_NAME	= "AnnotationMethod";
 

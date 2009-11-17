@@ -5,13 +5,13 @@ package org.cycads.entities.annotation;
 
 import java.util.Collection;
 
-import org.cycads.entities.EntityObject;
+import org.cycads.entities.BasicEntity;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.synonym.Dbxref;
 
 public interface Annotable
 {
-	public <TA extends EntityObject> Annotation< ? , TA> addAnnotation(TA target, AnnotationMethod method,
+	public <TA extends BasicEntity> Annotation< ? , TA> addAnnotation(TA target, AnnotationMethod method,
 			String score, Collection<Type> annotationTypes);
 
 	/* The arguments nulls are not considerated */
@@ -19,7 +19,7 @@ public interface Annotable
 			Collection<Type> types);
 
 	//Paremters nulls will be not consider
-	public <TA extends EntityObject> Collection< ? extends Annotation< ? , TA>> getAnnotations(TA target,
+	public <TA extends BasicEntity> Collection< ? extends Annotation< ? , TA>> getAnnotations(TA target,
 			AnnotationMethod method, Collection<Type> annotationTypes);
 
 	public Collection< ? extends Annotation< ? , ? >> getAnnotationsBySynonym(String dbName, String accession);

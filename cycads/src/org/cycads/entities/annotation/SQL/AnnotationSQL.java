@@ -11,15 +11,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.cycads.entities.EntityObject;
-import org.cycads.entities.SQL.EntitySQL;
+import org.cycads.entities.BasicEntity;
+import org.cycads.entities.SQL.BasicEntitySQL;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.note.SQL.TypeSQL;
 
-public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends AssociationSQL<SO, TA>
+public class AnnotationSQL<SO extends BasicEntitySQL, TA extends BasicEntitySQL> extends AssociationSQL<SO, TA>
 		implements Annotation<SO, TA>
 {
 	public final static String		PARENT_TYPE_NAME	= "Parent";
@@ -27,7 +27,7 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 	private String					score;
 
 	private AnnotationMethodSQL		method;
-	private Collection<EntitySQL>	parents;
+	private Collection<BasicEntitySQL>	parents;
 
 	public AnnotationSQL(int id, Connection con) throws SQLException {
 		super(id, con);
@@ -65,7 +65,7 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 		}
 	}
 
-	public static <SO extends EntitySQL, TA extends EntitySQL> AnnotationSQL<SO, TA> createAnnotationSQL(SO source,
+	public static <SO extends BasicEntitySQL, TA extends BasicEntitySQL> AnnotationSQL<SO, TA> createAnnotationSQL(SO source,
 			TA target, Collection<Type> types, AnnotationMethod method, String score, Connection con)
 			throws SQLException {
 		AnnotationMethodSQL methodSQL = AnnotationMethodSQL.getMethod(method, con);
@@ -152,11 +152,11 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 	}
 
 	@Override
-	public void addParent(EntityObject parent) {
-		if (!(parent instanceof EntitySQL)) {
+	public void addParent(BasicEntity parent) {
+		if (!(parent instanceof BasicEntitySQL)) {
 			throw new RuntimeException("Parent is not a SQL entity.");
 		}
-		EntitySQL parentSQL = (EntitySQL) parent;
+		BasicEntitySQL parentSQL = (BasicEntitySQL) parent;
 		if (!isParent(parentSQL)) {
 			try {
 				AssociationSQL< ? , ? > parentAssociation = AssociationSQL.createAssociationSQL(this, parentSQL,
@@ -170,9 +170,9 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 	}
 
 	@Override
-	public Collection<EntitySQL> getParents() {
+	public Collection<BasicEntitySQL> getParents() {
 		if (parents == null) {
-			parents = new ArrayList<EntitySQL>();
+			parents = new ArrayList<BasicEntitySQL>();
 			Collection<AssociationSQL<AnnotationSQL<SO, TA>, ? >> associations;
 			try {
 				associations = AssociationSQL.getAssociations(this, (Type) null, Arrays.asList(getParentType()),
@@ -188,10 +188,10 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 		return parents;
 	}
 
-	public boolean isParent(EntitySQL parent) {
-		Collection<EntitySQL> parents = getParents();
+	public boolean isParent(BasicEntitySQL parent) {
+		Collection<BasicEntitySQL> parents = getParents();
 		if (parents != null) {
-			for (EntitySQL parent1 : getParents()) {
+			for (BasicEntitySQL parent1 : getParents()) {
 				if (parent.getId() == parent1.getId() && parent.getEntityType().equals(parent1.getEntityType())) {
 					return true;
 				}
@@ -217,7 +217,7 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 		return TypeSQL.getType(PARENT_TYPE_NAME, con);
 	}
 
-	public static <SO extends EntitySQL, TA extends EntitySQL> Collection<AnnotationSQL<SO, TA>> getAnnotations(
+	public static <SO extends BasicEntitySQL, TA extends BasicEntitySQL> Collection<AnnotationSQL<SO, TA>> getAnnotations(
 			SO source, TA target, AnnotationMethod method, Collection<Type> types, Connection con) throws SQLException {
 		StringBuffer query = new StringBuffer(
 			"SELECT distinct(annotation_id) FROM Annotation AN, Association A, Source_target_type S");
@@ -291,7 +291,7 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 		return ret;
 	}
 
-	public static <TA extends EntitySQL> Collection<AnnotationSQL< ? , TA>> getAnnotations(Type sourceType, TA target,
+	public static <TA extends BasicEntitySQL> Collection<AnnotationSQL< ? , TA>> getAnnotations(Type sourceType, TA target,
 			AnnotationMethod method, Collection<Type> types, Connection con) throws SQLException {
 		StringBuffer query = new StringBuffer(
 			"SELECT distinct(annotation_id) FROM Annotation AN, Association A, Source_target_type S");
@@ -364,7 +364,7 @@ public class AnnotationSQL<SO extends EntitySQL, TA extends EntitySQL> extends A
 		return ret;
 	}
 
-	public static <SO extends EntitySQL> Collection<AnnotationSQL<SO, ? >> getAnnotations(SO source, Type targetType,
+	public static <SO extends BasicEntitySQL> Collection<AnnotationSQL<SO, ? >> getAnnotations(SO source, Type targetType,
 			AnnotationMethod method, Collection<Type> types, Connection con) throws SQLException {
 		StringBuffer query = new StringBuffer(
 			"SELECT distinct(annotation_id) FROM Annotation AN, Association A, Source_target_type S");

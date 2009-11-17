@@ -5,17 +5,17 @@ package org.cycads.entities.annotation;
 
 import java.util.Collection;
 
-import org.cycads.entities.EntityObject;
+import org.cycads.entities.BasicEntity;
 
-public interface Annotation<SO extends EntityObject, TA extends EntityObject> extends Association<SO, TA>
+public interface Annotation<SO extends BasicEntity, TA extends BasicEntity> extends Association<SO, TA>
 {
 	public static final String	ENTITY_TYPE_NAME	= "Annotation";
 
 	public AnnotationMethod getAnnotationMethod();
 
-	public Collection< ? extends EntityObject> getParents();
+	public Collection< ? extends BasicEntity> getParents();
 
-	public void addParent(EntityObject parent);
+	public void addParent(BasicEntity parent);
 
 	public void setScore(String score);
 

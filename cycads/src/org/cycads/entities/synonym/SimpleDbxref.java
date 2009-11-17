@@ -3,13 +3,13 @@
  */
 package org.cycads.entities.synonym;
 
-import org.cycads.entities.SimpleEntityObject;
+import org.cycads.entities.BasicEntityAbstract;
 import org.cycads.entities.factory.EntityAnnotationFactory;
 import org.cycads.entities.factory.EntityDbxrefFactory;
 import org.cycads.entities.factory.EntityTypeFactory;
 import org.cycads.entities.note.Type;
 
-public class SimpleDbxref extends SimpleEntityObject implements Dbxref
+public class SimpleDbxref extends BasicEntityAbstract implements Dbxref
 {
 
 	String		accession;

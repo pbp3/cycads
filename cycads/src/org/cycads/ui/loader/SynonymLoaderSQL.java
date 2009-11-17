@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
-import org.cycads.entities.EntityObject;
+import org.cycads.entities.BasicEntity;
 import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.synonym.Dbxref;
@@ -102,9 +102,9 @@ public class SynonymLoaderSQL
 		String lineComment = Config.synonymLoaderLineComment();
 		Pattern removeLinePattern = Config.synonymLoaderRemoveLineRegex();
 
-		ObjectFactory<Collection<EntityObject>> objectFactory = new EntityObjectsRecordFactory(factory, sourcesFactory,
+		ObjectFactory<Collection<BasicEntity>> objectFactory = new EntityObjectsRecordFactory(factory, sourcesFactory,
 			notesFactory, synonymsFactory, null);
-		LineRecordFileReader<Collection<EntityObject>> recordFileReader = new LineRecordFileReader<Collection<EntityObject>>(
+		LineRecordFileReader<Collection<BasicEntity>> recordFileReader = new LineRecordFileReader<Collection<BasicEntity>>(
 			br, columnSeparator, lineComment, removeLinePattern, objectFactory);
 
 		Progress progress = new ProgressPrintInterval(System.out, Messages.synonymLoaderStepShowInterval());
