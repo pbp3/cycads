@@ -6,7 +6,7 @@ package org.cycads.ui.loader;
 import java.io.File;
 import java.io.IOException;
 
-import org.cycads.entities.factory.EntityFactorySQL;
+import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.general.Config;
 import org.cycads.general.Messages;
@@ -20,7 +20,7 @@ public class GFF3LoaderSQL
 {
 
 	public static void main(String[] args) {
-		EntityFactorySQL factory = new EntityFactorySQL();
+		EntityFactory factory = EntityFactory.factoryDefault;
 		File file = Tools.getFileToOpen(args, 0, Config.gff3LoaderFileName(), Messages.gff3LoaderChooseFile());
 		if (file == null) {
 			return;

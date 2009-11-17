@@ -8,10 +8,10 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Collection;
 
+import org.cycads.entities.SQL.BasicEntityAbstractSQL;
 import org.cycads.entities.SQL.BasicEntitySQL;
 import org.cycads.entities.SQL.FeatureSQL;
 import org.cycads.entities.SQL.FunctionSQL;
-import org.cycads.entities.SQL.BasicEntityAbstractSQL;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.annotation.Association;
@@ -67,20 +67,20 @@ public class EntityFactorySQL
 		}
 	}
 
-	private AnnotationMethodSQL	methodDefault;
+	//	private AnnotationMethodSQL	methodDefault;
 
-	public AnnotationMethodSQL getMethodDefault() {
-		return methodDefault;
-	}
-
-	public void setMethodDefault(AnnotationMethodSQL methodDefault) {
-		this.methodDefault = methodDefault;
-	}
+	//	public AnnotationMethodSQL getMethodDefault() {
+	//		return methodDefault;
+	//	}
+	//
+	//	public void setMethodDefault(AnnotationMethodSQL methodDefault) {
+	//		this.methodDefault = methodDefault;
+	//	}
 
 	@Override
 	public AnnotationMethodSQL getAnnotationMethod(String name) {
 		if (name == null || (name = name.trim()).length() == 0) {
-			return getMethodDefault();
+			return null;
 		}
 		try {
 			return AnnotationMethodSQL.getMethod(name, getConnection());
@@ -245,8 +245,8 @@ public class EntityFactorySQL
 	}
 
 	@Override
-	public <SO extends BasicEntitySQL, TA extends BasicEntitySQL> AssociationSQL<SO, TA> createAssociation(SO source, TA target,
-			Collection<Type> types) {
+	public <SO extends BasicEntitySQL, TA extends BasicEntitySQL> AssociationSQL<SO, TA> createAssociation(SO source,
+			TA target, Collection<Type> types) {
 		try {
 			return AssociationSQL.createAssociationSQL(source, target, types, getConnection());
 		}
@@ -256,8 +256,8 @@ public class EntityFactorySQL
 	}
 
 	@Override
-	public <SO extends BasicEntitySQL, TA extends BasicEntitySQL> AnnotationSQL<SO, TA> createAnnotation(SO source, TA target,
-			Collection<Type> types, AnnotationMethod method, String score) {
+	public <SO extends BasicEntitySQL, TA extends BasicEntitySQL> AnnotationSQL<SO, TA> createAnnotation(SO source,
+			TA target, Collection<Type> types, AnnotationMethod method, String score) {
 		try {
 			return AnnotationSQL.createAnnotationSQL(source, target, types, method, score, getConnection());
 		}
@@ -278,8 +278,8 @@ public class EntityFactorySQL
 	}
 
 	@Override
-	public <TA extends BasicEntitySQL> Collection< ? extends Annotation< ? , TA>> getAnnotations(Type sourceType, TA target,
-			AnnotationMethod method, Collection<Type> types) {
+	public <TA extends BasicEntitySQL> Collection< ? extends Annotation< ? , TA>> getAnnotations(Type sourceType,
+			TA target, AnnotationMethod method, Collection<Type> types) {
 		try {
 			return AnnotationSQL.getAnnotations(sourceType, target, method, types, getConnection());
 		}
@@ -289,8 +289,8 @@ public class EntityFactorySQL
 	}
 
 	@Override
-	public <SO extends BasicEntitySQL> Collection< ? extends Annotation<SO, ? >> getAnnotations(SO source, Type targetType,
-			AnnotationMethod method, Collection<Type> types) {
+	public <SO extends BasicEntitySQL> Collection< ? extends Annotation<SO, ? >> getAnnotations(SO source,
+			Type targetType, AnnotationMethod method, Collection<Type> types) {
 		try {
 			return AnnotationSQL.getAnnotations(source, targetType, method, types, getConnection());
 		}

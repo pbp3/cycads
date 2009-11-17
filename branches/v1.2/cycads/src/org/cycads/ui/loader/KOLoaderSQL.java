@@ -8,7 +8,6 @@ import java.io.IOException;
 
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.factory.EntityFactory;
-import org.cycads.entities.factory.EntityFactorySQL;
 import org.cycads.general.Config;
 import org.cycads.general.Messages;
 import org.cycads.parser.FileParserException;
@@ -17,14 +16,15 @@ import org.cycads.ui.Tools;
 import org.cycads.ui.progress.Progress;
 import org.cycads.ui.progress.ProgressPrintInterval;
 
-public class KOLoaderSQL {
+public class KOLoaderSQL
+{
 
 	public static void main(String[] args) {
 		File file = Tools.getFileToOpen(args, 0, Config.koLoaderFileName(), Messages.koLoaderChooseFile());
 		if (file == null) {
 			return;
 		}
-		EntityFactory factory = new EntityFactorySQL();
+		EntityFactory factory = EntityFactory.factoryDefault;
 		AnnotationMethod methodDBLink = factory.getAnnotationMethod(Config.getKOLoaderMethodDBLinkName());
 		AnnotationMethod methodEC = factory.getAnnotationMethod(Config.getKOLoaderECAnnotationMethodName());
 
@@ -42,7 +42,7 @@ public class KOLoaderSQL {
 			e.printStackTrace();
 		}
 		finally {
-			((EntityFactorySQL) factory).finish();
+			//			((EntityFactorySQL) factory).finish();
 		}
 	}
 

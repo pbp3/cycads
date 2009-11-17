@@ -11,7 +11,7 @@ import java.util.List;
 
 import org.cycads.entities.Feature;
 import org.cycads.entities.annotation.Annotation;
-import org.cycads.entities.factory.EntityFactorySQL;
+import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Sequence;
 import org.cycads.entities.sequence.Subsequence;
@@ -36,7 +36,7 @@ public class PFFileGeneratorSQL
 {
 
 	public static void main(String[] args) {
-		EntityFactorySQL factory = new EntityFactorySQL();
+		EntityFactory factory = EntityFactory.factoryDefault;
 		File file = Tools.getFileToSave(args, 0, Config.pfGeneratorFileName(), Messages.pfGeneratorChooseFile());
 		if (file == null) {
 			return;

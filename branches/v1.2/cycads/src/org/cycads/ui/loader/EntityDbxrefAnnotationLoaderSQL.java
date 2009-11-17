@@ -17,7 +17,7 @@ import org.cycads.entities.BasicEntity;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.factory.EntityAnnotationFactory;
-import org.cycads.entities.factory.EntityFactorySQL;
+import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.factory.EntityMethodFactory;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.Type;
@@ -45,7 +45,7 @@ import org.cycads.ui.progress.ProgressPrintInterval;
 public class EntityDbxrefAnnotationLoaderSQL
 {
 	public static void main(String[] args) {
-		EntityFactorySQL factory = new EntityFactorySQL();
+		EntityFactory factory = EntityFactory.factoryDefault;
 		File file = Tools.getFileToOpen(args, 0, Config.entityDbxrefAnnotationLoaderFileName(),
 			Messages.generalChooseFileToLoad());
 		BufferedReader br;
@@ -66,7 +66,7 @@ public class EntityDbxrefAnnotationLoaderSQL
 		if (methodName == null) {
 			return;
 		}
-		factory.setMethodDefault(factory.getAnnotationMethod(methodName));
+		//		factory.setMethodDefault(factory.getAnnotationMethod(methodName));
 
 		Integer dbxrefSourceColumnIndex = Tools.getInteger(args, 2,
 			Config.entityDbxrefAnnotationLoaderSourceColumnIndex(),
@@ -115,7 +115,7 @@ public class EntityDbxrefAnnotationLoaderSQL
 		List<String> methodNames = Config.entityDbxrefAnnotationLoaderMethodNames();
 		ObjectFactory<AnnotationMethod> methodFactory = new SimpleObjectFactory<AnnotationMethod>(methodColumnIndex,
 			methodDelimiter, new IndependentMethodFactory<AnnotationMethod>((EntityMethodFactory) factory,
-				methodPatterns, methodNames));
+				methodPatterns, methodNames, factory.getAnnotationMethod(methodName)));
 
 		Collection<String> associationTypeNames = Config.entityDbxrefAnnotationLoaderAssocTypeNames();
 		if (associationTypeNames == null || associationTypeNames.size() == 0) {
@@ -177,7 +177,7 @@ public class EntityDbxrefAnnotationLoaderSQL
 		}
 		finally {
 			progress.finish(Messages.entityDbxrefAnnotationLoaderFinalMsg(progress.getStep(), errorCount.getStep()));
-			factory.finish();
+			//			factory.finish();
 		}
 	}
 }

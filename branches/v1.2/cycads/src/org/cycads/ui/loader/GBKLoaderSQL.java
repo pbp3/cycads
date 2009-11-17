@@ -7,7 +7,7 @@ package org.cycads.ui.loader;
 import java.io.File;
 import java.io.IOException;
 
-import org.cycads.entities.factory.EntityFactorySQL;
+import org.cycads.entities.factory.EntityFactory;
 import org.cycads.general.Messages;
 import org.cycads.parser.gbk.GBKFileConfig;
 import org.cycads.parser.gbk.GBKFileParser;
@@ -19,7 +19,7 @@ public class GBKLoaderSQL
 {
 
 	public static void main(String[] args) {
-		EntityFactorySQL factory = new EntityFactorySQL();
+		EntityFactory factory = EntityFactory.factoryDefault;
 		File fileIn = Tools.getFileToOpen(args, 0, GBKFileConfig.gbkLoaderFileName(), Messages.gbkLoaderChooseFile());
 		if (fileIn == null) {
 			return;

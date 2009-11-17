@@ -17,7 +17,7 @@ import org.cycads.entities.EntityFinder;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.factory.EntityAnnotationFactory;
-import org.cycads.entities.factory.EntityFactorySQL;
+import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.factory.EntityFeatureFactory;
 import org.cycads.entities.factory.EntityMethodFactory;
 import org.cycads.entities.factory.EntityTypeFactory;
@@ -49,7 +49,7 @@ import org.cycads.ui.progress.ProgressPrintInterval;
 public class SubseqDbxrefAnnotationLoaderSQL
 {
 	public static void main(String[] args) {
-		EntityFactorySQL factory = new EntityFactorySQL();
+		EntityFactory factory = EntityFactory.factoryDefault;
 		File file = Tools.getFileToOpen(args, 0, Config.subseqDbxrefAnnotationLoaderFileName(),
 			Messages.generalChooseFileToLoad());
 		if (file == null) {
@@ -76,7 +76,7 @@ public class SubseqDbxrefAnnotationLoaderSQL
 			return;
 		}
 		//		AnnotationMethod method = factory.getAnnotationMethod(methodName);
-		factory.setMethodDefault(factory.getAnnotationMethod(methodName));
+		//		factory.setMethodDefault(factory.getAnnotationMethod(methodName));
 
 		Integer annotColumnIndex = Tools.getInteger(args, 3, Config.subseqDbxrefAnnotationLoaderAnnotColumnIndex(),
 			Messages.subseqDbxrefAnnotationLoaderChooseSourceColumnIndex());
@@ -123,7 +123,7 @@ public class SubseqDbxrefAnnotationLoaderSQL
 		List<String> methodNames = Config.subseqDbxrefAnnotationLoaderMethodNames();
 		ObjectFactory<AnnotationMethod> methodFactory = new SimpleObjectFactory<AnnotationMethod>(methodColumnIndex,
 			methodDelimiter, new IndependentMethodFactory<AnnotationMethod>((EntityMethodFactory) factory,
-				methodPatterns, methodNames));
+				methodPatterns, methodNames, factory.getAnnotationMethod(methodName)));
 
 		Collection<String> associationTypeNames = Config.subseqDbxrefAnnotationLoaderAssocTypeNames();
 		if (associationTypeNames == null || associationTypeNames.size() == 0) {
@@ -184,7 +184,7 @@ public class SubseqDbxrefAnnotationLoaderSQL
 		}
 		finally {
 			progress.finish(Messages.subseqDbxrefAnnotationLoaderFinalMsg(progress.getStep(), errorCount.getStep()));
-			factory.finish();
+			//			factory.finish();
 		}
 	}
 }

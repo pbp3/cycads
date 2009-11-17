@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.regex.Pattern;
 
 import org.cycads.entities.BasicEntity;
-import org.cycads.entities.factory.EntityFactorySQL;
+import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.general.Config;
@@ -33,7 +33,7 @@ import org.cycads.ui.progress.ProgressPrintInterval;
 public class SynonymLoaderSQL
 {
 	public static void main(String[] args) {
-		EntityFactorySQL factory = new EntityFactorySQL();
+		EntityFactory factory = EntityFactory.factoryDefault;
 		File file = Tools.getFileToOpen(args, 0, Config.synonymLoaderFileName(), Messages.generalChooseFileToLoad());
 		BufferedReader br;
 		if (file == null) {
@@ -119,7 +119,7 @@ public class SynonymLoaderSQL
 		}
 		finally {
 			progress.finish(Messages.synonymLoaderFinalMsg(progress.getStep(), errorCount.getStep()));
-			factory.finish();
+			//			factory.finish();
 		}
 	}
 }
