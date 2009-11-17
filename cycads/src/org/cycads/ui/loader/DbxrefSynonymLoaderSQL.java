@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
-import org.cycads.entities.factory.EntityFactorySQL;
+import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.general.Config;
@@ -32,7 +32,7 @@ import org.cycads.ui.progress.ProgressPrintInterval;
 public class DbxrefSynonymLoaderSQL
 {
 	public static void main(String[] args) {
-		EntityFactorySQL factory = new EntityFactorySQL();
+		EntityFactory factory = EntityFactory.factoryDefault;
 		File file = Tools.getFileToOpen(args, 0, Config.dbxrefSynonymLoaderFileName(),
 			Messages.generalChooseFileToLoad());
 		BufferedReader br;
@@ -119,7 +119,7 @@ public class DbxrefSynonymLoaderSQL
 		}
 		finally {
 			progress.finish(Messages.dbxrefSynonymLoaderFinalMsg(progress.getStep(), errorCount.getStep()));
-			factory.finish();
+			//			factory.finish();
 		}
 	}
 }

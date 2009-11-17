@@ -13,24 +13,35 @@ import org.cycads.general.Config;
 public class IndependentMethodFactory<M extends AnnotationMethod> implements IndependentObjectFactory<M>
 {
 	private EntityMethodFactory<M>	entityFactory;
-	private List<Pattern>			methodPatterns	= null;
-	private List<String>			methodNames		= null;
+	private List<Pattern>			methodPatterns;
+	private List<String>			methodNames;
+	private M						methodDefault;
 
 	public IndependentMethodFactory(EntityMethodFactory<M> entityFactory, List<Pattern> methodPatterns,
-			List<String> methodNames) {
+			List<String> methodNames, M methodDefault) {
 		this.entityFactory = entityFactory;
 		this.methodPatterns = methodPatterns;
 		this.methodNames = methodNames;
+		this.methodDefault = methodDefault;
 	}
 
 	@Override
 	public M create(String value) {
 		if (methodPatterns == null || methodPatterns.isEmpty() || methodNames == null || methodNames.isEmpty()
 			|| value == null) {
-			return entityFactory.getAnnotationMethod(value);
+			return getMethod(value);
 		}
 		else {
-			return entityFactory.getAnnotationMethod(Config.transform(value, methodPatterns, methodNames));
+			return getMethod(Config.transform(value, methodPatterns, methodNames));
+		}
+	}
+
+	private M getMethod(String value) {
+		if (value == null || value.isEmpty()) {
+			return methodDefault;
+		}
+		else {
+			return entityFactory.getAnnotationMethod(value);
 		}
 	}
 }

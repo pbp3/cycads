@@ -3,8 +3,8 @@
  */
 package org.cycads.entities.factory;
 
-import org.cycads.entities.EntityFinder;
 import org.cycads.entities.BasicEntity;
+import org.cycads.entities.EntityFinder;
 import org.cycads.entities.Feature;
 import org.cycads.entities.Function;
 import org.cycads.entities.annotation.Annotation;
@@ -20,4 +20,5 @@ public interface EntityFactory<X extends Dbxref, M extends AnnotationMethod, T e
 		EntityFunctionFactory<F>, AnnotationFinder<E>, AssociationFinder<E>, EntityAnnotationFactory<E>,
 		EntityFinder<E>, EntityFeatureFactory<FE>
 {
+	public static EntityFactory	factoryDefault	= new EntityFactorySQL();
 }

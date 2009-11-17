@@ -9,6 +9,6 @@ public interface EntityMethodFactory<M extends AnnotationMethod>
 {
 	public M getAnnotationMethod(String name);
 
-	public M getMethodDefault();
+	//	public M getMethodDefault();
 
 }
