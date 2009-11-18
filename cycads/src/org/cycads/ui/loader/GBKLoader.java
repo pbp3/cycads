@@ -15,7 +15,7 @@ import org.cycads.ui.Tools;
 import org.cycads.ui.progress.Progress;
 import org.cycads.ui.progress.ProgressPrintInterval;
 
-public class GBKLoaderSQL
+public class GBKLoader
 {
 
 	public static void main(String[] args) {
