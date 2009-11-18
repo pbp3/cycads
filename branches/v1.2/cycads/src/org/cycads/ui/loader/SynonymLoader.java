@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
+import org.cycads.entities.BasicEntity;
 import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.synonym.Dbxref;
@@ -20,7 +21,7 @@ import org.cycads.general.ParametersDefault;
 import org.cycads.parser.association.InputNameOverwrite;
 import org.cycads.parser.association.LineRecordFileReader;
 import org.cycads.parser.association.TypeNameTransformer;
-import org.cycads.parser.association.factory.DbxrefsRecordFactory;
+import org.cycads.parser.association.factory.EntityObjectsRecordFactory;
 import org.cycads.parser.association.factory.ObjectFactory;
 import org.cycads.parser.association.factory.SimpleObjectsFactory;
 import org.cycads.parser.association.factory.independent.IndependentDbxrefFactory;
@@ -29,12 +30,11 @@ import org.cycads.ui.progress.Progress;
 import org.cycads.ui.progress.ProgressCount;
 import org.cycads.ui.progress.ProgressPrintInterval;
 
-public class DbxrefSynonymLoaderSQL
+public class SynonymLoader
 {
 	public static void main(String[] args) {
 		EntityFactory factory = EntityFactory.factoryDefault;
-		File file = Tools.getFileToOpen(args, 0, Config.dbxrefSynonymLoaderFileName(),
-			Messages.generalChooseFileToLoad());
+		File file = Tools.getFileToOpen(args, 0, Config.synonymLoaderFileName(), Messages.generalChooseFileToLoad());
 		BufferedReader br;
 		if (file == null) {
 			return;
@@ -49,34 +49,34 @@ public class DbxrefSynonymLoaderSQL
 			}
 		}
 
-		Integer dbxrefSourceColumnIndex = Tools.getInteger(args, 1, Config.dbxrefSynonymLoaderSourceColumnIndex(),
-			Messages.dbxrefSynonymLoaderChooseSourceColumnIndex());
+		Integer dbxrefSourceColumnIndex = Tools.getInteger(args, 1, Config.synonymLoaderSourceColumnIndex(),
+			Messages.synonymLoaderChooseSourceColumnIndex());
 		if (dbxrefSourceColumnIndex == null) {
 			return;
 		}
 
-		String dbxrefSourceDBName = Tools.getString(args, 2, Config.dbxrefSynonymLoaderSourceDBName(),
-			Messages.dbxrefSynonymLoaderChooseSourceDBName());
+		String dbxrefSourceDBName = Tools.getString(args, 2, Config.synonymLoaderSourceDBName(),
+			Messages.synonymLoaderChooseSourceDBName());
 		if (dbxrefSourceDBName == null) {
 			return;
 		}
 
-		Integer dbxrefSynonymColumnIndex = Tools.getInteger(args, 3, Config.dbxrefSynonymLoaderSynonymColumnIndex(),
-			Messages.dbxrefSynonymLoaderChooseSynonymColumnIndex());
-		if (dbxrefSynonymColumnIndex == null) {
+		Integer synonymColumnIndex = Tools.getInteger(args, 3, Config.synonymLoaderSynonymColumnIndex(),
+			Messages.synonymLoaderChooseSynonymColumnIndex());
+		if (synonymColumnIndex == null) {
 			return;
 		}
 
-		String dbxrefSynonymDBName = Tools.getString(args, 4, Config.dbxrefSynonymLoaderSynonymDBName(),
-			Messages.dbxrefSynonymLoaderChooseSynonymDBName());
-		if (dbxrefSynonymDBName == null) {
+		String synonymDBName = Tools.getString(args, 4, Config.synonymLoaderSynonymDBName(),
+			Messages.synonymLoaderChooseSynonymDBName());
+		if (synonymDBName == null) {
 			return;
 		}
 
 		ObjectFactory<Collection<Note>> notesFactory = null;
 
 		TypeNameTransformer dbNameSource = new InputNameOverwrite(dbxrefSourceDBName);
-		TypeNameTransformer dbNameSynonym = new InputNameOverwrite(dbxrefSynonymDBName);
+		TypeNameTransformer dbNameSynonym = new InputNameOverwrite(synonymDBName);
 
 		IndependentDbxrefFactory sourceFactory = new IndependentDbxrefFactory(
 			ParametersDefault.getDbxrefToStringSeparator(), dbNameSource, factory);
@@ -84,32 +84,32 @@ public class DbxrefSynonymLoaderSQL
 		IndependentDbxrefFactory synonymFactory = new IndependentDbxrefFactory(
 			ParametersDefault.getDbxrefToStringSeparator(), dbNameSynonym, factory);
 
-		String columnDelimiter = Config.dbxrefSynonymLoaderSourceColumnDelimiter();
-		String objectsDelimiter = Config.dbxrefSynonymLoaderSourcesDelimiter();
-		String objectsSeparator = Config.dbxrefSynonymLoaderSourcesSeparator();
+		String columnDelimiter = Config.synonymLoaderSourceColumnDelimiter();
+		String objectsDelimiter = Config.synonymLoaderSourcesDelimiter();
+		String objectsSeparator = Config.synonymLoaderSourcesSeparator();
 
 		ObjectFactory<Collection<Dbxref>> sourcesFactory = new SimpleObjectsFactory<Dbxref>(dbxrefSourceColumnIndex,
 			columnDelimiter, objectsSeparator, objectsDelimiter, sourceFactory);
 
-		columnDelimiter = Config.dbxrefSynonymLoaderSynonymColumnDelimiter();
-		objectsDelimiter = Config.dbxrefSynonymLoaderSynonymsDelimiter();
-		objectsSeparator = Config.dbxrefSynonymLoaderSynonymsSeparator();
+		columnDelimiter = Config.synonymLoaderSynonymColumnDelimiter();
+		objectsDelimiter = Config.synonymLoaderSynonymsDelimiter();
+		objectsSeparator = Config.synonymLoaderSynonymsSeparator();
 
-		ObjectFactory<Collection<Dbxref>> synonymsFactory = new SimpleObjectsFactory<Dbxref>(dbxrefSynonymColumnIndex,
+		ObjectFactory<Collection<Dbxref>> synonymsFactory = new SimpleObjectsFactory<Dbxref>(synonymColumnIndex,
 			columnDelimiter, objectsSeparator, objectsDelimiter, synonymFactory);
 
-		String columnSeparator = Config.dbxrefSynonymLoaderColumnSeparator();
-		String lineComment = Config.dbxrefSynonymLoaderLineComment();
-		Pattern removeLinePattern = Config.dbxrefSynonymLoaderRemoveLineRegex();
+		String columnSeparator = Config.synonymLoaderColumnSeparator();
+		String lineComment = Config.synonymLoaderLineComment();
+		Pattern removeLinePattern = Config.synonymLoaderRemoveLineRegex();
 
-		ObjectFactory<Collection<Dbxref>> objectFactory = new DbxrefsRecordFactory(sourcesFactory, notesFactory,
-			synonymsFactory);
-		LineRecordFileReader<Collection<Dbxref>> recordFileReader = new LineRecordFileReader<Collection<Dbxref>>(br,
-			columnSeparator, lineComment, removeLinePattern, objectFactory);
+		ObjectFactory<Collection<BasicEntity>> objectFactory = new EntityObjectsRecordFactory(factory, sourcesFactory,
+			notesFactory, synonymsFactory, null);
+		LineRecordFileReader<Collection<BasicEntity>> recordFileReader = new LineRecordFileReader<Collection<BasicEntity>>(
+			br, columnSeparator, lineComment, removeLinePattern, objectFactory);
 
-		Progress progress = new ProgressPrintInterval(System.out, Messages.dbxrefSynonymLoaderStepShowInterval());
+		Progress progress = new ProgressPrintInterval(System.out, Messages.synonymLoaderStepShowInterval());
 		Progress errorCount = new ProgressCount();
-		progress.init(Messages.dbxrefSynonymLoaderInitMsg(file.getPath()));
+		progress.init(Messages.synonymLoaderInitMsg(file.getPath()));
 
 		try {
 			recordFileReader.readAll(progress, errorCount);
@@ -118,7 +118,7 @@ public class DbxrefSynonymLoaderSQL
 			e.printStackTrace();
 		}
 		finally {
-			progress.finish(Messages.dbxrefSynonymLoaderFinalMsg(progress.getStep(), errorCount.getStep()));
+			progress.finish(Messages.synonymLoaderFinalMsg(progress.getStep(), errorCount.getStep()));
 			//			factory.finish();
 		}
 	}

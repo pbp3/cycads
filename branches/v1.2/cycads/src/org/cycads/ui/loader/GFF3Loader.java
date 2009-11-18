@@ -16,7 +16,7 @@ import org.cycads.ui.Tools;
 import org.cycads.ui.progress.Progress;
 import org.cycads.ui.progress.ProgressPrintInterval;
 
-public class GFF3LoaderSQL
+public class GFF3Loader
 {
 
 	public static void main(String[] args) {

@@ -40,7 +40,7 @@ import org.cycads.ui.progress.Progress;
 import org.cycads.ui.progress.ProgressCount;
 import org.cycads.ui.progress.ProgressPrintInterval;
 
-public class DbxrefDbxrefAnnotationLoaderSQL
+public class DbxrefDbxrefAnnotationLoader
 {
 	public static void main(String[] args) {
 		EntityFactory factory = EntityFactory.factoryDefault;
