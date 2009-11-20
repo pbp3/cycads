@@ -169,10 +169,6 @@ public class GBKFileConfig
 		return -1;
 	}
 
-	static ArrayList<Pattern>	removeTypePatterns	= getPatterns("gbk.file.removeType");
-	static ArrayList<Pattern>	changeTypePatterns	= getPatterns("gbk.file.changeType");
-	static ArrayList<String>	newValueTypes		= getStrings("gbk.file.changeType.newValue");
-
 	public static String getSeqCommentNoteType() {
 		return getStringMandatory("gbk.file.sequence.comment.noteType");
 	}
@@ -181,7 +177,11 @@ public class GBKFileConfig
 		return getStringMandatory("gbk.file.sequence.description.noteType");
 	}
 
-	private static Hashtable<String, String>	typeHash	= new Hashtable<String, String>();
+	static ArrayList<Pattern>					removeTypePatterns	= getPatterns("gbk.file.removeType");
+	static ArrayList<Pattern>					changeTypePatterns	= getPatterns("gbk.file.changeType");
+	static ArrayList<String>					newValueTypes		= getStrings("gbk.file.changeType.newValue");
+
+	private static Hashtable<String, String>	typeHash			= new Hashtable<String, String>();
 
 	public static String getType(String type) {
 		String newType = typeHash.get(type);

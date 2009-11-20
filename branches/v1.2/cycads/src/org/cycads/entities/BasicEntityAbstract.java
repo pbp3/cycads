@@ -69,8 +69,8 @@ public abstract class BasicEntityAbstract implements BasicEntity
 	}
 
 	@Override
-	public <TA extends BasicEntity> Annotation< ? , TA> addAnnotation(TA target, AnnotationMethod method,
-			String score, Collection<Type> annotationTypes) {
+	public <TA extends BasicEntity> Annotation< ? , TA> addAnnotation(TA target, AnnotationMethod method, String score,
+			Collection<Type> annotationTypes) {
 		Annotation< ? , TA> ret = annotationFactory.createAnnotation(this, target, annotationTypes, method, score);
 		annotations.add(ret);
 		return ret;
@@ -237,6 +237,11 @@ public abstract class BasicEntityAbstract implements BasicEntity
 	}
 
 	@Override
+	public Note getNote(Type noteType, String value) {
+		return getNote(noteType.getName(), value);
+	}
+
+	@Override
 	public Type getNoteType(String noteType) {
 		return typeFactory.getType(noteType);
 	}
@@ -248,6 +253,11 @@ public abstract class BasicEntityAbstract implements BasicEntity
 			return null;
 		}
 		return values.iterator().next();
+	}
+
+	@Override
+	public String getNoteValue(Type noteType) {
+		return getNoteValue(noteType.getName());
 	}
 
 	@Override
@@ -277,8 +287,18 @@ public abstract class BasicEntityAbstract implements BasicEntity
 	}
 
 	@Override
+	public Collection<Note> getNotes(Type noteType) {
+		return getNotes(noteType.getName());
+	}
+
+	@Override
 	public Collection<String> getNotesValues(String noteType) {
 		return notes.get(noteType);
+	}
+
+	@Override
+	public Collection<String> getNotesValues(Type noteType) {
+		return getNotesValues(noteType.getName());
 	}
 
 	@Override
@@ -292,6 +312,11 @@ public abstract class BasicEntityAbstract implements BasicEntity
 			notes.put(noteType, values);
 		}
 		values.add(value);
+	}
+
+	@Override
+	public void setNoteValue(Type noteType, String value) {
+		setNoteValue(noteType, value);
 	}
 
 }
