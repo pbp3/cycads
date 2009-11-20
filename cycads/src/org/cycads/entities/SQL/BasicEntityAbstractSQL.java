@@ -89,7 +89,17 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 	}
 
 	@Override
+	public Note getNote(Type noteType, String value) {
+		return getNote(getNoteType(noteType).getId(), value);
+	}
+
+	@Override
 	public Collection<Note> getNotes(String noteType) {
+		return getNotes(getNoteType(noteType).getId());
+	}
+
+	@Override
+	public Collection<Note> getNotes(Type noteType) {
 		return getNotes(getNoteType(noteType).getId());
 	}
 
@@ -99,12 +109,27 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 	}
 
 	@Override
+	public Collection<String> getNotesValues(Type noteType) {
+		return getNotesValues(getNoteType(noteType).getId());
+	}
+
+	@Override
 	public String getNoteValue(String noteType) {
 		return getNoteValue(getNoteType(noteType).getId());
 	}
 
 	@Override
+	public String getNoteValue(Type noteType) {
+		return getNoteValue(getNoteType(noteType).getId());
+	}
+
+	@Override
 	public void setNoteValue(String noteType, String value) {
+		setNoteValue(getNoteType(noteType).getId(), value);
+	}
+
+	@Override
+	public void setNoteValue(Type noteType, String value) {
 		setNoteValue(getNoteType(noteType).getId(), value);
 	}
 
@@ -553,7 +578,8 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 		return getEntities(type, DbxrefSQL.getDbxref(dbName, accession, con), con);
 	}
 
-	public static Collection<BasicEntitySQL> getEntities(Type type, DbxrefSQL dbxref, Connection con) throws SQLException {
+	public static Collection<BasicEntitySQL> getEntities(Type type, DbxrefSQL dbxref, Connection con)
+			throws SQLException {
 		if (type == null) {
 			return getEntities(dbxref, con);
 		}
@@ -677,11 +703,11 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 	}
 
 	@Override
-	public <TA extends BasicEntity> Annotation< ? , TA> addAnnotation(TA target, AnnotationMethod method,
-			String score, Collection<Type> annotationTypes) {
+	public <TA extends BasicEntity> Annotation< ? , TA> addAnnotation(TA target, AnnotationMethod method, String score,
+			Collection<Type> annotationTypes) {
 		try {
-			return (Annotation< ? , TA>) AnnotationSQL.createAnnotationSQL(this, (BasicEntitySQL) target, annotationTypes,
-				method, score, getConnection());
+			return (Annotation< ? , TA>) AnnotationSQL.createAnnotationSQL(this, (BasicEntitySQL) target,
+				annotationTypes, method, score, getConnection());
 		}
 		catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -692,8 +718,8 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 	public <TA extends BasicEntity> Collection< ? extends Annotation< ? , TA>> getAnnotations(TA target,
 			AnnotationMethod method, Collection<Type> annotationTypes) {
 		try {
-			return (Collection< ? extends Annotation< ? , TA>>) AnnotationSQL.getAnnotations(this, (BasicEntitySQL) target,
-				method, annotationTypes, getConnection());
+			return (Collection< ? extends Annotation< ? , TA>>) AnnotationSQL.getAnnotations(this,
+				(BasicEntitySQL) target, method, annotationTypes, getConnection());
 		}
 		catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -717,9 +743,9 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 		try {
 			Collection<AnnotationSQL< ? , ? >> ret = new ArrayList<AnnotationSQL< ? , ? >>();
 			Collection< ? extends AnnotationSQL< ? , ? >> annots;
-			annots = (Collection< ? extends AnnotationSQL< ? , ? >>) BasicEntityAbstractSQL.getEntities(TypeSQL.getType(
-				Annotation.ENTITY_TYPE_NAME, getConnection()), DbxrefSQL.getDbxref(synonym, getConnection()),
-				getConnection());
+			annots = (Collection< ? extends AnnotationSQL< ? , ? >>) BasicEntityAbstractSQL.getEntities(
+				TypeSQL.getType(Annotation.ENTITY_TYPE_NAME, getConnection()), DbxrefSQL.getDbxref(synonym,
+					getConnection()), getConnection());
 			for (AnnotationSQL< ? , ? > annot : annots) {
 				if (annot.getSource().equals(this)) {
 					ret.add(annot);
@@ -737,8 +763,8 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 		try {
 			Collection<AnnotationSQL< ? , ? >> ret = new ArrayList<AnnotationSQL< ? , ? >>();
 			Collection< ? extends AnnotationSQL< ? , ? >> annots;
-			annots = (Collection< ? extends AnnotationSQL< ? , ? >>) BasicEntityAbstractSQL.getEntities(TypeSQL.getType(
-				Annotation.ENTITY_TYPE_NAME, getConnection()), dbName, accession, getConnection());
+			annots = (Collection< ? extends AnnotationSQL< ? , ? >>) BasicEntityAbstractSQL.getEntities(
+				TypeSQL.getType(Annotation.ENTITY_TYPE_NAME, getConnection()), dbName, accession, getConnection());
 			for (AnnotationSQL< ? , ? > annot : annots) {
 				if (annot.getSource().equals(this)) {
 					ret.add(annot);

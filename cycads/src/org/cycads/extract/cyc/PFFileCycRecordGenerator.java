@@ -7,6 +7,7 @@ import java.util.regex.Pattern;
 
 import org.cycads.entities.Feature;
 import org.cycads.entities.annotation.Annotation;
+import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.general.ParametersDefault;
 
@@ -19,6 +20,7 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 	ScoreSystemCollection	ecScoreSystems;
 	double					goThreshold;
 	ScoreSystemCollection	goScoreSystems;
+	private Type			cycIdNoteType	= null;
 
 	//	double					koThreshold;
 	//	ScoreSystemCollection	koScoreSystems;
@@ -186,10 +188,17 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 	}
 
 	private String getID(Annotation< ? , ? > annot) {
-		String id = annot.getNoteValue(ParametersDefault.getPFFileCycIdNoteType());
-		if (id == null || id.length() == 0) {
+		if (cycIdNoteType == null) {
+			cycIdNoteType = annot.getNoteType(ParametersDefault.getPFFileCycIdNoteType());
+		}
+		String id = annot.getNoteValue(cycIdNoteType);
+		if (id == null) {
 			id = cycIdGenerator.getNewID();
-			annot.addNote(ParametersDefault.getPFFileCycIdNoteType(), id);
+			annot.addNote(cycIdNoteType, id);
+		}
+		else if (id.length() == 0) {
+			id = cycIdGenerator.getNewID();
+			annot.setNoteValue(cycIdNoteType, id);
 		}
 		return id;
 	}
