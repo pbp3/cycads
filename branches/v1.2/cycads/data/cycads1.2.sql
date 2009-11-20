@@ -11,9 +11,7 @@ CREATE  TABLE IF NOT EXISTS `Organism` (
   `name` TEXT NULL ,
   `Next_Cyc_Id` INT(11) NOT NULL DEFAULT 1 ,
   PRIMARY KEY (`ncbi_taxon_id`) )
-ENGINE = InnoDB
-PACK_KEYS = 0
-ROW_FORMAT = DEFAULT;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -30,9 +28,7 @@ CREATE  TABLE IF NOT EXISTS `Sequence` (
     REFERENCES `Organism` (`ncbi_taxon_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB
-PACK_KEYS = 0
-ROW_FORMAT = DEFAULT;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -49,9 +45,7 @@ CREATE  TABLE IF NOT EXISTS `Biosequence` (
     REFERENCES `Sequence` (`sequence_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB
-PACK_KEYS = 0
-ROW_FORMAT = DEFAULT;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -100,9 +94,7 @@ CREATE  TABLE IF NOT EXISTS `Dbxref` (
     REFERENCES `External_DB` (`external_db_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB
-PACK_KEYS = 0
-ROW_FORMAT = DEFAULT;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -121,9 +113,7 @@ CREATE  TABLE IF NOT EXISTS `Subsequence` (
     REFERENCES `Sequence` (`sequence_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB
-PACK_KEYS = 0
-ROW_FORMAT = DEFAULT;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -139,9 +129,7 @@ CREATE  TABLE IF NOT EXISTS `Intron` (
     REFERENCES `Subsequence` (`subsequence_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB
-PACK_KEYS = 0
-ROW_FORMAT = DEFAULT;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -186,9 +174,7 @@ CREATE  TABLE IF NOT EXISTS `Association` (
     REFERENCES `Source_target_type` (`source_target_type_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB
-PACK_KEYS = 0
-ROW_FORMAT = DEFAULT;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -203,9 +189,7 @@ CREATE  TABLE IF NOT EXISTS `Method` (
     REFERENCES `Term_type` (`type_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB
-PACK_KEYS = 0
-ROW_FORMAT = DEFAULT;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -220,9 +204,7 @@ CREATE  TABLE IF NOT EXISTS `Biofunction` (
     REFERENCES `Term_type` (`type_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB
-PACK_KEYS = 0
-ROW_FORMAT = DEFAULT;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -242,9 +224,7 @@ CREATE  TABLE IF NOT EXISTS `Association_type` (
     REFERENCES `Term_type` (`type_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB
-PACK_KEYS = 0
-ROW_FORMAT = DEFAULT;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -253,9 +233,7 @@ ROW_FORMAT = DEFAULT;
 CREATE  TABLE IF NOT EXISTS `Pathway` (
   `pathway_id` INT(11) NOT NULL AUTO_INCREMENT ,
   PRIMARY KEY (`pathway_id`) )
-ENGINE = InnoDB
-PACK_KEYS = 0
-ROW_FORMAT = DEFAULT;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -271,9 +249,7 @@ CREATE  TABLE IF NOT EXISTS `Reaction` (
     REFERENCES `Dbxref` (`dbxref_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB
-PACK_KEYS = 0
-ROW_FORMAT = DEFAULT;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -283,9 +259,7 @@ CREATE  TABLE IF NOT EXISTS `Compound` (
   `compound_id` INT(11) NOT NULL AUTO_INCREMENT ,
   `small_molecule` TINYINT(1) NOT NULL ,
   PRIMARY KEY (`compound_id`) )
-ENGINE = InnoDB
-PACK_KEYS = 0
-ROW_FORMAT = DEFAULT;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -327,9 +301,7 @@ CREATE  TABLE IF NOT EXISTS `Reaction_has_compound` (
     REFERENCES `Compound` (`compound_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB
-PACK_KEYS = 0
-ROW_FORMAT = DEFAULT;
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
