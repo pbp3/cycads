@@ -237,27 +237,27 @@ public class ParametersDefault
 	// CDS Fake
 
 	public static String getSeqVersionFake() {
-		return getStringMandatory("annot.fake.seqVersion");
+		return getStringMandatory("general.annot.fake.seqVersion");
 	}
 
 	public static int getSubseqStartFake() {
-		return getInt("annot.fake.subseqStartPos");
+		return getInt("general.annot.fake.subseqStartPos");
 	}
 
 	public static int getSubseqEndFake() {
-		return getInt("annot.fake.subseqEndPos");
+		return getInt("general.annot.fake.subseqEndPos");
 	}
 
 	public static String getAnnotationMethodFake() {
-		return getStringMandatory("annot.fake.annotationMethod");
+		return getStringMandatory("general.annot.fake.annotationMethod");
 	}
 
 	public static String getAnnotationFakeType() {
-		return getStringMandatory("annot.fake.annotationType");
+		return getStringMandatory("general.annot.fake.annotationType");
 	}
 
 	public static String getAnnotationFakeFeature() {
-		return getStringMandatory("annot.fake.annotationFeature");
+		return getStringMandatory("general.annot.fake.annotationFeature");
 	}
 
 }

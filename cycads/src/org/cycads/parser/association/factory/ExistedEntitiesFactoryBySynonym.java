@@ -7,8 +7,8 @@ package org.cycads.parser.association.factory;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.cycads.entities.annotation.Annotation;
-import org.cycads.entities.annotation.AnnotationFinder;
+import org.cycads.entities.BasicEntity;
+import org.cycads.entities.EntityFinder;
 import org.cycads.entities.factory.EntityFeatureFactory;
 import org.cycads.entities.factory.EntityMethodFactory;
 import org.cycads.entities.factory.EntityTypeFactory;
@@ -17,9 +17,9 @@ import org.cycads.entities.synonym.Dbxref;
 import org.cycads.parser.ParserException;
 import org.cycads.parser.association.Tools;
 
-public class ExistedAnnotationsFactoryBySynonym implements ObjectFactory<Collection<Annotation>>
+public class ExistedEntitiesFactoryBySynonym implements ObjectFactory<Collection<BasicEntity>>
 {
-	private AnnotationFinder					annotationFinder;
+	private EntityFinder						entityFinder;
 	private ObjectFactory<Collection<Dbxref>>	dbxrefsFactory;
 	boolean										createFake;
 	//the attributes below will be used in the fake creation
@@ -28,17 +28,16 @@ public class ExistedAnnotationsFactoryBySynonym implements ObjectFactory<Collect
 	private EntityFeatureFactory				featureFactory;
 	private EntityTypeFactory					typeFactory;
 
-	public ExistedAnnotationsFactoryBySynonym(AnnotationFinder annotationFinder,
-			ObjectFactory<Collection<Dbxref>> dbxrefsFactory) {
-		this.annotationFinder = annotationFinder;
+	public ExistedEntitiesFactoryBySynonym(EntityFinder entityFinder, ObjectFactory<Collection<Dbxref>> dbxrefsFactory) {
+		this.entityFinder = entityFinder;
 		this.dbxrefsFactory = dbxrefsFactory;
 		this.createFake = false;
 	}
 
-	public ExistedAnnotationsFactoryBySynonym(AnnotationFinder annotationFinder,
-			ObjectFactory<Collection<Dbxref>> dbxrefsFactory, Organism organism, EntityMethodFactory methodFactory,
-			EntityFeatureFactory featureFactory, EntityTypeFactory typeFactory) {
-		this.annotationFinder = annotationFinder;
+	public ExistedEntitiesFactoryBySynonym(EntityFinder entityFinder, ObjectFactory<Collection<Dbxref>> dbxrefsFactory,
+			Organism organism, EntityMethodFactory methodFactory, EntityFeatureFactory featureFactory,
+			EntityTypeFactory typeFactory) {
+		this.entityFinder = entityFinder;
 		this.dbxrefsFactory = dbxrefsFactory;
 		this.createFake = true;
 		this.organism = organism;
@@ -48,23 +47,23 @@ public class ExistedAnnotationsFactoryBySynonym implements ObjectFactory<Collect
 	}
 
 	@Override
-	public Collection<Annotation> create(String[] values) throws ParserException {
+	public Collection<BasicEntity> create(String[] values) throws ParserException {
 		Collection<Dbxref> dbxrefs = dbxrefsFactory.create(values);
 		if (dbxrefs == null || dbxrefs.isEmpty()) {
-			return new ArrayList<Annotation>();
+			return new ArrayList<BasicEntity>();
 		}
-		Collection<Annotation> ret = new ArrayList<Annotation>();
-		Collection<Annotation> annots;
+		Collection<BasicEntity> ret = new ArrayList<BasicEntity>();
+		Collection<BasicEntity> entities;
 		for (Dbxref dbxref : dbxrefs) {
-			annots = annotationFinder.getAnnotationsBySynonym(dbxref);
-			if ((annots == null || annots.isEmpty()) && createFake) {
-				if (annots == null) {
-					annots = new ArrayList<Annotation>();
+			entities = entityFinder.getEntitiesBySynonym(dbxref, null);
+			if ((entities == null || entities.isEmpty()) && createFake) {
+				if (entities == null) {
+					entities = new ArrayList<BasicEntity>();
 				}
-				annots.add(Tools.createFakeSubseqAnnot(dbxref, organism, methodFactory, featureFactory, typeFactory));
+				entities.add(Tools.createFakeSubseqAnnot(dbxref, organism, methodFactory, featureFactory, typeFactory));
 			}
-			if (annots != null && !annots.isEmpty()) {
-				ret.addAll(annots);
+			if (entities != null && !entities.isEmpty()) {
+				ret.addAll(entities);
 			}
 		}
 		return ret;
