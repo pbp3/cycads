@@ -50,17 +50,15 @@ ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `Term_type`
+-- ??? 2 indexes with the same atribute (`name` ASC) ???
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `Term_type` (
   `type_id` INT(11) NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(255) NOT NULL ,
   `description` TEXT NULL ,
   PRIMARY KEY (`type_id`) ,
-  UNIQUE INDEX `name` (`name` ASC) ,
-  INDEX `term_type_index1775` (`name` ASC) )
-ENGINE = InnoDB
-PACK_KEYS = 0
-ROW_FORMAT = DEFAULT;
+  UNIQUE INDEX `name` (`name` ASC) )
+ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------

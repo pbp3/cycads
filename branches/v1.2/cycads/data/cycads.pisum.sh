@@ -10,7 +10,7 @@ cp config.properties $dirout/.
 cp "cycads.pisum.sh" $dirout/.
 
 
-java -Xmx512M -cp $jar$othersjar org.cycads.ui.loader.KOLoaderL $dirin/ko > $dirout/KOLoaderSQL.out
+java -Xmx512M -cp $jar$othersjar org.cycads.ui.loader.KOLoader $dirin/ko > $dirout/KOLoaderSQL.out
 java -Xmx1024M -cp $jar$othersjar org.cycads.ui.loader.GFF3Loader $dirin/ACYPI.gff3 7029 AphidBaseS 1.0 > $dirout/GFF3LoaderSQL.out
 java -Xmx512M -cp $jar$othersjar org.cycads.ui.loader.SubseqDbxrefAnnotationLoader $dirin/2810_KO_for34821_ACYPI_BBH-subsetEukaryotes 7029 KAAS-subset-eukaryotes 0 AphidBaseP 1 KO -1  > $dirout/SubseqAnnotationLoaderSQL.subset-eukaryotes.out
 java -Xmx512M -cp $jar$othersjar org.cycads.ui.loader.SubseqDbxrefAnnotationLoader $dirin/3018_KO_for34821_ACYPI_BBH-RepSet-genes 7029 KAAS-repset-genes 0 AphidBaseP 1 KO -1 > $dirout/SubseqAnnotationLoaderSQL.repset-genes.out
