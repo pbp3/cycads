@@ -157,52 +157,52 @@ public class Config
 	// GFF3 Loader
 
 	public static String gff3LoaderFileName() {
-		return getStringOptional("gff3.loader.fileName");
+		return getStringOptional("GFF3Loader.loader.fileName");
 	}
 
 	public static int gff3LoaderOrganismNumber() {
-		return getInt("gff3.loader.organismNumber");
+		return getInt("GFF3Loader.loader.organismNumber");
 	}
 
 	public static String gff3LoaderSeqDBName() {
-		return getStringOptional("gff3.loader.sequenceDbName");
+		return getStringOptional("GFF3Loader.loader.sequenceDbName");
 	}
 
 	public static String gff3LoaderSeqVersion() {
-		return getStringOptional("gff3.loader.sequenceVersion");
+		return getStringOptional("GFF3Loader.loader.sequenceVersion");
 	}
 
 	public static String gff3LoaderOrganismName() {
-		return getStringOptional("gff3.loader.organismName");
+		return getStringOptional("GFF3Loader.loader.organismName");
 	}
 
 	// PFFile Generator
 	public static String pfGeneratorFileName() {
-		return getStringOptional("pf.file.extract.fileName");
+		return getStringOptional("PFFileGenerator.fileName");
 	}
 
 	public static int pfGeneratorOrganismNumber() {
-		return getInt("pf.file.extract.organismNumber");
+		return getInt("PFFileGenerator.organismNumber");
 	}
 
 	public static String pfGeneratorSeqSynonym() {
-		return getStringOptional("pf.file.extract.sequenceSynonym");
+		return getStringOptional("PFFileGenerator.sequenceSynonym");
 	}
 
 	public static String pfGeneratorSeqVersion() {
-		return getStringOptional("pf.file.extract.sequenceVersion");
+		return getStringOptional("PFFileGenerator.sequenceVersion");
 	}
 
 	public static double pfEcThreshold() {
-		return getDouble("pf.file.ec.threshold");
+		return getDouble("PFFileGenerator.ec.threshold");
 	}
 
 	public static double pfGoThreshold() {
-		return getDouble("pf.file.go.threshold");
+		return getDouble("PFFileGenerator.go.threshold");
 	}
 
 	public static String pfGeneratorFileHeader() {
-		return getStringOptional("pf.file.extract.fileHeader");
+		return getStringOptional("PFFileGenerator.file.fileHeader");
 	}
 
 	//	// CDS to KO Loader

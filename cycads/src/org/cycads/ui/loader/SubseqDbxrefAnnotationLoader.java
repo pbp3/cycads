@@ -34,6 +34,7 @@ import org.cycads.parser.association.LineRecordFileReader;
 import org.cycads.parser.association.TypeNameTransformer;
 import org.cycads.parser.association.factory.AnnotationsRecordFactory;
 import org.cycads.parser.association.factory.ConstantFactory;
+import org.cycads.parser.association.factory.ExistedEntitiesFactoryBySynonym;
 import org.cycads.parser.association.factory.ObjectFactory;
 import org.cycads.parser.association.factory.SimpleObjectFactory;
 import org.cycads.parser.association.factory.SimpleObjectsFactory;
@@ -149,10 +150,10 @@ public class SubseqDbxrefAnnotationLoader
 		String objectsDelimiter = Config.dbxrefDbxrefAnnotationLoaderSourcesDelimiter();
 		String objectsSeparator = Config.dbxrefDbxrefAnnotationLoaderSourcesSeparator();
 
-		ObjectFactory<Collection<Subsequence>> sourcesFactory = new SubseqsFactory(new SimpleObjectsFactory<Dbxref>(
-			annotColumnIndex, columnDelimiter, objectsSeparator, objectsDelimiter, sourceFactory),
-			(EntityFinder) factory, organism, (EntityMethodFactory) factory, (EntityFeatureFactory) factory,
-			(EntityTypeFactory) factory);
+		ObjectFactory<Collection<Subsequence>> sourcesFactory = new SubseqsFactory(new ExistedEntitiesFactoryBySynonym(
+			(EntityFinder) factory, new SimpleObjectsFactory<Dbxref>(annotColumnIndex, columnDelimiter,
+				objectsSeparator, objectsDelimiter, sourceFactory), organism, (EntityMethodFactory) factory,
+			(EntityFeatureFactory) factory, (EntityTypeFactory) factory));
 
 		columnDelimiter = Config.dbxrefDbxrefAnnotationLoaderTargetColumnDelimiter();
 		objectsDelimiter = Config.dbxrefDbxrefAnnotationLoaderTargetsDelimiter();
