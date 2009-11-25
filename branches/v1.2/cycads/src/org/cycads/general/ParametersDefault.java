@@ -147,47 +147,47 @@ public class ParametersDefault
 	// KOFile
 
 	public static String koFileEntryTag() {
-		return getString("KOFile.entryTag");
+		return getString("KOLoader.file.entryTag");
 	}
 
 	public static String koFileDefinitionTag() {
-		return getString("KOFile.definitionTag");
+		return getString("KOLoader.file.definitionTag");
 	}
 
 	public static String koFileDBLinksTag() {
-		return getString("KOFile.dbLinksTag");
+		return getString("KOLoader.file.dbLinksTag");
 	}
 
 	public static String koFileECTag() {
-		return getString("KOFile.ecTag");
+		return getString("KOLoader.file.ecTag");
 	}
 
 	public static int koFileDataPos() {
-		return getInt("KOFile.dataPos");
+		return getInt("KOLoader.file.dataPos");
 	}
 
 	public static String koFileEndRecordStr() {
-		return getString("KOFile.endRecord");
+		return getString("KOLoader.file.endRecord");
 	}
 
 	public static String koFileCommentStr() {
-		return getString("KOFile.comment");
+		return getString("KOLoader.file.comment");
 	}
 
 	public static String koFileECDeleteExpression() {
-		return getString("KOFile.EC.deleteExpression");
+		return getString("KOLoader.file.EC.deleteExpression");
 	}
 
 	public static String koFileECSeparator() {
-		return getString("KOFile.EC.separatorExpression");
+		return getString("KOLoader.file.EC.separatorExpression");
 	}
 
 	public static String koFileDBLinkSubTagSeparator() {
-		return getString("KOFile.DBLink.subTagSeparator");
+		return getString("KOLoader.file.DBLink.subTagSeparator");
 	}
 
 	public static String koFileDBLinkAccessionSeparator() {
-		return getString("KOFile.DBLink.accessionSeparator");
+		return getString("KOLoader.file.DBLink.accessionSeparator");
 	}
 
 	public static String koFileDBLinkDbName(String DBLinkName) {
@@ -202,7 +202,7 @@ public class ParametersDefault
 
 	private static List<Pattern> getKODBLinkPatterns() {
 		if (dbLinkPatterns == null) {
-			dbLinkPatterns = getPatterns("KOFile.DBLink.names.regex");
+			dbLinkPatterns = getPatterns("KOLoader.file.DBLink.dbName.regex");
 		}
 		return dbLinkPatterns;
 	}
@@ -211,7 +211,7 @@ public class ParametersDefault
 
 	private static List<String> getfKODBLinkNames() {
 		if (dbLinkNames == null) {
-			dbLinkNames = getStrings("KOFile.DBLink.dbNames");
+			dbLinkNames = getStrings("KOLoader.file.DBLink.newDbName");
 		}
 		return dbLinkNames;
 	}

@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 import org.cycads.general.Config;
 
 /*
- #the gff3 parameters: gff3.file[.comment].<parameter name>[.<type>][.<source>][.regex][.<i>]
+ #the gff3 parameters: GFF3Loader.file[.comment].<parameter name>[.<type>][.<source>][.regex][.<i>]
  #type = gene|mrna|cds|exon
 
  */
@@ -87,10 +87,10 @@ public class GFF3FileConfig
 
 	public static ArrayList<Pattern> getPatterns(String parameterName, boolean comment, String type, String source) {
 		if (comment) {
-			parameterName = "gff3.file.comment." + parameterName;
+			parameterName = "GFF3Loader.file.comment." + parameterName;
 		}
 		else {
-			parameterName = "gff3.file." + parameterName;
+			parameterName = "GFF3Loader.file." + parameterName;
 		}
 		ArrayList<Pattern> patterns = getPatterns(parameterName, null);
 		if (type != null) {
@@ -115,10 +115,10 @@ public class GFF3FileConfig
 
 	public static ArrayList<String> getStrings(String parameterName, boolean comment, String type, String source) {
 		if (comment) {
-			parameterName = "gff3.file.comment." + parameterName;
+			parameterName = "GFF3Loader.file.comment." + parameterName;
 		}
 		else {
-			parameterName = "gff3.file." + parameterName;
+			parameterName = "GFF3Loader.file." + parameterName;
 		}
 		ArrayList<String> values = getStrings(parameterName, null);
 		if (type != null && type.length() > 0) {
@@ -181,10 +181,10 @@ public class GFF3FileConfig
 		return false;
 	}
 
-	public static final String										geneType			= getStringMandatory("gff3.file.typeValue.gene");
-	public static final String										cdsType				= getStringMandatory("gff3.file.typeValue.cds");
-	public static final String										mrnaType			= getStringMandatory("gff3.file.typeValue.mrna");
-	public static final String										exonType			= getStringMandatory("gff3.file.typeValue.exon");
+	public static final String										geneType			= getStringMandatory("GFF3Loader.file.typeValue.gene");
+	public static final String										cdsType				= getStringMandatory("GFF3Loader.file.typeValue.cds");
+	public static final String										mrnaType			= getStringMandatory("GFF3Loader.file.typeValue.mrna");
+	public static final String										exonType			= getStringMandatory("GFF3Loader.file.typeValue.exon");
 
 	static Hashtable<String, Hashtable<String, ArrayList<Pattern>>>	typeValuePatterns	= new Hashtable<String, Hashtable<String, ArrayList<Pattern>>>(
 																							4);

@@ -137,9 +137,9 @@ public class GBKFileConfig
 	}
 
 	public static ArrayList<Pattern> getPatternsByType(String parameterName, String type) {
-		ArrayList<Pattern> patterns = getPatterns("gbk.file." + parameterName, null);
+		ArrayList<Pattern> patterns = getPatterns("GBKLoader.file." + parameterName, null);
 		type = getConfigType(type);
-		patterns = getPatterns("gbk.file." + type + "." + parameterName, patterns);
+		patterns = getPatterns("GBKLoader.file." + type + "." + parameterName, patterns);
 		return patterns;
 	}
 
@@ -152,9 +152,9 @@ public class GBKFileConfig
 	}
 
 	public static ArrayList<String> getStringsByType(String parameterName, String type) {
-		ArrayList<String> values = getStrings("gbk.file." + parameterName, null);
+		ArrayList<String> values = getStrings("GBKLoader.file." + parameterName, null);
 		type = getConfigType(type);
-		values = getStrings("gbk.file." + type + "." + parameterName, values);
+		values = getStrings("GBKLoader.file." + type + "." + parameterName, values);
 		return values;
 	}
 
@@ -170,16 +170,16 @@ public class GBKFileConfig
 	}
 
 	public static String getSeqCommentNoteType() {
-		return getStringMandatory("gbk.file.sequence.comment.noteType");
+		return getStringMandatory("GBKLoader.file.sequence.comment.noteType");
 	}
 
 	public static String getSeqDescriptionNoteType() {
-		return getStringMandatory("gbk.file.sequence.description.noteType");
+		return getStringMandatory("GBKLoader.file.sequence.description.noteType");
 	}
 
-	static ArrayList<Pattern>					removeTypePatterns	= getPatterns("gbk.file.removeType");
-	static ArrayList<Pattern>					changeTypePatterns	= getPatterns("gbk.file.changeType");
-	static ArrayList<String>					newValueTypes		= getStrings("gbk.file.changeType.newValue");
+	static ArrayList<Pattern>					removeTypePatterns	= getPatterns("GBKLoader.file.removeType");
+	static ArrayList<Pattern>					changeTypePatterns	= getPatterns("GBKLoader.file.changeType");
+	static ArrayList<String>					newValueTypes		= getStrings("GBKLoader.file.changeType.newValue");
 
 	private static Hashtable<String, String>	typeHash			= new Hashtable<String, String>();
 
@@ -204,8 +204,8 @@ public class GBKFileConfig
 		return newType;
 	}
 
-	static ArrayList<Pattern>					changeConfigTypePatterns	= getPatterns("gbk.file.changeConfigType");
-	static ArrayList<String>					newConfigValueTypes			= getStrings("gbk.file.changeConfigType.newValue");
+	static ArrayList<Pattern>					changeConfigTypePatterns	= getPatterns("GBKLoader.file.changeConfigType");
+	static ArrayList<String>					newConfigValueTypes			= getStrings("GBKLoader.file.changeConfigType.newValue");
 	private static Hashtable<String, String>	configTypeHash				= new Hashtable<String, String>();
 
 	public static String getConfigType(String type) {
@@ -240,7 +240,7 @@ public class GBKFileConfig
 		if (methodName == null) {
 			methodName = getStringByType("methodName", type);
 			if (methodName == null || methodName.length() == 0) {
-				methodName = getStringMandatory("gbk.file.methodNameDefault");
+				methodName = getStringMandatory("GBKLoader.file.methodNameDefault");
 			}
 			annotationMethodNameHash.put(type, methodName);
 		}
@@ -278,15 +278,15 @@ public class GBKFileConfig
 	//	}
 	//
 	public static String gbkLoaderSeqDBName() {
-		return getStringOptional("gbk.file.sequence.dbName");
+		return getStringOptional("GBKLoader.file.sequence.dbName");
 	}
 
 	public static String gbkLoaderFileName() {
-		return getStringOptional("gbk.file.fileName");
+		return getStringOptional("GBKLoader.file.fileName");
 	}
 
 	public static String getOutputFile() {
-		return getStringOptional("gbk.file.debug.outputGbkFile");
+		return getStringOptional("GBKLoader.file.debug.outputGbkFile");
 	}
 
 	private static Hashtable<String, ArrayList<NoteOperation>>	noteOperationsHash	= new Hashtable<String, ArrayList<NoteOperation>>();
