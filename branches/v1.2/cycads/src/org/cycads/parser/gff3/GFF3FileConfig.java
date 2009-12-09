@@ -86,21 +86,22 @@ public class GFF3FileConfig
 	}
 
 	public static ArrayList<Pattern> getPatterns(String parameterName, boolean comment, String type, String source) {
+		String parameterPrefix;
 		if (comment) {
-			parameterName = "GFF3Loader.file.comment." + parameterName;
+			parameterPrefix = "GFF3Loader.file.attribute";
 		}
 		else {
-			parameterName = "GFF3Loader.file." + parameterName;
+			parameterPrefix = "GFF3Loader.file";
 		}
-		ArrayList<Pattern> patterns = getPatterns(parameterName, null);
-		if (type != null) {
-			patterns = getPatterns(parameterName + "." + type, patterns);
+		ArrayList<Pattern> patterns = getPatterns(parameterPrefix + "." + parameterName, null);
+		if (type != null && type.length() > 0) {
+			patterns = getPatterns(parameterPrefix + "." + type + "." + parameterName, patterns);
 			if (source != null) {
-				patterns = getPatterns(parameterName + "." + type + "." + source, patterns);
+				patterns = getPatterns(parameterPrefix + "." + type + "." + source + "." + parameterName, patterns);
 			}
 		}
-		if (source != null) {
-			patterns = getPatterns(parameterName + "." + source, patterns);
+		if (source != null && source.length() > 0) {
+			patterns = getPatterns(parameterPrefix + "." + source + "." + parameterName, patterns);
 		}
 		return patterns;
 	}
@@ -114,21 +115,22 @@ public class GFF3FileConfig
 	}
 
 	public static ArrayList<String> getStrings(String parameterName, boolean comment, String type, String source) {
+		String parameterPrefix;
 		if (comment) {
-			parameterName = "GFF3Loader.file.comment." + parameterName;
+			parameterPrefix = "GFF3Loader.file.attribute";
 		}
 		else {
-			parameterName = "GFF3Loader.file." + parameterName;
+			parameterPrefix = "GFF3Loader.file";
 		}
-		ArrayList<String> values = getStrings(parameterName, null);
+		ArrayList<String> values = getStrings(parameterPrefix + "." + parameterName, null);
 		if (type != null && type.length() > 0) {
-			values = getStrings(parameterName + "." + type, values);
+			values = getStrings(parameterPrefix + "." + type + "." + parameterName, values);
 			if (source != null && source.length() > 0) {
-				values = getStrings(parameterName + "." + type + "." + source, values);
+				values = getStrings(parameterPrefix + "." + type + "." + source + "." + parameterName, values);
 			}
 		}
 		if (source != null && source.length() > 0) {
-			values = getStrings(parameterName + "." + source, values);
+			values = getStrings(parameterPrefix + "." + source + "." + parameterName, values);
 		}
 		return values;
 	}
@@ -181,16 +183,16 @@ public class GFF3FileConfig
 		return false;
 	}
 
-	public static final String										geneType			= getStringMandatory("GFF3Loader.file.typeValue.gene");
-	public static final String										cdsType				= getStringMandatory("GFF3Loader.file.typeValue.cds");
-	public static final String										mrnaType			= getStringMandatory("GFF3Loader.file.typeValue.mrna");
-	public static final String										exonType			= getStringMandatory("GFF3Loader.file.typeValue.exon");
+	public static final String										geneType			= getStringMandatory("GFF3Loader.file.geneConfigType");
+	public static final String										cdsType				= getStringMandatory("GFF3Loader.file.cdsConfigType");
+	public static final String										mrnaType			= getStringMandatory("GFF3Loader.file.mrnaConfigType");
+	public static final String										exonType			= getStringMandatory("GFF3Loader.file.exonConfigType");
 
 	static Hashtable<String, Hashtable<String, ArrayList<Pattern>>>	typeValuePatterns	= new Hashtable<String, Hashtable<String, ArrayList<Pattern>>>(
 																							4);
 
 	public static boolean isTypeValue(String input, String type, String source) {
-		ArrayList<Pattern> patterns = getPatternsTypeSource("typeValue", false, type, source, typeValuePatterns);
+		ArrayList<Pattern> patterns = getPatternsTypeSource("type", false, type, source, typeValuePatterns);
 		return matches(input, patterns);
 	}
 
@@ -250,28 +252,28 @@ public class GFF3FileConfig
 																							4);
 
 	public static ArrayList<Pattern> getReplaceTagPatterns(String type, String source) {
-		return getPatternsTypeSource("replaceTag", true, type, source, replaceTagPatterns);
+		return getPatternsTypeSource("replaceTagName", true, type, source, replaceTagPatterns);
 	}
 
 	static Hashtable<String, Hashtable<String, ArrayList<String>>>	replaceNewValues	= new Hashtable<String, Hashtable<String, ArrayList<String>>>(
 																							4);
 
 	public static ArrayList<String> getReplaceNewValues(String type, String source) {
-		return getStringsTypeSource("replaceNewValue", true, type, source, replaceNewValues);
+		return getStringsTypeSource("replaceNewTagName", true, type, source, replaceNewValues);
 	}
 
 	static Hashtable<String, Hashtable<String, ArrayList<Pattern>>>	completSynonymTagPatterns	= new Hashtable<String, Hashtable<String, ArrayList<Pattern>>>(
 																									4);
 
 	public static ArrayList<Pattern> getCompletSynonymTagPatterns(String type, String source) {
-		return getPatternsTypeSource("completSynonymTag", true, type, source, completSynonymTagPatterns);
+		return getPatternsTypeSource("annotationCompletSynonymTag", true, type, source, completSynonymTagPatterns);
 	}
 
 	static Hashtable<String, Hashtable<String, ArrayList<String>>>	completSynonymSeparators	= new Hashtable<String, Hashtable<String, ArrayList<String>>>(
 																									4);
 
 	public static ArrayList<String> getCompletSynonymSeparators(String type, String source) {
-		return getStringsTypeSource("completSynonymSeparator", true, type, source, completSynonymSeparators);
+		return getStringsTypeSource("annotationCompletSynonymSeparator", true, type, source, completSynonymSeparators);
 	}
 
 	static Hashtable<String, Hashtable<String, ArrayList<Pattern>>>	annotationSynonymAccessionTagPatterns	= new Hashtable<String, Hashtable<String, ArrayList<Pattern>>>(

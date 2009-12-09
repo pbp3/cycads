@@ -31,11 +31,11 @@ public class GFF3Loader
 		if (organism == null) {
 			return;
 		}
-		String seqDBName = Tools.getString(args, 2, Config.gff3LoaderSeqDBName(), Messages.gff3LoaderChooseSeqDBName());
+		String seqDBName = Tools.getString(args, 3, Config.gff3LoaderSeqDBName(), Messages.gff3LoaderChooseSeqDBName());
 		if (seqDBName == null) {
 			return;
 		}
-		String seqVersion = Tools.getString(args, 3, Config.gff3LoaderSeqVersion(),
+		String seqVersion = Tools.getString(args, 4, Config.gff3LoaderSeqVersion(),
 			Messages.gff3LoaderChooseSeqVersion());
 		if (seqVersion == null) {
 			return;
