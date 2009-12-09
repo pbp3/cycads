@@ -108,13 +108,10 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 		ArrayList<String> replaceNewValues = GFF3FileConfig.getReplaceNewValues(record.getType(), record.getSource());
 		Collection<Note> notes = record.getNotes();
 		for (Note note : new ArrayList<Note>(notes)) {
-			for (Pattern pattern : removePatterns) {
-				if (pattern.matcher(note.getType().getName()).matches()) {
-					record.removeNote(note);
-					note = null;
-				}
+			if (GFF3FileConfig.matches(note.getType().getName(), removePatterns)) {
+				record.removeNote(note);
 			}
-			if (note != null) {
+			else {
 				for (int i = 0; i < replacePatterns.size(); i++) {
 					Pattern pattern = replacePatterns.get(i);
 					if (pattern.matcher(note.getType().getName()).matches()) {

@@ -108,15 +108,28 @@ public class Tools
 	public static Organism getOrCreateOrganism(String[] args, int pos, int organismNumberDefault,
 			String organismNumberChooserMsg, String organismNameDefault, String organismNameChooserMsg,
 			EntityFactory entityFactory) {
-		int orgID = organismNumberDefault;
+		int orgID;
+		String organismName;
+		if (args.length > pos) {
+			orgID = Integer.parseInt(args[pos]);
+		}
+		else {
+			orgID = organismNumberDefault;
+		}
+		if (args.length > pos + 1) {
+			organismName = args[pos + 1];
+		}
+		else {
+			organismName = organismNameDefault;
+		}
+
 		Organism organism = null;
 		String respDialog;
 		try {
 			if (args.length > pos) {
-				orgID = Integer.parseInt(args[pos]);
 				organism = entityFactory.getOrganism(orgID);
 				if (organism == null) {
-					organism = entityFactory.createOrganism(orgID, organismNameDefault);
+					organism = entityFactory.createOrganism(orgID, organismName);
 				}
 			}
 		}
@@ -131,8 +144,8 @@ public class Tools
 				orgID = Integer.parseInt(respDialog);
 				organism = entityFactory.getOrganism(orgID);
 				if (organism == null) {
-					organism = entityFactory.createOrganism(orgID, JOptionPane.showInputDialog(organismNameChooserMsg,
-						organismNameDefault));
+					organismName = JOptionPane.showInputDialog(organismNameChooserMsg, organismName);
+					organism = entityFactory.createOrganism(orgID, organismName);
 				}
 			}
 			catch (Exception ex) {
