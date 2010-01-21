@@ -99,6 +99,24 @@ public class SimpleSubsequence<S extends Sequence< ? , ? >> extends BasicEntityA
 		return getEnd() <= getStart() ? getEnd() : getStart();
 	}
 
+	public void setMinPosition(int min) {
+		if (isPositiveStrand()) {
+			this.start = min;
+		}
+		else {
+			this.end = min;
+		}
+	}
+
+	public void setMaxPosition(int max) {
+		if (isPositiveStrand()) {
+			this.end = max;
+		}
+		else {
+			this.start = max;
+		}
+	}
+
 	@Override
 	public S getSequence() {
 		return seq;
@@ -117,12 +135,32 @@ public class SimpleSubsequence<S extends Sequence< ? , ? >> extends BasicEntityA
 		return introns.remove(intron);
 	}
 
-	public boolean addExon(int start, int end) {
+	public void addExon(int start, int end) {
+		boolean invert = false;
 		if (start > end) {
 			int aux = start;
 			start = end;
 			end = aux;
+			invert = true;
 		}
+
+		if (start < getMinPosition()) {
+			int minPosOld = getMinPosition();
+			setMinPosition(start);
+			if (end < minPosOld - 1) {
+				addIntron(new SimpleIntron(end + 1, minPosOld - 1));
+				return;
+			}
+		}
+		if (end > getMaxPosition()) {
+			int maxPosOld = getMaxPosition();
+			setMaxPosition(end);
+			if (start > maxPosOld + 1) {
+				addIntron(new SimpleIntron(start - 1, maxPosOld + 1));
+				return;
+			}
+		}
+
 		Collection<Intron> introns = getIntrons();
 		Collection<Intron> intronsToRemove = new ArrayList<Intron>();
 		Collection<Intron> intronsToAdd = new ArrayList<Intron>();
@@ -145,7 +183,6 @@ public class SimpleSubsequence<S extends Sequence< ? , ? >> extends BasicEntityA
 		for (Intron intron : intronsToAdd) {
 			addIntron(intron);
 		}
-		return true;
 	}
 
 	@Override

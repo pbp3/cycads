@@ -42,7 +42,7 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 	private final Collection<Type>											functionalTypes;
 
 	Hashtable<String, ArrayList<Annotation<SimpleSubsequence, Feature>>>	mrnasHash;
-	ArrayList<GFF3Record>													cdss;
+	Hashtable<String, ArrayList<GFF3Record>>								cdss;
 	ArrayList<Annotation<SimpleSubsequence, Feature>>						mrnas;
 
 	public GeneralGFF3Handler(EntityFactory factory, Organism organism, String seqDBName, String seqVersion,
@@ -66,7 +66,7 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 
 	@Override
 	public void startDocument() {
-		cdss = new ArrayList<GFF3Record>();
+		cdss = new Hashtable<String, ArrayList<GFF3Record>>();
 		mrnas = new ArrayList<Annotation<SimpleSubsequence, Feature>>();
 		mrnasHash = new Hashtable<String, ArrayList<Annotation<SimpleSubsequence, Feature>>>();
 	}
@@ -216,7 +216,21 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 	}
 
 	private void handleCDS(GFF3Record record) {
-		cdss.add(record);
+		ArrayList<Dbxref> synonyms = getSynonyms(record);
+		ArrayList<GFF3Record> cdsRecords = null;
+		for (Dbxref dbxref : synonyms) {
+			cdsRecords = cdss.get(dbxref.toString());
+			if (cdsRecords != null) {
+				break;
+			}
+		}
+		if (cdsRecords == null) {
+			cdsRecords = new ArrayList<GFF3Record>(1);
+		}
+		cdsRecords.add(record);
+		for (Dbxref dbxref : synonyms) {
+			cdss.put(dbxref.toString(), cdsRecords);
+		}
 	}
 
 	private void handleFunctionAnnot(Note note, Subsequence subseq, GFF3Record record) {
@@ -288,8 +302,14 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 	}
 
 	private void handleAnnotSynonym(Note note, Annotation< ? extends Subsequence, Feature> annot, GFF3Record record) {
-		String type = record.getType();
-		String source = record.getSource();
+		ArrayList<Dbxref> synonyms = getSynonyms(note, record.getType(), record.getSource());
+		for (Dbxref dbxref : synonyms) {
+			annot.addSynonym(dbxref);
+		}
+	}
+
+	private ArrayList<Dbxref> getSynonyms(Note note, String type, String source) {
+		ArrayList<Dbxref> synonyms = new ArrayList<Dbxref>(1);
 		String noteType = note.getType().getName();
 		ArrayList<Pattern> patterns = GFF3FileConfig.getCompletSynonymTagPatterns(type, source);
 		for (int i = 0; i < patterns.size(); i++) {
@@ -297,8 +317,8 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 				ArrayList<String> separators = GFF3FileConfig.getCompletSynonymSeparators(type, source);
 				String[] strs = note.getValue().split(separators.get(i));
 				if (strs.length == 2) {
-					annot.addSynonym(strs[0], strs[1]);
-					return;
+					synonyms.add(factory.getDbxref(strs[0], strs[1]));
+					return synonyms;
 				}
 			}
 		}
@@ -306,9 +326,21 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 		ArrayList<String> dbNames = GFF3FileConfig.getAnnotationSynonymDbNames(type, source);
 		for (int i = 0; i < patterns.size(); i++) {
 			if (patterns.get(i).matcher(noteType).matches()) {
-				annot.addSynonym(dbNames.get(i), note.getValue());
+				synonyms.add(factory.getDbxref(dbNames.get(i), note.getValue()));
 			}
 		}
+		return synonyms;
+	}
+
+	private ArrayList<Dbxref> getSynonyms(GFF3Record record) {
+		ArrayList<Dbxref> synonyms = new ArrayList<Dbxref>(1);
+		String type = record.getType();
+		String source = record.getSource();
+		Collection<Note> notes = record.getNotes();
+		for (Note note : notes) {
+			synonyms.addAll(getSynonyms(note, type, source));
+		}
+		return synonyms;
 	}
 
 	private Sequence	lastSequence		= null;
@@ -338,8 +370,8 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 	@Override
 	public void endDocument() {
 		persistMrnas();
-		for (GFF3Record record : cdss) {
-			handleCDS2(record);
+		for (ArrayList<GFF3Record> records : cdss.values()) {
+			handleCDS2(records);
 		}
 	}
 
@@ -376,7 +408,7 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 		}
 	}
 
-	private void handleCDS2(GFF3Record record) {
+	private void handleCDS2(ArrayList<GFF3Record> records) {
 		Sequence seq = getSequence(record.getSequenceID());
 		Collection<Intron> intronsParent = null;
 		Collection<Note> notes = record.getNotes();
