@@ -33,7 +33,6 @@ import org.cycads.entities.synonym.SQL.DbxrefSQL;
 import org.cycads.entities.synonym.SQL.ECSQL;
 import org.cycads.entities.synonym.SQL.KOSQL;
 import org.cycads.general.Config;
-import org.cycads.general.ParametersDefault;
 
 public class EntityFactorySQL
 		implements
@@ -182,16 +181,6 @@ public class EntityFactorySQL
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-	}
-
-	@Override
-	public TypeSQL getAnnotationTypeCDS() {
-		return getType(ParametersDefault.getCDSAnnotationTypeName());
-	}
-
-	@Override
-	public TypeSQL getAnnotationTypeGene() {
-		return getType(ParametersDefault.getGeneAnnotationTypeName());
 	}
 
 	public static BasicEntitySQL createObject(int id, int typeId, Connection con) throws SQLException {

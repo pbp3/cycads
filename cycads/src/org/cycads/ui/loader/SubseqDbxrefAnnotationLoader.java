@@ -79,15 +79,15 @@ public class SubseqDbxrefAnnotationLoader
 		//		AnnotationMethod method = factory.getAnnotationMethod(methodName);
 		//		factory.setMethodDefault(factory.getAnnotationMethod(methodName));
 
-		Integer annotColumnIndex = Tools.getInteger(args, 3, Config.subseqDbxrefAnnotationLoaderAnnotColumnIndex(),
+		Integer subseqColumnIndex = Tools.getInteger(args, 3, Config.subseqDbxrefAnnotationLoaderAnnotColumnIndex(),
 			Messages.subseqDbxrefAnnotationLoaderChooseSourceColumnIndex());
-		if (annotColumnIndex == null) {
+		if (subseqColumnIndex == null) {
 			return;
 		}
 
-		String annotDBName = Tools.getString(args, 4, Config.subseqDbxrefAnnotationLoaderAnnotDBName(),
+		String subseqDBName = Tools.getString(args, 4, Config.subseqDbxrefAnnotationLoaderAnnotDBName(),
 			Messages.subseqDbxrefAnnotationLoaderChooseSourceDBName());
-		if (annotDBName == null) {
+		if (subseqDBName == null) {
 			return;
 		}
 
@@ -137,7 +137,7 @@ public class SubseqDbxrefAnnotationLoader
 		}
 		ObjectFactory<Collection<Type>> typesFactory = new ConstantFactory<Collection<Type>>(associationTypes);
 
-		TypeNameTransformer dbNameSource = new InputNameOverwrite(annotDBName);
+		TypeNameTransformer dbNameSource = new InputNameOverwrite(subseqDBName);
 		TypeNameTransformer dbNameTarget = new InputNameOverwrite(dbxrefDBName);
 
 		IndependentDbxrefFactory sourceFactory = new IndependentDbxrefFactory(
@@ -151,7 +151,7 @@ public class SubseqDbxrefAnnotationLoader
 		String objectsSeparator = Config.dbxrefDbxrefAnnotationLoaderSourcesSeparator();
 
 		ObjectFactory<Collection<Subsequence>> sourcesFactory = new SubseqsFactory(new ExistedEntitiesFactoryBySynonym(
-			(EntityFinder) factory, new SimpleObjectsFactory<Dbxref>(annotColumnIndex, columnDelimiter,
+			(EntityFinder) factory, new SimpleObjectsFactory<Dbxref>(subseqColumnIndex, columnDelimiter,
 				objectsSeparator, objectsDelimiter, sourceFactory), organism, (EntityMethodFactory) factory,
 			(EntityFeatureFactory) factory, (EntityTypeFactory) factory));
 

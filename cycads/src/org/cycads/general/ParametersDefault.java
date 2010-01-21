@@ -100,26 +100,6 @@ public class ParametersDefault
 		return getInt("general.organism.nextCycId");
 	}
 
-	public static String getSubseqAnnotationTypeName() {
-		return getStringMandatory("general.type.subseqAnnotationTypeName");
-	}
-
-	public static String getDbxrefAnnotationTypeName() {
-		return getStringMandatory("general.type.dbxrefAnnotationTypeName");
-	}
-
-	public static String getFunctionAnnotationTypeName() {
-		return getStringMandatory("general.type.functionAnnotationTypeName");
-	}
-
-	public static String getDbxrefSourceAnnotationTypeName() {
-		return getStringMandatory("general.type.dbxrefSourceAnnotationTypeName");
-	}
-
-	public static String getScoreAnnotationNoteTypeName() {
-		return getStringMandatory("general.type.scoreAnnotationNoteTypeName");
-	}
-
 	public static String getCDSAnnotationTypeName() {
 		return getStringMandatory("general.type.cdsAnnotationTypeName");
 	}

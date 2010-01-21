@@ -246,11 +246,11 @@ public class Config
 	}
 
 	public static int subseqDbxrefAnnotationLoaderAnnotColumnIndex() {
-		return getInt("subseqDbxrefAnnotationLoader.annotColumnIndex");
+		return getInt("subseqDbxrefAnnotationLoader.subseqColumnIndex");
 	}
 
 	public static String subseqDbxrefAnnotationLoaderAnnotDBName() {
-		return getStringOptional("subseqDbxrefAnnotationLoader.annotDBName");
+		return getStringOptional("subseqDbxrefAnnotationLoader.subseqDBName");
 	}
 
 	public static int subseqDbxrefAnnotationLoaderDbxrefColumnIndex() {
@@ -517,66 +517,66 @@ public class Config
 		return getStrings("entityDbxrefAnnotationLoader.file.methodName");
 	}
 
-	// synonymLoader
+	// entitySynonymLoader
 
-	public static String synonymLoaderFileName() {
-		return getStringOptional("synonymLoader.fileName");
+	public static String entitySynonymLoaderFileName() {
+		return getStringOptional("entitySynonymLoader.fileName");
 	}
 
-	public static int synonymLoaderOrganismNumber() {
-		return getInt("synonymLoader.organismNumber");
+	public static int entitySynonymLoaderOrganismNumber() {
+		return getInt("entitySynonymLoader.organismNumber");
 	}
 
-	public static int synonymLoaderSourceColumnIndex() {
-		return getInt("synonymLoader.annotColumnIndex");
+	public static int entitySynonymLoaderSourceColumnIndex() {
+		return getInt("entitySynonymLoader.annotColumnIndex");
 	}
 
-	public static String synonymLoaderSourceDBName() {
-		return getStringOptional("synonymLoader.annotDBName");
+	public static String entitySynonymLoaderSourceDBName() {
+		return getStringOptional("entitySynonymLoader.annotDBName");
 	}
 
-	public static int synonymLoaderSynonymColumnIndex() {
-		return getInt("synonymLoader.dbxrefColumnIndex");
+	public static int entitySynonymLoaderSynonymColumnIndex() {
+		return getInt("entitySynonymLoader.dbxrefColumnIndex");
 	}
 
-	public static String synonymLoaderSynonymDBName() {
-		return getStringOptional("synonymLoader.dbxrefDBName");
+	public static String entitySynonymLoaderSynonymDBName() {
+		return getStringOptional("entitySynonymLoader.dbxrefDBName");
 	}
 
-	public static String synonymLoaderSourcesDelimiter() {
-		return getStringMandatory("synonymLoader.file.sourcesDelimiter");
+	public static String entitySynonymLoaderSourcesDelimiter() {
+		return getStringMandatory("entitySynonymLoader.file.sourcesDelimiter");
 	}
 
-	public static String synonymLoaderSynonymsDelimiter() {
-		return getStringMandatory("synonymLoader.file.synonymsDelimiter");
+	public static String entitySynonymLoaderSynonymsDelimiter() {
+		return getStringMandatory("entitySynonymLoader.file.synonymsDelimiter");
 	}
 
-	public static String synonymLoaderSourceColumnDelimiter() {
-		return getStringMandatory("synonymLoader.file.sourceColumnDelimiter");
+	public static String entitySynonymLoaderSourceColumnDelimiter() {
+		return getStringMandatory("entitySynonymLoader.file.sourceColumnDelimiter");
 	}
 
-	public static String synonymLoaderSynonymColumnDelimiter() {
-		return getStringMandatory("synonymLoader.file.synonymColumnDelimiter");
+	public static String entitySynonymLoaderSynonymColumnDelimiter() {
+		return getStringMandatory("entitySynonymLoader.file.synonymColumnDelimiter");
 	}
 
-	public static String synonymLoaderLineComment() {
-		return getStringMandatory("synonymLoader.file.lineComment");
+	public static String entitySynonymLoaderLineComment() {
+		return getStringMandatory("entitySynonymLoader.file.lineComment");
 	}
 
-	public static String synonymLoaderColumnSeparator() {
-		return getStringMandatory("synonymLoader.file.columnSeparator");
+	public static String entitySynonymLoaderColumnSeparator() {
+		return getStringMandatory("entitySynonymLoader.file.columnSeparator");
 	}
 
-	public static String synonymLoaderSourcesSeparator() {
-		return getStringMandatory("synonymLoader.file.sourcesSeparator");
+	public static String entitySynonymLoaderSourcesSeparator() {
+		return getStringMandatory("entitySynonymLoader.file.sourcesSeparator");
 	}
 
-	public static String synonymLoaderSynonymsSeparator() {
-		return getStringMandatory("synonymLoader.file.synonymsSeparator");
+	public static String entitySynonymLoaderSynonymsSeparator() {
+		return getStringMandatory("entitySynonymLoader.file.synonymsSeparator");
 	}
 
-	public static Pattern synonymLoaderRemoveLineRegex() {
-		return Pattern.compile(getStringMandatory("synonymLoader.file.removeLineRegex"));
+	public static Pattern entitySynonymLoaderRemoveLineRegex() {
+		return Pattern.compile(getStringMandatory("entitySynonymLoader.file.removeLineRegex"));
 	}
 
 	// dbxrefSynonymLoader

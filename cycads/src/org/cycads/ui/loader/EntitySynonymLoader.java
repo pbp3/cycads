@@ -30,11 +30,12 @@ import org.cycads.ui.progress.Progress;
 import org.cycads.ui.progress.ProgressCount;
 import org.cycads.ui.progress.ProgressPrintInterval;
 
-public class SynonymLoader
+public class EntitySynonymLoader
 {
 	public static void main(String[] args) {
 		EntityFactory factory = EntityFactory.factoryDefault;
-		File file = Tools.getFileToOpen(args, 0, Config.synonymLoaderFileName(), Messages.generalChooseFileToLoad());
+		File file = Tools.getFileToOpen(args, 0, Config.entitySynonymLoaderFileName(),
+			Messages.generalChooseFileToLoad());
 		BufferedReader br;
 		if (file == null) {
 			return;
@@ -49,26 +50,26 @@ public class SynonymLoader
 			}
 		}
 
-		Integer dbxrefSourceColumnIndex = Tools.getInteger(args, 1, Config.synonymLoaderSourceColumnIndex(),
-			Messages.synonymLoaderChooseSourceColumnIndex());
+		Integer dbxrefSourceColumnIndex = Tools.getInteger(args, 1, Config.entitySynonymLoaderSourceColumnIndex(),
+			Messages.entitySynonymLoaderChooseSourceColumnIndex());
 		if (dbxrefSourceColumnIndex == null) {
 			return;
 		}
 
-		String dbxrefSourceDBName = Tools.getString(args, 2, Config.synonymLoaderSourceDBName(),
-			Messages.synonymLoaderChooseSourceDBName());
+		String dbxrefSourceDBName = Tools.getString(args, 2, Config.entitySynonymLoaderSourceDBName(),
+			Messages.entitySynonymLoaderChooseSourceDBName());
 		if (dbxrefSourceDBName == null) {
 			return;
 		}
 
-		Integer synonymColumnIndex = Tools.getInteger(args, 3, Config.synonymLoaderSynonymColumnIndex(),
-			Messages.synonymLoaderChooseSynonymColumnIndex());
+		Integer synonymColumnIndex = Tools.getInteger(args, 3, Config.entitySynonymLoaderSynonymColumnIndex(),
+			Messages.entitySynonymLoaderChooseSynonymColumnIndex());
 		if (synonymColumnIndex == null) {
 			return;
 		}
 
-		String synonymDBName = Tools.getString(args, 4, Config.synonymLoaderSynonymDBName(),
-			Messages.synonymLoaderChooseSynonymDBName());
+		String synonymDBName = Tools.getString(args, 4, Config.entitySynonymLoaderSynonymDBName(),
+			Messages.entitySynonymLoaderChooseSynonymDBName());
 		if (synonymDBName == null) {
 			return;
 		}
@@ -84,32 +85,32 @@ public class SynonymLoader
 		IndependentDbxrefFactory synonymFactory = new IndependentDbxrefFactory(
 			ParametersDefault.getDbxrefToStringSeparator(), dbNameSynonym, factory);
 
-		String columnDelimiter = Config.synonymLoaderSourceColumnDelimiter();
-		String objectsDelimiter = Config.synonymLoaderSourcesDelimiter();
-		String objectsSeparator = Config.synonymLoaderSourcesSeparator();
+		String columnDelimiter = Config.entitySynonymLoaderSourceColumnDelimiter();
+		String objectsDelimiter = Config.entitySynonymLoaderSourcesDelimiter();
+		String objectsSeparator = Config.entitySynonymLoaderSourcesSeparator();
 
 		ObjectFactory<Collection<Dbxref>> sourcesFactory = new SimpleObjectsFactory<Dbxref>(dbxrefSourceColumnIndex,
 			columnDelimiter, objectsSeparator, objectsDelimiter, sourceFactory);
 
-		columnDelimiter = Config.synonymLoaderSynonymColumnDelimiter();
-		objectsDelimiter = Config.synonymLoaderSynonymsDelimiter();
-		objectsSeparator = Config.synonymLoaderSynonymsSeparator();
+		columnDelimiter = Config.entitySynonymLoaderSynonymColumnDelimiter();
+		objectsDelimiter = Config.entitySynonymLoaderSynonymsDelimiter();
+		objectsSeparator = Config.entitySynonymLoaderSynonymsSeparator();
 
 		ObjectFactory<Collection<Dbxref>> synonymsFactory = new SimpleObjectsFactory<Dbxref>(synonymColumnIndex,
 			columnDelimiter, objectsSeparator, objectsDelimiter, synonymFactory);
 
-		String columnSeparator = Config.synonymLoaderColumnSeparator();
-		String lineComment = Config.synonymLoaderLineComment();
-		Pattern removeLinePattern = Config.synonymLoaderRemoveLineRegex();
+		String columnSeparator = Config.entitySynonymLoaderColumnSeparator();
+		String lineComment = Config.entitySynonymLoaderLineComment();
+		Pattern removeLinePattern = Config.entitySynonymLoaderRemoveLineRegex();
 
 		ObjectFactory<Collection<BasicEntity>> objectFactory = new EntityObjectsRecordFactory(factory, sourcesFactory,
 			notesFactory, synonymsFactory, null);
 		LineRecordFileReader<Collection<BasicEntity>> recordFileReader = new LineRecordFileReader<Collection<BasicEntity>>(
 			br, columnSeparator, lineComment, removeLinePattern, objectFactory);
 
-		Progress progress = new ProgressPrintInterval(System.out, Messages.synonymLoaderStepShowInterval());
+		Progress progress = new ProgressPrintInterval(System.out, Messages.entitySynonymLoaderStepShowInterval());
 		Progress errorCount = new ProgressCount();
-		progress.init(Messages.synonymLoaderInitMsg(file.getPath()));
+		progress.init(Messages.entitySynonymLoaderInitMsg(file.getPath()));
 
 		try {
 			recordFileReader.readAll(progress, errorCount);
@@ -118,7 +119,7 @@ public class SynonymLoader
 			e.printStackTrace();
 		}
 		finally {
-			progress.finish(Messages.synonymLoaderFinalMsg(progress.getStep(), errorCount.getStep()));
+			progress.finish(Messages.entitySynonymLoaderFinalMsg(progress.getStep(), errorCount.getStep()));
 			//			factory.finish();
 		}
 	}
