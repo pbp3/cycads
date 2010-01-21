@@ -281,36 +281,36 @@ public class Messages
 		return getStringMandatory("gbkLoader.chooseSeqDBName");
 	}
 
-	// synonymLoader
+	// entitySynonymLoader
 
-	public static String synonymLoaderChooseSourceColumnIndex() {
-		return getStringMandatory("synonymLoader.chooseSourceColumnIndex");
+	public static String entitySynonymLoaderChooseSourceColumnIndex() {
+		return getStringMandatory("entitySynonymLoader.chooseSourceColumnIndex");
 	}
 
-	public static String synonymLoaderChooseSourceDBName() {
-		return getStringMandatory("synonymLoader.chooseSourceDBName");
+	public static String entitySynonymLoaderChooseSourceDBName() {
+		return getStringMandatory("entitySynonymLoader.chooseSourceDBName");
 	}
 
-	public static String synonymLoaderChooseSynonymColumnIndex() {
-		return getStringMandatory("synonymLoader.chooseSynonymColumnIndex");
+	public static String entitySynonymLoaderChooseSynonymColumnIndex() {
+		return getStringMandatory("entitySynonymLoader.chooseSynonymColumnIndex");
 	}
 
-	public static String synonymLoaderChooseSynonymDBName() {
-		return getStringMandatory("synonymLoader.chooseSynonymDBName");
+	public static String entitySynonymLoaderChooseSynonymDBName() {
+		return getStringMandatory("entitySynonymLoader.chooseSynonymDBName");
 	}
 
-	public static int synonymLoaderStepShowInterval() {
-		return getInt("synonymLoader.stepShowInterval");
+	public static int entitySynonymLoaderStepShowInterval() {
+		return getInt("entitySynonymLoader.stepShowInterval");
 	}
 
-	public static String synonymLoaderInitMsg(String path) {
+	public static String entitySynonymLoaderInitMsg(String path) {
 		Object[] a = {path};
-		return MessageFormat.format(getStringMandatory("synonymLoader.init"), a);
+		return MessageFormat.format(getStringMandatory("entitySynonymLoader.init"), a);
 	}
 
-	public static String synonymLoaderFinalMsg(int step, int errorStep) {
+	public static String entitySynonymLoaderFinalMsg(int step, int errorStep) {
 		Object[] a = {step, errorStep};
-		return MessageFormat.format(getStringMandatory("synonymLoader.final"), a);
+		return MessageFormat.format(getStringMandatory("entitySynonymLoader.final"), a);
 	}
 
 	// dbxrefSynonymLoader

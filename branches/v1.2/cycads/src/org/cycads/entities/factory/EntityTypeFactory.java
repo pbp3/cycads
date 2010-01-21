@@ -9,8 +9,4 @@ public interface EntityTypeFactory<T extends Type>
 {
 	public T getType(String name);
 
-	public T getAnnotationTypeCDS();
-
-	public T getAnnotationTypeGene();
-
 }
