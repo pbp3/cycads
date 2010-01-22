@@ -15,4 +15,6 @@ public interface Intron extends Comparable<Intron>, CycIntron
 
 	public int getEnd();
 
+	public Intron getIntersection(int start, int end);
+
 }

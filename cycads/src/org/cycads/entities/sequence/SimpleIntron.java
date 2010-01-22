@@ -3,6 +3,9 @@
  */
 package org.cycads.entities.sequence;
 
+import java.util.Collection;
+import java.util.TreeSet;
+
 public class SimpleIntron implements Intron
 {
 	int	start, end;
@@ -51,6 +54,29 @@ public class SimpleIntron implements Intron
 	@Override
 	public boolean contains(Intron intron) {
 		return this.getStart() <= intron.getStart() && this.getEnd() >= intron.getEnd();
+	}
+
+	public static Collection<Intron> getIntrons(Collection<Intron> introns, int start, int end) {
+		Collection<Intron> ret = new TreeSet<Intron>();
+		for (Intron intron : introns) {
+			Intron newIntron = intron.getIntersection(start, end);
+			if (newIntron != null) {
+				ret.add(newIntron);
+			}
+		}
+		return ret;
+	}
+
+	@Override
+	public Intron getIntersection(int start, int end) {
+		int min = start > end ? end : start;
+		int max = start > end ? start : end;
+		if (getEnd() < min || getStart() > max) {
+			return null;
+		}
+		int startIntersection = getStart() > min ? getStart() : min;
+		int endIntersection = getEnd() < max ? getEnd() : max;
+		return new SimpleIntron(startIntersection, endIntersection);
 	}
 
 }

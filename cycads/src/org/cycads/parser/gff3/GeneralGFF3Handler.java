@@ -409,6 +409,7 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 	}
 
 	private void handleCDS2(ArrayList<GFF3Record> records) {
+		GFF3Record record = records.get(0);
 		Sequence seq = getSequence(record.getSequenceID());
 		Collection<Intron> intronsParent = null;
 		Collection<Note> notes = record.getNotes();
@@ -425,19 +426,52 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 			}
 		}
 
-		Subsequence subseq;
+		SimpleSubsequence simpleSubsequence;
 		if (record.getStrand() < 0) {
-			subseq = seq.getSubsequence(record.getEnd(), record.getStart(), intronsParent);
-			if (subseq == null) {
-				subseq = seq.createSubsequence(record.getEnd(), record.getStart(), intronsParent);
-			}
+			simpleSubsequence = new SimpleSubsequence(seq, record.getEnd(), record.getStart(), factory, factory,
+				factory);
+			//			subseq = seq.getSubsequence(record.getEnd(), record.getStart(), intronsParent);
+			//			if (subseq == null) {
+			//				subseq = seq.createSubsequence(record.getEnd(), record.getStart(), intronsParent);
+			//			}
 		}
 		else {
-			subseq = seq.getSubsequence(record.getStart(), record.getEnd(), intronsParent);
-			if (subseq == null) {
-				subseq = seq.createSubsequence(record.getStart(), record.getEnd(), intronsParent);
-			}
+			simpleSubsequence = new SimpleSubsequence(seq, record.getStart(), record.getEnd(), factory, factory,
+				factory);
+			//			subseq = seq.getSubsequence(record.getStart(), record.getEnd(), intronsParent);
+			//			if (subseq == null) {
+			//				subseq = seq.createSubsequence(record.getStart(), record.getEnd(), intronsParent);
+			//			}
 		}
+		simpleSubsequence.addIntrons(SimpleIntron.getIntrons(intronsParent, record.getStart(), record.getEnd()));
+
+		for (int i = 1; i < records.size(); i++) {
+			record = records.get(i);
+			simpleSubsequence.addExon(record.getStart(), record.getEnd());
+			//get IntronsParent
+			notes = record.getNotes();
+			for (Note note : notes) {
+				ArrayList<Dbxref> parentDbxrefs = getParentDbxrefs(note, record.getType(), record.getSource());
+				for (Dbxref parentDbxref : parentDbxrefs) {
+					Collection<Annotation< ? , ? >> annotsParent = factory.getAnnotationsBySynonym(parentDbxref);
+					for (Annotation< ? , ? > parent : annotsParent) {
+						if (parent.getTarget() instanceof Feature && parent.getTarget().equals(mrnaFeature)
+							&& parent.getSource() instanceof Subsequence) {
+							intronsParent = ((Subsequence) parent.getSource()).getIntrons();
+						}
+					}
+				}
+			}
+			//getIntrons intersection
+			simpleSubsequence.addIntrons(SimpleIntron.getIntrons(intronsParent, record.getStart(), record.getEnd()));
+		}
+
+		Subsequence subseq = seq.getSubsequence(simpleSubsequence.getStart(), simpleSubsequence.getEnd(),
+			simpleSubsequence.getIntrons());
+		if (subseq == null) {
+			subseq = seq.createSubsequence(simpleSubsequence.getStart(), simpleSubsequence.getEnd(), intronsParent);
+		}
+
 		AnnotationMethod annotationMethod = factory.getAnnotationMethod(GFF3FileConfig.getAnnotationMethod(record));
 		double score = record.getScore();
 		String scoreStr = null;
