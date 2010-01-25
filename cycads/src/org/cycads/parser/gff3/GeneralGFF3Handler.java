@@ -411,20 +411,6 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 	private void handleCDS2(ArrayList<GFF3Record> records) {
 		GFF3Record record = records.get(0);
 		Sequence seq = getSequence(record.getSequenceID());
-		Collection<Intron> intronsParent = null;
-		Collection<Note> notes = record.getNotes();
-		for (Note note : notes) {
-			ArrayList<Dbxref> parentDbxrefs = getParentDbxrefs(note, record.getType(), record.getSource());
-			for (Dbxref parentDbxref : parentDbxrefs) {
-				Collection<Annotation< ? , ? >> annotsParent = factory.getAnnotationsBySynonym(parentDbxref);
-				for (Annotation< ? , ? > parent : annotsParent) {
-					if (parent.getTarget() instanceof Feature && parent.getTarget().equals(mrnaFeature)
-						&& parent.getSource() instanceof Subsequence) {
-						intronsParent = ((Subsequence) parent.getSource()).getIntrons();
-					}
-				}
-			}
-		}
 
 		SimpleSubsequence simpleSubsequence;
 		if (record.getStrand() < 0) {
@@ -443,25 +429,13 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 			//				subseq = seq.createSubsequence(record.getStart(), record.getEnd(), intronsParent);
 			//			}
 		}
+		Collection<Intron> intronsParent = getIntronsParent(record);
 		simpleSubsequence.addIntrons(SimpleIntron.getIntrons(intronsParent, record.getStart(), record.getEnd()));
 
 		for (int i = 1; i < records.size(); i++) {
 			record = records.get(i);
 			simpleSubsequence.addExon(record.getStart(), record.getEnd());
-			//get IntronsParent
-			notes = record.getNotes();
-			for (Note note : notes) {
-				ArrayList<Dbxref> parentDbxrefs = getParentDbxrefs(note, record.getType(), record.getSource());
-				for (Dbxref parentDbxref : parentDbxrefs) {
-					Collection<Annotation< ? , ? >> annotsParent = factory.getAnnotationsBySynonym(parentDbxref);
-					for (Annotation< ? , ? > parent : annotsParent) {
-						if (parent.getTarget() instanceof Feature && parent.getTarget().equals(mrnaFeature)
-							&& parent.getSource() instanceof Subsequence) {
-							intronsParent = ((Subsequence) parent.getSource()).getIntrons();
-						}
-					}
-				}
-			}
+			intronsParent = getIntronsParent(record);
 			//getIntrons intersection
 			simpleSubsequence.addIntrons(SimpleIntron.getIntrons(intronsParent, record.getStart(), record.getEnd()));
 		}
@@ -481,6 +455,7 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 		Annotation<Subsequence, Feature> annot = (Annotation<Subsequence, Feature>) subseq.addAnnotation(cdsFeature,
 			annotationMethod, scoreStr, functionalTypes);
 
+		Collection<Note> notes = record.getNotes();
 		for (Note note : notes) {
 			handleAnnotSynonym(note, annot, record);
 			handleSubseqSynonym(note, subseq, record);
@@ -489,5 +464,23 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 			handleFunctionAnnot(note, subseq, record);
 		}
 		progress.completeStep();
+	}
+
+	private Collection<Intron> getIntronsParent(GFF3Record record) {
+		Collection<Intron> intronsParent = new ArrayList<Intron>();
+		Collection<Note> notes = record.getNotes();
+		for (Note note : notes) {
+			ArrayList<Dbxref> parentDbxrefs = getParentDbxrefs(note, record.getType(), record.getSource());
+			for (Dbxref parentDbxref : parentDbxrefs) {
+				Collection<Annotation< ? , ? >> annotsParent = factory.getAnnotationsBySynonym(parentDbxref);
+				for (Annotation< ? , ? > parent : annotsParent) {
+					if (parent.getTarget() instanceof Feature && parent.getTarget().equals(mrnaFeature)
+						&& parent.getSource() instanceof Subsequence) {
+						intronsParent = ((Subsequence) parent.getSource()).getIntrons();
+					}
+				}
+			}
+		}
+		return intronsParent;
 	}
 }
