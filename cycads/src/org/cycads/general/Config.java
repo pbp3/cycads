@@ -128,6 +128,10 @@ public class Config
 
 	//General
 
+	public static String getSQLDriverName() {
+		return getStringMandatory("general.sql.driverName");
+	}
+
 	public static String getSQLConnectionUrl() {
 		return getStringMandatory("general.sql.connectionUrl");
 	}

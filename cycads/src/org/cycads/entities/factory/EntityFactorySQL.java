@@ -42,7 +42,7 @@ public class EntityFactorySQL
 
 	public EntityFactorySQL() {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName(Config.getSQLDriverName());
 			con = DriverManager.getConnection(Config.getSQLConnectionUrl(), Config.getSQLUser(),
 				Config.getSQLPassword());
 		}
