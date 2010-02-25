@@ -1,7 +1,10 @@
+--DROP SCHEMA IF EXISTS `cycads` ;
+--CREATE SCHEMA IF NOT EXISTS `cycads`;
 
-DROP SCHEMA IF EXISTS `cycads` ;
-CREATE SCHEMA `cycads`;
-USE `cycads` ;
+USE `cycads`;
+
+--GRANT ALL PRIVILEGES ON cycads.* TO 'cycads'@'localhost' IDENTIFIED BY 'secret password';
+--GRANT ALL PRIVILEGES ON cycads.* TO 'cycads'@'%' IDENTIFIED BY 'secret password';
 
 -- -----------------------------------------------------
 -- Table `Organism`
@@ -11,7 +14,9 @@ CREATE  TABLE IF NOT EXISTS `Organism` (
   `name` TEXT NULL ,
   `Next_Cyc_Id` INT(11) NOT NULL DEFAULT 1 ,
   PRIMARY KEY (`ncbi_taxon_id`) )
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
@@ -28,7 +33,9 @@ CREATE  TABLE IF NOT EXISTS `Sequence` (
     REFERENCES `Organism` (`ncbi_taxon_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
@@ -45,20 +52,24 @@ CREATE  TABLE IF NOT EXISTS `Biosequence` (
     REFERENCES `Sequence` (`sequence_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
 -- Table `Term_type`
--- ??? 2 indexes with the same atribute (`name` ASC) ???
 -- -----------------------------------------------------
 CREATE  TABLE IF NOT EXISTS `Term_type` (
   `type_id` INT(11) NOT NULL AUTO_INCREMENT ,
   `name` VARCHAR(255) NOT NULL ,
   `description` TEXT NULL ,
   PRIMARY KEY (`type_id`) ,
-  UNIQUE INDEX `name` (`name` ASC) )
-ENGINE = InnoDB;
+  UNIQUE INDEX `name` (`name` ASC) ,
+  INDEX `term_type_index1775` (`name` ASC) )
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
@@ -92,7 +103,9 @@ CREATE  TABLE IF NOT EXISTS `Dbxref` (
     REFERENCES `External_DB` (`external_db_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
@@ -111,7 +124,9 @@ CREATE  TABLE IF NOT EXISTS `Subsequence` (
     REFERENCES `Sequence` (`sequence_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
@@ -127,7 +142,9 @@ CREATE  TABLE IF NOT EXISTS `Intron` (
     REFERENCES `Subsequence` (`subsequence_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
@@ -172,7 +189,9 @@ CREATE  TABLE IF NOT EXISTS `Association` (
     REFERENCES `Source_target_type` (`source_target_type_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
@@ -187,7 +206,9 @@ CREATE  TABLE IF NOT EXISTS `Method` (
     REFERENCES `Term_type` (`type_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
@@ -202,7 +223,9 @@ CREATE  TABLE IF NOT EXISTS `Biofunction` (
     REFERENCES `Term_type` (`type_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
@@ -222,7 +245,9 @@ CREATE  TABLE IF NOT EXISTS `Association_type` (
     REFERENCES `Term_type` (`type_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
@@ -231,7 +256,9 @@ ENGINE = InnoDB;
 CREATE  TABLE IF NOT EXISTS `Pathway` (
   `pathway_id` INT(11) NOT NULL AUTO_INCREMENT ,
   PRIMARY KEY (`pathway_id`) )
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
@@ -247,7 +274,9 @@ CREATE  TABLE IF NOT EXISTS `Reaction` (
     REFERENCES `Dbxref` (`dbxref_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
@@ -257,7 +286,9 @@ CREATE  TABLE IF NOT EXISTS `Compound` (
   `compound_id` INT(11) NOT NULL AUTO_INCREMENT ,
   `small_molecule` TINYINT(1) NOT NULL ,
   PRIMARY KEY (`compound_id`) )
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
@@ -299,7 +330,9 @@ CREATE  TABLE IF NOT EXISTS `Reaction_has_compound` (
     REFERENCES `Compound` (`compound_id` )
     ON DELETE CASCADE
     ON UPDATE CASCADE)
-ENGINE = InnoDB;
+ENGINE = InnoDB
+PACK_KEYS = 0
+ROW_FORMAT = DEFAULT;
 
 
 -- -----------------------------------------------------
@@ -386,7 +419,7 @@ CREATE  TABLE IF NOT EXISTS `Feature` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
-
+--Warning: Depends on the database manager is necessary the SUPER privilegies to create the triggers
 DELIMITER //
 CREATE TRIGGER del_Annotation AFTER DELETE ON Annotation
 FOR EACH ROW 

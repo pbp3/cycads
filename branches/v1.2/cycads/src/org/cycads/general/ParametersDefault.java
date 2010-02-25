@@ -155,11 +155,11 @@ public class ParametersDefault
 	}
 
 	public static String koFileECDeleteExpression() {
-		return getString("KOLoader.file.EC.deleteExpression");
+		return getString("KOLoader.file.EC.delete.regex");
 	}
 
 	public static String koFileECSeparator() {
-		return getString("KOLoader.file.EC.separatorExpression");
+		return getString("KOLoader.file.EC.separator.regex");
 	}
 
 	public static String koFileDBLinkSubTagSeparator() {
@@ -214,30 +214,30 @@ public class ParametersDefault
 		return getStringMandatory("pf.file.id.noteType");
 	}
 
-	// CDS Fake
-
-	public static String getSeqVersionFake() {
-		return getStringMandatory("general.annot.fake.seqVersion");
-	}
-
-	public static int getSubseqStartFake() {
-		return getInt("general.annot.fake.subseqStartPos");
-	}
-
-	public static int getSubseqEndFake() {
-		return getInt("general.annot.fake.subseqEndPos");
-	}
-
-	public static String getAnnotationMethodFake() {
-		return getStringMandatory("general.annot.fake.annotationMethod");
-	}
-
-	public static String getAnnotationFakeType() {
-		return getStringMandatory("general.annot.fake.annotationType");
-	}
-
-	public static String getAnnotationFakeFeature() {
-		return getStringMandatory("general.annot.fake.annotationFeature");
-	}
-
+	//	// CDS Fake
+	//
+	//	public static String getSeqVersionFake() {
+	//		return getStringMandatory("general.annot.fake.seqVersion");
+	//	}
+	//
+	//	public static int getSubseqStartFake() {
+	//		return getInt("general.annot.fake.subseqStartPos");
+	//	}
+	//
+	//	public static int getSubseqEndFake() {
+	//		return getInt("general.annot.fake.subseqEndPos");
+	//	}
+	//
+	//	public static String getAnnotationMethodFake() {
+	//		return getStringMandatory("general.annot.fake.annotationMethod");
+	//	}
+	//
+	//	public static String getAnnotationFakeType() {
+	//		return getStringMandatory("general.annot.fake.annotationType");
+	//	}
+	//
+	//	public static String getAnnotationFakeFeature() {
+	//		return getStringMandatory("general.annot.fake.annotationFeature");
+	//	}
+	//
 }
