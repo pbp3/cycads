@@ -404,7 +404,6 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 					annotPersisted.addSynonym(synonym);
 				}
 			}
-
 		}
 	}
 

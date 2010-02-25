@@ -18,9 +18,7 @@ import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.factory.EntityAnnotationFactory;
 import org.cycads.entities.factory.EntityFactory;
-import org.cycads.entities.factory.EntityFeatureFactory;
 import org.cycads.entities.factory.EntityMethodFactory;
-import org.cycads.entities.factory.EntityTypeFactory;
 import org.cycads.entities.note.Note;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Organism;
@@ -152,8 +150,7 @@ public class SubseqDbxrefAnnotationLoader
 
 		ObjectFactory<Collection<Subsequence>> sourcesFactory = new SubseqsFactory(new ExistedEntitiesFactoryBySynonym(
 			(EntityFinder) factory, new SimpleObjectsFactory<Dbxref>(subseqColumnIndex, columnDelimiter,
-				objectsSeparator, objectsDelimiter, sourceFactory), organism, (EntityMethodFactory) factory,
-			(EntityFeatureFactory) factory, (EntityTypeFactory) factory));
+				objectsSeparator, objectsDelimiter, sourceFactory)));
 
 		columnDelimiter = Config.dbxrefDbxrefAnnotationLoaderTargetColumnDelimiter();
 		objectsDelimiter = Config.dbxrefDbxrefAnnotationLoaderTargetsDelimiter();

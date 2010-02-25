@@ -126,19 +126,19 @@ public class PFFileConfig
 	//	}
 
 	public static List<String> getPFFileNamesLocs() {
-		return getStrings("name.loc");
+		return getLocs("name");
 	}
 
 	public static List<String> getPFFileGeneCommentLocs() {
-		return getStrings("geneComment.loc");
+		return getLocs("geneComment");
 	}
 
 	public static List<String> getPFFileGeneSynonymLocs() {
-		return getStrings("synonym.loc");
+		return getLocs("synonym");
 	}
 
 	public static List<String> getPFFileDblinkLocs() {
-		return getStrings("dbLink.loc");
+		return getLocs("dbLink");
 	}
 
 	public static List<String> getPFFileECLocs() {
