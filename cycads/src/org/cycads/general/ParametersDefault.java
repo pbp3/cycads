@@ -199,19 +199,19 @@ public class ParametersDefault
 	// PFFIle
 
 	public static String getPFFileCommentStart() {
-		return getStringMandatory("pf.file.comment.start");
+		return getStringMandatory("PFFileGenerator.file.comment.start");
 	}
 
 	public static String getPFFileFunctionCommentSeparator() {
-		return getStringMandatory("pf.file.function.comment.separator");
+		return getStringMandatory("PFFileGenerator.file.function.comment.separator");
 	}
 
 	public static String getPFFileGeneCommentSeparator() {
-		return getStringMandatory("pf.file.gene.comment.separator");
+		return getStringMandatory("PFFileGenerator.file.gene.comment.separator");
 	}
 
 	public static String getPFFileCycIdNoteType() {
-		return getStringMandatory("pf.file.id.noteType");
+		return getStringMandatory("PFFileGenerator.file.id.noteType");
 	}
 
 	//	// CDS Fake
