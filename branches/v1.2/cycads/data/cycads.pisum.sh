@@ -22,14 +22,14 @@ java -Xmx512M -cp $jar$othersjar org.cycads.ui.loader.SubseqDbxrefAnnotationLoad
 java -Xmx2048M -cp $jar$othersjar org.cycads.ui.extract.cyc.PFFileGenerator $dirout/acypi1.2.pf 7029 '*' 1.0 n 2.0 2.0 > $dirout/PFFileGeneratorSQL.out
 
 #echo create dblinks in pathwaytools
-#AphidBase ---> AphidBase-GeneReport ---> http://genoweb.irisa.fr:8383/grs-1.0/grs?reportID=chado_genome_report&objectID=~A
+#AphidBaseG ---> AphidBase-GeneReport ---> http://webapps1.genouest.org/grs-1.6/grs?reportID=aphidbase_genome_report&objectID=~A
 #AphidBaseR ---> AphidBase-GBrowse ---> http://genoweb1.irisa.fr/cgi-bin/gbrowse/gbrowse_details/aphidbase?name=~A
 #GLEAN ---> AphidBase ---> http://genoweb1.irisa.fr/cgi-bin/gbrowse/gbrowse_details/aphidbase?name=~A
 #PhylomeDB ---> PhylomeDB ---> http://phylomedb.org/?seqid=~A
 #KO ---> KO ---> http://www.genome.jp/dbget-bin/www_bget?ko+~A
 #RefSeqP ---> Refseq-Protein ---> http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=~A
 #RefSeqM ---> Refseq-mRNA ---> http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?val=~A
-#GO_LOW ---> Gene Ontology Database GO --->http://www.geneontology.org/ http://amigo.geneontology.org/cgi-bin/amigo/go.cgi?query=~A&search_constraint=terms&action=query&view=query
+#GO_LOW ---> Gene Ontology Database ---> GO ---> http://www.geneontology.org/ ---> http://amigo.geneontology.org/cgi-bin/amigo/go.cgi?query=~A&search_constraint=terms&action=query&view=query
 
 #AphidBaseS ---> AphidBase ---> http://genoweb1.irisa.fr/cgi-bin/gbrowse/gbrowse_details/aphidbase?name=~A
 #AphidBaseP ---> PhylomeDB ---> http://phylomedb.org/?seqid=~A

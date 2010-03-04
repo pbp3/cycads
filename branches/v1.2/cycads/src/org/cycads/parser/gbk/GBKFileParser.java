@@ -153,10 +153,10 @@ public class GBKFileParser
 			factory.getFeature(type), annotationType,
 			factory.getAnnotationMethod(GBKFileConfig.getAnnotationMethodName(type)), null);
 
-		for (Object o : feature.getRankedCrossRefs()) {
-			RankedCrossRef rankedCrossRef = (RankedCrossRef) o;
-			annot.addSynonym(rankedCrossRef.getCrossRef().getDbname(), rankedCrossRef.getCrossRef().getAccession());
-		}
+		//		for (Object o : feature.getRankedCrossRefs()) {
+		//			RankedCrossRef rankedCrossRef = (RankedCrossRef) o;
+		//			annot.addSynonym(rankedCrossRef.getCrossRef().getDbname(), rankedCrossRef.getCrossRef().getAccession());
+		//		}
 
 		SimpleRichAnnotation annots = ((SimpleRichAnnotation) feature.getAnnotation());
 		int noteRank = annots.getNoteSet().size();
