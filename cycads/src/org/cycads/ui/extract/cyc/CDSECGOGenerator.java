@@ -4,9 +4,7 @@
 package org.cycads.ui.extract.cyc;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -24,6 +22,7 @@ import org.cycads.extract.cyc.LocContainer;
 import org.cycads.extract.cyc.OrganismCycIdGenerator;
 import org.cycads.extract.cyc.PFFileConfig;
 import org.cycads.extract.cyc.PFFileCycRecordGenerator;
+import org.cycads.extract.cyc.PFFileStream;
 import org.cycads.extract.cyc.ScoreSystemCollection;
 import org.cycads.extract.cyc.ScoreSystemsContainer;
 import org.cycads.extract.cyc.SimpleLocInterpreter;
@@ -104,7 +103,7 @@ public class CDSECGOGenerator
 				features.add(factory.getFeature(typeStr));
 			}
 
-			PrintStream out = new PrintStream(new FileOutputStream(file, false));
+			PFFileStream pfFile = new PFFileStream(file, Config.pfGeneratorFileHeader(), sequenceLocation);
 			CycIdGenerator cycIdGenerator = new OrganismCycIdGenerator(organism);
 
 			LocAndScores locAndScores = new LocAndScores();
@@ -123,27 +122,19 @@ public class CDSECGOGenerator
 						for (Annotation<Subsequence, Feature> cds : cdss) {
 							CycRecord record = cycRecordGenerator.generate(cds);
 							if (record != null) {
-								out.print(record.getName() + "\t");
-								for (String ec : record.getECs()) {
-									out.print(ec + ";");
-								}
-								out.print("\t");
-								for (String go : record.getGOs()) {
-									out.print(go + ";");
-								}
+								pfFile.printGeneECGO(record);
 								progress.completeStep();
 							}
 						}
 					}
 				}
 			}
-			out.flush();
-			out.close();
 			progress.finish(Messages.pfGeneratorFinalMsg(progress.getStep()));
 		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}
+
 	}
 
 	public static class LocAndScores implements ScoreSystemsContainer, LocContainer
