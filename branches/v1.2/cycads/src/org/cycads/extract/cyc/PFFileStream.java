@@ -131,4 +131,42 @@ public class PFFileStream implements CycStream
 		out.flush();
 	}
 
+	public void printGeneECGO(CycRecord cycRecord) {
+		out.print(cycRecord.getName() + "\t");
+		Collection<String> ecs = cycRecord.getECs();
+		if (ecs != null) {
+			boolean first = true;
+			for (String ec : ecs) {
+				if (ec != null && ec.length() > 0) {
+					if (!first) {
+						out.print(";");
+						out.print(ec);
+					}
+					else {
+						out.print(ec);
+						first = false;
+					}
+				}
+			}
+		}
+
+		Collection<String> gos = cycRecord.getGOs();
+		if (gos != null) {
+			boolean first = true;
+			for (String go : gos) {
+				if (go != null && go.length() > 0) {
+					if (!first) {
+						out.print(";");
+						out.print(go);
+					}
+					else {
+						out.print(go);
+						first = false;
+					}
+				}
+			}
+		}
+
+	}
+
 }

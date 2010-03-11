@@ -153,11 +153,6 @@ public class GBKFileParser
 			factory.getFeature(type), annotationType,
 			factory.getAnnotationMethod(GBKFileConfig.getAnnotationMethodName(type)), null);
 
-		//		for (Object o : feature.getRankedCrossRefs()) {
-		//			RankedCrossRef rankedCrossRef = (RankedCrossRef) o;
-		//			annot.addSynonym(rankedCrossRef.getCrossRef().getDbname(), rankedCrossRef.getCrossRef().getAccession());
-		//		}
-
 		SimpleRichAnnotation annots = ((SimpleRichAnnotation) feature.getAnnotation());
 		int noteRank = annots.getNoteSet().size();
 		ArrayList<Note> notes = new ArrayList<Note>(annots.getNoteSet());
@@ -166,6 +161,15 @@ public class GBKFileParser
 			type, factory);
 		List<RelationshipOperation<Subsequence, ? >> subseqOperations = GBKFileConfig.getSubseqOperations(type, factory);
 
+		//insert db_xref as a note
+		for (Object o : feature.getRankedCrossRefs()) {
+			RankedCrossRef rankedCrossRef = (RankedCrossRef) o;
+			Note newBiojavaNote = new SimpleNote(RichObjectFactory.getDefaultOntology().getOrCreateTerm("db_xref"),
+				rankedCrossRef.getCrossRef().getDbname() + ParametersDefault.getDbxrefToStringSeparator()
+					+ rankedCrossRef.getCrossRef().getAccession(), ++noteRank);
+			notes.add(newBiojavaNote);
+		}
+
 		Collection<org.cycads.parser.operation.Note> newNotes = new ArrayList<org.cycads.parser.operation.Note>();
 		for (int i = 0; i < notes.size(); i++) {
 			Note note = notes.get(i);
@@ -173,7 +177,6 @@ public class GBKFileParser
 
 			org.cycads.parser.operation.Note noteForOperation = new NoteBiojava(note);
 			//transform and get new notes for each note (Operations)
-			newNotes.clear();
 			int operationIndex = 0;
 			while (noteForOperation != null && operationIndex < noteOperations.size()) {
 				noteForOperation = noteOperations.get(operationIndex++).transform(noteForOperation, newNotes);
@@ -190,6 +193,7 @@ public class GBKFileParser
 				notes.add(newBiojavaNote);
 				annots.addNote(newBiojavaNote);
 			}
+			newNotes.clear();
 
 			//analyse transformed note
 			if (noteForOperation != null) {
