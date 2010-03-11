@@ -150,6 +150,7 @@ public class PFFileStream implements CycStream
 			}
 		}
 
+		out.print("\t");
 		Collection<String> gos = cycRecord.getGOs();
 		if (gos != null) {
 			boolean first = true;
@@ -166,6 +167,8 @@ public class PFFileStream implements CycStream
 				}
 			}
 		}
+
+		out.println();
 
 	}
 
