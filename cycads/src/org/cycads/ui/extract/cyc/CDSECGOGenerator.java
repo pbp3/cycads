@@ -85,6 +85,12 @@ public class CDSECGOGenerator
 		if (goThreshold == null) {
 			return;
 		}
+		
+		// add by PBP, for further export file format option
+		String fileformat = Tools.getString(args, 7, Config.CDSECGOexportFormat(), Messages.CDSECGOGeneratorChooseFileFormat());
+		if (fileformat == null) {
+			return;
+		}
 
 		Progress progress = new ProgressPrintInterval(System.out, Messages.pfGeneratorStepShowInterval());
 		try {
@@ -122,7 +128,7 @@ public class CDSECGOGenerator
 						for (Annotation<Subsequence, Feature> cds : cdss) {
 							CycRecord record = cycRecordGenerator.generate(cds);
 							if (record != null) {
-								pfFile.printGeneECGO(record);
+								pfFile.printGeneECGO(record, fileformat);
 								progress.completeStep();
 							}
 						}
