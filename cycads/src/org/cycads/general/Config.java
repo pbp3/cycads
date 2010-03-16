@@ -181,37 +181,33 @@ public class Config
 	}
 
 	// PFFile Generator
-	public static String pfGeneratorFileName() {
-		return getStringOptional("PFFileGenerator.fileName");
+	public static String annotationGeneratorFileName() {
+		return getStringOptional("AnnotationGenerator.fileName");
 	}
 
-	public static int pfGeneratorOrganismNumber() {
-		return getInt("PFFileGenerator.organismNumber");
+	public static int annotationGeneratorOrganismNumber() {
+		return getInt("AnnotationGenerator.organismNumber");
 	}
 
-	public static String pfGeneratorSeqSynonym() {
-		return getStringOptional("PFFileGenerator.sequenceSynonym");
+	public static String annotationGeneratorSeqSynonym() {
+		return getStringOptional("AnnotationGenerator.sequenceSynonym");
 	}
 
-	public static String pfGeneratorSeqVersion() {
-		return getStringOptional("PFFileGenerator.sequenceVersion");
+	public static String annotationGeneratorSeqVersion() {
+		return getStringOptional("AnnotationGenerator.sequenceVersion");
 	}
 
-	public static double pfEcThreshold() {
-		return getDouble("PFFileGenerator.ec.threshold");
+	public static double annotationGeneratorEcThreshold() {
+		return getDouble("AnnotationGenerator.ec.threshold");
 	}
 
-	public static double pfGoThreshold() {
-		return getDouble("PFFileGenerator.go.threshold");
-	}
-	
-	// adds by PBP, for further datas export formats
-	public static String CDSECGOexportFormat() {
-		return getStringOptional("CDSECGOGenerator.file.format");
+	public static double annotationGeneratorGoThreshold() {
+		return getDouble("AnnotationGenerator.go.threshold");
 	}
 
-	public static String pfGeneratorFileHeader() {
-		return getStringOptional("PFFileGenerator.file.fileHeader");
+	// for further datas export formats
+	public static String annotationGeneratorOutFormat() {
+		return getStringOptional("AnnotationGenerator.outFormat");
 	}
 
 	//	// CDS to KO Loader
