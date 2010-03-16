@@ -68,7 +68,7 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 				for (CycDBLink dbLink : dbLinks) {
 					record.addDBLink(dbLink);
 				}
-				record.addComment(PFFileConfig.getAnnotationComment(ec));
+				//				record.addComment(PFFileConfig.getAnnotationComment(ec));
 			}
 
 			Collection<CycDbxrefAnnotationPaths> gos = locInterpreter.getCycDbxrefPathAnnots(annot,
@@ -83,7 +83,7 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 						record.addDBLink(dbLink);
 					}
 				}
-				record.addComment(PFFileConfig.getAnnotationComment(go));
+				//				record.addComment(PFFileConfig.getAnnotationComment(go));
 			}
 
 			Collection<StringAndPath> cycValueRets = locInterpreter.getCycValues(annot,
@@ -189,7 +189,7 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 
 	private String getID(Annotation< ? , ? > annot) {
 		if (cycIdNoteType == null) {
-			cycIdNoteType = annot.getNoteType(ParametersDefault.getPFFileCycIdNoteType());
+			cycIdNoteType = annot.getNoteType(PFFileConfig.getPFFileCycIdNoteType());
 		}
 		String id = annot.getNoteValue(cycIdNoteType);
 		if (id == null) {
