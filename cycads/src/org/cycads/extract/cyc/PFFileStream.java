@@ -10,8 +10,6 @@ import java.io.PrintStream;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.cycads.general.ParametersDefault;
-
 public class PFFileStream implements CycStream
 {
 	PrintStream	out;
@@ -47,7 +45,7 @@ public class PFFileStream implements CycStream
 			StringBuffer comment = new StringBuffer();
 			for (String fComment : function.getComments()) {
 				comment.append(fComment);
-				comment.append(ParametersDefault.getPFFileFunctionCommentSeparator());
+				comment.append(PFFileConfig.getPFFileFunctionCommentSeparator());
 			}
 			if (comment.length() > 0) {
 				out.println("FUNCTION-COMMENT" + "\t" + comment.substring(0, comment.length() - 1));
@@ -110,7 +108,7 @@ public class PFFileStream implements CycStream
 			Iterator<String> iterator = comments.iterator();
 			commentAll.append(iterator.next());
 			while (iterator.hasNext()) {
-				commentAll.append(ParametersDefault.getPFFileGeneCommentSeparator());
+				commentAll.append(PFFileConfig.getPFFileGeneCommentSeparator());
 				commentAll.append(iterator.next());
 			}
 		}
