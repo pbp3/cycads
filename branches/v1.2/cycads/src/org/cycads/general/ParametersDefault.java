@@ -196,24 +196,6 @@ public class ParametersDefault
 		return dbLinkNames;
 	}
 
-	// PFFIle
-
-	public static String getPFFileCommentStart() {
-		return getStringMandatory("PFFileGenerator.file.comment.start");
-	}
-
-	public static String getPFFileFunctionCommentSeparator() {
-		return getStringMandatory("PFFileGenerator.file.function.comment.separator");
-	}
-
-	public static String getPFFileGeneCommentSeparator() {
-		return getStringMandatory("PFFileGenerator.file.gene.comment.separator");
-	}
-
-	public static String getPFFileCycIdNoteType() {
-		return getStringMandatory("PFFileGenerator.file.id.noteType");
-	}
-
 	//	// CDS Fake
 	//
 	//	public static String getSeqVersionFake() {
