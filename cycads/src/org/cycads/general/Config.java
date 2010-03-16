@@ -204,6 +204,11 @@ public class Config
 	public static double pfGoThreshold() {
 		return getDouble("PFFileGenerator.go.threshold");
 	}
+	
+	// adds by PBP, for further datas export formats
+	public static String CDSECGOexportFormat() {
+		return getStringOptional("CDSECGOGenerator.file.format");
+	}
 
 	public static String pfGeneratorFileHeader() {
 		return getStringOptional("PFFileGenerator.file.fileHeader");
