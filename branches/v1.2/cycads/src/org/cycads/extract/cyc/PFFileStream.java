@@ -24,13 +24,9 @@ public class PFFileStream implements CycStream
 	public PFFileStream(File fileOut, String header, boolean sequenceLocation) throws FileNotFoundException {
 		out = new PrintStream(new FileOutputStream(fileOut, false));
 		if (header != null && header.length() > 0) {
-			printComment(header);
+			out.println(header);
 		}
 		this.sequenceLocation = sequenceLocation;
-	}
-
-	public void printComment(String str) {
-		out.println(ParametersDefault.getPFFileCommentStart() + str);
 	}
 
 	public void print(CycRecord cycRecord) {
@@ -132,8 +128,8 @@ public class PFFileStream implements CycStream
 	}
 
 	public void printGeneECGO(CycRecord cycRecord, String fileformat) {
-		
-		if (fileformat.equals("byECorGO")){ // each EC or GO appears on different line(s)
+
+		if (fileformat.equals("byECorGO")) { // each EC or GO appears on different line(s)
 			Collection<String> ecs = cycRecord.getECs();
 			if (ecs != null) {
 				boolean first = true;
@@ -155,7 +151,7 @@ public class PFFileStream implements CycStream
 						out.println();
 					}
 				}
-			}	
+			}
 		}
 		else { // default format, ECs ou GOs are concat (with ';' separator in their respective column)
 			out.print(cycRecord.getName() + "\t");
@@ -199,7 +195,5 @@ public class PFFileStream implements CycStream
 		}
 		out.flush();
 	}
-	
+
 }
-
-
