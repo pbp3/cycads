@@ -216,6 +216,10 @@ public class Messages
 	public static String pfGeneratorChooseGoThreshold() {
 		return getString("pfFile.extract.chooseGoThreshold");
 	}
+	
+	public static String CDSECGOGeneratorChooseFileFormat() {
+		return getString("CDSECGO.extract.ChooseFileFormat");
+	}
 
 	//	public static String pfGeneratorChooseKoThreshold() {
 	//		return getString("pfFile.extract.chooseKoThreshold");
