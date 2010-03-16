@@ -26,9 +26,9 @@ public class PFFileConfig
 	private PFFileConfig() {
 	}
 
-	private static String getString(String key) {
+	private static String getString(String parameterName) {
 		try {
-			return Config.getString(key);
+			return Config.getString("AnnotationGenerator." + parameterName);
 		}
 		catch (MissingResourceException e) {
 			e.printStackTrace();
@@ -36,18 +36,18 @@ public class PFFileConfig
 		}
 	}
 
-	private static String getStringOptional(String key) {
+	private static String getStringOptional(String parameterName) {
 		try {
-			return Config.getString(key);
+			return Config.getString("AnnotationGenerator." + parameterName);
 		}
 		catch (MissingResourceException e) {
 			return null;
 		}
 	}
 
-	private static String getStringMandatory(String key) {
+	private static String getStringMandatory(String parameterName) {
 		try {
-			return Config.getString(key);
+			return Config.getString("AnnotationGenerator." + parameterName);
 		}
 		catch (MissingResourceException e) {
 			e.printStackTrace();
@@ -97,9 +97,7 @@ public class PFFileConfig
 	}
 
 	public static ArrayList<String> getStrings(String parameterName) {
-		parameterName = "PFFileGenerator.file." + parameterName;
-		ArrayList<String> values = getStrings(parameterName, null);
-		return values;
+		return getStrings(parameterName, null);
 	}
 
 	public static boolean matches(String input, Collection<Pattern> patterns) {
@@ -112,7 +110,7 @@ public class PFFileConfig
 	}
 
 	public static String getProductType(String type) {
-		return getStringMandatory("PFFileGenerator.file.productType." + type);
+		return getStringMandatory("productType." + type);
 	}
 
 	//	public static String getProductType(SubseqAnnotation< ? , ? , ? , ? , ? > annot) {
@@ -157,27 +155,27 @@ public class PFFileConfig
 		return getStrings(locName + ".loc");
 	}
 
-	//	public static List<String> getPFFileKOLocs() {
-	//		return getStrings("ko.loc");
-	//	}
-	//
-	//	public static String getECDbName() {
-	//		return getString("PFFileGenerator.file.ec.dbName");
-	//	}
-	//
-	//	public static String getGODbName() {
-	//		return getString("PFFileGenerator.file.go.dbName");
-	//	}
+	public static String getPFFileFunctionCommentSeparator() {
+		return getStringMandatory("function.comment.separator");
+	}
 
-	//	public static String getKODbName() {
-	//		return getString("PFFileGenerator.file.ko.dbName");
-	//	}
+	public static String getPFFileGeneCommentSeparator() {
+		return getStringMandatory("geneComment.separator");
+	}
+
+	public static String getPFFileCycIdNoteType() {
+		return getStringMandatory("id.noteType");
+	}
+
+	public static String pfGeneratorFileHeader() {
+		return getStringOptional("header");
+	}
 
 	static ArrayList<Pattern>	dbLinkDbNameRemovePatterns;
 
 	public static ArrayList<Pattern> getDbLinkDbNameRemovePatterns() {
 		if (dbLinkDbNameRemovePatterns == null) {
-			dbLinkDbNameRemovePatterns = getPatterns("PFFileGenerator.file.dbLink.dbName.remove", null);
+			dbLinkDbNameRemovePatterns = getPatterns("dbLink.dbName.remove", null);
 		}
 		return dbLinkDbNameRemovePatterns;
 	}
@@ -186,7 +184,7 @@ public class PFFileConfig
 
 	public static ArrayList<Pattern> getDbLinkDbNameChangePatterns() {
 		if (dbLinkDbNameChangePatterns == null) {
-			dbLinkDbNameChangePatterns = getPatterns("PFFileGenerator.file.dbLink.dbName.change", null);
+			dbLinkDbNameChangePatterns = getPatterns("dbLink.dbName.change", null);
 		}
 		return dbLinkDbNameChangePatterns;
 	}
@@ -195,7 +193,7 @@ public class PFFileConfig
 
 	public static ArrayList<String> getDbLinkDbNameChangeValues() {
 		if (dbLinkDbNameChangeValues == null) {
-			dbLinkDbNameChangeValues = getStrings("PFFileGenerator.file.dbLink.dbName.change.newValue", null);
+			dbLinkDbNameChangeValues = getStrings("dbLink.dbName.change.newValue", null);
 		}
 		return dbLinkDbNameChangeValues;
 	}
@@ -204,7 +202,7 @@ public class PFFileConfig
 
 	public static ArrayList<Pattern> getDbLinkDbNameCopyPatterns() {
 		if (dbLinkDbNameCopyPatterns == null) {
-			dbLinkDbNameCopyPatterns = getPatterns("PFFileGenerator.file.dbLink.dbName.copy", null);
+			dbLinkDbNameCopyPatterns = getPatterns("dbLink.dbName.copy", null);
 		}
 		return dbLinkDbNameCopyPatterns;
 	}
@@ -213,7 +211,7 @@ public class PFFileConfig
 
 	public static ArrayList<String> getDbLinkDbNameCopyValues() {
 		if (dbLinkDbNameCopyValues == null) {
-			dbLinkDbNameCopyValues = getStrings("PFFileGenerator.file.dbLink.dbName.copy.newValue", null);
+			dbLinkDbNameCopyValues = getStrings("dbLink.dbName.copy.newValue", null);
 		}
 		return dbLinkDbNameCopyValues;
 	}
@@ -221,18 +219,18 @@ public class PFFileConfig
 	public static String getAnnotationComment(CycDbxrefAnnotationPaths annotation) {
 		StringBuffer buf = new StringBuffer();
 		Object[] a = {annotation.getDbName(), annotation.getAccession(), annotation.getScore()};
-		buf.append(MessageFormat.format(getStringMandatory("PFFileGenerator.file.geneComment.Score"), a));
+		buf.append(MessageFormat.format(getStringMandatory("geneComment.Score"), a));
 		List<List<Annotation>> paths = annotation.getAnnotationPaths();
 		if (!paths.isEmpty()) {
-			buf.append(getStringMandatory("PFFileGenerator.file.geneComment.Method"));
+			buf.append(getStringMandatory("geneComment.Method"));
 			List<Annotation> path = paths.get(0);
 			buf.append(path.get(0).getAnnotationMethod().getName());
-			String methodSeparator = getStringMandatory("PFFileGenerator.file.geneComment.MethodSeparator");
+			String methodSeparator = getStringMandatory("geneComment.MethodSeparator");
 			for (int i = 1; i < path.size(); i++) {
 				buf.append(methodSeparator);
 				buf.append(path.get(i).getAnnotationMethod().getName());
 			}
-			String pathSeparator = getStringMandatory("PFFileGenerator.file.geneComment.PathSeparator");
+			String pathSeparator = getStringMandatory("geneComment.PathSeparator");
 			for (int i = 1; i < paths.size(); i++) {
 				buf.append(pathSeparator);
 				path = paths.get(i);
@@ -268,10 +266,9 @@ public class PFFileConfig
 
 	public static ScoreSystemCollection getScoreSystems(String scoreName) {
 		SimpleScoreSystemCollection scoreSystemCollection = new SimpleScoreSystemCollection();
-		ArrayList<Pattern> patterns = PFFileConfig.getPatterns("PFFileGenerator.file.scoreAnnotation.methodName."
-			+ scoreName, null);
-		ArrayList<String> values = PFFileConfig.getStrings("scoreAnnotation.value." + scoreName);
-		ArrayList<String> fileNames = PFFileConfig.getStrings("scoreAnnotation.scoreNote.file." + scoreName);
+		ArrayList<Pattern> patterns = getPatterns("scoreAnnotation.methodName." + scoreName, null);
+		ArrayList<String> values = getStrings("scoreAnnotation.value." + scoreName);
+		ArrayList<String> fileNames = getStrings("scoreAnnotation.scoreNote.file." + scoreName);
 		FileScoreSystem fileScoreSystem;
 		String fileName;
 		for (int i = 0; i < patterns.size(); i++) {
