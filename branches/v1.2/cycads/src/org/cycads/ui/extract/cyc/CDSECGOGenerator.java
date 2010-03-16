@@ -118,11 +118,13 @@ public class CDSECGOGenerator
 					}
 				case 2:
 					{
-
+						outStream = new AnnotationByLineFileStream(file, Config.pfGeneratorFileHeader());
+						break;
 					}
 				case 3:
 					{
-
+						outStream = new RecordByLineFileStream(file, Config.pfGeneratorFileHeader());
+						break;
 					}
 				default:
 					{
