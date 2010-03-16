@@ -131,45 +131,75 @@ public class PFFileStream implements CycStream
 		out.flush();
 	}
 
-	public void printGeneECGO(CycRecord cycRecord) {
-		out.print(cycRecord.getName() + "\t");
-		Collection<String> ecs = cycRecord.getECs();
-		if (ecs != null) {
-			boolean first = true;
-			for (String ec : ecs) {
-				if (ec != null && ec.length() > 0) {
-					if (!first) {
-						out.print(";");
+	public void printGeneECGO(CycRecord cycRecord, String fileformat) {
+		
+		if (fileformat.equals("byECorGO")){ // each EC or GO appears on different line(s)
+			Collection<String> ecs = cycRecord.getECs();
+			if (ecs != null) {
+				boolean first = true;
+				for (String ec : ecs) {
+					if (ec != null && ec.length() > 0) {
+						out.print(cycRecord.getName() + "\t");
 						out.print(ec);
-					}
-					else {
-						out.print(ec);
-						first = false;
+						out.println();
 					}
 				}
 			}
-		}
-
-		out.print("\t");
-		Collection<String> gos = cycRecord.getGOs();
-		if (gos != null) {
-			boolean first = true;
-			for (String go : gos) {
-				if (go != null && go.length() > 0) {
-					if (!first) {
-						out.print(";");
-						out.print(go);
+			Collection<String> gos = cycRecord.getGOs();
+			if (gos != null) {
+				boolean first = true;
+				for (String go : gos) {
+					if (go != null && go.length() > 0) {
+						out.print(cycRecord.getName() + "\t");
+						out.print("GO:" + go);
+						out.println();
 					}
-					else {
-						out.print(go);
-						first = false;
+				}
+			}	
+		}
+		else { // default format, ECs ou GOs are concat (with ';' separator in their respective column)
+			out.print(cycRecord.getName() + "\t");
+			Collection<String> ecs = cycRecord.getECs();
+			if (ecs != null) {
+				boolean first = true;
+				for (String ec : ecs) {
+					if (ec != null && ec.length() > 0) {
+						if (!first) {
+							out.print(";");
+							out.print(ec);
+						}
+						else {
+							out.print(ec);
+							first = false;
+						}
 					}
 				}
 			}
+
+			out.print("\t");
+			Collection<String> gos = cycRecord.getGOs();
+			if (gos != null) {
+				boolean first = true;
+				for (String go : gos) {
+					if (go != null && go.length() > 0) {
+						if (!first) {
+							out.print(";");
+							out.print("GO:");
+							out.print(go);
+						}
+						else {
+							out.print("GO:");
+							out.print(go);
+							first = false;
+						}
+					}
+				}
+			}
+			out.println();
 		}
-
-		out.println();
-
+		out.flush();
 	}
-
+	
 }
+
+
