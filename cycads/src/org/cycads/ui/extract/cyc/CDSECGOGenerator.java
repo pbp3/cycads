@@ -1,4 +1,5 @@
 /*
+ /*
  * Created on 05/01/2009
  */
 package org.cycads.ui.extract.cyc;
@@ -18,6 +19,7 @@ import org.cycads.entities.sequence.Subsequence;
 import org.cycads.extract.cyc.CycIdGenerator;
 import org.cycads.extract.cyc.CycRecord;
 import org.cycads.extract.cyc.CycRecordGenerator;
+import org.cycads.extract.cyc.CycStream;
 import org.cycads.extract.cyc.LocContainer;
 import org.cycads.extract.cyc.OrganismCycIdGenerator;
 import org.cycads.extract.cyc.PFFileConfig;
@@ -74,23 +76,19 @@ public class CDSECGOGenerator
 			return;
 		}
 
-		boolean sequenceLocation = Tools.getBoolean(args, 4, Messages.pfGeneratorChooseSequenceLocation());
-
-		Double ecThreshold = Tools.getDouble(args, 5, Config.pfEcThreshold(), Messages.pfGeneratorChooseEcThreshold());
+		Double ecThreshold = Tools.getDouble(args, 4, Config.pfEcThreshold(), Messages.pfGeneratorChooseEcThreshold());
 		if (ecThreshold == null) {
 			return;
 		}
 
-		Double goThreshold = Tools.getDouble(args, 6, Config.pfGoThreshold(), Messages.pfGeneratorChooseGoThreshold());
+		Double goThreshold = Tools.getDouble(args, 5, Config.pfGoThreshold(), Messages.pfGeneratorChooseGoThreshold());
 		if (goThreshold == null) {
 			return;
 		}
-		
+
 		// add by PBP, for further export file format option
-		String fileformat = Tools.getString(args, 7, Config.CDSECGOexportFormat(), Messages.CDSECGOGeneratorChooseFileFormat());
-		if (fileformat == null) {
-			return;
-		}
+		int fileFormat = Tools.getInteger(args, 6, Config.CDSECGOexportFormat(),
+			Messages.CDSECGOGeneratorChooseFileFormat());
 
 		Progress progress = new ProgressPrintInterval(System.out, Messages.pfGeneratorStepShowInterval());
 		try {
@@ -109,7 +107,28 @@ public class CDSECGOGenerator
 				features.add(factory.getFeature(typeStr));
 			}
 
-			PFFileStream pfFile = new PFFileStream(file, Config.pfGeneratorFileHeader(), sequenceLocation);
+			CycStream outStream;
+			switch (fileFormat){
+				case 1:
+					{
+						boolean sequenceLocation = Config.pfSequenceLocation();
+						outStream = new PFFileStream(file, Config.pfGeneratorFileHeader(), sequenceLocation);
+						break;
+					}
+				case 2:
+					{
+
+					}
+				case 3:
+					{
+
+					}
+				default:
+					{
+
+					}
+
+			}
 			CycIdGenerator cycIdGenerator = new OrganismCycIdGenerator(organism);
 
 			LocAndScores locAndScores = new LocAndScores();
@@ -128,7 +147,7 @@ public class CDSECGOGenerator
 						for (Annotation<Subsequence, Feature> cds : cdss) {
 							CycRecord record = cycRecordGenerator.generate(cds);
 							if (record != null) {
-								pfFile.printGeneECGO(record, fileformat);
+								outStream.print(record);
 								progress.completeStep();
 							}
 						}
