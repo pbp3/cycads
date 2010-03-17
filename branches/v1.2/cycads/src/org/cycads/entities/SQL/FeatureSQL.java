@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 import org.cycads.entities.Feature;
@@ -101,6 +102,7 @@ public class FeatureSQL extends TypeSQL implements Feature
 		if (ret == null) {
 			ret = new FeatureSQL(name, con);
 			hashByName.put(name, ret);
+			hashById.put(ret.getId(), ret);
 		}
 		return ret;
 	}
@@ -110,8 +112,45 @@ public class FeatureSQL extends TypeSQL implements Feature
 		if (ret == null) {
 			ret = new FeatureSQL(id, con);
 			hashById.put(id, ret);
+			hashByName.put(ret.getName(), ret);
 		}
 		return ret;
+	}
+
+	public static ArrayList<FeatureSQL> getFeatures(Connection con) throws SQLException {
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = con.prepareStatement("SELECT * from Feature");
+			rs = stmt.executeQuery();
+			ArrayList<FeatureSQL> ret = new ArrayList<FeatureSQL>();
+			while (rs.next()) {
+				ret.add(getFeature(rs.getInt("feature_id"), con));
+			}
+			return ret;
+		}
+		catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				}
+				catch (SQLException ex) {
+					// ignore
+				}
+			}
+		}
+
 	}
 
 	@Override

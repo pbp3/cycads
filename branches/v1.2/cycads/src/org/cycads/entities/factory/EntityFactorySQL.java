@@ -173,6 +173,17 @@ public class EntityFactorySQL
 	}
 
 	@Override
+	public Collection<FeatureSQL> getFeatures() {
+		try {
+			return FeatureSQL.getFeatures(getConnection());
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
 	public FunctionSQL getFunction(String name) {
 		try {
 			return FunctionSQL.getFunction(name, getConnection());
