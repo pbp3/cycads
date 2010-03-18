@@ -3,6 +3,8 @@
  */
 package org.cycads.entities.note;
 
+import org.cycads.general.ParametersDefault;
+
 public class SimpleNote implements Note
 {
 	String	value;
@@ -28,6 +30,10 @@ public class SimpleNote implements Note
 		}
 		Note o = (Note) obj;
 		return (o.getValue().equals(this.getValue()) && o.getType().equals(this.getType()));
+	}
+
+	public String toString() {
+		return getType().getName() + ParametersDefault.getNoteToStringSeparator() + getValue();
 	}
 
 }
