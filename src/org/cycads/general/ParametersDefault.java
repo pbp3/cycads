@@ -116,6 +116,10 @@ public class ParametersDefault
 		return getStringMandatory("general.dbxref.toStringSeparator");
 	}
 
+	public static String getNoteToStringSeparator() {
+		return getStringMandatory("general.note.toStringSeparator");
+	}
+
 	public static boolean isDebugging() {
 		return new Boolean(getStringMandatory("general.debug"));
 	}

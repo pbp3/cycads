@@ -207,7 +207,6 @@ public abstract class BasicEntityAbstract implements BasicEntity
 
 	@Override
 	public void addNote(String noteType, String value) {
-		Note note = new SimpleNote(getNoteType(noteType), value);
 		Collection<String> values = notes.get(noteType);
 		if (values == null) {
 			values = new TreeSet<String>();
@@ -218,13 +217,7 @@ public abstract class BasicEntityAbstract implements BasicEntity
 
 	@Override
 	public void addNote(Type noteType, String value) {
-		Note note = new SimpleNote(noteType, value);
-		Collection<String> values = notes.get(noteType);
-		if (values == null) {
-			values = new TreeSet<String>();
-			notes.put(noteType.getName(), values);
-		}
-		values.add(value);
+		addNote(noteType.getName(), value);
 	}
 
 	@Override
