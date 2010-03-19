@@ -34,7 +34,6 @@ import org.cycads.ui.progress.ProgressPrintInterval;
 
 public class PFFileGenerator
 {
-
 	public static void main(String[] args) {
 		EntityFactory factory = EntityFactory.factoryDefault;
 		File file = Tools.getFileToSave(args, 0, Config.pfGeneratorFileName(), Messages.pfGeneratorChooseFile());
