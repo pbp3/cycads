@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.sequence.Subsequence;
+import org.cycads.extract.score.ScoreSystemCollection;
 
 public interface LocInterpreter
 {

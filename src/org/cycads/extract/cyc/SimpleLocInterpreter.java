@@ -19,6 +19,8 @@ import org.cycads.entities.sequence.Sequence;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.HasSynonyms;
+import org.cycads.extract.score.ScoreSystemCollection;
+import org.cycads.extract.score.ScoreSystemsContainer;
 
 public class SimpleLocInterpreter implements LocInterpreter
 {

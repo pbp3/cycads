@@ -11,6 +11,8 @@ import java.util.Locale;
 
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.synonym.Dbxref;
+import org.cycads.extract.score.ScoreSystem;
+import org.cycads.extract.score.ScoreSystemCollection;
 
 public class SimpleCycDbxrefAnnotationPaths implements CycDbxrefAnnotationPaths
 {
