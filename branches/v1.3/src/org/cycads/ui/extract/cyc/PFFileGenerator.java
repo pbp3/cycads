@@ -23,9 +23,9 @@ import org.cycads.extract.cyc.OrganismCycIdGenerator;
 import org.cycads.extract.cyc.PFFileConfig;
 import org.cycads.extract.cyc.PFFileCycRecordGenerator;
 import org.cycads.extract.cyc.PFFileStream;
-import org.cycads.extract.cyc.ScoreSystemCollection;
-import org.cycads.extract.cyc.ScoreSystemsContainer;
 import org.cycads.extract.cyc.SimpleLocInterpreter;
+import org.cycads.extract.score.ScoreSystemCollection;
+import org.cycads.extract.score.ScoreSystemsContainer;
 import org.cycads.general.Config;
 import org.cycads.general.Messages;
 import org.cycads.ui.Tools;
@@ -34,6 +34,7 @@ import org.cycads.ui.progress.ProgressPrintInterval;
 
 public class PFFileGenerator
 {
+
 	public static void main(String[] args) {
 		EntityFactory factory = EntityFactory.factoryDefault;
 		File file = Tools.getFileToSave(args, 0, Config.pfGeneratorFileName(), Messages.pfGeneratorChooseFile());
