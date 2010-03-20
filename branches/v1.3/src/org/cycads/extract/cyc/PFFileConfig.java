@@ -10,6 +10,10 @@ import java.util.MissingResourceException;
 import java.util.regex.Pattern;
 
 import org.cycads.entities.annotation.Annotation;
+import org.cycads.extract.score.FileScoreSystem;
+import org.cycads.extract.score.FixAndFileScoreSystem;
+import org.cycads.extract.score.ScoreSystemCollection;
+import org.cycads.extract.score.SimpleScoreSystemCollection;
 import org.cycads.general.Config;
 
 /*

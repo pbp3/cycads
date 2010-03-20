@@ -9,6 +9,7 @@ import org.cycads.entities.Feature;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Subsequence;
+import org.cycads.extract.score.ScoreSystemCollection;
 import org.cycads.general.ParametersDefault;
 
 public class PFFileCycRecordGenerator implements CycRecordGenerator
