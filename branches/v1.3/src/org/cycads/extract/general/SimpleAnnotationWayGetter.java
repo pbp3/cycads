@@ -2,6 +2,8 @@ package org.cycads.extract.general;
 
 import java.util.List;
 
+import org.cycads.extract.objectsGetter.ObjectsGetter;
+
 public class SimpleAnnotationWayGetter implements AnnotationWaysGetter
 {
 
