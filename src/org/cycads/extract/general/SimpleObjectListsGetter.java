@@ -6,11 +6,11 @@ package org.cycads.extract.general;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleObjectListsGetter implements ObjectListsGetter
+public class SimpleObjectListsGetter implements ObjectsGetter
 {
 
 	@Override
-	public List<List<Object>> getObjectLists(Object obj, List<AnnotationWayGetter> steps) throws GetterExpressionException {
+	public List<List<Object>> getObjectLists(Object obj, List<AnnotationWaysGetter> steps) throws GetterExpressionException {
 		List<List<Object>> ret = new ArrayList<List<Object>>();
 		if (steps.isEmpty()) {
 			List<Object> retO;
@@ -19,9 +19,9 @@ public class SimpleObjectListsGetter implements ObjectListsGetter
 			ret.add(retO);
 		}
 		else {
-			AnnotationWayGetter step = steps.get(0);
+			AnnotationWaysGetter step = steps.get(0);
 			List<Object> nexts = step.getObjects(obj);
-			List<AnnotationWayGetter> nextSteps = new ArrayList<AnnotationWayGetter>(steps);
+			List<AnnotationWaysGetter> nextSteps = new ArrayList<AnnotationWaysGetter>(steps);
 			nextSteps.remove(0);
 			List<List<Object>> retLists;
 			for (Object next : nexts) {

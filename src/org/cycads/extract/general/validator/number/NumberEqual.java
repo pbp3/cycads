@@ -3,13 +3,17 @@
  */
 package org.cycads.extract.general.validator.number;
 
-public class NumberEqual implements NumberValidator
+import org.cycads.extract.general.validator.CompNumber;
+
+public class NumberEqual extends CompNumber
 {
-	double	number;
+	public NumberEqual(Number number) {
+		super(number);
+	}
 
 	@Override
-	public boolean isValid(double number) {
-		return number == this.number;
+	public boolean compNumber(Number number) {
+		return this.number.equals(number);
 	}
 
 }

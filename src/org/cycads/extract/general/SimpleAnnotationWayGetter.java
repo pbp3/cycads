@@ -2,18 +2,20 @@ package org.cycads.extract.general;
 
 import java.util.List;
 
-public abstract class AbstractAnnotationWayGetter implements AnnotationWayGetter
+public class SimpleAnnotationWayGetter implements AnnotationWaysGetter
 {
 
-	AnnotationWayGetter	next;
+	ObjectsGetter			objsGetter;
+	AnnotationWaysGetter	next;
 
-	public AbstractAnnotationWayGetter(AnnotationWayGetter next) {
+	public SimpleAnnotationWayGetter(ObjectsGetter objsGetter, AnnotationWaysGetter next) {
 		this.next = next;
+		this.objsGetter = objsGetter;
 	}
 
 	@Override
 	public AnnotationWayList getAnnotationWays(Object obj) throws GetterExpressionException {
-		List<Object> objsGetted = getObjects(obj);
+		List<Object> objsGetted = objsGetter.getObjects(obj);
 		AnnotationWayList ret = new SimpleAnnotationWayList();
 		if (next == null) {
 			for (Object oGetted : objsGetted) {
@@ -32,11 +34,6 @@ public abstract class AbstractAnnotationWayGetter implements AnnotationWayGetter
 			}
 			return ret;
 		}
-	}
-
-	protected List<Object> getObjects(Object obj) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }
