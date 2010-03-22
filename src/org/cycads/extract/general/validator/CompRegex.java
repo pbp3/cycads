@@ -5,7 +5,6 @@ package org.cycads.extract.general.validator;
 
 import java.util.regex.Pattern;
 
-import org.cycads.extract.general.Validator;
 
 public class CompRegex implements Validator
 {

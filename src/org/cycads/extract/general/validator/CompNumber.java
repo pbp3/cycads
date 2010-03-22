@@ -4,7 +4,6 @@
 package org.cycads.extract.general.validator;
 
 import org.cycads.extract.general.GetterExpressionException;
-import org.cycads.extract.general.Validator;
 
 public abstract class CompNumber implements Validator
 {
