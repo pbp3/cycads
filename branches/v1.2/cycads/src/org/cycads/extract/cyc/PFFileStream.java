@@ -10,23 +10,22 @@ import java.io.PrintStream;
 import java.util.Collection;
 import java.util.Iterator;
 
-public class PFFileStream implements CycStream
+public class PFFileStream extends TextStream
 {
-	PrintStream	out;
-	boolean		sequenceLocation	= true;
+	
+	boolean	sequenceLocation = true;
 
 	public PFFileStream(String fileOutName, String header, boolean sequenceLocation) throws FileNotFoundException {
-		this(new File(fileOutName), header, sequenceLocation);
-	}
-
-	public PFFileStream(File fileOut, String header, boolean sequenceLocation) throws FileNotFoundException {
-		out = new PrintStream(new FileOutputStream(fileOut, false));
-		if (header != null && header.length() > 0) {
-			out.println(header);
-		}
+		super(fileOutName,header);
 		this.sequenceLocation = sequenceLocation;
 	}
 
+	public PFFileStream(File fileOut, String header, boolean sequenceLocation) throws FileNotFoundException {
+		super(fileOut,header);
+		this.sequenceLocation = sequenceLocation;
+	}
+
+	@Override
 	public void print(CycRecord cycRecord) {
 		if (cycRecord == null) {
 			return;
@@ -118,79 +117,6 @@ public class PFFileStream implements CycStream
 
 		out.println("//");
 		out.println();
-		out.flush();
-	}
-
-	public void flush() {
-		out.flush();
-	}
-
-	public void printGeneECGO(CycRecord cycRecord, String fileformat) {
-
-		if (fileformat.equals("byECorGO")) { // each EC or GO appears on different line(s)
-			Collection<String> ecs = cycRecord.getECs();
-			if (ecs != null) {
-				boolean first = true;
-				for (String ec : ecs) {
-					if (ec != null && ec.length() > 0) {
-						out.print(cycRecord.getName() + "\t");
-						out.print(ec);
-						out.println();
-					}
-				}
-			}
-			Collection<String> gos = cycRecord.getGOs();
-			if (gos != null) {
-				boolean first = true;
-				for (String go : gos) {
-					if (go != null && go.length() > 0) {
-						out.print(cycRecord.getName() + "\t");
-						out.print("GO:" + go);
-						out.println();
-					}
-				}
-			}
-		}
-		else { // default format, ECs ou GOs are concat (with ';' separator in their respective column)
-			out.print(cycRecord.getName() + "\t");
-			Collection<String> ecs = cycRecord.getECs();
-			if (ecs != null) {
-				boolean first = true;
-				for (String ec : ecs) {
-					if (ec != null && ec.length() > 0) {
-						if (!first) {
-							out.print(";");
-							out.print(ec);
-						}
-						else {
-							out.print(ec);
-							first = false;
-						}
-					}
-				}
-			}
-
-			out.print("\t");
-			Collection<String> gos = cycRecord.getGOs();
-			if (gos != null) {
-				boolean first = true;
-				for (String go : gos) {
-					if (go != null && go.length() > 0) {
-						if (!first) {
-							out.print(";");
-							out.print("GO:");
-							out.print(go);
-						}
-						else {
-							out.print("GO:");
-							out.print(go);
-							first = false;
-						}
-					}
-				}
-			}
-			out.println();
-		}
 		out.flush();
 	}
 
