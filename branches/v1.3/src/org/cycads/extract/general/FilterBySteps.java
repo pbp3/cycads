@@ -5,7 +5,7 @@ package org.cycads.extract.general;
 
 import java.util.List;
 
-public class FilterBySteps implements Step
+public class FilterBySteps implements ObjectGetter
 {
 
 	List	steps;
