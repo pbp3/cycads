@@ -3,9 +3,8 @@
  */
 package org.cycads.extract.general;
 
-public interface AnnotationClusterDefinitionRepository
-{
-
-	public AnnotationClusterDefinition getObjectsChainDefinition(String name);
+public interface AnnotationClusterDefinitionRepository {
+	public AnnotationClusterDefinition getAnnotationClusterDefinition(
+			String name);
 
 }

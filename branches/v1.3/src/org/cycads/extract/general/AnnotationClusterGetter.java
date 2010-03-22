@@ -3,12 +3,12 @@
  */
 package org.cycads.extract.general;
 
-import java.util.Collection;
 import java.util.List;
 
-public interface AnnotationClusterGetter
-{
-	public List<AnnotationCluster> getObjectChains(Collection<Object> objs, String definitionName);
+public interface AnnotationClusterGetter {
+	// public List<AnnotationCluster> getAnnotationClustera(
+	// Collection<Object> objs, String definitionName);
 
-	public List<AnnotationCluster> getObjectChains(Object obj, String definitionName);
+	public List<AnnotationCluster> getAnnotationClusters(Object obj,
+			String definitionName);
 }
