@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.cycads.extract.general.GetterExpressionException;
-import org.cycads.extract.general.validator.Validator;
+import org.cycads.extract.objectsGetter.validator.Validator;
 
 public class ObjectsGetterFilter implements ObjectsGetter
 {
