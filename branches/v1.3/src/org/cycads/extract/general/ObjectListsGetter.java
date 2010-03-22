@@ -9,5 +9,5 @@ public interface ObjectListsGetter
 {
 	//	public List<List<Object>> getObjectLists(Collection<Object> objs, String loc);
 
-	public List<List<Object>> getObjectLists(Object obj, List<ObjectGetter> steps) throws GetterExpressionException;
+	public List<List<Object>> getObjectLists(Object obj, List<AnnotationWayGetter> steps) throws GetterExpressionException;
 }

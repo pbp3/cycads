@@ -7,9 +7,9 @@ import java.util.List;
 
 import org.cycads.extract.score.ScoreSystemCollection;
 
-public interface ObjectChainDefinition
+public interface AnnotationClusterDefinition
 {
-	public List<String> getLocation();
+	public List<String> getLocations();
 
 	public ScoreSystemCollection getScoreSystemCollection();
 
