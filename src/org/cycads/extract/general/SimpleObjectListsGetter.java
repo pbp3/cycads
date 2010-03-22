@@ -10,7 +10,7 @@ public class SimpleObjectListsGetter implements ObjectListsGetter
 {
 
 	@Override
-	public List<List<Object>> getObjectLists(Object obj, List<ObjectGetter> steps) throws GetterExpressionException {
+	public List<List<Object>> getObjectLists(Object obj, List<AnnotationWayGetter> steps) throws GetterExpressionException {
 		List<List<Object>> ret = new ArrayList<List<Object>>();
 		if (steps.isEmpty()) {
 			List<Object> retO;
@@ -19,9 +19,9 @@ public class SimpleObjectListsGetter implements ObjectListsGetter
 			ret.add(retO);
 		}
 		else {
-			ObjectGetter step = steps.get(0);
-			List<Object> nexts = step.execute(obj);
-			List<ObjectGetter> nextSteps = new ArrayList<ObjectGetter>(steps);
+			AnnotationWayGetter step = steps.get(0);
+			List<Object> nexts = step.getObjects(obj);
+			List<AnnotationWayGetter> nextSteps = new ArrayList<AnnotationWayGetter>(steps);
 			nextSteps.remove(0);
 			List<List<Object>> retLists;
 			for (Object next : nexts) {

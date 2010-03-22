@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ObjectChainGetter
 {
-	public List<ObjectChain> getObjectChains(Collection<Object> objs, String definitionName);
+	public List<AnnotationCluster> getObjectChains(Collection<Object> objs, String definitionName);
 
-	public List<ObjectChain> getObjectChains(Object obj, String definitionName);
+	public List<AnnotationCluster> getObjectChains(Object obj, String definitionName);
 }
