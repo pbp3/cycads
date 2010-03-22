@@ -5,7 +5,6 @@ package org.cycads.extract.general.validator;
 
 import org.cycads.extract.general.AnnotationWaysGetter;
 import org.cycads.extract.general.GetterExpressionException;
-import org.cycads.extract.general.Validator;
 
 public class CompAnnotWaysGetter implements Validator
 {

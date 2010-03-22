@@ -6,7 +6,7 @@ package org.cycads.extract.general;
 import java.util.Collection;
 import java.util.List;
 
-public interface ObjectChainGetter
+public interface AnnotationClusterGetter
 {
 	public List<AnnotationCluster> getObjectChains(Collection<Object> objs, String definitionName);
 

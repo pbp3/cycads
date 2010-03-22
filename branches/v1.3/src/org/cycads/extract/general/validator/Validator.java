@@ -1,7 +1,9 @@
 /*
  * Created on 22/03/2010
  */
-package org.cycads.extract.general;
+package org.cycads.extract.general.validator;
+
+import org.cycads.extract.general.GetterExpressionException;
 
 public interface Validator
 {

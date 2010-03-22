@@ -6,6 +6,8 @@ package org.cycads.extract.general;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.cycads.extract.general.validator.Validator;
+
 public class ObjectsGetterFilter implements ObjectsGetter
 {
 
