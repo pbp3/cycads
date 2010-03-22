@@ -5,14 +5,16 @@ package org.cycads.extract.objectsGetter.validator;
 
 import java.util.regex.Pattern;
 
+public class CompRegex implements Validator {
 
-public class CompRegex implements Validator
-{
-
-	Pattern	pattern;
+	Pattern pattern;
 
 	public CompRegex(Pattern pattern) {
 		this.pattern = pattern;
+	}
+
+	public CompRegex(String patternStr) {
+		this.pattern = Pattern.compile(patternStr);
 	}
 
 	@Override
