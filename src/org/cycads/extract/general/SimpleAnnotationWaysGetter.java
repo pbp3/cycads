@@ -15,6 +15,11 @@ public class SimpleAnnotationWaysGetter implements AnnotationWaysGetter
 		this.objsGetter = objsGetter;
 	}
 
+	public SimpleAnnotationWaysGetter(ObjectsGetter objsGetter) {
+		this.next = null;
+		this.objsGetter = objsGetter;
+	}
+
 	@Override
 	public AnnotationWayList getAnnotationWays(Object obj) throws GetterExpressionException {
 		List<Object> objsGetted = objsGetter.getObjects(obj);
@@ -36,6 +41,10 @@ public class SimpleAnnotationWaysGetter implements AnnotationWaysGetter
 			}
 			return ret;
 		}
+	}
+
+	public void setNext(AnnotationWaysGetter next) {
+		this.next = next;
 	}
 
 }
