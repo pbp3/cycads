@@ -3,7 +3,7 @@
  */
 package org.cycads.extract.objectsGetter.changeObject;
 
-import org.cycads.entities.sequence.Organism;
+import org.cycads.entities.sequence.Sequence;
 import org.cycads.extract.general.GetterExpressionException;
 
 public class ChangeToOrganism extends ChangeToOneObject
@@ -11,10 +11,10 @@ public class ChangeToOrganism extends ChangeToOneObject
 
 	@Override
 	public Object executeMethod(Object obj) throws GetterExpressionException {
-		if (!(obj instanceof Organism)) {
-			throw new GetterExpressionException("Object is not an organism. Object:" + obj);
+		if (!(obj instanceof Sequence)) {
+			throw new GetterExpressionException("Object is not a sequence. Object:" + obj);
 		}
-		return ((Organism) obj).getName();
+		return ((Sequence) obj).getOrganism();
 	}
 
 }
