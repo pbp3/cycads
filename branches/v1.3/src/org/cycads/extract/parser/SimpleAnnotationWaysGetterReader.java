@@ -73,7 +73,6 @@ public class SimpleAnnotationWaysGetterReader implements AnnotationWaysGetterRea
 						throw new ParserException(compRegexChr + " is not a valid compRegex comparator. Loc=" + loc);
 					}
 					handler.newCompRegex(compRegex);
-					handler.endFilter();
 					loc = loc.substring(posEndFilter + 1);
 					break;
 				case '=':
@@ -109,7 +108,6 @@ public class SimpleAnnotationWaysGetterReader implements AnnotationWaysGetterRea
 								+ loc);
 					}
 					handler.newCompNumber(compNumber);
-					handler.endFilter();
 					loc = loc.substring(posEndFilter + 1);
 					break;
 				case '<':
@@ -137,7 +135,6 @@ public class SimpleAnnotationWaysGetterReader implements AnnotationWaysGetterRea
 								+ loc);
 					}
 					handler.newCompNumber(compNumber);
-					handler.endFilter();
 					loc = loc.substring(posEndFilter + 1);
 					break;
 				case '>':
@@ -165,7 +162,6 @@ public class SimpleAnnotationWaysGetterReader implements AnnotationWaysGetterRea
 								+ loc);
 					}
 					handler.newCompNumber(compNumber);
-					handler.endFilter();
 					loc = loc.substring(posEndFilter + 1);
 					break;
 				default:
