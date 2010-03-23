@@ -1,10 +1,12 @@
 package org.cycads.extract.parser;
 
+import org.cycads.extract.general.AnnotationWaysGetter;
 import org.cycads.extract.objectsGetter.ObjectsGetterChangeObject;
 import org.cycads.extract.objectsGetter.validator.CompNumber;
 import org.cycads.extract.objectsGetter.validator.CompRegex;
 
-public interface ObjectGetterHandler {
+public interface ObjectGetterHandler
+{
 
 	public void newChanger(ObjectsGetterChangeObject changer);
 
@@ -15,4 +17,8 @@ public interface ObjectGetterHandler {
 	public void newCompRegex(CompRegex compRegex);
 
 	public void newCompNumber(CompNumber compNumber);
+
+	public void startLoc();
+
+	public AnnotationWaysGetter endLoc();
 }

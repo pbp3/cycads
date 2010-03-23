@@ -5,9 +5,10 @@ package org.cycads.extract.objectsGetter.validator;
 
 import java.util.regex.Pattern;
 
-public class CompRegex implements Validator {
+public abstract class CompRegex implements Validator
+{
 
-	Pattern pattern;
+	Pattern	pattern;
 
 	public CompRegex(Pattern pattern) {
 		this.pattern = pattern;
@@ -15,11 +16,6 @@ public class CompRegex implements Validator {
 
 	public CompRegex(String patternStr) {
 		this.pattern = Pattern.compile(patternStr);
-	}
-
-	@Override
-	public boolean isValid(Object obj) {
-		return pattern.matcher(obj.toString()).matches();
 	}
 
 }
