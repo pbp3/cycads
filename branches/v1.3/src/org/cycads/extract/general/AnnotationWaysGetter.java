@@ -3,9 +3,8 @@
  */
 package org.cycads.extract.general;
 
-public interface AnnotationWaysGetter
-{
-
-	public AnnotationWayList getAnnotationWays(Object obj) throws GetterExpressionException;
+public interface AnnotationWaysGetter {
+	public AnnotationWayList getAnnotationWays(Object obj)
+			throws GetterExpressionException;
 
 }
