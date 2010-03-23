@@ -27,6 +27,10 @@ public class SimpleAnnotationWaysGetterReader implements AnnotationWaysGetterRea
 		this.handler = handler;
 	}
 
+	public SimpleAnnotationWaysGetterReader() {
+		this.handler = new SimpleAnnotationWaysGetterHandler();
+	}
+
 	@Override
 	public AnnotationWaysGetter parse(String loc) throws ParserException {
 		handler.startLoc();
