@@ -3,8 +3,6 @@
  */
 package org.cycads.extract.objectsGetter.changeObject;
 
-import java.util.Collection;
-
 import org.cycads.entities.sequence.Sequence;
 import org.cycads.extract.general.GetterExpressionException;
 
