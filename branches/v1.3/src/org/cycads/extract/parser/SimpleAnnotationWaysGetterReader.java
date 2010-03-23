@@ -3,10 +3,20 @@
  */
 package org.cycads.extract.parser;
 
+import org.cycads.extract.general.AnnotationClustersGetter;
+import org.cycads.extract.general.AnnotationClustersGetterRepository;
 import org.cycads.extract.general.AnnotationWaysGetter;
 import org.cycads.extract.objectsGetter.ObjectsGetterChangeObject;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToAnnotationMethod;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToAnnotationType;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToAnnotationsAsSource;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToAnnotationsAsTarget;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToOrganism;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToScore;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToSource;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToSubSeqBegin;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToSubSeqEnd;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToTarget;
 import org.cycads.extract.objectsGetter.validator.CompNumber;
 import org.cycads.extract.objectsGetter.validator.CompRegex;
 import org.cycads.extract.objectsGetter.validator.CompRegexMatch;
@@ -21,14 +31,18 @@ import org.cycads.parser.ParserException;
 
 public class SimpleAnnotationWaysGetterReader implements AnnotationWaysGetterReader
 {
-	AnnotationWaysGetterHandler	handler;
+	AnnotationWaysGetterHandler			handler;
+	AnnotationClustersGetterRepository	clusterRepository;
 
-	public SimpleAnnotationWaysGetterReader(AnnotationWaysGetterHandler handler) {
+	public SimpleAnnotationWaysGetterReader(AnnotationWaysGetterHandler handler,
+			AnnotationClustersGetterRepository clusterRepository) {
 		this.handler = handler;
+		this.clusterRepository = clusterRepository;
 	}
 
-	public SimpleAnnotationWaysGetterReader() {
-		this.handler = new SimpleAnnotationWaysGetterHandler();
+	public SimpleAnnotationWaysGetterReader(AnnotationClustersGetterRepository clusterRepository) {
+		this(new SimpleAnnotationWaysGetterHandler(), clusterRepository);
+
 	}
 
 	@Override
@@ -39,18 +53,58 @@ public class SimpleAnnotationWaysGetterReader implements AnnotationWaysGetterRea
 		while (loc != null && loc.length() != 0) {
 			switch (loc.charAt(0)){
 				case '.':
-					String changerStr = loc.substring(1, 3);
-					if (changerStr.equalsIgnoreCase("AS")) {
-						changer = new ChangeToAnnotationsAsSource();
-					}
-					else if (changerStr.equalsIgnoreCase("SO")) {
-						changer = new ChangeToSource();
+					if (loc.charAt(1) == '[') {
+						int posEndClusterName = loc.indexOf(']');
+						if (posEndClusterName < 0) {
+							throw new ParserException("AnnotationClusterName without close ']'. Loc=" + loc);
+						}
+						String annotationClusterName = loc.substring(2, posEndClusterName);
+						AnnotationClustersGetter annotClustersGetter = clusterRepository.getAnnotationClusterGetter(annotationClusterName);
+						if (annotClustersGetter == null) {
+							throw new ParserException("AnnotationClusterName '" + annotationClusterName
+								+ "' not found. Loc=" + loc);
+						}
+						handler.newAnnotClustersGetter(annotClustersGetter);
+						loc = loc.substring(posEndClusterName + 1);
 					}
 					else {
-						throw new ParserException(changerStr + " is not a valid changer String. Loc=" + loc);
+						String changerStr = loc.substring(1, 3);
+						if (changerStr.equalsIgnoreCase("AS")) {
+							changer = new ChangeToAnnotationsAsSource();
+						}
+						else if (changerStr.equalsIgnoreCase("AT")) {
+							changer = new ChangeToAnnotationsAsTarget();
+						}
+						else if (changerStr.equalsIgnoreCase("SO")) {
+							changer = new ChangeToSource();
+						}
+						else if (changerStr.equalsIgnoreCase("TA")) {
+							changer = new ChangeToTarget();
+						}
+						else if (changerStr.equalsIgnoreCase("AY")) {
+							changer = new ChangeToAnnotationType();
+						}
+						else if (changerStr.equalsIgnoreCase("ME")) {
+							changer = new ChangeToAnnotationMethod();
+						}
+						else if (changerStr.equalsIgnoreCase("SC")) {
+							changer = new ChangeToScore();
+						}
+						else if (changerStr.equalsIgnoreCase("EN")) {
+							changer = new ChangeToSubSeqEnd();
+						}
+						else if (changerStr.equalsIgnoreCase("BE")) {
+							changer = new ChangeToSubSeqBegin();
+						}
+						else if (changerStr.equalsIgnoreCase("OR")) {
+							changer = new ChangeToOrganism();
+						}
+						else {
+							throw new ParserException(changerStr + " is not a valid changer String. Loc=" + loc);
+						}
+						handler.newChanger(changer);
+						loc = loc.substring(3);
 					}
-					handler.newChanger(changer);
-					loc = loc.substring(3);
 					break;
 				case '(':
 					handler.startFilter();
@@ -62,7 +116,7 @@ public class SimpleAnnotationWaysGetterReader implements AnnotationWaysGetterRea
 					break;
 				case '#':
 					posEndFilter = loc.indexOf(')');
-					if (posEndFilter == -1) {
+					if (posEndFilter < 0) {
 						throw new ParserException("CompRegex without close filter ')'. Loc=" + loc);
 					}
 					CompRegex compRegex;
@@ -81,7 +135,7 @@ public class SimpleAnnotationWaysGetterReader implements AnnotationWaysGetterRea
 					break;
 				case '=':
 					posEndFilter = loc.indexOf(')');
-					if (posEndFilter == -1) {
+					if (posEndFilter < 0) {
 						throw new ParserException("CompNumber without close filter ')'. Loc=" + loc);
 					}
 					CompNumber compNumber;
@@ -116,7 +170,7 @@ public class SimpleAnnotationWaysGetterReader implements AnnotationWaysGetterRea
 					break;
 				case '<':
 					posEndFilter = loc.indexOf(')');
-					if (posEndFilter == -1) {
+					if (posEndFilter < 0) {
 						throw new ParserException("CompNumber without close filter ')'. Loc=" + loc);
 					}
 					compNumberChr = loc.charAt(1);
@@ -143,7 +197,7 @@ public class SimpleAnnotationWaysGetterReader implements AnnotationWaysGetterRea
 					break;
 				case '>':
 					posEndFilter = loc.indexOf(')');
-					if (posEndFilter == -1) {
+					if (posEndFilter < 0) {
 						throw new ParserException("CompNumber without close filter ')'. Loc=" + loc);
 					}
 					compNumberChr = loc.charAt(1);

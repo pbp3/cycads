@@ -5,6 +5,7 @@ package org.cycads.extract.parser;
 
 import java.util.Stack;
 
+import org.cycads.extract.general.AnnotationClustersGetter;
 import org.cycads.extract.general.AnnotationWaysGetter;
 import org.cycads.extract.general.SimpleAnnotationWaysGetter;
 import org.cycads.extract.objectsGetter.ObjectsGetter;
@@ -80,6 +81,11 @@ public class SimpleAnnotationWaysGetterHandler implements AnnotationWaysGetterHa
 	@Override
 	public void startLoc() {
 		getters = new Stack<ObjectsGetter>();
+	}
+
+	@Override
+	public void newAnnotClustersGetter(AnnotationClustersGetter annotClustersGetter) {
+		getters.push(annotClustersGetter);
 	}
 
 }

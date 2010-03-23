@@ -1,5 +1,6 @@
 package org.cycads.extract.parser;
 
+import org.cycads.extract.general.AnnotationClustersGetter;
 import org.cycads.extract.general.AnnotationWaysGetter;
 import org.cycads.extract.objectsGetter.ObjectsGetterChangeObject;
 import org.cycads.extract.objectsGetter.validator.CompNumber;
@@ -10,6 +11,8 @@ public interface AnnotationWaysGetterHandler
 {
 
 	public void newChanger(ObjectsGetterChangeObject changer) throws ParserException;
+
+	public void newAnnotClustersGetter(AnnotationClustersGetter annotClustersGetter) throws ParserException;
 
 	public void startFilter() throws ParserException;
 
