@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.cycads.extract.score.ScoreSystemCollection;
 
-public interface AnnotationClusterGetter {
+public interface AnnotationClustersGetter {
 	// public List<AnnotationCluster> getAnnotationClustera(
 	// Collection<Object> objs, String definitionName);
 
