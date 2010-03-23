@@ -1,5 +1,7 @@
 package org.cycads.extract.parser;
 
-public class ObjectGetterReader {
+import org.cycads.extract.general.AnnotationWaysGetter;
 
+public interface ObjectGetterReader {
+	public AnnotationWaysGetter parse(String loc);
 }

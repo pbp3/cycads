@@ -5,10 +5,20 @@ package org.cycads.extract.general;
 
 import java.util.List;
 
+import org.cycads.extract.score.ScoreSystemCollection;
+
 public interface AnnotationClusterGetter {
 	// public List<AnnotationCluster> getAnnotationClustera(
 	// Collection<Object> objs, String definitionName);
 
-	public List<AnnotationCluster> getAnnotationClusters(Object obj,
-			String definitionName);
+	public List<AnnotationCluster> getAnnotationClusters(Object obj);
+
+	public List<String> getLocations();
+
+	public ScoreSystemCollection getScoreSystemCollection();
+
+	// public List<NumberValidator> getRemoveByScore();
+	//
+	// public List<Pattern> getRemoveByString();
+
 }
