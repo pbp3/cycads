@@ -6,7 +6,7 @@ import org.cycads.extract.objectsGetter.validator.CompNumber;
 import org.cycads.extract.objectsGetter.validator.CompRegex;
 import org.cycads.parser.ParserException;
 
-public interface ObjectGetterHandler
+public interface AnnotationWaysGetterHandler
 {
 
 	public void newChanger(ObjectsGetterChangeObject changer) throws ParserException;

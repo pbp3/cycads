@@ -19,11 +19,11 @@ import org.cycads.extract.objectsGetter.validator.NumberLess;
 import org.cycads.extract.objectsGetter.validator.NumberNotEqual;
 import org.cycads.parser.ParserException;
 
-public class SimpleObjectGetterReader implements ObjectGetterReader
+public class SimpleAnnotationWaysGetterReader implements AnnotationWaysGetterReader
 {
-	ObjectGetterHandler	handler;
+	AnnotationWaysGetterHandler	handler;
 
-	public SimpleObjectGetterReader(ObjectGetterHandler handler) {
+	public SimpleAnnotationWaysGetterReader(AnnotationWaysGetterHandler handler) {
 		this.handler = handler;
 	}
 
