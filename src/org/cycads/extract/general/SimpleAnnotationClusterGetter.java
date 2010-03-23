@@ -2,6 +2,8 @@ package org.cycads.extract.general;
 
 import java.util.List;
 
+import org.cycads.extract.score.ScoreSystemCollection;
+
 public class SimpleAnnotationClusterGetter implements AnnotationClusterGetter {
 
 	AnnotationClusterGetter otherAnnotationClusterGetter;
@@ -15,12 +17,23 @@ public class SimpleAnnotationClusterGetter implements AnnotationClusterGetter {
 	}
 
 	@Override
-	public List<AnnotationCluster> getAnnotationClusters(Object obj,
-			String definitionName) {
+	public List<AnnotationCluster> getAnnotationClusters(Object obj) {
 		List<AnnotationCluster> ret = null;
 		if (otherAnnotationClusterGetter != null) {
 ????
 		}
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> getLocations() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ScoreSystemCollection getScoreSystemCollection() {
 		// TODO Auto-generated method stub
 		return null;
 	}
