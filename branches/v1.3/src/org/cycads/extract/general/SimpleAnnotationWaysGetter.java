@@ -4,13 +4,13 @@ import java.util.List;
 
 import org.cycads.extract.objectsGetter.ObjectsGetter;
 
-public class SimpleAnnotationWayGetter implements AnnotationWaysGetter
+public class SimpleAnnotationWaysGetter implements AnnotationWaysGetter
 {
 
 	ObjectsGetter			objsGetter;
 	AnnotationWaysGetter	next;
 
-	public SimpleAnnotationWayGetter(ObjectsGetter objsGetter, AnnotationWaysGetter next) {
+	public SimpleAnnotationWaysGetter(ObjectsGetter objsGetter, AnnotationWaysGetter next) {
 		this.next = next;
 		this.objsGetter = objsGetter;
 	}
