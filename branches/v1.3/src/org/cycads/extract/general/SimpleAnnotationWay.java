@@ -29,11 +29,11 @@ public class SimpleAnnotationWay extends ArrayList<Object> implements Annotation
 	@Override
 	public void addFirst(Object o) {
 		if (o != null) {
-			if (o instanceof AnnotationCluster) {
-
-			}
-			else if (o instanceof AnnotationWay) {
-
+			if (o instanceof AnnotationWay) {
+				AnnotationWay way = (AnnotationWay) o;
+				for (int i = way.size() - 1; i >= 0; i--) {
+					addFirst(way.get(i));
+				}
 			}
 			else if (!o.equals(get(0))) {
 				add(0, o);
@@ -41,13 +41,13 @@ public class SimpleAnnotationWay extends ArrayList<Object> implements Annotation
 		}
 	}
 
-	@Override
-	public void addLast(Object o) {
-		if (o != null && !o.equals(get(size() - 1))) {
-			add(o);
-		}
-	}
-
+	//	@Override
+	//	public void addLast(Object o) {
+	//		if (o != null && !o.equals(get(size() - 1))) {
+	//			add(o);
+	//		}
+	//	}
+	//
 	@Override
 	public Object getSource() {
 		return get(0);
