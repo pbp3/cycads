@@ -13,7 +13,7 @@ public class ChangeToNotes extends ChangeToManyObjects
 {
 
 	@Override
-	public Collection<Object> executeMethod(Object obj) throws GetterExpressionException {
+	public Collection< ? extends Object> executeMethod(Object obj) throws GetterExpressionException {
 		if (!(obj instanceof BasicEntity)) {
 			throw new GetterExpressionException("Object is not an entity. Object:" + obj);
 		}

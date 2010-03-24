@@ -15,7 +15,7 @@ public abstract class ChangeToManyObjects extends ObjectsGetterChangeObject
 
 	@Override
 	public List<Object> getObjects(Object obj) throws GetterExpressionException {
-		Collection<Object> retMethod = executeMethod(obj);
+		Collection<Object> retMethod = (Collection<Object>) executeMethod(obj);
 		if (retMethod instanceof List) {
 			return (List<Object>) retMethod;
 		}
@@ -25,6 +25,6 @@ public abstract class ChangeToManyObjects extends ObjectsGetterChangeObject
 		}
 	}
 
-	public abstract Collection<Object> executeMethod(Object obj) throws GetterExpressionException;
+	public abstract Collection< ? extends Object> executeMethod(Object obj) throws GetterExpressionException;
 
 }
