@@ -4,38 +4,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.cycads.extract.parser.AnnotationWaysGetterReader;
-import org.cycads.extract.score.ScoreSystemCollection;
+import org.cycads.extract.parser.SimpleAnnotationWaysGetterReader;
+import org.cycads.extract.score.AnnotationScoreSystemCollection;
 import org.cycads.parser.ParserException;
 
-public class SimpleAnnotationClusterGetter implements AnnotationClustersGetter {
+public class SimpleAnnotationClusterGetter implements AnnotationClustersGetter
+{
 
-	List<AnnotationWaysGetter> annotationWaysGetters;
-	ScoreSystemCollection scoreSystemCollection;
+	List<AnnotationWaysGetter>		annotationWaysGetters;
+	AnnotationScoreSystemCollection	scoreSystemCollection;
 
 	public SimpleAnnotationClusterGetter(
-			List<AnnotationWaysGetter> annotationWaysGetters,
-			ScoreSystemCollection scoreSystemCollection) {
+
+	ScoreSystemCollection scoreSystemCollection, List<AnnotationWaysGetter> annotationWaysGetters) {
 		this.annotationWaysGetters = annotationWaysGetters;
 		this.scoreSystemCollection = scoreSystemCollection;
 	}
 
-	public SimpleAnnotationClusterGetter(List<String> locations,
-			AnnotationWaysGetterReader annotationWaysGetterReader,
+	public SimpleAnnotationClusterGetter(List<String> locations, AnnotationWaysGetterReader annotationWaysGetterReader,
 			ScoreSystemCollection scoreSystemCollection) throws ParserException {
 		this.scoreSystemCollection = scoreSystemCollection;
-		annotationWaysGetters = new ArrayList<AnnotationWaysGetter>(locations
-				.size());
+		annotationWaysGetters = new ArrayList<AnnotationWaysGetter>(locations.size());
 		for (String location : locations) {
-			annotationWaysGetters.add(annotationWaysGetterReader
-					.parse(location));
+			annotationWaysGetters.add(annotationWaysGetterReader.parse(location));
 		}
+	}
+
+	public SimpleAnnotationClusterGetter(List<String> locations, ScoreSystemCollection scoreSystemCollection)
+			throws ParserException {
+		this(locations, new SimpleAnnotationWaysGetterReader(), scoreSystemCollection);
 	}
 
 	@Override
 	public List<AnnotationCluster> getAnnotationClusters(Object obj) {
 		List<AnnotationCluster> ret = null;
 		if (otherAnnotationClusterGetter != null) {
-????
 		}
 		// TODO Auto-generated method stub
 		return null;
@@ -52,8 +55,7 @@ public class SimpleAnnotationClusterGetter implements AnnotationClustersGetter {
 	}
 
 	@Override
-	public List<? extends Object> getObjects(Object obj)
-			throws GetterExpressionException {
+	public List< ? extends Object> getObjects(Object obj) throws GetterExpressionException {
 		return getAnnotationClusters(obj);
 	}
 }

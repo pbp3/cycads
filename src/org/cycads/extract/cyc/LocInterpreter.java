@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.sequence.Subsequence;
-import org.cycads.extract.score.ScoreSystemCollection;
+import org.cycads.extract.score.AnnotationScoreSystemCollection;
 
 public interface LocInterpreter
 {
@@ -19,6 +19,6 @@ public interface LocInterpreter
 	public Collection<String> getStrings(Annotation< ? extends Subsequence, ? > annot, List<String> locs);
 
 	public Collection<CycDbxrefAnnotationPaths> getCycDbxrefPathAnnots(Annotation< ? extends Subsequence, ? > annot,
-			List<String> locs, ScoreSystemCollection scoreSystems);
+			List<String> locs, AnnotationScoreSystemCollection scoreSystems);
 
 }

@@ -1,3 +1,6 @@
+/*
+ * Created on 24/03/2010
+ */
 package org.cycads.extract.score;
 
 import java.io.FileInputStream;
@@ -8,11 +11,12 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Properties;
 
-public class FileScoreSystem implements ScoreSystem
+public class FileScaleDouble implements TransformDouble
 {
+
 	ArrayList<Score>	scores;
 
-	public FileScoreSystem(String fileName) throws FileNotFoundException, IOException {
+	public FileScaleDouble(String fileName) throws FileNotFoundException, IOException {
 		Properties fileMap = new Properties();
 		fileMap.load(new FileInputStream(fileName));
 		Enumeration<Object> keys = fileMap.keys();
@@ -25,8 +29,8 @@ public class FileScoreSystem implements ScoreSystem
 	}
 
 	@Override
-	public double getScore(Double scoreNote) {
-		int i = Collections.binarySearch(scores, new Score(scoreNote, Double.NEGATIVE_INFINITY));
+	public double transform(double score) {
+		int i = Collections.binarySearch(scores, new Score(score, Double.NEGATIVE_INFINITY));
 		if (i >= 0) {
 			return Double.NEGATIVE_INFINITY;
 		}

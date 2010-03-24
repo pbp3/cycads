@@ -9,25 +9,25 @@ import org.cycads.extract.general.AnnotationWaysGetter;
 import org.cycads.extract.objectsGetter.ObjectsGetterChangeObject;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToAccession;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToAnnotationTypes;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToAnnotationsAsSource;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToAnnotationsAsTarget;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToBegin;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToDB;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToEnd;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToMethod;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToName;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToNoteType;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToNoteValue;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToNotes;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToOrganism;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToScore;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToSeq;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToSource;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToString;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToSubseq;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToSynonyms;
-import org.cycads.extract.objectsGetter.changeObject.ChangeToType;
-import org.cycads.extract.objectsGetter.changeObject.ChangeToAnnotationsAsSource;
-import org.cycads.extract.objectsGetter.changeObject.ChangeToAnnotationsAsTarget;
-import org.cycads.extract.objectsGetter.changeObject.ChangeToOrganism;
-import org.cycads.extract.objectsGetter.changeObject.ChangeToScore;
-import org.cycads.extract.objectsGetter.changeObject.ChangeToSource;
-import org.cycads.extract.objectsGetter.changeObject.ChangeToBegin;
-import org.cycads.extract.objectsGetter.changeObject.ChangeToEnd;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToTarget;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToType;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToVersion;
 import org.cycads.extract.objectsGetter.validator.CompNumber;
 import org.cycads.extract.objectsGetter.validator.CompRegex;
@@ -54,6 +54,11 @@ public class SimpleAnnotationWaysGetterReader implements AnnotationWaysGetterRea
 
 	public SimpleAnnotationWaysGetterReader(AnnotationClustersGetterRepository clusterRepository) {
 		this(new SimpleAnnotationWaysGetterHandler(), clusterRepository);
+
+	}
+
+	public SimpleAnnotationWaysGetterReader() {
+		this(new SimpleAnnotationWaysGetterHandler(), new SimpleAnnotationClustersGetterRepository());
 
 	}
 

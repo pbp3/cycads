@@ -1,22 +1,19 @@
 package org.cycads.extract.general;
 
-import java.util.List;
+import org.cycads.extract.score.AnnotationScoreSystemCollection;
+import org.cycads.general.ParametersDefault;
 
-import org.cycads.entities.annotation.AnnotationMethod;
-import org.cycads.extract.score.ScoreSystemCollection;
-
-public class SimpleAnnotationCluster implements AnnotationCluster
+public class SimpleAnnotationCluster extends SimpleAnnotationWayList implements AnnotationCluster
 {
 
 	Object					source;
 	Object					target;
-	ScoreSystemCollection	scoreSystemCollection;
-	AnnotationWayList		annotationWays	= new SimpleAnnotationWayList();
+	AnnotationScoreSystemCollection	annotationScoreSystemCollection;
 
-	public SimpleAnnotationCluster(Object source, Object target, ScoreSystemCollection scoreSystemCollection) {
+	public SimpleAnnotationCluster(Object source, Object target, AnnotationScoreSystemCollection annotationScoreSystemCollection) {
 		this.source = source;
 		this.target = target;
-		this.scoreSystemCollection = scoreSystemCollection;
+		this.annotationScoreSystemCollection = annotationScoreSystemCollection;
 	}
 
 	@Override
@@ -27,23 +24,17 @@ public class SimpleAnnotationCluster implements AnnotationCluster
 		if (!annotationWay.getSource().equals(source)) {
 			throw new RuntimeException("AnnotationCluster with 2 sources: " + source + "; " + annotationWay.getSource());
 		}
-		return annotationWays.add(annotationWay);
+		return super.add(annotationWay);
 	}
 
-	@Override
-	public List<List<AnnotationMethod>> getMethods() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	//	@Override
-	//	public String getMethodsStr() {
-	//		// TODO Auto-generated method stub
-	//		return null;
-	//	}
-	//
 	@Override
 	public double getScore() {
+		if (getScoreSystemCollection() == null) {
+			return ParametersDefault.getAnnotationClusterScoreDefault();
+		}
+		else {
+
+		}
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -58,9 +49,8 @@ public class SimpleAnnotationCluster implements AnnotationCluster
 		return target;
 	}
 
-	@Override
-	public AnnotationWayList getAnnotationWays() {
-		return annotationWays;
+	public AnnotationScoreSystemCollection getScoreSystemCollection() {
+		return annotationScoreSystemCollection;
 	}
 
 }

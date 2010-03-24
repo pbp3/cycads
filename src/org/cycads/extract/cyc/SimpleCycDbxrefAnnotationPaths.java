@@ -11,24 +11,24 @@ import java.util.Locale;
 
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.synonym.Dbxref;
-import org.cycads.extract.score.ScoreSystem;
-import org.cycads.extract.score.ScoreSystemCollection;
+import org.cycads.extract.score.AnnotationScoreSystem;
+import org.cycads.extract.score.AnnotationScoreSystemCollection;
 
 public class SimpleCycDbxrefAnnotationPaths implements CycDbxrefAnnotationPaths
 {
 
-	private final ScoreSystemCollection		scoreSystems;
+	private final AnnotationScoreSystemCollection		scoreSystems;
 	private final List<List<Annotation>>	annotationPaths	= new ArrayList<List<Annotation>>();
 	private double							score			= 0;
 	private final Dbxref					dbxref;
 
-	public SimpleCycDbxrefAnnotationPaths(Dbxref dbxref, ScoreSystemCollection scoreSystems) {
+	public SimpleCycDbxrefAnnotationPaths(Dbxref dbxref, AnnotationScoreSystemCollection scoreSystems) {
 		this.dbxref = dbxref;
 		this.scoreSystems = scoreSystems;
 	}
 
 	public SimpleCycDbxrefAnnotationPaths(Dbxref dbxref, List<Annotation> annotationsList,
-			ScoreSystemCollection scoreSystems) {
+			AnnotationScoreSystemCollection scoreSystems) {
 		this.dbxref = dbxref;
 		this.scoreSystems = scoreSystems;
 		addAnnotationPath(annotationsList);
@@ -55,12 +55,12 @@ public class SimpleCycDbxrefAnnotationPaths implements CycDbxrefAnnotationPaths
 	public void addAnnotationPath(List<Annotation> annotationPath) {
 		if (annotationPath != null && !annotationPath.isEmpty()) {
 			annotationPaths.add(annotationPath);
-			ScoreSystem scoreSystem;
+			AnnotationScoreSystem annotationScoreSystem;
 			double scoreAnnotation;
 			String scoreNote;
 			double scoreAnnotationPath = 1;
 			for (Annotation annot : annotationPath) {
-				scoreSystem = scoreSystems.getScoreSystem(annot.getAnnotationMethod());
+				annotationScoreSystem = scoreSystems.getScoreSystem(annot.getAnnotationMethod());
 				scoreNote = annot.getScore();
 				Double scoreDbl = null;
 				if (scoreNote != null) {
@@ -82,7 +82,7 @@ public class SimpleCycDbxrefAnnotationPaths implements CycDbxrefAnnotationPaths
 						throw new RuntimeException(e);
 					}
 				}
-				scoreAnnotation = scoreSystem.getScore(scoreDbl);
+				scoreAnnotation = annotationScoreSystem.getScore(scoreDbl);
 				scoreAnnotationPath = scoreAnnotationPath * scoreAnnotation;
 			}
 			score = score + scoreAnnotationPath;
