@@ -2,8 +2,8 @@ package org.cycads.extract.general;
 
 import java.util.ArrayList;
 
-public class SimpleAnnotationWay extends ArrayList<Object> implements AnnotationWay
-{
+public class SimpleAnnotationWay extends ArrayList<Object> implements
+		AnnotationWay {
 
 	public SimpleAnnotationWay() {
 		super();
@@ -34,6 +34,16 @@ public class SimpleAnnotationWay extends ArrayList<Object> implements Annotation
 		if (o != null && !o.equals(get(size() - 1))) {
 			add(o);
 		}
+	}
+
+	@Override
+	public Object getFirst() {
+		return get(0);
+	}
+
+	@Override
+	public Object getLast() {
+		return get(size() - 1);
 	}
 
 }

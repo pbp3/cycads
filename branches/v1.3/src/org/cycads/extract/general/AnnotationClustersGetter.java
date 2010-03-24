@@ -8,16 +8,13 @@ import java.util.List;
 import org.cycads.extract.objectsGetter.ObjectsGetter;
 import org.cycads.extract.score.ScoreSystemCollection;
 
-public interface AnnotationClustersGetter extends ObjectsGetter
-{
-	// public List<AnnotationCluster> getAnnotationClustera(
-	// Collection<Object> objs, String definitionName);
+public interface AnnotationClustersGetter extends ObjectsGetter {
 
 	public List<AnnotationCluster> getAnnotationClusters(Object obj);
 
-	public List<String> getLocations();
-
 	public ScoreSystemCollection getScoreSystemCollection();
+
+	public List<AnnotationWaysGetter> getAnnotationWaysGetters();
 
 	// public List<NumberValidator> getRemoveByScore();
 	//

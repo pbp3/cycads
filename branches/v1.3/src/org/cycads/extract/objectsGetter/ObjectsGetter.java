@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.cycads.extract.general.GetterExpressionException;
 
-public interface ObjectsGetter
-{
-	public List<Object> getObjects(Object obj) throws GetterExpressionException;
+public interface ObjectsGetter {
+	public List<? extends Object> getObjects(Object obj)
+			throws GetterExpressionException;
 }
