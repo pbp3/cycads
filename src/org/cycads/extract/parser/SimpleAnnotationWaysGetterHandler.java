@@ -26,7 +26,7 @@ public class SimpleAnnotationWaysGetterHandler implements AnnotationWaysGetterHa
 		if (getters.empty()) {
 			throw new ParserException("Missing '('");
 		}
-		AnnotationWaysGetter ret = new EndAnnotationWaysGetter();
+		AnnotationWaysGetter ret = EndAnnotationWaysGetter.getInstance();
 		ObjectsGetter getter = null;
 		while (!getters.empty() && (getter = getters.pop()) != null) {
 			ret = new SimpleAnnotationWaysGetter(getter, ret);
@@ -39,7 +39,7 @@ public class SimpleAnnotationWaysGetterHandler implements AnnotationWaysGetterHa
 
 	@Override
 	public AnnotationWaysGetter endLoc() throws ParserException {
-		AnnotationWaysGetter ret = new EndAnnotationWaysGetter();
+		AnnotationWaysGetter ret = EndAnnotationWaysGetter.getInstance();
 		ObjectsGetter getter;
 		while (!getters.empty()) {
 			getter = getters.pop();

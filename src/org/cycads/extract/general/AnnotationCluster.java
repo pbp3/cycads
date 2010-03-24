@@ -3,27 +3,17 @@
  */
 package org.cycads.extract.general;
 
-import java.util.List;
-
-import org.cycads.entities.annotation.AnnotationMethod;
-
-public interface AnnotationCluster
+public interface AnnotationCluster extends AnnotationWayList
 {
 
 	//Exclude repeated AnnotationWays
+	//all AnnotWays with the same source and target
+	//score system
 
 	public Object getSource();
 
 	public Object getTarget();
 
 	public double getScore();
-
-	//	public String getMethodsStr();
-
-	public List<List<AnnotationMethod>> getMethods();
-
-	public void addAnnotationWay(AnnotationWay annotationWay);
-
-	public AnnotationWayList getAnnotationWays();
 
 }

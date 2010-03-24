@@ -2,8 +2,8 @@ package org.cycads.extract.general;
 
 import java.util.ArrayList;
 
-public class SimpleAnnotationWayList extends ArrayList<AnnotationWay> implements
-		AnnotationWayList {
+public class SimpleAnnotationWayList extends ArrayList<AnnotationWay> implements AnnotationWayList
+{
 
 	public SimpleAnnotationWayList() {
 		super();
@@ -20,6 +20,14 @@ public class SimpleAnnotationWayList extends ArrayList<AnnotationWay> implements
 
 	public SimpleAnnotationWayList(int initialCapacity) {
 		super(initialCapacity);
+	}
+
+	@Override
+	public void addAllFirst(Object obj) {
+		for (AnnotationWay way : this) {
+			way.addFirst(obj);
+		}
+
 	}
 
 }

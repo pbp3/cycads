@@ -16,14 +16,21 @@ public class SimpleAnnotationWaysGetter implements AnnotationWaysGetter
 	}
 
 	public SimpleAnnotationWaysGetter(ObjectsGetter objsGetter) {
-		this.next = null;
+		this.next = EndAnnotationWaysGetter.getInstance();
 		this.objsGetter = objsGetter;
 	}
 
 	@Override
 	public AnnotationWayList getAnnotationWays(Object obj) throws GetterExpressionException {
 		AnnotationWayList ret = new SimpleAnnotationWayList();
+		AnnotationWayList annotationWayListGettedNext;
 		List< ? extends Object> objsGetted = objsGetter.getObjects(obj);
+		for (Object objGetted : objsGetted) {
+			annotationWayListGettedNext = next.getAnnotationWays(objGetted);
+			//			annotationWayListGettedNext.addSource(obj);
+			ret.add(obj, annotationWayListGettedNext);
+		}
+
 		if (next == null) {
 			for (Object oGetted : objsGetted) {
 				if (oGetted instanceof AnnotationCluster) {
