@@ -6,7 +6,7 @@ package org.cycads.extract.objectsGetter.changeObject;
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.extract.general.GetterExpressionException;
 
-public class ChangeToAnnotationMethod extends ChangeToOneObject
+public class ChangeToMethod extends ChangeToOneObject
 {
 
 	@Override

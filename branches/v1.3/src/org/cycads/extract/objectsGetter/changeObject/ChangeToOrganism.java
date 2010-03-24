@@ -6,6 +6,7 @@ package org.cycads.extract.objectsGetter.changeObject;
 import org.cycads.entities.sequence.Sequence;
 import org.cycads.extract.general.GetterExpressionException;
 
+// LOC "OR"
 public class ChangeToOrganism extends ChangeToOneObject
 {
 
