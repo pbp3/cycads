@@ -1,20 +1,19 @@
 package org.cycads.extract.general;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.extract.score.ScoreSystemCollection;
 
-public class SimpleAnnotationCluster implements AnnotationCluster {
+public class SimpleAnnotationCluster implements AnnotationCluster
+{
 
-	Object source;
-	Object target;
-	ScoreSystemCollection scoreSystemCollection;
-	List<AnnotationWay> annotationWays = new ArrayList<AnnotationWay>();
+	Object					source;
+	Object					target;
+	ScoreSystemCollection	scoreSystemCollection;
+	AnnotationWayList		annotationWays	= new SimpleAnnotationWayList();
 
-	public SimpleAnnotationCluster(Object source, Object target,
-			ScoreSystemCollection scoreSystemCollection) {
+	public SimpleAnnotationCluster(Object source, Object target, ScoreSystemCollection scoreSystemCollection) {
 		this.source = source;
 		this.target = target;
 		this.scoreSystemCollection = scoreSystemCollection;
@@ -23,12 +22,10 @@ public class SimpleAnnotationCluster implements AnnotationCluster {
 	@Override
 	public void addAnnotationWay(AnnotationWay annotationWay) {
 		if (!annotationWay.getTarget().equals(target)) {
-			throw new RuntimeException("AnnotationCluster with 2 targets: "
-					+ target + "; " + annotationWay.getTarget());
+			throw new RuntimeException("AnnotationCluster with 2 targets: " + target + "; " + annotationWay.getTarget());
 		}
 		if (!annotationWay.getSource().equals(source)) {
-			throw new RuntimeException("AnnotationCluster with 2 sources: "
-					+ source + "; " + annotationWay.getSource());
+			throw new RuntimeException("AnnotationCluster with 2 sources: " + source + "; " + annotationWay.getSource());
 		}
 		annotationWays.add(annotationWay);
 	}
@@ -39,12 +36,12 @@ public class SimpleAnnotationCluster implements AnnotationCluster {
 		return null;
 	}
 
-	@Override
-	public String getMethodsStr() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+	//	@Override
+	//	public String getMethodsStr() {
+	//		// TODO Auto-generated method stub
+	//		return null;
+	//	}
+	//
 	@Override
 	public double getScore() {
 		// TODO Auto-generated method stub
@@ -59,6 +56,11 @@ public class SimpleAnnotationCluster implements AnnotationCluster {
 	@Override
 	public Object getTarget() {
 		return target;
+	}
+
+	@Override
+	public AnnotationWayList getAnnotationWays() {
+		return annotationWays;
 	}
 
 }
