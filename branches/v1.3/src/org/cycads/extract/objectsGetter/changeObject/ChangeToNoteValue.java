@@ -7,7 +7,7 @@ package org.cycads.extract.objectsGetter.changeObject;
 import org.cycads.entities.note.Note;
 import org.cycads.extract.general.GetterExpressionException;
 
-
+// LOC "NV"
 public class ChangeToNoteValue extends ChangeToOneObject
 {
 
@@ -16,7 +16,7 @@ public class ChangeToNoteValue extends ChangeToOneObject
 		if (!(obj instanceof Note)) {
 			throw new GetterExpressionException("Object is not a note. Object:" + obj);
 		}
-		return ((Note) obj).getType().getName();
+		return ((Note) obj).getValue();
 	}
 
 }
