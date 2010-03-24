@@ -12,11 +12,11 @@ import org.cycads.extract.general.GetterExpressionException;
 
 public class ChangeToSeq extends ChangeToManyObjects
 {
-// LOC "SE"
+	// LOC "SE"
 	@Override
 	public Collection<Object> executeMethod(Object obj) throws GetterExpressionException {
 		if (obj instanceof Subsequence) {
-			ArrayList ret = new ArrayList(1);
+			ArrayList<Object> ret = new ArrayList<Object>(1);
 			ret.add(((Subsequence) obj).getSequence());
 			return ret;
 		}
