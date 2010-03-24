@@ -11,8 +11,8 @@ public interface AnnotationMethod extends BasicEntity
 
 	public String getName();
 
-	public double getWeight();
-
-	public void setWeight(double weight);
-
+	//	public double getWeight();
+	//
+	//	public void setWeight(double weight);
+	//
 }

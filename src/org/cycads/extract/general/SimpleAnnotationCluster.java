@@ -1,19 +1,19 @@
 package org.cycads.extract.general;
 
-import org.cycads.extract.score.AnnotationScoreSystemCollection;
-import org.cycads.general.ParametersDefault;
+import org.cycads.extract.score.AnnotationWayListScoreSystem;
 
 public class SimpleAnnotationCluster extends SimpleAnnotationWayList implements AnnotationCluster
 {
 
-	Object					source;
-	Object					target;
-	AnnotationScoreSystemCollection	annotationScoreSystemCollection;
+	Object							source;
+	Object							target;
+	AnnotationWayListScoreSystem	annotationWayListScoreSystem;
 
-	public SimpleAnnotationCluster(Object source, Object target, AnnotationScoreSystemCollection annotationScoreSystemCollection) {
+	public SimpleAnnotationCluster(Object source, Object target,
+			AnnotationWayListScoreSystem annotationWayListScoreSystem) {
 		this.source = source;
 		this.target = target;
-		this.annotationScoreSystemCollection = annotationScoreSystemCollection;
+		this.annotationWayListScoreSystem = annotationWayListScoreSystem;
 	}
 
 	@Override
@@ -29,14 +29,7 @@ public class SimpleAnnotationCluster extends SimpleAnnotationWayList implements 
 
 	@Override
 	public double getScore() {
-		if (getScoreSystemCollection() == null) {
-			return ParametersDefault.getAnnotationClusterScoreDefault();
-		}
-		else {
-
-		}
-		// TODO Auto-generated method stub
-		return 0;
+		return getScoreSystem().getScore(this);
 	}
 
 	@Override
@@ -49,8 +42,8 @@ public class SimpleAnnotationCluster extends SimpleAnnotationWayList implements 
 		return target;
 	}
 
-	public AnnotationScoreSystemCollection getScoreSystemCollection() {
-		return annotationScoreSystemCollection;
+	public AnnotationWayListScoreSystem getScoreSystem() {
+		return annotationWayListScoreSystem;
 	}
 
 }

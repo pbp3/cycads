@@ -19,7 +19,7 @@ import org.cycads.entities.sequence.Sequence;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.HasSynonyms;
-import org.cycads.extract.score.AnnotationScoreSystemCollection;
+import org.cycads.extract.score.AnnotationScoreSystem;
 import org.cycads.extract.score.ScoreSystemsContainer;
 
 public class SimpleLocInterpreter implements LocInterpreter
@@ -559,7 +559,7 @@ public class SimpleLocInterpreter implements LocInterpreter
 
 	@Override
 	public Collection<CycDbxrefAnnotationPaths> getCycDbxrefPathAnnots(Annotation< ? extends Subsequence, ? > annot,
-			List<String> locs, AnnotationScoreSystemCollection scoreSystems) {
+			List<String> locs, AnnotationScoreSystem scoreSystems) {
 		Collection<StringAndPath> values = getCycValues(annot, locs);
 		Hashtable<String, CycDbxrefAnnotationPaths> cycAnnots = new Hashtable<String, CycDbxrefAnnotationPaths>();
 		CycDbxrefAnnotationPaths cycAnnot;

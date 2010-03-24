@@ -9,7 +9,7 @@ import org.cycads.entities.Feature;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Subsequence;
-import org.cycads.extract.score.AnnotationScoreSystemCollection;
+import org.cycads.extract.score.AnnotationScoreSystem;
 import org.cycads.general.ParametersDefault;
 
 public class PFFileCycRecordGenerator implements CycRecordGenerator
@@ -18,16 +18,16 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 	CycIdGenerator			cycIdGenerator;
 	LocInterpreter			locInterpreter;
 	double					ecThreshold;
-	AnnotationScoreSystemCollection	ecScoreSystems;
+	AnnotationScoreSystem	ecScoreSystems;
 	double					goThreshold;
-	AnnotationScoreSystemCollection	goScoreSystems;
+	AnnotationScoreSystem	goScoreSystems;
 	private Type			cycIdNoteType	= null;
 
 	//	double					koThreshold;
 	//	ScoreSystemCollection	koScoreSystems;
 
 	public PFFileCycRecordGenerator(CycIdGenerator cycIdGenerator, LocInterpreter locInterpreter, double ecThreshold,
-			AnnotationScoreSystemCollection ecScoreSystems, double goThreshold, AnnotationScoreSystemCollection goScoreSystems) {
+			AnnotationScoreSystem ecScoreSystems, double goThreshold, AnnotationScoreSystem goScoreSystems) {
 		this.cycIdGenerator = cycIdGenerator;
 		this.locInterpreter = locInterpreter;
 		this.ecThreshold = ecThreshold;
