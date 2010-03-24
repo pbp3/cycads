@@ -4,17 +4,20 @@
 package org.cycads.extract.objectsGetter.changeObject;
 
 import org.cycads.entities.sequence.Subsequence;
+import org.cycads.entities.sequence.Sequence;
 import org.cycads.extract.general.GetterExpressionException;
 
-public class ChangeToSubSeqEnd extends ChangeToOneObject
+public class ChangeToBegin extends ChangeToOneObject
 {
 
 	@Override
 	public Object executeMethod(Object obj) throws GetterExpressionException {
-		if (!(obj instanceof Subsequence)) {
+		if (obj instanceof Subsequence) {
+			return ((Subsequence) obj).getStart();
+		}
+		else {
 			throw new GetterExpressionException("Object is not a subsequence. Object:" + obj);
 		}
-		return ((Subsequence) obj).getEnd();
 	}
 
 }

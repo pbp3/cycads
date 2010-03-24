@@ -12,30 +12,18 @@ import org.cycads.entities.annotation.Annotation;
 import org.cycads.extract.general.GetterExpressionException;
 import org.cycads.extract.objectsGetter.ObjectsGetterChangeObject;
 
-public class ChangeToAnnotationsAsTarget extends ObjectsGetterChangeObject
+public class ChangeToAnnotationsAsTarget extends ChangeToManyObjects
 {
 	// not implemented
 	@Override
-	public List<Object> getObjects(Object obj) throws GetterExpressionException {
-			throw new GetterExpressionException("Not implemented. Object:" + obj);
-		}
-		
-	/*
-	public List<Object> getObjects(Object obj) throws GetterExpressionException {
+	public Collection<Object> executeMethod(Object obj) throws GetterExpressionException {
+		throw new GetterExpressionException("Not implemented. Object:" + obj);
+		/* not implemented for target entity
 		if (!(obj instanceof BasicEntity)) {
 			throw new GetterExpressionException("Object is not an entity. Object:" + obj);
 		}
-		Collection< ? extends Annotation< BasicEntity , ?>> retMethod = ((? extends BasicEntity) obj).getAnnotations(null, null,
-			null);
-		
-		if (retMethod instanceof ArrayList) {
-			return (List<Object>) retMethod;
-		}
-		else {
-			ArrayList<Object> ret = new ArrayList<Object>(retMethod);
-			return ret;
-		}
+		return (Collection<Object>) ((BasicEntity) obj).getAnnotations(null, null, null);
+		*/
 	}
-	*/
 
 }
