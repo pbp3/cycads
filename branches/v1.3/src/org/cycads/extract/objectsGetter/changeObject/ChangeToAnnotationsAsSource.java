@@ -22,7 +22,7 @@ public class ChangeToAnnotationsAsSource extends ObjectsGetterChangeObject
 		}
 		Collection< ? extends Annotation< ? , BasicEntity>> retMethod = ((BasicEntity) obj).getAnnotations(null, null,
 			null);
-		if (retMethod instanceof ArrayList) {
+		if (retMethod instanceof List) {
 			return (List<Object>) retMethod;
 		}
 		else {
