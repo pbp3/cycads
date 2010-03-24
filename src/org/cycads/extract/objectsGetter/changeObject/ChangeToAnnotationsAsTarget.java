@@ -12,6 +12,7 @@ import org.cycads.entities.annotation.Annotation;
 import org.cycads.extract.general.GetterExpressionException;
 import org.cycads.extract.objectsGetter.ObjectsGetterChangeObject;
 
+//LOC "AT"
 public class ChangeToAnnotationsAsTarget extends ChangeToManyObjects
 {
 	// not implemented
