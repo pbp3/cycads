@@ -4,13 +4,13 @@ import java.util.List;
 
 import org.cycads.extract.objectsGetter.ObjectsGetter;
 
-public class SimpleAnnotationWaysGetter implements AnnotationWaysGetter
-{
+public class SimpleAnnotationWaysGetter implements AnnotationWaysGetter {
 
-	ObjectsGetter			objsGetter;
-	AnnotationWaysGetter	next;
+	ObjectsGetter objsGetter;
+	AnnotationWaysGetter next;
 
-	public SimpleAnnotationWaysGetter(ObjectsGetter objsGetter, AnnotationWaysGetter next) {
+	public SimpleAnnotationWaysGetter(ObjectsGetter objsGetter,
+			AnnotationWaysGetter next) {
 		this.next = next;
 		this.objsGetter = objsGetter;
 	}
@@ -21,16 +21,16 @@ public class SimpleAnnotationWaysGetter implements AnnotationWaysGetter
 	}
 
 	@Override
-	public AnnotationWayList getAnnotationWays(Object obj) throws GetterExpressionException {
-		List<Object> objsGetted = objsGetter.getObjects(obj);
+	public AnnotationWayList getAnnotationWays(Object obj)
+			throws GetterExpressionException {
+		List<? extends Object> objsGetted = objsGetter.getObjects(obj);
 		AnnotationWayList ret = new SimpleAnnotationWayList();
 		if (next == null) {
 			for (Object oGetted : objsGetted) {
 				ret.add(new SimpleAnnotationWay(oGetted));
 			}
 			return ret;
-		}
-		else {
+		} else {
 			AnnotationWayList annotationWayListGettedNext;
 			for (Object oGetted : objsGetted) {
 				annotationWayListGettedNext = next.getAnnotationWays(oGetted);
