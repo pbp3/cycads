@@ -274,4 +274,9 @@ public class TypeSQL extends BasicEntityAbstractSQL implements Type
 		return TypeSQL.getType(Type.ENTITY_TYPE_NAME, con);
 	}
 
+	@Override
+	public String toString() {
+		return getName();
+	}
+
 }

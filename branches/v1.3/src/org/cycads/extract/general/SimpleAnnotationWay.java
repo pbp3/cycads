@@ -28,8 +28,16 @@ public class SimpleAnnotationWay extends ArrayList<Object> implements Annotation
 
 	@Override
 	public void addFirst(Object o) {
-		if (o != null && !o.equals(get(0))) {
-			add(0, o);
+		if (o != null) {
+			if (o instanceof AnnotationCluster) {
+
+			}
+			else if (o instanceof AnnotationWay) {
+
+			}
+			else if (!o.equals(get(0))) {
+				add(0, o);
+			}
 		}
 	}
 
