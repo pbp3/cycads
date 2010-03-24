@@ -8,15 +8,19 @@ import java.util.List;
 import org.cycads.extract.score.AnnotationWayListScoreSystem;
 import org.cycads.general.Config;
 
-public class ConfigAnnotationClustersGetterRepository implements AnnotationClustersGetterRepository
-{
+public class ConfigAnnotationClustersGetterRepository implements
+		AnnotationClustersGetterRepository {
 
 	@Override
 	public AnnotationClustersGetter getAnnotationClusterGetter(String name) {
 		List<String> locations = Config.getAnnotationClusterLocs(name);
-		AnnotationWayListScoreSystem scoreSystem = Config.getAnnotationClusterScoreSystems(name);
-
-		return new SimpleAnnotationClustersGetter(locations, scoreSystem);
+		AnnotationWayListScoreSystem scoreSystem = Config
+				.getAnnotationClusterScoreSystems(name);
+		if (locations != null && !locations.isEmpty()) {
+			return new SimpleAnnotationClustersGetter(locations, scoreSystem);
+		} else {
+			return null;
+		}
 	}
 
 }
