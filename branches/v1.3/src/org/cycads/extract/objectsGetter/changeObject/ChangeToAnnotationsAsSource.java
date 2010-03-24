@@ -8,6 +8,7 @@ import java.util.Collection;
 import org.cycads.entities.BasicEntity;
 import org.cycads.extract.general.GetterExpressionException;
 
+// LOC "AS"
 public class ChangeToAnnotationsAsSource extends ChangeToManyObjects
 {
 
