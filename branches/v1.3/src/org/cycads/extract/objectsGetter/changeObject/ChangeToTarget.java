@@ -6,6 +6,7 @@ package org.cycads.extract.objectsGetter.changeObject;
 import org.cycads.entities.annotation.Association;
 import org.cycads.extract.general.GetterExpressionException;
 
+// LOC "TA"
 public class ChangeToTarget extends ChangeToOneObject
 {
 
