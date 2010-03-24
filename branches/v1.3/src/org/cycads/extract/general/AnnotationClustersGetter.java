@@ -6,13 +6,13 @@ package org.cycads.extract.general;
 import java.util.List;
 
 import org.cycads.extract.objectsGetter.ObjectsGetter;
-import org.cycads.extract.score.ScoreSystemCollection;
+import org.cycads.extract.score.AnnotationScoreSystemCollection;
 
 public interface AnnotationClustersGetter extends ObjectsGetter {
 
 	public List<AnnotationCluster> getAnnotationClusters(Object obj);
 
-	public ScoreSystemCollection getScoreSystemCollection();
+	public AnnotationScoreSystemCollection getScoreSystemCollection();
 
 	public List<AnnotationWaysGetter> getAnnotationWaysGetters();
 

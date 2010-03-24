@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.extract.score.FileScoreSystem;
 import org.cycads.extract.score.FixAndFileScoreSystem;
-import org.cycads.extract.score.ScoreSystemCollection;
-import org.cycads.extract.score.SimpleScoreSystemCollection;
+import org.cycads.extract.score.AnnotationScoreSystemCollection;
+import org.cycads.extract.score.SimpleAnnotationScoreSystemCollection;
 import org.cycads.general.Config;
 
 /*
@@ -260,16 +260,16 @@ public class PFFileConfig
 		return getStrings("functionComment.loc");
 	}
 
-	public static ScoreSystemCollection getEcScoreSystems() {
+	public static AnnotationScoreSystemCollection getEcScoreSystems() {
 		return getScoreSystems("ec");
 	}
 
-	public static ScoreSystemCollection getGoScoreSystems() {
+	public static AnnotationScoreSystemCollection getGoScoreSystems() {
 		return getScoreSystems("go");
 	}
 
-	public static ScoreSystemCollection getScoreSystems(String scoreName) {
-		SimpleScoreSystemCollection scoreSystemCollection = new SimpleScoreSystemCollection();
+	public static AnnotationScoreSystemCollection getScoreSystems(String scoreName) {
+		SimpleAnnotationScoreSystemCollection scoreSystemCollection = new SimpleAnnotationScoreSystemCollection();
 		ArrayList<Pattern> patterns = getPatterns("scoreAnnotation.methodName." + scoreName, null);
 		ArrayList<String> values = getStrings("scoreAnnotation.value." + scoreName);
 		ArrayList<String> fileNames = getStrings("scoreAnnotation.scoreNote.file." + scoreName);
