@@ -7,16 +7,28 @@ import org.cycads.extract.general.AnnotationClustersGetter;
 import org.cycads.extract.general.AnnotationClustersGetterRepository;
 import org.cycads.extract.general.AnnotationWaysGetter;
 import org.cycads.extract.objectsGetter.ObjectsGetterChangeObject;
-import org.cycads.extract.objectsGetter.changeObject.ChangeToAnnotationMethod;
-import org.cycads.extract.objectsGetter.changeObject.ChangeToAnnotationType;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToAccession;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToAnnotationTypes;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToDB;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToMethod;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToName;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToNoteType;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToNoteValue;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToNotes;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToSeq;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToString;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToSubseq;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToSynonyms;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToType;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToAnnotationsAsSource;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToAnnotationsAsTarget;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToOrganism;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToScore;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToSource;
-import org.cycads.extract.objectsGetter.changeObject.ChangeToSubSeqBegin;
-import org.cycads.extract.objectsGetter.changeObject.ChangeToSubSeqEnd;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToBegin;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToEnd;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToTarget;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToVersion;
 import org.cycads.extract.objectsGetter.validator.CompNumber;
 import org.cycads.extract.objectsGetter.validator.CompRegex;
 import org.cycads.extract.objectsGetter.validator.CompRegexMatch;
@@ -83,22 +95,58 @@ public class SimpleAnnotationWaysGetterReader implements AnnotationWaysGetterRea
 							changer = new ChangeToTarget();
 						}
 						else if (changerStr.equalsIgnoreCase("AY")) {
-							changer = new ChangeToAnnotationType();
+							changer = new ChangeToAnnotationTypes();
 						}
 						else if (changerStr.equalsIgnoreCase("ME")) {
-							changer = new ChangeToAnnotationMethod();
+							changer = new ChangeToMethod();
 						}
 						else if (changerStr.equalsIgnoreCase("SC")) {
 							changer = new ChangeToScore();
 						}
 						else if (changerStr.equalsIgnoreCase("EN")) {
-							changer = new ChangeToSubSeqEnd();
+							changer = new ChangeToEnd();
 						}
 						else if (changerStr.equalsIgnoreCase("BE")) {
-							changer = new ChangeToSubSeqBegin();
+							changer = new ChangeToBegin();
+						}
+						else if (changerStr.equalsIgnoreCase("NA")) {
+							changer = new ChangeToName();
 						}
 						else if (changerStr.equalsIgnoreCase("OR")) {
 							changer = new ChangeToOrganism();
+						}
+						else if (changerStr.equalsIgnoreCase("SE")) {
+							changer = new ChangeToSeq();
+						}
+						else if (changerStr.equalsIgnoreCase("VE")) {
+							changer = new ChangeToVersion();
+						}
+						else if (changerStr.equalsIgnoreCase("SS")) {
+							changer = new ChangeToSubseq();
+						}
+						else if (changerStr.equalsIgnoreCase("TY")) {
+							changer = new ChangeToType();
+						}
+						else if (changerStr.equalsIgnoreCase("SY")) {
+							changer = new ChangeToSynonyms();
+						}
+						else if (changerStr.equalsIgnoreCase("NO")) {
+							changer = new ChangeToNotes();
+						}
+						else if (changerStr.equalsIgnoreCase("NT")) {
+							changer = new ChangeToNoteType();
+						}
+						else if (changerStr.equalsIgnoreCase("NV")) {
+							changer = new ChangeToNoteValue();
+						}
+						else if (changerStr.equalsIgnoreCase("DB")) {
+							changer = new ChangeToDB();
+						}
+						else if (changerStr.equalsIgnoreCase("AC")) {
+							changer = new ChangeToAccession();
+						}
+						else if (changerStr.equalsIgnoreCase("ST")) {
+							changer = new ChangeToString();
 						}
 						else {
 							throw new ParserException(changerStr + " is not a valid changer String. Loc=" + loc);
