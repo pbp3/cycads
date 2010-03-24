@@ -22,9 +22,13 @@ public class SimpleAnnotationCluster implements AnnotationCluster {
 
 	@Override
 	public void addAnnotationWay(AnnotationWay annotationWay) {
-		if (!annotationWay.getLast().equals(target)) {
+		if (!annotationWay.getTarget().equals(target)) {
 			throw new RuntimeException("AnnotationCluster with 2 targets: "
-					+ target + "; " + annotationWay.getLast());
+					+ target + "; " + annotationWay.getTarget());
+		}
+		if (!annotationWay.getSource().equals(source)) {
+			throw new RuntimeException("AnnotationCluster with 2 sources: "
+					+ source + "; " + annotationWay.getSource());
 		}
 		annotationWays.add(annotationWay);
 	}
@@ -49,7 +53,6 @@ public class SimpleAnnotationCluster implements AnnotationCluster {
 
 	@Override
 	public Object getSource() {
-		// TODO Auto-generated method stub
 		return source;
 	}
 

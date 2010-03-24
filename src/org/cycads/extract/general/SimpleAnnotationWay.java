@@ -1,6 +1,9 @@
 package org.cycads.extract.general;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import org.cycads.entities.annotation.AnnotationMethod;
 
 public class SimpleAnnotationWay extends ArrayList<Object> implements
 		AnnotationWay {
@@ -37,13 +40,19 @@ public class SimpleAnnotationWay extends ArrayList<Object> implements
 	}
 
 	@Override
-	public Object getFirst() {
+	public Object getSource() {
 		return get(0);
 	}
 
 	@Override
-	public Object getLast() {
+	public Object getTarget() {
 		return get(size() - 1);
+	}
+
+	@Override
+	public List<AnnotationMethod> getMethods() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
