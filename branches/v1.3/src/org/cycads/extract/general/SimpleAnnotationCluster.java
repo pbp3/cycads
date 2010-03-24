@@ -1,28 +1,31 @@
 package org.cycads.extract.general;
 
 import org.cycads.extract.score.AnnotationWayListScoreSystem;
+import org.cycads.extract.score.SimpleAnnotationWayListScoreSystem;
 
-public class SimpleAnnotationCluster extends SimpleAnnotationWayList implements AnnotationCluster
-{
+public class SimpleAnnotationCluster extends SimpleAnnotationWayList implements
+		AnnotationCluster {
 
-	Object							source;
-	Object							target;
-	AnnotationWayListScoreSystem	annotationWayListScoreSystem;
+	Object source;
+	Object target;
+	AnnotationWayListScoreSystem annotationWayListScoreSystem;
 
 	public SimpleAnnotationCluster(Object source, Object target,
 			AnnotationWayListScoreSystem annotationWayListScoreSystem) {
 		this.source = source;
 		this.target = target;
-		this.annotationWayListScoreSystem = annotationWayListScoreSystem;
+		setScoreSystem(annotationWayListScoreSystem);
 	}
 
 	@Override
 	public boolean add(AnnotationWay annotationWay) {
 		if (!annotationWay.getTarget().equals(target)) {
-			throw new RuntimeException("AnnotationCluster with 2 targets: " + target + "; " + annotationWay.getTarget());
+			throw new RuntimeException("AnnotationCluster with 2 targets: "
+					+ target + "; " + annotationWay.getTarget());
 		}
 		if (!annotationWay.getSource().equals(source)) {
-			throw new RuntimeException("AnnotationCluster with 2 sources: " + source + "; " + annotationWay.getSource());
+			throw new RuntimeException("AnnotationCluster with 2 sources: "
+					+ source + "; " + annotationWay.getSource());
 		}
 		return super.add(annotationWay);
 	}
@@ -44,6 +47,15 @@ public class SimpleAnnotationCluster extends SimpleAnnotationWayList implements 
 
 	public AnnotationWayListScoreSystem getScoreSystem() {
 		return annotationWayListScoreSystem;
+	}
+
+	public void setScoreSystem(
+			AnnotationWayListScoreSystem annotationWayListScoreSystem) {
+		if (annotationWayListScoreSystem == null) {
+			annotationWayListScoreSystem = new SimpleAnnotationWayListScoreSystem(
+					null);
+		}
+		this.annotationWayListScoreSystem = annotationWayListScoreSystem;
 	}
 
 }
