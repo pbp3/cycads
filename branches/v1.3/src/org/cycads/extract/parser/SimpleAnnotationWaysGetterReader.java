@@ -6,6 +6,7 @@ package org.cycads.extract.parser;
 import org.cycads.extract.general.AnnotationClustersGetter;
 import org.cycads.extract.general.AnnotationClustersGetterRepository;
 import org.cycads.extract.general.AnnotationWaysGetter;
+import org.cycads.extract.general.ConfigAnnotationClustersGetterRepository;
 import org.cycads.extract.objectsGetter.ObjectsGetterChangeObject;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToAccession;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToAnnotationTypes;
@@ -58,7 +59,7 @@ public class SimpleAnnotationWaysGetterReader implements AnnotationWaysGetterRea
 	}
 
 	public SimpleAnnotationWaysGetterReader() {
-		this(new SimpleAnnotationWaysGetterHandler(), new SimpleAnnotationClustersGetterRepository());
+		this(new SimpleAnnotationWaysGetterHandler(), new ConfigAnnotationClustersGetterRepository());
 
 	}
 
