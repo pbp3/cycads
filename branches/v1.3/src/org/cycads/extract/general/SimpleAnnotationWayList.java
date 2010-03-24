@@ -36,6 +36,14 @@ public class SimpleAnnotationWayList extends ArrayList<AnnotationWay> implements
 		return this.contains(e) ? false : super.add(e);
 	}
 
+	public void addAll(AnnotationWayList list) {
+		if (list != null) {
+			for (AnnotationWay annotationWay : list) {
+				add(annotationWay);
+			}
+		}
+	}
+
 	@Override
 	public void addAllFirst(Object obj) {
 		if (this.isEmpty() || obj == null) {

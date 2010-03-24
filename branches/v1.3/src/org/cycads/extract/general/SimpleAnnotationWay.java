@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
+import org.cycads.general.ParametersDefault;
 
 public class SimpleAnnotationWay extends ArrayList<Object> implements AnnotationWay
 {
@@ -63,7 +64,7 @@ public class SimpleAnnotationWay extends ArrayList<Object> implements Annotation
 		List<AnnotationMethod> ret = new ArrayList<AnnotationMethod>();
 		for (int i = 1; i < size() - 1; i++) {
 			Object obj = get(i);
-			if (obj instanceof Annotation) {
+			if (obj instanceof Annotation && ParametersDefault.isValidAnnotForMethods(((Annotation) obj))) {
 				ret.add(((Annotation) obj).getAnnotationMethod());
 			}
 		}

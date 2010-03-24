@@ -5,14 +5,14 @@ import java.util.List;
 
 import org.cycads.extract.parser.AnnotationWaysGetterReader;
 import org.cycads.extract.parser.SimpleAnnotationWaysGetterReader;
-import org.cycads.extract.score.AnnotationScoreSystemCollection;
+import org.cycads.extract.score.AnnotationScoreSystem;
 import org.cycads.parser.ParserException;
 
 public class SimpleAnnotationClusterGetter implements AnnotationClustersGetter
 {
 
 	List<AnnotationWaysGetter>		annotationWaysGetters;
-	AnnotationScoreSystemCollection	scoreSystemCollection;
+	AnnotationScoreSystem	scoreSystemCollection;
 
 	public SimpleAnnotationClusterGetter(
 

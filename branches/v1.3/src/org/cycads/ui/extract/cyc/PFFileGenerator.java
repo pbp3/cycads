@@ -24,7 +24,7 @@ import org.cycads.extract.cyc.PFFileConfig;
 import org.cycads.extract.cyc.PFFileCycRecordGenerator;
 import org.cycads.extract.cyc.PFFileStream;
 import org.cycads.extract.cyc.SimpleLocInterpreter;
-import org.cycads.extract.score.AnnotationScoreSystemCollection;
+import org.cycads.extract.score.AnnotationScoreSystem;
 import org.cycads.extract.score.ScoreSystemsContainer;
 import org.cycads.general.Config;
 import org.cycads.general.Messages;
@@ -107,8 +107,8 @@ public class PFFileGenerator
 			CycIdGenerator cycIdGenerator = new OrganismCycIdGenerator(organism);
 
 			LocAndScores locAndScores = new LocAndScores();
-			AnnotationScoreSystemCollection ecScoreSystemCollection = locAndScores.getScoreSystems("ec");
-			AnnotationScoreSystemCollection goScoreSystemCollection = locAndScores.getScoreSystems("go");
+			AnnotationScoreSystem ecScoreSystemCollection = locAndScores.getScoreSystems("ec");
+			AnnotationScoreSystem goScoreSystemCollection = locAndScores.getScoreSystems("go");
 
 			CycRecordGenerator cycRecordGenerator = new PFFileCycRecordGenerator(cycIdGenerator,
 				new SimpleLocInterpreter(locAndScores, locAndScores), ecThreshold, ecScoreSystemCollection,
@@ -140,7 +140,7 @@ public class PFFileGenerator
 	public static class LocAndScores implements ScoreSystemsContainer, LocContainer
 	{
 		@Override
-		public AnnotationScoreSystemCollection getScoreSystems(String scoreName) {
+		public AnnotationScoreSystem getScoreSystems(String scoreName) {
 			return PFFileConfig.getScoreSystems(scoreName);
 		}
 
