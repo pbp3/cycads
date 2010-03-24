@@ -11,14 +11,13 @@ import java.util.Hashtable;
 
 import org.cycads.entities.annotation.AnnotationMethod;
 import org.cycads.entities.note.SQL.TypeSQL;
-import org.cycads.general.ParametersDefault;
 
 public class AnnotationMethodSQL extends TypeSQL implements AnnotationMethod
 {
 	private static Hashtable<String, AnnotationMethodSQL>	hashByName	= new Hashtable<String, AnnotationMethodSQL>();
 	private static Hashtable<Integer, AnnotationMethodSQL>	hashById	= new Hashtable<Integer, AnnotationMethodSQL>();
 
-	private double											weight		= ParametersDefault.getMethodWeightDefault();
+	//	private double											weight		= ParametersDefault.getMethodWeightDefault();
 
 	private AnnotationMethodSQL(int id, Connection con) throws SQLException {
 		super(id, con);
@@ -128,16 +127,16 @@ public class AnnotationMethodSQL extends TypeSQL implements AnnotationMethod
 		}
 	}
 
-	@Override
-	public double getWeight() {
-		return weight;
-	}
-
-	@Override
-	public void setWeight(double weight) {
-		this.weight = weight;
-	}
-
+	//	@Override
+	//	public double getWeight() {
+	//		return weight;
+	//	}
+	//
+	//	@Override
+	//	public void setWeight(double weight) {
+	//		this.weight = weight;
+	//	}
+	//
 	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof AnnotationMethodSQL) {
