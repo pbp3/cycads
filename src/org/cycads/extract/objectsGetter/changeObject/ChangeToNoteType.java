@@ -7,7 +7,7 @@ package org.cycads.extract.objectsGetter.changeObject;
 import org.cycads.entities.note.Note;
 import org.cycads.extract.general.GetterExpressionException;
 
-
+// LOC "NT"
 public class ChangeToNoteType extends ChangeToOneObject
 {
 
