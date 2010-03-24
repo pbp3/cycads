@@ -18,10 +18,12 @@ public interface AnnotationCluster
 
 	public double getScore();
 
-	public String getMethodsStr();
+	//	public String getMethodsStr();
 
 	public List<List<AnnotationMethod>> getMethods();
 
 	public void addAnnotationWay(AnnotationWay annotationWay);
+
+	public AnnotationWayList getAnnotationWays();
 
 }

@@ -3,10 +3,11 @@ package org.cycads.extract.general;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
 
-public class SimpleAnnotationWay extends ArrayList<Object> implements
-		AnnotationWay {
+public class SimpleAnnotationWay extends ArrayList<Object> implements AnnotationWay
+{
 
 	public SimpleAnnotationWay() {
 		super();
@@ -51,8 +52,13 @@ public class SimpleAnnotationWay extends ArrayList<Object> implements
 
 	@Override
 	public List<AnnotationMethod> getMethods() {
-		// TODO Auto-generated method stub
-		return null;
+		List<AnnotationMethod> ret = new ArrayList<AnnotationMethod>();
+		for (int i = 1; i < size() - 1; i++) {
+			Object obj = get(i);
+			if (obj instanceof Annotation) {
+				ret.add(((Annotation) obj).getAnnotationMethod());
+			}
+		}
+		return ret;
 	}
-
 }

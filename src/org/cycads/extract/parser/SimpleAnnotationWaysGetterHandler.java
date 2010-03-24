@@ -7,6 +7,7 @@ import java.util.Stack;
 
 import org.cycads.extract.general.AnnotationClustersGetter;
 import org.cycads.extract.general.AnnotationWaysGetter;
+import org.cycads.extract.general.EndAnnotationWaysGetter;
 import org.cycads.extract.general.SimpleAnnotationWaysGetter;
 import org.cycads.extract.objectsGetter.ObjectsGetter;
 import org.cycads.extract.objectsGetter.ObjectsGetterChangeObject;
@@ -25,7 +26,7 @@ public class SimpleAnnotationWaysGetterHandler implements AnnotationWaysGetterHa
 		if (getters.empty()) {
 			throw new ParserException("Missing '('");
 		}
-		AnnotationWaysGetter ret = null;
+		AnnotationWaysGetter ret = new EndAnnotationWaysGetter();
 		ObjectsGetter getter = null;
 		while (!getters.empty() && (getter = getters.pop()) != null) {
 			ret = new SimpleAnnotationWaysGetter(getter, ret);
@@ -33,14 +34,12 @@ public class SimpleAnnotationWaysGetterHandler implements AnnotationWaysGetterHa
 		if (getter != null) {
 			throw new ParserException("Missing '('");
 		}
-		if (ret != null) {
-			getters.push(new ObjectsGetterFilter(new CompAnnotWaysGetter(ret)));
-		}
+		getters.push(new ObjectsGetterFilter(new CompAnnotWaysGetter(ret)));
 	}
 
 	@Override
 	public AnnotationWaysGetter endLoc() throws ParserException {
-		AnnotationWaysGetter ret = null;
+		AnnotationWaysGetter ret = new EndAnnotationWaysGetter();
 		ObjectsGetter getter;
 		while (!getters.empty()) {
 			getter = getters.pop();
