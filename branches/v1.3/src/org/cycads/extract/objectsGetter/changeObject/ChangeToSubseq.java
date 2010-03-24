@@ -3,14 +3,17 @@
  */
 package org.cycads.extract.objectsGetter.changeObject;
 
+import java.util.Collection;
+
 import org.cycads.entities.sequence.Sequence;
 import org.cycads.extract.general.GetterExpressionException;
 
-public class ChangeToSubseq extends ChangeToOneObject
+// LOC "SS"
+public class ChangeToSubseq extends ChangeToManyObjects
 {
 
 	@Override
-	public Object executeMethod(Object obj) throws GetterExpressionException {
+	public Collection<Object> executeMethod(Object obj) throws GetterExpressionException {
 		if (!(obj instanceof Sequence)) {
 			throw new GetterExpressionException("Object is not a sequence. Object:" + obj);
 		}
