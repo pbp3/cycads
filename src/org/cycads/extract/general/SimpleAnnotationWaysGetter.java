@@ -22,44 +22,18 @@ public class SimpleAnnotationWaysGetter implements AnnotationWaysGetter
 
 	@Override
 	public AnnotationWayList getAnnotationWays(Object obj) throws GetterExpressionException {
-		AnnotationWayList ret = new SimpleAnnotationWayList();
-		AnnotationWayList annotationWayListGettedNext;
 		List< ? extends Object> objsGetted = objsGetter.getObjects(obj);
-		for (Object objGetted : objsGetted) {
-			annotationWayListGettedNext = next.getAnnotationWays(objGetted);
-			//			annotationWayListGettedNext.addSource(obj);
-			ret.add(obj, annotationWayListGettedNext);
+		if (objsGetted.isEmpty()) {
+			return new SimpleAnnotationWayList();
 		}
-
-		if (next == null) {
-			for (Object oGetted : objsGetted) {
-				if (oGetted instanceof AnnotationCluster) {
-					ret.addAll(((AnnotationCluster) oGetted).getAnnotationWays());
-				}
-				else {
-					AnnotationWay annotationWay = new SimpleAnnotationWay(oGetted);
-					annotationWay.addFirst(obj);
-					ret.add(annotationWay);
-				}
-			}
-			return ret;
+		AnnotationWayList ret = next.getAnnotationWays(objsGetted.get(0));
+		ret.addAllFirst(obj);
+		for (int i = 1; i < objsGetted.size(); i++) {
+			AnnotationWayList retGetted = next.getAnnotationWays(objsGetted.get(i));
+			retGetted.addAllFirst(obj);
+			ret.addAll(retGetted);
 		}
-		else {
-			AnnotationWayList annotationWayListGettedNext;
-			for (Object oGetted : objsGetted) {
-				annotationWayListGettedNext = next.getAnnotationWays(oGetted);
-				for (AnnotationWay annotationWay : annotationWayListGettedNext) {
-					if (oGetted instanceof AnnotationCluster) {
-						ret.addAll(((AnnotationCluster) oGetted).getAnnotationWays());
-					}
-					else {
-						annotationWay.addFirst(oGetted);
-						ret.add(annotationWay);
-					}
-				}
-			}
-			return ret;
-		}
+		return ret;
 	}
 
 	public void setNext(AnnotationWaysGetter next) {
