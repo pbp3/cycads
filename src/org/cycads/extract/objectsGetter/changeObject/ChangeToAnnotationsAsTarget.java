@@ -3,14 +3,9 @@
  */
 package org.cycads.extract.objectsGetter.changeObject;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
-import org.cycads.entities.BasicEntity;
-import org.cycads.entities.annotation.Annotation;
 import org.cycads.extract.general.GetterExpressionException;
-import org.cycads.extract.objectsGetter.ObjectsGetterChangeObject;
 
 //LOC "AT"
 public class ChangeToAnnotationsAsTarget extends ChangeToManyObjects

@@ -24,7 +24,7 @@ public class SimpleTransformScore implements TransformScore
 
 	@Override
 	public double getScoreDbl(String scoreStr) {
-		double score = stringToDouble.getScoreDouble(scoreStr);
+		double score = stringToDouble.getDouble(scoreStr);
 		for (TransformDouble transformDouble : transforms) {
 			score = transformDouble.transform(score);
 		}

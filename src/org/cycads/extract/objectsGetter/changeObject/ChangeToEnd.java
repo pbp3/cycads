@@ -4,7 +4,6 @@
 package org.cycads.extract.objectsGetter.changeObject;
 
 import org.cycads.entities.sequence.Subsequence;
-import org.cycads.entities.sequence.Sequence;
 import org.cycads.extract.general.GetterExpressionException;
 
 public class ChangeToEnd extends ChangeToOneObject
@@ -17,7 +16,7 @@ public class ChangeToEnd extends ChangeToOneObject
 		}
 		else {
 			throw new GetterExpressionException("Object is not a subsequence. Object:" + obj);
-		}	
+		}
 	}
 
 }

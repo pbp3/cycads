@@ -7,12 +7,11 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Locale;
 
-
 public class TransformStringToDouble
 {
-	public double getScoreDouble(String score) {
+	public double getDouble(String score) {
 		if (score == null) {
-			return ParametersDefault.getAnnotationScoreDefault();
+			return 0;
 		}
 		else {
 			NumberFormat numberFormat;
