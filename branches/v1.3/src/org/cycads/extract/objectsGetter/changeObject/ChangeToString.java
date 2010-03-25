@@ -3,14 +3,13 @@
  */
 package org.cycads.extract.objectsGetter.changeObject;
 
-import org.cycads.extract.general.GetterExpressionException;
 
 // LOC "ST"
 public class ChangeToString extends ChangeToOneObject
 {
 
 	@Override
-	public Object executeMethod(Object obj) throws GetterExpressionException {
+	public Object executeMethod(Object obj) {
 		return obj.toString();
 	}
 

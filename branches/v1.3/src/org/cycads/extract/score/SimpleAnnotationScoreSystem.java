@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.annotation.AnnotationMethod;
+import org.cycads.general.ParametersDefault;
 
 public class SimpleAnnotationScoreSystem implements AnnotationScoreSystem
 {
@@ -43,7 +44,14 @@ public class SimpleAnnotationScoreSystem implements AnnotationScoreSystem
 
 	@Override
 	public double getScore(Annotation annotation) {
-		return getTransformScore(annotation.getAnnotationMethod()).getScoreDbl(annotation.getScore());
+		TransformScore transformScore = getTransformScore(annotation.getAnnotationMethod());
+		String score = annotation.getScore();
+		if (score == null) {
+			return ParametersDefault.getAnnotationScoreDefault();
+		}
+		else {
+			return transformScore.getScoreDbl(score);
+		}
 	}
 
 }

@@ -4,8 +4,9 @@
 package org.cycads.extract.objectsGetter.changeObject;
 
 import org.cycads.entities.Feature;
-import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.Function;
+import org.cycads.entities.note.Type;
+import org.cycads.entities.sequence.Organism;
 import org.cycads.extract.general.GetterExpressionException;
 
 // LOC "NA"
@@ -23,10 +24,14 @@ public class ChangeToName extends ChangeToOneObject
 		else if (obj instanceof Organism) {
 			return ((Organism) obj).getName();
 		}
-		else {
-			throw new GetterExpressionException("Object is neither a feature nor a function nor an organism. Object:" + obj);
+		else if (obj instanceof Type) {
+			return ((Type) obj).getName();
 		}
-		
+		else {
+			throw new GetterExpressionException(
+				"Object is neither a feature nor a function nor an organism nor a type. Object:" + obj);
+		}
+
 	}
 
 }

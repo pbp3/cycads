@@ -22,8 +22,9 @@ public class SimpleAnnotationClustersGetter implements AnnotationClustersGetter
 		this.scoreSystem = scoreSystem;
 	}
 
-	public SimpleAnnotationClustersGetter(List<String> locations, AnnotationWaysGetterReader annotationWaysGetterReader,
-			AnnotationWayListScoreSystem scoreSystem) throws ParserException {
+	public SimpleAnnotationClustersGetter(List<String> locations,
+			AnnotationWaysGetterReader annotationWaysGetterReader, AnnotationWayListScoreSystem scoreSystem)
+			throws ParserException {
 		this.scoreSystem = scoreSystem;
 		annotationWaysGetters = new ArrayList<AnnotationWaysGetter>(locations.size());
 		for (String location : locations) {
@@ -38,7 +39,7 @@ public class SimpleAnnotationClustersGetter implements AnnotationClustersGetter
 
 	@Override
 	public List<AnnotationCluster> getAnnotationClusters(Object source) throws GetterExpressionException {
-		List<AnnotationCluster> ret = null;
+		List<AnnotationCluster> ret = new ArrayList<AnnotationCluster>();
 		Hashtable<Object, AnnotationCluster> targets = new Hashtable<Object, AnnotationCluster>();
 		AnnotationCluster cluster;
 		for (AnnotationWaysGetter getter : annotationWaysGetters) {

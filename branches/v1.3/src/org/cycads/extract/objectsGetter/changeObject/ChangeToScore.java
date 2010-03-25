@@ -4,7 +4,6 @@
 package org.cycads.extract.objectsGetter.changeObject;
 
 import org.cycads.entities.annotation.Annotation;
-import org.cycads.entities.annotation.Association;
 import org.cycads.extract.general.AnnotationCluster;
 import org.cycads.extract.general.GetterExpressionException;
 
@@ -18,10 +17,11 @@ public class ChangeToScore extends ChangeToOneObject
 			return ((Annotation) obj).getScore();
 		}
 		else if (obj instanceof AnnotationCluster) {
-			return ((AnnotationCluster)obj).getScore();
+			return ((AnnotationCluster) obj).getScore();
 		}
 		else {
-			throw new GetterExpressionException("Object is neither an annotation nor an annotation cluster. Object:" + obj);
+			throw new GetterExpressionException("Object is neither an annotation nor an annotation cluster. Object:"
+				+ obj);
 		}
 	}
 
