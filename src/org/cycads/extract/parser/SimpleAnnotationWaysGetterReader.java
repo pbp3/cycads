@@ -59,6 +59,11 @@ public class SimpleAnnotationWaysGetterReader implements AnnotationWaysGetterRea
 
 	}
 
+	public SimpleAnnotationWaysGetterReader(AnnotationWaysGetterHandler handler) {
+		this(handler, new ConfigAnnotationClustersGetterRepository());
+
+	}
+
 	public SimpleAnnotationWaysGetterReader() {
 		this(new SimpleAnnotationWaysGetterHandler(), new ConfigAnnotationClustersGetterRepository());
 
