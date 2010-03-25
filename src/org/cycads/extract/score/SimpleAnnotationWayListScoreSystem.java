@@ -25,17 +25,24 @@ public class SimpleAnnotationWayListScoreSystem implements
 		// }
 		double ret = 0;
 		double scoreWay;
+		Object objPrevious;
+		Annotation annot;
 		for (AnnotationWay annotationWay : annotationWayList) {
 			if (!annotationWay.isEmpty()) {
 				scoreWay = 1;
+				objPrevious = null;
 				for (Object obj : annotationWay) {
-					if (obj instanceof Annotation
-							&& ParametersDefault
-									.isValidAnnotForScore(((Annotation) obj))) {
-						scoreWay = scoreWay
-								* annotationScoreSystem
-										.getScore((Annotation) obj);
+					if (obj instanceof Annotation) {
+						annot = (Annotation) obj;
+						if (annot.getSource().equals(objPrevious)
+								&& ParametersDefault
+										.isValidAnnotForScore(annot)) {
+							scoreWay = scoreWay
+									* annotationScoreSystem
+											.getScore((Annotation) obj);
+						}
 					}
+					objPrevious = obj;
 				}
 				ret += scoreWay;
 			}

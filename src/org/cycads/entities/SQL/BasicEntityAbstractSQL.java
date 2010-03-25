@@ -24,11 +24,10 @@ import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.SQL.DbxrefSQL;
 
-public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
-{
+public abstract class BasicEntityAbstractSQL implements BasicEntitySQL {
 
-	protected int				id;
-	private final Connection	con;
+	protected int id;
+	private final Connection con;
 
 	public BasicEntityAbstractSQL(int id, Connection con) {
 		this.id = id;
@@ -39,34 +38,33 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = getConnection().prepareStatement(
-				"SELECT note_type_id, value from Note where source_id=? and source_type_id=?");
+			stmt = getConnection()
+					.prepareStatement(
+							"SELECT note_type_id, value from Note where source_id=? and source_type_id=?");
 			stmt.setInt(1, getId());
 			stmt.setInt(2, getTypeId());
 			rs = stmt.executeQuery();
 			ArrayList<Note> notes = new ArrayList<Note>();
 			while (rs.next()) {
-				notes.add(new SimpleNote(getNoteType(rs.getInt("note_type_id")), rs.getString("value")));
+				notes.add(new SimpleNote(
+						getNoteType(rs.getInt("note_type_id")), rs
+								.getString("value")));
 			}
 			return notes;
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
-		}
-		finally {
+		} finally {
 			if (rs != null) {
 				try {
 					rs.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
 			if (stmt != null) {
 				try {
 					stmt.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
@@ -137,35 +135,33 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = getConnection().prepareStatement(
-				"SELECT value from Note where source_id=? and source_type_id=? and note_type_id=?");
+			stmt = getConnection()
+					.prepareStatement(
+							"SELECT value from Note where source_id=? and source_type_id=? and note_type_id=?");
 			stmt.setInt(1, getId());
 			stmt.setInt(2, getTypeId());
 			stmt.setInt(3, noteTypeId);
 			rs = stmt.executeQuery();
 			ArrayList<Note> notes = new ArrayList<Note>();
 			while (rs.next()) {
-				notes.add(new SimpleNote(getNoteType(noteTypeId), rs.getString("value")));
+				notes.add(new SimpleNote(getNoteType(noteTypeId), rs
+						.getString("value")));
 			}
 			return notes;
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
-		}
-		finally {
+		} finally {
 			if (rs != null) {
 				try {
 					rs.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
 			if (stmt != null) {
 				try {
 					stmt.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
@@ -176,8 +172,9 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = getConnection().prepareStatement(
-				"SELECT value from Note where source_id=? and source_type_id=? and note_type_id=?");
+			stmt = getConnection()
+					.prepareStatement(
+							"SELECT value from Note where source_id=? and source_type_id=? and note_type_id=?");
 			stmt.setInt(1, getId());
 			stmt.setInt(2, getTypeId());
 			stmt.setInt(3, noteTypeId);
@@ -187,24 +184,20 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 				values.add(rs.getString("value"));
 			}
 			return values;
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
-		}
-		finally {
+		} finally {
 			if (rs != null) {
 				try {
 					rs.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
 			if (stmt != null) {
 				try {
 					stmt.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
@@ -215,8 +208,9 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = getConnection().prepareStatement(
-				"SELECT value from Note where source_id=? and source_type_id=? and note_type_id=?");
+			stmt = getConnection()
+					.prepareStatement(
+							"SELECT value from Note where source_id=? and source_type_id=? and note_type_id=?");
 			stmt.setInt(1, getId());
 			stmt.setInt(2, getTypeId());
 			stmt.setInt(3, noteTypeId);
@@ -225,24 +219,20 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 				return rs.getString("value");
 			}
 			return null;
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
-		}
-		finally {
+		} finally {
 			if (rs != null) {
 				try {
 					rs.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
 			if (stmt != null) {
 				try {
 					stmt.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
@@ -252,27 +242,24 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 	public void setNoteValue(int noteTypeId, String value) {
 		if (getNoteValue(noteTypeId) == null) {
 			addNote(noteTypeId, value);
-		}
-		else {
+		} else {
 			PreparedStatement stmt = null;
 			try {
-				stmt = getConnection().prepareStatement(
-					"UPDATE Note SET value=? WHERE source_id=? and source_type_id=? and note_type_id=?");
+				stmt = getConnection()
+						.prepareStatement(
+								"UPDATE Note SET value=? WHERE source_id=? and source_type_id=? and note_type_id=?");
 				stmt.setString(1, value);
 				stmt.setInt(2, getId());
 				stmt.setInt(3, getTypeId());
 				stmt.setInt(4, noteTypeId);
 				stmt.executeUpdate();
-			}
-			catch (SQLException e) {
+			} catch (SQLException e) {
 				throw new RuntimeException(e);
-			}
-			finally {
+			} finally {
 				if (stmt != null) {
 					try {
 						stmt.close();
-					}
-					catch (SQLException ex) {
+					} catch (SQLException ex) {
 						// ignore
 					}
 				}
@@ -284,8 +271,9 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = getConnection().prepareStatement(
-				"SELECT * from Note where source_id=? and source_type_id=? and note_type_id=? and value=?");
+			stmt = getConnection()
+					.prepareStatement(
+							"SELECT * from Note where source_id=? and source_type_id=? and note_type_id=? and value=?");
 			stmt.setInt(1, getId());
 			stmt.setInt(2, getTypeId());
 			stmt.setInt(3, noteTypeId);
@@ -296,24 +284,20 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 				note = new SimpleNote(getNoteType(noteTypeId), value);
 			}
 			return note;
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
-		}
-		finally {
+		} finally {
 			if (rs != null) {
 				try {
 					rs.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
 			if (stmt != null) {
 				try {
 					stmt.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
@@ -326,24 +310,22 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 		}
 		PreparedStatement stmt = null;
 		try {
-			stmt = getConnection().prepareStatement(
-				"INSERT INTO Note (source_id, source_type_id, note_type_id, value) VALUES(?,?,?,?)");
+			stmt = getConnection()
+					.prepareStatement(
+							"INSERT INTO Note (source_id, source_type_id, note_type_id, value) VALUES(?,?,?,?)");
 			stmt.setInt(1, getId());
 			stmt.setInt(2, getTypeId());
 			stmt.setInt(3, noteTypeId);
 			stmt.setString(4, value);
 			stmt.executeUpdate();
 			return getNote(noteTypeId, value);
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
-		}
-		finally {
+		} finally {
 			if (stmt != null) {
 				try {
 					stmt.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
@@ -363,40 +345,38 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 		return TypeSQL.getType(noteType, getConnection());
 	}
 
-	//Synonyms methods
+	// Synonyms methods
 
 	public Collection<DbxrefSQL> getSynonyms() {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = getConnection().prepareStatement(
-				"SELECT dbxref_id from Synonym where source_id=? and source_type_id=?");
+			stmt = getConnection()
+					.prepareStatement(
+							"SELECT dbxref_id from Synonym where source_id=? and source_type_id=?");
 			stmt.setInt(1, getId());
 			stmt.setInt(2, getTypeId());
 			rs = stmt.executeQuery();
 			ArrayList<DbxrefSQL> dbxrefs = new ArrayList<DbxrefSQL>();
 			while (rs.next()) {
-				dbxrefs.add(new DbxrefSQL(rs.getInt("dbxref_id"), getConnection()));
+				dbxrefs.add(new DbxrefSQL(rs.getInt("dbxref_id"),
+						getConnection()));
 			}
 			return dbxrefs;
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
-		}
-		finally {
+		} finally {
 			if (rs != null) {
 				try {
 					rs.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
 			if (stmt != null) {
 				try {
 					stmt.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
@@ -407,36 +387,34 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = getConnection().prepareStatement(
-				"SELECT X.dbxref_id from Synonym S ,Dbxref X, Term_type T WHERE S.source_id=? and S.source_type_id=?"
-					+ " AND S.dbxref_id=X.dbxref_id AND X.external_db_id=T.type_id AND T.name=?");
+			stmt = getConnection()
+					.prepareStatement(
+							"SELECT X.dbxref_id from Synonym S ,Dbxref X, Term_type T WHERE S.source_id=? and S.source_type_id=?"
+									+ " AND S.dbxref_id=X.dbxref_id AND X.external_db_id=T.type_id AND T.name=?");
 			stmt.setInt(1, getId());
 			stmt.setInt(2, getTypeId());
 			stmt.setString(3, dbName);
 			rs = stmt.executeQuery();
 			ArrayList<DbxrefSQL> dbxrefs = new ArrayList<DbxrefSQL>();
 			while (rs.next()) {
-				dbxrefs.add(new DbxrefSQL(rs.getInt("dbxref_id"), getConnection()));
+				dbxrefs.add(new DbxrefSQL(rs.getInt("dbxref_id"),
+						getConnection()));
 			}
 			return dbxrefs;
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
-		}
-		finally {
+		} finally {
 			if (rs != null) {
 				try {
 					rs.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
 			if (stmt != null) {
 				try {
 					stmt.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
@@ -447,9 +425,11 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			DbxrefSQL dbxref = DbxrefSQL.getDbxref(dbName, accession, getConnection());
-			stmt = getConnection().prepareStatement(
-				"SELECT * from Synonym where source_id=? and source_type_id=? AND dbxref_id=?");
+			DbxrefSQL dbxref = DbxrefSQL.getDbxref(dbName, accession,
+					getConnection());
+			stmt = getConnection()
+					.prepareStatement(
+							"SELECT * from Synonym where source_id=? and source_type_id=? AND dbxref_id=?");
 			stmt.setInt(1, getId());
 			stmt.setInt(2, getTypeId());
 			stmt.setInt(3, dbxref.getId());
@@ -458,24 +438,20 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 				return null;
 			}
 			return dbxref;
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
-		}
-		finally {
+		} finally {
 			if (rs != null) {
 				try {
 					rs.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
 			if (stmt != null) {
 				try {
 					stmt.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
@@ -484,9 +460,9 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 
 	public DbxrefSQL addSynonym(String dbName, String accession) {
 		try {
-			return addSynonym(DbxrefSQL.getDbxref(dbName, accession, getConnection()));
-		}
-		catch (SQLException e) {
+			return addSynonym(DbxrefSQL.getDbxref(dbName, accession,
+					getConnection()));
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -495,8 +471,7 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 		DbxrefSQL dbxrefSQL;
 		if (dbxref instanceof DbxrefSQL) {
 			dbxrefSQL = (DbxrefSQL) dbxref;
-		}
-		else {
+		} else {
 			dbxrefSQL = getSynonym(dbxref.getDbName(), dbxref.getAccession());
 		}
 		if (isSynonym(dbxref)) {
@@ -504,23 +479,21 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 		}
 		PreparedStatement stmt = null;
 		try {
-			stmt = getConnection().prepareStatement(
-				"INSERT INTO Synonym (source_id, source_type_id, dbxref_id) VALUES(?,?,?)");
+			stmt = getConnection()
+					.prepareStatement(
+							"INSERT INTO Synonym (source_id, source_type_id, dbxref_id) VALUES(?,?,?)");
 			stmt.setInt(1, getId());
 			stmt.setInt(2, getTypeId());
 			stmt.setInt(3, dbxrefSQL.getId());
 			stmt.executeUpdate();
 			return dbxrefSQL;
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
-		}
-		finally {
+		} finally {
 			if (stmt != null) {
 				try {
 					stmt.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
@@ -531,38 +504,34 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 		DbxrefSQL dbxrefSQL;
 		if (dbxref instanceof DbxrefSQL) {
 			dbxrefSQL = (DbxrefSQL) dbxref;
-		}
-		else {
+		} else {
 			dbxrefSQL = getSynonym(dbxref.getDbName(), dbxref.getAccession());
 		}
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = getConnection().prepareStatement(
-				"SELECT * from Synonym where source_id=? AND source_type_id=? AND dbxref_id=?");
+			stmt = getConnection()
+					.prepareStatement(
+							"SELECT * from Synonym where source_id=? AND source_type_id=? AND dbxref_id=?");
 			stmt.setInt(1, getId());
 			stmt.setInt(2, getTypeId());
 			stmt.setInt(3, dbxrefSQL.getId());
 			rs = stmt.executeQuery();
 			return rs.next();
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
-		}
-		finally {
+		} finally {
 			if (rs != null) {
 				try {
 					rs.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
 			if (stmt != null) {
 				try {
 					stmt.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
@@ -573,13 +542,15 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 		return (getSynonym(dbName, accession) != null);
 	}
 
-	public static Collection<BasicEntitySQL> getEntities(Type type, String dbName, String accession, Connection con)
+	public static Collection<BasicEntitySQL> getEntities(Type type,
+			String dbName, String accession, Connection con)
 			throws SQLException {
-		return getEntities(type, DbxrefSQL.getDbxref(dbName, accession, con), con);
+		return getEntities(type, DbxrefSQL.getDbxref(dbName, accession, con),
+				con);
 	}
 
-	public static Collection<BasicEntitySQL> getEntities(Type type, DbxrefSQL dbxref, Connection con)
-			throws SQLException {
+	public static Collection<BasicEntitySQL> getEntities(Type type,
+			DbxrefSQL dbxref, Connection con) throws SQLException {
 		if (type == null) {
 			return getEntities(dbxref, con);
 		}
@@ -587,69 +558,69 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT source_id from Synonym where source_type_id=? AND dbxref_id=?");
+			stmt = con
+					.prepareStatement("SELECT source_id from Synonym where source_type_id=? AND dbxref_id=?");
 			stmt.setInt(1, typeSQL.getId());
 			stmt.setInt(2, dbxref.getId());
 			rs = stmt.executeQuery();
 			Collection<BasicEntitySQL> ret = new ArrayList<BasicEntitySQL>();
 			while (rs.next()) {
-				ret.add(EntityFactorySQL.createObject(rs.getInt("source_id"), typeSQL, con));
+				ret.add(EntityFactorySQL.createObject(rs.getInt("source_id"),
+						typeSQL, con));
 			}
 			return ret;
-		}
-		finally {
+		} finally {
 			if (rs != null) {
 				try {
 					rs.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
 			if (stmt != null) {
 				try {
 					stmt.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
 		}
 	}
 
-	public static Collection<BasicEntitySQL> getEntities(String dbName, String accession, Connection con)
-			throws SQLException {
+	public static Collection<BasicEntitySQL> getEntities(String dbName,
+			String accession, Connection con) throws SQLException {
 		return getEntities(DbxrefSQL.getDbxref(dbName, accession, con), con);
 	}
 
-	public static Collection<BasicEntitySQL> getEntities(DbxrefSQL dbxref, Connection con) throws SQLException {
+	public static Collection<BasicEntitySQL> getEntities(DbxrefSQL dbxref,
+			Connection con) throws SQLException {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT source_id, source_type_id from Synonym where dbxref_id=?");
+			stmt = con
+					.prepareStatement("SELECT source_id, source_type_id from Synonym where dbxref_id=?");
 			stmt.setInt(1, dbxref.getId());
 			rs = stmt.executeQuery();
 			Collection<BasicEntitySQL> ret = new ArrayList<BasicEntitySQL>();
 			while (rs.next()) {
-				ret.add(EntityFactorySQL.createObject(rs.getInt("source_id"), TypeSQL.getType(
-					rs.getInt("source_type_id"), con), con));
+				ret
+						.add(EntityFactorySQL.createObject(rs
+								.getInt("source_id"), TypeSQL.getType(rs
+								.getInt("source_type_id"), con), con));
 			}
 			return ret;
-		}
-		finally {
+		} finally {
 			if (rs != null) {
 				try {
 					rs.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
 			if (stmt != null) {
 				try {
 					stmt.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
@@ -680,111 +651,117 @@ public abstract class BasicEntityAbstractSQL implements BasicEntitySQL
 	public abstract String getEntityTypeName();
 
 	@Override
-	public <TA extends BasicEntity> Association< ? , TA> addAssociation(TA target, Collection<Type> associationTypes) {
+	public <TA extends BasicEntity> Association<?, TA> addAssociation(
+			TA target, Collection<Type> associationTypes) {
 		try {
-			return (Association< ? , TA>) AssociationSQL.createAssociationSQL(this, (BasicEntitySQL) target,
-				associationTypes, getConnection());
-		}
-		catch (SQLException e) {
+			return (Association<?, TA>) AssociationSQL.createAssociationSQL(
+					this, (BasicEntitySQL) target, associationTypes,
+					getConnection());
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	@Override
-	public <TA extends BasicEntity> Collection< ? extends Association< ? , TA>> getAssociations(TA target,
-			Collection<Type> associationTypes) {
+	public <TA extends BasicEntity> Collection<? extends Association<?, TA>> getAssociations(
+			TA target, Collection<Type> associationTypes) {
 		try {
-			return (Collection< ? extends Association< ? , TA>>) AssociationSQL.getAssociations(this,
-				(BasicEntitySQL) target, associationTypes, getConnection());
-		}
-		catch (SQLException e) {
+			return (Collection<? extends Association<?, TA>>) AssociationSQL
+					.getAssociations(this, (BasicEntitySQL) target,
+							associationTypes, getConnection());
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	@Override
-	public <TA extends BasicEntity> Annotation< ? , TA> addAnnotation(TA target, AnnotationMethod method, String score,
+	public <TA extends BasicEntity> Annotation<?, TA> addAnnotation(TA target,
+			AnnotationMethod method, String score,
 			Collection<Type> annotationTypes) {
 		try {
-			return (Annotation< ? , TA>) AnnotationSQL.createAnnotationSQL(this, (BasicEntitySQL) target,
-				annotationTypes, method, score, getConnection());
-		}
-		catch (SQLException e) {
+			return (Annotation<?, TA>) AnnotationSQL.createAnnotationSQL(this,
+					(BasicEntitySQL) target, annotationTypes, method, score,
+					getConnection());
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	@Override
-	public <TA extends BasicEntity> Collection< ? extends Annotation< ? , TA>> getAnnotations(TA target,
-			AnnotationMethod method, Collection<Type> annotationTypes) {
+	public <TA extends BasicEntity> Collection<? extends Annotation<?, TA>> getAnnotations(
+			TA target, AnnotationMethod method, Collection<Type> annotationTypes) {
 		try {
-			return (Collection< ? extends Annotation< ? , TA>>) AnnotationSQL.getAnnotations(this,
-				(BasicEntitySQL) target, method, annotationTypes, getConnection());
-		}
-		catch (SQLException e) {
+			return (Collection<? extends Annotation<?, TA>>) AnnotationSQL
+					.getAnnotations(this, (BasicEntitySQL) target, method,
+							annotationTypes, getConnection());
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	@Override
-	public Collection< ? extends Annotation< ? , ? >> getAnnotationsByType(Type targetType, AnnotationMethod method,
+	public Collection<? extends Annotation<?, ?>> getAnnotationsByType(
+			Type targetType, AnnotationMethod method,
 			Collection<Type> annotationTypes) {
 		try {
-			return (Collection< ? extends Annotation< ? , ? >>) AnnotationSQL.getAnnotations(this, targetType, method,
-				annotationTypes, getConnection());
-		}
-		catch (SQLException e) {
+			return AnnotationSQL.getAnnotations(this, targetType, method,
+					annotationTypes, getConnection());
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	@Override
-	public Collection< ? extends AnnotationSQL< ? , ? >> getAnnotationsBySynonym(Dbxref synonym) {
+	public Collection<? extends AnnotationSQL<?, ?>> getAnnotationsBySynonym(
+			Dbxref synonym) {
 		try {
-			Collection<AnnotationSQL< ? , ? >> ret = new ArrayList<AnnotationSQL< ? , ? >>();
-			Collection< ? extends AnnotationSQL< ? , ? >> annots;
-			annots = (Collection< ? extends AnnotationSQL< ? , ? >>) BasicEntityAbstractSQL.getEntities(
-				TypeSQL.getType(Annotation.ENTITY_TYPE_NAME, getConnection()), DbxrefSQL.getDbxref(synonym,
-					getConnection()), getConnection());
-			for (AnnotationSQL< ? , ? > annot : annots) {
+			Collection<AnnotationSQL<?, ?>> ret = new ArrayList<AnnotationSQL<?, ?>>();
+			Collection<? extends AnnotationSQL<?, ?>> annots;
+			annots = (Collection<? extends AnnotationSQL<?, ?>>) BasicEntityAbstractSQL
+					.getEntities(TypeSQL.getType(Annotation.ENTITY_TYPE_NAME,
+							getConnection()), DbxrefSQL.getDbxref(synonym,
+							getConnection()), getConnection());
+			for (AnnotationSQL<?, ?> annot : annots) {
 				if (annot.getSource().equals(this)) {
 					ret.add(annot);
 				}
 			}
 			return ret;
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	@Override
-	public Collection< ? extends Annotation< ? , ? >> getAnnotationsBySynonym(String dbName, String accession) {
+	public Collection<? extends Annotation<?, ?>> getAnnotationsBySynonym(
+			String dbName, String accession) {
 		try {
-			Collection<AnnotationSQL< ? , ? >> ret = new ArrayList<AnnotationSQL< ? , ? >>();
-			Collection< ? extends AnnotationSQL< ? , ? >> annots;
-			annots = (Collection< ? extends AnnotationSQL< ? , ? >>) BasicEntityAbstractSQL.getEntities(
-				TypeSQL.getType(Annotation.ENTITY_TYPE_NAME, getConnection()), dbName, accession, getConnection());
-			for (AnnotationSQL< ? , ? > annot : annots) {
+			Collection<AnnotationSQL<?, ?>> ret = new ArrayList<AnnotationSQL<?, ?>>();
+			Collection<? extends AnnotationSQL<?, ?>> annots;
+			annots = (Collection<? extends AnnotationSQL<?, ?>>) BasicEntityAbstractSQL
+					.getEntities(TypeSQL.getType(Annotation.ENTITY_TYPE_NAME,
+							getConnection()), dbName, accession,
+							getConnection());
+			for (AnnotationSQL<?, ?> annot : annots) {
 				if (annot.getSource().equals(this)) {
 					ret.add(annot);
 				}
 			}
 			return ret;
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof BasicEntitySQL)) {
+		if (obj == null || !(obj instanceof BasicEntitySQL)) {
 			return false;
 		}
 		BasicEntitySQL o1 = (BasicEntitySQL) obj;
 
-		return (this.getId() == o1.getId()) && (this.getTypeId() == o1.getTypeId());
+		return (this.getId() == o1.getId())
+				&& (this.getTypeId() == o1.getTypeId());
 	}
 
 }

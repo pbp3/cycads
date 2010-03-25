@@ -17,44 +17,41 @@ import org.cycads.entities.sequence.Intron;
 import org.cycads.entities.sequence.SimpleIntron;
 import org.cycads.entities.sequence.Subsequence;
 
-public class SubsequenceSQL extends BasicEntityAbstractSQL implements Subsequence<SequenceSQL>
-{
-	private int					start, end;
-	private int					sequenceId;
-	private SequenceSQL			sequence;
-	private Collection<Intron>	introns;
+public class SubsequenceSQL extends BasicEntityAbstractSQL implements
+		Subsequence<SequenceSQL> {
+	private int start, end;
+	private int sequenceId;
+	private SequenceSQL sequence;
+	private Collection<Intron> introns;
 
 	public SubsequenceSQL(int id, Connection con) throws SQLException {
 		super(id, con);
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		try {
-			stmt = con.prepareStatement("SELECT sequence_id, start_position, end_position FROM Subsequence WHERE subsequence_id=?");
+			stmt = con
+					.prepareStatement("SELECT sequence_id, start_position, end_position FROM Subsequence WHERE subsequence_id=?");
 			stmt.setInt(1, id);
 			rs = stmt.executeQuery();
 			if (rs.next()) {
 				sequenceId = rs.getInt("sequence_id");
 				start = rs.getInt("start_position");
 				end = rs.getInt("end_position");
-			}
-			else {
+			} else {
 				throw new SQLException("Subsequence does not exist:" + id);
 			}
-		}
-		finally {
+		} finally {
 			if (rs != null) {
 				try {
 					rs.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
 			if (stmt != null) {
 				try {
 					stmt.close();
-				}
-				catch (SQLException ex) {
+				} catch (SQLException ex) {
 					// ignore
 				}
 			}
@@ -91,8 +88,7 @@ public class SubsequenceSQL extends BasicEntityAbstractSQL implements Subsequenc
 		if (sequence == null) {
 			try {
 				sequence = new SequenceSQL(sequenceId, getConnection());
-			}
-			catch (SQLException e) {
+			} catch (SQLException e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
 			}
@@ -101,8 +97,9 @@ public class SubsequenceSQL extends BasicEntityAbstractSQL implements Subsequenc
 	}
 
 	@Override
-	public boolean contains(Subsequence< ? > subseq) {
-		if (subseq.getMinPosition() < this.getMinPosition() || subseq.getMaxPosition() > this.getMaxPosition()) {
+	public boolean contains(Subsequence<?> subseq) {
+		if (subseq.getMinPosition() < this.getMinPosition()
+				|| subseq.getMaxPosition() > this.getMaxPosition()) {
 			return false;
 		}
 		// introns must be in natural order
@@ -124,21 +121,19 @@ public class SubsequenceSQL extends BasicEntityAbstractSQL implements Subsequenc
 			}
 			if (intronOtherSubseq.getStart() > intron.getStart()) {
 				return intron.getStart() > subseq.getMaxPosition();
-			}
-			else {
+			} else {
 				// intronOtherSubseq.min<=intron.min
 				while (intronOtherSubseq.getEnd() < intron.getEnd()) {
 					// get nextIntron adjacent
 					if (itSubseq.hasNext()) {
 						Intron nextIntronOtherSubseq = itSubseq.next();
-						if (intronOtherSubseq.getEnd() + 1 == nextIntronOtherSubseq.getStart()) {
+						if (intronOtherSubseq.getEnd() + 1 == nextIntronOtherSubseq
+								.getStart()) {
 							intronOtherSubseq = nextIntronOtherSubseq;
-						}
-						else {
+						} else {
 							return intron.getStart() > subseq.getMaxPosition();
 						}
-					}
-					else {
+					} else {
 						return intron.getStart() > subseq.getMaxPosition();
 					}
 				}
@@ -153,33 +148,31 @@ public class SubsequenceSQL extends BasicEntityAbstractSQL implements Subsequenc
 			PreparedStatement stmt = null;
 			ResultSet rs = null;
 			try {
-				stmt = getConnection().prepareStatement(
-					"SELECT start_position, end_position FROM Intron where subsequence_id=?");
+				stmt = getConnection()
+						.prepareStatement(
+								"SELECT start_position, end_position FROM Intron where subsequence_id=?");
 				stmt.setInt(1, id);
 				rs = stmt.executeQuery();
 				introns = new TreeSet<Intron>();
 				while (rs.next()) {
-					introns.add(new SimpleIntron(rs.getInt("start_position"), rs.getInt("end_position")));
+					introns.add(new SimpleIntron(rs.getInt("start_position"),
+							rs.getInt("end_position")));
 				}
-			}
-			catch (SQLException e) {
+			} catch (SQLException e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);
-			}
-			finally {
+			} finally {
 				if (rs != null) {
 					try {
 						rs.close();
-					}
-					catch (SQLException ex) {
+					} catch (SQLException ex) {
 						// ignore
 					}
 				}
 				if (stmt != null) {
 					try {
 						stmt.close();
-					}
-					catch (SQLException ex) {
+					} catch (SQLException ex) {
 						// ignore
 					}
 				}
