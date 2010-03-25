@@ -17,6 +17,10 @@ public interface AnnotationClustersGetter extends ObjectsGetter
 
 	public List<AnnotationWaysGetter> getAnnotationWaysGetters();
 
+	public String getMsgChangeTarget();
+
+	public void setMsgChangeTarget(String msgChangeTarget);
+
 	// public List<NumberValidator> getRemoveByScore();
 	//
 	// public List<Pattern> getRemoveByString();
