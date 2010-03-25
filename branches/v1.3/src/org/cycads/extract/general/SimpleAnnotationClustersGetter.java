@@ -14,10 +14,10 @@ public class SimpleAnnotationClustersGetter implements AnnotationClustersGetter
 
 	List<AnnotationWaysGetter>		annotationWaysGetters;
 	AnnotationWayListScoreSystem	scoreSystem;
+	String							msgChangeTarget	= null;
 
-	public SimpleAnnotationClustersGetter(
-
-	AnnotationWayListScoreSystem scoreSystem, List<AnnotationWaysGetter> annotationWaysGetters) {
+	public SimpleAnnotationClustersGetter(AnnotationWayListScoreSystem scoreSystem,
+			List<AnnotationWaysGetter> annotationWaysGetters) {
 		this.annotationWaysGetters = annotationWaysGetters;
 		this.scoreSystem = scoreSystem;
 	}
@@ -48,7 +48,7 @@ public class SimpleAnnotationClustersGetter implements AnnotationClustersGetter
 				Object target = way.getTarget();
 				cluster = targets.get(target);
 				if (cluster == null) {
-					cluster = new SimpleAnnotationCluster(source, target, scoreSystem);
+					cluster = new SimpleAnnotationCluster(source, target, scoreSystem, msgChangeTarget);
 					targets.put(target, cluster);
 					ret.add(cluster);
 				}
@@ -72,4 +72,15 @@ public class SimpleAnnotationClustersGetter implements AnnotationClustersGetter
 	public List< ? extends Object> getObjects(Object obj) throws GetterExpressionException {
 		return getAnnotationClusters(obj);
 	}
+
+	@Override
+	public String getMsgChangeTarget() {
+		return msgChangeTarget;
+	}
+
+	@Override
+	public void setMsgChangeTarget(String msgChangeTarget) {
+		this.msgChangeTarget = msgChangeTarget;
+	}
+
 }

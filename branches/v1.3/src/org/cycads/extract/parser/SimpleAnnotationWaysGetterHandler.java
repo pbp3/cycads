@@ -3,6 +3,7 @@
  */
 package org.cycads.extract.parser;
 
+import java.util.List;
 import java.util.Stack;
 
 import org.cycads.extract.general.AnnotationClustersGetter;
@@ -19,7 +20,16 @@ import org.cycads.parser.ParserException;
 
 public class SimpleAnnotationWaysGetterHandler implements AnnotationWaysGetterHandler
 {
-	Stack<ObjectsGetter>	getters;
+	List< ? extends ObjectsGetterChangeObject>	beforeEndGetters;
+	Stack<ObjectsGetter>						getters;
+
+	public SimpleAnnotationWaysGetterHandler(List< ? extends ObjectsGetterChangeObject> beforeEndGetters) {
+		this.beforeEndGetters = beforeEndGetters;
+	}
+
+	public SimpleAnnotationWaysGetterHandler() {
+		this.beforeEndGetters = null;
+	}
 
 	@Override
 	public void endFilter() throws ParserException {
@@ -39,6 +49,11 @@ public class SimpleAnnotationWaysGetterHandler implements AnnotationWaysGetterHa
 
 	@Override
 	public AnnotationWaysGetter endLoc() throws ParserException {
+		if (beforeEndGetters != null && !beforeEndGetters.isEmpty()) {
+			for (ObjectsGetterChangeObject beforeEndGetter : beforeEndGetters) {
+				newChanger(beforeEndGetter);
+			}
+		}
 		AnnotationWaysGetter ret = EndAnnotationWaysGetter.getInstance();
 		ObjectsGetter getter;
 		while (!getters.empty()) {

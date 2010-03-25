@@ -1,5 +1,7 @@
 package org.cycads.extract.general;
 
+import java.text.MessageFormat;
+
 import org.cycads.extract.score.AnnotationWayListScoreSystem;
 import org.cycads.extract.score.SimpleAnnotationWayListScoreSystem;
 
@@ -9,6 +11,15 @@ public class SimpleAnnotationCluster extends SimpleAnnotationWayList implements 
 	Object							source;
 	Object							target;
 	AnnotationWayListScoreSystem	annotationWayListScoreSystem;
+	String							msgChangeTarget	= null;
+
+	public SimpleAnnotationCluster(Object source, Object target,
+			AnnotationWayListScoreSystem annotationWayListScoreSystem, String msgChangeTarget) {
+		this.source = source;
+		this.target = target;
+		this.annotationWayListScoreSystem = annotationWayListScoreSystem;
+		this.msgChangeTarget = msgChangeTarget;
+	}
 
 	public SimpleAnnotationCluster(Object source, Object target,
 			AnnotationWayListScoreSystem annotationWayListScoreSystem) {
@@ -40,6 +51,10 @@ public class SimpleAnnotationCluster extends SimpleAnnotationWayList implements 
 
 	@Override
 	public Object getTarget() {
+		if (msgChangeTarget != null && msgChangeTarget.length() > 0) {
+			Object[] a = {target, getScore(), getMethods()};
+			return MessageFormat.format(msgChangeTarget, a);
+		}
 		return target;
 	}
 
