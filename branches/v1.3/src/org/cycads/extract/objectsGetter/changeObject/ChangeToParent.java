@@ -7,8 +7,6 @@ import java.util.Collection;
 
 import org.cycads.entities.BasicEntity;
 import org.cycads.entities.annotation.Annotation;
-import org.cycads.entities.annotation.Association;
-import org.cycads.extract.general.AnnotationCluster;
 import org.cycads.extract.general.GetterExpressionException;
 
 // LOC "PA"
@@ -24,7 +22,7 @@ public class ChangeToParent extends ChangeToManyObjects
 			throw new GetterExpressionException("Not implemented. Object:" + obj);
 		}
 		else {
-			throw new GetterExpressionException("Object is not an annotation. Object:" + obj);
+			throw new GetterExpressionException("Object is not a BasicEntity. Object:" + obj);
 		}
 	}
 
