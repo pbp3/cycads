@@ -21,6 +21,7 @@ import org.cycads.extract.objectsGetter.changeObject.ChangeToNoteType;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToNoteValue;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToNotes;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToOrganism;
+import org.cycads.extract.objectsGetter.changeObject.ChangeToParent;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToScore;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToSeq;
 import org.cycads.extract.objectsGetter.changeObject.ChangeToSource;
@@ -153,6 +154,9 @@ public class SimpleAnnotationWaysGetterReader implements AnnotationWaysGetterRea
 						}
 						else if (changerStr.equalsIgnoreCase("ST")) {
 							changer = new ChangeToString();
+						}
+						else if (changerStr.equalsIgnoreCase("PA")) {
+							changer = new ChangeToParent();
 						}
 						else {
 							throw new ParserException(changerStr + " is not a valid changer String. Loc=" + loc);
