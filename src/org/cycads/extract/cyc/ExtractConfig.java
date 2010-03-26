@@ -153,24 +153,46 @@ public class ExtractConfig
 	
 	// AnnotationClustersGetter
 	public static List<String> getAnnotationClusterLocs(String clusterName) {
-		return getStrings(clusterName);
+		return getStrings(clusterName + ".loc");
 	}
 	
 	// AnnotationWayListScoreSystem
 	public static ArrayList<Pattern> getScoreMethodPatterns(String clusterName) {
 		return getPatterns(clusterName, null);
+		// clusterName + ".???"
 	}
 
 	public static List<TransformScore> getScoreMethodTransforms(String clusterName) {
-		
+		// todo
 	}
 	
 	// File
-	public static String AnnotationGeneratorFileName() {
-		return getStringMandatory("AnnotationGenerator.file.name");
+	public static String annotGeneratorFileName() {
+		return getStringMandatory("fileName");
 	}
+	
 	public static String defaultFileFormat() {
-		return getStringMandatory("AnnotationGenerator.file.format");
+		return getStringMandatory("fileFormat");
+	}
+	
+	public static String annotGeneratorOrganismNumber() {
+		return getStringMandatory("organism");
+	}
+
+	public static String annotGeneratorSeqSynonym() {
+		return getStringMandatory("sequence");
+	}
+	
+	public static String annotGeneratorSeqVersion() {
+		return getStringMandatory("seqversion");
+	}
+	
+	public static AnnotationScoreSystem annotGeneratorgetEcScoreSystems() {
+		return getScoreSystems("ec");
+	}
+
+	public static AnnotationScoreSystem annotGeneratorgetGoScoreSystems() {
+		return getScoreSystems("go");
 	}
 	
 	/* PFFile
