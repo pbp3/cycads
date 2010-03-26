@@ -17,6 +17,7 @@ import org.cycads.extract.cyc.FileScoreSystem;
 import org.cycads.extract.cyc.FixAndFileScoreSystem;
 import org.cycads.extract.score.AnnotationScoreSystem;
 import org.cycads.extract.score.SimpleAnnotationScoreSystem;
+import org.cycads.extract.score.TransformScore;
 
 public class Config
 {
@@ -219,7 +220,30 @@ public class Config
 	}
 
 	// PFFile
-
+	public static List<String> getAnnotationClusterLocs(String clusterName) {
+		return getStrings(clusterName + ".loc");
+	}
+	
+	public static List<String> getClusterReplaceRegex(String clusterName) {
+		return getStrings(clusterName + ".regex");
+	}
+	
+	public static List<String> getClusterReplaceReplacement(String clusterName) {
+		return getStrings(clusterName + ".replace");
+	}
+	
+	public static String getClusterMsgChangeTarget(String clusterName) {
+		return getStringMandatory(clusterName + ".change");
+	}
+	
+	public static List<Pattern> getScoreMethodPatterns(String clusterName) {
+		return getPatterns(clusterName + ".methods");
+	}
+	
+	public static List<TransformScore> getScoreMethodTransforms(String clusterName) {
+		// todo
+	}
+	
 	
 	//	// CDS to KO Loader
 	//
