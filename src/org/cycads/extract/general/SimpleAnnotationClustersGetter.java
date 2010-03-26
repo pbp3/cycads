@@ -83,4 +83,46 @@ public class SimpleAnnotationClustersGetter implements AnnotationClustersGetter
 		this.msgChangeTarget = msgChangeTarget;
 	}
 
+	@Override
+	public Object getFirstTarget(Object obj) throws GetterExpressionException {
+		List<AnnotationCluster> clusters = getAnnotationClusters(obj);
+		if (clusters != null && !clusters.isEmpty()) {
+			return clusters.get(0).getTarget();
+		}
+		else {
+			return null;
+		}
+	}
+
+	@Override
+	public String getFirstTargetStr(Object obj) throws GetterExpressionException {
+		List<AnnotationCluster> clusters = getAnnotationClusters(obj);
+		if (clusters != null && !clusters.isEmpty()) {
+			return clusters.get(0).getTarget().toString();
+		}
+		else {
+			return null;
+		}
+	}
+
+	@Override
+	public List<Object> getTargets(Object obj) throws GetterExpressionException {
+		List<Object> ret = new ArrayList<Object>();
+		List<AnnotationCluster> clusters = getAnnotationClusters(obj);
+		if (clusters != null && !clusters.isEmpty()) {
+			ret.add(clusters.get(0).getTarget());
+		}
+		return ret;
+	}
+
+	@Override
+	public List<String> getTargetsStr(Object obj) throws GetterExpressionException {
+		List<String> ret = new ArrayList<String>();
+		List<AnnotationCluster> clusters = getAnnotationClusters(obj);
+		if (clusters != null && !clusters.isEmpty()) {
+			ret.add(clusters.get(0).getTarget().toString());
+		}
+		return ret;
+	}
+
 }

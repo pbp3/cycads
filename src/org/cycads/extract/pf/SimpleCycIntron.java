@@ -33,4 +33,15 @@ public class SimpleCycIntron implements CycIntron
 		end += qtty;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof CycIntron)) {
+			return false;
+		}
+		else {
+			CycIntron o = (CycIntron) obj;
+			return this.getStart() == o.getStart() && this.getEnd() == o.getEnd();
+		}
+	}
+
 }

@@ -13,6 +13,14 @@ public interface AnnotationClustersGetter extends ObjectsGetter
 
 	public List<AnnotationCluster> getAnnotationClusters(Object obj) throws GetterExpressionException;
 
+	public List<Object> getTargets(Object obj) throws GetterExpressionException;
+
+	public List<String> getTargetsStr(Object obj) throws GetterExpressionException;
+
+	public String getFirstTargetStr(Object obj) throws GetterExpressionException;
+
+	public Object getFirstTarget(Object obj) throws GetterExpressionException;
+
 	public AnnotationWayListScoreSystem getScoreSystem();
 
 	public List<AnnotationWaysGetter> getAnnotationWaysGetters();
