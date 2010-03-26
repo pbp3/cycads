@@ -1,9 +1,6 @@
 package org.cycads.extract.pf;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import org.cycads.entities.BasicEntity;
 import org.cycads.entities.Feature;
@@ -11,10 +8,8 @@ import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.extract.general.AnnotationCluster;
-import org.cycads.extract.general.AnnotationClustersGetter;
 import org.cycads.extract.general.AnnotationClustersGetterRepository;
 import org.cycads.extract.general.GetterExpressionException;
-import org.cycads.extract.score.AnnotationScoreSystem;
 import org.cycads.general.ParametersDefault;
 
 public class PFFileCycRecordGenerator implements CycRecordGenerator
@@ -95,7 +90,7 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 
 	private String getID(BasicEntity annot) {
 		if (cycIdNoteType == null) {
-			cycIdNoteType = annot.getNoteType(Config.getPFFileCycIdNoteType());
+			cycIdNoteType = annot.getNoteType(ParametersDefault.getPFFileCycIdNoteType());
 		}
 		String id = annot.getNoteValue(cycIdNoteType);
 		if (id == null) {
