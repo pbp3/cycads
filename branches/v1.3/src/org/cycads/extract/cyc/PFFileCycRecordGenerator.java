@@ -1,4 +1,4 @@
-package org.cycads.extract.stream;
+package org.cycads.extract.cyc;
 
 import java.util.List;
 
@@ -7,11 +7,6 @@ import org.cycads.entities.Feature;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Subsequence;
-import org.cycads.extract.cyc.CycFunction;
-import org.cycads.extract.cyc.CycIdGenerator;
-import org.cycads.extract.cyc.CycRecordGenerator;
-import org.cycads.extract.cyc.SimpleCycFunction;
-import org.cycads.extract.cyc.SimpleCycRecord;
 import org.cycads.extract.general.AnnotationCluster;
 import org.cycads.extract.general.AnnotationClustersGetterRepository;
 import org.cycads.extract.general.GetterExpressionException;
