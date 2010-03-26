@@ -1,7 +1,7 @@
 /*
  * Created on 16/09/2008
  */
-package org.cycads.extract.pf;
+package org.cycads.extract.cyc;
 
 import java.util.Collection;
 

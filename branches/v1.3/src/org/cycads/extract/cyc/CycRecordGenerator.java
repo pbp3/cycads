@@ -1,4 +1,4 @@
-package org.cycads.extract.pf;
+package org.cycads.extract.cyc;
 
 import org.cycads.entities.Feature;
 import org.cycads.entities.annotation.Annotation;

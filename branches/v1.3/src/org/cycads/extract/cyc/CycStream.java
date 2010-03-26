@@ -1,4 +1,4 @@
-package org.cycads.extract.pf;
+package org.cycads.extract.cyc;
 
 public interface CycStream
 {

@@ -1,7 +1,7 @@
 /*
  * Created on 17/09/2008
  */
-package org.cycads.extract.pf;
+package org.cycads.extract.cyc;
 
 public interface CycIntron
 {
