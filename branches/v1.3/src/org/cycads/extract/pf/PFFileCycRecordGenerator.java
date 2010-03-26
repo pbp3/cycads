@@ -5,11 +5,15 @@ import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.cycads.entities.BasicEntity;
 import org.cycads.entities.Feature;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.note.Type;
 import org.cycads.entities.sequence.Subsequence;
+import org.cycads.extract.general.AnnotationCluster;
+import org.cycads.extract.general.AnnotationClustersGetter;
 import org.cycads.extract.general.AnnotationClustersGetterRepository;
+import org.cycads.extract.general.GetterExpressionException;
 import org.cycads.extract.score.AnnotationScoreSystem;
 import org.cycads.general.ParametersDefault;
 
@@ -21,174 +25,75 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 	double								ecThreshold;
 	double								goThreshold;
 
-	//	double					koThreshold;
-	//	ScoreSystemCollection	koScoreSystems;
+	public static String				PREFIX_NAME			= ".pf";
+	public static String				PRODUCT_TYPE		= PREFIX_NAME + ".productType";
+	public static String				GENE_NAME			= PREFIX_NAME + ".geneName";
+	public static String				GENE_SYNONYMS		= PREFIX_NAME + ".geneSynonyms";
+	public static String				GENE_COMMENTS		= PREFIX_NAME + ".geneComments";
+	public static String				GENE_DBLINKS		= PREFIX_NAME + ".geneDblinks";
+	public static String				FUNCTION_NAME		= PREFIX_NAME + ".functionName";
+	public static String				FUNCTION_SYNONYMS	= PREFIX_NAME + ".functionSynonyms";
+	public static String				FUNCTION_COMMENTS	= PREFIX_NAME + ".functionComments";
+	public static String				FUNCTION_SSEQUENCE	= PREFIX_NAME + ".functionSSequence";
+	public static String				FUNCTION_ECS		= PREFIX_NAME + ".functionECs";
+	public static String				FUNCTION_GOS		= PREFIX_NAME + ".functionGOs";
 
-	public PFFileCycRecordGenerator(CycIdGenerator cycIdGenerator, LocInterpreter locInterpreter, double ecThreshold,
-			AnnotationScoreSystem ecScoreSystems, double goThreshold, AnnotationScoreSystem goScoreSystems) {
+	public PFFileCycRecordGenerator(CycIdGenerator cycIdGenerator,
+			AnnotationClustersGetterRepository clusterRepository, double ecThreshold, double goThreshold) {
 		this.cycIdGenerator = cycIdGenerator;
-		this.locInterpreter = locInterpreter;
+		this.clusterRepository = clusterRepository;
 		this.ecThreshold = ecThreshold;
-		this.ecScoreSystems = ecScoreSystems;
 		this.goThreshold = goThreshold;
-		this.goScoreSystems = goScoreSystems;
-		//		this.koThreshold = koThreshold;
-		//		this.koScoreSystems = koScoreSystems;
 	}
 
 	@Override
-	public SimpleCycRecord generate(Annotation< ? extends Subsequence, ? extends Feature> annot) {
+	public SimpleCycRecord generate(Annotation< ? extends Subsequence, ? extends Feature> annot)
+			throws GetterExpressionException {
 		String id = getID(annot);
-		String prodtype = PFFileConfig.getProductType(annot.getTarget().getName());
+		String prodtype = clusterRepository.getFirstTargetStr(PRODUCT_TYPE, annot);
 		SimpleCycRecord record = new SimpleCycRecord(prodtype, id);
-		try {
-			Subsequence subseq = annot.getSource();
-			record.setStartBase(subseq.getStart());
-			record.setEndBase(subseq.getEnd());
-			record.setIntrons(getIntrons(subseq));
-			String name = locInterpreter.getFirstString(annot, PFFileConfig.getPFFileNamesLocs());
-			record.setName(name);
-			record.setFunctions(getFunctions(annot, record));
-			record.setComments(locInterpreter.getStrings(annot, PFFileConfig.getPFFileGeneCommentLocs()));
-			Collection<String> syns = locInterpreter.getStrings(annot, PFFileConfig.getPFFileGeneSynonymLocs());
-			if (record.getName() != null && record.getName().length() > 0) {
-				syns.remove(record.getName());
-			}
-			record.setSynonyms(syns);
-			record.setDBLinks(getDblinks(annot));
+		record.setName(clusterRepository.getFirstTargetStr(GENE_NAME, annot));
+		record.setSynonyms(clusterRepository.getTargetsStr(GENE_SYNONYMS, annot));
+		record.setComments(clusterRepository.getTargetsStr(GENE_COMMENTS, annot));
+		record.setDBLinks(clusterRepository.getTargetsStr(GENE_DBLINKS, annot));
 
-			Collection<CycDbxrefAnnotationPaths> ecs = locInterpreter.getCycDbxrefPathAnnots(annot,
-				PFFileConfig.getPFFileECLocs(), ecScoreSystems);
-			for (CycDbxrefAnnotationPaths ec : ecs) {
-				if (ec.getScore() >= ecThreshold) {
-					record.addEC(ec.getAccession());
-				}
-				Collection<CycDBLink> dbLinks = createDBLink(ec.getDbName(), ec.getAccession());
-				for (CycDBLink dbLink : dbLinks) {
-					record.addDBLink(dbLink);
-				}
-				//				record.addComment(PFFileConfig.getAnnotationComment(ec));
-			}
+		String functionName = clusterRepository.getFirstTargetStr(FUNCTION_NAME, annot);
+		CycFunction function = new SimpleCycFunction(functionName);
+		function.setSynonyms(clusterRepository.getTargetsStr(FUNCTION_SYNONYMS, annot));
+		function.setComments(clusterRepository.getTargetsStr(FUNCTION_COMMENTS, annot));
+		record.addFunction(function);
 
-			Collection<CycDbxrefAnnotationPaths> gos = locInterpreter.getCycDbxrefPathAnnots(annot,
-				PFFileConfig.getPFFileGOLocs(), goScoreSystems);
-			for (CycDbxrefAnnotationPaths go : gos) {
-				if (go.getScore() >= goThreshold) {
-					record.addGO(go.getAccession());
-				}
-				else {
-					Collection<CycDBLink> dbLinks = createDBLink(go.getDbName(), go.getAccession());
-					for (CycDBLink dbLink : dbLinks) {
-						record.addDBLink(dbLink);
-					}
-				}
-				//				record.addComment(PFFileConfig.getAnnotationComment(go));
-			}
-
-			Collection<StringAndPath> cycValueRets = locInterpreter.getCycValues(annot,
-				PFFileConfig.getPFFileGeneCommentAnnotationsLocs());
-			for (StringAndPath cycValueRet : cycValueRets) {
-				if (cycValueRet instanceof CycDbxrefAnnotationPathsRet) {
-					CycDbxrefAnnotationPaths cycDbxrefAnnotationPaths = ((CycDbxrefAnnotationPathsRet) cycValueRet).getCycDbxrefAnnotationPaths();
-					List<Annotation> initialAnnots = cycValueRet.getAnnotations();
-					for (List<Annotation> annots : cycDbxrefAnnotationPaths.getAnnotationPaths()) {
-						annots.addAll(0, initialAnnots);
-					}
-					record.addComment(PFFileConfig.getAnnotationComment(cycDbxrefAnnotationPaths));
-				}
-				else {
-					throw new RuntimeException("Error in the gene comment annotation loc.");
-				}
-			}
-
+		Object obj = clusterRepository.getFirstTarget(FUNCTION_SSEQUENCE, annot);
+		if (!(obj instanceof Subsequence)) {
+			throw new GetterExpressionException("Object is not a Subsequence. Object:" + obj);
 		}
-		catch (RecordErrorException e) {
-			System.err.println(record.getId() + " - " + e.getMessage());
-			return null;
+		Subsequence sseq = (Subsequence) obj;
+		record.setStartBase(sseq.getStart());
+		record.setEndBase(sseq.getEnd());
+		record.setIntrons(sseq.getIntrons());
+
+		List<AnnotationCluster> ecClusters = clusterRepository.getAnnotationClusterGetter(FUNCTION_ECS).getAnnotationClusters(
+			annot);
+		for (AnnotationCluster ecCluster : ecClusters) {
+			if (ecCluster.getScore() >= ecThreshold) {
+				record.addEC(ecCluster.getTarget().toString());
+			}
 		}
+
+		List<AnnotationCluster> goClusters = clusterRepository.getAnnotationClusterGetter(FUNCTION_GOS).getAnnotationClusters(
+			annot);
+		for (AnnotationCluster goCluster : goClusters) {
+			if (goCluster.getScore() >= goThreshold) {
+				record.addGO(goCluster.getTarget().toString());
+			}
+		}
+
 		return record;
-	}
-
-	private Collection<CycFunction> getFunctions(Annotation< ? extends Subsequence, ? > annot, CycRecord record)
-			throws RecordErrorException {
-		String functionName = locInterpreter.getFirstString(annot, PFFileConfig.getPFFileFunctionsLocs());
-		if (functionName == null || functionName.length() == 0) {
-			functionName = record.getName();
-			if (functionName == null || functionName.length() == 0) {
-				throw new RecordErrorException("Function:" + functionName + ";");
-			}
-		}
-		else {
-			String name = record.getName();
-			if (name == null || name.length() == 0) {
-				record.setName(functionName);
-			}
-		}
-		CycFunction cycFunction = new SimpleCycFunction(functionName);
-		Collection<String> syns = locInterpreter.getStrings(annot, PFFileConfig.getPFFileFunctionSynonymLocs());
-		if (functionName != null && functionName.length() > 0) {
-			syns.remove(functionName);
-		}
-		cycFunction.setSynonyms(syns);
-		cycFunction.setComments(locInterpreter.getStrings(annot, PFFileConfig.getPFFileFunctionCommentLocs()));
-		ArrayList<CycFunction> ret = new ArrayList<CycFunction>(1);
-		ret.add(cycFunction);
-		return ret;
-	}
-
-	private Collection<CycIntron> getIntrons(Subsequence subseq) {
-		Collection<CycIntron> introns = subseq.getIntrons();
-		return introns;
-	}
-
-	private Collection<CycDBLink> getDblinks(Annotation< ? extends Subsequence, ? > annot) {
-		Collection<CycDBLink> cycDbLinks = new ArrayList<CycDBLink>();
-
-		Collection<String> dbLinksStr = locInterpreter.getStrings(annot, PFFileConfig.getPFFileDblinkLocs());
-
-		for (String dbLinkStr : dbLinksStr) {
-			String[] strs = dbLinkStr.split(ParametersDefault.getDbxrefToStringSeparator());
-			if (strs.length == 2) {
-				cycDbLinks.addAll(createDBLink(strs[0], strs[1]));
-			}
-			else {
-				System.err.println("DBLink error:" + dbLinkStr);
-			}
-		}
-		return cycDbLinks;
-	}
-
-	private Collection<CycDBLink> createDBLink(String dbName, String accession) {
-		Collection<CycDBLink> cycDbLinks = new ArrayList<CycDBLink>();
-		dbName = dbName.trim();
-		accession = accession.trim();
-		List<Pattern> changePatterns = PFFileConfig.getDbLinkDbNameChangePatterns();
-		List<String> changeValues = PFFileConfig.getDbLinkDbNameChangeValues();
-		List<Pattern> copyPatterns = PFFileConfig.getDbLinkDbNameCopyPatterns();
-		List<String> copyValues = PFFileConfig.getDbLinkDbNameCopyValues();
-		List<Pattern> patternsRemove = PFFileConfig.getDbLinkDbNameRemovePatterns();
-		if (!PFFileConfig.matches(dbName, patternsRemove)) {
-			boolean foundDbName = false;
-			for (int i = 0; i < changePatterns.size(); i++) {
-				if (changePatterns.get(i).matcher(dbName).matches()) {
-					foundDbName = cycDbLinks.add(new SimpleCycDBLink(changeValues.get(i), accession));
-				}
-			}
-			if (!foundDbName) {
-				cycDbLinks.add(new SimpleCycDBLink(dbName, accession));
-			}
-			for (int i = 0; i < copyPatterns.size(); i++) {
-				if (copyPatterns.get(i).matcher(dbName).matches()) {
-					cycDbLinks.add(new SimpleCycDBLink(copyValues.get(i), accession));
-				}
-			}
-		}
-		return cycDbLinks;
 	}
 
 	private Type	cycIdNoteType	= null;
 
-	private String getID(Annotation< ? , ? > annot) {
+	private String getID(BasicEntity annot) {
 		if (cycIdNoteType == null) {
 			cycIdNoteType = annot.getNoteType(Config.getPFFileCycIdNoteType());
 		}

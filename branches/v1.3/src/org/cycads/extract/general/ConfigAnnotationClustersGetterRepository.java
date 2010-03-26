@@ -63,4 +63,48 @@ public class ConfigAnnotationClustersGetterRepository implements AnnotationClust
 		}
 		return new SimpleAnnotationWayListScoreSystem(annotationScoreSystem);
 	}
+
+	@Override
+	public Object getFirstTarget(String clusterName, Object obj) throws GetterExpressionException {
+		AnnotationClustersGetter clusterGetter = getAnnotationClusterGetter(clusterName);
+		if (clusterGetter != null) {
+			return clusterGetter.getFirstTarget(obj);
+		}
+		else {
+			return null;
+		}
+	}
+
+	@Override
+	public String getFirstTargetStr(String clusterName, Object obj) throws GetterExpressionException {
+		AnnotationClustersGetter clusterGetter = getAnnotationClusterGetter(clusterName);
+		if (clusterGetter != null) {
+			return clusterGetter.getFirstTargetStr(obj);
+		}
+		else {
+			return null;
+		}
+	}
+
+	@Override
+	public List<Object> getTargets(String clusterName, Object obj) throws GetterExpressionException {
+		AnnotationClustersGetter clusterGetter = getAnnotationClusterGetter(clusterName);
+		if (clusterGetter != null) {
+			return clusterGetter.getTargets(obj);
+		}
+		else {
+			return null;
+		}
+	}
+
+	@Override
+	public List<String> getTargetsStr(String clusterName, Object obj) throws GetterExpressionException {
+		AnnotationClustersGetter clusterGetter = getAnnotationClusterGetter(clusterName);
+		if (clusterGetter != null) {
+			return clusterGetter.getTargetsStr(obj);
+		}
+		else {
+			return null;
+		}
+	}
 }

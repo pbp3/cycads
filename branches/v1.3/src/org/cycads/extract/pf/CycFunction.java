@@ -15,9 +15,9 @@ public interface CycFunction
 
 	public void setSynonyms(Collection<String> synonyms);
 
-	public void addComments(String comment);
+	public void addComment(String comment);
 
-	public void addSynonyms(String synonym);
+	public void addSynonym(String synonym);
 
 	public Collection<String> getComments();
 

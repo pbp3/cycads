@@ -5,7 +5,8 @@ package org.cycads.extract.pf;
 
 import java.util.Collection;
 
-public class SimpleCycFunction implements CycFunction {
+public class SimpleCycFunction implements CycFunction
+{
 	String				name;
 	Collection<String>	comments;
 	Collection<String>	synonyms;
@@ -36,11 +37,11 @@ public class SimpleCycFunction implements CycFunction {
 		this.synonyms = synonyms;
 	}
 
-	public void addComments(String comment) {
+	public void addComment(String comment) {
 		this.comments.add(comment);
 	}
 
-	public void addSynonyms(String synonym) {
+	public void addSynonym(String synonym) {
 		this.synonyms.add(synonym);
 	}
 
@@ -50,6 +51,17 @@ public class SimpleCycFunction implements CycFunction {
 
 	public Collection<String> getSynonyms() {
 		return synonyms;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof CycFunction)) {
+			return false;
+		}
+		else {
+			CycFunction o = (CycFunction) obj;
+			return this.getName() == o.getName();
+		}
 	}
 
 }

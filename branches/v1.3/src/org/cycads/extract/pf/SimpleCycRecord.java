@@ -3,22 +3,22 @@
  */
 package org.cycads.extract.pf;
 
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 public class SimpleCycRecord implements CycRecord
 {
-	private int						start, end;
-	private String					productType;
 	private String					bioCycID;
-	private Collection<CycIntron>	introns;
+	private String					productType;
 	private String					name;
-	private Collection<String>		dBLinks;
-	private Collection<String>		comments;
-	private Collection<String>		synonyms;
-	private Collection<String>		ecs;
-	private Collection<String>		gos;
-	private Collection<CycFunction>	functions;
+	private Collection<CycFunction>	functions	= new HashSet<CycFunction>();
+	private Collection<String>		dBLinks		= new HashSet<String>();
+	private Collection<String>		comments	= new HashSet<String>();
+	private Collection<String>		synonyms	= new HashSet<String>();
+	private Collection<String>		ecs			= new HashSet<String>();
+	private Collection<String>		gos			= new HashSet<String>();
+	private int						start, end;
+	private Collection<CycIntron>	introns		= new HashSet<CycIntron>();
 
 	public SimpleCycRecord(String productType, String bioCycID) {
 		this.productType = productType;
@@ -87,14 +87,6 @@ public class SimpleCycRecord implements CycRecord
 	}
 
 	public void addDBLink(String dbLink) {
-		if (dBLinks == null) {
-			dBLinks = new ArrayList<String>();
-		}
-		for (String dbLink1 : dBLinks) {
-			if (dbLink1.equals(dbLink)) {
-				return;
-			}
-		}
 		dBLinks.add(dbLink);
 	}
 
@@ -120,9 +112,6 @@ public class SimpleCycRecord implements CycRecord
 
 	@Override
 	public void addFunction(CycFunction function) {
-		if (functions == null) {
-			functions = new ArrayList<CycFunction>();
-		}
 		functions.add(function);
 	}
 
@@ -133,9 +122,6 @@ public class SimpleCycRecord implements CycRecord
 
 	@Override
 	public void addComment(String comment) {
-		if (comments == null) {
-			comments = new ArrayList<String>();
-		}
 		comments.add(comment);
 	}
 
@@ -146,9 +132,6 @@ public class SimpleCycRecord implements CycRecord
 
 	@Override
 	public void addEC(String ec) {
-		if (ecs == null) {
-			ecs = new ArrayList<String>();
-		}
 		ecs.add(ec);
 	}
 
@@ -164,9 +147,6 @@ public class SimpleCycRecord implements CycRecord
 
 	@Override
 	public void addGO(String go) {
-		if (gos == null) {
-			gos = new ArrayList<String>();
-		}
 		gos.add(go);
 	}
 
@@ -177,9 +157,6 @@ public class SimpleCycRecord implements CycRecord
 
 	@Override
 	public void addSynonym(String synonym) {
-		if (synonyms == null) {
-			synonyms = new ArrayList<String>();
-		}
 		synonyms.add(synonym);
 	}
 
