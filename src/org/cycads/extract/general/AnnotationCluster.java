@@ -6,7 +6,6 @@ package org.cycads.extract.general;
 public interface AnnotationCluster extends AnnotationWayList
 {
 
-	//Exclude repeated AnnotationWays
 	//all AnnotWays with the same source and target
 	//score system
 
