@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 
+import org.cycads.extract.cyc.CycStream;
+
 public abstract class TextStream implements CycStream {
 
 	PrintStream	out;

@@ -10,6 +10,10 @@ import java.io.PrintStream;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.cycads.extract.cyc.CycFunction;
+import org.cycads.extract.cyc.CycIntron;
+import org.cycads.extract.cyc.CycRecord;
+import org.cycads.extract.cyc.CycStream;
 import org.cycads.general.ParametersDefault;
 
 public class PFFileStream implements CycStream
