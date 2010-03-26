@@ -179,9 +179,12 @@ public class SimpleAnnotationWaysGetterReader implements AnnotationWaysGetterRea
 					loc = loc.substring(1);
 					break;
 				case '#':
-					posEndFilter = loc.indexOf(')');
+					posEndFilter = loc.indexOf('#');
 					if (posEndFilter < 0) {
-						throw new ParserException("CompRegex without close filter ')'. Loc=" + loc);
+						throw new ParserException("Regex without close regex '#'. Loc=" + loc);
+					}
+					if (loc.charAt(posEndFilter + 1) != ')') {
+						throw new ParserException("Regex without close filter ')'. Loc=" + loc);
 					}
 					CompRegex compRegex;
 					char compRegexChr = loc.charAt(1);
@@ -195,7 +198,7 @@ public class SimpleAnnotationWaysGetterReader implements AnnotationWaysGetterRea
 						throw new ParserException(compRegexChr + " is not a valid compRegex comparator. Loc=" + loc);
 					}
 					handler.newCompRegex(compRegex);
-					loc = loc.substring(posEndFilter + 1);
+					loc = loc.substring(posEndFilter + 2);
 					break;
 				case '=':
 					posEndFilter = loc.indexOf(')');
