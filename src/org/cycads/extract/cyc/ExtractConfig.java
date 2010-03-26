@@ -175,8 +175,8 @@ public class ExtractConfig
 		return getStringMandatory("fileFormat");
 	}
 	
-	public static String annotGeneratorOrganismNumber() {
-		return getStringMandatory("organism");
+	public static int annotGeneratorOrganismNumber() {
+		return getInt("organism");
 	}
 
 	public static String annotGeneratorSeqSynonym() {
@@ -193,6 +193,10 @@ public class ExtractConfig
 
 	public static AnnotationScoreSystem annotGeneratorgetGoScoreSystems() {
 		return getScoreSystems("go");
+	}
+	
+	public static String annotGeneratorFileHeader() {
+		return getStringMandatory("fileheader");
 	}
 	
 	/* PFFile
