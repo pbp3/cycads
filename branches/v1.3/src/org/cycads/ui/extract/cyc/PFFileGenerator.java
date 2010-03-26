@@ -5,9 +5,9 @@ package org.cycads.ui.extract.cyc;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import org.cycads.entities.Feature;
 import org.cycads.entities.annotation.Annotation;
@@ -31,6 +31,8 @@ import org.cycads.ui.progress.ProgressPrintInterval;
 
 public class PFFileGenerator
 {
+
+	static List<Pattern>	typesPatterns	= Config.getPFFileTypesToGenerate();
 
 	public static void main(String[] args) {
 		EntityFactory factory = EntityFactory.factoryDefault;
@@ -94,12 +96,6 @@ public class PFFileGenerator
 				seqs = organism.getSequences(factory.getDbxref(seqDbname, seqAccession));
 			}
 
-			List<String> typesStr = Config.getPFFileTypesToGenerate();
-			Collection<Feature> features = new ArrayList<Feature>(typesStr.size());
-			for (String typeStr : typesStr) {
-				features.add(factory.getFeature(typeStr));
-			}
-
 			PFFileStream pfFile = new PFFileStream(file, Config.pfGeneratorFileHeader(), sequenceLocation);
 			CycIdGenerator cycIdGenerator = new OrganismCycIdGenerator(organism);
 
@@ -107,13 +103,14 @@ public class PFFileGenerator
 
 			CycRecordGenerator cycRecordGenerator = new PFFileCycRecordGenerator(cycIdGenerator, repository,
 				ecThreshold, goThreshold);
-			for (Feature feature : features) {
-				for (Sequence seq : seqs) {
-					Collection<Subsequence> subseqs = seq.getSubsequences();
-					for (Subsequence subseq : subseqs) {
-						Collection<Annotation<Subsequence, Feature>> annots = (Collection<Annotation<Subsequence, Feature>>) subseq.getAnnotations(
-							feature, null, null);
-						for (Annotation<Subsequence, Feature> annot : annots) {
+			for (Sequence seq : seqs) {
+				Collection<Subsequence> subseqs = seq.getSubsequences();
+				for (Subsequence subseq : subseqs) {
+					Collection<Annotation<Subsequence, Feature>> annots = (Collection<Annotation<Subsequence, Feature>>) subseq.getAnnotationsByType(
+						factory.getType(Feature.ENTITY_TYPE_NAME), null, null);
+					for (Annotation<Subsequence, Feature> annot : annots) {
+						String featureName = annot.getTarget().getName();
+						if (featureIsValid(featureName)) {
 							CycRecord record = cycRecordGenerator.generate(annot);
 							if (record != null) {
 								pfFile.print(record);
@@ -131,4 +128,12 @@ public class PFFileGenerator
 
 	}
 
+	private static boolean featureIsValid(String featureName) {
+		for (Pattern typePattern : typesPatterns) {
+			if (typePattern.matcher(featureName).matches()) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
