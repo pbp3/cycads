@@ -15,17 +15,14 @@ import org.cycads.entities.factory.EntityFactory;
 import org.cycads.entities.sequence.Organism;
 import org.cycads.entities.sequence.Sequence;
 import org.cycads.entities.sequence.Subsequence;
-import org.cycads.extract.cyc.CycIdGenerator;
-import org.cycads.extract.cyc.CycRecord;
-import org.cycads.extract.cyc.CycRecordGenerator;
-import org.cycads.extract.cyc.LocContainer;
-import org.cycads.extract.cyc.OrganismCycIdGenerator;
-import org.cycads.extract.cyc.PFFileConfig;
-import org.cycads.extract.cyc.PFFileCycRecordGenerator;
-import org.cycads.extract.cyc.PFFileStream;
-import org.cycads.extract.cyc.SimpleLocInterpreter;
-import org.cycads.extract.score.AnnotationScoreSystem;
-import org.cycads.extract.score.ScoreSystemsContainer;
+import org.cycads.extract.general.AnnotationClustersGetterRepository;
+import org.cycads.extract.general.ConfigAnnotationClustersGetterRepository;
+import org.cycads.extract.pf.CycIdGenerator;
+import org.cycads.extract.pf.CycRecord;
+import org.cycads.extract.pf.CycRecordGenerator;
+import org.cycads.extract.pf.OrganismCycIdGenerator;
+import org.cycads.extract.pf.PFFileCycRecordGenerator;
+import org.cycads.extract.pf.PFFileStream;
 import org.cycads.general.Config;
 import org.cycads.general.Messages;
 import org.cycads.ui.Tools;
@@ -97,7 +94,7 @@ public class PFFileGenerator
 				seqs = organism.getSequences(factory.getDbxref(seqDbname, seqAccession));
 			}
 
-			List<String> typesStr = PFFileConfig.getTypes();
+			List<String> typesStr = Config.getPFFileTypesToGenerate();
 			Collection<Feature> features = new ArrayList<Feature>(typesStr.size());
 			for (String typeStr : typesStr) {
 				features.add(factory.getFeature(typeStr));
@@ -106,21 +103,18 @@ public class PFFileGenerator
 			PFFileStream pfFile = new PFFileStream(file, Config.pfGeneratorFileHeader(), sequenceLocation);
 			CycIdGenerator cycIdGenerator = new OrganismCycIdGenerator(organism);
 
-			LocAndScores locAndScores = new LocAndScores();
-			AnnotationScoreSystem ecScoreSystemCollection = locAndScores.getScoreSystems("ec");
-			AnnotationScoreSystem goScoreSystemCollection = locAndScores.getScoreSystems("go");
+			AnnotationClustersGetterRepository repository = new ConfigAnnotationClustersGetterRepository();
 
-			CycRecordGenerator cycRecordGenerator = new PFFileCycRecordGenerator(cycIdGenerator,
-				new SimpleLocInterpreter(locAndScores, locAndScores), ecThreshold, ecScoreSystemCollection,
-				goThreshold, goScoreSystemCollection);
+			CycRecordGenerator cycRecordGenerator = new PFFileCycRecordGenerator(cycIdGenerator, repository,
+				ecThreshold, goThreshold);
 			for (Feature feature : features) {
 				for (Sequence seq : seqs) {
 					Collection<Subsequence> subseqs = seq.getSubsequences();
 					for (Subsequence subseq : subseqs) {
-						Collection<Annotation<Subsequence, Feature>> cdss = (Collection<Annotation<Subsequence, Feature>>) subseq.getAnnotations(
+						Collection<Annotation<Subsequence, Feature>> annots = (Collection<Annotation<Subsequence, Feature>>) subseq.getAnnotations(
 							feature, null, null);
-						for (Annotation<Subsequence, Feature> cds : cdss) {
-							CycRecord record = cycRecordGenerator.generate(cds);
+						for (Annotation<Subsequence, Feature> annot : annots) {
+							CycRecord record = cycRecordGenerator.generate(annot);
 							if (record != null) {
 								pfFile.print(record);
 								progress.completeStep();
@@ -133,20 +127,6 @@ public class PFFileGenerator
 		}
 		catch (IOException e) {
 			e.printStackTrace();
-		}
-
-	}
-
-	public static class LocAndScores implements ScoreSystemsContainer, LocContainer
-	{
-		@Override
-		public AnnotationScoreSystem getScoreSystems(String scoreName) {
-			return PFFileConfig.getScoreSystems(scoreName);
-		}
-
-		@Override
-		public List<String> getLocs(String locName) {
-			return PFFileConfig.getLocs(locName);
 		}
 
 	}
