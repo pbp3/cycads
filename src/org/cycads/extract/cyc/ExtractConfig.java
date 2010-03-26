@@ -175,6 +175,11 @@ public class ExtractConfig
 		return getStringMandatory("fileFormat");
 	}
 	
+	public static String annotGeneratorFileHeader() {
+		return getStringMandatory("fileheader");
+	}
+	
+	// sequences
 	public static int annotGeneratorOrganismNumber() {
 		return getInt("organism");
 	}
@@ -187,6 +192,7 @@ public class ExtractConfig
 		return getStringMandatory("seqversion");
 	}
 	
+	// score systems
 	public static AnnotationScoreSystem annotGeneratorgetEcScoreSystems() {
 		return getScoreSystems("ec");
 	}
@@ -195,9 +201,7 @@ public class ExtractConfig
 		return getScoreSystems("go");
 	}
 	
-	public static String annotGeneratorFileHeader() {
-		return getStringMandatory("fileheader");
-	}
+
 	
 	/* PFFile
 	public static String getProductType(String type) {
