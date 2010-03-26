@@ -113,6 +113,7 @@ public class Config
 
 	private static List<Pattern> getPatterns(String tag) {
 		List<String> patternsStr = getStrings(tag);
+		tag += ".regex";
 		List<Pattern> patterns = new ArrayList<Pattern>(patternsStr.size());
 		for (String str : patternsStr) {
 			patterns.add(Pattern.compile(str));
@@ -135,8 +136,14 @@ public class Config
 		return values;
 	}
 
+	private static List<TransformScore> getTransformScores(String tag) {
+		String tagWeight = tag + ".weight";
+		String tagScaleFile = tag + ".file";
+		
+		// todo List<TransformScore> 
+	}
+	
 	//General
-
 	public static String getSQLDriverName() {
 		return getStringMandatory("general.sql.driverName");
 	}
@@ -221,27 +228,30 @@ public class Config
 
 	// PFFile
 	public static List<String> getAnnotationClusterLocs(String clusterName) {
-		return getStrings(clusterName + ".loc");
+		return getStrings("AnnotationGenerator." + clusterName + ".loc");
 	}
 	
 	public static List<String> getClusterReplaceRegex(String clusterName) {
-		return getStrings(clusterName + ".regex");
+		return getStrings("AnnotationGenerator." + clusterName + ".replace.regex");
 	}
 	
 	public static List<String> getClusterReplaceReplacement(String clusterName) {
-		return getStrings(clusterName + ".replace");
+		return getStrings("AnnotationGenerator." + clusterName + ".replace.replacement");
 	}
 	
 	public static String getClusterMsgChangeTarget(String clusterName) {
-		return getStringMandatory(clusterName + ".change");
+		return getStringOptional("AnnotationGenerator." + clusterName + ".msgChange");
 	}
 	
 	public static List<Pattern> getScoreMethodPatterns(String clusterName) {
-		return getPatterns(clusterName + ".methods");
+		return getPatterns("AnnotationGenerator." + clusterName + ".score.method");
 	}
 	
 	public static List<TransformScore> getScoreMethodTransforms(String clusterName) {
-		// todo
+		return getTransformScores("AnnotationGenerator." + clusterName + ".scoretransform");
+		// .file .weight
+		// weight : multiplydbl
+		// file : scale
 	}
 	
 	
@@ -362,7 +372,7 @@ public class Config
 	}
 
 	public static List<Pattern> subseqDbxrefAnnotationLoaderMethodPatterns() {
-		return getPatterns("subseqDbxrefAnnotationLoader.file.method.regex");
+		return getPatterns("subseqDbxrefAnnotationLoader.file.method");
 	}
 
 	public static List<String> subseqDbxrefAnnotationLoaderMethodNames() {
@@ -456,7 +466,7 @@ public class Config
 	}
 
 	public static List<Pattern> dbxrefDbxrefAnnotationLoaderMethodPatterns() {
-		return getPatterns("dbxrefDbxrefAnnotationLoader.file.method.regex");
+		return getPatterns("dbxrefDbxrefAnnotationLoader.file.method");
 	}
 
 	public static List<String> dbxrefDbxrefAnnotationLoaderMethodNames() {
@@ -550,7 +560,7 @@ public class Config
 	}
 
 	public static List<Pattern> entityDbxrefAnnotationLoaderMethodPatterns() {
-		return getPatterns("entityDbxrefAnnotationLoader.file.method.regex");
+		return getPatterns("entityDbxrefAnnotationLoader.file.method");
 	}
 
 	public static List<String> entityDbxrefAnnotationLoaderMethodNames() {
