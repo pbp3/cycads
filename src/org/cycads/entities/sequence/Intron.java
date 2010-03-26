@@ -3,7 +3,7 @@
  */
 package org.cycads.entities.sequence;
 
-import org.cycads.extract.cyc.CycIntron;
+import org.cycads.extract.pf.CycIntron;
 
 public interface Intron extends Comparable<Intron>, CycIntron
 {
