@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.regex.Pattern;
 
+import org.cycads.entities.annotation.Annotation;
+
 public class ParametersDefault
 {
 	//	private static final String		BUNDLE_NAME		= "config";				//$NON-NLS-1$
@@ -45,6 +47,10 @@ public class ParametersDefault
 
 	private static int getInt(String key) {
 		return Integer.parseInt(getStringMandatory(key));
+	}
+	
+	private static double getDbl(String key) {
+		return Double.parseDouble(getStringMandatory(key));
 	}
 
 	private static String transform(String key, List<Pattern> keyPatterns, List<String> values) {
@@ -128,6 +134,27 @@ public class ParametersDefault
 		return getStringMandatory("general.functionalAnnotationTypeName");
 	}
 
+	// Annotation Generator
+	public static String getMethodSeparator() {
+		return getStringOptional("AnnotationGenerator.MethodSeparator");
+	}
+	
+	public static String getMethodWaySeparator() {
+		return getStringOptional("AnnotationGenerator.PathSeparator");
+	}
+	
+	public static double getAnnotationScoreDefault() {
+		return getDbl("AnnotationGenerator.ScoreDefault");
+	}
+	
+	public static boolean isValidAnnotForScore(Annotation annot) {
+		//return annot.isType(???);
+	}
+	
+	public static boolean isValidAnnotForMethods(Annotation annot) {
+		//return annot.isType(???);
+	}
+	
 	// KOFile
 
 	public static String koFileEntryTag() {
