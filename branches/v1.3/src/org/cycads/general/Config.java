@@ -3,7 +3,6 @@ package org.cycads.general;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -11,12 +10,6 @@ import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-import org.cycads.entities.annotation.Annotation;
-import org.cycads.extract.cyc.CycDbxrefAnnotationPaths;
-import org.cycads.extract.cyc.FileScoreSystem;
-import org.cycads.extract.cyc.FixAndFileScoreSystem;
-import org.cycads.extract.score.AnnotationScoreSystem;
-import org.cycads.extract.score.SimpleAnnotationScoreSystem;
 import org.cycads.extract.score.TransformScore;
 
 public class Config
@@ -139,10 +132,10 @@ public class Config
 	private static List<TransformScore> getTransformScores(String tag) {
 		String tagWeight = tag + ".weight";
 		String tagScaleFile = tag + ".file";
-		
+
 		// todo List<TransformScore> 
 	}
-	
+
 	//General
 	public static String getSQLDriverName() {
 		return getStringMandatory("general.sql.driverName");
@@ -235,31 +228,30 @@ public class Config
 	public static List<String> getAnnotationClusterLocs(String clusterName) {
 		return getStrings("AnnotationGenerator." + clusterName + ".loc");
 	}
-	
+
 	public static List<String> getClusterReplaceRegex(String clusterName) {
 		return getStrings("AnnotationGenerator." + clusterName + ".replace.regex");
 	}
-	
+
 	public static List<String> getClusterReplaceReplacement(String clusterName) {
 		return getStrings("AnnotationGenerator." + clusterName + ".replace.replacement");
 	}
-	
+
 	public static String getClusterMsgChangeTarget(String clusterName) {
 		return getStringOptional("AnnotationGenerator." + clusterName + ".msgChange");
 	}
-	
+
 	public static List<Pattern> getScoreMethodPatterns(String clusterName) {
 		return getPatterns("AnnotationGenerator." + clusterName + ".score.method");
 	}
-	
+
 	public static List<TransformScore> getScoreMethodTransforms(String clusterName) {
 		return getTransformScores("AnnotationGenerator." + clusterName + ".scoretransform");
 		// .file .weight
 		// weight : multiplydbl
 		// file : scale
 	}
-	
-	
+
 	//	// CDS to KO Loader
 	//
 	//	public static String cdsToKOFileComment() {
