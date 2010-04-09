@@ -11,6 +11,7 @@ import org.cycads.extract.general.AnnotationCluster;
 import org.cycads.extract.general.AnnotationClustersGetterRepository;
 import org.cycads.extract.general.GetterExpressionException;
 import org.cycads.general.ParametersDefault;
+import org.cycads.parser.ParserException;
 
 public class PFFileCycRecordGenerator implements CycRecordGenerator
 {
@@ -43,7 +44,7 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 
 	@Override
 	public SimpleCycRecord generate(Annotation< ? extends Subsequence, ? extends Feature> annot)
-			throws GetterExpressionException {
+			throws GetterExpressionException, ParserException {
 		String id = getID(annot);
 		String prodtype = clusterRepository.getFirstTargetStr(PRODUCT_TYPE, annot);
 		SimpleCycRecord record = new SimpleCycRecord(prodtype, id);
