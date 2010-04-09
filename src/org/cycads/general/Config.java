@@ -189,7 +189,14 @@ public class Config
 		return getStringOptional("GFF3Loader.loader.organismName");
 	}
 
+	// PFFile
+	
+	public static String annotationGeneratorPfFileHeader() {
+		return getStringOptional("AnnotationGenerator.pf.header");
+	}
+	
 	// Annotation Generator
+	
 	public static String annotationGeneratorFileName() {
 		return getStringOptional("AnnotationGenerator.fileName");
 	}
@@ -215,16 +222,10 @@ public class Config
 	}
 
 	// for further datas export formats
-	public static String annotationGeneratorOutFormat() {
-		return getStringOptional("AnnotationGenerator.outFormat");
+	public static int annotationGeneratorOutFormat() {
+		return getInt("AnnotationGenerator.outFormat");
 	}
 
-	// PFFile
-	
-	public static String annotationGeneratorPfFileHeader() {
-		return getStringOptional("AnnotationGenerator.pf.header");
-	}
-	
 	public static List<String> getAnnotationClusterLocs(String clusterName) {
 		return getStrings("AnnotationGenerator." + clusterName + ".loc");
 	}
