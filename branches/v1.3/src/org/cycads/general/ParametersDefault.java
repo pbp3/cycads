@@ -6,6 +6,7 @@ import java.util.MissingResourceException;
 import java.util.regex.Pattern;
 
 import org.cycads.entities.annotation.Annotation;
+import org.cycads.entities.note.Type;
 
 public class ParametersDefault
 {
@@ -149,11 +150,16 @@ public class ParametersDefault
 	}
 
 	public static AnnotationFilterBytype	scoreAnnotFilterByType	= null;
+	public static AnnotationFilterBytype	methodAnnotFilterByType	= null;
 
 	public static AnnotationFilterBytype getScoreAnnotFilterByType() {
 		if (scoreAnnotFilterByType == null) {
 			scoreAnnotFilterByType = new AnnotationFilterBytype();
-						lire du config;
+			/* howto: should reads the Config
+			for (Type type : getStrings("AnnotationGenerator.ScoreAnnotationType")){
+				scoreAnnotFilterByType.addType(type);
+			}
+			*/
 		}
 		return scoreAnnotFilterByType;
 	}
@@ -163,7 +169,19 @@ public class ParametersDefault
 	}
 
 	public static boolean isValidAnnotForMethods(Annotation annot) {
-		//return annot.isType(???);
+		return getMethodAnnotFilterByType().isValid(annot);
+	}
+
+	public static AnnotationFilterBytype getMethodAnnotFilterByType() {
+		if (methodAnnotFilterByType == null) {
+			methodAnnotFilterByType = new AnnotationFilterBytype();
+			/* howto: should reads the Config
+			for (Type type : getStrings("AnnotationGenerator.MethodAnnotationType")){
+				methodAnnotFilterByType.addType(type);
+			}
+			*/
+		}
+		return methodAnnotFilterByType;
 	}
 
 	// PfFile
