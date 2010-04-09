@@ -40,16 +40,16 @@ public class CDSECGOGenerator
 
 	public static void main(String[] args) {
 		EntityFactory factory = EntityFactory.factoryDefault;
-		File file = Tools.getFileToSave(args, 0, Config.pfGeneratorFileName(), Messages.pfGeneratorChooseFile());
+		File file = Tools.getFileToSave(args, 0, Config.annotationGeneratorFileName(), Messages.pfGeneratorChooseFile());
 		if (file == null) {
 			return;
 		}
-		Organism organism = Tools.getOrganism(args, 1, Config.pfGeneratorOrganismNumber(),
+		Organism organism = Tools.getOrganism(args, 1, Config.annotationGeneratorOrganismNumber(),
 			Messages.pfGeneratorChooseOrganismNumber(), factory);
 		if (organism == null) {
 			return;
 		}
-		String seqSynonym = Tools.getString(args, 2, Config.pfGeneratorSeqSynonym(),
+		String seqSynonym = Tools.getString(args, 2, Config.annotationGeneratorSeqSynonym(),
 			Messages.pfGeneratorChooseSeqSynonym());
 		String seqDbname = null, seqAccession = null;
 		while (seqSynonym != null && !seqSynonym.equals("*") && seqDbname == null && seqAccession == null) {
@@ -71,24 +71,24 @@ public class CDSECGOGenerator
 			return;
 		}
 
-		String seqVersion = Tools.getString(args, 3, Config.pfGeneratorSeqVersion(),
+		String seqVersion = Tools.getString(args, 3, Config.annotationGeneratorSeqVersion(),
 			Messages.pfGeneratorChooseSeqVersion());
 		if (seqVersion == null) {
 			return;
 		}
 
-		Double ecThreshold = Tools.getDouble(args, 4, Config.pfEcThreshold(), Messages.pfGeneratorChooseEcThreshold());
+		Double ecThreshold = Tools.getDouble(args, 4, Config.annotationGeneratorEcThreshold(), Messages.pfGeneratorChooseEcThreshold());
 		if (ecThreshold == null) {
 			return;
 		}
 
-		Double goThreshold = Tools.getDouble(args, 5, Config.pfGoThreshold(), Messages.pfGeneratorChooseGoThreshold());
+		Double goThreshold = Tools.getDouble(args, 5, Config.annotationGeneratorGoThreshold(), Messages.pfGeneratorChooseGoThreshold());
 		if (goThreshold == null) {
 			return;
 		}
 
 		// add by PBP, for further export file format option
-		int fileFormat = Tools.getInteger(args, 6, Config.CDSECGOexportFormat(),
+		int fileFormat = Tools.getInteger(args, 6, Config.annotationGeneratorOutFormat(),
 			Messages.CDSECGOGeneratorChooseFileFormat());
 
 		Progress progress = new ProgressPrintInterval(System.out, Messages.pfGeneratorStepShowInterval());
@@ -112,18 +112,18 @@ public class CDSECGOGenerator
 			switch (fileFormat){
 				case 1:
 					{
-						boolean sequenceLocation = Config.pfSequenceLocation();
+						boolean sequenceLocation = Config.SequenceLocation();
 						outStream = new PFFileStream(file, Config.pfGeneratorFileHeader(), sequenceLocation);
 						break;
 					}
 				case 2:
 					{
-						outStream = new AnnotationByLineFileStream(file, Config.pfGeneratorFileHeader());
+						outStream = new AnnotationByLineFileStream(file, Config.annotationGeneratorFileHeader());
 						break;
 					}
 				case 3:
 					{
-						outStream = new RecordByLineFileStream(file, Config.pfGeneratorFileHeader());
+						outStream = new RecordByLineFileStream(file, Config.annotationGeneratorFileHeader());
 						break;
 					}
 				default:
