@@ -4,7 +4,6 @@
 package org.cycads.ui.extract.cyc;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -122,7 +121,7 @@ public class PFFileGenerator
 			}
 			progress.finish(Messages.pfGeneratorFinalMsg(progress.getStep()));
 		}
-		catch (IOException e) {
+		catch (Exception e) {
 			e.printStackTrace();
 		}
 
