@@ -134,6 +134,7 @@ public class ParametersDefault
 		return getStringMandatory("general.functionalAnnotationTypeName");
 	}
 
+	/* adds pbp */
 	// Annotation Generator
 	public static String getMethodSeparator() {
 		return getStringOptional("AnnotationGenerator.MethodSeparator");
@@ -154,6 +155,20 @@ public class ParametersDefault
 	public static boolean isValidAnnotForMethods(Annotation annot) {
 		//return annot.isType(???);
 	}
+	
+	// PfFile
+	public static String getPFFileCycIdNoteType() {
+		return getStringMandatory("AnnotationGenerator.idNoteType");
+	}
+	
+	public static String getPFFileFunctionCommentSeparator() {
+		return getStringMandatory("AnnotationGenerator.pf.functionComment.separator");
+	}
+	
+	public static String getPFFileGeneCommentSeparator() {
+		return getStringMandatory("AnnotationGenerator.pf.geneComment.separator");
+	}
+	/* end adds pbp*/
 	
 	// KOFile
 
