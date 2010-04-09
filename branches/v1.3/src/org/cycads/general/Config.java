@@ -227,6 +227,11 @@ public class Config
 	}
 
 	// PFFile
+	
+	public static String annotationGeneratorPfFileHeader() {
+		return getStringOptional("AnnotationGenerator.pf.header");
+	}
+	
 	public static List<String> getAnnotationClusterLocs(String clusterName) {
 		return getStrings("AnnotationGenerator." + clusterName + ".loc");
 	}
