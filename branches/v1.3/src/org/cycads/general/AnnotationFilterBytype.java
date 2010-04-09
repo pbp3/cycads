@@ -13,12 +13,20 @@ public class AnnotationFilterBytype implements AnnotationFilter
 {
 	Collection<Type>	types;
 
+	public AnnotationFilterBytype() {
+		this.types = new ArrayList<Type>();
+	}
+
 	public AnnotationFilterBytype(Collection<Type> types) {
 		this.types = types;
 	}
 
 	public AnnotationFilterBytype(Type type) {
 		this.types = new ArrayList<Type>(1);
+		types.add(type);
+	}
+
+	public void addType(Type type) {
 		types.add(type);
 	}
 

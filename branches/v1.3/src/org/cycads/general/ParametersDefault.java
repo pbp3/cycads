@@ -48,7 +48,7 @@ public class ParametersDefault
 	private static int getInt(String key) {
 		return Integer.parseInt(getStringMandatory(key));
 	}
-	
+
 	private static double getDbl(String key) {
 		return Double.parseDouble(getStringMandatory(key));
 	}
@@ -139,23 +139,33 @@ public class ParametersDefault
 	public static String getMethodSeparator() {
 		return getStringOptional("AnnotationGenerator.MethodSeparator");
 	}
-	
+
 	public static String getMethodWaySeparator() {
 		return getStringOptional("AnnotationGenerator.PathSeparator");
 	}
-	
+
 	public static double getAnnotationScoreDefault() {
 		return getDbl("AnnotationGenerator.ScoreDefault");
 	}
-	
-	public static boolean isValidAnnotForScore(Annotation annot) {
-		//return annot.isType(???);
+
+	public static AnnotationFilterBytype	scoreAnnotFilterByType	= null;
+
+	public static AnnotationFilterBytype getScoreAnnotFilterByType() {
+		if (scoreAnnotFilterByType == null) {
+			scoreAnnotFilterByType = new AnnotationFilterBytype();
+						lire du config;
+		}
+		return scoreAnnotFilterByType;
 	}
-	
+
+	public static boolean isValidAnnotForScore(Annotation annot) {
+		return getScoreAnnotFilterByType().isValid(annot);
+	}
+
 	public static boolean isValidAnnotForMethods(Annotation annot) {
 		//return annot.isType(???);
 	}
-	
+
 	// PfFile
 	public static String getPFFileCycIdNoteType() {
 		return getStringMandatory("AnnotationGenerator.idNoteType");
