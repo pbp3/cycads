@@ -4,10 +4,11 @@ import org.cycads.entities.Feature;
 import org.cycads.entities.annotation.Annotation;
 import org.cycads.entities.sequence.Subsequence;
 import org.cycads.extract.general.GetterExpressionException;
+import org.cycads.parser.ParserException;
 
 public interface CycRecordGenerator
 {
 	public CycRecord generate(Annotation< ? extends Subsequence, ? extends Feature> annot)
-			throws GetterExpressionException;
+			throws GetterExpressionException, ParserException;
 
 }
