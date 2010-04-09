@@ -36,16 +36,16 @@ public class PFFileGenerator
 
 	public static void main(String[] args) {
 		EntityFactory factory = EntityFactory.factoryDefault;
-		File file = Tools.getFileToSave(args, 0, Config.pfGeneratorFileName(), Messages.pfGeneratorChooseFile());
+		File file = Tools.getFileToSave(args, 0, Config.annotationGeneratorFileName(), Messages.pfGeneratorChooseFile());
 		if (file == null) {
 			return;
 		}
-		Organism organism = Tools.getOrganism(args, 1, Config.pfGeneratorOrganismNumber(),
+		Organism organism = Tools.getOrganism(args, 1, Config.annotationGeneratorOrganismNumber(),
 			Messages.pfGeneratorChooseOrganismNumber(), factory);
 		if (organism == null) {
 			return;
 		}
-		String seqSynonym = Tools.getString(args, 2, Config.pfGeneratorSeqSynonym(),
+		String seqSynonym = Tools.getString(args, 2, Config.annotationGeneratorSeqSynonym(),
 			Messages.pfGeneratorChooseSeqSynonym());
 		String seqDbname = null, seqAccession = null;
 		while (seqSynonym != null && !seqSynonym.equals("*") && seqDbname == null && seqAccession == null) {
@@ -67,7 +67,7 @@ public class PFFileGenerator
 			return;
 		}
 
-		String seqVersion = Tools.getString(args, 3, Config.pfGeneratorSeqVersion(),
+		String seqVersion = Tools.getString(args, 3, Config.annotationGeneratorSeqVersion(),
 			Messages.pfGeneratorChooseSeqVersion());
 		if (seqVersion == null) {
 			return;
@@ -75,12 +75,12 @@ public class PFFileGenerator
 
 		boolean sequenceLocation = Tools.getBoolean(args, 4, Messages.pfGeneratorChooseSequenceLocation());
 
-		Double ecThreshold = Tools.getDouble(args, 5, Config.pfEcThreshold(), Messages.pfGeneratorChooseEcThreshold());
+		Double ecThreshold = Tools.getDouble(args, 5, Config.annotationGeneratorEcThreshold(), Messages.pfGeneratorChooseEcThreshold());
 		if (ecThreshold == null) {
 			return;
 		}
 
-		Double goThreshold = Tools.getDouble(args, 6, Config.pfGoThreshold(), Messages.pfGeneratorChooseGoThreshold());
+		Double goThreshold = Tools.getDouble(args, 6, Config.annotationGeneratorGoThreshold(), Messages.pfGeneratorChooseGoThreshold());
 		if (goThreshold == null) {
 			return;
 		}
@@ -96,7 +96,7 @@ public class PFFileGenerator
 				seqs = organism.getSequences(factory.getDbxref(seqDbname, seqAccession));
 			}
 
-			PFFileStream pfFile = new PFFileStream(file, Config.pfGeneratorFileHeader(), sequenceLocation);
+			PFFileStream pfFile = new PFFileStream(file, Config.annotationGeneratorPfFileHeader(), sequenceLocation);
 			CycIdGenerator cycIdGenerator = new OrganismCycIdGenerator(organism);
 
 			AnnotationClustersGetterRepository repository = new ConfigAnnotationClustersGetterRepository();
