@@ -63,6 +63,8 @@ public class ReplaceStringColumn
 		}
 		try {
 			String line;
+			int error = 0;
+			int lineOk = 0;
 			while ((line = br.readLine()) != null) {
 				line = line.trim();
 				if (line.length() > 0 && !line.startsWith(lineComment)) {
@@ -74,12 +76,15 @@ public class ReplaceStringColumn
 							out.print('\t');
 						}
 						out.println(strs[strs.length - 1]);
+						lineOk++;
 					}
 					else {
-						throw new RuntimeException(line);
+						error++;
 					}
 				}
 			}
+			System.out.println("Processed:" + lineOk);
+			System.out.println("Without column:" + error);
 		}
 		catch (FileNotFoundException e) {
 			e.printStackTrace();
