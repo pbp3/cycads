@@ -253,7 +253,7 @@ public class Tools
 			return new String[] {value};
 		}
 		else {
-			return value.split(separator);
+			return value.split(separator, -2);
 		}
 	}
 
