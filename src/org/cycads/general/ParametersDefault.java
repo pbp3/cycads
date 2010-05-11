@@ -6,7 +6,6 @@ import java.util.MissingResourceException;
 import java.util.regex.Pattern;
 
 import org.cycads.entities.annotation.Annotation;
-import org.cycads.entities.note.Type;
 
 public class ParametersDefault
 {
@@ -138,68 +137,56 @@ public class ParametersDefault
 	/* adds pbp */
 	// Annotation Generator
 	public static String getMethodSeparator() {
-		return getStringOptional("AnnotationGenerator.MethodSeparator");
+		return getStringMandatory("AnnotationGenerator.methodSeparator");
 	}
 
 	public static String getMethodWaySeparator() {
-		return getStringOptional("AnnotationGenerator.PathSeparator");
+		return getStringMandatory("AnnotationGenerator.methodPathSeparator");
 	}
 
-	public static double getAnnotationScoreDefault() {
-		return getDbl("AnnotationGenerator.ScoreDefault");
+	public static String getAnnotationScoreDefault() {
+		return getStringMandatory("AnnotationGenerator.annotationScoreDefault");
 	}
 
 	public static AnnotationFilterBytype	scoreAnnotFilterByType	= null;
 	public static AnnotationFilterBytype	methodAnnotFilterByType	= null;
 
-	public static AnnotationFilterBytype getScoreAnnotFilterByType() {
+	public static boolean isValidAnnotForScore(Annotation annot) {
 		if (scoreAnnotFilterByType == null) {
 			scoreAnnotFilterByType = new AnnotationFilterBytype();
-			/* howto: should reads the Config
-			for (Type type : getStrings("AnnotationGenerator.ScoreAnnotationType")){
-				scoreAnnotFilterByType.addType(type);
+			for (String type : getStrings("AnnotationGenerator.scoreFilterByAnnotationType")) {
+				scoreAnnotFilterByType.addType(annot.getNoteType(type));
 			}
-			*/
 		}
-		return scoreAnnotFilterByType;
-	}
-
-	public static boolean isValidAnnotForScore(Annotation annot) {
-		return getScoreAnnotFilterByType().isValid(annot);
+		return scoreAnnotFilterByType.isValid(annot);
 	}
 
 	public static boolean isValidAnnotForMethods(Annotation annot) {
-		return getMethodAnnotFilterByType().isValid(annot);
-	}
-
-	public static AnnotationFilterBytype getMethodAnnotFilterByType() {
 		if (methodAnnotFilterByType == null) {
 			methodAnnotFilterByType = new AnnotationFilterBytype();
-			/* howto: should reads the Config
-			for (Type type : getStrings("AnnotationGenerator.MethodAnnotationType")){
-				methodAnnotFilterByType.addType(type);
+			for (String type : getStrings("AnnotationGenerator.methodFilterByAnnotationType")) {
+				methodAnnotFilterByType.addType(annot.getNoteType(type));
 			}
-			*/
 		}
-		return methodAnnotFilterByType;
+		return methodAnnotFilterByType.isValid(annot);
 	}
 
 	// PfFile
 	public static String getPFFileCycIdNoteType() {
-		return getStringMandatory("AnnotationGenerator.idNoteType");
+		return getStringMandatory("annotationGenerator.idNoteType");
 	}
-	
-	public static String getPFFileFunctionCommentSeparator() {
-		return getStringMandatory("AnnotationGenerator.pf.functionComment.separator");
-	}
-	
-	public static String getPFFileGeneCommentSeparator() {
-		return getStringMandatory("AnnotationGenerator.pf.geneComment.separator");
-	}
-	/* end adds pbp*/
-	
-	// KOFile
 
+	public static String getPFFileFunctionCommentSeparator() {
+		return getStringMandatory("annotationGenerator.pf.functionComment.separator");
+	}
+
+	public static String getPFFileGeneCommentSeparator() {
+		return getStringMandatory("annotationGenerator.pf.geneComment.separator");
+	}
+
+	/* end adds pbp*/
+
+	// KOFile
 	public static String koFileEntryTag() {
 		return getString("KOLoader.file.entryTag");
 	}
@@ -269,31 +256,4 @@ public class ParametersDefault
 		}
 		return dbLinkNames;
 	}
-
-	//	// CDS Fake
-	//
-	//	public static String getSeqVersionFake() {
-	//		return getStringMandatory("general.annot.fake.seqVersion");
-	//	}
-	//
-	//	public static int getSubseqStartFake() {
-	//		return getInt("general.annot.fake.subseqStartPos");
-	//	}
-	//
-	//	public static int getSubseqEndFake() {
-	//		return getInt("general.annot.fake.subseqEndPos");
-	//	}
-	//
-	//	public static String getAnnotationMethodFake() {
-	//		return getStringMandatory("general.annot.fake.annotationMethod");
-	//	}
-	//
-	//	public static String getAnnotationFakeType() {
-	//		return getStringMandatory("general.annot.fake.annotationType");
-	//	}
-	//
-	//	public static String getAnnotationFakeFeature() {
-	//		return getStringMandatory("general.annot.fake.annotationFeature");
-	//	}
-	//
 }

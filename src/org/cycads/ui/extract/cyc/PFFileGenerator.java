@@ -5,6 +5,7 @@ package org.cycads.ui.extract.cyc;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -31,7 +32,7 @@ import org.cycads.ui.progress.ProgressPrintInterval;
 public class PFFileGenerator
 {
 
-	static List<Pattern>	typesPatterns	= Config.getPFFileTypesToGenerate();
+	static List<Pattern>	typesPatterns	= Config.getAnnotationGeneratorFeaturesToGenerate();
 
 	public static void main(String[] args) {
 		EntityFactory factory = EntityFactory.factoryDefault;
@@ -74,12 +75,14 @@ public class PFFileGenerator
 
 		boolean sequenceLocation = Tools.getBoolean(args, 4, Messages.pfGeneratorChooseSequenceLocation());
 
-		Double ecThreshold = Tools.getDouble(args, 5, Config.annotationGeneratorEcThreshold(), Messages.pfGeneratorChooseEcThreshold());
+		Double ecThreshold = Tools.getDouble(args, 5, Config.annotationGeneratorEcThreshold(),
+			Messages.pfGeneratorChooseEcThreshold());
 		if (ecThreshold == null) {
 			return;
 		}
 
-		Double goThreshold = Tools.getDouble(args, 6, Config.annotationGeneratorGoThreshold(), Messages.pfGeneratorChooseGoThreshold());
+		Double goThreshold = Tools.getDouble(args, 6, Config.annotationGeneratorGoThreshold(),
+			Messages.pfGeneratorChooseGoThreshold());
 		if (goThreshold == null) {
 			return;
 		}
@@ -127,12 +130,19 @@ public class PFFileGenerator
 
 	}
 
+	static Hashtable<String, Boolean>	features	= new Hashtable<String, Boolean>();
+
 	private static boolean featureIsValid(String featureName) {
-		for (Pattern typePattern : typesPatterns) {
-			if (typePattern.matcher(featureName).matches()) {
-				return true;
+		Boolean ret = features.get(featureName);
+		if (ret == null) {
+			for (Pattern typePattern : typesPatterns) {
+				if (typePattern.matcher(featureName).matches()) {
+					ret = true;
+				}
 			}
+			ret = false;
+			features.put(featureName, ret);
 		}
-		return false;
+		return ret;
 	}
 }

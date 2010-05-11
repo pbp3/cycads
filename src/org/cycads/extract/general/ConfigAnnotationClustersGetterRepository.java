@@ -6,16 +6,13 @@ package org.cycads.extract.general;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.regex.Pattern;
 
 import org.cycads.extract.objectsGetter.changeObject.ChangeToStringReplaced;
 import org.cycads.extract.parser.AnnotationWaysGetterReader;
 import org.cycads.extract.parser.SimpleAnnotationWaysGetterHandler;
 import org.cycads.extract.parser.SimpleAnnotationWaysGetterReader;
 import org.cycads.extract.score.AnnotationWayListScoreSystem;
-import org.cycads.extract.score.SimpleAnnotationScoreSystem;
 import org.cycads.extract.score.SimpleAnnotationWayListScoreSystem;
-import org.cycads.extract.score.TransformScore;
 import org.cycads.general.Config;
 import org.cycads.parser.ParserException;
 
@@ -62,13 +59,7 @@ public class ConfigAnnotationClustersGetterRepository implements AnnotationClust
 	}
 
 	public AnnotationWayListScoreSystem getScoreSystem(String clusterName) {
-		SimpleAnnotationScoreSystem annotationScoreSystem = new SimpleAnnotationScoreSystem();
-		List<Pattern> patterns = Config.getScoreMethodPatterns(clusterName);
-		List<TransformScore> transformScores = Config.getScoreMethodTransforms(clusterName);
-		for (int i = 0; i < patterns.size(); i++) {
-			annotationScoreSystem.addTransformScore(patterns.get(i), transformScores.get(i));
-		}
-		return new SimpleAnnotationWayListScoreSystem(annotationScoreSystem);
+		return new SimpleAnnotationWayListScoreSystem(Config.getAnnotScoreSystem(clusterName));
 	}
 
 	@Override

@@ -10,7 +10,11 @@ import java.util.MissingResourceException;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-import org.cycads.extract.score.TransformScore;
+import org.cycads.extract.score.AnnotationScoreSystem;
+import org.cycads.extract.score.FileScaleDouble;
+import org.cycads.extract.score.MultiplyDouble;
+import org.cycads.extract.score.SimpleAnnotationScoreSystem;
+import org.cycads.extract.score.SimpleTransformScore;
 
 public class Config
 {
@@ -129,13 +133,6 @@ public class Config
 		return values;
 	}
 
-	private static List<TransformScore> getTransformScores(String tag) {
-		String tagWeight = tag + ".weight";
-		String tagScaleFile = tag + ".file";
-
-		// todo List<TransformScore> 
-	}
-
 	//General
 	public static String getSQLDriverName() {
 		return getStringMandatory("general.sql.driverName");
@@ -190,13 +187,17 @@ public class Config
 	}
 
 	// PFFile
-	
+
 	public static String annotationGeneratorPfFileHeader() {
 		return getStringOptional("AnnotationGenerator.pf.header");
 	}
-	
+
+	public static List<Pattern> getAnnotationGeneratorFeaturesToGenerate() {
+		return getPatterns("AnnotationGenerator.feature");
+	}
+
 	// Annotation Generator
-	
+
 	public static String annotationGeneratorFileName() {
 		return getStringOptional("AnnotationGenerator.fileName");
 	}
@@ -242,44 +243,38 @@ public class Config
 		return getStringOptional("AnnotationGenerator." + clusterName + ".msgChange");
 	}
 
-	public static List<Pattern> getScoreMethodPatterns(String clusterName) {
-		return getPatterns("AnnotationGenerator." + clusterName + ".score.method");
+	// .file .weight .valueDefault
+	// weight : multiplydbl
+	// file : scale
+	public static AnnotationScoreSystem getAnnotScoreSystem(String clusterName) {
+		String tag = "AnnotationGenerator." + clusterName + ".score.method";
+		SimpleAnnotationScoreSystem annotationScoreSystem = new SimpleAnnotationScoreSystem();
+		List<Pattern> patterns = getPatterns(tag);
+		SimpleTransformScore transformScore;
+		String weight, scaleFile, valueDefault;
+		for (int i = 0; i < patterns.size(); i++) {
+			weight = getStringOptional(tag + "." + i + ".weight");
+			scaleFile = getStringOptional(tag + "." + i + ".file");
+			valueDefault = getStringOptional(tag + "." + i + ".valueDefault");
+			transformScore = new SimpleTransformScore();
+			try {
+				if (weight != null && weight.trim().length() > 0) {
+					transformScore.addTransform(new MultiplyDouble(Double.parseDouble(weight.trim())));
+				}
+				if (scaleFile != null && scaleFile.trim().length() > 0) {
+					transformScore.addTransform(new FileScaleDouble(scaleFile.trim()));
+				}
+				if (valueDefault != null && valueDefault.trim().length() > 0) {
+					transformScore.setScoreDefault(valueDefault.trim());
+				}
+			}
+			catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+			annotationScoreSystem.addTransformScore(patterns.get(i), transformScore);
+		}
+		return annotationScoreSystem;
 	}
-
-	public static List<TransformScore> getScoreMethodTransforms(String clusterName) {
-		return getTransformScores("AnnotationGenerator." + clusterName + ".scoretransform");
-		// .file .weight
-		// weight : multiplydbl
-		// file : scale
-	}
-
-	//	// CDS to KO Loader
-	//
-	//	public static String cdsToKOFileComment() {
-	//		return getStringMandatory("cdsToKO.file.comment");
-	//	}
-	//
-	//	public static String cdsToKOFileSeparator() {
-	//		return getStringMandatory("cdsToKO.file.separator");
-	//	}
-	//
-	//	public static String cdsToKOLoaderFileName() {
-	//		return getStringOptional("cdsToKO.loader.fileName");
-	//	}
-	//
-	//	public static int cdsToKOLoaderOrganismNumber() {
-	//		return getInt("cdsToKO.loader.organismNumber");
-	//	}
-	//
-	//	public static String cdsToKOMethodName() {
-	//		return getStringOptional("cdsToKO.loader.methodName");
-	//	}
-	//
-	//	public static String cdsToKOCDSDBName() {
-	//		return getStringOptional("cdsToKO.loader.cdsDBName");
-	//	}
-	//
-	// subseqDbxrefAnnotationLoader
 
 	public static String subseqDbxrefAnnotationLoaderFileName() {
 		return getStringOptional("subseqDbxrefAnnotationLoader.fileName");
@@ -689,62 +684,4 @@ public class Config
 		return Pattern.compile(getStringMandatory("dbxrefSynonymLoader.file.removeLineRegex"));
 	}
 
-	//	//ecCDSFileGenerator
-	//
-	//	public static String ecCDSFileGeneratorMethods(CycDbxrefAnnotationPaths ec) {
-	//		StringBuffer buf = new StringBuffer();
-	//		List<List<Annotation>> paths = ec.getAnnotationPaths();
-	//		if (!paths.isEmpty()) {
-	//			List<Annotation> path = paths.get(0);
-	//			buf.append(path.get(0).getAnnotationMethod().getName());
-	//			String methodSeparator = getStringMandatory("ecCDS.file.methodSeparator");
-	//			for (int i = 1; i < path.size(); i++) {
-	//				buf.append(methodSeparator);
-	//				buf.append(path.get(i).getAnnotationMethod().getName());
-	//			}
-	//			String pathSeparator = getStringMandatory("ecCDS.file.pathSeparator");
-	//			for (int i = 1; i < paths.size(); i++) {
-	//				buf.append(pathSeparator);
-	//				path = paths.get(i);
-	//				buf.append(path.get(0).getAnnotationMethod().getName());
-	//				for (int j = 1; j < path.size(); j++) {
-	//					buf.append(methodSeparator);
-	//					buf.append(path.get(j).getAnnotationMethod().getName());
-	//				}
-	//			}
-	//		}
-	//		else {
-	//			return ecCDSFileGeneratorAtributeNotPresentStr();
-	//		}
-	//		return buf.toString();
-	//	}
-	//
-	//	public static String ecCDSFileGeneratorAtributeNotPresentStr() {
-	//		return getStringMandatory("ecCDS.file.atributeNotPresentStr");
-	//	}
-	//
-	//	public static char ecCDSFileGeneratorColumnSeparator() {
-	//		return getStringMandatory("ecCDS.file.columnSeparator").charAt(0);
-	//	}
-	//
-	//	public static char ecCDSFileGeneratorDBLinkSeparator() {
-	//		return getStringMandatory("ecCDS.file.dBLinkSeparator").charAt(0);
-	//	}
-	//
-	//	public static List<String> ecCDSFileGeneratorDBNames() {
-	//		return getStrings("ecCDS.file.dBName");
-	//	}
-	//
-	//	public static String ecCDSFileGeneratorFileName() {
-	//		return getStringMandatory("ecCDS.file.fileName");
-	//	}
-	//
-	//	public static int ecCDSFileGeneratorOrganismNumber() {
-	//		return getInt("ecCDS.file.organismNumber");
-	//	}
-	//
-	//	public static String ecCDSFileGeneratorSeqVersion() {
-	//		return getStringMandatory("ecCDS.file.seqVersion");
-	//	}
-	//
 }
