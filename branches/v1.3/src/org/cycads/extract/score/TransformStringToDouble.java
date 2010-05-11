@@ -1,7 +1,7 @@
 /*
  * Created on 24/03/2010
  */
-package org.cycads.general;
+package org.cycads.extract.score;
 
 import java.text.NumberFormat;
 import java.text.ParseException;

@@ -5,9 +5,9 @@ package org.cycads.extract.score;
 
 public class MultiplyDouble implements TransformDouble
 {
-	int	factor;
+	double	factor;
 
-	public MultiplyDouble(int factor) {
+	public MultiplyDouble(double factor) {
 		this.factor = factor;
 	}
 
@@ -16,7 +16,7 @@ public class MultiplyDouble implements TransformDouble
 		return score * getFactor();
 	}
 
-	public int getFactor() {
+	public double getFactor() {
 		return factor;
 	}
 
