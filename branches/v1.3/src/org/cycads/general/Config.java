@@ -109,8 +109,8 @@ public class Config
 	}
 
 	private static List<Pattern> getPatterns(String tag) {
-		List<String> patternsStr = getStrings(tag);
 		tag += ".regex";
+		List<String> patternsStr = getStrings(tag);
 		List<Pattern> patterns = new ArrayList<Pattern>(patternsStr.size());
 		for (String str : patternsStr) {
 			patterns.add(Pattern.compile(str));
