@@ -4,7 +4,7 @@
 package org.cycads.extract.general;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.List;
 
 import org.cycads.extract.objectsGetter.changeObject.ChangeToStringReplaced;
@@ -19,7 +19,7 @@ import org.cycads.parser.ParserException;
 public class ConfigAnnotationClustersGetterRepository implements AnnotationClustersGetterRepository
 {
 
-	Hashtable<String, AnnotationClustersGetter>	clustersGetters	= new Hashtable<String, AnnotationClustersGetter>();
+	HashMap<String, AnnotationClustersGetter>	clustersGetters	= new HashMap<String, AnnotationClustersGetter>();
 
 	@Override
 	public AnnotationClustersGetter getAnnotationClusterGetter(String clusterName) throws ParserException {

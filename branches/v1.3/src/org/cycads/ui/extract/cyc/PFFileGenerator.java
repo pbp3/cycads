@@ -140,7 +140,9 @@ public class PFFileGenerator
 					ret = true;
 				}
 			}
-			ret = false;
+			if (ret == null) {
+				ret = false;
+			}
 			features.put(featureName, ret);
 		}
 		return ret;

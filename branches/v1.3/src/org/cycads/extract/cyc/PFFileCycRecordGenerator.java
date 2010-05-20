@@ -21,7 +21,7 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 	double								ecThreshold;
 	double								goThreshold;
 
-	public static String				PREFIX_NAME			= ".pf";
+	public static String				PREFIX_NAME			= "pf";
 	public static String				PRODUCT_TYPE		= PREFIX_NAME + ".productType";
 	public static String				GENE_NAME			= PREFIX_NAME + ".geneName";
 	public static String				GENE_SYNONYMS		= PREFIX_NAME + ".geneSynonyms";

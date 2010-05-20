@@ -110,7 +110,9 @@ public class SimpleAnnotationClustersGetter implements AnnotationClustersGetter
 		List<Object> ret = new ArrayList<Object>();
 		List<AnnotationCluster> clusters = getAnnotationClusters(obj);
 		if (clusters != null && !clusters.isEmpty()) {
-			ret.add(clusters.get(0).getTarget());
+			for (AnnotationCluster cluster : clusters) {
+				ret.add(cluster.getTarget());
+			}
 		}
 		return ret;
 	}
@@ -120,7 +122,9 @@ public class SimpleAnnotationClustersGetter implements AnnotationClustersGetter
 		List<String> ret = new ArrayList<String>();
 		List<AnnotationCluster> clusters = getAnnotationClusters(obj);
 		if (clusters != null && !clusters.isEmpty()) {
-			ret.add(clusters.get(0).getTarget().toString());
+			for (AnnotationCluster cluster : clusters) {
+				ret.add(cluster.getTarget().toString());
+			}
 		}
 		return ret;
 	}
