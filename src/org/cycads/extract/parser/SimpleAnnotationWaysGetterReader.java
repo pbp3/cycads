@@ -179,7 +179,7 @@ public class SimpleAnnotationWaysGetterReader implements AnnotationWaysGetterRea
 					loc = loc.substring(1);
 					break;
 				case '#':
-					posEndFilter = loc.indexOf('#');
+					posEndFilter = loc.indexOf('#', 1);
 					if (posEndFilter < 0) {
 						throw new ParserException("Regex without close regex '#'. Loc=" + loc);
 					}

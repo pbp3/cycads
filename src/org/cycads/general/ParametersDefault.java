@@ -173,15 +173,15 @@ public class ParametersDefault
 
 	// PfFile
 	public static String getPFFileCycIdNoteType() {
-		return getStringMandatory("annotationGenerator.idNoteType");
+		return getStringMandatory("AnnotationGenerator.idNoteType");
 	}
 
 	public static String getPFFileFunctionCommentSeparator() {
-		return getStringMandatory("annotationGenerator.pf.functionComment.separator");
+		return getStringMandatory("AnnotationGenerator.pf.functionComment.separator");
 	}
 
 	public static String getPFFileGeneCommentSeparator() {
-		return getStringMandatory("annotationGenerator.pf.geneComment.separator");
+		return getStringMandatory("AnnotationGenerator.pf.geneComment.separator");
 	}
 
 	/* end adds pbp*/

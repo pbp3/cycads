@@ -3,6 +3,7 @@
  */
 package org.cycads.extract.cyc;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -157,7 +158,12 @@ public class SimpleCycRecord implements CycRecord
 
 	@Override
 	public void addSynonym(String synonym) {
-		synonyms.add(synonym);
+		if (!synonym.equals(getName())) {
+			if (synonyms == null) {
+				synonyms = new ArrayList<String>();
+			}
+			synonyms.add(synonym);
+		}
 	}
 
 	@Override
@@ -167,7 +173,13 @@ public class SimpleCycRecord implements CycRecord
 
 	@Override
 	public void setSynonyms(Collection<String> synonyms) {
-		this.synonyms = synonyms;
+		this.synonyms = new ArrayList<String>(synonyms.size());
+		String name = getName();
+		for (String synonym : synonyms) {
+			if (!synonym.equals(name)) {
+				this.synonyms.add(synonym);
+			}
+		}
 	}
 
 }

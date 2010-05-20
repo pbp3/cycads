@@ -3,6 +3,7 @@
  */
 package org.cycads.extract.cyc;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class SimpleCycFunction implements CycFunction
@@ -12,10 +13,7 @@ public class SimpleCycFunction implements CycFunction
 	Collection<String>	synonyms;
 
 	public SimpleCycFunction(String name) {
-		if (name == null || name.length() == 0) {
-			throw new RuntimeException("Function without name.");
-		}
-		this.name = name;
+		setName(name);
 	}
 
 	public String getName() {
@@ -30,19 +28,33 @@ public class SimpleCycFunction implements CycFunction
 	}
 
 	public void setComments(Collection<String> comments) {
-		this.comments = comments;
+		this.comments = new ArrayList<String>(comments);
 	}
 
 	public void setSynonyms(Collection<String> synonyms) {
-		this.synonyms = synonyms;
+		this.synonyms = new ArrayList<String>(synonyms.size());
+		String name = getName();
+		for (String synonym : synonyms) {
+			if (!synonym.equals(name)) {
+				this.synonyms.add(synonym);
+			}
+		}
 	}
 
 	public void addComment(String comment) {
+		if (synonyms == null) {
+			synonyms = new ArrayList<String>();
+		}
 		this.comments.add(comment);
 	}
 
 	public void addSynonym(String synonym) {
-		this.synonyms.add(synonym);
+		if (!synonym.equals(getName())) {
+			if (synonyms == null) {
+				synonyms = new ArrayList<String>();
+			}
+			this.synonyms.add(synonym);
+		}
 	}
 
 	public Collection<String> getComments() {
