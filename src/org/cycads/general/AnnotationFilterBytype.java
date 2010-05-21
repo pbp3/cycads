@@ -35,10 +35,11 @@ public class AnnotationFilterBytype implements AnnotationFilter
 		Collection<Type> annotTypes = annot.getTypes();
 		for (Type type : types) {
 			if (annotTypes.contains(type)) {
-				return true;
+				return false;
 			}
 		}
-		return false;
+		// if filter is nothing 
+		return true;
 	}
 
 }
