@@ -240,7 +240,7 @@ public class Config
 	}
 
 	public static String getClusterMsgChangeTarget(String clusterName) {
-		return getStringOptional("AnnotationGenerator." + clusterName + ".msgChange");
+		return getStringOptional("AnnotationGenerator." + clusterName + ".changeToMsg");
 	}
 
 	// .file .weight .valueDefault

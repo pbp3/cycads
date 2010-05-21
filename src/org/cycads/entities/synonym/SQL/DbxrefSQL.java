@@ -216,4 +216,9 @@ public class DbxrefSQL extends BasicEntityAbstractSQL implements Dbxref
 		return TypeSQL.getType(Dbxref.OBJECT_TYPE_NAME, con);
 	}
 
+	@Override
+	public int hashCode() {
+		return toString().hashCode();
+	}
+
 }

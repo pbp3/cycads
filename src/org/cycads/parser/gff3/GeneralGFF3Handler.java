@@ -442,7 +442,8 @@ public class GeneralGFF3Handler implements GFF3DocumentHandler
 		Subsequence subseq = seq.getSubsequence(simpleSubsequence.getStart(), simpleSubsequence.getEnd(),
 			simpleSubsequence.getIntrons());
 		if (subseq == null) {
-			subseq = seq.createSubsequence(simpleSubsequence.getStart(), simpleSubsequence.getEnd(), intronsParent);
+			subseq = seq.createSubsequence(simpleSubsequence.getStart(), simpleSubsequence.getEnd(),
+				simpleSubsequence.getIntrons());
 		}
 
 		AnnotationMethod annotationMethod = factory.getAnnotationMethod(GFF3FileConfig.getAnnotationMethod(record));
