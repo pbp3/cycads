@@ -197,9 +197,13 @@ public class Config
 	}
 
 	// Annotation Generator
-
+	
 	public static String annotationGeneratorFileName() {
 		return getStringOptional("AnnotationGenerator.fileName");
+	}
+	
+	public static String annotationGeneratorFileHeader() {
+		return getStringOptional("AnnotationGenerator.pf.header");
 	}
 
 	public static int annotationGeneratorOrganismNumber() {
@@ -683,5 +687,7 @@ public class Config
 	public static Pattern dbxrefSynonymLoaderRemoveLineRegex() {
 		return Pattern.compile(getStringMandatory("dbxrefSynonymLoader.file.removeLineRegex"));
 	}
+
+
 
 }
