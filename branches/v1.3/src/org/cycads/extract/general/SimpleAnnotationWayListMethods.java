@@ -27,8 +27,12 @@ public class SimpleAnnotationWayListMethods extends ArrayList<List<AnnotationMet
 			boolean firstMethod = true;
 			for (AnnotationMethod method : methods) {
 				if (firstMethod) {
+					firstMethod = false;
 					if (!firstList) {
 						strBuf.append(ParametersDefault.getMethodWaySeparator());
+					}
+					else {
+						firstList = false;
 					}
 				}
 				else {
@@ -79,9 +83,9 @@ public class SimpleAnnotationWayListMethods extends ArrayList<List<AnnotationMet
 		if (methodsList == null || methodsList.isEmpty()) {
 			return false;
 		}
-		//		if (this.isEmpty()) {
-		//			add(new ArrayList<AnnotationMethod>());
-		//		}
+		if (this.isEmpty()) {
+			add(new ArrayList<AnnotationMethod>());
+		}
 		SimpleAnnotationWayListMethods cloneOldThis = this.clone();
 		boolean first = true;
 		for (List<AnnotationMethod> methodList : methodsList) {
