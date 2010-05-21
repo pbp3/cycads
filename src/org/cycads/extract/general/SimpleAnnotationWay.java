@@ -72,7 +72,8 @@ public class SimpleAnnotationWay extends ArrayList<Object> implements Annotation
 	@Override
 	public AnnotationWayListMethods getMethods() {
 		AnnotationWayListMethods ret = new SimpleAnnotationWayListMethods();
-		for (int i = 1; i < size() - 1; i++) {
+		for (int i = 0; i <= size() - 1; i++) {
+			//			for (int i = 1; i < size() - 1; i++) {
 			Object obj = get(i);
 			if (obj instanceof Annotation && ParametersDefault.isValidAnnotForMethods(((Annotation) obj))) {
 				ret.addToAll(((Annotation) obj).getAnnotationMethod());
