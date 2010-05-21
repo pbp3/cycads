@@ -24,9 +24,9 @@ public class SimpleAnnotationWayList extends ArrayList<AnnotationWay> implements
 
 	@Override
 	public AnnotationWayListMethods getMethods() {
-		AnnotationWayListMethods ret = new SimpleAnnotationWayListMethods(size());
+		AnnotationWayListMethods ret = new SimpleAnnotationWayListMethods();
 		for (AnnotationWay way : this) {
-			ret.add(way.getMethods());
+			ret.addAll(way.getMethods());
 		}
 		return ret;
 	}
@@ -49,7 +49,7 @@ public class SimpleAnnotationWayList extends ArrayList<AnnotationWay> implements
 		if (this.isEmpty() || obj == null) {
 			return;
 		}
-		if (obj instanceof AnnotationWayList) {
+		if (obj instanceof AnnotationWayList && !(obj instanceof AnnotationCluster)) {
 			AnnotationWayList annotationWayList = (AnnotationWayList) obj;
 			if (!annotationWayList.isEmpty()) {
 				ArrayList<AnnotationWay> waysThis = new ArrayList<AnnotationWay>(this);
