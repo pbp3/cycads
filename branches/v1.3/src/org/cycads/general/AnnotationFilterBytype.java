@@ -13,10 +13,6 @@ public class AnnotationFilterBytype implements AnnotationFilter
 {
 	Collection<Type>	types;
 
-	public AnnotationFilterBytype() {
-		this.types = new ArrayList<Type>();
-	}
-
 	public AnnotationFilterBytype(Collection<Type> types) {
 		this.types = types;
 	}
@@ -26,20 +22,15 @@ public class AnnotationFilterBytype implements AnnotationFilter
 		types.add(type);
 	}
 
-	public void addType(Type type) {
-		types.add(type);
-	}
-
 	@Override
 	public boolean isValid(Annotation annot) {
 		Collection<Type> annotTypes = annot.getTypes();
 		for (Type type : types) {
 			if (annotTypes.contains(type)) {
-				return false;
+				return true;
 			}
 		}
-		// if filter is nothing 
-		return true;
+		return false;
 	}
 
 }
