@@ -10,12 +10,14 @@ public class EndAnnotationWaysGetter implements AnnotationWaysGetter
 
 	@Override
 	public AnnotationWayList getAnnotationWays(Object obj) {
-		if (obj instanceof AnnotationCluster) {
-			return (AnnotationCluster) obj;
-		}
-		else {
-			return new SimpleAnnotationWayList(new SimpleAnnotationWay(obj));
-		}
+		//		if (obj instanceof AnnotationCluster) {
+		//			AnnotationCluster cluster = (AnnotationCluster) obj;
+		//			//			Object target
+		//			return cluster;
+		//		}
+		//		else {
+		return new SimpleAnnotationWayList(new SimpleAnnotationWay(obj));
+		//		}
 	}
 
 	public static EndAnnotationWaysGetter getInstance() {

@@ -7,9 +7,13 @@ import java.util.List;
 
 import org.cycads.entities.annotation.AnnotationMethod;
 
-public interface AnnotationWayListMethods
+public interface AnnotationWayListMethods extends List<List<AnnotationMethod>>
 {
 
-	public boolean add(List<AnnotationMethod> methods);
+	public boolean addToAll(AnnotationWayListMethods methodsList);
+
+	public boolean addToAll(List<AnnotationMethod> methods);
+
+	public boolean addToAll(AnnotationMethod method);
 
 }
