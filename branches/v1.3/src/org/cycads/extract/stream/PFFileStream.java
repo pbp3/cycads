@@ -50,8 +50,10 @@ public class PFFileStream implements CycStream
 			out.println("FUNCTION" + "\t" + function.getName());
 			StringBuffer comment = new StringBuffer();
 			for (String fComment : function.getComments()) {
+				if (comment.length() > 0) {
+					comment.append(ParametersDefault.getPFFileFunctionCommentSeparator());
+				}
 				comment.append(fComment);
-				comment.append(ParametersDefault.getPFFileFunctionCommentSeparator());
 			}
 			if (comment.length() > 0) {
 				out.println("FUNCTION-COMMENT" + "\t" + comment.substring(0, comment.length() - 1));

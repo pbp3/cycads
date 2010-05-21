@@ -52,7 +52,8 @@ public class SimpleAnnotationWayList extends ArrayList<AnnotationWay> implements
 		if (obj instanceof AnnotationWayList) {
 			AnnotationWayList annotationWayList = (AnnotationWayList) obj;
 			if (!annotationWayList.isEmpty()) {
-				for (AnnotationWay way : this) {
+				ArrayList<AnnotationWay> waysThis = new ArrayList<AnnotationWay>(this);
+				for (AnnotationWay way : waysThis) {
 					for (int i = 0; i < annotationWayList.size() - 1; i++) {
 						AnnotationWay wayClone = new SimpleAnnotationWay(way);
 						wayClone.addFirst(annotationWayList.get(i));
