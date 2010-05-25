@@ -3,6 +3,8 @@
  */
 package org.cycads.extract.general;
 
+import org.cycads.extract.score.AnnotationWayListScoreSystem;
+
 public interface AnnotationCluster extends AnnotationWayList
 {
 
@@ -14,5 +16,9 @@ public interface AnnotationCluster extends AnnotationWayList
 	public Object getTarget();
 
 	public double getScore();
+
+	public AnnotationWayListScoreSystem getScoreSystem();
+
+	void setScoreSystem(AnnotationWayListScoreSystem annotationWayListScoreSystem);
 
 }
