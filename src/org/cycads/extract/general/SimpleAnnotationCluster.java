@@ -58,10 +58,12 @@ public class SimpleAnnotationCluster extends SimpleAnnotationWayList implements 
 		return target;
 	}
 
+	@Override
 	public AnnotationWayListScoreSystem getScoreSystem() {
 		return annotationWayListScoreSystem;
 	}
 
+	@Override
 	public void setScoreSystem(AnnotationWayListScoreSystem annotationWayListScoreSystem) {
 		if (annotationWayListScoreSystem == null) {
 			annotationWayListScoreSystem = new SimpleAnnotationWayListScoreSystem(null);

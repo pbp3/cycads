@@ -4,6 +4,7 @@
 package org.cycads.extract.score;
 
 import org.cycads.entities.annotation.Annotation;
+import org.cycads.extract.general.AnnotationCluster;
 import org.cycads.extract.general.AnnotationWay;
 import org.cycads.extract.general.AnnotationWayList;
 import org.cycads.general.ParametersDefault;
@@ -26,6 +27,7 @@ public class SimpleAnnotationWayListScoreSystem implements AnnotationWayListScor
 		double scoreWay;
 		Object objPrevious;
 		Annotation annot;
+		AnnotationCluster cluster;
 		for (AnnotationWay annotationWay : annotationWayList) {
 			if (!annotationWay.isEmpty()) {
 				scoreWay = 1;
@@ -36,6 +38,10 @@ public class SimpleAnnotationWayListScoreSystem implements AnnotationWayListScor
 						if (annot.getSource().equals(objPrevious) && ParametersDefault.isValidAnnotForScore(annot)) {
 							scoreWay = scoreWay * annotationScoreSystem.getScore((Annotation) obj);
 						}
+					}
+					if (obj instanceof AnnotationCluster) {
+						cluster = (AnnotationCluster) obj;
+						scoreWay = scoreWay * cluster.getScore();
 					}
 					objPrevious = obj;
 				}
