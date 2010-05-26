@@ -48,7 +48,7 @@ public class SubseqsFactory implements ObjectFactory<Collection<Subsequence>>
 	public Collection<Subsequence> create(String[] values) throws ParserException {
 		Collection<Subsequence> ret = new ArrayList<Subsequence>(1);
 		Collection<BasicEntity> objs = existedEntitiesFactoryBySynonym.create(values);
-		if (objs != null || !objs.isEmpty()) {
+		if (objs != null && !objs.isEmpty()) {
 			for (BasicEntity obj : objs) {
 				if (obj instanceof Association) {
 					Association assoc = (Association) obj;

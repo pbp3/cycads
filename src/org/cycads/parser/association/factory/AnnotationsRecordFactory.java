@@ -70,28 +70,31 @@ public class AnnotationsRecordFactory<S extends BasicEntity, T extends BasicEnti
 			parents = parentsFactory.create(values);
 		}
 
-		if (sources == null || targets == null) {
+		if (sources == null || targets == null || method == null) {
 			return null;
 		}
 
 		Collection<Annotation<S, T>> ret = new ArrayList<Annotation<S, T>>(sources.size() * targets.size());
 		for (S source : sources) {
 			for (T target : targets) {
-				Annotation<S, T> annotation = annotationFactory.createAnnotation(source, target, types, method, score);
-				ret.add(annotation);
-				if (notes != null) {
-					for (Note note : notes) {
-						annotation.addNote(note.getType(), note.getValue());
+				if (source != null && target != null) {
+					Annotation<S, T> annotation = annotationFactory.createAnnotation(source, target, types, method,
+						score);
+					ret.add(annotation);
+					if (notes != null) {
+						for (Note note : notes) {
+							annotation.addNote(note.getType(), note.getValue());
+						}
 					}
-				}
-				if (synonyms != null) {
-					for (Dbxref synonym : synonyms) {
-						annotation.addSynonym(synonym);
+					if (synonyms != null) {
+						for (Dbxref synonym : synonyms) {
+							annotation.addSynonym(synonym);
+						}
 					}
-				}
-				if (parents != null) {
-					for (Annotation parent : parents) {
-						annotation.addParent(parent);
+					if (parents != null) {
+						for (Annotation parent : parents) {
+							annotation.addParent(parent);
+						}
 					}
 				}
 			}
