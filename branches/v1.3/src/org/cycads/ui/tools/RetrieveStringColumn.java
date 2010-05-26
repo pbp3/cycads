@@ -47,7 +47,7 @@ public class RetrieveStringColumn
 		if (regexRetrieve == null) {
 			return;
 		}
-		File fileOut = Tools.getFileToSave(args, 6, file.getName() + "." + column, "Choose the file to save");
+		File fileOut = Tools.getFileToSave(args, 5, file.getName() + "." + column, "Choose the file to save");
 		if (fileOut == null) {
 			return;
 		}
