@@ -25,6 +25,9 @@ public class IndependentDbxrefFactory<X extends Dbxref> implements IndependentOb
 
 	@Override
 	public X create(String value) throws ParserException {
+		if (value == null || value.length() == 0) {
+			return null;
+		}
 		String[] strs = Tools.split(value, dbxrefSeparator);
 		if (strs == null || strs.length == 0) {
 			return null;
