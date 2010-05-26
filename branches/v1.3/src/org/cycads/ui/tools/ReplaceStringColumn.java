@@ -66,7 +66,6 @@ public class ReplaceStringColumn
 			int error = 0;
 			int lineOk = 0;
 			while ((line = br.readLine()) != null) {
-				line = line.trim();
 				if (line.length() > 0 && !line.startsWith(lineComment)) {
 					String[] strs = Tools.split(line, separator);
 					if (strs.length > column) {
@@ -81,6 +80,9 @@ public class ReplaceStringColumn
 					else {
 						error++;
 					}
+				}
+				else {
+					out.println(line);
 				}
 			}
 			System.out.println("Processed:" + lineOk);
