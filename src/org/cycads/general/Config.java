@@ -197,11 +197,11 @@ public class Config
 	}
 
 	// Annotation Generator
-	
+
 	public static String annotationGeneratorFileName() {
 		return getStringOptional("AnnotationGenerator.fileName");
 	}
-	
+
 	public static String annotationGeneratorFileHeader() {
 		return getStringOptional("AnnotationGenerator.pf.header");
 	}
@@ -293,19 +293,19 @@ public class Config
 	}
 
 	public static int subseqDbxrefAnnotationLoaderAnnotColumnIndex() {
-		return getInt("subseqDbxrefAnnotationLoader.subseqColumnIndex");
+		return getInt("subseqDbxrefAnnotationLoader.sourceColumnIndex");
 	}
 
 	public static String subseqDbxrefAnnotationLoaderAnnotDBName() {
-		return getStringOptional("subseqDbxrefAnnotationLoader.subseqDBName");
+		return getStringOptional("subseqDbxrefAnnotationLoader.sourceDBName");
 	}
 
 	public static int subseqDbxrefAnnotationLoaderDbxrefColumnIndex() {
-		return getInt("subseqDbxrefAnnotationLoader.dbxrefColumnIndex");
+		return getInt("subseqDbxrefAnnotationLoader.targetColumnIndex");
 	}
 
 	public static String subseqDbxrefAnnotationLoaderDbxrefDBName() {
-		return getStringOptional("subseqDbxrefAnnotationLoader.dbxrefDBName");
+		return getStringOptional("subseqDbxrefAnnotationLoader.targetDBName");
 	}
 
 	public static int subseqDbxrefAnnotationLoaderScoreColumnIndex() {
@@ -575,19 +575,19 @@ public class Config
 	}
 
 	public static int entitySynonymLoaderSourceColumnIndex() {
-		return getInt("entitySynonymLoader.annotColumnIndex");
+		return getInt("entitySynonymLoader.sourceColumnIndex");
 	}
 
 	public static String entitySynonymLoaderSourceDBName() {
-		return getStringOptional("entitySynonymLoader.annotDBName");
+		return getStringOptional("entitySynonymLoader.sourceDBName");
 	}
 
 	public static int entitySynonymLoaderSynonymColumnIndex() {
-		return getInt("entitySynonymLoader.dbxrefColumnIndex");
+		return getInt("entitySynonymLoader.synonymColumnIndex");
 	}
 
 	public static String entitySynonymLoaderSynonymDBName() {
-		return getStringOptional("entitySynonymLoader.dbxrefDBName");
+		return getStringOptional("entitySynonymLoader.synonymDBName");
 	}
 
 	public static String entitySynonymLoaderSourcesDelimiter() {
@@ -637,19 +637,19 @@ public class Config
 	}
 
 	public static int dbxrefSynonymLoaderSourceColumnIndex() {
-		return getInt("dbxrefSynonymLoader.annotColumnIndex");
+		return getInt("dbxrefSynonymLoader.sourceColumnIndex");
 	}
 
 	public static String dbxrefSynonymLoaderSourceDBName() {
-		return getStringOptional("dbxrefSynonymLoader.annotDBName");
+		return getStringOptional("dbxrefSynonymLoader.sourceDBName");
 	}
 
 	public static int dbxrefSynonymLoaderSynonymColumnIndex() {
-		return getInt("dbxrefSynonymLoader.dbxrefColumnIndex");
+		return getInt("dbxrefSynonymLoader.synonymColumnIndex");
 	}
 
 	public static String dbxrefSynonymLoaderSynonymDBName() {
-		return getStringOptional("dbxrefSynonymLoader.dbxrefDBName");
+		return getStringOptional("dbxrefSynonymLoader.synonymDBName");
 	}
 
 	public static String dbxrefSynonymLoaderSourcesDelimiter() {
@@ -687,7 +687,5 @@ public class Config
 	public static Pattern dbxrefSynonymLoaderRemoveLineRegex() {
 		return Pattern.compile(getStringMandatory("dbxrefSynonymLoader.file.removeLineRegex"));
 	}
-
-
 
 }
