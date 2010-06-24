@@ -101,6 +101,7 @@ public class DbxrefDbxrefAnnotationLoader
 		Integer methodColumnIndex = Tools.getIntegerOptional(args, 7,
 			Config.dbxrefDbxrefAnnotationLoaderMethodColumnIndex());
 
+		// change null values to file column factory
 		ObjectFactory<Collection<Annotation>> parentsFactory = null;
 		ObjectFactory<Collection<Dbxref>> synonymsFactory = null;
 		ObjectFactory<Collection<Note>> notesFactory = null;
