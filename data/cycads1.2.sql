@@ -1,10 +1,10 @@
---DROP SCHEMA IF EXISTS `cycads` ;
---CREATE SCHEMA IF NOT EXISTS `cycads`;
+-- DROP SCHEMA IF EXISTS `cycads` ;
+-- CREATE SCHEMA IF NOT EXISTS `cycads`;
 
 USE `cycads`;
 
---GRANT ALL PRIVILEGES ON cycads.* TO 'cycads'@'localhost' IDENTIFIED BY 'secret password';
---GRANT ALL PRIVILEGES ON cycads.* TO 'cycads'@'%' IDENTIFIED BY 'secret password';
+-- GRANT ALL PRIVILEGES ON cycads.* TO 'cycads'@'localhost' IDENTIFIED BY 'secret password';
+-- GRANT ALL PRIVILEGES ON cycads.* TO 'cycads'@'%' IDENTIFIED BY 'secret password';
 
 -- -----------------------------------------------------
 -- Table `Organism`
@@ -419,7 +419,7 @@ CREATE  TABLE IF NOT EXISTS `Feature` (
     ON UPDATE CASCADE)
 ENGINE = InnoDB;
 
---Warning: Depends on the database manager is necessary the SUPER privilegies to create the triggers
+-- Warning: Depends on the database manager is necessary the SUPER privilegies to create the triggers
 DELIMITER //
 CREATE TRIGGER del_Annotation AFTER DELETE ON Annotation
 FOR EACH ROW 
