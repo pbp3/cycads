@@ -1,15 +1,1 @@
-Cycads home page http://pbil.univ-lyon1.fr/software/cycads/images/pisum_logo.jpg
-
-= Introduction =
-
-Introduction paragraph
-
-
-= Details =
-
-Current home page [http://acypicyc.cycadsys.org]
-
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+Cycads home page : http://www4.inra.fr/cycads_eng/
