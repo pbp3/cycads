@@ -145,9 +145,9 @@ public class SubseqDbxrefAnnotationLoader
 			(EntityFinder) factory, new SimpleObjectsFactory<Dbxref>(subseqColumnIndex, columnDelimiter,
 				objectsSeparator, objectsDelimiter, sourceFactory)));
 
-		columnDelimiter = Config.dbxrefDbxrefAnnotationLoaderTargetColumnDelimiter();
-		objectsDelimiter = Config.dbxrefDbxrefAnnotationLoaderTargetsDelimiter();
-		objectsSeparator = Config.dbxrefDbxrefAnnotationLoaderTargetsSeparator();
+		columnDelimiter = Config.subseqDbxrefAnnotationLoaderTargetColumnDelimiter();
+		objectsDelimiter = Config.subseqDbxrefAnnotationLoaderTargetsDelimiter();
+		objectsSeparator = Config.subseqDbxrefAnnotationLoaderTargetsSeparator();
 
 		ObjectFactory<Collection<Dbxref>> targetsFactory = new SimpleObjectsFactory<Dbxref>(dbxrefColumnIndex,
 			columnDelimiter, objectsSeparator, objectsDelimiter, targetFactory);
