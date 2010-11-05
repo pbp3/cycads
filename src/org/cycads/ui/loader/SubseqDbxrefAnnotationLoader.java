@@ -137,9 +137,9 @@ public class SubseqDbxrefAnnotationLoader
 		IndependentDbxrefFactory targetFactory = new IndependentDbxrefFactory(
 			ParametersDefault.getDbxrefToStringSeparator(), dbNameTarget, factory);
 
-		String columnDelimiter = Config.dbxrefDbxrefAnnotationLoaderSourceColumnDelimiter();
-		String objectsDelimiter = Config.dbxrefDbxrefAnnotationLoaderSourcesDelimiter();
-		String objectsSeparator = Config.dbxrefDbxrefAnnotationLoaderSourcesSeparator();
+		String columnDelimiter = Config.subseqDbxrefAnnotationLoaderSourceColumnDelimiter();
+		String objectsDelimiter = Config.subseqDbxrefAnnotationLoaderSourcesDelimiter();
+		String objectsSeparator = Config.subseqDbxrefAnnotationLoaderSourcesSeparator();
 
 		ObjectFactory<Collection<Subsequence>> sourcesFactory = new SubseqsFactory(new ExistedEntitiesFactoryBySynonym(
 			(EntityFinder) factory, new SimpleObjectsFactory<Dbxref>(subseqColumnIndex, columnDelimiter,
