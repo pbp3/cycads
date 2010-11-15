@@ -217,8 +217,8 @@ public class Messages
 		return getString("pfFile.extract.chooseGoThreshold");
 	}
 	
-	public static String CDSECGOGeneratorChooseFileFormat() {
-		return getString("CDSECGO.extract.ChooseFileFormat");
+	public static String AnnotationGeneratorChooseFileFormat() {
+		return getString("AnnotationGenerator.ChooseFileFormat");
 	}
 
 	//	public static String pfGeneratorChooseKoThreshold() {
