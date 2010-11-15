@@ -88,7 +88,7 @@ public class AnnotationGenerator {
 		}
 		
 		int fileFormat = Tools.getInteger(args, 7, Config.annotationGeneratorOutFormat(),
-				Messages.CDSECGOGeneratorChooseFileFormat());
+				Messages.AnnotationGeneratorChooseFileFormat());
 
 		Progress progress = new ProgressPrintInterval(System.out, Messages.pfGeneratorStepShowInterval());
 		try {
