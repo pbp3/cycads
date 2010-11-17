@@ -48,7 +48,13 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 		String id = getID(annot);
 		String prodtype = clusterRepository.getFirstTargetStr(PRODUCT_TYPE, annot);
 		SimpleCycRecord record = new SimpleCycRecord(prodtype, id);
-		record.setName(clusterRepository.getFirstTargetStr(GENE_NAME, annot));
+		
+		
+		String geneName = clusterRepository.getFirstTargetStr(GENE_NAME, annot);
+		if (geneName == null) { // PBP : trying to get the gene name by the first synonym name
+			geneName = clusterRepository.getFirstTargetStr(GENE_SYNONYMS, annot);
+		}
+		record.setName(geneName);
 		record.setSynonyms(clusterRepository.getTargetsStr(GENE_SYNONYMS, annot));
 		record.setComments(clusterRepository.getTargetsStr(GENE_COMMENTS, annot));
 		record.setDBLinks(clusterRepository.getTargetsStr(GENE_DBLINKS, annot));
