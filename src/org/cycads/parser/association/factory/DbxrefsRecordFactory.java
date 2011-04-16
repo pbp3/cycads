@@ -26,12 +26,14 @@ public class DbxrefsRecordFactory implements ObjectFactory<Collection<Dbxref>>
 	@Override
 	public Collection<Dbxref> create(String[] values) throws ParserException {
 		Collection<Dbxref> dbxrefs = dbxrefsFactory.create(values);
+		Collection<Note> notes = null;
 		if (dbxrefs == null || dbxrefs.isEmpty()) {
 			return new ArrayList<Dbxref>();
 		}
-		Collection<Note> notes = notesFactory.create(values);
+		if(notesFactory !=null) {
+			notes = notesFactory.create(values);
+		}
 		Collection<Dbxref> synonyms = synonymsFactory.create(values);
-
 		for (Dbxref dbxref : dbxrefs) {
 			if (notes != null) {
 				for (Note note : notes) {
