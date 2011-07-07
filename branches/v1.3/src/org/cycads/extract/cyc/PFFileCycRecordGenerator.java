@@ -60,10 +60,12 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 		record.setDBLinks(clusterRepository.getTargetsStr(GENE_DBLINKS, annot));
 
 		String functionName = clusterRepository.getFirstTargetStr(FUNCTION_NAME, annot);
-		CycFunction function = new SimpleCycFunction(functionName);
-		function.setSynonyms(clusterRepository.getTargetsStr(FUNCTION_SYNONYMS, annot));
-		function.setComments(clusterRepository.getTargetsStr(FUNCTION_COMMENTS, annot));
-		record.addFunction(function);
+		if (functionName != null) { // tRNA, rRNA and other may have any function
+			CycFunction function = new SimpleCycFunction(functionName);
+			function.setSynonyms(clusterRepository.getTargetsStr(FUNCTION_SYNONYMS, annot));
+			function.setComments(clusterRepository.getTargetsStr(FUNCTION_COMMENTS, annot));
+			record.addFunction(function);
+		}	
 
 		Object obj = clusterRepository.getFirstTarget(FUNCTION_SSEQUENCE, annot);
 		if (!(obj instanceof Subsequence)) {
