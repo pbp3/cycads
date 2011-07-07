@@ -46,21 +46,26 @@ public class PFFileStream implements CycStream
 		//		}
 
 		Collection<CycFunction> functions = cycRecord.getFunctions();
-		for (CycFunction function : functions) {
-			out.println("FUNCTION" + "\t" + function.getName());
-			StringBuffer comment = new StringBuffer();
-			for (String fComment : function.getComments()) {
-				if (comment.length() > 0) {
-					comment.append(ParametersDefault.getPFFileFunctionCommentSeparator());
+		if (functions.isEmpty()) {
+			out.println("FUNCTION" + "\t" + "ORF"); // PBP : The word ORF should be used if the function is unknown.
+		}
+		else  {
+			for (CycFunction function : functions) {
+				out.println("FUNCTION" + "\t" + function.getName());
+				StringBuffer comment = new StringBuffer();
+				for (String fComment : function.getComments()) {
+					if (comment.length() > 0) {
+						comment.append(ParametersDefault.getPFFileFunctionCommentSeparator());
+					}
+					comment.append(fComment);
 				}
-				comment.append(fComment);
-			}
-			if (comment.length() > 0) {
-				out.println("FUNCTION-COMMENT" + "\t" + comment.substring(0, comment.length() - 1));
-			}
-			for (String synonym : function.getSynonyms()) {
-				if (synonym != null && synonym.length() > 0) {
-					out.println("FUNCTION-SYNONYM" + "\t" + synonym);
+				if (comment.length() > 0) {
+					out.println("FUNCTION-COMMENT" + "\t" + comment.substring(0, comment.length() - 1));
+				}
+				for (String synonym : function.getSynonyms()) {
+					if (synonym != null && synonym.length() > 0) {
+						out.println("FUNCTION-SYNONYM" + "\t" + synonym);
+					}
 				}
 			}
 		}
@@ -73,7 +78,7 @@ public class PFFileStream implements CycStream
 				}
 			}
 		}
-
+/* See bellow, output changed according to pathologic file format : out.println("GO" + "\t" + go);
 		Collection<String> gos = cycRecord.getGOs();
 		if (gos != null) {
 			for (String go : gos) {
@@ -82,6 +87,7 @@ public class PFFileStream implements CycStream
 				}
 			}
 		}
+*/
 
 		Collection<String> dbLinks = cycRecord.getDBLinks();
 		if (dbLinks != null) {
@@ -106,6 +112,16 @@ public class PFFileStream implements CycStream
 			for (String syn : synonyms) {
 				if (syn != null && syn.length() > 0) {
 					out.println("SYNONYM" + "\t\t" + syn);
+				}
+			}
+		}
+		
+
+		Collection<String> gos = cycRecord.getGOs();
+		if (gos != null) {
+			for (String go : gos) {
+				if (go != null && go.length() > 0) {
+					out.println("GO" + "\t" + go);
 				}
 			}
 		}
