@@ -201,6 +201,10 @@ public class Config
 	public static String annotationGeneratorFileName() {
 		return getStringOptional("AnnotationGenerator.fileName");
 	}
+	
+	public static String annotationGeneratorDirectoryName() {
+		return getStringOptional("AnnotationGenerator.directoryName");
+	}
 
 	public static String annotationGeneratorFileHeader() {
 		return getStringOptional("AnnotationGenerator.pf.header");
