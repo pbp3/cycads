@@ -117,6 +117,13 @@ public class AnnotationGenerator {
 						outStream = new ByFunctionTextStream(file, Config.annotationGeneratorFileHeader().toString());
 						break;
 					}
+				case 4: // Multiple PF files, one per sequence with "genetic-elements.dat" autogeneration
+					{ // each file is defined using the seq Name bellow
+						file.delete(); //closing the unused single file
+						// TODO: preparing list of contigs for the genetic-elements.dat file
+						break;
+					}
+			
 				default:
 					{
 
@@ -130,6 +137,16 @@ public class AnnotationGenerator {
 			CycRecordGenerator cycRecordGenerator = new PFFileCycRecordGenerator(cycIdGenerator, repository,
 				ecThreshold, goThreshold);
 			for (Sequence seq : seqs) {
+				if (fileFormat == 4) { // case multiple PF Files
+					file = Tools.getFileToSaveFrom(args, 0, Config.annotationGeneratorDirectoryName(), Messages.pfGeneratorChooseDirectory(), seq.getDbName()+"_"+seq.getAccession(), ".pf");
+					if (file == null) {
+						return;
+					}
+					else {
+						outStream = new PFFileStream(file, Config.annotationGeneratorPfFileHeader(), sequenceLocation);
+						// TODO: automatically generate part of the genetic-elements.dat file
+					}
+				}
 				Collection<Subsequence> subseqs = seq.getSubsequences();
 				for (Subsequence subseq : subseqs) {
 					Collection<Annotation<Subsequence, Feature>> annots = (Collection<Annotation<Subsequence, Feature>>) subseq.getAnnotationsByType(
