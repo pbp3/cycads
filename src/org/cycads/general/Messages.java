@@ -186,6 +186,10 @@ public class Messages
 	public static String pfGeneratorChooseFile() {
 		return getString("pfFile.extract.chooseFile");
 	}
+	
+	public static String pfGeneratorChooseDirectory() {
+		return getString("pfFile.extract.chooseDirectory");
+	}
 
 	public static String pfGeneratorChooseSeqSynonym() {
 		return getString("pfFile.extract.chooseSeqSynonym");
