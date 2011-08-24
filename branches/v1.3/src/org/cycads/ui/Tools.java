@@ -66,6 +66,38 @@ public class Tools
 		}
 		return fc.getSelectedFile();
 	}
+	
+	public static File getFileToSaveFrom(String[] args, int pos, String directoryNameDefault, String fileChooserMsg, String prefix, String suffix) {
+		String directoryName;
+		File file = null;
+		if (args.length > pos) {
+			directoryName = args[pos];
+			if (!directoryName.endsWith("/")) {
+				directoryName = directoryName + "/";
+			}
+			file = new File(directoryName + prefix + suffix);
+			return file;
+		}
+		else {
+			directoryName = directoryNameDefault;
+		}
+		if (directoryName != null) {
+			if (!directoryName.endsWith("/")) {
+				directoryName = directoryName + "/";
+			}
+			file = new File(directoryName + prefix + suffix);
+		}
+		JFileChooser fc = new JFileChooser();
+		fc.setDialogTitle(fileChooserMsg);
+		if (file != null) {
+			fc.setSelectedFile(file);
+		}
+		int returnVal = fc.showSaveDialog(null);
+		if (returnVal != JFileChooser.APPROVE_OPTION) {
+			return null;
+		}
+		return fc.getSelectedFile();
+	}
 
 	public static File getDirectoryToSave(String[] args, int pos, String directoryNameDefault,
 			String directoryChooserMsg) {
