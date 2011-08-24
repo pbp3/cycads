@@ -11,7 +11,7 @@ import org.cycads.entities.synonym.Dbxref;
 import org.cycads.entities.synonym.HasSynonyms;
 
 public interface Sequence<O extends Organism< ? >, SS extends Subsequence< ? >>
-		extends Noteble, HasSynonyms, BasicEntity, Dbxref
+		extends Noteble, HasSynonyms, BasicEntity
 {
 	public static final String	ENTITY_TYPE_NAME	= "Sequence";
 
@@ -23,7 +23,9 @@ public interface Sequence<O extends Organism< ? >, SS extends Subsequence< ? >>
 
 	public int getLength();
 	
-	public Dbxref getDbxref();
+	public String getDbName();
+	
+	public String getAccession();
 
 	public String getSequenceString();
 
