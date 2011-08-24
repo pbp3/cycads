@@ -16,6 +16,7 @@ import org.cycads.entities.SQL.BasicEntityAbstractSQL;
 import org.cycads.entities.note.SQL.TypeSQL;
 import org.cycads.entities.sequence.Intron;
 import org.cycads.entities.sequence.Sequence;
+import org.cycads.entities.synonym.SQL.DbxrefSQL;
 
 public class SequenceSQL extends BasicEntityAbstractSQL implements Sequence<OrganismSQL, SubsequenceSQL>
 {
@@ -26,6 +27,7 @@ public class SequenceSQL extends BasicEntityAbstractSQL implements Sequence<Orga
 	private int				organismId;
 	private OrganismSQL		organism;
 	private String			version;
+	private DbxrefSQL		dbxref;
 
 	public SequenceSQL(int id, Connection con) throws SQLException {
 		super(id, con);
@@ -52,6 +54,16 @@ public class SequenceSQL extends BasicEntityAbstractSQL implements Sequence<Orga
 				length = 0;
 				seqStr = "";
 			}
+			stmt = con.prepareStatement("SELECT dbxref_id FROM Synonym WHERE source_id=?");
+			stmt.setInt(1, id);
+			rs = stmt.executeQuery();
+			if (rs.next()) {
+				dbxref = new DbxrefSQL(rs.getInt("dbxref_id"), con);
+			}
+			else {
+				throw new SQLException("Sequence has no Synonym:" + id);
+			}
+
 		}
 		finally {
 			if (rs != null) {
@@ -87,6 +99,15 @@ public class SequenceSQL extends BasicEntityAbstractSQL implements Sequence<Orga
 		return organism;
 	}
 
+	@Override
+	public String getDbName() {
+		return dbxref.getDbName();
+	}
+	@Override
+	public String getAccession() {
+		return dbxref.getAccession();
+	}
+	
 	@Override
 	public String getSequenceString() {
 		if (seqStr == null) {
