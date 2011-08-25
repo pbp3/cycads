@@ -144,51 +144,11 @@ public class PFFileStream implements CycStream
 		out.println();
 		out.flush();
 	}
-	
-	/*print a contig record for the genetic-elements.dat file
-	 * ID	GL363747
-	 * NAME	Contig GL363747
-	 * TYPE	:CONTIG
-	 * ANNOT-FILE	GL363747.pf
-	 */
-	public void printContig(String contigID, String contigName, String annotFileName) {
-		if (contigName == null) {
-			return;
-		}
-		out.println("ID" + "\t\t" + contigID);
-		out.println("NAME" + "\t\t" + "Contig " + contigName);
-		out.println("TYPE" + "\t" + ":CONTIG");
-		out.println("ANNOT-FILE" + "\t" + annotFileName);
-		out.println("//");
-		out.flush();
-	}
-	
-	/*print a contig list for the genetic-elements.dat file
-	 * ID	ACYPI_V2
-	 * NAME	Genome Assembly Acyr2.0
-	 * TYPE	:CHRSM
-	 * CIRCULAR?	N
-	 * SEQ-FILE	assembly2_scaffolds.fasta
-	 * CONTIG	GL363747
-	*/
-	public void printContigsList(String genElemID, String genElemName, String seqFileName, String[] contigs) {
-		if (contigs == null) {
-			return;
-		}
-		out.println("ID" + "\t\t" + genElemID);
-		out.println("NAME" + "\t\t" + genElemName);
-		out.println("TYPE" + "\t" + ":CONTIG");
-		out.println("CIRCULAR?" + "\t" + "N");
-		out.println("SEQ-FILE" + "\t" + seqFileName);
-		for (String contig : contigs) {
-			out.println("CONTIG" + "\t" + contig);
-		}
-		out.println("//");
-		out.println();
-		out.flush();
-	}
 
 	public void flush() {
 		out.flush();
+	}
+	public void close() {
+		out.close();
 	}
 }
