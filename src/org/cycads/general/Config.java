@@ -195,6 +195,22 @@ public class Config
 	public static List<Pattern> getAnnotationGeneratorFeaturesToGenerate() {
 		return getPatterns("AnnotationGenerator.feature");
 	}
+	
+	public static String annotationGeneratorGeneticElementsFileName() {
+		return getStringOptional("AnnotationGenerator.pf.geneticElementsFileName");
+	}
+	
+	public static String annotationGeneratorGenElemID() {
+		return getStringOptional("AnnotationGenerator.pf.genElemID");
+	}
+
+	public static String annotationGeneratorGenElemName() {
+		return getStringOptional("AnnotationGenerator.pf.genElemName");
+	}
+
+	public static String annotationGeneratorSeqFileName() {
+		return getStringOptional("AnnotationGenerator.pf.seqFileName");
+	}
 
 	// Annotation Generator
 
@@ -234,6 +250,7 @@ public class Config
 	public static int annotationGeneratorOutFormat() {
 		return getInt("AnnotationGenerator.outFormat");
 	}
+
 
 	public static List<String> getAnnotationClusterLocs(String clusterName) {
 		return getStrings("AnnotationGenerator." + clusterName + ".loc");
