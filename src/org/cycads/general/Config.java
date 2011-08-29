@@ -211,6 +211,19 @@ public class Config
 	public static String annotationGeneratorSeqFileName() {
 		return getStringOptional("AnnotationGenerator.pf.seqFileName");
 	}
+	
+	public static String annotationGeneratorMultipleSequencesFiles() {
+		return getStringMandatory("AnnotationGenerator.pf.multipleSequencesFiles");
+	}
+
+	
+	public static String annotationGeneratorseqFilesNamePrefix() {
+		return getStringOptional("AnnotationGenerator.pf.seqFilesName.prefix");
+	}
+	
+	public static String annotationGeneratorseqFilesNameSuffix() {
+		return getStringMandatory("AnnotationGenerator.pf.seqFilesName.suffix");
+	}
 
 	// Annotation Generator
 
