@@ -46,7 +46,7 @@ public class GeneticElementsFileStream {
 		out.println("NAME" + "\t\t" + seq.getAccession());
 		out.println("TYPE" + "\t" + ":CONTIG");
 		out.println("ANNOT-FILE" + "\t" + annotFileName);
-		if (seqfile == "y") {
+		if (seqfile.equals("y")) {
 			out.println("SEQ-FILE" + "\t" + seq.getAccession() + "." + Config.annotationGeneratorseqFilesNameSuffix());
 		}
 		out.println("//");
