@@ -38,7 +38,7 @@ public class GeneticElementsFileStream {
 	 * TYPE	:CONTIG
 	 * ANNOT-FILE	GL363747.pf
 	 */
-	public void printContig(Sequence< ? , ? > seq, String annotFileName) {
+	public void printContig(Sequence< ? , ? > seq, String annotFileName, String seqfile) {
 		if (seq == null) {
 			return;
 		}
@@ -46,6 +46,9 @@ public class GeneticElementsFileStream {
 		out.println("NAME" + "\t\t" + seq.getAccession());
 		out.println("TYPE" + "\t" + ":CONTIG");
 		out.println("ANNOT-FILE" + "\t" + annotFileName);
+		if (seqfile == "y") {
+			out.println("SEQ-FILE" + "\t" + seq.getAccession() + "." + Config.annotationGeneratorseqFilesNameSuffix());
+		}
 		out.println("//");
 		out.flush();
 	}
@@ -66,7 +69,9 @@ public class GeneticElementsFileStream {
 		out.println("NAME" + "\t\t" + genElemName);
 		out.println("TYPE" + "\t" + ":CHRSM");
 		out.println("CIRCULAR?" + "\t" + "N");
-		out.println("SEQ-FILE" + "\t" + seqFileName);
+		if (Config.annotationGeneratorMultipleSequencesFiles() == "n") {
+			out.println("SEQ-FILE" + "\t" + seqFileName);
+		}
 		for (Sequence< ? , ? > seq : seqs) {
 			out.println("CONTIG" + "\t" + seq.getDbName()+"-"+seq.getAccession());
 		}
