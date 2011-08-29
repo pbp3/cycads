@@ -152,7 +152,7 @@ public class AnnotationGenerator {
 					else {
 						outStream = new PFFileStream(file, Config.annotationGeneratorPfFileHeader(), sequenceLocation);
 						// TODO: automatically generate part of the genetic-elements.dat file
-						genElemStream.printContig(seq, file.getName());
+						genElemStream.printContig(seq, file.getName(), Config.annotationGeneratorMultipleSequencesFiles());
 					}
 				}
 				Collection<Subsequence> subseqs = seq.getSubsequences();
