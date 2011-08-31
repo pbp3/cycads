@@ -60,10 +60,6 @@ public class SequenceSQL extends BasicEntityAbstractSQL implements Sequence<Orga
 			if (rs.next()) {
 				dbxref = new DbxrefSQL(rs.getInt("dbxref_id"), con);
 			}
-			else {
-				throw new SQLException("Sequence has no Synonym:" + id);
-			}
-
 		}
 		finally {
 			if (rs != null) {
