@@ -16,6 +16,7 @@
  * Local Sequence identifier         lcl|identifier
  * 
  * use: SplitFastaFile <fastaFile> <column> <columnSeparatorRegex> <patternRegex> <fileExtension> <outputDirectory>
+ * example: SplitFastaFile assembly2_scaffolds.fasta 3 "\|" "GL\d+" ".fa" dirout
  */
 package org.cycads.ui.tools;
 
