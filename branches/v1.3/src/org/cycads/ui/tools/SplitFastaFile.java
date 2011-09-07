@@ -80,9 +80,9 @@ public class SplitFastaFile {
 						selectedText = line;
 					}
 					else {
-						String [] columns = line.split(separator);
-						if (column < columns.length) {
-							selectedText = columns[column];
+						String [] tags = Tools.split(line, separator);
+						if (column < tags.length) {
+							selectedText = tags[column];
 						}
 						else {
 							selectedText = line;
@@ -96,7 +96,7 @@ public class SplitFastaFile {
 							return;
 						}
 						out = new PrintStream(outFile);
-						out.print(line);
+						out.println(line);
 						out.flush();
 						newFileStarted = true;
 						headerLineOk++;
@@ -107,11 +107,13 @@ public class SplitFastaFile {
 					}
 				}
 				else if (newFileStarted) {
-					out.print(line);
+					out.println(line);
 					out.flush();
 				}
 			}
 			out.close();
+			System.out.println("Processed:" + headerLineOk);
+			System.out.println("Errors:" + headerLineError);
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
