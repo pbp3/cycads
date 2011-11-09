@@ -1,5 +1,6 @@
 /*
  * Created on 24/03/2010
+ * Modified on 09/11/2011 PBP
  */
 package org.cycads.extract.general;
 
@@ -43,15 +44,12 @@ public class ConfigAnnotationClustersGetterRepository implements AnnotationClust
 					}
 				}
 				String msgChangeTarget = Config.getClusterMsgChangeTarget(clusterName);
-				//		if (msgChangeTarget!=null && msgChangeTarget.length()>0)
-				//		{
-				//			
-				//		}
-
 				AnnotationWaysGetterReader annotationWaysGetterReader = new SimpleAnnotationWaysGetterReader(
 					new SimpleAnnotationWaysGetterHandler(modifiers));
 				clustersGetter = new SimpleAnnotationClustersGetter(locations, annotationWaysGetterReader, scoreSystem);
-				clustersGetter.setMsgChangeTarget(msgChangeTarget);
+				if (msgChangeTarget!=null && msgChangeTarget.length()>0) {
+					clustersGetter.setMsgChangeTarget(msgChangeTarget);		
+				}
 			}
 			clustersGetters.put(clusterName, clustersGetter);
 		}
