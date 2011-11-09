@@ -111,7 +111,9 @@ public class SplitFastaFile {
 					out.flush();
 				}
 			}
-			out.close();
+			if (out != null) {
+				out.close();
+			}
 			System.out.println("Processed:" + headerLineOk);
 			System.out.println("Errors:" + headerLineError);
 			
