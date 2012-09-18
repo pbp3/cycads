@@ -170,7 +170,11 @@ public class AnnotationGenerator {
 						}
 					}
 				}
+				if (fileFormat == 4) {
+					outStream.close();
+				}
 			}
+			outStream.close();
 			progress.finish(Messages.pfGeneratorFinalMsg(progress.getStep()));
 		}
 		catch (Exception e) {
