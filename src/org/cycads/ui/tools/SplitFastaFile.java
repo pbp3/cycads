@@ -91,6 +91,9 @@ public class SplitFastaFile {
 					matcher = pattern.matcher(selectedText);
 					if (matcher.find()) {
 						seqName = matcher.group();
+						if (out != null) {
+							out.close(); // close any open file to prevent system max_open_files
+						}
 						File outFile = Tools.getFileToSaveFrom(args, 5, "", "Choose a directory to write in:", seqName, fileExtension);
 						if (outFile == null) {
 							return;
