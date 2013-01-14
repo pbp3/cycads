@@ -68,5 +68,10 @@ public class ByFunctionTextStream extends TextStream {
 		out.flush();
 	}
 
+	@Override
+	public void close() {
+		out.close();
+	}
+
 }
 
