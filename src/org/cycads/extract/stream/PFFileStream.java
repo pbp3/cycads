@@ -125,6 +125,15 @@ public class PFFileStream implements CycStream
 				}
 			}
 		}
+		// PBP: separate phylome GOs with separate goMsg
+		Collection<String> phygos = cycRecord.getPhyGOs();
+		if (phygos != null) {
+			for (String phygo : phygos) {
+				if (phygo != null && phygo.length() > 0 && !gos.contains(phygo)) {
+					out.println("GO" + "\t" + phygo);
+				}
+			}
+		}
 
 		Collection<String> comments = cycRecord.getComments();
 		StringBuffer commentAll = new StringBuffer();

@@ -62,6 +62,13 @@ public interface CycRecord
 	public void setGOs(Collection<String> gos);
 
 	public void addGO(String go);
+	
+	//PBP: separate Phylome GO
+	public Collection<String> getPhyGOs();
+
+	public void setPhyGOs(Collection<String> gos);
+
+	public void addPhyGO(String go);
 
 	public Collection<String> getComments();
 

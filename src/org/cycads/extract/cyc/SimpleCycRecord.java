@@ -18,6 +18,7 @@ public class SimpleCycRecord implements CycRecord
 	private Collection<String>		synonyms	= new HashSet<String>();
 	private Collection<String>		ecs			= new HashSet<String>();
 	private Collection<String>		gos			= new HashSet<String>();
+	private Collection<String>		phygos		= new HashSet<String>(); //PBP: separate phylome gos
 	private int						start, end;
 	private Collection<CycIntron>	introns		= new HashSet<CycIntron>();
 
@@ -155,6 +156,23 @@ public class SimpleCycRecord implements CycRecord
 	public void setGOs(Collection<String> gos) {
 		this.gos = gos;
 	}
+	
+	//PBP : separate phylome GOs
+	@Override
+	public Collection<String> getPhyGOs() {
+		return phygos;
+	}
+
+	@Override
+	public void addPhyGO(String go) {
+		phygos.add(go);
+	}
+
+	@Override
+	public void setPhyGOs(Collection<String> gos) {
+		this.phygos = gos;
+	}
+
 
 	@Override
 	public void addSynonym(String synonym) {

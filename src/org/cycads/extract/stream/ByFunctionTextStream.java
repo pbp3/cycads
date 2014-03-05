@@ -7,6 +7,7 @@ import java.io.PrintStream;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.cycads.extract.cyc.CycFunction;
 import org.cycads.extract.cyc.CycRecord;
 import org.cycads.general.ParametersDefault;
 
@@ -23,11 +24,24 @@ public class ByFunctionTextStream extends TextStream {
 	@Override
 	public void print(CycRecord cycRecord) {
 		
-		// ECs ou GOs are concat (with ';' separator in their respective column)
+		boolean first;
+		
+		// Function, ECs ou GOs are concat (with ';' separator in their respective column)
 		out.print(cycRecord.getName() + "\t");
+		Collection<CycFunction> functions = cycRecord.getFunctions();
+		first = true;
+		for (CycFunction function : functions) {
+			if (!first) {
+				out.print(";");
+			}
+			out.print(function.getName());
+			first = false;
+		}
+		out.print("\t");
+			
 		Collection<String> ecs = cycRecord.getECs();
 		if (ecs != null) {
-			boolean first = true;
+			first = true;
 			for (String ec : ecs) {
 				if (ec != null && ec.length() > 0) {
 					if (!first) {
@@ -45,7 +59,7 @@ public class ByFunctionTextStream extends TextStream {
 		out.print("\t");
 		Collection<String> gos = cycRecord.getGOs();
 		if (gos != null) {
-			boolean first = true;
+			first = true;
 			for (String go : gos) {
 				if (go != null && go.length() > 0) {
 					if (!first) {

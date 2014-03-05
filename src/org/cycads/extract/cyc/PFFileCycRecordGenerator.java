@@ -20,6 +20,7 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 	AnnotationClustersGetterRepository	clusterRepository;
 	double								ecThreshold;
 	double								goThreshold;
+	double								phygoThreshold;
 
 	public static String				PREFIX_NAME			= "pf";
 	public static String				PRODUCT_TYPE		= PREFIX_NAME + ".productType";
@@ -33,13 +34,15 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 	public static String				FUNCTION_SSEQUENCE	= PREFIX_NAME + ".functionSSequence";
 	public static String				FUNCTION_ECS		= PREFIX_NAME + ".functionECs";
 	public static String				FUNCTION_GOS		= PREFIX_NAME + ".functionGOs";
+	public static String				FUNCTION_PHYGOS		= PREFIX_NAME + ".functionPhyloGOs";
 
 	public PFFileCycRecordGenerator(CycIdGenerator cycIdGenerator,
-			AnnotationClustersGetterRepository clusterRepository, double ecThreshold, double goThreshold) {
+			AnnotationClustersGetterRepository clusterRepository, double ecThreshold, double goThreshold, double phygoThreshold) {
 		this.cycIdGenerator = cycIdGenerator;
 		this.clusterRepository = clusterRepository;
 		this.ecThreshold = ecThreshold;
 		this.goThreshold = goThreshold;
+		this.phygoThreshold = phygoThreshold;
 	}
 
 	@Override
@@ -89,6 +92,15 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 		for (AnnotationCluster goCluster : goClusters) {
 			if (goCluster.getScore() >= goThreshold) {
 				record.addGO(goCluster.getTarget().toString());
+			}
+		}
+		
+		//PBP: separating GO coming from Phylogeny
+		List<AnnotationCluster> phygoClusters = clusterRepository.getAnnotationClusterGetter(FUNCTION_PHYGOS).getAnnotationClusters(
+			annot);
+		for (AnnotationCluster phygoCluster : phygoClusters) {
+			if (phygoCluster.getScore() >= phygoThreshold) {
+				record.addPhyGO(phygoCluster.getTarget().toString());
 			}
 		}
 

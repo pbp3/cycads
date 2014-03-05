@@ -89,7 +89,13 @@ public class AnnotationGenerator {
 			return;
 		}
 		
-		int fileFormat = Tools.getInteger(args, 7, Config.annotationGeneratorOutFormat(),
+		Double phygoThreshold = Tools.getDouble(args, 7, Config.annotationGeneratorPhyGoThreshold(),
+			Messages.pfGeneratorChooseGoThreshold());
+		if (phygoThreshold == null) {
+			return;
+		}
+		
+		int fileFormat = Tools.getInteger(args, 8, Config.annotationGeneratorOutFormat(),
 				Messages.AnnotationGeneratorChooseFileFormat());
 
 		Progress progress = new ProgressPrintInterval(System.out, Messages.pfGeneratorStepShowInterval());
@@ -142,7 +148,7 @@ public class AnnotationGenerator {
 			AnnotationClustersGetterRepository repository = new ConfigAnnotationClustersGetterRepository();
 
 			CycRecordGenerator cycRecordGenerator = new PFFileCycRecordGenerator(cycIdGenerator, repository,
-				ecThreshold, goThreshold);
+				ecThreshold, goThreshold, phygoThreshold);
 			for (Sequence seq : seqs) {
 				if (fileFormat == 4) { // case multiple PF Files
 					file = Tools.getFileToSaveFrom(args, 0, Config.annotationGeneratorDirectoryName(), Messages.pfGeneratorChooseDirectory(), seq.getDbName()+"_"+seq.getAccession(), ".pf");
