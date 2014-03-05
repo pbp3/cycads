@@ -86,7 +86,12 @@ public class PFFileGenerator
 		if (goThreshold == null) {
 			return;
 		}
-
+		Double phygoThreshold = Tools.getDouble(args, 7, Config.annotationGeneratorPhyGoThreshold(),
+			Messages.pfGeneratorChooseGoThreshold());
+		if (phygoThreshold == null) {
+			return;
+		}
+			
 		Progress progress = new ProgressPrintInterval(System.out, Messages.pfGeneratorStepShowInterval());
 		try {
 			progress.init(Messages.pfGeneratorInitMsg(file.getPath()));
@@ -104,7 +109,7 @@ public class PFFileGenerator
 			AnnotationClustersGetterRepository repository = new ConfigAnnotationClustersGetterRepository();
 
 			CycRecordGenerator cycRecordGenerator = new PFFileCycRecordGenerator(cycIdGenerator, repository,
-				ecThreshold, goThreshold);
+				ecThreshold, goThreshold, phygoThreshold);
 			for (Sequence seq : seqs) {
 				Collection<Subsequence> subseqs = seq.getSubsequences();
 				for (Subsequence subseq : subseqs) {

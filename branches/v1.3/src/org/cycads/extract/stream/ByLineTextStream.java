@@ -38,7 +38,7 @@ public class ByLineTextStream extends TextStream {
 			for (String go : gos) {
 				if (go != null && go.length() > 0) {
 					out.print(cycRecord.getName() + "\t");
-					out.print("GO:" + go);
+					out.print(go);
 					out.println();
 				}
 			}

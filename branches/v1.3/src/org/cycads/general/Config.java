@@ -258,6 +258,9 @@ public class Config
 	public static double annotationGeneratorGoThreshold() {
 		return getDouble("AnnotationGenerator.go.threshold");
 	}
+	public static double annotationGeneratorPhyGoThreshold() {
+		return getDouble("AnnotationGenerator.phygo.threshold");
+	}
 
 	// for further datas export formats
 	public static int annotationGeneratorOutFormat() {
@@ -276,7 +279,7 @@ public class Config
 	public static List<String> getClusterReplaceReplacement(String clusterName) {
 		return getStrings("AnnotationGenerator." + clusterName + ".replace.replacement");
 	}
-
+	
 	public static String getClusterMsgChangeTarget(String clusterName) {
 		return getStringOptional("AnnotationGenerator." + clusterName + ".changeToMsg");
 	}
