@@ -116,12 +116,14 @@ public class PFFileStream implements CycStream
 			}
 		}
 		
-
+		// PBP: according to pathologic file format,
+		// GO should be written else with DBLINK tag and GO:id
+		// or GO tag and GoName|GOid|Citation PubMed ID|Evidence Code
 		Collection<String> gos = cycRecord.getGOs();
 		if (gos != null) {
 			for (String go : gos) {
 				if (go != null && go.length() > 0) {
-					out.println("GO" + "\t" + go);
+					out.println("GO" + "\t" + "|" + go.replace("GO:", "") + "||IEA");
 				}
 			}
 		}
@@ -130,7 +132,7 @@ public class PFFileStream implements CycStream
 		if (phygos != null) {
 			for (String phygo : phygos) {
 				if (phygo != null && phygo.length() > 0 && !gos.contains(phygo)) {
-					out.println("GO" + "\t" + phygo);
+					out.println("GO" + "\t" + "|" + phygo.replace("GO:", "") + "||IEA");
 				}
 			}
 		}
