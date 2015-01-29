@@ -60,7 +60,7 @@ public class PFFileStream implements CycStream
 					comment.append(fComment);
 				}
 				if (comment.length() > 0) {
-					out.println("FUNCTION-COMMENT" + "\t" + comment.substring(0, comment.length() - 1));
+					out.println("FUNCTION-COMMENT" + "\t" + comment.toString());
 				}
 				for (String synonym : function.getSynonyms()) {
 					if (synonym != null && synonym.length() > 0) {
