@@ -261,6 +261,10 @@ public class Config
 	public static double annotationGeneratorPhyGoThreshold() {
 		return getDouble("AnnotationGenerator.phygo.threshold");
 	}
+	// PBP: a new annotation type for contaminations
+	public static double annotationGeneratorContaminThreshold() {
+		return getDouble("AnnotationGenerator.contamin.threshold");
+	}
 
 	// for further datas export formats
 	public static int annotationGeneratorOutFormat() {
