@@ -221,6 +221,10 @@ public class Messages
 		return getString("pfFile.extract.chooseGoThreshold");
 	}
 	
+	public static String pfGeneratorChooseContaminThreshold() {
+		return getString("pfFile.extract.chooseContaminThreshold");
+	}
+	
 	public static String AnnotationGeneratorChooseFileFormat() {
 		return getString("AnnotationGenerator.ChooseFileFormat");
 	}
