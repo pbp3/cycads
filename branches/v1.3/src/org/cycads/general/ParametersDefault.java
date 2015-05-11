@@ -183,6 +183,13 @@ public class ParametersDefault
 	public static String getPFFileGeneCommentSeparator() {
 		return getStringMandatory("AnnotationGenerator.pf.geneComment.separator");
 	}
+	
+	public static String getPFFileGeneCommentsDivHtmlopen() {
+		return getString("AnnotationGenerator.pf.geneComment.divhtmlopen");
+	}
+	public static String getPFFileGeneCommentsDivHtmlclose() {
+		return getString("AnnotationGenerator.pf.geneComment.divhtmlclose");
+	}
 
 	/* end adds pbp*/
 
