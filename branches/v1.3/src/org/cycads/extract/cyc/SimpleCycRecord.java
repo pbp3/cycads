@@ -19,6 +19,7 @@ public class SimpleCycRecord implements CycRecord
 	private Collection<String>		ecs			= new HashSet<String>();
 	private Collection<String>		gos			= new HashSet<String>();
 	private Collection<String>		phygos		= new HashSet<String>(); //PBP: separate phylome gos
+	private Collection<String>		contamins	= new HashSet<String>(); //PBP: contaminations annotations
 	private int						start, end;
 	private Collection<CycIntron>	introns		= new HashSet<CycIntron>();
 
@@ -173,6 +174,21 @@ public class SimpleCycRecord implements CycRecord
 		this.phygos = gos;
 	}
 
+	//PBP : contaminations annotations
+	@Override
+	public Collection<String> getContamins() {
+		return contamins;
+	}
+
+	@Override
+	public void addContamin(String contamin) {
+		contamins.add(contamin);
+	}
+
+	@Override
+	public void setContamins(Collection<String> contamins) {
+		this.contamins = contamins;
+	}
 
 	@Override
 	public void addSynonym(String synonym) {
