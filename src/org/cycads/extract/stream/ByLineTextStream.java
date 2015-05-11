@@ -22,9 +22,20 @@ public class ByLineTextStream extends TextStream {
 	
 	@Override
 	public void print(CycRecord cycRecord) {
+		
+		Collection<String> contamins = cycRecord.getContamins();
+		if (!contamins.isEmpty()) {
+			for (String contamin : contamins) {
+				if (contamin != null && contamin.length() > 0) {
+					out.print(cycRecord.getName() + "\t");
+					out.print("putative contaminant: " + contamin.toString());
+					out.println();
+				}
+			}
+		}
 		// each EC or GO appears on different line(s)
 		Collection<String> ecs = cycRecord.getECs();
-		if (ecs != null) {
+		if (ecs != null && contamins.isEmpty()) {
 			for (String ec : ecs) {
 				if (ec != null && ec.length() > 0) {
 					out.print(cycRecord.getName() + "\t");
@@ -34,7 +45,7 @@ public class ByLineTextStream extends TextStream {
 			}
 		}
 		Collection<String> gos = cycRecord.getGOs();
-		if (gos != null) {
+		if (gos != null && contamins.isEmpty()) {
 			for (String go : gos) {
 				if (go != null && go.length() > 0) {
 					out.print(cycRecord.getName() + "\t");
