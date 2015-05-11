@@ -97,6 +97,14 @@ public class AnnotationGenerator {
 		
 		int fileFormat = Tools.getInteger(args, 8, Config.annotationGeneratorOutFormat(),
 				Messages.AnnotationGeneratorChooseFileFormat());
+		
+		// contamination threshold has to be preferentially set through the config properties
+		//Double contaminThreshold = Tools.getDouble(args, 9, Config.annotationGeneratorContaminThreshold(),
+		//		Messages.pfGeneratorChooseContaminThreshold());
+		Double contaminThreshold = Config.annotationGeneratorContaminThreshold();
+		if (contaminThreshold == null) {
+			return;
+		}
 
 		Progress progress = new ProgressPrintInterval(System.out, Messages.pfGeneratorStepShowInterval());
 		try {
@@ -148,7 +156,7 @@ public class AnnotationGenerator {
 			AnnotationClustersGetterRepository repository = new ConfigAnnotationClustersGetterRepository();
 
 			CycRecordGenerator cycRecordGenerator = new PFFileCycRecordGenerator(cycIdGenerator, repository,
-				ecThreshold, goThreshold, phygoThreshold);
+				ecThreshold, goThreshold, phygoThreshold, contaminThreshold);
 			for (Sequence seq : seqs) {
 				if (fileFormat == 4) { // case multiple PF Files
 					file = Tools.getFileToSaveFrom(args, 0, Config.annotationGeneratorDirectoryName(), Messages.pfGeneratorChooseDirectory(), seq.getDbName()+"_"+seq.getAccession(), ".pf");
