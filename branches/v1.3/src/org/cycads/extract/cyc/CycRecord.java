@@ -69,6 +69,13 @@ public interface CycRecord
 	public void setPhyGOs(Collection<String> gos);
 
 	public void addPhyGO(String go);
+	
+	//PBP: contaminations annotations
+	public Collection<String> getContamins();
+
+	public void setContamins(Collection<String> contamins);
+
+	public void addContamin(String contamin);
 
 	public Collection<String> getComments();
 
