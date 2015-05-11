@@ -69,9 +69,20 @@ public class PFFileStream implements CycStream
 				}
 			}
 		}
-
+		
+		// if not contamins.isEmpty() EC, DBLinks, GOs, PhyGos and Gene comments will not be printed
+		Collection<String> contamins = cycRecord.getContamins();
+		boolean contaminationfree = true;
+		if (contamins != null){
+			for (String contamin : contamins) {
+				if (contamin != null && contamin.length() > 0) {
+					contaminationfree = false;
+				}
+			}
+		}
+		
 		Collection<String> ecs = cycRecord.getECs();
-		if (ecs != null) {
+		if (ecs != null && contaminationfree) {
 			for (String ec : ecs) {
 				if (ec != null && ec.length() > 0) {
 					out.println("EC" + "\t\t" + ec);
@@ -90,7 +101,7 @@ public class PFFileStream implements CycStream
 */
 
 		Collection<String> dbLinks = cycRecord.getDBLinks();
-		if (dbLinks != null) {
+		if (dbLinks != null && contaminationfree) {
 			for (String dbLink : dbLinks) {
 				out.println("DBLINK" + "\t\t" + dbLink);
 			}
@@ -120,7 +131,7 @@ public class PFFileStream implements CycStream
 		// GO should be written else with DBLINK tag and GO:id
 		// or GO tag and GoName|GOid|Citation PubMed ID|Evidence Code
 		Collection<String> gos = cycRecord.getGOs();
-		if (gos != null) {
+		if (gos != null && contaminationfree) {
 			for (String go : gos) {
 				if (go != null && go.length() > 0) {
 					out.println("GO" + "\t" + "|" + go.replace("GO:", "") + "||IEA");
@@ -129,7 +140,7 @@ public class PFFileStream implements CycStream
 		}
 		// PBP: separate phylome GOs with separate goMsg
 		Collection<String> phygos = cycRecord.getPhyGOs();
-		if (phygos != null) {
+		if (phygos != null && contaminationfree) {
 			for (String phygo : phygos) {
 				if (phygo != null && phygo.length() > 0 && !gos.contains(phygo)) {
 					out.println("GO" + "\t" + "|" + phygo.replace("GO:", "") + "||IEA");
@@ -141,10 +152,21 @@ public class PFFileStream implements CycStream
 		StringBuffer commentAll = new StringBuffer();
 		if (comments != null && !comments.isEmpty()) {
 			Iterator<String> iterator = comments.iterator();
-			commentAll.append(iterator.next());
-			while (iterator.hasNext()) {
-				commentAll.append(ParametersDefault.getPFFileGeneCommentSeparator());
+			if (!contaminationfree) {
 				commentAll.append(iterator.next());
+				commentAll.append(ParametersDefault.getPFFileGeneCommentsDivHtmlopen());
+				while (iterator.hasNext()) {
+					commentAll.append(ParametersDefault.getPFFileGeneCommentSeparator());
+					commentAll.append(iterator.next());
+				}
+				commentAll.append(ParametersDefault.getPFFileGeneCommentsDivHtmlclose());
+			}
+			else {
+				commentAll.append(iterator.next());
+				while (iterator.hasNext()) {
+					commentAll.append(ParametersDefault.getPFFileGeneCommentSeparator());
+					commentAll.append(iterator.next());
+				}
 			}
 		}
 		if (commentAll.length() > 0) {
