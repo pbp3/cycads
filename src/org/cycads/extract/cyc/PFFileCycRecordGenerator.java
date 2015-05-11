@@ -21,6 +21,7 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 	double								ecThreshold;
 	double								goThreshold;
 	double								phygoThreshold;
+	double								contaminThreshold;
 
 	public static String				PREFIX_NAME			= "pf";
 	public static String				PRODUCT_TYPE		= PREFIX_NAME + ".productType";
@@ -35,14 +36,17 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 	public static String				FUNCTION_ECS		= PREFIX_NAME + ".functionECs";
 	public static String				FUNCTION_GOS		= PREFIX_NAME + ".functionGOs";
 	public static String				FUNCTION_PHYGOS		= PREFIX_NAME + ".functionPhyloGOs";
+	public static String				FUNCTION_CONTAMIN	= PREFIX_NAME + ".functionContamins";
+
 
 	public PFFileCycRecordGenerator(CycIdGenerator cycIdGenerator,
-			AnnotationClustersGetterRepository clusterRepository, double ecThreshold, double goThreshold, double phygoThreshold) {
+			AnnotationClustersGetterRepository clusterRepository, double ecThreshold, double goThreshold, double phygoThreshold, double contaminThreshold) {
 		this.cycIdGenerator = cycIdGenerator;
 		this.clusterRepository = clusterRepository;
 		this.ecThreshold = ecThreshold;
 		this.goThreshold = goThreshold;
 		this.phygoThreshold = phygoThreshold;
+		this.contaminThreshold = contaminThreshold;
 	}
 
 	@Override
@@ -78,9 +82,18 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 		record.setStartBase(sseq.getStart());
 		record.setEndBase(sseq.getEnd());
 		record.setIntrons(sseq.getIntrons());
-
+		
+		//PBP: contamination annotation, they will switch off other functional annotations if any during the PFFileStream
+		List<AnnotationCluster> contaminClusters = clusterRepository.getAnnotationClusterGetter(FUNCTION_CONTAMIN).getAnnotationClusters(annot);
+		for (AnnotationCluster contaminCluster : contaminClusters) {
+			//System.out.println("contaminCluster.getScore: " + contaminCluster.getScore()  + "contaminThreshold: " + contaminThreshold);
+			if (contaminCluster.getScore() >= contaminThreshold) {
+				record.addContamin(contaminCluster.getTarget().toString());
+			}
+		}
+		
 		List<AnnotationCluster> ecClusters = clusterRepository.getAnnotationClusterGetter(FUNCTION_ECS).getAnnotationClusters(
-			annot);
+				annot);
 		for (AnnotationCluster ecCluster : ecClusters) {
 			if (ecCluster.getScore() >= ecThreshold) {
 				record.addEC(ecCluster.getTarget().toString());
@@ -88,22 +101,20 @@ public class PFFileCycRecordGenerator implements CycRecordGenerator
 		}
 
 		List<AnnotationCluster> goClusters = clusterRepository.getAnnotationClusterGetter(FUNCTION_GOS).getAnnotationClusters(
-			annot);
+				annot);
 		for (AnnotationCluster goCluster : goClusters) {
 			if (goCluster.getScore() >= goThreshold) {
 				record.addGO(goCluster.getTarget().toString());
 			}
 		}
-		
 		//PBP: separating GO coming from Phylogeny
 		List<AnnotationCluster> phygoClusters = clusterRepository.getAnnotationClusterGetter(FUNCTION_PHYGOS).getAnnotationClusters(
-			annot);
+				annot);
 		for (AnnotationCluster phygoCluster : phygoClusters) {
 			if (phygoCluster.getScore() >= phygoThreshold) {
 				record.addPhyGO(phygoCluster.getTarget().toString());
 			}
 		}
-
 		return record;
 	}
 
