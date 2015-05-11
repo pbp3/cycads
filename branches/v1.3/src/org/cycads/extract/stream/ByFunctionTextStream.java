@@ -26,58 +26,75 @@ public class ByFunctionTextStream extends TextStream {
 		
 		boolean first;
 		
-		// Function, ECs ou GOs are concat (with ';' separator in their respective column)
 		out.print(cycRecord.getName() + "\t");
-		Collection<CycFunction> functions = cycRecord.getFunctions();
+		
+		Collection<String> contamins = cycRecord.getContamins();
 		first = true;
-		for (CycFunction function : functions) {
-			if (!first) {
-				out.print(";");
+		if (!contamins.isEmpty()) {
+			for (String contamin : contamins) {
+				if (!first) {
+					out.print(";");
+				}
+				if (contamin != null && contamin.length() > 0) {
+					out.print("putative contaminant: " + contamin.toString());
+				}
+				first = false;
 			}
-			out.print(function.getName());
-			first = false;
 		}
-		out.print("\t");
-			
-		Collection<String> ecs = cycRecord.getECs();
-		if (ecs != null) {
+		else {
+			// Function, ECs or GOs are concatenated (with ';' separator in their respective column)
+			Collection<CycFunction> functions = cycRecord.getFunctions();
 			first = true;
-			for (String ec : ecs) {
-				if (ec != null && ec.length() > 0) {
-					if (!first) {
-						out.print(";");
-						out.print(ec);
-					}
-					else {
-						out.print(ec);
-						first = false;
+			for (CycFunction function : functions) {
+				if (!first) {
+					out.print(";");
+				}
+				out.print(function.getName());
+				first = false;
+			}
+			out.print("\t");
+				
+			Collection<String> ecs = cycRecord.getECs();
+			if (ecs != null) {
+				first = true;
+				for (String ec : ecs) {
+					if (ec != null && ec.length() > 0) {
+						if (!first) {
+							out.print(";");
+							out.print(ec);
+						}
+						else {
+							out.print(ec);
+							first = false;
+						}
 					}
 				}
 			}
-		}
 
-		out.print("\t");
-		Collection<String> gos = cycRecord.getGOs();
-		if (gos != null) {
-			first = true;
-			for (String go : gos) {
-				if (go != null && go.length() > 0) {
-					if (!first) {
-						out.print(";");
-						out.print("GO:");
-						out.print(go);
-					}
-					else {
-						out.print("GO:");
-						out.print(go);
-						first = false;
+			out.print("\t");
+			Collection<String> gos = cycRecord.getGOs();
+			if (gos != null) {
+				first = true;
+				for (String go : gos) {
+					if (go != null && go.length() > 0) {
+						if (!first) {
+							out.print(";");
+							out.print("GO:");
+							out.print(go);
+						}
+						else {
+							out.print("GO:");
+							out.print(go);
+							first = false;
+						}
 					}
 				}
 			}
+			
+			// TODO : Collection<String> kos = cycRecord.getKOs;
+			
 		}
-		
-		// TODO : Collection<String> kos = cycRecord.getKOs;
-		
+						
 		out.println();
 		out.flush();
 	}
