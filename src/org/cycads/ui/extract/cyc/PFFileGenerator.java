@@ -91,6 +91,11 @@ public class PFFileGenerator
 		if (phygoThreshold == null) {
 			return;
 		}
+		Double contaminThreshold = Tools.getDouble(args, 8, Config.annotationGeneratorContaminThreshold(),
+				Messages.pfGeneratorChooseContaminThreshold());
+			if (contaminThreshold == null) {
+				return;
+			}
 			
 		Progress progress = new ProgressPrintInterval(System.out, Messages.pfGeneratorStepShowInterval());
 		try {
@@ -109,7 +114,8 @@ public class PFFileGenerator
 			AnnotationClustersGetterRepository repository = new ConfigAnnotationClustersGetterRepository();
 
 			CycRecordGenerator cycRecordGenerator = new PFFileCycRecordGenerator(cycIdGenerator, repository,
-				ecThreshold, goThreshold, phygoThreshold);
+				ecThreshold, goThreshold, phygoThreshold, contaminThreshold);
+			
 			for (Sequence seq : seqs) {
 				Collection<Subsequence> subseqs = seq.getSubsequences();
 				for (Subsequence subseq : subseqs) {
